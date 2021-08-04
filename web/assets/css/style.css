@@ -1,0 +1,161 @@
+body {
+    background-color: #f0f0f0;
+ }
+ @media (min-width: 1200px){
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: calc(100% - 230px) !important;
+    }
+ }
+
+/*.container {
+    max-width: calc(100% - 230px) !important;
+}*/
+.mainMenu{
+    background-color: #000;
+    padding: 2px 0;
+}
+.mainMenu .navbar-expand-sm .navbar-nav .nav-link{
+    padding: 15px 20px;
+    letter-spacing: .7px;
+    color: #fff;
+    transition: all .3s ease;
+    font-size: 15px;
+    cursor: pointer;
+}
+.navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+    color: #059862;
+}
+.mainMenu .navbar-expand-sm .navbar-nav .dropdown-menu {
+    position: absolute;
+    padding: 6px 11px 16px;
+}
+.mainMenu .dropdown-item {
+    padding: 6px 10px;
+    border-bottom: 1px solid #ccc!important;
+    font-size: 14.5px;
+    color: #212529;
+}
+.sectionPadding{
+    padding: 70px 0;
+}
+.sectionPadding35 {
+    padding: 15px 0;
+}
+.page_heading{
+    background-color: #e0dcdc;
+}
+.page_heading h1{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 28px;
+    text-shadow: 2px 1px 3px #111;
+    color: #191919;
+}
+.organizationBox{
+   box-shadow:0px 0px 2px #000;
+   padding:20px;
+   background-color:#fff;
+}
+.marginTop30{
+   margin-top:20px;
+}
+.myInput.form-control{
+   border-radius:0;
+   border:1px solid #000;
+}
+.mySelect.form-control{
+   border-radius:0;
+   border:1px solid #000;
+}
+.myTextArea.form-control{
+   border-radius:0;
+   border:1px solid #000;
+}
+.formBtnWrap{
+   margin-top: 31px;
+}
+.formBtn{
+   background-color: #000;
+   border:1px solid #000;
+   border-radius: 0;
+   color: #fff;
+   padding:6px 20px;
+   
+}
+.formBtn:hover{
+   color: #000;
+   background-color: #fff;
+}
+.normalBtn{
+   background-color: #000;
+   border:1px solid #000;
+   border-radius: 0;
+   color: #fff;
+   padding: 6px 29px;
+   margin-bottom: 5px;
+}
+.normalBtn:hover{
+   color: #000;
+   background-color: #fff;
+}
+.headBox{
+   background-color:#f2f2f2;
+   margin: -20px -20px 0;
+   padding: 8px 20px;
+}
+.headBox h5{
+   font-size:19px;
+   margin-bottom:3px;
+}
+.myTable table.dataTable th{
+   white-space:nowrap;
+   font-weight:600;
+}
+.myTable table.dataTable td{
+   font-size:14.5px;
+}
+.table th, .table td {
+    padding: 7px 0.75rem;
+}
+.myTable #mytable_paginate a {
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: #000;
+    margin: 3px;
+    border: 1px solid #000
+}
+.myTable #mytable_paginate a.current {
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: #fff;
+    margin: 3px;
+    background-color: #000;
+}
+.myTable #mytable_previous, #mytable_next {
+    background-color: transparent!important;
+    color: #000!important;
+    border:1px solid #000;
+}
+.myTable .dataTables_length{
+    width: 32%;
+    float: left;
+}
+.myTable .dataTables_filter{
+    width: 37%;
+    float: right;
+}
+.myTable .dataTables_info{
+    /*width: 32%;*/
+    float: left;
+}
+.myTable .dataTables_paginate.paging_simple_numbers{
+    /*width: 37%;*/
+    float: right;
+    margin-bottom: 10px;
+}
+.myTable #mytable_paginate{
+    margin-top:14px;
+}
+.hyperlink:hover{
+    text-decoration:none;
+}
