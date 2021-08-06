@@ -9,13 +9,19 @@
         <meta charset="utf-8">
         <title>Data Entry: Organization Name Table</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+        <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">-->
+        <!--<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />-->
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     </head>
     <body>
         <div class="mainMenuWrap" id="mainMenuWrap">
-            <div class="mainMenu ">
+            <div class="mainMenuDataEntry ">
                 <nav class="navbar navbar-expand-sm navbar-dark">
                     <div class="container px-0">
                         <a class="navbar-brand" href="dashboard">
@@ -26,16 +32,16 @@
                         </button>
                         <div class="collapse navbar-collapse" id="collapsibleNavbar">
                             <ul class="navbar-nav mx-auto">
-                                <li class="nav-item">
+<!--                                <li class="nav-item">
                                     <a class="nav-link" href="dashboard">Home</a>
-                                </li>
+                                </li>-->
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Organization
                                     </a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="OrganizationNameController">Org. Name</a>
-                                        <a class="dropdown-item" href="orgTypeCont.do">Org. Type</a>
+                                        <a class="dropdown-item" href="organization_type">Org. Type</a>
                                         <a class="dropdown-item" href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
                                         <a class="dropdown-item" href="organisationCont.do" class="dropdown-item">Org. Office</a>
                                         <a class="dropdown-item" href="designationCont.do" class="dropdown-item">Designation</a>
@@ -107,7 +113,7 @@
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        Quarantine Management
+                                        Quarantine Mgnt
                                     </a>
                                     <div class="dropdown-menu">
                                         <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
@@ -143,7 +149,7 @@
                                         <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
                                     </div>
                                 </li>
-                                <li class="nav-item dropdown">
+                               <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Medical Survey
                                     </a>
@@ -165,8 +171,12 @@
                             </ul>
 
                             <div>
-                                <a href="#" class="myButtonEffect learnMoreBtn"> 
+                                
+                                <a href="#"> 
                                     <img src="assets/images/logout.png" width="27">
+                                </a>&nbsp 
+                                <a href="home" class="btn btn-info"> 
+                                    Go to Website
                                 </a>
                             </div>
 

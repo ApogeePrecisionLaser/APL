@@ -9,9 +9,9 @@ import java.util.List;
 
 /**
  *
- * @author Vikrant
+ * @author SoftTech
  */
-public class OrganisationNameBean {
+public class OrganisationName {
 
     private int organisation_id;
     private String organisation_name;

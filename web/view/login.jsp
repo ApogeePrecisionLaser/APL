@@ -5,6 +5,7 @@
     
 <head>
 	<title>Apogee Levelling</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -20,7 +21,6 @@
 			height: 100%;
 		}
 		.user_card {
-			height: 400px;
 			width: 350px;
 			margin-top: auto;
 			margin-bottom: auto;
@@ -29,7 +29,7 @@
 			display: flex;
 			justify-content: center;
 			flex-direction: column;
-			padding: 10px;
+			padding: 30px 10px;
 			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -118,14 +118,14 @@
 					</form>
 				</div>
 		
-				<div class="mt-4">
+<!--				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
 						Don't have an account? <a href="#" class="ml-2 text-white">Sign Up</a>
 					</div>
 					<div class="d-flex justify-content-center links">
 						<a href="#" class="text-white">Forgot your password?</a>
 					</div>
-				</div>
+				</div>-->
 			</div>
 		</div>
 	</div>

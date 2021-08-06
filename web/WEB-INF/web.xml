@@ -19,11 +19,11 @@
         <param-value>jdbc:mysql://localhost:3306/apl</param-value>
     </context-param>
     <context-param>
-        <param-name>db_user_name</param-name>
+        <param-name>db_username</param-name>
         <param-value>root</param-value>
     </context-param>
     <context-param>
-        <param-name>db_user_password</param-name>                
+        <param-name>db_password</param-name>                
         <param-value>root</param-value>
         <!--<param-value>jpss@1277</param-value>-->
     </context-param>
@@ -45,6 +45,21 @@
         <url-pattern>/organization_name</url-pattern>
     </servlet-mapping>
     
+    
+    
+    <servlet>
+        <servlet-name>organization_type</servlet-name>
+        <jsp-file>/view/organization/organization_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>organization_type</servlet-name>
+        <url-pattern>/organization_type</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+    
+    
     <servlet>
         <servlet-name>DashboardController</servlet-name>
         <servlet-class>DashboardController</servlet-class>
@@ -55,7 +70,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>dashboard</servlet-name>
-        <jsp-file>/view/organization/dashboard.jsp</jsp-file>
+        <jsp-file>/view/dashboard.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>dashboard</servlet-name>
@@ -80,5 +95,121 @@
         <servlet-name>login</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>HomeController</servlet-name>
+        <servlet-class>HomeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeController</servlet-name>
+        <url-pattern>/HomeController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>home</servlet-name>
+        <jsp-file>/view/frontend/index.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>home</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>about</servlet-name>
+        <jsp-file>/view/frontend/about.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>about</servlet-name>
+        <url-pattern>/about</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>product_detail</servlet-name>
+        <jsp-file>/view/frontend/product_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>product_detail</servlet-name>
+        <url-pattern>/product_detail</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>blogs</servlet-name>
+        <jsp-file>/view/frontend/blogs.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>blogs</servlet-name>
+        <url-pattern>/blogs</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>blog_details</servlet-name>
+        <jsp-file>/view/frontend/blog_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>blog_details</servlet-name>
+        <url-pattern>/blog_details</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>career</servlet-name>
+        <jsp-file>/view/frontend/career.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>career</servlet-name>
+        <url-pattern>/career</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>image_gallery</servlet-name>
+        <jsp-file>/view/frontend/image_gallery.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>image_gallery</servlet-name>
+        <url-pattern>/image_gallery</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>video_gallery</servlet-name>
+        <jsp-file>/view/frontend/video_gallery.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>video_gallery</servlet-name>
+        <url-pattern>/video_gallery</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>contact</servlet-name>
+        <jsp-file>/view/frontend/contact.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>contact</servlet-name>
+        <url-pattern>/contact</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>faqs</servlet-name>
+        <jsp-file>/view/frontend/faqs.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>faqs</servlet-name>
+        <url-pattern>/faqs</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>privacy_policy</servlet-name>
+        <jsp-file>/view/frontend/privacy_policy.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>privacy_policy</servlet-name>
+        <url-pattern>/privacy_policy</url-pattern>
+    </servlet-mapping>
+    
+    
+    
     
 </web-app>
