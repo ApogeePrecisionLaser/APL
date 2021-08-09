@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONObject;
+import com.DBConnection.DBConnection;
 
 /**
  *
@@ -54,12 +55,12 @@ public class OrganisationNameModel {
             rset.next();
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
-            System.out.println("OrganisationNameModel getNoOfRows() Error: " + e);
+            System.out.println("OrganisationNameModel getNoOfRows() 1 Error: " + e);
         }
         return noOfRows;
     }
 
-    public int getNoOfRows(String organisation_name,String active) {
+    public int getNoOfRows(String organisation_name, String active) {
         int noOfRows = 0;
         //organisation_name = krutiToUnicode.convert_to_unicode(organisation_name);
         try {
@@ -67,12 +68,12 @@ public class OrganisationNameModel {
                     + " IF('" + active + "'='' , active LIKE '%%', active = '" + active + "') ";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, organisation_name + '%');
-             
+
             ResultSet rset = pstmt.executeQuery();
             rset.next();
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
-            System.out.println("OrganisationNameModel getNoOfRows() Error: " + e);
+            System.out.println("OrganisationNameModel getNoOfRows()2 Error: " + e);
         }
         return noOfRows;
     }
@@ -110,24 +111,25 @@ public class OrganisationNameModel {
 //    }
     public List<OrganisationName> showData(int lowerLimit, int noOfRowsToDisplay, String org_name, String searchOrgSubType) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
-        
-        if(org_name == null){
-            org_name="";
+
+        if (org_name == null) {
+            org_name = "";
         }
-        if(searchOrgSubType == null){
-            searchOrgSubType="";
+        if (searchOrgSubType == null) {
+            searchOrgSubType = "";
         }
 
         String query = "select org.organisation_id,org.organisation_name,org.description,org.organisation_code,orgT.org_type_name "
                 + " from organisation_name org, organisation_type orgT where orgT.organisation_type_id=org.organisation_type_id ";
         if (!org_name.equals("") && org_name != null) {
-            query += " and org.organisation_name='" + org_name + "' "; 
+            query += " and org.organisation_name='" + org_name + "' ";
         }
         query += "  and orgT.active='Y' order by org.organisation_id desc ";
 
         try {
-            System.out.println("query -"+query);
+            System.out.println("query----- -" + query);
             ResultSet rset = connection.prepareStatement(query).executeQuery();
+            System.err.println("connectipn---------" + connection);
             while (rset.next()) {
                 OrganisationName organisationSubType = new OrganisationName();
                 organisationSubType.setOrganisation_id(rset.getInt("organisation_id"));
@@ -141,15 +143,12 @@ public class OrganisationNameModel {
                 list.add(organisationSubType);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrganisationSubTypeModel-" + e);
+            System.out.println("Error: OrganisationSubTypeModel data-" + e);
         }
         return list;
     }
 
-    
-    
-    
-     public List<OrganisationName> showPDF(String searchOrgType, String searchOrgSubType,String active) {
+    public List<OrganisationName> showPDF(String searchOrgType, String searchOrgSubType, String active) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         searchOrgType = (searchOrgType);
         //   searchOrgSubType =(searchOrgSubType);
@@ -165,12 +164,12 @@ public class OrganisationNameModel {
                 + " from organisation_name org, organisation_type orgT where orgT.organisation_type_id=org.organisation_type_id and"
                 + " IF('" + active + "'='' ,org.active LIKE '%%',org.active = '" + active + "') ";
         if (!searchOrgType.equals("") && searchOrgType != null) {
-            query += " and org.organisation_name='" + searchOrgType + "' "; 
+            query += " and org.organisation_name='" + searchOrgType + "' ";
         }
         query += "  and orgT.active='Y' ";
 
         try {
-            System.out.println("query -"+query);
+            System.out.println("query -" + query);
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             System.out.println("org name show data -" + query);
             while (rset.next()) {
@@ -186,12 +185,11 @@ public class OrganisationNameModel {
                 list.add(organisationSubType);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrganisationSubTypeModel-" + e);
+            System.out.println("Error: OrganisationSubTypeModel pdf-" + e);
         }
         return list;
     }
-    
-    
+
     public int insertRecord(OrganisationName organisation_name) {
         String query = "INSERT INTO organisation_name(organisation_name,organisation_type_id,description,"
                 + " revision_no,active,remark,organisation_code) VALUES(?,?,?,?,?,?,?) ";
@@ -367,8 +365,8 @@ public class OrganisationNameModel {
         }
         return id;
     }
-    
-      public String getOrganisationTypeName(int org_type_name) {
+
+    public String getOrganisationTypeName(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT org_type_name FROM organisation_type WHERE organisation_type_id = ? and active='Y'";
         String name = "";
@@ -383,41 +381,40 @@ public class OrganisationNameModel {
         }
         return name;
     }
-      
+
     public JSONObject getselectedOrg(String q) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         JSONObject json = new JSONObject();
         String query = "SELECT * FROM organisation_name where organisation_name=?  AND active='Y' ";
         try {
-            PreparedStatement ptst=connection.prepareStatement(query);
+            PreparedStatement ptst = connection.prepareStatement(query);
             ptst.setString(1, q);
             ResultSet rset = ptst.executeQuery();
-            
+
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                int id=rset.getInt("organisation_id");
+                int id = rset.getInt("organisation_id");
                 String OrgName = (rset.getString("organisation_name"));
-                int typeid=rset.getInt("organisation_type_id");
-                String orgtypename=getOrganisationTypeName(typeid);
+                int typeid = rset.getInt("organisation_type_id");
+                String orgtypename = getOrganisationTypeName(typeid);
                 String orgcode = (rset.getString("organisation_code"));
-                String desp=(rset.getString("description"));
-                
-           
+                String desp = (rset.getString("description"));
+
                 json.put("id", id);
                 json.put("orgname", OrgName);
                 json.put("orgtype", orgtypename);
                 json.put("orgcode", orgcode);
                 json.put("desc", desp);
-              
+
             }
         } catch (Exception e) {
             System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
         }
         return json;
     }
-     
-     public String getOfficeTypeName(int org_type_name) {
+
+    public String getOfficeTypeName(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT office_type FROM org_office_type WHERE office_type_id = ? and active='Y'";
         String name = "";
@@ -432,8 +429,8 @@ public class OrganisationNameModel {
         }
         return name;
     }
-     
-      public String getOrganisationName(int org_type_name) {
+
+    public String getOrganisationName(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT organisation_name FROM organisation_name WHERE organisation_id = ? and active='Y'";
         String name = "";
@@ -448,7 +445,8 @@ public class OrganisationNameModel {
         }
         return name;
     }
-      public String getOfficeName(int org_type_name) {
+
+    public String getOfficeName(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT org_office_name FROM org_office WHERE org_office_id = ? and active='Y'";
         String name = "";
@@ -462,9 +460,9 @@ public class OrganisationNameModel {
             System.out.println("Error: " + e);
         }
         return name;
-    } 
-      
-       public String getidtypename(int org_type_name) {
+    }
+
+    public String getidtypename(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT id_type FROM id_type WHERE id_type_id = ? and active='Y'";
         String name = "";
@@ -478,9 +476,9 @@ public class OrganisationNameModel {
             System.out.println("Error: " + e);
         }
         return name;
-    } 
-       
-        public String getdesignationName(int org_type_name) {
+    }
+
+    public String getdesignationName(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT designation FROM designation WHERE designation_id = ? and active='Y'";
         String name = "";
@@ -494,9 +492,9 @@ public class OrganisationNameModel {
             System.out.println("Error: " + e);
         }
         return name;
-    } 
-      
-        public String getfamilykpid(int org_type_name) {
+    }
+
+    public String getfamilykpid(int org_type_name) {
         org_type_name = (org_type_name);
         String query = "SELECT designation FROM designation WHERE designation_id = ? and active='Y'";
         String name = "";
@@ -510,68 +508,67 @@ public class OrganisationNameModel {
             System.out.println("Error: " + e);
         }
         return name;
-    } 
-      
-     public String getCityName(int id) {
-        String name="";
+    }
+
+    public String getCityName(int id) {
+        String name = "";
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
         String query = "SELECT city_name FROM city AS c where c.active='Y'and c.city_id=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-        //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
+            //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
             pstmt.setInt(1, id);
             ResultSet rset = pstmt.executeQuery();
-         
+
             while (rset.next()) {    // move cursor from BOR to valid record.
-               name = (rset.getString("city_name"));
-             
+                name = (rset.getString("city_name"));
+
             }
-         
+
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
         return name;
-    } 
+    }
+
     public JSONObject getselectedOffice(String q) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         JSONObject json = new JSONObject();
         String query = "SELECT * FROM org_office where org_office_name=?  AND active='Y' ";
         try {
-            PreparedStatement ptst=connection.prepareStatement(query);
+            PreparedStatement ptst = connection.prepareStatement(query);
             ptst.setString(1, q);
             ResultSet rset = ptst.executeQuery();
-            
+
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                int id=rset.getInt("org_office_id");
+                int id = rset.getInt("org_office_id");
                 String OrgOfficeName = (rset.getString("org_office_name"));
-                
-                int offtypeid=rset.getInt("office_type_id");
-                String offtyp=getOfficeTypeName(offtypeid);
-                
-                int orgid=rset.getInt("organisation_id");
-                String orgname=getOrganisationName(orgid);
-                
-                int cityid=rset.getInt("city_id");
-                String cityname=getCityName(cityid);
-                
-                int parentorgoffice=rset.getInt("parent_org_office_id");
-                String parentoffname=getOfficeName(parentorgoffice);
-                
-                
-                
+
+                int offtypeid = rset.getInt("office_type_id");
+                String offtyp = getOfficeTypeName(offtypeid);
+
+                int orgid = rset.getInt("organisation_id");
+                String orgname = getOrganisationName(orgid);
+
+                int cityid = rset.getInt("city_id");
+                String cityname = getCityName(cityid);
+
+                int parentorgoffice = rset.getInt("parent_org_office_id");
+                String parentoffname = getOfficeName(parentorgoffice);
+
                 String address = (rset.getString("address_line1"));
-                String email=(rset.getString("email_id1"));
-                
-                String mobilenumber=(rset.getString("mobile_no1"));
-                String landline=(rset.getString("landline_no1"));
-                String officecode=(rset.getString("org_office_code"));
-                String generation=(rset.getString("generation"));
-                String latitude=(rset.getString("latitude"));
-                String longitude=(rset.getString("longitude"));
-           
+                String email = (rset.getString("email_id1"));
+
+                String mobilenumber = (rset.getString("mobile_no1"));
+                String landline = (rset.getString("landline_no1"));
+                String officecode = (rset.getString("org_office_code"));
+                String generation = (rset.getString("generation"));
+                String latitude = (rset.getString("latitude"));
+                String longitude = (rset.getString("longitude"));
+
                 json.put("id", id);
                 json.put("orgname", orgname);
                 json.put("offtype", offtyp);
@@ -586,92 +583,79 @@ public class OrganisationNameModel {
                 json.put("longitude", longitude);
                 json.put("serial", parentoffname);
                 json.put("generation", generation);
-              
+
             }
         } catch (Exception e) {
             System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
         }
         return json;
     }
-    
+
     public JSONObject getselectedPerson(String q) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         JSONObject json = new JSONObject();
         String query = "SELECT * FROM key_person where key_person_name=?  AND active='Y' ";
         try {
-            PreparedStatement ptst=connection.prepareStatement(query);
+            PreparedStatement ptst = connection.prepareStatement(query);
             ptst.setString(1, q);
             ResultSet rset = ptst.executeQuery();
-            
+
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                int id=rset.getInt("key_person_id");
-                String personname=(rset.getString("key_person_name"));
-                
-                
-                String OrgOfficeName="";
-                int offid=rset.getInt("org_office_id");
-                if(offid != 0)
-                {
-                     OrgOfficeName = getOfficeName(offid);
+                int id = rset.getInt("key_person_id");
+                String personname = (rset.getString("key_person_name"));
+
+                String OrgOfficeName = "";
+                int offid = rset.getInt("org_office_id");
+                if (offid != 0) {
+                    OrgOfficeName = getOfficeName(offid);
                 }
-                
-                  String famOrgOfficeName="";
-                int famoffid=rset.getInt("family_office");
-                if(famoffid != 0)
-                {
-                     famOrgOfficeName = getOfficeName(famoffid);
+
+                String famOrgOfficeName = "";
+                int famoffid = rset.getInt("family_office");
+                if (famoffid != 0) {
+                    famOrgOfficeName = getOfficeName(famoffid);
                 }
-                
-                
-                int cityid=rset.getInt("city_id");
-                String cityname=getCityName(cityid);
-                
-                String latitude=(rset.getString("latitude"));
-                String longitude=(rset.getString("longitude"));
+
+                int cityid = rset.getInt("city_id");
+                String cityname = getCityName(cityid);
+
+                String latitude = (rset.getString("latitude"));
+                String longitude = (rset.getString("longitude"));
                 String address = (rset.getString("address_line1"));
-                String mobilenumber=(rset.getString("mobile_no1"));
-                String landline=(rset.getString("landline_no1"));
-                String email=(rset.getString("email_id1"));
-                String empcode=(rset.getString("emp_code"));
-                String fathername=(rset.getString("father_name"));
-                String dob=(rset.getString("date_of_birth"));
-                String pass=(rset.getString("password"));
-                String blood=(rset.getString("bloodgroup"));
-                String emername=(rset.getString("emergency_contact_name"));
-                String emernumber=(rset.getString("emergency_contact_mobile"));
-                String gender=(rset.getString("gender"));
-                 String id_no=(rset.getString("id_no"));
-                  String relation=(rset.getString("relation"));
-                 
-                
-                
-                  String idtype="";
-                int idtypeid=rset.getInt("id_type_id");
-                 if(offid != 0)
-                {
-                     idtype = getidtypename(idtypeid);
-                }  
-                   
-                String designation="";
-                int designationid=rset.getInt("designation_id");
-                 if(offid != 0)
-                {
-                     designation = getdesignationName(designationid);
+                String mobilenumber = (rset.getString("mobile_no1"));
+                String landline = (rset.getString("landline_no1"));
+                String email = (rset.getString("email_id1"));
+                String empcode = (rset.getString("emp_code"));
+                String fathername = (rset.getString("father_name"));
+                String dob = (rset.getString("date_of_birth"));
+                String pass = (rset.getString("password"));
+                String blood = (rset.getString("bloodgroup"));
+                String emername = (rset.getString("emergency_contact_name"));
+                String emernumber = (rset.getString("emergency_contact_mobile"));
+                String gender = (rset.getString("gender"));
+                String id_no = (rset.getString("id_no"));
+                String relation = (rset.getString("relation"));
+
+                String idtype = "";
+                int idtypeid = rset.getInt("id_type_id");
+                if (offid != 0) {
+                    idtype = getidtypename(idtypeid);
                 }
-                
-                  String famdesignation="";
-                int famdesignationid=rset.getInt("family_designation");
-                 if(offid != 0)
-                {
-                     famdesignation = getdesignationName(famdesignationid);
+
+                String designation = "";
+                int designationid = rset.getInt("designation_id");
+                if (offid != 0) {
+                    designation = getdesignationName(designationid);
                 }
-                
-                
-            
-                
-           
+
+                String famdesignation = "";
+                int famdesignationid = rset.getInt("family_designation");
+                if (offid != 0) {
+                    famdesignation = getdesignationName(famdesignationid);
+                }
+
                 json.put("id", id);
                 json.put("offname", OrgOfficeName);
                 json.put("emp", empcode);
@@ -686,26 +670,24 @@ public class OrganisationNameModel {
                 json.put("idtype", idtype);
                 json.put("idnumber", id_no);
                 json.put("gender", gender);
-                        json.put("address", address);
-                        json.put("city", cityname);
-                        json.put("mobile", mobilenumber);
-                        json.put("landline", landline);
-                        json.put("email", email);
-                        json.put("famoffice", famOrgOfficeName);
-                        json.put("famdesig", famdesignation);
-                        json.put("relation", relation);
-                        json.put("lat2", latitude);
-                        json.put("long2", longitude);
-              
+                json.put("address", address);
+                json.put("city", cityname);
+                json.put("mobile", mobilenumber);
+                json.put("landline", landline);
+                json.put("email", email);
+                json.put("famoffice", famOrgOfficeName);
+                json.put("famdesig", famdesignation);
+                json.put("relation", relation);
+                json.put("lat2", latitude);
+                json.put("long2", longitude);
+
             }
         } catch (Exception e) {
             System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
         }
         return json;
     }
-    
-    
-    
+
     public List<String> getOrganisationTypeName(String q) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT org_type_name FROM organisation_type where organisation_type.active='Y' ORDER BY org_type_name";
@@ -798,13 +780,13 @@ public class OrganisationNameModel {
         return list;
     }
 
-    public byte[] generateSiteList(String jrxmlFilePath,List listAll) {
+    public byte[] generateSiteList(String jrxmlFilePath, List listAll) {
         byte[] reportInbytes = null;
         HashMap mymap = new HashMap();
         try {
-           JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
+            JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null , beanColDataSource );
+            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
             System.out.println("Error: in OrganisationNameModel generatReport() JRException: " + e);
         }

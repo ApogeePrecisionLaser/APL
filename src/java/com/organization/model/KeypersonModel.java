@@ -2,16 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.general.model.GeneralModel;
-import com.healthDepartment.organization.tableClasses.EmergencyBean;
-import com.healthDepartment.organization.tableClasses.FormDataOfficeBean;
-import com.healthDepartment.organization.tableClasses.KeyPerson;
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.organization.tableClasses.OrganisationName;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.EmergencyBean;
+import com.organization.tableClasses.FormDataOfficeBean;
+import com.organization.tableClasses.KeyPerson;
+import com.organization.tableClasses.Org_Office;
+import com.organization.tableClasses.OrganisationName;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Connection;
@@ -54,8 +51,6 @@ public class KeypersonModel {
     private String db_username;
     private String db_password;
     private String driverClass;
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
     List<String> list = new ArrayList<String>();
 
     public Connection getConnection() {
@@ -1222,20 +1217,20 @@ public class KeypersonModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
             pstmt.setString(1, key.getSalutation());
-            pstmt.setString(2, krutiToUnicode.convert_to_unicode(key.getKey_person_name()));
+            pstmt.setString(2, key.getKey_person_name());
             pstmt.setInt(3, key.getDesignation_id());
             pstmt.setInt(4, key.getOrg_office_id());
             pstmt.setInt(5, key.getCity_id());
-            pstmt.setString(6, krutiToUnicode.convert_to_unicode(key.getAddress_line1()));
-            pstmt.setString(7, krutiToUnicode.convert_to_unicode(key.getAddress_line2()));
-            pstmt.setString(8, krutiToUnicode.convert_to_unicode(key.getAddress_line3()));
+            pstmt.setString(6, key.getAddress_line1());
+            pstmt.setString(7, key.getAddress_line2());
+            pstmt.setString(8, key.getAddress_line3());
             pstmt.setString(9, key.getMobile_no1());
             pstmt.setString(10, key.getMobile_no2());
             pstmt.setString(11, key.getLandline_no1());
             pstmt.setString(12, key.getLandline_no2());
             pstmt.setString(13, key.getEmail_id1());
             pstmt.setString(14, key.getEmail_id2());
-            pstmt.setString(15, krutiToUnicode.convert_to_unicode(key.getFather_name()));
+            pstmt.setString(15, key.getFather_name());
             pstmt.setString(16, key.getDate_of_birth());
             pstmt.setInt(17, key_person_id);
             rowsAffected = pstmt.executeUpdate();
@@ -1279,7 +1274,7 @@ public class KeypersonModel {
                         int index1 = tempExt.length();
                         String Extention = tempExt.substring(index + 1, index1);
                         tempExt = "." + Extention;
-                        String imageName = krutiToUnicode.convert_to_unicode(key.getDesignation()) + "_" + middleName + "_" + key_person_id + rev + tempExt;
+                        String imageName = key.getDesignation() + "_" + middleName + "_" + key_person_id + rev + tempExt;
                         key.setImage_name(imageName);
                         // rowsAffected = insertImageRecord(imageName, image_uploaded_for, current_date, key_person_id);
                         if (rowsAffected > 0) {

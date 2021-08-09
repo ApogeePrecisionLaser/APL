@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.healthDepartment.organization.tableClasses;
+package com.organization.tableClasses;
 
 public class OrganisationSubType {
 

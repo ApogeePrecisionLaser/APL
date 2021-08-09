@@ -11,13 +11,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.OrgOfficeHierarchyBean;
+import com.organization.tableClasses.OrgOfficeHierarchyBean;
 import com.lowagie.text.pdf.PdfWriter;
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.Org_Office;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Connection;
@@ -53,8 +51,6 @@ public class OrgOfficeHierarchyModel {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
 
     public void setConnection(Connection con) {
         try {
@@ -81,8 +77,6 @@ public class OrgOfficeHierarchyModel {
         int noOfRowNUM = 0;
         // int org_id = getOrganisation_id(org_name);
         try {
-            org_name = krutiToUnicode.convert_to_unicode(org_name);
-            office_name_search = krutiToUnicode.convert_to_unicode(office_name_search);
             String query = "  SELECT COUNT(*) as count "
                     + " FROM  org_office AS o LEFT JOIN org_office_type AS oft ON oft.office_type_id = o.office_type_id , "
                     + " city AS c, organisation_name AS org "
@@ -626,7 +620,7 @@ public class OrgOfficeHierarchyModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String AdvertiseName = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("city_name"));
+                String AdvertiseName = rset.getString("city_name");
                 if (AdvertiseName.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(AdvertiseName);
                     count++;
@@ -649,7 +643,7 @@ public class OrgOfficeHierarchyModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String state_name = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("state_name"));
+                String state_name = rset.getString("state_name");
                 if (state_name.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(state_name);
                     count++;

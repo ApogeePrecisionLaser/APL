@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
 
 
-import com.healthDepartment.organization.model.OrganisationNameModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.tableClasses.OrganisationName;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.OrganisationNameModel;
+import com.DBConnection.DBConnection;
+import com.organization.tableClasses.OrganisationName;
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;

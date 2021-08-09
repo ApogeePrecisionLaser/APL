@@ -2,13 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
 import com.lowagie.text.pdf.PdfWriter;
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.organization.tableClasses.OrganisationDesignationBean;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.Org_Office;
+import com.organization.tableClasses.OrganisationDesignationBean;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Connection;
@@ -47,8 +45,6 @@ public class OrgOfficeModel {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
     private static List<Org_Office> list1 = new ArrayList<Org_Office>();
   static int  count=0; 
   static int  prev_parent_id=0;
@@ -2339,7 +2335,7 @@ public class OrgOfficeModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String state_name = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("state_name"));
+                String state_name = rset.getString("state_name");
                 if (state_name.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(state_name);
                     count++;
