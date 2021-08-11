@@ -160,7 +160,7 @@ body[data-aos-easing="ease"]{
 }
 .mainMenu .dropdown-menu{padding:0;margin:0;border:0 solid transition!important;border:0 solid rgba(0,0,0,.15);border-radius:0;-webkit-box-shadow:none!important;box-shadow:none!important}
 .mainmenu a, .navbar-default .navbar-nav > li > a, .mainmenu ul li a , .navbar-expand-lg .navbar-nav .nav-link{color:#000;font-size:17px;font-weight: 500;text-transform:capitalize;padding:11px 15px;display: block !important;text-decoration: none;}
-.mainmenu .active a,.mainmenu .active a:focus,.mainmenu .active a:hover,.mainmenu li a:hover,.mainmenu li a:focus ,.navbar-default .navbar-nav>.show>a, .navbar-default .navbar-nav>.show>a:focus, .navbar-default .navbar-nav>.show>a:hover{color: #255946;background: utline: 0;}
+.mainmenu .active a,.mainmenu .active a:focus,.mainmenu .active a:hover,.mainmenu li a:hover,.mainmenu li a:focus ,.navbar-default .navbar-nav>.show>a, .navbar-default .navbar-nav>.show>a:focus, .navbar-default .navbar-nav>.show>a:hover{color: #255946;}
 .mainmenu .collapse ul ul, .mainmenu .collapse ul ul.dropdown-menu{margin-left: 15px;color: #255946;padding: 0;}
 .mainmenu .collapse ul ul ul, .mainmenu .collapse ul ul ul.dropdown-menu{margin-left: 15px;color: #255946;}
 .mainmenu .collapse ul ul ul ul, .mainmenu .collapse ul ul ul ul.dropdown-menu{margin-left: 15px;color: #255946;}
@@ -293,7 +293,7 @@ body[data-aos-easing="ease"]{
 }
 
 .topheader{
-    padding: 3px 0;
+    padding: 5px 0;
 }
 .topheader ul{
     margin: 0;
@@ -306,10 +306,12 @@ body[data-aos-easing="ease"]{
 .topheader ul li a{
     text-decoration: none;
     color: #fff;
-    font-size: 13.5px;
+    font-size: 13px;
     padding: 5px 7px;
 }
-
+.topheader .loginTop a{
+    font-size: 14px;
+}
   .sectionHead h2{
     text-align: center;
     position: relative;
@@ -1101,9 +1103,12 @@ footer .bottomTopBtn a i {
   }
   .squareArrowBox{
     background-color: #255946;
-    width: 70px;height: 70px;
-    transform: rotate(45deg);
-    margin: -35px auto 0;
+    width: 45px;
+    height: 45px;
+    transform: rotate(
+45deg
+);
+    margin: -26px auto 0;
   }
 
 

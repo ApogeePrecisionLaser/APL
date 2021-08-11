@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.organization.tableClasses.OrganisationDesignationBean;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.Org_Office;
+import com.organization.tableClasses.OrganisationDesignationBean;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,8 +40,6 @@ public class OrganisationDesignationModel {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
 
     public void setConnection(Connection con) {
         try {
@@ -70,8 +66,6 @@ public class OrganisationDesignationModel {
         int noOfRowNUM = 0;
         // int org_id = getOrganisation_id(org_name);
         try {
-            org_name = krutiToUnicode.convert_to_unicode(org_name);
-            office_name_search = krutiToUnicode.convert_to_unicode(office_name_search);
             String query = "  SELECT COUNT(*) as count "
                     + " FROM  org_office AS o LEFT JOIN org_office_type AS oft ON oft.office_type_id = o.office_type_id , "
                     + " city AS c, organisation_name AS org "
@@ -665,7 +659,7 @@ public class OrganisationDesignationModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String org_office = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("org_office_name"));
+                String org_office = rset.getString("org_office_name");
                 if (org_office.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(org_office);
                     count++;
@@ -783,7 +777,7 @@ public class OrganisationDesignationModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String AdvertiseName = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("city_name"));
+                String AdvertiseName = rset.getString("city_name");
                 if (AdvertiseName.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(AdvertiseName);
                     count++;

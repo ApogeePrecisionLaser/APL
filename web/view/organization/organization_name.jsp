@@ -356,7 +356,7 @@
                         <input type="text" Placeholder="Organization Type" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>-->
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <div class="form-group mb-md-0">
                         <label>Organization Name</label>
                         <input type="text"  id="org_name" name="org_name" value="" Placeholder="Organization Name" class="form-control myInput searchInput1 w-100" >
@@ -373,18 +373,13 @@
                         </select>
                     </div>
                 </div>-->
-                <div class="col-md-3">
-                    <div class="formBtnWrap">
-                        <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
-                    </div>
-                </div>
+                
             </div>
         </form>
         <hr>
         <div class="row">
             <div class="col-md-12 text-center">
-                <input type="button" class="btn normalBtn" id="viewPdf" name="viewPdf" value="PDF" onclick="displayOrgnList(id)">
-                <input type="button" class="btn normalBtn" id="viewXls" name="viewXls" value="Excel" onclick="displayOrgnList(id)">
+               <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
             </div>
         </div>
     </div>

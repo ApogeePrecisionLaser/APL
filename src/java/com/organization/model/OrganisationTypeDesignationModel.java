@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.organization.tableClasses.OrganisationDesignationBean;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.Org_Office;
+import com.organization.tableClasses.OrganisationDesignationBean;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,13 +40,10 @@ public class OrganisationTypeDesignationModel {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
-        private static List<OrganisationDesignationBean> list1 = new ArrayList<OrganisationDesignationBean>();
- static int  count=0; 
-  static int  prev_parent_id=0;
-    static int  off_id=0;
-    
+    private static List<OrganisationDesignationBean> list1 = new ArrayList<OrganisationDesignationBean>();
+    static int count = 0;
+    static int prev_parent_id = 0;
+    static int off_id = 0;
 
     public void setConnection(Connection con) {
         try {
@@ -71,43 +66,37 @@ public class OrganisationTypeDesignationModel {
         return noOfRows;
     }
 
-    public int getNoOfRows(String org_name, String designation,String getgeneration,String active,String searchhierarchy) {
+    public int getNoOfRows(String org_name, String designation, String getgeneration, String active, String searchhierarchy) {
         int noOfRowNUM = 0;
-       int org_id = getOrganisation_id(org_name);
-       
-       String id="";
-       
-          if(org_id!=0)
-      {
-         id=String.valueOf(org_id);
-      }
-      else{
-          id = "";
-      }
-          list1.clear();
-         int org_idd  = OrganisationTypeDesignationModel.getDesgnid(searchhierarchy);
-        count=0;
-        int count=0;
-        int o_id=0;
-        if(searchhierarchy.isEmpty())
-        {
-          count=0;
+        int org_id = getOrganisation_id(org_name);
+
+        String id = "";
+
+        if (org_id != 0) {
+            id = String.valueOf(org_id);
+        } else {
+            id = "";
         }
-        else
-        {
-        count++;
+        list1.clear();
+        int org_idd = OrganisationTypeDesignationModel.getDesgnid(searchhierarchy);
+        count = 0;
+        int count = 0;
+        int o_id = 0;
+        if (searchhierarchy.isEmpty()) {
+            count = 0;
+        } else {
+            count++;
         }
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        if(count>0)
-        {
-            
-           list1 = OrganisationTypeDesignationModel.showHierarchyParentData(0,50,org_idd,org_name,designation,getgeneration,active,searchhierarchy,o_id) ;
-            noOfRowNUM=list1.size();
-           return noOfRowNUM;
+        if (count > 0) {
+
+            list1 = OrganisationTypeDesignationModel.showHierarchyParentData(0, 50, org_idd, org_name, designation, getgeneration, active, searchhierarchy, o_id);
+            noOfRowNUM = list1.size();
+            return noOfRowNUM;
         }
         try {
             org_name = (org_name);
-          
+
 //            String query = "  SELECT COUNT(*) as count "
 //                    + " FROM  org_office AS o LEFT JOIN org_office_type AS oft ON oft.office_type_id = o.office_type_id , "
 //                    + " city AS c, organisation_name AS org "
@@ -119,64 +108,54 @@ public class OrganisationTypeDesignationModel {
 //                    + " AND IF('" + office_code_search + "'='' ,o.org_office_code LIKE '%%',o.org_office_code LIKE '" + office_code_search + ".%' OR o.org_office_code like ?)"
 //                    + " AND IF ('" + office_name_search + "' = '' , o.org_office_name LIKE '%%',o.org_office_name = ?) "
 //                    + " ORDER BY org.organisation_name,o.org_office_name ";
-
-                       String   query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+            String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
                     + " od.parent_designation_id,od.generation "
                     //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                     //+ " and a.active='Y')as desigantion_map_2 "
                     + " from designation_organisation_type_map od, organisation_type o, designation d "
                     + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
                     + " and d.designation_id=od.designation_id and d.active='Y'  "
-                    +  " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
-                     + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
-                      + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
+                    + " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
+                    + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
+                    + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
                     //+ " or d.designation_id=od.organisation_designation_map_id_2 and d.active='Y' "                                       
                     + "  order by od.id ";
             PreparedStatement psmt = connection.prepareStatement(query);
-           psmt.setString(1, active);
+            psmt.setString(1, active);
             psmt.setString(2, org_name);
-             psmt.setString(3, getgeneration);
+            psmt.setString(3, getgeneration);
             ResultSet rset = psmt.executeQuery();
-         while ( rset.next())
-                    {// move cursor from BOR to valid record.
-            noOfRowNUM++;
-                    }
+            while (rset.next()) {// move cursor from BOR to valid record.
+                noOfRowNUM++;
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
         return noOfRowNUM;
     }
-    
-    
-      public List<OrganisationDesignationBean> showPDF(String org_name, String designation,String getgeneration,String active,String searchhierarchy) {
-      PreparedStatement pstmt;
-          String query;
+
+    public List<OrganisationDesignationBean> showPDF(String org_name, String designation, String getgeneration, String active, String searchhierarchy) {
+        PreparedStatement pstmt;
+        String query;
         List<OrganisationDesignationBean> list = new ArrayList<OrganisationDesignationBean>();
-        
-        
-         list1.clear();
-         int org_id  = OrganisationTypeDesignationModel.getDesgnid(searchhierarchy);
-        count=0;
-        int count=0;
-        int o_id=0;
-        if(searchhierarchy.isEmpty())
-        {
-          count=0;
-        }
-        else
-        {
-        count++;
+
+        list1.clear();
+        int org_id = OrganisationTypeDesignationModel.getDesgnid(searchhierarchy);
+        count = 0;
+        int count = 0;
+        int o_id = 0;
+        if (searchhierarchy.isEmpty()) {
+            count = 0;
+        } else {
+            count++;
         }
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        if(count>0)
-        {
-            
-           list1 = OrganisationTypeDesignationModel.showHierarchyParentData(0,50,org_id,org_name,designation,getgeneration,active,searchhierarchy,o_id) ;
+        if (count > 0) {
+
+            list1 = OrganisationTypeDesignationModel.showHierarchyParentData(0, 50, org_id, org_name, designation, getgeneration, active, searchhierarchy, o_id);
             return list1;
         }
-        
-        
-        
+
         try {
 //            org_name = krutiToUnicode.convert_to_unicode(org_name);
 //            office_name_search = krutiToUnicode.convert_to_unicode(office_name_search);
@@ -200,18 +179,18 @@ public class OrganisationTypeDesignationModel {
                     + " from designation_organisation_type_map od, organisation_type o, designation d "
                     + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
                     + " and d.designation_id=od.designation_id and d.active='Y'  "
-                    +  " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
-                     + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
-                      + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
+                    + " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
+                    + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
+                    + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
                     //+ " or d.designation_id=od.organisation_designation_map_id_2 and d.active='Y' "                                       
                     + "  order by od.id ";
 
             System.out.println("query show all data -" + query);
 
             pstmt = connection.prepareStatement(query);
-             pstmt.setString(1, active);
+            pstmt.setString(1, active);
             pstmt.setString(2, org_name);
-             pstmt.setString(3, getgeneration);
+            pstmt.setString(3, getgeneration);
 //            pstmt.setString(3, office_name_search);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
@@ -226,7 +205,7 @@ public class OrganisationTypeDesignationModel {
                 String orgname = rset.getString("org_type_name");;
                 String desigName2 = rset.getString("parent_designation_id");
                 String generation = String.valueOf(rset.getInt("generation"));
-                
+
                 String mapId2 = getDesignation_name(desigName2);
 
                 OrganisationDesignationBean organisation = new OrganisationDesignationBean();
@@ -244,16 +223,14 @@ public class OrganisationTypeDesignationModel {
         }
         return list;
     }
-    
-    
-    
-          public static int getParentOrgid(int org_id) {
+
+    public static int getParentOrgid(int org_id) {
         String query = "SELECT parent_designation_id FROM designation_organisation_type_map WHERE  designation_id=? and active=? ";
-        int organisation_id =0;
+        int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, org_id);
-           
+
             pstmt.setString(2, "Y");
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
@@ -263,14 +240,14 @@ public class OrganisationTypeDesignationModel {
         }
         return organisation_id;
     }
-    
+
     public static int getcheckorgid(int org_id) {
         String query = "SELECT designation_id FROM designation_organisation_type_map WHERE  parent_designation_id=? and active=? ";
-        int organisation_id =0;
+        int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, org_id);
-           
+
             pstmt.setString(2, "Y");
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
@@ -280,19 +257,14 @@ public class OrganisationTypeDesignationModel {
         }
         return organisation_id;
     }
-    
-    
-    
-    
-      
-      
-         public static int getDesgnid(String org_id) {
+
+    public static int getDesgnid(String org_id) {
         String query = "SELECT designation_id FROM designation WHERE  designation=? and active=? ";
-        int organisation_id =0;
+        int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, org_id);
-           
+
             pstmt.setString(2, "Y");
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
@@ -301,46 +273,30 @@ public class OrganisationTypeDesignationModel {
             System.out.println("Error: OrganisationMapModel--" + e);
         }
         return organisation_id;
-    } 
-      
-      
-      
-      
-      
-      
-      
-      
+    }
 
-    public List<OrganisationDesignationBean> showData(int lowerLimit, int noOfRowsToDisplay, String org_name, String designation,String getgeneration,String active,String searchhierarchy) {
+    public List<OrganisationDesignationBean> showData(int lowerLimit, int noOfRowsToDisplay, String org_name, String designation, String getgeneration, String active, String searchhierarchy) {
         PreparedStatement pstmt;
         String query;
         List<OrganisationDesignationBean> list = new ArrayList<OrganisationDesignationBean>();
-        
-          
-         list1.clear();
-         int org_id  = OrganisationTypeDesignationModel.getDesgnid(searchhierarchy);
-        count=0;
-        int count=0;
-        int o_id=0;
-        if(searchhierarchy.isEmpty())
-        {
-          count=0;
-        }
-        else
-        {
-        count++;
+
+        list1.clear();
+        int org_id = OrganisationTypeDesignationModel.getDesgnid(searchhierarchy);
+        count = 0;
+        int count = 0;
+        int o_id = 0;
+        if (searchhierarchy.isEmpty()) {
+            count = 0;
+        } else {
+            count++;
         }
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        if(count>0)
-        {
-            
-           list1 = OrganisationTypeDesignationModel.showHierarchyParentData(lowerLimit,noOfRowsToDisplay,org_id,org_name,designation,getgeneration,active,searchhierarchy,o_id) ;
+        if (count > 0) {
+
+            list1 = OrganisationTypeDesignationModel.showHierarchyParentData(lowerLimit, noOfRowsToDisplay, org_id, org_name, designation, getgeneration, active, searchhierarchy, o_id);
             return list1;
         }
-        
-        
-        
-        
+
         try {
 //            org_name = krutiToUnicode.convert_to_unicode(org_name);
 //            office_name_search = krutiToUnicode.convert_to_unicode(office_name_search);
@@ -364,18 +320,18 @@ public class OrganisationTypeDesignationModel {
                     + " from designation_organisation_type_map od, organisation_type o, designation d "
                     + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
                     + " and d.designation_id=od.designation_id and d.active='Y'  "
-                    +  " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
-                     + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
-                      + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
+                    + " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
+                    + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
+                    + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
                     //+ " or d.designation_id=od.organisation_designation_map_id_2 and d.active='Y' "                                       
                     + "  order by od.id LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 
             System.out.println("query show all data -" + query);
 
             pstmt = connection.prepareStatement(query);
-             pstmt.setString(1, active);
+            pstmt.setString(1, active);
             pstmt.setString(2, org_name);
-             pstmt.setString(3, getgeneration);
+            pstmt.setString(3, getgeneration);
 //            pstmt.setString(3, office_name_search);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
@@ -390,7 +346,7 @@ public class OrganisationTypeDesignationModel {
                 String orgname = rset.getString("org_type_name");;
                 String desigName2 = rset.getString("parent_designation_id");
                 String generation = String.valueOf(rset.getInt("generation"));
-                
+
                 String mapId2 = getDesignation_name(desigName2);
 
                 OrganisationDesignationBean organisation = new OrganisationDesignationBean();
@@ -408,23 +364,13 @@ public class OrganisationTypeDesignationModel {
         }
         return list;
     }
-    
-    
-    
-    
-    
-       public static List<OrganisationDesignationBean> showHierarchyParentData(int lowerLimit, int noOfRowsToDisplay,int org_id ,String org_name, String designation, String getgeneration,String active,String searchhierarchy,int o_id) {
-      int id=0;
 
-    //    int org_id  = OrgOfficeModel.getOrgid(searchhierarchy);
-        String p_idd="";
-      
-      
+    public static List<OrganisationDesignationBean> showHierarchyParentData(int lowerLimit, int noOfRowsToDisplay, int org_id, String org_name, String designation, String getgeneration, String active, String searchhierarchy, int o_id) {
+        int id = 0;
 
-        
-        
- 
-                     
+        //    int org_id  = OrgOfficeModel.getOrgid(searchhierarchy);
+        String p_idd = "";
+
 //            String query = " SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
 //                              + " FROM organisation_type where   "
 //                        + " IF('" + active + "' = '', active LIKE '%%',active =?) and "
@@ -432,31 +378,29 @@ public class OrganisationTypeDesignationModel {
 ////                           + "  IF('" + o_id + "' = '', parent_org_id LIKE '%%',parent_org_id =?) "
 //                              + " ORDER BY generation asc "
 //                              + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
+        String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+                + " od.parent_designation_id,od.generation,od.designation_id "
+                //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
+                //+ " and a.active='Y')as desigantion_map_2 "
+                + " from designation_organisation_type_map od, organisation_type o, designation d "
+                + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
+                + " and d.designation_id=od.designation_id and d.active='Y'  "
+                + " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
+                + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
+                + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
+                + " AND IF('" + org_id + "' = '', od.designation_id LIKE '%%',od.designation_id =?) order by generation  "
+                + "  LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 
-
-   String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
-                    + " od.parent_designation_id,od.generation,od.designation_id "
-                    //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
-                    //+ " and a.active='Y')as desigantion_map_2 "
-                    + " from designation_organisation_type_map od, organisation_type o, designation d "
-                    + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
-                    + " and d.designation_id=od.designation_id and d.active='Y'  "
-                    +  " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
-                     + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
-                      + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
-                 + " AND IF('" + org_id + "' = '', od.designation_id LIKE '%%',od.designation_id =?) order by generation  "
-                    + "  LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
-            
-            try {
+        try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-          
-               pstmt.setString(1, active);
+
+            pstmt.setString(1, active);
             pstmt.setString(2, org_name);
             pstmt.setString(3, getgeneration);
             pstmt.setInt(4, org_id);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
-           
+
 //                int id =rset.getInt("organisation_type_id");
 //                organisationType.setOrganisation_type_id(rset.getInt("organisation_type_id"));
 //                o_id =OrganisationTypeModel.getParentOrgid(id);
@@ -471,11 +415,8 @@ public class OrganisationTypeDesignationModel {
 //                  organisationType.setSupper(rset.getString("super"));
 //                  organisationType.setGeneration(rset.getInt("generation"));
 //                   list1.add(organisationType);
-               
+                int desigid = rset.getInt("designation_id");
 
-
-                 int desigid=rset.getInt("designation_id");  
-                 
 //                int orgid=rset.getInt("organisation_id");
                 //String serialno = rset.getString("serial_no");
                 String superp = rset.getString("is_super_child");
@@ -484,10 +425,10 @@ public class OrganisationTypeDesignationModel {
                 String orgname = rset.getString("org_type_name");;
                 String desigName2 = rset.getString("parent_designation_id");
                 String generation = String.valueOf(rset.getInt("generation"));
-                
+
                 String mapId2 = getDesignation_name(desigName2);
- o_id =OrganisationTypeDesignationModel.getParentOrgid(org_id);
-                 off_id =OrganisationTypeDesignationModel.getcheckorgid(org_id);
+                o_id = OrganisationTypeDesignationModel.getParentOrgid(org_id);
+                off_id = OrganisationTypeDesignationModel.getcheckorgid(org_id);
                 OrganisationDesignationBean organisation = new OrganisationDesignationBean();
                 organisation.setId(id);
                 organisation.setOrganisation(orgname);
@@ -496,40 +437,31 @@ public class OrganisationTypeDesignationModel {
                 organisation.setSuperp(superp);
                 organisation.setP_designation(mapId2);
                 organisation.setGeneration(generation);
-              
+
                 list1.add(organisation);
                 count++;
             }
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-            if(count>1)
-            {
-              showHierarchyData2(lowerLimit,noOfRowsToDisplay,o_id,org_name,designation,getgeneration,active,searchhierarchy,o_id) ;
-            }
-           
-        showHierarchyData(lowerLimit,noOfRowsToDisplay,org_id,org_name,designation,getgeneration,active,searchhierarchy,o_id) ;
-            
-           
-          
- //   }
-                 return list1;
-     }   
-    
-     
-     
-     
-      public static List<OrganisationDesignationBean> showHierarchyData(int lowerLimit, int noOfRowsToDisplay,int org_id ,String org_name, String designation, String getgeneration,String active,String searchhierarchy,int o_id) {
-      int id=0;
-    
-     //   int org_id  = OrgOfficeModel.getOrgid(searchhierarchy);
-        String p_idd="";
-       
-        List<Integer> idList = new ArrayList<Integer>();
-        
-      
+        if (count > 1) {
+            showHierarchyData2(lowerLimit, noOfRowsToDisplay, o_id, org_name, designation, getgeneration, active, searchhierarchy, o_id);
+        }
 
-                     
+        showHierarchyData(lowerLimit, noOfRowsToDisplay, org_id, org_name, designation, getgeneration, active, searchhierarchy, o_id);
+
+        //   }
+        return list1;
+    }
+
+    public static List<OrganisationDesignationBean> showHierarchyData(int lowerLimit, int noOfRowsToDisplay, int org_id, String org_name, String designation, String getgeneration, String active, String searchhierarchy, int o_id) {
+        int id = 0;
+
+        //   int org_id  = OrgOfficeModel.getOrgid(searchhierarchy);
+        String p_idd = "";
+
+        List<Integer> idList = new ArrayList<Integer>();
+
 //            String query = " SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
 //                              + " FROM organisation_type where  organisation_type_id="+org_id+" and "
 //                       
@@ -538,33 +470,29 @@ public class OrganisationTypeDesignationModel {
 //                              + " ORDER BY generation asc "
 //                              + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 //            
-
-
-  
-      String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
-                    + " od.parent_designation_id,od.generation,od.designation_id "
-                    //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
-                    //+ " and a.active='Y')as desigantion_map_2 "
-                    + " from designation_organisation_type_map od, organisation_type o, designation d "
-                    + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
-                    + " and d.designation_id=od.designation_id and d.active='Y'  "
-                    +  " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
-                     + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
-                      + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
+        String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+                + " od.parent_designation_id,od.generation,od.designation_id "
+                //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
+                //+ " and a.active='Y')as desigantion_map_2 "
+                + " from designation_organisation_type_map od, organisation_type o, designation d "
+                + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
+                + " and d.designation_id=od.designation_id and d.active='Y'  "
+                + " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
+                + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
+                + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
                 + " AND IF('" + org_id + "' = '', od.parent_designation_id LIKE '%%',od.parent_designation_id =?) order by generation  "
-                    + "   LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
-            
-            
-            try {
+                + "   LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
+
+        try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-          
-               pstmt.setString(1, active);
+
+            pstmt.setString(1, active);
             pstmt.setString(2, org_name);
             pstmt.setString(3, getgeneration);
-               pstmt.setInt(4, org_id);
+            pstmt.setInt(4, org_id);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
-           
+
 //                int id =rset.getInt("organisation_type_id");
 //                organisationType.setOrganisation_type_id(rset.getInt("organisation_type_id"));
 //                o_id =OrganisationTypeModel.getParentOrgid(id);
@@ -579,10 +507,7 @@ public class OrganisationTypeDesignationModel {
 //                  organisationType.setSupper(rset.getString("super"));
 //                  organisationType.setGeneration(rset.getInt("generation"));
 //                   list1.add(organisationType);
-               
-
-
-                  int desigid=rset.getInt("designation_id");                    
+                int desigid = rset.getInt("designation_id");
 //                int orgid=rset.getInt("organisation_id");
                 //String serialno = rset.getString("serial_no");
                 String superp = rset.getString("is_super_child");
@@ -591,15 +516,14 @@ public class OrganisationTypeDesignationModel {
                 String orgname = rset.getString("org_type_name");;
                 String desigName2 = rset.getString("parent_designation_id");
                 String generation = String.valueOf(rset.getInt("generation"));
-                
+
                 String mapId2 = getDesignation_name(desigName2);
-o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
-                 off_id =OrganisationTypeDesignationModel.getcheckorgid(desigid);
-                   if(o_id==0)
-                 {
-                 break;
-                 
-                 }
+                o_id = OrganisationTypeDesignationModel.getParentOrgid(desigid);
+                off_id = OrganisationTypeDesignationModel.getcheckorgid(desigid);
+                if (o_id == 0) {
+                    break;
+
+                }
                 OrganisationDesignationBean organisation = new OrganisationDesignationBean();
                 organisation.setId(id);
                 organisation.setOrganisation(orgname);
@@ -608,38 +532,31 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
                 organisation.setSuperp(superp);
                 organisation.setP_designation(mapId2);
                 organisation.setGeneration(generation);
-                
+
                 list1.add(organisation);
-                    if(off_id!=0)
-               {
-                    showHierarchyData2(lowerLimit,noOfRowsToDisplay,desigid,org_name,designation,getgeneration,active,searchhierarchy,o_id); 
-               } 
+                if (off_id != 0) {
+                    showHierarchyData2(lowerLimit, noOfRowsToDisplay, desigid, org_name, designation, getgeneration, active, searchhierarchy, o_id);
+                }
             }
-       
+
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-            
-            if(o_id!=0)
-            {
-       //  showHierarchyData(lowerLimit,noOfRowsToDisplay,id,org_name,office_code_search,office_name_search,mobile,generation,active,searchhierarchy,o_id);
-            }
-//}
-                 return list1;
-     }   
-     
-     
-     
-         public static List<OrganisationDesignationBean> showHierarchyData2(int lowerLimit, int noOfRowsToDisplay,int org_id ,String org_name, String designation, String getgeneration,String active,String searchhierarchy,int o_id) {
-      int id=0;
-      
-     //   int org_id  = OrgOfficeModel.getOrgid(searchhierarchy);
-        String p_idd="";
-        int desigid=0;
-      
-      
 
-                     
+        if (o_id != 0) {
+            //  showHierarchyData(lowerLimit,noOfRowsToDisplay,id,org_name,office_code_search,office_name_search,mobile,generation,active,searchhierarchy,o_id);
+        }
+//}
+        return list1;
+    }
+
+    public static List<OrganisationDesignationBean> showHierarchyData2(int lowerLimit, int noOfRowsToDisplay, int org_id, String org_name, String designation, String getgeneration, String active, String searchhierarchy, int o_id) {
+        int id = 0;
+
+        //   int org_id  = OrgOfficeModel.getOrgid(searchhierarchy);
+        String p_idd = "";
+        int desigid = 0;
+
 //            String query = " SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
 //                              + " FROM organisation_type where  organisation_type_id="+org_id+" and "
 //                       
@@ -648,30 +565,29 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
 //                              + " ORDER BY generation asc "
 //                              + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 //            
+        String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+                + " od.parent_designation_id,od.generation,od.designation_id "
+                //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
+                //+ " and a.active='Y')as desigantion_map_2 "
+                + " from designation_organisation_type_map od, organisation_type o, designation d "
+                + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
+                + " and d.designation_id=od.designation_id and d.active='Y'  "
+                + " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
+                + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
+                + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
+                + " AND IF('" + org_id + "' = '', od.parent_designation_id LIKE '%%',od.parent_designation_id =?) order by generation  "
+                + "  LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 
-   String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
-                    + " od.parent_designation_id,od.generation,od.designation_id "
-                    //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
-                    //+ " and a.active='Y')as desigantion_map_2 "
-                    + " from designation_organisation_type_map od, organisation_type o, designation d "
-                    + " where od.organisation_type_id=o.organisation_type_id and o.active='Y' "
-                    + " and d.designation_id=od.designation_id and d.active='Y'  "
-                    +  " AND IF ('" + active + "' = '' , od.active LIKE '%%',od.active= ?) "
-                     + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
-                      + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
-              + " AND IF('" + org_id + "' = '', od.parent_designation_id LIKE '%%',od.parent_designation_id =?) order by generation  "
-                    + "  LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
-            
-            try {
+        try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-          
-               pstmt.setString(1, active);
+
+            pstmt.setString(1, active);
             pstmt.setString(2, org_name);
             pstmt.setString(3, getgeneration);
-               pstmt.setInt(4, org_id);
+            pstmt.setInt(4, org_id);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
-           
+
 //                int id =rset.getInt("organisation_type_id");
 //                organisationType.setOrganisation_type_id(rset.getInt("organisation_type_id"));
 //                o_id =OrganisationTypeModel.getParentOrgid(id);
@@ -686,10 +602,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
 //                  organisationType.setSupper(rset.getString("super"));
 //                  organisationType.setGeneration(rset.getInt("generation"));
 //                   list1.add(organisationType);
-               
-
-
-                    desigid=rset.getInt("designation_id");                    
+                desigid = rset.getInt("designation_id");
 //                int orgid=rset.getInt("organisation_id");
                 //String serialno = rset.getString("serial_no");
                 String superp = rset.getString("is_super_child");
@@ -698,10 +611,10 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
                 String orgname = rset.getString("org_type_name");;
                 String desigName2 = rset.getString("parent_designation_id");
                 String generation = String.valueOf(rset.getInt("generation"));
-                
+
                 String mapId2 = getDesignation_name(desigName2);
-o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
-                 off_id =OrganisationTypeDesignationModel.getcheckorgid(desigid);
+                o_id = OrganisationTypeDesignationModel.getParentOrgid(desigid);
+                off_id = OrganisationTypeDesignationModel.getcheckorgid(desigid);
                 OrganisationDesignationBean organisation = new OrganisationDesignationBean();
                 organisation.setId(id);
                 organisation.setOrganisation(orgname);
@@ -710,47 +623,32 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
                 organisation.setSuperp(superp);
                 organisation.setP_designation(mapId2);
                 organisation.setGeneration(generation);
-            
+
                 list1.add(organisation);
-                
-                 if(off_id!=0)
-           {
-         showHierarchyData2(lowerLimit,noOfRowsToDisplay,desigid,org_name,designation,generation,active,searchhierarchy,o_id);
-           }
-                
-                
+
+                if (off_id != 0) {
+                    showHierarchyData2(lowerLimit, noOfRowsToDisplay, desigid, org_name, designation, generation, active, searchhierarchy, o_id);
+                }
+
 //                if(off_id!=0 )
 //                {
 //                    count++;
 //                  showHierarchyParentData(lowerLimit,noOfRowsToDisplay,off_id,org_name,office_code_search,office_name_search,mobile,generation,active,searchhierarchy,o_id);
 //                }
- if(off_id!=0)
-           {
-         showHierarchyData2(lowerLimit,noOfRowsToDisplay,desigid,org_name,designation,getgeneration,active,searchhierarchy,o_id);
-           }
+                if (off_id != 0) {
+                    showHierarchyData2(lowerLimit, noOfRowsToDisplay, desigid, org_name, designation, getgeneration, active, searchhierarchy, o_id);
+                }
             }
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-            
-            if(off_id!=0)
-           {
-         showHierarchyData2(lowerLimit,noOfRowsToDisplay,desigid,org_name,designation,getgeneration,active,searchhierarchy,o_id);
-           }
-  // }
-                 return list1;
-     }   
-     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+        if (off_id != 0) {
+            showHierarchyData2(lowerLimit, noOfRowsToDisplay, desigid, org_name, designation, getgeneration, active, searchhierarchy, o_id);
+        }
+        // }
+        return list1;
+    }
 
     public int getIdOfParent(String number) {
         int id = 0;
@@ -836,15 +734,12 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         int orgid = getOrganisation_id(bean.getOrganisation());
         int desigid1 = getDesignation_id(bean.getDesignation());
         int desigid2 = getDesignation_id(bean.getP_designation());
-        int generation=0;
-        if(desigid2 == 0)
-        {
-        generation =1;
-        }
-        else
-        {
-        generation=getParentGeneration(orgid,desigid2)+1;
-        
+        int generation = 0;
+        if (desigid2 == 0) {
+            generation = 1;
+        } else {
+            generation = getParentGeneration(orgid, desigid2) + 1;
+
         }
         if (desigid1 == desigid2) {
             message = "Sorry! Parent-Child cannot be same!";
@@ -1081,16 +976,13 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         int orgid = getOrganisation_id(orgOffice.getOrganisation());
         int desigid1 = getDesignation_id(orgOffice.getDesignation());
         int desigid2 = getDesignation_id(orgOffice.getP_designation());
-         int generation=0;
-        if(desigid2 == 0)
-        {
-        generation =1;
-        }
-        else
-        {
-            
-        generation=getParentGeneration(orgid,desigid2)+1;
-        
+        int generation = 0;
+        if (desigid2 == 0) {
+            generation = 1;
+        } else {
+
+            generation = getParentGeneration(orgid, desigid2) + 1;
+
         }
 
         if (desigid1 == desigid2) {
@@ -1117,26 +1009,24 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             System.out.println("error in insertRecord model -" + e);
         }
         if (prev_mapId1 != desigid) {
-            int c=0;
+            int c = 0;
             String query3 = "select count(*),designation_id from designation_organisation_type_map where "
-                //+ " organisation_designation_id='" + org_desig_id + "' and organisation_id='" + orgid + "'  "
-                + " organisation_type_id='" + orgid + "' and parent_designation_id='"+prev_mapId1+"' "
-                + " and active='Y' ";
+                    //+ " organisation_designation_id='" + org_desig_id + "' and organisation_id='" + orgid + "'  "
+                    + " organisation_type_id='" + orgid + "' and parent_designation_id='" + prev_mapId1 + "' "
+                    + " and active='Y' ";
             try {
-            PreparedStatement pst3 = connection.prepareStatement(query3);
-            System.out.println("query for check -" + pst3);
-            ResultSet rst3 = pst3.executeQuery();
-            while (rst3.next()) {
-                c = rst3.getInt(1);
-                prev_mapId1 = rst3.getInt(2);
+                PreparedStatement pst3 = connection.prepareStatement(query3);
+                System.out.println("query for check -" + pst3);
+                ResultSet rst3 = pst3.executeQuery();
+                while (rst3.next()) {
+                    c = rst3.getInt(1);
+                    prev_mapId1 = rst3.getInt(2);
 
+                }
+            } catch (Exception e) {
+                System.out.println("error in insertRecord model -" + e);
             }
-        } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
-        }
-            
-            
-            
+
             if (c > 0) {
                 message = "Cannot save the record, already mapped!";
                 msgBgColor = COLOR_ERROR;
@@ -1246,9 +1136,9 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
                         rowsAffected = psmt.executeUpdate();
                         if (rowsAffected > 0) {
                             status = true;
-                                
+
                             updateallRecorf(orgid);
-                            
+
                             message = "Record updated successfully.";
                             msgBgColor = COLOR_OK;
                             connection.commit();
@@ -1271,7 +1161,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         } catch (Exception e) {
             System.out.println("Error: updateRecord---updateRecord" + e);
         } finally {
-            
+
         }
 
 //        if (rowsAffected > 0) {
@@ -1284,50 +1174,43 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         return rowsAffected;
     }
 
-     public Boolean updateallRecorf(int id) throws SQLException
-    {
-        Boolean status=false;
-        
-         String querynw= "select * from designation_organisation_type_map where organisation_type_id=?  and active=?  order by generation";
-                                PreparedStatement psmtnw = (PreparedStatement) connection.prepareStatement(querynw);
-                                psmtnw.setInt(1,id);
-                                
-                                psmtnw.setString(2,"Y");
-                                
-                                  ResultSet rstnw = psmtnw.executeQuery();
-                                   while (rstnw.next()) 
-                                   {
-                                   int generation=0;
-                                   int selfdesig=rstnw.getInt("designation_id");
-                                   int desig = rstnw.getInt("parent_designation_id");
-                                   
-                                   if(desig == 0)
-                                   {
-                                   
-                                   generation=1;
-                                   }
-                                   else
-                                    {
-                                     generation=getParentGeneration(id,desig)+1;
-        
-                                    }
-                                   
-                                   
-                                    String querynw2= "update designation_organisation_type_map SET generation=?  where organisation_type_id=?  and designation_id=? and active=?  order by generation";
-                                PreparedStatement psmtnw2 = (PreparedStatement) connection.prepareStatement(querynw2);
-                                psmtnw2.setInt(1,generation);
-                                psmtnw2.setInt(2,id);
-                                psmtnw2.setInt(3,selfdesig);
-                                psmtnw2.setString(4,"Y");
-                                
-                                  int n = psmtnw2.executeUpdate();
-                                   
-                                   
-                                   
-                                       }
-    
-    return status; 
+    public Boolean updateallRecorf(int id) throws SQLException {
+        Boolean status = false;
+
+        String querynw = "select * from designation_organisation_type_map where organisation_type_id=?  and active=?  order by generation";
+        PreparedStatement psmtnw = (PreparedStatement) connection.prepareStatement(querynw);
+        psmtnw.setInt(1, id);
+
+        psmtnw.setString(2, "Y");
+
+        ResultSet rstnw = psmtnw.executeQuery();
+        while (rstnw.next()) {
+            int generation = 0;
+            int selfdesig = rstnw.getInt("designation_id");
+            int desig = rstnw.getInt("parent_designation_id");
+
+            if (desig == 0) {
+
+                generation = 1;
+            } else {
+                generation = getParentGeneration(id, desig) + 1;
+
+            }
+
+            String querynw2 = "update designation_organisation_type_map SET generation=?  where organisation_type_id=?  and designation_id=? and active=?  order by generation";
+            PreparedStatement psmtnw2 = (PreparedStatement) connection.prepareStatement(querynw2);
+            psmtnw2.setInt(1, generation);
+            psmtnw2.setInt(2, id);
+            psmtnw2.setInt(3, selfdesig);
+            psmtnw2.setString(4, "Y");
+
+            int n = psmtnw2.executeUpdate();
+
+        }
+
+        return status;
     }
+
     public static int getRevisionno(OrganisationDesignationBean orgOffice, int org_office_id) {
         int revision = 0;
         try {
@@ -1394,7 +1277,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         if (count > 0) {
             message = "Sorry!, cannot delete because child already mapped as Parent!";
             msgBgColor = COLOR_ERROR;
-         
+
             return rowsAffected;
         }
 
@@ -1415,11 +1298,11 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             System.out.println("Error: " + e);
         }
         if (rowsAffected > 0) {
-         
+
             message = "Record deleted successfully.";
             msgBgColor = COLOR_OK;
         } else {
-           
+
             message = "Cannot delete the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
@@ -1518,7 +1401,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         return organisation_id;
     }
 
-     public int getParentGeneration(int org_id,int desig_id) {
+    public int getParentGeneration(int org_id, int desig_id) {
         String query = "SELECT * FROM designation_organisation_type_map WHERE organisation_type_id = ? and designation_id=? and active=? ";
         int organisation_id = 0;
         try {
@@ -1526,7 +1409,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             pstmt.setInt(1, org_id);
             pstmt.setInt(2, desig_id);
             pstmt.setString(3, "Y");
-            System.out.println("generation query --"+pstmt);
+            System.out.println("generation query --" + pstmt);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("generation");
@@ -1535,8 +1418,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         }
         return organisation_id;
     }
-    
-    
+
     public int getDesignation_id(String organisation_name) {
         String query = "SELECT designation_id FROM designation WHERE designation = ? and active=? ";
         int organisation_id = 0;
@@ -1594,20 +1476,20 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         }
         return list;
     }
-    
-     public List<String> getGeneration(String q) {
+
+    public List<String> getGeneration(String q) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT distinct org.generation FROM designation_organisation_type_map  AS org   where org.active='Y'  ORDER BY generation ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
-          q=q.trim();
+            q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
                 String organisation_name = (rset.getString("generation"));
-                  if (organisation_name.toUpperCase().startsWith(q.toUpperCase())) {
+                if (organisation_name.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(organisation_name);
                     count++;
-                  }  
+                }
             }
             if (count == 0) {
                 list.add("No such Generation exists.");
@@ -1617,7 +1499,6 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         }
         return list;
     }
-    
 
     public List<String> getOrgOfficeNameSearch(String q, String office_code) {
         List<String> list = new ArrayList<String>();
@@ -1629,7 +1510,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String org_office = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("org_office_name"));
+                String org_office = rset.getString("org_office_name");
                 if (org_office.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(org_office);
                     count++;
@@ -1727,22 +1608,21 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         }
         return city_id;
     }
-    
-       public byte[] generateSiteList(String jrxmlFilePath,List listAll) {
+
+    public byte[] generateSiteList(String jrxmlFilePath, List listAll) {
         byte[] reportInbytes = null;
         HashMap mymap = new HashMap();
         try {
-           JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
+            JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null , beanColDataSource );
+            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
             System.out.println("Error: in OrganisationNameModel generatReport() JRException: " + e);
         }
         return reportInbytes;
     }
 
-       
-        public List<String> getHierarchy(String q) {
+    public List<String> getHierarchy(String q) {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
@@ -1755,7 +1635,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String AdvertiseName =(rset.getString("designation"));
+                String AdvertiseName = (rset.getString("designation"));
                 if (AdvertiseName.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(AdvertiseName);
                     count++;
@@ -1769,14 +1649,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         }
         return list;
     }
-    
-       
-       
-       
-       
-       
-       
-       
+
     public List<String> getCityName(String q) {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
@@ -1790,7 +1663,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String AdvertiseName = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("city_name"));
+                String AdvertiseName = rset.getString("city_name");
                 if (AdvertiseName.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(AdvertiseName);
                     count++;
@@ -1830,7 +1703,7 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
         return list;
     }
 
-    public List<String> getParentdesignation(String q, String code ,String edit,String generationS,String currdesig) {
+    public List<String> getParentdesignation(String q, String code, String edit, String generationS, String currdesig) {
         int id = getDesgn_id(code);
         // int id1 = getDesgn_idd(id);
         List<String> list = new ArrayList<String>();
@@ -1849,27 +1722,24 @@ o_id =OrganisationTypeDesignationModel.getParentOrgid(desigid);
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
                 String state_name = (rset.getString("designation"));
-                if(edit.equals("true"))
-                {
-                int generation = (rset.getInt("generation"));
-                int generationP=Integer.parseInt(generationS);
-                 if ((state_name.toUpperCase().startsWith(q.toUpperCase()))&&(generationP >= generation )) {
-                     if(!(state_name.equals(currdesig)))
-                    list.add(state_name);
-                    count++;
+                if (edit.equals("true")) {
+                    int generation = (rset.getInt("generation"));
+                    int generationP = Integer.parseInt(generationS);
+                    if ((state_name.toUpperCase().startsWith(q.toUpperCase())) && (generationP >= generation)) {
+                        if (!(state_name.equals(currdesig))) {
+                            list.add(state_name);
+                        }
+                        count++;
+                    }
+
+                } else {
+                    if (state_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(state_name);
+                        count++;
+                    }
+
                 }
-                
-                }
-                else
-                {
-                if (state_name.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(state_name);
-                    count++;
-                }
-                
-                }
-                
-                
+
             }
             if (count == 0) {
                 list.add("No such Designation exists.");

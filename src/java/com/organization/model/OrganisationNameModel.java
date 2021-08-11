@@ -35,7 +35,7 @@ public class OrganisationNameModel {
 
     private String message;
     private String msgBgColor;
-    private final String COLOR_OK = "lightyellow";
+    private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
 
     public void setConnection(Connection con) {

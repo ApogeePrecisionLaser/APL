@@ -1,8 +1,6 @@
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.OrganisationSubType;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.OrganisationSubType;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,8 +29,6 @@ public class OrganisationSubTypeModel {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
 
   public void setConnection(Connection con) {
         try {
@@ -44,8 +40,6 @@ public class OrganisationSubTypeModel {
     }
     public int getNoOfRows(String searchOrgType, String searchOrgSubType) {
         int noOfRows = 0;
-        searchOrgType = krutiToUnicode.convert_to_unicode(searchOrgType);
-        searchOrgSubType = krutiToUnicode.convert_to_unicode(searchOrgSubType);
         try {
             String query = "select count(*) FROM organisation_sub_type AS ost, organisation_type AS ot "
                     + "WHERE ost.organisation_type_id=ot.organisation_type_id and ost.active='Y' and ot.active='Y' "
@@ -62,8 +56,6 @@ public class OrganisationSubTypeModel {
      public List<OrganisationSubType> showAllData(String searchOrgType, String searchOrgSubType)
     {
           List<OrganisationSubType> list = new ArrayList<OrganisationSubType>();
-          searchOrgType = krutiToUnicode.convert_to_unicode(searchOrgType);
-        searchOrgSubType = krutiToUnicode.convert_to_unicode(searchOrgSubType);
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
         String query = "SELECT ost.organisation_sub_type_id, ost.organisation_sub_type_name, ot.org_type_name "
                 + "FROM organisation_sub_type AS ost, organisation_type AS ot "

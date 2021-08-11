@@ -26,9 +26,9 @@
     <div class="row">
       <div class="col-md-4">
         <div class="contactLeft">
-          <div class="bgGreenOverlay">
-            <h3 class="text-white">Contact Information</h3>
-            <p>We  are available for Sales, Service & Support 24x7.</p>
+          <div class="bgGreenOverlay py-3">
+            <!-- <h3 class="text-white">Contact Information</h3>
+            <p>We  are available for Sales, Service & Support 24x7.</p> -->
             <div>
               <ul>
                 <li class="mb-1"><a href="#"><strong>Utter Pradesh</strong></a> </li>
@@ -46,6 +46,12 @@
                 <li><a href="#"><strong>Madhya Pradesh</strong></a> </li>
                 <li><a href="tel:+91 7624002266" ><i class="fas fa-mobile-alt"></i> +91 7624002266</a></li>
                 <li><a href="#"><i class="fas fa-map-marker-alt"></i> Shanti Market, New Bypass Road, Near Imalia, Bhopal (MP) </a></li>
+              </ul>
+              <hr class="bg-white">
+              <ul>
+                <li><a href="#"><strong>Haryana </strong></a> </li>
+                <li><a href="tel:+91 7624002266" ><i class="fas fa-mobile-alt"></i> +91 9896830281, 9837212286</a></li>
+                <li><a href="#"><i class="fas fa-map-marker-alt"></i> Near Jat Dharamsala Ladhot Road, Sukhpura Chowk Rohtak 124001</a></li>
               </ul>
             </div>
           </div>

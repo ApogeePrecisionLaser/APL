@@ -3,16 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-
-
-import com.healthDepartment.organization.model.KeypersonModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.general.model.GeneralModel;
-import com.healthDepartment.organization.tableClasses.KeyPerson;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.KeypersonModel;
+import com.DBConnection.DBConnection;
+import com.organization.tableClasses.KeyPerson;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,30 +46,27 @@ public class KeyPersonNewController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 10, noOfRowsInTable;
         Map<String, String> map = new HashMap<String, String>();
-          ArrayList<String> List=new ArrayList<String>();
-           ArrayList<String> List1=new ArrayList<String>();
-             List liste=null;
-             String active="Y";
-             String ac="ACTIVE RECORDS";
+        ArrayList<String> List = new ArrayList<String>();
+        ArrayList<String> List1 = new ArrayList<String>();
+        List liste = null;
+        String active = "Y";
+        String ac = "ACTIVE RECORDS";
         ServletContext ctx = getServletContext();
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         KeypersonModel keyModel = new KeypersonModel();
         String k = "";
-        KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
         try {
-            keyModel.setDriverClass(ctx.getInitParameter("driverClass"));
-            keyModel.setDb_username(ctx.getInitParameter("db_user_name"));
-            keyModel.setDb_password(ctx.getInitParameter("db_user_password"));
-            keyModel.setConnectionString(ctx.getInitParameter("connectionString"));
-            keyModel.setConnection();
+//            keyModel.setDriverClass(ctx.getInitParameter("driverClass"));
+//            keyModel.setDb_username(ctx.getInitParameter("db_user_name"));
+//            keyModel.setDb_password(ctx.getInitParameter("db_user_password"));
+//            keyModel.setConnectionString(ctx.getInitParameter("connectionString"));
+//            keyModel.setConnection();
 
         } catch (Exception e) {
             System.out.println("error in KeypersonController setConnection() calling try block" + e);
         }
-        
-        GeneralModel generalModel = new GeneralModel();
-        //generalModel.sendSmsToAssignedFor("9760957577", generalModel.calstr("अमित"));//"अमित");//0905092e093f0924
+
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
             String office_code = request.getParameter("searchOrg");
@@ -82,33 +74,33 @@ public class KeyPersonNewController extends HttpServlet {
             String person = request.getParameter("searchKeyPerson");
             String designation = request.getParameter("searchDesignation");
             String mobile = request.getParameter("searchmobile");
-        
+
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
                 isOrgBasicStep = isOrgBasicStep.trim();
             } else {
                 isOrgBasicStep = "";
             }
-             if (office_code != null && !office_code.isEmpty()) {
+            if (office_code != null && !office_code.isEmpty()) {
                 office_code = office_code.trim();
             } else {
                 office_code = "";
             }
-              if (person != null && !person.isEmpty()) {
+            if (person != null && !person.isEmpty()) {
                 person = person.trim();
             } else {
                 person = "";
             }
-               if (designation != null && !designation.isEmpty()) {
+            if (designation != null && !designation.isEmpty()) {
                 designation = designation.trim();
             } else {
                 designation = "";
             }
-               if (mobile != null && !mobile.isEmpty()) {
+            if (mobile != null && !mobile.isEmpty()) {
                 mobile = mobile.trim();
             } else {
                 mobile = "";
             }
-                if (searchfamily != null && !searchfamily.isEmpty()) {
+            if (searchfamily != null && !searchfamily.isEmpty()) {
                 searchfamily = searchfamily.trim();
             } else {
                 searchfamily = "";
@@ -117,21 +109,18 @@ public class KeyPersonNewController extends HttpServlet {
             try {
                 //----- This is only for Vendor key Person JQuery
                 String JQstring = request.getParameter("action1");
-                
+
                 String q = request.getParameter("str");   // field own input
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
                     if (JQstring.equals("getStateName")) {
                         list = keyModel.getStateName(q);
-                    } 
-                    else if (JQstring.equals("mobile_number")) {
+                    } else if (JQstring.equals("mobile_number")) {
                         list = keyModel.getMobilevalidty(q);//, request.getParameter("action2")
-                    } 
-                    else if (JQstring.equals("getMobile")) {
+                    } else if (JQstring.equals("getMobile")) {
                         list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
-                    } 
-                    else if (JQstring.equals("getCityName")) {
+                    } else if (JQstring.equals("getCityName")) {
                         list = keyModel.getCityName(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getOfficeType")) {
                         list = keyModel.getOffice_type(q);
@@ -141,42 +130,38 @@ public class KeyPersonNewController extends HttpServlet {
                         list = keyModel.getSearchEmpCode(q);
                     } else if (JQstring.equals("getSearchKeyPerson")) {
                         String code = request.getParameter("action2");
-                       
-                        list = keyModel.getOrgPersonNameList(q,code);
+
+                        list = keyModel.getOrgPersonNameList(q, code);
                     } else if (JQstring.equals("getSearchDesignation")) {
-                          String code = request.getParameter("action2");
-                          String key_person = request.getParameter("action3");
-                        list = keyModel.getDesignation(q,code,key_person);
+                        String code = request.getParameter("action2");
+                        String key_person = request.getParameter("action3");
+                        list = keyModel.getDesignation(q, code, key_person);
                     } else if (JQstring.equals("getOrgOfficeName")) {
                         list = keyModel.getOrgOfficeName(q, request.getParameter("action2"));
                     } else if (JQstring.equals("getDesignation")) {
-                          String org_office = request.getParameter("action2");
-                          int parent_check=0;
-                          //String key_person = request.getParameter("action3");
-                        list = keyModel.getDesgnation(q,org_office,parent_check);
+                        String org_office = request.getParameter("action2");
+                        int parent_check = 0;
+                        //String key_person = request.getParameter("action3");
+                        list = keyModel.getDesgnation(q, org_office, parent_check);
                         System.out.println(list.toString());
-                    }else if (JQstring.equals("getunknownDesignation")) {
-                          String org_office = request.getParameter("action2");
-                          int parent_check=0;
-                          //String key_person = request.getParameter("action3");
-                        list = keyModel.getunDesgnation(q,org_office,parent_check);
+                    } else if (JQstring.equals("getunknownDesignation")) {
+                        String org_office = request.getParameter("action2");
+                        int parent_check = 0;
+                        //String key_person = request.getParameter("action3");
+                        list = keyModel.getunDesgnation(q, org_office, parent_check);
                         System.out.println(list.toString());
-                    } 
-                    else if (JQstring.equals("getOrgOfficeCode")) {
-                         list = keyModel.getOrgOfficeCode(q);
+                    } else if (JQstring.equals("getOrgOfficeCode")) {
+                        list = keyModel.getOrgOfficeCode(q);
+                    } else if (JQstring.equals("searchOrg")) {
+                        list = keyModel.searchOrg(q);
+                    } else if (JQstring.equals("searchOrgOfficeCode")) {
+                        list = keyModel.searchOrgOfficeCode(q);
+                    } else if (JQstring.equals("getfamilycode")) {
+                        list = keyModel.searchfamilyOfficeCode(q);
                     }
-                    else if (JQstring.equals("searchOrg")) {
-                         list = keyModel.searchOrg(q);
-                    }
-                    else if (JQstring.equals("searchOrgOfficeCode")) {
-                         list = keyModel.searchOrgOfficeCode(q);
-                    }
-                    else if (JQstring.equals("getfamilycode")) {
-                         list = keyModel.searchfamilyOfficeCode(q);
-                    }
-                     JSONObject gson = new JSONObject();
-                     gson.put("list",list);
-                   out.println(gson);
+                    JSONObject gson = new JSONObject();
+                    gson.put("list", list);
+                    out.println(gson);
                     keyModel.closeConnection();
                     return;
                 }
@@ -184,11 +169,8 @@ public class KeyPersonNewController extends HttpServlet {
                 System.out.println("\n Error --SiteListController get JQuery Parameters Part-" + e);
             }
 
-
             List id_list = keyModel.getIdtypeList();
-            
-            
-            
+
             List items = null;
             Iterator itr = null;
             DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(); //Set the size threshold, above which content will be stored on disk.
@@ -202,7 +184,7 @@ public class KeyPersonNewController extends HttpServlet {
                     FileItem item = (FileItem) itr.next();
                     if (item.isFormField()) {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getString() + "\n");//(getString())its for form field
-                        map.put(item.getFieldName(),item.getString( "UTF-8"));
+                        map.put(item.getFieldName(), item.getString("UTF-8"));
                     } else {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getName());//it is (getName()) for file related things
                         if (item.getName() == null || item.getName().isEmpty()) {
@@ -251,44 +233,36 @@ public class KeyPersonNewController extends HttpServlet {
                 if (searchDesignation == null) {
                     searchDesignation = "";
                 }
-                 if (mobile == null) {
+                if (mobile == null) {
                     mobile = "";
                 }
-               if (searchfamily == null) {
+                if (searchfamily == null) {
                     searchfamily = "";
                 }
-                 if (searchOrganisation == null) {
+                if (searchOrganisation == null) {
                     searchOrganisation = "";
                 }
             } catch (Exception e) {
             }
-            
-            
-             String task2 = request.getParameter("task2");
+
+            String task2 = request.getParameter("task2");
             if (task2 == null) {
                 task2 = "";
             }
-            
-             if(task2.equals("ACTIVE RECORDS"))
-            {
-               active="Y";
-               ac="ACTIVE RECORDS";
-            }else if(task2.equals("INACTIVE RECORDS")){
-                active="N";
-                 ac="INACTIVE RECORDS";
+
+            if (task2.equals("ACTIVE RECORDS")) {
+                active = "Y";
+                ac = "ACTIVE RECORDS";
+            } else if (task2.equals("INACTIVE RECORDS")) {
+                active = "N";
+                ac = "INACTIVE RECORDS";
+            } else if (task2.equals("ALL RECORDS")) {
+                active = "";
+                ac = "ALL RECORDS";
             }
-            else if(task2.equals("ALL RECORDS"))
-            {
-            active="";
-             ac="ALL RECORDS";
-            }
-      
-         
-         
+
             String active1 = request.getParameter("active");
-         
-         
-         
+
             if (task1.equals("viewImage")) {
                 try {
                     // String jrxmlFilePath;
@@ -299,26 +273,28 @@ public class KeyPersonNewController extends HttpServlet {
                     String destinationPath = "";
                     String kp_id = request.getParameter("kp_id");
                     String type = request.getParameter("type");
-                    if(kp_id != null && !kp_id.isEmpty()){
+                    if (kp_id != null && !kp_id.isEmpty()) {
                         destinationPath = keyModel.getImagePath(kp_id, type);
-                        if(destinationPath.isEmpty())
+                        if (destinationPath.isEmpty()) {
                             destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
-                    } else{
+                        }
+                    } else {
                         System.out.println("Image Not Found");
                         destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
                     }
                     //destinationPath = keyModel.getImagePath(emp_code);
                     File f = new File(destinationPath);
                     FileInputStream fis = null;
-                    if(!f.exists()){
+                    if (!f.exists()) {
                         destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
                         f = new File(destinationPath);
                     }
                     fis = new FileInputStream(f);
-                    if(destinationPath.contains("pdf"))
+                    if (destinationPath.contains("pdf")) {
                         response.setContentType("pdf");
-                    else
+                    } else {
                         response.setContentType("image/jpeg");
+                    }
 
                     //  response.addHeader("Content-Disposition", "attachment; filename=\"" + f.getName() + "\"");
                     BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
@@ -346,81 +322,77 @@ public class KeyPersonNewController extends HttpServlet {
                 }
             }
 
-              if (task1.equals("showMapWindow")) {
+            if (task1.equals("showMapWindow")) {
 
-            String point_id = request.getParameter("keyperson_id");
-            String latitude = "";
-            String longitude = "";
-            String LatLong = keyModel.getPointLatLong(point_id);
-            System.out.println(LatLong);
-            String[] words = LatLong.split("\\,");
-            for (int i = 0; i < words.length; i++) {
-                latitude = words[0];
-                longitude = words[1];
-                System.out.println(latitude + "  " + longitude);
+                String point_id = request.getParameter("keyperson_id");
+                String latitude = "";
+                String longitude = "";
+                String LatLong = keyModel.getPointLatLong(point_id);
+                System.out.println(LatLong);
+                String[] words = LatLong.split("\\,");
+                for (int i = 0; i < words.length; i++) {
+                    latitude = words[0];
+                    longitude = words[1];
+                    System.out.println(latitude + "  " + longitude);
+                }
+                request.setAttribute("longi", latitude);
+                request.setAttribute("latti", longitude);
+                //System.out.println(latti + "," + longi);
+                request.getRequestDispatcher("openMapWindowView").forward(request, response);
+                return;
+
             }
-            request.setAttribute("longi", latitude);
-            request.setAttribute("latti", longitude);
-            //System.out.println(latti + "," + longi);
-            request.getRequestDispatcher("openMapWindowView").forward(request, response);
-            return;
 
-        }
-            
-            
-            
-                   if (task1.equals("PRINTRecordList")) {
-                        String jrxmlFilePath;
-                        List list=null;
-                        response.setContentType("application/pdf");
-                        response.setCharacterEncoding("UTF-8");
-                        ServletOutputStream servletOutputStream = response.getOutputStream();
-                        jrxmlFilePath = ctx.getRealPath("/report/Keyperson.jrxml");
-                        list=keyModel.showAll( designation, person, office_code, searchEmpCode, searchDesignation,mobile,active1,searchfamily);
-                        byte[] reportInbytes =keyModel.generateKeyperSonList(jrxmlFilePath,list);
-                        response.setContentLength(reportInbytes.length);
-                        servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
-                        servletOutputStream.flush();
-                        servletOutputStream.close();
-                        return;
-                     }
-                 else if (task1 != null && task1.equals("PRINTExcelList")) {
-
-                     String jrxmlFilePath;
-                        List list=null;
-                        response.setContentType("application/vnd.ms-excel");
-                        response.setHeader("Content-Disposition", "attachment; filename=KeyPerson.xls");
-                        ServletOutputStream servletOutputStream = response.getOutputStream();
-                        jrxmlFilePath = ctx.getRealPath("/Report/organization/Keyperson.jrxml");
-                      // list=keyModel.showAll(-1,noOfRowsToDisplay,searchKeyPerson,searchOfficeCode, searchEmpCode,searchDesignation);
-                    //    ByteArrayOutputStream reportInbytes =keyModel.generateXlsRecordList(jrxmlFilePath,list);
-                    //    response.setContentLength(reportInbytes.toByteArray().length);
-
-                     //  servletOutputStream.write(reportInbytes.toByteArray() , 0, reportInbytes.toByteArray().length);
-                       servletOutputStream.flush();
-                       servletOutputStream.close();
-
-                        return;
-}
+//            if (task1.equals("PRINTRecordList")) {
+//                String jrxmlFilePath;
+//                List list = null;
+//                response.setContentType("application/pdf");
+//                response.setCharacterEncoding("UTF-8");
+//                ServletOutputStream servletOutputStream = response.getOutputStream();
+//                jrxmlFilePath = ctx.getRealPath("/report/Keyperson.jrxml");
+//                list = keyModel.showAll(designation, person, office_code, searchEmpCode, searchDesignation, mobile, active1, searchfamily);
+//                byte[] reportInbytes = keyModel.generateKeyperSonList(jrxmlFilePath, list);
+//                response.setContentLength(reportInbytes.length);
+//                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+//                servletOutputStream.flush();
+//                servletOutputStream.close();
+//                return;
+//            } else if (task1 != null && task1.equals("PRINTExcelList")) {
+//
+//                String jrxmlFilePath;
+//                List list = null;
+//                response.setContentType("application/vnd.ms-excel");
+//                response.setHeader("Content-Disposition", "attachment; filename=KeyPerson.xls");
+//                ServletOutputStream servletOutputStream = response.getOutputStream();
+//                jrxmlFilePath = ctx.getRealPath("/Report/organization/Keyperson.jrxml");
+//                // list=keyModel.showAll(-1,noOfRowsToDisplay,searchKeyPerson,searchOfficeCode, searchEmpCode,searchDesignation);
+//                //    ByteArrayOutputStream reportInbytes =keyModel.generateXlsRecordList(jrxmlFilePath,list);
+//                //    response.setContentLength(reportInbytes.toByteArray().length);
+//
+//                //  servletOutputStream.write(reportInbytes.toByteArray() , 0, reportInbytes.toByteArray().length);
+//                servletOutputStream.flush();
+//                servletOutputStream.close();
+//
+//                return;
+//            }
             if (task.equals("Delete")) {
                 //String destination = "E:/Traffic/ImageUpload/";
                 keyModel.deleteRecord(Integer.parseInt(map.get("key_person_id")));  // Pretty sure that city_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New")) {
                 int key_person_id;
-                int general_image_details_id=0;
+                int general_image_details_id = 0;
                 try {
                     key_person_id = Integer.parseInt(map.get("key_person_id"));
                     general_image_details_id = Integer.parseInt(map.get("general_image_details_id"));// city_id may or may NOT be available i.e. it can be update or new record.
                 } catch (Exception e) {
                     key_person_id = 0;
-                    general_image_details_id=0;
+                    general_image_details_id = 0;
                 }
                 if (task.equals("Save AS New")) {
-                 //   key_person_id = 0;
-                    general_image_details_id=0;
+                    //   key_person_id = 0;
+                    general_image_details_id = 0;
                 }
-                
-              
+
 //        for(int j=1;j<=k;j++)
 //        {
 //             ArrayList<String> emergency=new ArrayList<String>();
@@ -432,7 +404,6 @@ public class KeyPersonNewController extends HttpServlet {
 //                   //List<String> contact = 
 //                   
 //        }
-                
                 KeyPerson key = new KeyPerson();
                 key.setKey_person_id(key_person_id);
                 key.setSalutation(new String(map.get("salutation").trim().getBytes("iso-8859-1"), "UTF-8"));
@@ -450,14 +421,14 @@ public class KeyPersonNewController extends HttpServlet {
                 key.setAddress_line2(map.get("address_line2").trim());
                 key.setAddress_line3(map.get("address_line3").trim());
                 key.setGender(map.get("gender").trim());
-                
+
                 key.setPassword(map.get("password").trim());
                 key.setBlood(map.get("blood").trim());
                 key.setEmergency_number(map.get("emergency_number"));
                 key.setEmergency_name(map.get("emergency_name"));
-                
+
                 key.setMobile_no1(map.get("mobile_no1").trim());
-                
+
                 key.setMobile_no2(map.get("mobile_no2").trim());
                 key.setLandline_no1(map.get("landline_no1").trim());
                 key.setLandline_no2(map.get("landline_no2").trim());
@@ -476,43 +447,41 @@ public class KeyPersonNewController extends HttpServlet {
                 String photo_destination = keyModel.getDestination_Path("key_person_photo");
                 String iD_destination = keyModel.getDestination_Path("key_person_ID");
                 response.setContentType("image/jpeg");
-                String mobile_no1= map.get("mobile_no1");
-                
-                 k=(map.get("i"));
-                 if((k).equals(""))
-                 {
-                   k="0";
-                 }
-                 
-        for(int j=1;j<=Integer.parseInt(k);j++)
-        {
-             ArrayList<String> emergency=new ArrayList<String>();
-              HashSet<String> name = new HashSet<String>(); 
-               HashSet<String> number = new HashSet<String>();
-                                
-                 name.add(map.get("emergency_name"+j));
-                 number.add(map.get("emergency_number"+j));
-                  
-                   List.addAll(name);
-                   List1.addAll(number);
-               //    keyModel.insertemergency(List,key_person_id,k);
-                   //List<String> contact = 
-                   
-        }
-           List.add(map.get("emergency_name"));
-           List1.add(map.get("emergency_number"));
+                String mobile_no1 = map.get("mobile_no1");
+
+                k = (map.get("i"));
+                if ((k).equals("")) {
+                    k = "0";
+                }
+
+                for (int j = 1; j <= Integer.parseInt(k); j++) {
+                    ArrayList<String> emergency = new ArrayList<String>();
+                    HashSet<String> name = new HashSet<String>();
+                    HashSet<String> number = new HashSet<String>();
+
+                    name.add(map.get("emergency_name" + j));
+                    number.add(map.get("emergency_number" + j));
+
+                    List.addAll(name);
+                    List1.addAll(number);
+                    //    keyModel.insertemergency(List,key_person_id,k);
+                    //List<String> contact = 
+
+                }
+                List.add(map.get("emergency_name"));
+                List1.add(map.get("emergency_number"));
 
                 if (key_person_id == 0) {
                     // if city_id was not provided, that means insert new record.
 
-                 int kp_id  = keyModel.insertRecord(key, itr, photo_destination, iD_destination);
-                 keyModel.insertemergency(List,List1,kp_id,k,mobile_no1);
+                    int kp_id = keyModel.insertRecord(key, itr, photo_destination, iD_destination);
+                    keyModel.insertemergency(List, List1, kp_id, k, mobile_no1);
 
                 } else {
                     // update existing record.
                     keyModel.updateRecord(key, key_person_id);
-                     keyModel.insertemergency(List,List1,key_person_id,k,mobile_no1);
-                  //  keyModel.updateRecord(key, itr, photo_destination, iD_destination);
+                    keyModel.insertemergency(List, List1, key_person_id, k, mobile_no1);
+                    //  keyModel.updateRecord(key, itr, photo_destination, iD_destination);
                 }
             } else if (task1.equals("Show All Records")) {
                 searchOrganisation = "";
@@ -520,14 +489,12 @@ public class KeyPersonNewController extends HttpServlet {
                 searchOfficeCode = "";
                 searchEmpCode = "";
                 searchDesignation = "";
-                designation="";
-                person="";
-                office_code="";
-                mobile="";
-                searchfamily="";
+                designation = "";
+                person = "";
+                office_code = "";
+                mobile = "";
+                searchfamily = "";
             }
-
-
 
             try {
                 lowerLimit = Integer.parseInt(request.getParameter("lowerLimit"));
@@ -539,86 +506,79 @@ public class KeyPersonNewController extends HttpServlet {
             String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
             if (buttonAction == null) {
                 buttonAction = "none";
-            }
-            else
-            {
-              active=active1;
-              ac=active;
-              
-                if(active.equals(""))
-                {
-                ac="ALL RECORDS";
-                }else if(active.equals("Y"))
-                {
-                 ac = "ACTIVE RECORDS";
-                }
-                else
-                {
-                  ac="INACTIVE RECORDS";
-                }
-                
-            }
-           noOfRowsInTable = keyModel.getNoOfRows(searchOrganisation, person, searchOfficeCode, searchEmpCode, searchDesignation,mobile,active,office_code,searchfamily);
-            if (buttonAction.equals("Next")); // lowerLimit already has value such that it shows forward records, so do nothing here.
-            else if (buttonAction.equals("Previous")) {
-                int temp = lowerLimit - noOfRowsToDisplay - noOfRowsTraversed;
-                if (temp < 0) {
-                    noOfRowsToDisplay = lowerLimit - noOfRowsTraversed;
-                    lowerLimit = 0;
+            } else {
+                active = active1;
+                ac = active;
+
+                if (active.equals("")) {
+                    ac = "ALL RECORDS";
+                } else if (active.equals("Y")) {
+                    ac = "ACTIVE RECORDS";
                 } else {
-                    lowerLimit = temp;
+                    ac = "INACTIVE RECORDS";
                 }
-            } else if (buttonAction.equals("First")) {
-                lowerLimit = 0;
-            } else if (buttonAction.equals("Last")) {
-                lowerLimit = noOfRowsInTable - noOfRowsToDisplay;
-                if (lowerLimit < 0) {
-                    lowerLimit = 0;
-                }
-            }
 
-            if (task.equals("Save") || task.equals("Delete") || task.equals("Save AS New")) {
-                lowerLimit = lowerLimit - noOfRowsTraversed;    // Here objective is to display the same view again, i.e. reset lowerLimit to its previous value.
             }
+//            noOfRowsInTable = keyModel.getNoOfRows(searchOrganisation, person, searchOfficeCode, searchEmpCode, searchDesignation, mobile, active, office_code, searchfamily);
+//            if (buttonAction.equals("Next")); // lowerLimit already has value such that it shows forward records, so do nothing here.
+//            else if (buttonAction.equals("Previous")) {
+//                int temp = lowerLimit - noOfRowsToDisplay - noOfRowsTraversed;
+//                if (temp < 0) {
+//                    noOfRowsToDisplay = lowerLimit - noOfRowsTraversed;
+//                    lowerLimit = 0;
+//                } else {
+//                    lowerLimit = temp;
+//                }
+//            } else if (buttonAction.equals("First")) {
+//                lowerLimit = 0;
+//            } else if (buttonAction.equals("Last")) {
+//                lowerLimit = noOfRowsInTable - noOfRowsToDisplay;
+//                if (lowerLimit < 0) {
+//                    lowerLimit = 0;
+//                }
+//            }
+//
+//            if (task.equals("Save") || task.equals("Delete") || task.equals("Save AS New")) {
+//                lowerLimit = lowerLimit - noOfRowsTraversed;    // Here objective is to display the same view again, i.e. reset lowerLimit to its previous value.
+//            }
             // Logic to show data in the table.
-            List<KeyPerson> keyList = keyModel.showData(lowerLimit, noOfRowsToDisplay, designation, person, office_code, searchEmpCode, searchDesignation,mobile,active,searchfamily);
-           
-            lowerLimit = lowerLimit + keyList.size();
-            noOfRowsTraversed = keyList.size();
+            List<KeyPerson> keyList = keyModel.showData(designation, person, office_code, searchEmpCode, searchDesignation, mobile, active, searchfamily);
 
-            // Now set request scoped attributes, and then forward the request to view.
-            request.setAttribute("lowerLimit", lowerLimit);
-            request.setAttribute("noOfRowsTraversed", noOfRowsTraversed);
+            //lowerLimit = lowerLimit + keyList.size();
+//            noOfRowsTraversed = keyList.size();
+//
+//            // Now set request scoped attributes, and then forward the request to view.
+//            request.setAttribute("lowerLimit", lowerLimit);
+//            request.setAttribute("noOfRowsTraversed", noOfRowsTraversed);
             request.setAttribute("keyList", keyList);
 
-            if ((lowerLimit - noOfRowsTraversed) == 0) {     // if this is the only data in the table or when viewing the data 1st time.
-                request.setAttribute("showFirst", "false");
-                request.setAttribute("showPrevious", "false");
+//            if ((lowerLimit - noOfRowsTraversed) == 0) {     // if this is the only data in the table or when viewing the data 1st time.
+//                request.setAttribute("showFirst", "false");
+//                request.setAttribute("showPrevious", "false");
+//            }
+//            if (lowerLimit == noOfRowsInTable) {             // if No further data (rows) in the table.
+//                request.setAttribute("showNext", "false");
+//                request.setAttribute("showLast", "false");
+//            }
+            if (task1.equals("showEmergency")) {
+
+                String id = request.getParameter("keyperson_id");
+                liste = keyModel.showEmergency(id);
+                request.setAttribute("emerList", liste);
+                request.getRequestDispatcher("Emergency").forward(request, response);
             }
-            if (lowerLimit == noOfRowsInTable) {             // if No further data (rows) in the table.
-                request.setAttribute("showNext", "false");
-                request.setAttribute("showLast", "false");
-            }
-             if (task1.equals("showEmergency")) {
-                     
-                   String id = request.getParameter("keyperson_id");
-                   liste=keyModel.showEmergency(id);
-                        request.setAttribute("emerList", liste);
-                    request.getRequestDispatcher("Emergency").forward(request, response);
-               }
             request.setAttribute("emerList", liste);
-            request.setAttribute("IDGenerator", new UniqueIDGenerator());
             request.setAttribute("message", keyModel.getMessage());
             request.setAttribute("msgBgColor", keyModel.getMsgBgColor());
             request.setAttribute("searchOfficeCode", searchOfficeCode);
-                    request.setAttribute("searchmobile", mobile);
+            request.setAttribute("searchmobile", mobile);
             request.setAttribute("searchEmpCode", searchEmpCode);
             request.setAttribute("searchKeyPerson", person);
             request.setAttribute("searchDesignation", searchDesignation);
-              request.setAttribute("searchfamily", searchfamily);
-              request.setAttribute("searchOrg", office_code);
-                        request.setAttribute("active", active);
-                           request.setAttribute("ac", ac); 
+            request.setAttribute("searchfamily", searchfamily);
+            request.setAttribute("searchOrg", office_code);
+            request.setAttribute("active", active);
+            request.setAttribute("ac", ac);
             request.setAttribute("id_list", id_list);
             keyModel.closeConnection();
             if (isOrgBasicStep.equals("Yes")) {
@@ -627,7 +587,7 @@ public class KeyPersonNewController extends HttpServlet {
             } else {
                 request.getRequestDispatcher("keypersonnew").forward(request, response);
             }
-            
+
         } catch (Exception ex) {
 
             System.out.println("KeypersonController error: " + ex);
