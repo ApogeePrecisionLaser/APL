@@ -22,7 +22,6 @@
     <link rel="stylesheet" type="text/css" href="assets/frontend/css/responsive.css">
   </head>
 <body>
-
  <header id="topHeader">
   <div class="bgGreen">
     <div class="container topheader ">
@@ -48,8 +47,8 @@
                  <div class="d-inline mr-3" style="height:22px;overflow: hidden">
                     <div id="google_translate_element"></div>
                 </div>
-                <div class="d-inline">
-                    <a href="http://localhost:8080/APL/login" class="text-white">Login</a>
+                <div class="d-inline loginTop">
+                    <a href="http://localhost:8080/APL/login" class="text-white"><i class="fas fa-user"></i> Login</a>
                 </div>
             </div>        
         </div>
@@ -125,8 +124,8 @@
                   <li><a href="blogs">Blogs</a></li>
                   <li><a href="contact">Contact Us</a></li> 
               </ul>
-              <div class="px-3 mb-3 mb-md-0">
-                  <a href="home#enquiryForm" class="myButtonEffect text-white" style="font-size: 15px;">Enquiry Now</a>
+              <div class="px-3 pr-md-0 mb-3 mb-md-0">
+                  <a href="home#enquiryForm" class="myButtonEffect text-white" style="font-size: 14px;">Enquiry Now</a>
               </div>
           </div>
         </div>

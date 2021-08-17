@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.OrganisationMap;
+import com.organization.tableClasses.OrganisationMap;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-import com.healthDepartment.organization.model.OrgDetailEntryModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.tableClasses.OrgDetailEntry;
+import com.organization.model.OrgDetailEntryModel;
+import com.DBConnection.DBConnection;
+import com.organization.tableClasses.OrgDetailEntry;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;

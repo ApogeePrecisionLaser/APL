@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-import com.healthDepartment.organization.model.OrganisationSubTypeModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.model.KeypersonModel;
-import com.healthDepartment.organization.tableClasses.OrganisationSubType;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.OrganisationSubTypeModel;
+import com.DBConnection.DBConnection;
+import com.organization.model.KeypersonModel;
+import com.organization.tableClasses.OrganisationSubType;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
-
 /**
  *
  * @author SoftTech
@@ -34,7 +32,7 @@ public class OrganisationSubTypeCont extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 10, noOfRowsInTable;
         ServletContext ctx = getServletContext();
-  /*      HttpSession session = request.getSession(false);
+        /*      HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_name") == null) {
             response.sendRedirect("beforelogin.jsp");
             return;
@@ -44,45 +42,44 @@ public class OrganisationSubTypeCont extends HttpServlet {
         response.setContentType("text/html");
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
-      
+
         OrganisationSubTypeModel organisationSubTypeModel = new OrganisationSubTypeModel();
         try {
-           //  organisationSubTypeModel.setConnection(DBConnection.getConnection(ctx, session));
+            //  organisationSubTypeModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationSubTypeModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in OrganisationSubTypeCont setConnection() calling try block" + e);
         }
-     
-        try {        
-                String JQstring = request.getParameter("action1");
-                String q = request.getParameter("str");
-                if (JQstring != null) {
-                    PrintWriter out = response.getWriter();
-                    List<String> list = null;
-                    if (JQstring.equals("getOrgTypeName")) {
-                        list = organisationSubTypeModel.getOrgTypeNameList(q);
-                    }
-                    if (JQstring.equals("searchOrgSubTypeName")) {
-                        String org_type = request.getParameter("action2");
-                        list = organisationSubTypeModel.searchOrgTypeNameList(q,org_type);
-                    }
-                    if (JQstring.equals("getOrgSubTypeName")) {
-                        list = organisationSubTypeModel.getOrgSubTypeNameList(q);
-                    }
-                    JSONObject gson = new JSONObject();
-                     gson.put("list",list);
-                   out.println(gson);
-                   
-                    organisationSubTypeModel.closeConnection();
-                   return;             
+
+        try {
+            String JQstring = request.getParameter("action1");
+            String q = request.getParameter("str");
+            if (JQstring != null) {
+                PrintWriter out = response.getWriter();
+                List<String> list = null;
+                if (JQstring.equals("getOrgTypeName")) {
+                    list = organisationSubTypeModel.getOrgTypeNameList(q);
+                }
+                if (JQstring.equals("searchOrgSubTypeName")) {
+                    String org_type = request.getParameter("action2");
+                    list = organisationSubTypeModel.searchOrgTypeNameList(q, org_type);
+                }
+                if (JQstring.equals("getOrgSubTypeName")) {
+                    list = organisationSubTypeModel.getOrgSubTypeNameList(q);
+                }
+                JSONObject gson = new JSONObject();
+                gson.put("list", list);
+                out.println(gson);
+
+                organisationSubTypeModel.closeConnection();
+                return;
             }
-      String task = request.getParameter("task");
-            if (task == null)
-            {
+            String task = request.getParameter("task");
+            if (task == null) {
                 task = "";
             }
-       String   searchOrgType = request.getParameter("searchOrgType");
-       String   searchOrgSubType = request.getParameter("searchOrgSubType");
+            String searchOrgType = request.getParameter("searchOrgType");
+            String searchOrgSubType = request.getParameter("searchOrgSubType");
             try {
                 if (searchOrgType == null) {
                     searchOrgType = "";
@@ -92,33 +89,31 @@ public class OrganisationSubTypeCont extends HttpServlet {
                 }
             } catch (Exception e) {
             }
-       List<OrganisationSubType> organisationSubTypeList=null;
-          if(task.equals("generateOrgReport"))
-         {
-           response.setContentType("application/pdf");
-           ServletOutputStream servletOutputStream = response.getOutputStream();
-           List listAll=organisationSubTypeModel.showAllData(searchOrgType,searchOrgSubType);
-           String  jrxmlFilePath = ctx.getRealPath("/report/organization/OrganisationSubTypeReport.jrxml");
-            byte[] reportInbytes = organisationSubTypeModel.generateOrgSubTypeReport(jrxmlFilePath,listAll);
-            response.setContentLength(reportInbytes.length);
-            servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
-            servletOutputStream.flush();
-            servletOutputStream.close();
-            return;
-         }else if(task.equals("generateOrgXlsReport"))
-         {
-                  response.setContentType("application/vnd.ms-excel");
-                  response.addHeader("Content-Disposition", "attachment; filename=OrgSubType.xls");
-                  ServletOutputStream servletOutputStream = response.getOutputStream();
-                  String jrxmlFilePath = ctx.getRealPath("/report/organization/OrganisationSubTypeReport.jrxml");
-                  List listAll=organisationSubTypeModel.showAllData( searchOrgType,searchOrgSubType);
-                  ByteArrayOutputStream reportInbytes =organisationSubTypeModel.generateOrgSubTypeXlsRecordList(jrxmlFilePath, listAll);
-                  response.setContentLength(reportInbytes.size());
-                  servletOutputStream.write(reportInbytes.toByteArray());
-                  servletOutputStream.flush();
-                  servletOutputStream.close();
-                  return;
-         }           
+            List<OrganisationSubType> organisationSubTypeList = null;
+            if (task.equals("generateOrgReport")) {
+                response.setContentType("application/pdf");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                List listAll = organisationSubTypeModel.showAllData(searchOrgType, searchOrgSubType);
+                String jrxmlFilePath = ctx.getRealPath("/report/organization/OrganisationSubTypeReport.jrxml");
+                byte[] reportInbytes = organisationSubTypeModel.generateOrgSubTypeReport(jrxmlFilePath, listAll);
+                response.setContentLength(reportInbytes.length);
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                return;
+            } else if (task.equals("generateOrgXlsReport")) {
+                response.setContentType("application/vnd.ms-excel");
+                response.addHeader("Content-Disposition", "attachment; filename=OrgSubType.xls");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                String jrxmlFilePath = ctx.getRealPath("/report/organization/OrganisationSubTypeReport.jrxml");
+                List listAll = organisationSubTypeModel.showAllData(searchOrgType, searchOrgSubType);
+                ByteArrayOutputStream reportInbytes = organisationSubTypeModel.generateOrgSubTypeXlsRecordList(jrxmlFilePath, listAll);
+                response.setContentLength(reportInbytes.size());
+                servletOutputStream.write(reportInbytes.toByteArray());
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                return;
+            }
             if (task.equals("Delete")) {
                 organisationSubTypeModel.deleteRecord(Integer.parseInt(request.getParameter("organisation_sub_type_id")));  // Pretty sure that lighting_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New")) {
@@ -141,7 +136,7 @@ public class OrganisationSubTypeCont extends HttpServlet {
                     organisationSubTypeModel.insertRecord(organisationSubType);
                 } else {
                     // update existing record.
-                    organisationSubTypeModel.updateRecord(organisationSubType,organisation_sub_type_id);
+                    organisationSubTypeModel.updateRecord(organisationSubType, organisation_sub_type_id);
                 }
             }
             try {
@@ -155,10 +150,9 @@ public class OrganisationSubTypeCont extends HttpServlet {
                 buttonAction = "none";
             }
 
-            
             if (task.equals("Search")) {
                 lowerLimit = noOfRowsTraversed = 0;
-            }else if (task.equals("Show All Records")) {
+            } else if (task.equals("Show All Records")) {
                 searchOrgType = "";
                 searchOrgSubType = "";
             }// get the number of records (rows) in the table.
@@ -185,7 +179,7 @@ public class OrganisationSubTypeCont extends HttpServlet {
                 lowerLimit = lowerLimit - noOfRowsTraversed;    // Here objective is to display the same view again, i.e. reset lowerLimit to its previous value.
             }
             // Logic to show data in the table.
-           organisationSubTypeList = organisationSubTypeModel.showData(lowerLimit, noOfRowsToDisplay, searchOrgType, searchOrgSubType);
+            organisationSubTypeList = organisationSubTypeModel.showData(lowerLimit, noOfRowsToDisplay, searchOrgType, searchOrgSubType);
             lowerLimit = lowerLimit + organisationSubTypeList.size();
             noOfRowsTraversed = organisationSubTypeList.size();
 
@@ -204,7 +198,6 @@ public class OrganisationSubTypeCont extends HttpServlet {
             }
             request.setAttribute("searchOrgType", searchOrgType);
             request.setAttribute("searchOrgSubType", searchOrgSubType);
-            request.setAttribute("IDGenerator", new UniqueIDGenerator());
             request.setAttribute("message", organisationSubTypeModel.getMessage());
             request.setAttribute("msgBgColor", organisationSubTypeModel.getMsgBgColor());
             organisationSubTypeModel.closeConnection();

@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
 /**
  *
  * @author Tarun
  */
-import com.healthDepartment.organization.tableClasses.OrgClientAssoMap;
+import com.organization.tableClasses.OrgClientAssoMap;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

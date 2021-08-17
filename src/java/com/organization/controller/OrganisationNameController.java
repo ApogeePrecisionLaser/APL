@@ -102,6 +102,8 @@ public class OrganisationNameController extends HttpServlet {
                 System.out.println("\n Error --SiteListController get JQuery Parameters Part-" + e);
             }
             String task = request.getParameter("task");
+            //System.err.println("task organization name ----"+task);
+            
             if (task == null) {
                 task = "";
             }

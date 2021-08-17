@@ -2,16 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.general.model.GeneralModel;
-import com.healthDepartment.organization.tableClasses.EmergencyBean;
-import com.healthDepartment.organization.tableClasses.FormDataOfficeBean;
-import com.healthDepartment.organization.tableClasses.KeyPerson;
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.organization.tableClasses.OrganisationName;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.EmergencyBean;
+import com.organization.tableClasses.FormDataOfficeBean;
+import com.organization.tableClasses.KeyPerson;
+import com.organization.tableClasses.Org_Office;
+import com.organization.tableClasses.OrganisationName;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Connection;
@@ -48,185 +45,16 @@ public class KeypersonModel {
     private static Connection connection;
     private String message;
     private String msgBgColor;
-    private final String COLOR_OK = "lightyellow";
+    private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
     private String connectionString;
     private String db_username;
     private String db_password;
     private String driverClass;
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
     List<String> list = new ArrayList<String>();
 
-    public Connection getConnection() {
-        return connection;
-    }
+    public List<KeyPerson> showData(String designation, String person, String office_code, String searchEmpCode, String searchDesignation, String mobile, String active, String familysearch) {
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    public String getDriverClass() {
-        return driverClass;
-    }
-
-    public void setDriverClass(String driverClass) {
-        this.driverClass = driverClass;
-    }
-
-    public String getDb_password() {
-        return db_password;
-    }
-
-    public void setDb_password(String db_password) {
-        this.db_password = db_password;
-    }
-
-    public String getDb_username() {
-        return db_username;
-    }
-
-    public void setDb_username(String db_username) {
-        this.db_username = db_username;
-    }
-
-    public String getConnectionString() {
-        return connectionString;
-    }
-
-    public void setConnectionString(String connectionString) {
-        this.connectionString = connectionString;
-    }
-
-    public void setConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = (Connection) DriverManager.getConnection(connectionString + "?useUnicode=true&characterEncoding=UTF-8&character_set_results=utf8", db_username, db_password);
-        } catch (Exception e) {
-            System.out.println("KeypersonModel setConnection() Error: " + e);
-        }
-    }
-
-    public int getNoOfRows(String searchOrganisation, String searchKeyPerson, String searchOfficeCode, String searchEmpCode, String searchDesignation, String mobile, String active, String office_code, String familysearch) {
-        int noOfRows = 0;
-        String id = "";
-        int org_id = getOrganisation_id(office_code);
-        if (org_id != 0) {
-            id = String.valueOf(org_id);
-        } else {
-            id = "";
-        }
-        try {
-
-//   String   query1=" select  k.key_person_id,ot.org_office_code ,oft.office_type,org.organisation_name, ot.org_office_name,k.key_person_name,d.designation," +
-//                          "c.city_name,k.address_line1, k.address_line2,k.address_line3,k.image_path, k.mobile_no1," +
-//                          "k.mobile_no2, k.landline_no1, k.landline_no2, k.email_id1, k.email_id2, k.salutation,k.emp_code, k.father_name, k.date_of_birth," +
-//                          "k.id_no, k.id_type_id ,k.password ,k.bloodgroup,k.emergency_contact_name,k.emergency_contact_mobile,k.latitude,k.longitude,k.gender,k.relation,ot2.org_office_name as family_org_name,d2.designation  as family_designation " +
-//                          "from key_person AS k " +
-//                          "left join org_office AS ot  on k.org_office_id=ot.org_office_id " +
-//                          "left join organisation_name AS org on ot.organisation_id = org.organisation_id " +
-//                          "left join  org_office_type as oft on oft.office_type_id = ot.office_type_id " +
-//                          "left join org_office AS ot2 on k.family_office=ot2.org_office_id " +
-//                          "left join  designation as d2 on k.family_designation = d2.designation_id " +
-//                          "left join  city AS c on k.city_id=c.city_id " +
-//                          "left join  designation as d on k.designation_id = d.designation_id " +
-//                          " where  if('" + active + "' = '' , k.active like '%%' , k.active= ? ) " 
-//                          + " OR if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? )  "
-//                           + " AND if('" + mobile + "' = '' , k.mobile_no1 like '%%' , k.mobile_no1= ? )  "
-//                         + "AND if('" + searchKeyPerson + "' = '' , k.key_person_name like '%%' , k.key_person_name = ? )  "
-//                        + "AND ( if('" + familysearch + "' = '' , ot2.org_office_code like '%%' , ot2.org_office_code = ? )  "
-//                       + " OR if('" + familysearch + "' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) ) "
-////                          + "AND if('" + searchEmpCode + "' = '' , emp_code like '%%' , emp_code = ? )  "
-////                           + "AND if('" + searchDesignation + "' = '' ,d.designation like '%%' ,d.designation = ? ) "
-//                          
-//                          + "GROUP BY k.key_person_id ORDER BY key_person_name ";
-            String query1 = " select k.key_person_id,ot.org_office_code ,oft.office_type,org.organisation_name,org2.organisation_name as family_organisation, ot.org_office_name, "
-                    + " k.key_person_name,d.designation,c.city_name,k.address_line1, k.address_line2,k.address_line3, "
-                    + " k.image_path, k.mobile_no1,k.mobile_no2, k.landline_no1, k.landline_no2, k.email_id1, k.email_id2,  "
-                    + " k.salutation,k.emp_code, k.father_name, k.date_of_birth,k.id_no, k.id_type_id ,k.password , "
-                    + " k.bloodgroup,k.emergency_contact_name,k.emergency_contact_mobile,k.latitude,k.longitude, "
-                    + " k.gender,k.relation,ot2.org_office_name as family_org_name,d2.designation  as family_designation "
-                    + " from key_person AS k left join org_office AS ot  on k.org_office_id=ot.org_office_id "
-                    + " left join  org_office_type as oft on oft.office_type_id = ot.office_type_id "
-                    + " left join org_office AS ot2 on k.family_office=ot2.org_office_id "
-                    + " left join  designation as d2 on k.family_designation = d2.designation_id "
-                    + " left join  city AS c on k.city_id=c.city_id "
-                    + " left join  designation as d on k.designation_id = d.designation_id "
-                    + " left join organisation_name AS org on ot.organisation_id = org.organisation_id "
-                    + " left join organisation_name AS org2 on ot2.organisation_id = org2.organisation_id  "
-                    + " where  if('" + active + "' = '' , k.active like '%%' , k.active= ? )  "
-                    + " AND (if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? ) "
-                    + " OR if('" + office_code + "' = '' , org2.organisation_name like '%%' , org2.organisation_name = ? ) ) "
-                    + " AND if('" + mobile + "' = '' , k.mobile_no1 like '%%' , k.mobile_no1= ? ) "
-                    + " AND if('" + searchKeyPerson + "' = '' , k.key_person_name like '%%' , k.key_person_name = ? ) "
-                    + " AND ( if('" + familysearch + "' = '' , ot2.org_office_code like '%%' , ot2.org_office_code = ? ) "
-                    + " OR if('" + familysearch + "' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) ) "
-                    + " GROUP BY k.key_person_id ORDER BY key_person_name  ";
-
-            PreparedStatement pstmt = connection.prepareStatement(query1);
-            pstmt.setString(1, active);
-            pstmt.setString(2, office_code);
-            pstmt.setString(3, office_code);
-            pstmt.setString(4, mobile);
-            pstmt.setString(5, (searchKeyPerson));
-
-            pstmt.setString(6, familysearch);
-            pstmt.setString(7, familysearch);
-//            pstmt.setString(5, krutiToUnicode.convert_to_unicode(searchDesignation));
-
-            ResultSet rset = pstmt.executeQuery();
-
-            while (rset.next()) {
-                KeyPerson key = new KeyPerson();
-                key.setKey_person_id(rset.getInt("key_person_id"));
-                key.setOrg_office_code(rset.getString("org_office_code"));
-                key.setOffice_type(rset.getString("office_type"));
-                key.setOrganisation_name((rset.getString("organisation_name")));
-                key.setOrg_office_name((rset.getString("org_office_name")));
-                key.setKey_person_name((rset.getString("key_person_name")));
-                key.setImage_path(rset.getString("image_path"));
-                key.setDesignation((rset.getString("designation")));
-                // key.setState_name(rset.getString("state_name"));
-                key.setCity_name((rset.getString("city_name")));
-                key.setAddress_line1((rset.getString("address_line1")));
-                key.setAddress_line2((rset.getString("address_line2")));
-                key.setAddress_line3((rset.getString("address_line3")));
-                key.setMobile_no1(rset.getString("mobile_no1"));
-                key.setMobile_no2(rset.getString("mobile_no2"));
-                key.setLandline_no1(rset.getString("landline_no1"));
-                key.setLandline_no2(rset.getString("landline_no2"));
-                key.setEmail_id1(rset.getString("email_id1"));
-                key.setEmail_id2(rset.getString("email_id2"));
-                key.setSalutation(rset.getString("salutation"));
-                key.setEmp_code(rset.getString("emp_code"));
-                // key.setGeneral_image_details_id(rset.getInt("general_image_details_id"));
-                key.setFather_name((rset.getString("father_name")));
-                key.setDate_of_birth(rset.getString("date_of_birth"));
-                key.setId_no(rset.getString("id_no"));
-                String id_type = KeypersonModel.getid_type_id((rset.getString("id_type_id")));
-                key.setId_type((id_type));
-                key.setPassword(rset.getString("password"));
-                key.setBlood(rset.getString("bloodgroup"));
-                key.setEmergency_name(rset.getString("emergency_contact_name"));
-                key.setEmergency_number(rset.getString("emergency_contact_mobile"));
-                key.setLatitude(rset.getString("latitude"));
-                key.setLongitude(rset.getString("longitude"));
-                key.setGender(rset.getString("gender"));
-                key.setFamilyName(rset.getString("family_org_name"));
-                key.setRelation(rset.getString("relation"));
-                key.setFamilyDesignation(rset.getString("family_designation"));
-
-                //key.setImage_name(rset.getString("image_name"));
-                noOfRows++;
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error:keypersonModel-getNoOfRows-- " + e);
-        }
-        return noOfRows;
-    }
-
-    public List<KeyPerson> showData(int lowerLimit, int noOfRowsToDisplay, String designation, String person, String office_code, String searchEmpCode, String searchDesignation, String mobile, String active, String familysearch) {
         List<KeyPerson> list = new ArrayList<KeyPerson>();
         String query;
         byte[] imgData = null;
@@ -271,24 +99,38 @@ public class KeypersonModel {
                     + " left join  designation as d on k.designation_id = d.designation_id "
                     + " left join organisation_name AS org on ot.organisation_id = org.organisation_id "
                     + " left join organisation_name AS org2 on ot2.organisation_id = org2.organisation_id  "
-                    + " where (d.active='Y' or d2.active='Y') and  if('" + active + "' = '' , k.active like '%%' , k.active= ? )  "
-                    + " AND (if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? ) "
-                    + " OR if('" + office_code + "' = '' , org2.organisation_name like '%%' , org2.organisation_name = ? ) ) "
-                    + " AND if('" + mobile + "' = '' , k.mobile_no1 like '%%' , k.mobile_no1= ? ) "
-                    + " AND if('" + person + "' = '' , k.key_person_name like '%%' , k.key_person_name = ? ) "
-                    + " AND ( if('" + familysearch + "' = '' , ot2.org_office_code like '%%' , ot2.org_office_code = ? ) "
-                    + " OR if('" + familysearch + "' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) ) "
-                    + " GROUP BY k.key_person_id ORDER BY key_person_name  "
-                    + "LIMIT  " + lowerLimit + ", " + noOfRowsToDisplay;
+                    + " where (d.active='Y' or d2.active='Y') and k.active='Y' ";
 
+            if (!office_code.equals("") && office_code != null) {
+                query1 += " and org.organisation_name='" + office_code + "' or org2.organisation_name='" + office_code + "'";
+            }
+            if (!mobile.equals("") && mobile != null) {
+                query1 += " and k.mobile_no1='" + mobile + "' ";
+            }
+            if (!person.equals("") && person != null) {
+                query1 += " and k.key_person_name='" + person + "' ";
+            }
+            if (!familysearch.equals("") && familysearch != null) {
+                query1 += " and ot2.org_office_code='" + familysearch + "' or  ot.org_office_code='" + familysearch + "' ";
+            }
+
+            query1 += " GROUP BY k.key_person_id ORDER BY key_person_name ";
+
+//            +" AND (if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? ) "
+//                    + " OR if('" + office_code + "' = '' , org2.organisation_name like '%%' , org2.organisation_name = ? ) ) "
+//                    + " AND if('" + mobile + "' = '' , k.mobile_no1 like '%%' , k.mobile_no1= ? ) "
+//                    + " AND if('" + person + "' = '' , k.key_person_name like '%%' , k.key_person_name = ? ) "
+//                    + " AND ( if('" + familysearch + "' = '' , ot2.org_office_code like '%%' , ot2.org_office_code = ? ) "
+//                    + " OR if('" + familysearch + "' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) ) "
+//                    + " GROUP BY k.key_person_id ORDER BY key_person_name  ";
             PreparedStatement pstmt = connection.prepareStatement(query1);
-            pstmt.setString(1, active);
-            pstmt.setString(2, office_code);
-            pstmt.setString(3, office_code);
-            pstmt.setString(4, mobile);
-            pstmt.setString(5, (person));
-            pstmt.setString(6, familysearch);
-            pstmt.setString(7, familysearch);
+//            pstmt.setString(1, active);
+//            pstmt.setString(2, office_code);
+//            pstmt.setString(3, office_code);
+//            pstmt.setString(4, mobile);
+//            pstmt.setString(5, (person));
+//            pstmt.setString(6, familysearch);
+//            pstmt.setString(7, familysearch);
 //            pstmt.setString(5, searchEmpCode);
 //            pstmt.setString(6,(searchDesignation));
             ResultSet rset = pstmt.executeQuery();
@@ -341,103 +183,11 @@ public class KeypersonModel {
         return list;
     }
 
-    public List<KeyPerson> showAll(String designation, String person, String office_code, String searchEmpCode, String searchDesignation, String mobile, String active, String searchfamily) {
-
-        List<KeyPerson> list = new ArrayList<KeyPerson>();
-        String query;
-        byte[] imgData = null;
-        //InputStream binaryStream = null;
-        try {
-//            // Use DESC or ASC for descending or ascending order respectively of fetched data.
-
-            String query1 = " select k.key_person_id,ot.org_office_code ,oft.office_type,org.organisation_name,org2.organisation_name as family_organisation, ot.org_office_name, "
-                    + " k.key_person_name,d.designation,c.city_name,k.address_line1, k.address_line2,k.address_line3, "
-                    + " k.image_path, k.mobile_no1,k.mobile_no2, k.landline_no1, k.landline_no2, k.email_id1, k.email_id2,  "
-                    + " k.salutation,k.emp_code, k.father_name, k.date_of_birth,k.id_no, k.id_type_id ,k.password , "
-                    + " k.bloodgroup,k.emergency_contact_name,k.emergency_contact_mobile,k.latitude,k.longitude, "
-                    + " k.gender,k.relation,ot2.org_office_name as family_org_name,d2.designation  as family_designation "
-                    + " from key_person AS k left join org_office AS ot  on k.org_office_id=ot.org_office_id "
-                    + " left join  org_office_type as oft on oft.office_type_id = ot.office_type_id "
-                    + " left join org_office AS ot2 on k.family_office=ot2.org_office_id "
-                    + " left join  designation as d2 on k.family_designation = d2.designation_id "
-                    + " left join  city AS c on k.city_id=c.city_id "
-                    + " left join  designation as d on k.designation_id = d.designation_id "
-                    + " left join organisation_name AS org on ot.organisation_id = org.organisation_id "
-                    + " left join organisation_name AS org2 on ot2.organisation_id = org2.organisation_id  "
-                    + " where  if('" + active + "' = '' , k.active like '%%' , k.active= ? )  "
-                    + " AND (if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? ) "
-                    + " OR if('" + office_code + "' = '' , org2.organisation_name like '%%' , org2.organisation_name = ? ) ) "
-                    + " AND if('" + mobile + "' = '' , k.mobile_no1 like '%%' , k.mobile_no1= ? ) "
-                    + " AND if('" + person + "' = '' , k.key_person_name like '%%' , k.key_person_name = ? ) "
-                    + " AND ( if('" + searchfamily + "' = '' , ot2.org_office_code like '%%' , ot2.org_office_code = ? ) "
-                    + " OR if('" + searchfamily + "' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) ) "
-                    + " GROUP BY k.key_person_id ORDER BY key_person_name  ";
-
-            PreparedStatement pstmt = connection.prepareStatement(query1);
-            pstmt.setString(1, active);
-            pstmt.setString(2, office_code);
-            pstmt.setString(3, office_code);
-            pstmt.setString(4, mobile);
-            pstmt.setString(5, (person));
-//          pstmt.setString(3, active);
-            pstmt.setString(6, searchfamily);
-            pstmt.setString(7, (searchfamily));
-            ResultSet rset = pstmt.executeQuery();
-            while (rset.next()) {
-                KeyPerson key = new KeyPerson();
-                key.setKey_person_id(rset.getInt("key_person_id"));
-                key.setOrg_office_code(rset.getString("org_office_code"));
-                key.setOffice_type(rset.getString("office_type"));
-                key.setOrganisation_name((rset.getString("organisation_name")));
-                key.setOrg_office_name((rset.getString("org_office_name")));
-                key.setKey_person_name((rset.getString("key_person_name")));
-                key.setImage_path(rset.getString("image_path"));
-                key.setDesignation((rset.getString("designation")));
-                // key.setState_name(rset.getString("state_name"));
-                key.setCity_name((rset.getString("city_name")));
-                key.setAddress_line1((rset.getString("address_line1")));
-                key.setAddress_line2((rset.getString("address_line2")));
-                key.setAddress_line3((rset.getString("address_line3")));
-                key.setMobile_no1(rset.getString("mobile_no1"));
-                key.setMobile_no2(rset.getString("mobile_no2"));
-                key.setLandline_no1(rset.getString("landline_no1"));
-                key.setLandline_no2(rset.getString("landline_no2"));
-                key.setEmail_id1(rset.getString("email_id1"));
-                key.setEmail_id2(rset.getString("email_id2"));
-                key.setSalutation(rset.getString("salutation"));
-                key.setEmp_code(rset.getString("emp_code"));
-                // key.setGeneral_image_details_id(rset.getInt("general_image_details_id"));
-                key.setFather_name((rset.getString("father_name")));
-                key.setDate_of_birth(rset.getString("date_of_birth"));
-                key.setId_no(rset.getString("id_no"));
-                String id_type = KeypersonModel.getid_type_id((rset.getString("id_type_id")));
-                key.setId_type((id_type));
-                key.setPassword(rset.getString("password"));
-                key.setBlood(rset.getString("bloodgroup"));
-                key.setEmergency_name(rset.getString("emergency_contact_name"));
-                key.setEmergency_number(rset.getString("emergency_contact_mobile"));
-                key.setLatitude(rset.getString("latitude"));
-                key.setLongitude(rset.getString("longitude"));
-                key.setGender(rset.getString("gender"));
-                key.setFamilyName(rset.getString("family_org_name"));
-                key.setRelation(rset.getString("relation"));
-                key.setFamilyDesignation(rset.getString("family_designation"));
-
-                //key.setImage_name(rset.getString("image_name"));
-                list.add(key);
-                key.setList(list);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error:keypersonModel--showData " + e);
-        }
-        return list;
-    }
-
     public List<EmergencyBean> showEmergency(String kp_id) {
         List list = new ArrayList();
         String query = " select distinct emer.id,emer.name,emer.number,emer.key_person_id,emer.emergency_kp_id from emergency_contact_details emer,key_person k"
                 + " where  emer.key_person_id=" + kp_id + " and  k.active='Y' and emer.active='Y' ";
+        System.err.println("quer--------------------" + query);
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
 
@@ -514,131 +264,8 @@ public class KeypersonModel {
         return organisation_id;
     }
 
-//    public int insertRecord(KeyPerson key, Iterator itr, String photo_destination, String iD_destination) {
-//        int rowsAffected = 0;
-//        DateFormat dateFormat1 = new SimpleDateFormat("dd.MMMMM.yyyy");
-//        DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
-//        Date date = new Date();
-//        String current_date = dateFormat.format(date);
-//        String image_uploaded_for = "key_person";
-//        String query = "", imageQuery = "", updateQuery = "";
-//        PreparedStatement pstmt = null;
-//        int kp_id = 0;
-//        try{
-//            query = "INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
-//                    + "address_line2, address_line3,"
-//                    + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name, date_of_birth,revision_no,active,remark) "//image_path,
-//                    + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)";
-//
-//            imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
-//                    + " VALUES(?, ?, ?, ?,?,?,?,?)";
-//
-//            updateQuery = "UPDATE key_person set general_image_details_id=?,active=? where key_person_id=? and revision_no=?";
-//
-//            pstmt = connection.prepareStatement(query);
-//            //pstmt.setString(16, photo_destination + imageName);`
-//            // pstmt.setInt(17,Integer.parseInt(key.getImage_id()));
-//            //}
-//            pstmt.setString(1, key.getSalutation());
-//            pstmt.setString(2, (key.getKey_person_name()));
-//            pstmt.setInt(3, key.getDesignation_id());
-//            pstmt.setInt(4, key.getOrg_office_id());
-//            pstmt.setInt(5, key.getCity_id());
-//            pstmt.setString(6, (key.getAddress_line1()));
-//            pstmt.setString(7, (key.getAddress_line2()));
-//            pstmt.setString(8, (key.getAddress_line3()));
-//            pstmt.setString(9, key.getMobile_no1());
-//            pstmt.setString(10, key.getMobile_no2());
-//            pstmt.setString(11, key.getLandline_no1());
-//            pstmt.setString(12, key.getLandline_no2());
-//            pstmt.setString(13, key.getEmail_id1());
-//            pstmt.setString(14, key.getEmail_id2());
-//            pstmt.setString(15, key.getEmp_code());
-//            pstmt.setString(16, (key.getFather_name()));
-//            pstmt.setInt(17, key.getDate_of_birth());
-//            pstmt.setInt(18, key.getRevision_no());
-//            pstmt.setString(19,key.getActive());
-//            pstmt.setString(20,key.getRemark());
-//            rowsAffected = pstmt.executeUpdate();
-//            ResultSet rs = pstmt.getGeneratedKeys();
-//            if(rs.next())
-//                kp_id = rs.getInt(1);
-//        } catch (Exception e) {
-//            System.out.println("Error:keypersonModel--insertRecord-- " + e);
-//        }
-//        if (rowsAffected > 0 && (!key.getId_proof().isEmpty() || !key.getImage_path().isEmpty())) {
-//            String[] image_name = {key.getImage_path(), key.getId_proof()};
-//
-//            for(int i=0; i < image_name.length;i++){
-//                String tempExt = image_name[i];
-//                
-//                if (!tempExt.isEmpty()){
-//                    String middleName = "";
-//                    String destination = "";
-//                    String fieldName = "";
-//                    if(tempExt.equals(image_name[0])){
-//                        middleName = "pic";
-//                        destination = photo_destination;
-//                        fieldName = "design_name";
-//                        image_uploaded_for = "key_person_photo";
-//                    }
-//                    else if(tempExt.equals(image_name[1])){
-//                        middleName = "proof";
-//                        destination = iD_destination;
-//                        fieldName = "id_proof";
-//                        image_uploaded_for = "key_person_ID";
-//                    }
-//
-//                    int index = tempExt.lastIndexOf(".");
-//                    int index1 = tempExt.length();
-//                    String Extention = tempExt.substring(index + 1, index1);
-//                    tempExt = "." + Extention;
-//                    String imageName = krutiToUnicode.convert_to_unicode(key.getDesignation()) + "_" + middleName + "_" + kp_id + tempExt;
-//                    key.setImage_name(imageName);
-//                    rowsAffected = insertImageRecord(imageName, image_uploaded_for, current_date, kp_id);
-//                    if(rowsAffected > 0)
-//                        WirteImage(key, itr, destination, imageName, fieldName);
-//                }
-//            }
-////                pstmt = connection.prepareStatement(imageQuery);
-////                pstmt.setString(1, key.getImage_name());
-////                pstmt.setInt(2, getimage_destination_id(image_uploaded_for));
-////                pstmt.setString(3, current_date);
-////                pstmt.setString(4, "this image is for site");
-////                pstmt.setInt(5, kp_id);
-////                rowsAffected = pstmt.executeUpdate();
-////                pstmt.close();
-//             //catch (Exception e) {
-//             //   System.out.println("Error:keypersonModel--insertRecord-- " + e);
-//            //}
-//            if (rowsAffected > 0) {
-//                try {
-//                    pstmt = connection.prepareStatement(updateQuery);
-//                    pstmt.setInt(1, getgeneral_image_details_id(getkey_person_id(key.getEmp_code())));
-//                    pstmt.setString(2,"Y");
-//                    pstmt.setInt(2, getkey_person_id(key.getEmp_code()));
-//                    pstmt.executeUpdate();
-//                } catch (Exception e) {
-//                    System.out.println("Exception :" + e);
-//                }
-//            }
-//        }
-//            if(rowsAffected > 0){
-////                GeneralModel generalModel = new GeneralModel();
-////                generalModel.sendSmsToAssignedFor(key.getMobile_no1(), message);
-//            }
-//            // rowsAffected = writeImage(key, itr, destination);
-//        if(rowsAffected > 0){
-//            message = "Record saved successfully.";
-//            msgBgColor = COLOR_OK;
-//        } else {
-//            message = "Cannot save the record, some error.";
-//            msgBgColor = COLOR_ERROR;
-//        }
-//        return rowsAffected;
-//    }
     public int insertRecord(KeyPerson key, Iterator itr, String photo_destination, String iD_destination) throws SQLException {
-
+        System.err.println("insert -----------------------");
         int rowsAffected = 0;
         DateFormat dateFormat1 = new SimpleDateFormat("dd.MMMMM.yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
@@ -965,67 +592,6 @@ public class KeypersonModel {
         }
     }
 
-    /*   public int writeImage(KeyPerson key, Iterator itr, String destination) {
-    int count = 0;
-    try {
-    String tempExt =  key.getImage_path();
-    int maxId=0;
-    String query1=" select max(key_person_id) as  key_person_id from key_person ";
-    PreparedStatement pstmt1 = connection.prepareStatement(query1);
-    ResultSet rset=pstmt1.executeQuery();
-    while(rset.next())
-    {
-    maxId=rset.getInt("key_person_id");
-    System.out.println(maxId);
-    }
-    int check=0;
-    if(tempExt.isEmpty()){
-    tempExt=key.getImage_path();
-    maxId= key.getKey_person_id();
-    check=1;
-    }
-    int index = tempExt.lastIndexOf(".");
-    int index1 = tempExt.length();
-    String Extention = tempExt.substring(index + 1, index1);
-    tempExt = "." + Extention;
-    String imageName = key.getDesignation()+"_"+"pic"+"_"+ maxId + tempExt;
-    makeDirectory(destination);
-    if(check==1){
-    File file = new File(key.getImage_path());
-    File file1 = new File(imageName);
-    if(file.renameTo(file1)){
-    System.out.println("Rename succesful");
-    }else{
-    System.out.println("Rename failed");
-    }
-    //  updateImageName(imageName,maxId);
-    }else{
-    while (itr.hasNext()) {
-    FileItem item = (FileItem) itr.next();
-    try {
-    if (!item.isFormField()) {
-    File file = new File(destination+ imageName);
-    String image = item.getName();
-    if (image.isEmpty() || image.equals(destination)) {
-    } else {
-    item.write(file);
-    message = "Image Uploaded Successfully.";
-    //  updateImageName(imageName,id);
-    count++;
-    }
-    }
-    } catch (Exception e) {
-    System.out.println("Image upload error: " + e);
-    }
-    }
-    }
-    } catch (Exception ex) {
-    System.out.println("File write error" + ex);
-    message = "Cannot upload the image, some error.";
-    msgBgColor = COLOR_ERROR;
-    }
-    return 1;
-    }*/
     public static int getRevisionno(KeyPerson key, int key_id) {
         int revision = 0;
         try {
@@ -1044,15 +610,15 @@ public class KeypersonModel {
         }
         return revision;
     }
-
+    
     public int getimage_destination_id(String image_uploaded_for) {
         String query;
         int image_destination_id = 0;
         query = " SELECT image_destination_id, destination_path from image_destination AS id , image_uploaded_for As i "
-                + " WHERE id.image_uploaded_for_id=i.image_uploaded_for_id AND i.image_uploaded_for= ? ";
+                + " WHERE id.image_uploaded_for_id=i.image_uploaded_for_id AND i.image_uploaded_for= '"+image_uploaded_for+"' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, image_uploaded_for);
+            // pstmt.setString(1, image_uploaded_for);
             ResultSet rset = pstmt.executeQuery();
             if (rset.next()) {
                 String destination_path = rset.getString("destination_path");
@@ -1084,7 +650,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getimage_destination_id-" + ex);
+            System.out.println("Error: UploadBillImageModel-getkey_person_id-" + ex);
         }
         return key_person_id;
     }
@@ -1104,7 +670,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getimage_destination_id-" + ex);
+            System.out.println("Error: UploadBillImageModel-getgeneral_image_details_id-" + ex);
         }
         return key_person_id;
     }
@@ -1133,79 +699,6 @@ public class KeypersonModel {
         String current_date = dateFormat.format(date);
         //String tempExt="";
         int count = 0;
-        try {
-
-//             if (key.getGeneral_image_details_id() != 0) {
-//             String query="select image_name from general_image_details where general_image_details_id='"+key.getGeneral_image_details_id()+"'";
-//             PreparedStatement pstmt1 = connection.prepareStatement(query);
-//                ResultSet rset = pstmt1.executeQuery();
-//                while (rset.next()) {
-//                    tempExt=rset.getString("image_name");
-//                }
-//             }else{
-//                tempExt = key.getImage_path();}
-//                int maxId = 0;
-//                 String imageName="";
-//                String query1 = " select max(key_person_id) as  key_person_id from key_person ";
-//                PreparedStatement pstmt1 = connection.prepareStatement(query1);
-//                ResultSet rset = pstmt1.executeQuery();
-//                while (rset.next()) {
-//                    maxId = rset.getInt("key_person_id");
-//                    System.out.println(maxId);
-//                }
-//                int check = 0;
-//                if (tempExt.isEmpty()) {
-//                    tempExt = key.getImage_path();
-//                    maxId = key.getKey_person_id();
-//                    check = 1;
-//                }
-//                File file1 = new File(photo_destination + File.separator + tempExt);
-//                if (file1.exists()) {
-//                  imageName=tempExt;
-//                  key.setImage_name(imageName);
-//                } else {
-//                    int index = tempExt.lastIndexOf(".");
-//                    int index1 = tempExt.length();
-//                    String Extention = tempExt.substring(index + 1, index1);
-//                    tempExt = "." + Extention;
-//
-//                     imageName = key.getDesignation() + "_" + "pic" + "_" + maxId + tempExt;
-//                    key.setImage_name(imageName);
-//                }
-//                makeDirectory(photo_destination);
-//                if (check == 1) {
-//                    File file = new File(key.getImage_path());
-//                    File file2 = new File(imageName);
-//                    if (file.renameTo(file2)) {
-//                        System.out.println("Rename succesful");
-//                    } else {
-//                        System.out.println("Rename failed");
-//                    }
-//                    // updateImageName(imageName,maxId);
-//                } else {
-//                    while (itr.hasNext()) {
-//                        FileItem item = (FileItem) itr.next();
-//                        try {
-//                            if (!item.isFormField()) {
-//                                File file = new File(photo_destination + imageName);
-//                                String image = item.getName();
-//                                if (image.isEmpty() || image.equals(photo_destination)) {
-//                                } else {
-//                                    item.write(file);
-//                                    message = "Image Uploaded Successfully.";
-//                                    //  updateImageName(imageName,id);
-//                                    count++;
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            System.out.println("Image upload error: " + e);
-//                        }
-//                    }
-//                }
-            //   }
-        } catch (Exception e) {
-            System.out.println("Exception is :" + e);
-        }
 
         String query = "UPDATE key_person SET  salutation=?, key_person_name=?, designation_id=?, org_office_id=?, city_id=?, address_line1=?, "
                 + "address_line2=?, address_line3=?,"
@@ -1222,20 +715,20 @@ public class KeypersonModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
             pstmt.setString(1, key.getSalutation());
-            pstmt.setString(2, krutiToUnicode.convert_to_unicode(key.getKey_person_name()));
+            pstmt.setString(2, key.getKey_person_name());
             pstmt.setInt(3, key.getDesignation_id());
             pstmt.setInt(4, key.getOrg_office_id());
             pstmt.setInt(5, key.getCity_id());
-            pstmt.setString(6, krutiToUnicode.convert_to_unicode(key.getAddress_line1()));
-            pstmt.setString(7, krutiToUnicode.convert_to_unicode(key.getAddress_line2()));
-            pstmt.setString(8, krutiToUnicode.convert_to_unicode(key.getAddress_line3()));
+            pstmt.setString(6, key.getAddress_line1());
+            pstmt.setString(7, key.getAddress_line2());
+            pstmt.setString(8, key.getAddress_line3());
             pstmt.setString(9, key.getMobile_no1());
             pstmt.setString(10, key.getMobile_no2());
             pstmt.setString(11, key.getLandline_no1());
             pstmt.setString(12, key.getLandline_no2());
             pstmt.setString(13, key.getEmail_id1());
             pstmt.setString(14, key.getEmail_id2());
-            pstmt.setString(15, krutiToUnicode.convert_to_unicode(key.getFather_name()));
+            pstmt.setString(15, key.getFather_name());
             pstmt.setString(16, key.getDate_of_birth());
             pstmt.setInt(17, key_person_id);
             rowsAffected = pstmt.executeUpdate();
@@ -1279,7 +772,7 @@ public class KeypersonModel {
                         int index1 = tempExt.length();
                         String Extention = tempExt.substring(index + 1, index1);
                         tempExt = "." + Extention;
-                        String imageName = krutiToUnicode.convert_to_unicode(key.getDesignation()) + "_" + middleName + "_" + key_person_id + rev + tempExt;
+                        String imageName = key.getDesignation() + "_" + middleName + "_" + key_person_id + rev + tempExt;
                         key.setImage_name(imageName);
                         // rowsAffected = insertImageRecord(imageName, image_uploaded_for, current_date, key_person_id);
                         if (rowsAffected > 0) {
@@ -1288,42 +781,6 @@ public class KeypersonModel {
                     }
                 }
             }
-//            if(rowsAffected>0){
-//            if (key.getGeneral_image_details_id() != 0) {
-//                PreparedStatement pstmt1 = connection.prepareStatement(updateQuery);
-//               // pstmt.setString(1, key.getImage_path());
-//                pstmt1.setString(1, key.getImage_name());
-//                pstmt1.setInt(2, getimage_destination_id(image_uploaded_for));
-//                pstmt1.setString(3, current_date);
-//                pstmt1.setInt(4, key_person_id);
-//                pstmt1.setInt(5,key.getGeneral_image_details_id());
-//                rowsAffected = pstmt1.executeUpdate();
-//            } else {
-//                try {
-////                     PreparedStatement pstmt2 = connection.prepareStatement(imageQuery);
-////                    pstmt2.setString(1, key.getImage_name());
-////                    pstmt2.setInt(2, getimage_destination_id(image_uploaded_for));
-////                    pstmt2.setString(3, current_date);
-////                    pstmt2.setString(4, "this image is for site");
-////                    pstmt2.setInt(5,key_person_id);
-//                    //rowsAffected = pstmt2.executeUpdate();
-//                    rowsAffected = insertImageRecord(key.getImage_name(), image_uploaded_for, current_date, key_person_id);
-//                    pstmt.close();
-//                    if (rowsAffected > 0) {
-//                        try {
-//                             PreparedStatement pstmt3 = connection.prepareStatement(updateQuery1);
-//                            pstmt3.setInt(1, getgeneral_image_details_id(getkey_person_id(key.getEmp_code())));
-//                            pstmt3.setInt(2, getkey_person_id(key.getEmp_code()));
-//                            pstmt3.executeUpdate();
-//                        } catch (Exception e) {
-//                            System.out.println("Exception :" + e);
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    System.out.println("Error:keypersonModel--insertRecord-- " + e);
-//                }
-//            }
-//            }
         } catch (Exception e) {
             System.out.println("Error:keypersonModel-updateRecord-- " + e);
         }
@@ -1356,190 +813,6 @@ public class KeypersonModel {
         return image_name;
     }
 
-//    public int updateRecord(KeyPerson key, Iterator itr, String photo_destination, String iD_destination) {
-//
-//        String image_uploaded_for = "key_person";
-//        String imageQuery = "", updateQuery = "";
-//        DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
-//        Date date = new Date();
-//        String current_date = dateFormat.format(date);
-//        String tempExt="";
-//        int count = 0;
-//        try {
-////            if (key.getGeneral_image_details_id() != 0) {
-////                String image_name = key.getImage_path();
-////                File file1 = new File(destination + File.separator + image_name);
-////                if (!file1.exists()) {
-////                }
-////                while (itr.hasNext()) {
-////                    FileItem item = (FileItem) itr.next();
-////                    try {
-////                        if (!item.isFormField()) {
-////                            File file = new File(destination + image_name);
-////                            String image = item.getName();
-////                            if (image.isEmpty() || image.equals(destination)) {
-////                            } else {
-////                                item.write(file);
-////                                message = "Image Uploaded Successfully.";
-////                                //  updateImageName(imageName,id);
-////                                count++;
-////                            }
-////                        }
-////                    } catch (Exception e) {
-////                        System.out.println("Image upload error: " + e);
-////                    }
-////                }
-////            } else {
-//             if (key.getGeneral_image_details_id() != 0) {
-//             String query="select image_name from general_image_details where general_image_details_id='"+key.getGeneral_image_details_id()+"'";
-//             PreparedStatement pstmt1 = connection.prepareStatement(query);
-//                ResultSet rset = pstmt1.executeQuery();
-//                while (rset.next()) {
-//                    tempExt=rset.getString("image_name");
-//                }
-//             }else{
-//                tempExt = key.getImage_path();}
-//                int maxId = 0;
-//                 String imageName="";
-//                String query1 = " select max(key_person_id) as  key_person_id from key_person ";
-//                PreparedStatement pstmt1 = connection.prepareStatement(query1);
-//                ResultSet rset = pstmt1.executeQuery();
-//                while (rset.next()) {
-//                    maxId = rset.getInt("key_person_id");
-//                    System.out.println(maxId);
-//                }
-//                int check = 0;
-//                if (tempExt.isEmpty()) {
-//                    tempExt = key.getImage_path();
-//                    maxId = key.getKey_person_id();
-//                    check = 1;
-//                }
-//                File file1 = new File(photo_destination + File.separator + tempExt);
-//                if (file1.exists()) {
-//                  imageName=tempExt;
-//                  key.setImage_name(imageName);
-//                } else {
-//                    int index = tempExt.lastIndexOf(".");
-//                    int index1 = tempExt.length();
-//                    String Extention = tempExt.substring(index + 1, index1);
-//                    tempExt = "." + Extention;
-//
-//                     imageName = key.getDesignation() + "_" + "pic" + "_" + maxId + tempExt;
-//                    key.setImage_name(imageName);
-//                }
-//                makeDirectory(photo_destination);
-//                if (check == 1) {
-//                    File file = new File(key.getImage_path());
-//                    File file2 = new File(imageName);
-//                    if (file.renameTo(file2)) {
-//                        System.out.println("Rename succesful");
-//                    } else {
-//                        System.out.println("Rename failed");
-//                    }
-//                    // updateImageName(imageName,maxId);
-//                } else {
-//                    while (itr.hasNext()) {
-//                        FileItem item = (FileItem) itr.next();
-//                        try {
-//                            if (!item.isFormField()) {
-//                                File file = new File(photo_destination + imageName);
-//                                String image = item.getName();
-//                                if (image.isEmpty() || image.equals(photo_destination)) {
-//                                } else {
-//                                    item.write(file);
-//                                    message = "Image Uploaded Successfully.";
-//                                    //  updateImageName(imageName,id);
-//                                    count++;
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            System.out.println("Image upload error: " + e);
-//                        }
-//                    }
-//                }
-//         //   }
-//        } catch (SQLException e) {
-//            System.out.println("Exception is :" + e);
-//        }
-//
-//        String query = "UPDATE key_person SET  salutation=?, key_person_name=?, designation_id=?, org_office_id=?, city_id=?, address_line1=?, "
-//                + "address_line2=?, address_line3=?,"
-//                + " mobile_no1=?, mobile_no2=?, landline_no1=?, landline_no2=?, email_id1=?, email_id2=?, father_name=?, age=? "
-//                + "WHERE key_person_id=?";
-//        updateQuery = "update general_image_details set image_name=?,image_destination_id=?, date_time=?,key_person_id=? where general_image_details_id=?";
-//        imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id) "
-//                + " VALUES(?, ?, ?, ?,?)";
-//        String updateQuery1 = "UPDATE key_person set general_image_details_id=? where key_person_id=?";
-//
-//        int rowsAffected = 0;
-//        try {
-//            PreparedStatement pstmt = connection.prepareStatement(query);
-//
-//            pstmt.setString(1, key.getSalutation());
-//            pstmt.setString(2, krutiToUnicode.convert_to_unicode(key.getKey_person_name()));
-//            pstmt.setInt(3, key.getDesignation_id());
-//            pstmt.setInt(4, key.getOrg_office_id());
-//            pstmt.setInt(5, key.getCity_id());
-//            pstmt.setString(6, krutiToUnicode.convert_to_unicode(key.getAddress_line1()));
-//            pstmt.setString(7, krutiToUnicode.convert_to_unicode(key.getAddress_line2()));
-//            pstmt.setString(8, krutiToUnicode.convert_to_unicode(key.getAddress_line3()));
-//            pstmt.setString(9, key.getMobile_no1());
-//            pstmt.setString(10, key.getMobile_no2());
-//            pstmt.setString(11, key.getLandline_no1());
-//            pstmt.setString(12, key.getLandline_no2());
-//            pstmt.setString(13, key.getEmail_id1());
-//            pstmt.setString(14, key.getEmail_id2());
-//            pstmt.setString(15, krutiToUnicode.convert_to_unicode(key.getFather_name()));
-//            pstmt.setInt(16, key.getAge());
-//            pstmt.setInt(17, key.getKey_person_id());
-//            rowsAffected = pstmt.executeUpdate();
-//            if(rowsAffected>0){
-//            if (key.getGeneral_image_details_id() != 0) {
-//                PreparedStatement pstmt1 = connection.prepareStatement(updateQuery);
-//               // pstmt.setString(1, key.getImage_path());
-//                pstmt1.setString(1, key.getImage_name());
-//                pstmt1.setInt(2, getimage_destination_id(image_uploaded_for));
-//                pstmt1.setString(3, current_date);
-//                pstmt1.setInt(4, getkey_person_id(key.getEmp_code()));
-//                pstmt1.setInt(5,key.getGeneral_image_details_id());
-//                rowsAffected = pstmt1.executeUpdate();
-//            } else {
-//                try {
-//                     PreparedStatement pstmt2 = connection.prepareStatement(imageQuery);
-//                    pstmt2.setString(1, key.getImage_name());
-//                    pstmt2.setInt(2, getimage_destination_id(image_uploaded_for));
-//                    pstmt2.setString(3, current_date);
-//                    pstmt2.setString(4, "this image is for site");
-//                    pstmt2.setInt(5, getkey_person_id(key.getEmp_code()));
-//                    rowsAffected = pstmt2.executeUpdate();
-//                    pstmt.close();
-//                    if (rowsAffected > 0) {
-//                        try {
-//                             PreparedStatement pstmt3 = connection.prepareStatement(updateQuery1);
-//                            pstmt3.setInt(1, getgeneral_image_details_id(getkey_person_id(key.getEmp_code())));
-//                            pstmt3.setInt(2, getkey_person_id(key.getEmp_code()));
-//                            pstmt3.executeUpdate();
-//                        } catch (Exception e) {
-//                            System.out.println("Exception :" + e);
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    System.out.println("Error:keypersonModel--insertRecord-- " + e);
-//                }
-//            }
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error:keypersonModel-updateRecord-- " + e);
-//        }
-//        if (rowsAffected > 0) {
-//            message = "Record updated successfully.";
-//            msgBgColor = COLOR_OK;
-//        } else {
-//            message = "Cannot update the record, some error.";
-//            msgBgColor = COLOR_ERROR;
-//        }
-//        return rowsAffected;
-//    }
     public int deleteRecord(int key_person_id) {
         // String query = "DELETE FROM key_person WHERE key_person_id=" + key_person_id;
         String query2 = "UPDATE key_person SET active=? WHERE key_person_id=? and revision_no=?";
@@ -1568,11 +841,11 @@ public class KeypersonModel {
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = ?";
+        String query = "SELECT city_id FROM city WHERE city_name = '"+city_name+"'";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, city_name);
+            // pstmt.setString(1, city_name);
 
             ResultSet rset = pstmt.executeQuery();
             if (rset.next()) // move cursor from BOR to valid record.
@@ -1597,7 +870,7 @@ public class KeypersonModel {
                 city_id = rset.getString("id_type");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getCity_id-- " + e);
+            System.out.println("Error:keypersonModel--getid_type_id-- " + e);
         }
         return city_id;
     }
@@ -1729,14 +1002,15 @@ public class KeypersonModel {
     public List<String> getOrgOfficeName(String q, String office_code) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT ot.org_office_name FROM org_office AS ot , org_office_type as oft,organisation_name AS o "
-                + "WHERE oft.office_type_id = ot.office_type_id  AND o.organisation_id=ot.organisation_id AND ot.org_office_code =? and ot.active='Y' and oft.active='Y' and o.active='Y'"
+                + "WHERE oft.office_type_id = ot.office_type_id  AND o.organisation_id=ot.organisation_id AND ot.org_office_code ='"+office_code+"' and ot.active='Y' and oft.active='Y' and o.active='Y'"
                 //                + " AND if('"+ office_code +"' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) "
                 + " GROUP BY org_office_name ";
+        System.err.println("org office query----------------"+query);
         try {
             int count = 0;
 
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, office_code);
+            // pstmt.setString(1, office_code);
             ResultSet rset = pstmt.executeQuery();
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
@@ -1763,7 +1037,6 @@ public class KeypersonModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
             for (int i = 0; i <= Integer.parseInt(k); i++) {
                 pstmt.setInt(1, (key_id));
-
                 pstmt.setObject(2, list1.get(i));
                 pstmt.setObject(3, list2.get(i));
                 pstmt.setInt(4, getemergencykp_id(mobile_no1));
@@ -1795,19 +1068,21 @@ public class KeypersonModel {
         String query = "SELECT ot.org_office_id "
                 + " FROM org_office AS ot , "
                 + " organisation_name AS o "
-                + " WHERE o.organisation_id=ot.organisation_id AND ot.org_office_name = ? AND ot.org_office_code = ?";
+                + " WHERE o.organisation_id=ot.organisation_id AND "
+                + "ot.org_office_name = '"+org_office_name+"' AND ot.org_office_code = '"+office_code+"'";
+        
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
-            pstmt.setString(1, org_office_name);
-            pstmt.setString(2, office_code);
+//            pstmt.setString(1, org_office_name);
+//            pstmt.setString(2, office_code);
             ResultSet rset = pstmt.executeQuery();
             if (rset.next()) {
                 organisation_id = rset.getInt("org_office_id");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel-- getOrganization_id--" + e);
+            System.out.println("Error:keypersonModel-- getOrgOffice_id--" + e);
         }
         return organisation_id;
     }
@@ -1816,13 +1091,12 @@ public class KeypersonModel {
         String query = "SELECT ot.org_office_id "
                 + " FROM org_office AS ot , "
                 + " organisation_name AS o "
-                + " WHERE o.organisation_id=ot.organisation_id AND ot.org_office_name = ? AND ot.active='Y'";
+                + " WHERE o.organisation_id=ot.organisation_id AND ot.org_office_name = '"+org_office_name+"' AND ot.active='Y'";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
-            pstmt.setString(1, org_office_name);
-
+            //pstmt.setString(1, org_office_name);
             ResultSet rset = pstmt.executeQuery();
             if (rset.next()) {
                 organisation_id = rset.getInt("org_office_id");
@@ -1952,11 +1226,11 @@ public class KeypersonModel {
         String longi = "";
         String query = " select latitude,longitude "
                 + " from key_person "
-                + " where key_person_id=? ";
+                + " where key_person_id='"+person_id+"' ";
 
         try {
             PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1, person_id);
+            //  pst.setString(1, person_id);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 lat = rs.getString("latitude");
@@ -1971,61 +1245,62 @@ public class KeypersonModel {
     }
 
     public int getIdtype_id(String id_type) {
-        String query = "SELECT id_type_id FROM id_type WHERE id_type = ?";
+        String query = "SELECT id_type_id FROM id_type WHERE id_type = '"+id_type+"'";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, id_type);
+            //  pstmt.setString(1, id_type);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             designation_id = rset.getInt("id_type_id");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getdesignation_id-- " + e);
+            System.out.println("Error:keypersonModel--getIdtype_id-- " + e);
         }
         return designation_id;
     }
 
     public String getkp_name(int id_type) {
-        String query = "SELECT key_person_name FROM key_person WHERE key_person_id = ?";
+        String query = "SELECT key_person_name FROM key_person WHERE key_person_id = '"+id_type+"'";
         String designation_id = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, id_type);
+           // pstmt.setInt(1, id_type);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             designation_id = rset.getString("key_person_name");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getdesignation_id-- " + e);
+            System.out.println("Error:keypersonModel--getkp_name-- " + e);
         }
         return designation_id;
     }
 
     public int getDesignation_id(String designation) {
-        String query = "SELECT designation_id FROM designation WHERE designation = ?";
+        String query = "SELECT designation_id FROM designation WHERE designation = '"+designation+"'";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, designation);
+            //  pstmt.setString(1, designation);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             designation_id = rset.getInt("designation_id");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getdesignation_id-- " + e);
+            System.out.println("Error:keypersonModel--getDesignation_id-- " + e);
         }
         return designation_id;
     }
 
     public int getemergencykp_id(String designation) {
-        String query = "SELECT key_person_id FROM key_person WHERE mobile_no1 = ?";
+        String query = "SELECT key_person_id FROM key_person WHERE mobile_no1 = '"+designation+"'";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, designation);
+            // pstmt.setString(1, designation);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             designation_id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getdesignation_id-- " + e);
+            System.out.println("Error:keypersonModel--getemergencykp_id"
+                    + "-- " + e);
         }
         return designation_id;
     }
@@ -2039,8 +1314,8 @@ public class KeypersonModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
             int count = 0;
             q = q.trim();
-            pstmt.setString(1, code);
-            pstmt.setString(2, key_person);
+//            pstmt.setString(1, code);
+//            pstmt.setString(2, key_person);
 
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {    // move cursor from BOR to valid record.
@@ -2111,7 +1386,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getimage_destination_id-" + ex);
+            System.out.println("Error: UploadBillImageModel-getOrgtype_id-" + ex);
         }
         return key_person_id;
     }
@@ -2122,8 +1397,8 @@ public class KeypersonModel {
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //  pstmt.setString(1, office_code);
-            pstmt.setString(1, office_type);
-            pstmt.setString(2, "Y");
+            // pstmt.setString(1, office_type);
+            // pstmt.setString(2, "Y");
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_type_id");
@@ -2354,8 +1629,8 @@ public class KeypersonModel {
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //  pstmt.setString(1, office_code);
-            pstmt.setString(1, office_type);
-            pstmt.setString(2, "Y");
+//            pstmt.setString(1, office_type);
+//            pstmt.setString(2, "Y");
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_id");
@@ -2460,12 +1735,12 @@ public class KeypersonModel {
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, id_type);
+            // pstmt.setString(1, id_type);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             designation_id = rset.getInt("organisation_type_id");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getdesignation_id-- " + e);
+            System.out.println("Error:keypersonModel--getorgtypeidfromname-- " + e);
         }
         return designation_id;
     }
@@ -2475,12 +1750,12 @@ public class KeypersonModel {
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, id_type);
+            //pstmt.setString(1, id_type);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             designation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getdesignation_id-- " + e);
+            System.out.println("Error:keypersonModel--getorgtypeidfromname-- " + e);
         }
         return designation_id;
     }
@@ -2542,8 +1817,8 @@ public class KeypersonModel {
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //  pstmt.setString(1, office_code);
-            pstmt.setString(1, office_type);
-            pstmt.setString(2, "Y");
+            // pstmt.setString(1, office_type);
+            // pstmt.setString(2, "Y");
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("designation_id");
@@ -2790,7 +2065,7 @@ public class KeypersonModel {
             String query = " SELECT image_path FROM key_person "
                     + " where emp_code = ? ";
             PreparedStatement psmt = connection.prepareStatement(query);
-            psmt.setString(1, emp_code);
+            // psmt.setString(1, emp_code);
             ResultSet rst = psmt.executeQuery();
             if (rst.next()) {
                 image_name = rst.getString("image_path");
@@ -2817,6 +2092,8 @@ public class KeypersonModel {
                 + " FROM general_image_details gid, image_destination dp, image_uploaded_for iuf "
                 + " WHERE dp.image_destination_id=gid.image_destination_id AND iuf.image_uploaded_for_id=dp.image_uploaded_for_id "
                 + " AND iuf.image_uploaded_for='" + uploadedFor + "' AND gid.key_person_id=" + key_person_id + " ORDER BY general_image_details_id DESC";
+      
+        
         try {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
             if (rs.next()) {
@@ -2826,7 +2103,7 @@ public class KeypersonModel {
             //String[] img_path = img_name.split("-");
             destination_path = destination_path + img_name;
         } catch (Exception ex) {
-            System.out.println("ERROR: in getImageName in TrafficPoliceSearchModel : " + ex);
+            System.out.println("ERROR: in getImagePath in TrafficPoliceSearchModel : " + ex);
         }
         return destination_path;
     }
@@ -2837,7 +2114,7 @@ public class KeypersonModel {
             String query = " SELECT image_path FROM key_person "
                     + " where key_person_name = ? ";
             PreparedStatement psmt = connection.prepareStatement(query);
-            psmt.setString(1, key_person_name);
+            // psmt.setString(1, key_person_name);
             ResultSet rst = psmt.executeQuery();
             if (rst.next()) {
                 image_path = rst.getString("image_path");
@@ -2877,6 +2154,15 @@ public class KeypersonModel {
             connection.close();
         } catch (Exception e) {
             System.out.println("keypersonModel closeConnection() Error: " + e);
+        }
+    }
+
+    public void setConnection(Connection con) {
+        try {
+
+            connection = con;
+        } catch (Exception e) {
+            System.out.println("OrganisationTypeModel setConnection() Error: " + e);
         }
     }
 }

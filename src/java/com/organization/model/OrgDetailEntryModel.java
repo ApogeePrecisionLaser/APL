@@ -2,11 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.OrgDetailEntry;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.OrgDetailEntry;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,8 +32,6 @@ public class OrgDetailEntryModel {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
-    public static KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    public static UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
     public void setConnection(Connection con) {
         try {
 
@@ -961,10 +957,10 @@ public class OrgDetailEntryModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, orgOffice.getOrganisation_id());
             pstmt.setString(2, orgOffice.getOffice_code());
-            pstmt.setString(3, krutiToUnicode.convert_to_unicode( orgOffice.getOffice_name()));
+            pstmt.setString(3, orgOffice.getOffice_name());
             pstmt.setInt(4, orgOffice.getOffice_type_id());
-            pstmt.setString(5,  krutiToUnicode.convert_to_unicode(orgOffice.getOffice_address1()));
-            pstmt.setString(6,  krutiToUnicode.convert_to_unicode(orgOffice.getOffice_address2()));
+            pstmt.setString(5,  orgOffice.getOffice_address1());
+            pstmt.setString(6,  orgOffice.getOffice_address2());
             pstmt.setInt(7, orgOffice.getOffice_city_id());
             pstmt.setString(8, orgOffice.getOffice_mail_id1());
             pstmt.setString(9, orgOffice.getOffice_mail_id2());

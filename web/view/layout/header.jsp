@@ -10,6 +10,8 @@
         <title>Data Entry: Organization Name Table</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">-->
         <!--<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />-->
@@ -41,17 +43,17 @@
                                     </a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="OrganizationNameController">Org. Name</a>
-                                        <a class="dropdown-item" href="organization_type">Org. Type</a>
-                                        <a class="dropdown-item" href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a class="dropdown-item" href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a class="dropdown-item" href="designationCont.do" class="dropdown-item">Designation</a>
-                                        <a class="dropdown-item" href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a class="dropdown-item" href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a class="dropdown-item" href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
+                                        <a class="dropdown-item" href="OrganisationTypeController">Org. Type</a>
+                                        <a class="dropdown-item" href="OrgOfficeTypeController" class="dropdown-item">Org. Office Type</a>
+                                        <a class="dropdown-item" href="OrgOfficeController" class="dropdown-item">Org. Office</a>
+                                        <a class="dropdown-item" href="DesignationController" class="dropdown-item">Designation</a>
+                                        <a class="dropdown-item" href="KeypersonController" class="dropdown-item">Org Person's Name</a>
+                                        <a class="dropdown-item" href="organizationDesignation" class="dropdown-item">Designation Organisation</a>
+                                        <a class="dropdown-item" href="organizationtypeDesignation" class="dropdown-item">Designation Organisation Type</a>
                                         <a class="dropdown-item" href="formdata" class="dropdown-item">FormData</a>
-                                        <a class="dropdown-item" href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a class="dropdown-item" href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a class="dropdown-item" href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
+                                        <a class="dropdown-item" href="#" class="dropdown-item">Org Detail Entry</a>
+                                        <a class="dropdown-item" href="allinone" class="dropdown-item">All in One</a>
+                                        <a class="dropdown-item" href="#" class="dropdown-item">KeyPerson New</a>
                                     </div>
                                 </li>   
                                 <li class="nav-item dropdown">
@@ -63,7 +65,7 @@
                                         <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
                                         <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
                                         <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="designationCont.do" class="dropdown-item">Designation</a>
+                                        <a href="DesignationController" class="dropdown-item">Designation</a>
                                         <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
                                         <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
                                         <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>

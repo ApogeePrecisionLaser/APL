@@ -9,7 +9,6 @@
             30
         </session-timeout>
     </session-config>
-    
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
@@ -31,6 +30,7 @@
         <param-value>root</param-value>
         <!--<param-value>jpss@1277</param-value>-->
     </context-param>
+   
     
     <servlet>
         <servlet-name>OrganizationNameController</servlet-name>
@@ -51,6 +51,16 @@
     
     
     
+    <!--Start Organization type-->
+    <servlet>
+        <servlet-name>OrganisationTypeController</servlet-name>
+        <servlet-class>com.organization.controller.OrganisationTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrganisationTypeController</servlet-name>
+        <url-pattern>/OrganisationTypeController</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>organization_type</servlet-name>
         <jsp-file>/view/organization/organization_type.jsp</jsp-file>
@@ -58,6 +68,183 @@
     <servlet-mapping>
         <servlet-name>organization_type</servlet-name>
         <url-pattern>/organization_type</url-pattern>
+    </servlet-mapping>
+    <!--End organization type-->
+    
+    
+    <!--Start Designation-->
+    
+    <servlet>
+        <servlet-name>DesignationController</servlet-name>
+        <servlet-class>com.organization.controller.DesignationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DesignationController</servlet-name>
+        <url-pattern>/DesignationController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>designation</servlet-name>
+        <jsp-file>/view/organization/designation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>designation</servlet-name>
+        <url-pattern>/designation</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Designation-->
+    
+    
+    <!--Start organization office type--> 
+    
+    <servlet>
+        <servlet-name>OrgOfficeTypeController</servlet-name>
+        <servlet-class>com.organization.controller.OrgOfficeTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrgOfficeTypeController</servlet-name>
+        <url-pattern>/OrgOfficeTypeController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>org_office_type</servlet-name>
+        <jsp-file>/view/organization/org_office_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>org_office_type</servlet-name>
+        <url-pattern>/org_office_type</url-pattern>
+    </servlet-mapping>
+    
+    <!-- end organization office type--> 
+
+    
+    
+    <!--Start org office-->
+    
+    <servlet>
+        <servlet-name>OrgOfficeController</servlet-name>
+        <servlet-class>com.organization.controller.OrgOfficeNewController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrgOfficeController</servlet-name>
+        <url-pattern>/OrgOfficeController</url-pattern>
+    </servlet-mapping> 
+    
+    <servlet>
+        <servlet-name>orgOffice</servlet-name>
+        <jsp-file>/view/organization/orgOffice.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>orgOffice</servlet-name>
+        <url-pattern>/orgOffice</url-pattern>
+    </servlet-mapping>
+    <!--End org office-->
+    
+    
+    
+    <!--Start org Key person-->
+    <servlet>
+        <servlet-name>KeypersonController</servlet-name>
+        <servlet-class>com.organization.controller.KeypersonController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>KeypersonController</servlet-name>
+        <url-pattern>/KeypersonController</url-pattern>
+    </servlet-mapping> 
+    
+    <servlet>
+        <servlet-name>keyPerson</servlet-name>
+        <jsp-file>/view/organization/keyperson.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>keyPerson</servlet-name>
+        <url-pattern>/keyPerson</url-pattern>
+    </servlet-mapping>
+    <!--End Org key Person-->
+    
+    
+    <!--Start General Controller-->
+    
+    <servlet>
+        <servlet-name>GeneralController</servlet-name>
+        <servlet-class>com.general.controller.GeneralController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GeneralController</servlet-name>
+        <url-pattern>/GeneralController</url-pattern>
+    </servlet-mapping>
+    
+    <!--End General Controller-->
+     
+    <!--Start Map-->
+    <servlet>
+        <servlet-name>getCordinate4</servlet-name>
+        <jsp-file>/view/Map/getCordinateMapWindow4.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getCordinate4</servlet-name>
+        <url-pattern>/getCordinate4</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>openMapWindowView</servlet-name>
+        <jsp-file>/view/Map/mapWindow1.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>openMapWindowView</servlet-name>
+        <url-pattern>/openMapWindowView</url-pattern>
+    </servlet-mapping>
+    
+    <!--End map-->
+    
+    <!--Start emergency contact-->
+    <servlet>
+        <servlet-name>Emergency</servlet-name>
+        <jsp-file>/view/organization/emergencyContact.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Emergency</servlet-name>
+        <url-pattern>/Emergency</url-pattern>
+    </servlet-mapping>
+    <!--end emergency contact-->
+    
+    <servlet>
+        <servlet-name>organizationDesignation</servlet-name>
+        <jsp-file>/view/organization/organizationDesignation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>organizationDesignation</servlet-name>
+        <url-pattern>/organizationDesignation</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>organizationtypeDesignation</servlet-name>
+        <jsp-file>/view/organization/organizationtypedesignation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>organizationtypeDesignation</servlet-name>
+        <url-pattern>/organizationtypeDesignation</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>formdata</servlet-name>
+        <jsp-file>/view/organization/formdata.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>formdata</servlet-name>
+        <url-pattern>/formdata</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>allinone</servlet-name>
+        <jsp-file>/view/organization/allinone.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>allinone</servlet-name>
+        <url-pattern>/allinone</url-pattern>
     </servlet-mapping>
     
     

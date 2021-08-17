@@ -2,11 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.model;
+package com.organization.model;
 
-import com.healthDepartment.organization.tableClasses.OrgOfficeType;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UnicodeToKrutiDevConverter;
+import com.organization.tableClasses.OrgOfficeType;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,56 +28,40 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 public class OrgOfficeTypeModel {
 
     private static Connection connection;
-   
+
     private String message;
     private String msgBgColor;
-    private final String COLOR_OK = "lightyellow";
+    private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
-    private KrutiDevToUnicodeConverter krutiToUnicode = new KrutiDevToUnicodeConverter();
-    private UnicodeToKrutiDevConverter unicodeToKruti = new UnicodeToKrutiDevConverter();
 
-   public void setConnection(Connection con) {
+    public void setConnection(Connection con) {
         try {
 
             connection = con;
         } catch (Exception e) {
-             System.out.println("OrgOfficeTypeModel setConnection() Error: " + e);
+            System.out.println("OrgOfficeTypeModel setConnection() Error: " + e);
         }
     }
 
-    public int getNoOfRows(String searchOrgOfficeType,String active) {
-        int noOfRows = 0;
-        
-        try {
-            searchOrgOfficeType = (searchOrgOfficeType);
-            String query = " SELECT COUNT(*) FROM org_office_type where  "
-                    + "  IF('" + active + "'='' ,active LIKE '%%',active = ?)"
-                    + " and IF('" + searchOrgOfficeType + "'='' ,office_type LIKE '%%',office_type = ?) ";
-            PreparedStatement pst = connection.prepareStatement(query);
-              pst.setString(1, active);
-            pst.setString(2, searchOrgOfficeType);
-            ResultSet rset = pst.executeQuery();
-            rset.next();
-            noOfRows = Integer.parseInt(rset.getString(1));
-        } catch (Exception e) {
-            System.out.println("OrgOfficeTypeModel getNoOfRows() Error: " + e);
-        }
-        return noOfRows;
-    }
-     public List<OrgOfficeType> showAllData(String searchOrgOfficeType,String active)
-    {
-          List<OrgOfficeType> list = new ArrayList<OrgOfficeType>();
-        
+    public List<OrgOfficeType> showAllData(String searchOrgOfficeType, String active) {
+        List<OrgOfficeType> list = new ArrayList<OrgOfficeType>();
+
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        String query = " SELECT office_type_id, office_type,  description FROM org_office_type where  "
-                  + "  IF('" + active + "'='' ,active LIKE '%%',active = ?)  AND "
-                + "  IF('" + searchOrgOfficeType + "'='' ,office_type LIKE '%%',office_type = ?)  ";
-             
+//        String query = " SELECT office_type_id, office_type,  description FROM org_office_type where  "
+//                + "  IF('" + active + "'='' ,active LIKE '%%',active = ?)  AND "
+//                + "  IF('" + searchOrgOfficeType + "'='' ,office_type LIKE '%%',office_type = ?)  ";
+
+        String query = " SELECT office_type_id, office_type,  description FROM org_office_type where active='Y' ";
+
+        if (!searchOrgOfficeType.equals("") && searchOrgOfficeType != null) {
+            query += " and office_type='" + searchOrgOfficeType + "' ";
+        }
+        
         try {
             searchOrgOfficeType = (searchOrgOfficeType);
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, active);
-            pstmt.setString(2, searchOrgOfficeType);
+//            pstmt.setString(1, active);
+//            pstmt.setString(2, searchOrgOfficeType);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 OrgOfficeType orgOfficeType = new OrgOfficeType();
@@ -92,20 +74,23 @@ public class OrgOfficeTypeModel {
             System.out.println("OrgOfficeTypeModel showData() Error: " + e);
         }
         return list;
-     }
-    public List<OrgOfficeType> showData(int lowerLimit, int noOfRowsToDisplay, String searchOrgOfficeType,String active) {
+    }
+
+    public List<OrgOfficeType> showData(String searchOrgOfficeType, String active) {
         List<OrgOfficeType> list = new ArrayList<OrgOfficeType>();
-        
+
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        String query = " SELECT office_type_id, office_type,  description FROM org_office_type where  "
-                  + "  IF('" + active + "'='' ,active LIKE '%%',active = ?)  AND "
-                + "  IF('" + searchOrgOfficeType + "'='' ,office_type LIKE '%%',office_type = ?)  "
-                + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
+        String query = " SELECT office_type_id, office_type,  description FROM org_office_type where active='Y' ";
+
+        if (!searchOrgOfficeType.equals("") && searchOrgOfficeType != null) {
+            query += " and office_type='" + searchOrgOfficeType + "' ";
+        }
+        
         try {
             searchOrgOfficeType = (searchOrgOfficeType);
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, active);
-            pstmt.setString(2, searchOrgOfficeType);
+//            pstmt.setString(1, active);
+//            pstmt.setString(2, searchOrgOfficeType);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 OrgOfficeType orgOfficeType = new OrgOfficeType();
@@ -128,9 +113,9 @@ public class OrgOfficeTypeModel {
             pstmt.setString(1, (org_office_type.getOffice_type()));
             pstmt.setString(2, (org_office_type.getDescription()));
             pstmt.setInt(3, org_office_type.getRevision_no());
-             pstmt.setString(4,"Y");
-            pstmt.setString(5,"OK");
-            
+            pstmt.setString(4, "Y");
+            pstmt.setString(5, "OK");
+
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
             System.out.println("OrgOfficeTypeModel insertRecord() Error: " + e);
@@ -145,45 +130,45 @@ public class OrgOfficeTypeModel {
         return rowsAffected;
     }
 
-    public int updateRecord(OrgOfficeType org_office_type,int office_type_id) {
-         int revision=OrgOfficeTypeModel.getRevisionno(org_office_type,office_type_id);
-          int updateRowsAffected = 0;
-           boolean status=false;
-        String query1 = "SELECT max(revision_no) revision_no FROM org_office_type WHERE office_type_id = "+office_type_id+"  && active=? ";
+    public int updateRecord(OrgOfficeType org_office_type, int office_type_id) {
+        int revision = OrgOfficeTypeModel.getRevisionno(org_office_type, office_type_id);
+        int updateRowsAffected = 0;
+        boolean status = false;
+        String query1 = "SELECT max(revision_no) revision_no FROM org_office_type WHERE office_type_id = " + office_type_id + "  && active=? ";
         String query2 = "UPDATE org_office_type SET active =? WHERE office_type_id =? and revision_no=? ";
-         String query3 = "INSERT INTO org_office_type(office_type_id,office_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
+        String query3 = "INSERT INTO org_office_type(office_type_id,office_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
 //           pstmt.setInt(1,organisation_type_id);
-           pstmt.setString(1, "Y");
-           ResultSet rs = pstmt.executeQuery();
-                if(rs.next()){
+            pstmt.setString(1, "Y");
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
                 PreparedStatement pstm = connection.prepareStatement(query2);
-               
-                 pstm.setString(1,"n");
-               
-                 pstm.setInt(2,office_type_id);
-                 pstm.setInt(3,revision);
-                  updateRowsAffected = pstm.executeUpdate();
-             if(updateRowsAffected >= 1){
-                   revision = rs.getInt("revision_no")+1;
+
+                pstm.setString(1, "n");
+
+                pstm.setInt(2, office_type_id);
+                pstm.setInt(3, revision);
+                updateRowsAffected = pstm.executeUpdate();
+                if (updateRowsAffected >= 1) {
+                    revision = rs.getInt("revision_no") + 1;
                     PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
-                     psmt.setInt(1,(office_type_id));
-                     psmt.setString(2, org_office_type.getOffice_type());
-                     psmt.setString(3, org_office_type.getDescription());
-                    psmt.setInt(4,revision);
-                    psmt.setString(5,"Y");
-                    psmt.setString(6,"OK");
+                    psmt.setInt(1, (office_type_id));
+                    psmt.setString(2, org_office_type.getOffice_type());
+                    psmt.setString(3, org_office_type.getDescription());
+                    psmt.setInt(4, revision);
+                    psmt.setString(5, "Y");
+                    psmt.setString(6, "OK");
                     rowsAffected = psmt.executeUpdate();
-                   if(rowsAffected > 0)
-                   status=true;
-                else 
-                  status=false;
-             }
-                 
-                 
+                    if (rowsAffected > 0) {
+                        status = true;
+                    } else {
+                        status = false;
+                    }
                 }
+
+            }
         } catch (Exception e) {
             System.out.println("OrgOfficeTypeModel updateRecord() Error: " + e);
         }
@@ -197,20 +182,17 @@ public class OrgOfficeTypeModel {
         return rowsAffected;
     }
 
-    public static int getRevisionno(OrgOfficeType bean,int office_type_id) {
-        int revision=0;
+    public static int getRevisionno(OrgOfficeType bean, int office_type_id) {
+        int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM org_office_type WHERE office_type_id ="+office_type_id+"  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM org_office_type WHERE office_type_id =" + office_type_id + "  && active='Y';";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-           
-            
-           
+
             ResultSet rset = pstmt.executeQuery();
 
-            while (rset.next())
-            {
+            while (rset.next()) {
                 revision = rset.getInt("revision_no");
 
             }
@@ -218,7 +200,7 @@ public class OrgOfficeTypeModel {
         }
         return revision;
     }
-    
+
     public int deleteRecord(int office_type_id) {
         String query = "DELETE FROM org_office_type WHERE active='Y' and office_type_id = " + office_type_id;
         int rowsAffected = 0;
@@ -243,13 +225,13 @@ public class OrgOfficeTypeModel {
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
-           q=q.trim();
+            q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
                 String office_type = (rset.getString("office_type"));
-               if (office_type.toUpperCase().startsWith(q.toUpperCase())) {
+                if (office_type.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(office_type);
                     count++;
-               }
+                }
             }
             if (count == 0) {
                 list.add("No such Organisation Office Type exists.");
@@ -259,34 +241,36 @@ public class OrgOfficeTypeModel {
         }
         return list;
     }
-    public byte[] orgOfficeReport(String jrxmlFilePath,List listAll) {
+
+    public byte[] orgOfficeReport(String jrxmlFilePath, List listAll) {
         byte[] reportInbytes = null;
         try {
 
             JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null , beanColDataSource );
+            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
             System.out.println("Error: in OrgOfficeReport orgOfficeReport() JRException: " + e);
         }
         return reportInbytes;
     }
-     public ByteArrayOutputStream orgOfficeXlsRecordList(String jrxmlFilePath,List list) {
-                ByteArrayOutputStream bytArray = new ByteArrayOutputStream();
-              //  HashMap mymap = new HashMap();
-                try {
-                    JRBeanCollectionDataSource jrBean=new JRBeanCollectionDataSource(list);
-                    JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, null, jrBean);
-                    JRXlsExporter exporter = new JRXlsExporter();
-                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
-                    exporter.exportReport();
-                } catch (Exception e) {
-                    System.out.println("CityStatusModel orgOfficeXlsRecordList() JRException: " + e);
-                }
-                return bytArray;
-            }
+
+    public ByteArrayOutputStream orgOfficeXlsRecordList(String jrxmlFilePath, List list) {
+        ByteArrayOutputStream bytArray = new ByteArrayOutputStream();
+        //  HashMap mymap = new HashMap();
+        try {
+            JRBeanCollectionDataSource jrBean = new JRBeanCollectionDataSource(list);
+            JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, null, jrBean);
+            JRXlsExporter exporter = new JRXlsExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
+            exporter.exportReport();
+        } catch (Exception e) {
+            System.out.println("CityStatusModel orgOfficeXlsRecordList() JRException: " + e);
+        }
+        return bytArray;
+    }
 
     public String getMessage() {
         return message;
@@ -296,7 +280,6 @@ public class OrgOfficeTypeModel {
         return msgBgColor;
     }
 
-   
     public void closeConnection() {
         try {
             connection.close();

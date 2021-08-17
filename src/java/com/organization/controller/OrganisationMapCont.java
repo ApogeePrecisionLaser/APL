@@ -2,13 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-
-import com.healthDepartment.organization.model.OrganisationMapModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.tableClasses.OrganisationMap;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.OrganisationMapModel;
+import com.DBConnection.DBConnection;
+import com.organization.tableClasses.OrganisationMap;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -208,7 +206,7 @@ public class OrganisationMapCont extends HttpServlet {
                 request.setAttribute("showNext", "false");
                 request.setAttribute("showLast", "false");
             }
-            request.setAttribute("IDGenerator", new UniqueIDGenerator());
+          //  request.setAttribute("IDGenerator", new UniqueIDGenerator());
             request.setAttribute("message", organisationMapModel.getMessage());
             request.setAttribute("msgBgColor", organisationMapModel.getMsgBgColor());
             organisationMapModel.closeConnection();

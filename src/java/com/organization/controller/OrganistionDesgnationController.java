@@ -3,22 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-import com.healthDepartment.organization.model.OrgOfficeModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.model.OrganisationDesignationModel;
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.organization.tableClasses.OrganisationDesignationBean;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.OrgOfficeModel;
+import com.DBConnection.DBConnection;
+import com.organization.model.OrganisationDesignationModel;
+import com.organization.tableClasses.Org_Office;
+import com.organization.tableClasses.OrganisationDesignationBean;
 import java.io.ByteArrayOutputStream;
 
 import java.io.IOException;
@@ -34,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
-
 public class OrganistionDesgnationController extends HttpServlet {
 
     @Override
@@ -42,14 +36,13 @@ public class OrganistionDesgnationController extends HttpServlet {
         int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 15, noOfRowsInTable;
         ServletContext ctx = getServletContext();
 
-  /*      HttpSession session = request.getSession(false);
+        /*      HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_name") == null) {
             response.sendRedirect("beforelogin.jsp");
             return;
         }
         String role = (String) session.getAttribute("user_role");   */
         //((Integer)session.getAttribute("user_id")).intValue();
-
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         OrganisationDesignationModel organisationModel = new OrganisationDesignationModel();
@@ -62,18 +55,18 @@ public class OrganistionDesgnationController extends HttpServlet {
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
             String organisation = request.getParameter("searchDesignationCode");
-             String designation = request.getParameter("searchDesignation");
+            String designation = request.getParameter("searchDesignation");
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
                 isOrgBasicStep = isOrgBasicStep.trim();
             } else {
                 isOrgBasicStep = "";
             }
-              if (organisation != null && !organisation.isEmpty()) {
+            if (organisation != null && !organisation.isEmpty()) {
                 organisation = organisation.trim();
             } else {
                 organisation = "";
             }
-                if (designation != null && !designation.isEmpty()) {
+            if (designation != null && !designation.isEmpty()) {
                 designation = designation.trim();
             } else {
                 designation = "";
@@ -89,31 +82,27 @@ public class OrganistionDesgnationController extends HttpServlet {
                     List<String> list = null;
                     if (JQstring.equals("getOrgTypeName")) {
                         list = organisationModel.getOrganisation_Name(q);
-                    }  else if (JQstring.equals("getOfficeCodeName")){
+                    } else if (JQstring.equals("getOfficeCodeName")) {
                         list = organisationModel.getOrgOfficeCodeSearch(q);
-                    } else if (JQstring.equals("getOfficeName")){
-                        list = organisationModel.getOrgOfficeNameSearch(q,request.getParameter("action2"));
-                    }
-                    else if (JQstring.equals("getOrgOfficeType")) {
-                         list = organisationModel.OrgOfficeType(q);
+                    } else if (JQstring.equals("getOfficeName")) {
+                        list = organisationModel.getOrgOfficeNameSearch(q, request.getParameter("action2"));
+                    } else if (JQstring.equals("getOrgOfficeType")) {
+                        list = organisationModel.OrgOfficeType(q);
                     } else if (JQstring.equals("searchOrganisation")) {
-                         list = organisationModel.searchOrganisation_Name(q);
-                    } 
-                    else if (JQstring.equals("searchDesignation")) {
-                         String code = request.getParameter("action2");
-                         list = organisationModel.searchDesignation(q,code);
-                    } 
-                    else if (JQstring.equals("getDesignation")) {
+                        list = organisationModel.searchOrganisation_Name(q);
+                    } else if (JQstring.equals("searchDesignation")) {
                         String code = request.getParameter("action2");
-                        list = organisationModel.getStateName(q,code);
-                    }
-                else if (JQstring.equals("getCityName")) {
+                        list = organisationModel.searchDesignation(q, code);
+                    } else if (JQstring.equals("getDesignation")) {
+                        String code = request.getParameter("action2");
+                        list = organisationModel.getStateName(q, code);
+                    } else if (JQstring.equals("getCityName")) {
                         list = organisationModel.getCityName(q);//, request.getParameter("action2")
                     }
                     JSONObject gson = new JSONObject();
-                     gson.put("list",list);
-                   out.println(gson);
-                   
+                    gson.put("list", list);
+                    out.println(gson);
+
                     organisationModel.closeConnection();
                     return;
                 }
@@ -121,9 +110,8 @@ public class OrganistionDesgnationController extends HttpServlet {
                 System.out.println("\n Error --OrgOfficeController get JQuery Parameters Part-" + e);
             }
 
-
             String task = request.getParameter("task");
-            
+
             if (task == null) {
                 task = "";
             }
@@ -137,14 +125,14 @@ public class OrganistionDesgnationController extends HttpServlet {
                     org_office_id = 0;
                 }
                 if (task.equals("Save AS New")) {
-                  //  org_office_id = 0;
+                    //  org_office_id = 0;
                 }
-              
+
                 OrganisationDesignationBean orgOffice = new OrganisationDesignationBean();
                 orgOffice.setId(org_office_id);
                 orgOffice.setOrganisation((request.getParameter("designation_code").trim()));
                 orgOffice.setDesignation(request.getParameter("designation").trim());
-               
+
                 orgOffice.setSerialnumber(request.getParameter("description").trim());
                 orgOffice.setSuperp(request.getParameter("super").trim());
                 if (org_office_id == 0) {
@@ -152,7 +140,7 @@ public class OrganistionDesgnationController extends HttpServlet {
                     organisationModel.insertRecord(orgOffice);
                 } else {
                     // update existing record.
-                    organisationModel.updateRecord(orgOffice,org_office_id);
+                    organisationModel.updateRecord(orgOffice, org_office_id);
                 }
             }
             if (requester != null && requester.equals("PRINT")) {
@@ -176,7 +164,7 @@ public class OrganistionDesgnationController extends HttpServlet {
                 servletOutputStream.close();
                 organisationModel.closeConnection();
                 return;
-            }else if (requester != null && requester.equals("PrintExcel")) {
+            } else if (requester != null && requester.equals("PrintExcel")) {
                 String jrxmlFilePath;
                 response.setContentType("application/vnd.ms-excel");
                 response.addHeader("Content-Disposition", "attachment; filename=OrganizationOffice_report.xls");
@@ -194,8 +182,7 @@ public class OrganistionDesgnationController extends HttpServlet {
                 servletOutputStream.close();
                 organisationModel.closeConnection();
                 return;
-            }else
-            if (requester != null && requester.equals("PRINTAddress")) {
+            } else if (requester != null && requester.equals("PRINTAddress")) {
                 String jrxmlFilePath;
                 response.setContentType("application/pdf");
                 int org_office_id = Integer.parseInt(request.getParameter("org_office_id"));
@@ -236,10 +223,10 @@ public class OrganistionDesgnationController extends HttpServlet {
                 if (office_code_search == null) {
                     office_code_search = "";
                 }
-                  if (organisation == null) {
+                if (organisation == null) {
                     organisation = "";
                 }
-                 if (designation == null) {
+                if (designation == null) {
                     designation = "";
                 }
             } catch (Exception e) {
@@ -260,7 +247,7 @@ public class OrganistionDesgnationController extends HttpServlet {
                 org_name = "";
                 office_code_search = "";
                 office_name_search = "";
-                organisation="";
+                organisation = "";
             }
 
             String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
@@ -269,11 +256,11 @@ public class OrganistionDesgnationController extends HttpServlet {
             } else {
                 org_name = request.getParameter("org_name");
             }
-        //    if (org_name != null && !org_name.isEmpty()) {
-                noOfRowsInTable = organisationModel.getNoOfRows(org_name, office_code_search, office_name_search);
-        //    } else {
-        //        noOfRowsInTable = organisationModel.getNoOfRows();
-        //    }// get the number of records (rows) in the table.
+            //    if (org_name != null && !org_name.isEmpty()) {
+            noOfRowsInTable = organisationModel.getNoOfRows(org_name, office_code_search, office_name_search);
+            //    } else {
+            //        noOfRowsInTable = organisationModel.getNoOfRows();
+            //    }// get the number of records (rows) in the table.
             if (buttonAction.equals("Next")); // lowerLimit already has value such that it shows forward records, so do nothing here.
             else if (buttonAction.equals("Previous")) {
                 int temp = lowerLimit - noOfRowsToDisplay - noOfRowsTraversed;
@@ -294,9 +281,9 @@ public class OrganistionDesgnationController extends HttpServlet {
 
             if (task.equals("Save") || task.equals("Delete") || task.equals("Save AS New")) {
                 lowerLimit = lowerLimit - noOfRowsTraversed;    // Here objective is to display the same view again, i.e. reset lowerLimit to its previous value.
-            } 
+            }
             // Logic to show data in the table.
-             List<OrganisationDesignationBean> organisationList = organisationModel.showData(lowerLimit, noOfRowsToDisplay,organisation,designation);
+            List<OrganisationDesignationBean> organisationList = organisationModel.showData(lowerLimit, noOfRowsToDisplay, organisation, designation);
             lowerLimit = lowerLimit + organisationList.size();
             noOfRowsTraversed = organisationList.size();
 
@@ -312,7 +299,6 @@ public class OrganistionDesgnationController extends HttpServlet {
             }
             request.setAttribute("lowerLimit", lowerLimit);
             request.setAttribute("noOfRowsTraversed", noOfRowsTraversed);
-            request.setAttribute("IDGenerator", new UniqueIDGenerator());
             request.setAttribute("message", organisationModel.getMessage());
             request.setAttribute("msgBgColor", organisationModel.getMsgBgColor());
 

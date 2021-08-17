@@ -4,21 +4,18 @@
  * and open the template in the editor.
  */
 
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-import com.healthDepartment.organization.model.OrgOfficeModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.model.OrgOfficeHierarchyModel;
-import com.healthDepartment.organization.tableClasses.OrgOfficeHierarchyBean;
-import com.healthDepartment.organization.tableClasses.Org_Office;
-import com.healthDepartment.util.KrutiDevToUnicodeConverter;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.OrgOfficeModel;
+import com.DBConnection.DBConnection;
+import com.organization.model.OrgOfficeHierarchyModel;
+import com.organization.tableClasses.OrgOfficeHierarchyBean;
+import com.organization.tableClasses.Org_Office;
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -32,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
-
 public class OrgOfficeHierarchyController extends HttpServlet {
 
     @Override
@@ -40,14 +36,13 @@ public class OrgOfficeHierarchyController extends HttpServlet {
         int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 15, noOfRowsInTable;
         ServletContext ctx = getServletContext();
 
-  /*      HttpSession session = request.getSession(false);
+        /*      HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_name") == null) {
             response.sendRedirect("beforelogin.jsp");
             return;
         }
         String role = (String) session.getAttribute("user_role");   */
         //((Integer)session.getAttribute("user_id")).intValue();
-
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         OrgOfficeHierarchyModel organisationModel = new OrgOfficeHierarchyModel();
@@ -59,20 +54,20 @@ public class OrgOfficeHierarchyController extends HttpServlet {
         }
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
-             String serial_no = request.getParameter("searchDesignationCode");
+            String serial_no = request.getParameter("searchDesignationCode");
             String designation = request.getParameter("searchDesignation");
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
                 isOrgBasicStep = isOrgBasicStep.trim();
             } else {
                 isOrgBasicStep = "";
             }
-             if (serial_no != null && !serial_no.isEmpty()) {
+            if (serial_no != null && !serial_no.isEmpty()) {
                 serial_no = serial_no.trim();
             } else {
                 serial_no = "";
             }
-             
-              if (designation != null && !designation.isEmpty()) {
+
+            if (designation != null && !designation.isEmpty()) {
                 designation = designation.trim();
             } else {
                 designation = "";
@@ -88,31 +83,29 @@ public class OrgOfficeHierarchyController extends HttpServlet {
                     List<String> list = null;
                     if (JQstring.equals("getOrgTypeName")) {
                         list = organisationModel.getOrganisation_Name(q);
-                    }  else if (JQstring.equals("getOfficeCodeName")){
+                    } else if (JQstring.equals("getOfficeCodeName")) {
                         list = organisationModel.getOrgOfficeCodeSearch(q);
-                    } else if (JQstring.equals("getOrganisation")){
+                    } else if (JQstring.equals("getOrganisation")) {
                         String serial = request.getParameter("action2");
-                        list = organisationModel.getOrgOfficeNameSearch(q,serial);
-                    }
-                    else if (JQstring.equals("getSerialNo")) {
-                         list = organisationModel.serialNo(q);
+                        list = organisationModel.getOrgOfficeNameSearch(q, serial);
+                    } else if (JQstring.equals("getSerialNo")) {
+                        list = organisationModel.serialNo(q);
                     }// else if (JQstring.equals("getStateName")) {
-                      //  list = organisationModel.getStateName(q);
-                   // }
-                else if (JQstring.equals("getCityName")) {
+                    //  list = organisationModel.getStateName(q);
+                    // }
+                    else if (JQstring.equals("getCityName")) {
                         list = organisationModel.getCityName(q);//, request.getParameter("action2")
                     }
                     JSONObject gson = new JSONObject();
-                     gson.put("list",list);
-                   out.println(gson);
-                   
+                    gson.put("list", list);
+                    out.println(gson);
+
                     organisationModel.closeConnection();
                     return;
                 }
             } catch (Exception e) {
                 System.out.println("\n Error --OrgOfficeController get JQuery Parameters Part-" + e);
             }
-
 
             String task = request.getParameter("task");
             if (task == null) {
@@ -128,9 +121,9 @@ public class OrgOfficeHierarchyController extends HttpServlet {
                     org_office_id = 0;
                 }
                 if (task.equals("Save AS New")) {
-                  //  org_office_id = 0;
+                    //  org_office_id = 0;
                 }
-              
+
                 Org_Office orgOffice = new Org_Office();
                 orgOffice.setOrg_office_id(org_office_id);
                 orgOffice.setOrganisation_id(organisationModel.getOrganisation_id((request.getParameter("organisation_name").trim())));
@@ -155,7 +148,7 @@ public class OrgOfficeHierarchyController extends HttpServlet {
                     organisationModel.insertRecord(orgOffice);
                 } else {
                     // update existing record.
-                    organisationModel.updateRecord(orgOffice,org_office_id);
+                    organisationModel.updateRecord(orgOffice, org_office_id);
                 }
             }
             if (requester != null && requester.equals("PRINT")) {
@@ -179,7 +172,7 @@ public class OrgOfficeHierarchyController extends HttpServlet {
                 servletOutputStream.close();
                 organisationModel.closeConnection();
                 return;
-            }else if (requester != null && requester.equals("PrintExcel")) {
+            } else if (requester != null && requester.equals("PrintExcel")) {
                 String jrxmlFilePath;
                 response.setContentType("application/vnd.ms-excel");
                 response.addHeader("Content-Disposition", "attachment; filename=OrganizationOffice_report.xls");
@@ -197,8 +190,7 @@ public class OrgOfficeHierarchyController extends HttpServlet {
                 servletOutputStream.close();
                 organisationModel.closeConnection();
                 return;
-            }else
-            if (requester != null && requester.equals("PRINTAddress")) {
+            } else if (requester != null && requester.equals("PRINTAddress")) {
                 String jrxmlFilePath;
                 response.setContentType("application/pdf");
                 int org_office_id = Integer.parseInt(request.getParameter("org_office_id"));
@@ -226,7 +218,7 @@ public class OrgOfficeHierarchyController extends HttpServlet {
             org_name = request.getParameter("org_name");
             office_code_search = request.getParameter("office_code_search");
             office_name_search = request.getParameter("office_name_search");
-             serial_no = request.getParameter("searchDesignationCode");
+            serial_no = request.getParameter("searchDesignationCode");
             designation = request.getParameter("searchDesignation");
             try {
 
@@ -240,15 +232,14 @@ public class OrgOfficeHierarchyController extends HttpServlet {
                     office_code_search = "";
                 }
 
-            if (serial_no == null) {
+                if (serial_no == null) {
                     serial_no = "";
                 }
                 if (designation == null) {
                     designation = "";
                 }
 
-            }
-                catch (Exception e) {
+            } catch (Exception e) {
             }
 //        String org_name = "";
 //        if (request.getParameter("search_org") != null) {
@@ -276,11 +267,11 @@ public class OrgOfficeHierarchyController extends HttpServlet {
             } else {
                 org_name = request.getParameter("org_name");
             }
-        //    if (org_name != null && !org_name.isEmpty()) {
-                noOfRowsInTable = organisationModel.getNoOfRows(org_name, office_code_search, office_name_search);
-        //    } else {
-        //        noOfRowsInTable = organisationModel.getNoOfRows();
-        //    }// get the number of records (rows) in the table.
+            //    if (org_name != null && !org_name.isEmpty()) {
+            noOfRowsInTable = organisationModel.getNoOfRows(org_name, office_code_search, office_name_search);
+            //    } else {
+            //        noOfRowsInTable = organisationModel.getNoOfRows();
+            //    }// get the number of records (rows) in the table.
             if (buttonAction.equals("Next")); // lowerLimit already has value such that it shows forward records, so do nothing here.
             else if (buttonAction.equals("Previous")) {
                 int temp = lowerLimit - noOfRowsToDisplay - noOfRowsTraversed;
@@ -301,9 +292,9 @@ public class OrgOfficeHierarchyController extends HttpServlet {
 
             if (task.equals("Save") || task.equals("Delete") || task.equals("Save AS New")) {
                 lowerLimit = lowerLimit - noOfRowsTraversed;    // Here objective is to display the same view again, i.e. reset lowerLimit to its previous value.
-            } 
+            }
             // Logic to show data in the table.
-            List<OrgOfficeHierarchyBean> organisationList = organisationModel.showData(lowerLimit, noOfRowsToDisplay,serial_no,designation);
+            List<OrgOfficeHierarchyBean> organisationList = organisationModel.showData(lowerLimit, noOfRowsToDisplay, serial_no, designation);
             lowerLimit = lowerLimit + organisationList.size();
             noOfRowsTraversed = organisationList.size();
 
@@ -319,7 +310,6 @@ public class OrgOfficeHierarchyController extends HttpServlet {
             }
             request.setAttribute("lowerLimit", lowerLimit);
             request.setAttribute("noOfRowsTraversed", noOfRowsTraversed);
-            request.setAttribute("IDGenerator", new UniqueIDGenerator());
             request.setAttribute("message", organisationModel.getMessage());
             request.setAttribute("msgBgColor", organisationModel.getMsgBgColor());
 

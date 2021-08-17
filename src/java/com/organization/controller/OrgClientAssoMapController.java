@@ -1,9 +1,8 @@
-package com.healthDepartment.organization.controller;
+package com.organization.controller;
 
-import com.healthDepartment.organization.model.OrgClientAssoMapModel;
-import com.healthDepartment.dbCon.DBConnection;
-import com.healthDepartment.organization.tableClasses.OrgClientAssoMap;
-import com.healthDepartment.util.UniqueIDGenerator;
+import com.organization.model.OrgClientAssoMapModel;
+import com.DBConnection.DBConnection;
+import com.organization.tableClasses.OrgClientAssoMap;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -22,7 +21,7 @@ public class OrgClientAssoMapController extends HttpServlet {
         int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 20, noOfRowsInTable;
         ServletContext ctx = getServletContext();
 
-   /*     HttpSession session = request.getSession(false);
+        /*     HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_name") == null) {
             response.sendRedirect("beforelogin.jsp");
             return;
@@ -144,7 +143,6 @@ public class OrgClientAssoMapController extends HttpServlet {
             request.setAttribute("showNext", "false");
             request.setAttribute("showLast", "false");
         }
-        request.setAttribute("IDGenerator", new UniqueIDGenerator());
         request.setAttribute("message", orgClientAssoMapModel.getMessage());
         request.setAttribute("msgBgColor", orgClientAssoMapModel.getMsgBgColor());
         orgClientAssoMapModel.closeConnection();
