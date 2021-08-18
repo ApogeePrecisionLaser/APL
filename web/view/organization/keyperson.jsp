@@ -784,7 +784,7 @@
 
                     if (response_data.list[0] == ("Mobile no exist"))
                     {
-                        alert(response_data.list[0]);
+                       // alert(response_data.list[0]);
                         document.getElementById("mobile_no1").value = "";
                     }
 
