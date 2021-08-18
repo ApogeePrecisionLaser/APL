@@ -27,8 +27,8 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-        <param-value>root</param-value>
-        <!--<param-value>jpss@1277</param-value>-->
+        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>
+        <!--<param-value>root</param-value>-->
     </context-param>
    
     
@@ -142,7 +142,7 @@
     
     
     
-    <!--Start org Key person-->
+    <!--Start org Key person-->keyPerson
     <servlet>
         <servlet-name>KeypersonController</servlet-name>
         <servlet-class>com.organization.controller.KeypersonController</servlet-class>
@@ -193,7 +193,7 @@
     <servlet-mapping>
         <servlet-name>openMapWindowView</servlet-name>
         <url-pattern>/openMapWindowView</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>heade
     
     <!--End map-->
     
@@ -207,6 +207,46 @@
         <url-pattern>/Emergency</url-pattern>
     </servlet-mapping>
     <!--end emergency contact-->
+    
+    
+    <!--Start Org Office designation map-->
+    <servlet>
+        <servlet-name>OrgOfficeDesignationMapController</servlet-name>
+        <servlet-class>com.organization.controller.OrgOfficeDesignationMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrgOfficeDesignationMapController</servlet-name>
+        <url-pattern>/OrgOfficeDesignationMapController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>orgOfficeDesignationMap</servlet-name>
+        <jsp-file>/view/organization/orgOfficeDesignationMap.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>orgOfficeDesignationMap</servlet-name>
+        <url-pattern>/orgOfficeDesignationMap</url-pattern>
+    </servlet-mapping>
+    <!--End org office designation map-->
+    
+    
+    <!--Start generate spreadsheet-->
+    <servlet>
+        <servlet-name>generateSpreadSheetController</servlet-name>
+        <servlet-class>com.organization.controller.GenerateSpreadSheetController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>generateSpreadSheetController</servlet-name>
+        <url-pattern>/generateSpreadSheetController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>generateSpreadSheet</servlet-name>
+        <jsp-file>/view/organization/generateSpreadSheet.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>generateSpreadSheet</servlet-name>
+        <url-pattern>/generateSpreadSheet</url-pattern>
+    </servlet-mapping>
+    <!--end generate spreadsheet-->
     
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>
@@ -398,6 +438,24 @@
     <servlet-mapping>
         <servlet-name>privacy_policy</servlet-name>
         <url-pattern>/privacy_policy</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>CityController</servlet-name>
+        <servlet-class>com.location.controller.CityController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CityController</servlet-name>
+        <url-pattern>/CityController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>city_view</servlet-name>
+        <jsp-file>/view/location/city.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>city_view</servlet-name>
+        <url-pattern>/city_view</url-pattern>
     </servlet-mapping>
     
     
