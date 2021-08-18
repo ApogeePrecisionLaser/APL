@@ -6,6 +6,7 @@ package com.organization.controller;
 
 import com.organization.model.KeypersonModel;
 import com.DBConnection.DBConnection;
+import com.organization.tableClasses.EmergencyBean;
 import com.organization.tableClasses.KeyPerson;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -263,7 +264,7 @@ public class KeypersonController extends HttpServlet {
 
             if (task1.equals("viewImage")) {
                 try {
-                   
+
                     String destinationPath = "";
                     String kp_id = request.getParameter("kp_id");
                     String type = request.getParameter("type");
@@ -328,7 +329,7 @@ public class KeypersonController extends HttpServlet {
                 for (int i = 0; i < words.length; i++) {
                     latitude = words[0];
                     longitude = words[1];
-                } 
+                }
                 request.setAttribute("longi", longitude);
                 request.setAttribute("latti", latitude);
                 request.getRequestDispatcher("openMapWindowView").forward(request, response);
@@ -398,6 +399,9 @@ public class KeypersonController extends HttpServlet {
                 key.setId_type_d(keyModel.getIdtype_id(map.get("id_type")));
                 key.setId_no(map.get("id_no").trim());
                 key.setOrg_office_id(keyModel.getOrgOffice_id((map.get("org_office_name").trim()), map.get("office_code").trim()));
+
+                key.setOrg_office_des_map_id(keyModel.getOrgOfficeDesignationMapId(key.getDesignation_id(), key.getOrg_office_id()));
+
                 key.setCity_id(keyModel.getCity_id((map.get("city_name").trim())));
                 key.setAddress_line1(map.get("address_line1").trim());
                 key.setAddress_line2(map.get("address_line2").trim());
@@ -492,20 +496,23 @@ public class KeypersonController extends HttpServlet {
 
             }
 
+            EmergencyBean bean = new EmergencyBean();
             // Logic to show data in the table.
             List<KeyPerson> keyList = keyModel.showData(designation, person, office_code, searchEmpCode, searchDesignation, mobile, active, searchfamily);
 
+            List<EmergencyBean> emerList = new ArrayList<EmergencyBean>();
             if (task1.equals("showEmergency")) {
                 String id = request.getParameter("keyperson_id");
-                liste = keyModel.showEmergency(id);
+                emerList = keyModel.showEmergency(id);
+
+                // System.err.println("list -"+bean.getName());
                 // request.setAttribute("emerList", liste);
 //                request.getRequestDispatcher("Emergency").forward(request, response);
-
             }
             keyModel.closeConnection();
-            if (liste != null) {
-                request.setAttribute("emerList", liste);
-                System.err.println("liste----------"+liste.size());
+            System.err.println("emerList----" + emerList.size());
+            if (emerList.size() > 0) {
+                request.setAttribute("emerList", emerList);
                 request.getRequestDispatcher("Emergency").forward(request, response);
             } else {
                 request.setAttribute("keyList", keyList);
