@@ -36,17 +36,11 @@ public class OrgOfficeController extends HttpServlet {
             System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
         }
         try {
-            //String isOrgBasicStep = request.getParameter("isOrgBasicStep");
             String serial_no = request.getParameter("searchDesignationCode");
             String designation = request.getParameter("searchDesignation");
             String after_save_organisation = (request.getParameter("organisation_name"));
             String after_save_office_type = (request.getParameter("office_type"));
 
-//            if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
-//                isOrgBasicStep = isOrgBasicStep.trim();
-//            } else {
-//                isOrgBasicStep = "";
-//            }
             if (serial_no != null && !serial_no.isEmpty()) {
                 serial_no = serial_no.trim();
             } else {
@@ -143,6 +137,34 @@ public class OrgOfficeController extends HttpServlet {
                     organisationModel.updateRecord(orgOffice, org_office_id);
                 }
             }
+
+//            if (task.equals("showMapWindow")) {
+//                System.err.println("helloooo");
+//                String point_id = request.getParameter("org_office_id");
+//                String latitude = "";
+//                String longitude = "";
+//                String LatLong = organisationModel.getPointLatLong(point_id);
+//                System.err.println("LatLong -----------" + LatLong);
+//                String[] words = LatLong.split(",");
+//                System.err.println("LatLong split-----------" + LatLong);
+//                System.err.println("words 0------" + words[0]);
+//                System.err.println("words 1------" + words[1]);
+//
+//                for (int i = 0; i < words.length; i++) {
+//                    latitude = words[0];
+//                    longitude = words[1];
+//                }
+//                System.err.println("lat-----------------------------------------" + latitude);
+//                System.err.println("longi-----------------------------------------" + longitude);
+//
+//                request.setAttribute("latti", latitude);
+//                request.setAttribute("longi", longitude);
+//                System.err.println("lat--" + latitude);
+//                System.err.println("long------" + longitude);
+//                request.getRequestDispatcher("openMapWindowView").forward(request, response);
+//                return;
+//
+//            }
 //            else if (requester != null && requester.equals("PrintExcel")) {
 //                String jrxmlFilePath;
 //                response.setContentType("application/vnd.ms-excel");
@@ -211,18 +233,7 @@ public class OrgOfficeController extends HttpServlet {
                 }
             } catch (Exception e) {
             }
-//        String org_name = "";
-//        if (request.getParameter("search_org") != null) {
-//            if (request.getParameter("search_org").equals("SEARCH")) {
-//                org_name = request.getParameter("org_name");
-//            }
-//        }
-//        if (request.getParameter("clear_org") != null) {
-//            if (request.getParameter("clear_org").equals("CLEAR")) {
-//                org_name = request.getParameter("org_name");
-//                org_name = org_name.trim();
-//            }
-//        }
+
             if (task.equals("Show All Records")) {
                 org_name = "";
                 office_code_search = "";
@@ -237,49 +248,10 @@ public class OrgOfficeController extends HttpServlet {
             } else {
                 org_name = request.getParameter("org_name");
             }
-            //    if (org_name != null && !org_name.isEmpty()) {
-//            noOfRowsInTable = organisationModel.getNoOfRows(org_name, office_code_search, office_name_search, office_name_search);
-//            //    } else {
-//            //        noOfRowsInTable = organisationModel.getNoOfRows();
-//            //    }// get the number of records (rows) in the table.
-//            if (buttonAction.equals("Next")); // lowerLimit already has value such that it shows forward records, so do nothing here.
-//            else if (buttonAction.equals("Previous")) {
-//                int temp = lowerLimit - noOfRowsToDisplay - noOfRowsTraversed;
-//                if (temp < 0) {
-//                    noOfRowsToDisplay = lowerLimit - noOfRowsTraversed;
-//                    lowerLimit = 0;
-//                } else {
-//                    lowerLimit = temp;
-//                }
-//            } else if (buttonAction.equals("First")) {
-//                lowerLimit = 0;
-//            } else if (buttonAction.equals("Last")) {
-//                lowerLimit = noOfRowsInTable - noOfRowsToDisplay;
-//                if (lowerLimit < 0) {
-//                    lowerLimit = 0;
-//                }
-//            }
-//
-//            if (task.equals("Save") || task.equals("Delete") || task.equals("Save AS New")) {
-//                lowerLimit = lowerLimit - noOfRowsTraversed;    // Here objective is to display the same view again, i.e. reset lowerLimit to its previous value.
-//            }
+
             // Logic to show data in the table.
             List<Org_Office> organisationList = organisationModel.showData(org_name, office_code_search, office_name_search, designation, designation, designation, designation);
-//            lowerLimit = lowerLimit + organisationList.size();
-//            noOfRowsTraversed = organisationList.size();
-//
-//            // Now set request scoped attributes, and then forward the request to view.
-//            // Following request scoped attributes NAME will remain constant from module to module.
-//            if ((lowerLimit - noOfRowsTraversed) == 0) {     // if this is the only data in the table or when viewing the data 1st time.
-//                request.setAttribute("showFirst", "false");
-//                request.setAttribute("showPrevious", "false");
-//            }
-//            if (lowerLimit == noOfRowsInTable) {             // if No further data (rows) in the table.
-//                request.setAttribute("showNext", "false");
-//                request.setAttribute("showLast", "false");
-//            }
-//            request.setAttribute("lowerLimit", lowerLimit);
-//            request.setAttribute("noOfRowsTraversed", noOfRowsTraversed);
+
             request.setAttribute("message", organisationModel.getMessage());
             request.setAttribute("msgBgColor", organisationModel.getMsgBgColor());
 

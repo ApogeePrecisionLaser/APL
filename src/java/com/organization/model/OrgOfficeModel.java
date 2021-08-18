@@ -213,7 +213,7 @@ public class OrgOfficeModel {
                     + " o.landline_no2, o.landline_no3,o.serial_no,o.super,o.generation,o.parent_org_office_id,o.latitude,o.longitude"
                     + " FROM org_office o, organisation_name og, city c, org_office_type oft "
                     + " where o.organisation_id = og.organisation_id and c.city_id = o.city_id and oft.office_type_id = o.office_type_id and "
-                    + "  og.active='Y' and c.active='Y'";
+                    + "  og.active='Y' and c.active='Y' and o.active='Y' ";
 
             if (!org_name.equals("") && org_name != null) {
                 query += " and og.organisation_name='" + org_name + "' ";
@@ -948,9 +948,10 @@ public class OrgOfficeModel {
 
         return id;
     }
-
+   
+    
     public int getOrg_Office_id(String organisation_name) {
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = ? and active=? ";
+        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '"+organisation_name+"' and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1296,7 +1297,7 @@ public class OrgOfficeModel {
         }
         return organisation_id;
     }
-
+    
     //new update
     public int updateRecordd(Org_Office orgOffice, int org_office_id) throws SQLException {
         int revision = OrgOfficeModel.getRevisionno(orgOffice, org_office_id);
@@ -1611,7 +1612,7 @@ public class OrgOfficeModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM organisation_type WHERE org_office_id =" + org_office_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id =" + org_office_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -1743,7 +1744,7 @@ public class OrgOfficeModel {
         } catch (Exception e) {
             System.out.println("getPointLatLong error-------" + e);
         }
-
+       
         return lat + "," + longi;
     }
 

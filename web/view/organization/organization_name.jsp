@@ -38,6 +38,10 @@
 
 
     $(function () {
+
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
         $("#organisation_type").autocomplete({
 
             source: function (request, response) {

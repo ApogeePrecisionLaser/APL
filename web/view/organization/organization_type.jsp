@@ -36,6 +36,11 @@
 
     $(function () {
 
+
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+
         $("#searchOrgType").autocomplete({
 
             source: function (request, response) {
@@ -324,10 +329,10 @@
         $('#org_type_name').val($("#" + count + '2').html());
         $('#p_ot').val($("#" + count + '3').html());
         $('#description').val($("#" + count + '5').html());
-        var isCheck=$("#" + count + '4').html();      
-        if(isCheck=='Y'){
+        var isCheck = $("#" + count + '4').html();
+        if (isCheck == 'Y') {
             $('#supery').prop('checked', true);
-        }else{
+        } else {
             $('#supern').prop('checked', true);
         }
         $('#edit').attr('disabled', false);

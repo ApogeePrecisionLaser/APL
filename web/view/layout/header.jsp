@@ -7,7 +7,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Data Entry: Organization Name Table</title>
+        <title>APL</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -42,14 +42,17 @@
                                         Organization
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="OrganizationNameController">Org. Name</a>
                                         <a class="dropdown-item" href="OrganisationTypeController">Org. Type</a>
+                                        <a class="dropdown-item" href="OrganizationNameController">Org. Name</a>
                                         <a class="dropdown-item" href="OrgOfficeTypeController" class="dropdown-item">Org. Office Type</a>
                                         <a class="dropdown-item" href="OrgOfficeController" class="dropdown-item">Org. Office</a>
                                         <a class="dropdown-item" href="DesignationController" class="dropdown-item">Designation</a>
+                                        <a class="dropdown-item" href="OrgOfficeDesignationMapController" class="dropdown-item">Org. Office Designation Map</a>
                                         <a class="dropdown-item" href="KeypersonController" class="dropdown-item">Org Person's Name</a>
-                                        <a class="dropdown-item" href="organizationDesignation" class="dropdown-item">Designation Organisation</a>
+                                         <a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Report</a>
+                                        <!--<a class="dropdown-item" href="organizationDesignation" class="dropdown-item">Designation Organisation</a>-->
                                         <a class="dropdown-item" href="organizationtypeDesignation" class="dropdown-item">Designation Organisation Type</a>
+                                        <!--<a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Generate Spreadheet</a>-->
                                         <a class="dropdown-item" href="formdata" class="dropdown-item">FormData</a>
                                         <a class="dropdown-item" href="#" class="dropdown-item">Org Detail Entry</a>
                                         <a class="dropdown-item" href="allinone" class="dropdown-item">All in One</a>
@@ -61,7 +64,7 @@
                                         Location
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
+                                        <a href="CityController" class="dropdown-item">City</a>
                                         <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
                                         <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
                                         <a href="organisationCont.do" class="dropdown-item">Org. Office</a>

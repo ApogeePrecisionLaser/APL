@@ -34,7 +34,11 @@
             });
 
     $(function () {
-
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+        
+        
         $("#searchOrgOfficeType").autocomplete({
 
             source: function (request, response) {

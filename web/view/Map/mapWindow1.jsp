@@ -26,8 +26,9 @@
             function openMap()
             {
                 var latitude = document.getElementById("latti").value;
-                var longitude =document.getElementById("longi").value;
+                var longitude = document.getElementById("longi").value;
 
+               
                 var myCenter = new google.maps.LatLng(latitude, longitude);
                 var mapProp = {
                     center: myCenter,
@@ -45,7 +46,7 @@
     </head>
     <body onload="openMap()">
         <div id="googleMap" style="width:900px;height:550px;" onclick="getCordinate();"></div>
-        <input type="hidden" id="longi" value="${longi}" >
         <input type="hidden" id="latti" value="${latti}" >
+        <input type="hidden" id="longi" value="${longi}" >
     </body>
 </html>
