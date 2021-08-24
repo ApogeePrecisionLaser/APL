@@ -479,7 +479,7 @@ public class KeyPersonNewController extends HttpServlet {
 
                 } else {
                     // update existing record.
-                    keyModel.updateRecord(key, key_person_id);
+//                    keyModel.updateRecord(key, key_person_id);
                     keyModel.insertemergency(List, List1, key_person_id, k, mobile_no1);
                     //  keyModel.updateRecord(key, itr, photo_destination, iD_destination);
                 }

@@ -67,6 +67,7 @@ public class KeyPerson {
    private int familydesignationid;
     private String familyDesignation;
     private String relation;
+    private int org_office_des_map_id;
 
     public int getFamilyofiiceid() {
         return familyofiiceid;
@@ -539,6 +540,20 @@ public class KeyPerson {
 
     public void setId_type(String id_type) {
         this.id_type = id_type;
+    }
+
+    /**
+     * @return the org_office_des_map_id
+     */
+    public int getOrg_office_des_map_id() {
+        return org_office_des_map_id;
+    }
+
+    /**
+     * @param org_office_des_map_id the org_office_des_map_id to set
+     */
+    public void setOrg_office_des_map_id(int org_office_des_map_id) {
+        this.org_office_des_map_id = org_office_des_map_id;
     }
 
     

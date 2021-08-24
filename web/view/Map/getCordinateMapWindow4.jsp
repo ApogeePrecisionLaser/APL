@@ -18,6 +18,7 @@
                 border: 1px solid #000;
             }
         </style>
+        <script src="js/map_js.js"></script>
         <script type="text/javascript" language="javascript">
             var data = [];
             window.onload = function ()
@@ -26,69 +27,58 @@
             };
             function map()
             {
-                debugger;
-                var lat = ${latti};
-                if (lat == "")
-                    lat = "23.1657228";
-                var lng = ${longi};
-                if (lng == "")
-                    lng = "79.9505182";
-                var latlng = new google.maps.LatLng(lat, lng);
+                directionsService = new google.maps.DirectionsService();
+                directionsRenderer = new google.maps.DirectionsRenderer();
+                //var cen = new google.maps.LatLng(41.850033, -87.6500523);
+                var cen = new google.maps.LatLng(28.612776, 77.386388); // 28.6126823,77.37714   // 28.6266395,77.3755757
+                var mapOptions = {
+                    zoom: 7,
+                    center: cen
+                }
+                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                directionsRenderer.setMap(map);
 
-                //(23.1657228,79.9505182);
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: latlng,
-                    zoom: 10,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                let infoWindow = new google.maps.InfoWindow({
+                    content: "Click the map to get Lat/Lng!",
+                    position: cen,
                 });
-                var marker = new google.maps.Marker({
-                    position: latlng,
-                    map: map,
-                    title: 'Set lat/lon values for this property',
-                    draggable: true
+                infoWindow.open(map);
+                // Configure the click listener.
+                map.addListener("click", (mapsMouseEvent) => {
+                    // Close the current InfoWindow.
+                    infoWindow.close();
+                    // Create a new InfoWindow.
+                    infoWindow = new google.maps.InfoWindow({
+                        position: mapsMouseEvent.latLng,
+                    });
+
+                    var lat_long = mapsMouseEvent.latLng.toString().replace(/"/g, "").replace(/'/g, "").replace(/\(|\)/g, "");
+                    //var lat_long = lat_long.toString().replace(/"/g, "").replace(/'/g, "").replace(/\(|\)/g, "");
+                    var array = lat_long.split(",");
+                    var lat = array[0];
+                    var long = array[1];
+                  //  alert(" array lat 1 ---" + lat);
+                  //  alert(" array long 2 ---" + long);
+                    opener.document.getElementById("latitude").value =lat;
+                    opener.document.getElementById("longitude").value = long;
+//                    $('#latti').val(lat);
+//                    $('#longi').val(long);
+                    alert('Location selected');
+//                    infoWindow.setContent(
+//                            JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+//                            );
+                    infoWindow.open(map);
                 });
-//                var marker1 = [];
-//                for (i = 0; i < data.length; i++) {
-//                    marker1[i] = new google.maps.Marker({
-//                        position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
-//                        map: map,
-////                        icon: 'http://google.com/mapfiles/kml/paddle/g',
-//                        label: ""+(i+1)
-//                    });
-//                }
-                google.maps.event.addListener(marker, 'dragend', function (a) {
-                    opener.document.getElementById("latitude").value = a.latLng.lat();
-                    opener.document.getElementById("longitude").value = a.latLng.lng();
-                    opener.document.getElementById("cordinate_change").value = "Y";
-                    if (${latti} != 0 && ${longi} != 0) {
-                        $.ajax({url: "generalCont?task=GetDistance",
-                            data: "source=" + ${latti} + "," + ${longi} + "&destination=" + a.latLng.lat() + "," + a.latLng.lng(),
-                            success: function (response_data) {
-                                if (response_data > 50) {
-                                    var dst = response_data / 1000;
-                                    dst = dst + parseFloat(opener.distance);//parseFloat(opener.document.getElementById("distance").value);
-                                    dst = dst.toFixed(2);
-                                    opener.document.getElementById("distance").value = dst;
-                                    opener.calculateAmount();
-                                    opener.document.getElementById("add_distance").value = dst;
-                                } else {
-                                    dst = parseFloat(opener.distance);//parseFloat(opener.document.getElementById("distance").value);
-                                    opener.document.getElementById("distance").value = dst;
-                                    opener.calculateAmount();
-                                    opener.document.getElementById("add_distance").value = dst;
-                                }
-                            }
-                        });
-                    }
-                });
+
             }
+
         </script>
     </head>
     <body>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDOT5yBi-LAmh9P2X0jQmm4y7zOUaWRXI0"></script>
         <input type="button" value="Close" onclick="window.close();">
         <div id="map" style="width:600px;height:550px;"></div>
-        <input type="hidden" id="longi" value="${longi}" >
-        <input type="hidden" id="latti" value="${latti}" >
+        <input type="" id="longi" value="${longi}" size="20">
+        <input type="" id="latti" value="${latti}" size="20">
     </body>
 </html>
