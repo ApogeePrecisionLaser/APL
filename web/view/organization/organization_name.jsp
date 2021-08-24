@@ -4,9 +4,44 @@
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
+<style>
+
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+
+</style>
 <script>
 
+
+    $(document).ready(
+            function () {
+                $('#mytable tbody').on(
+                        'click',
+                        'tr',
+                        function () {
+                            if ($(this).hasClass('selected_row')) {
+                                $(this).removeClass('selected_row');
+                            } else {
+                                $("#mytable").DataTable().$(
+                                        'tr.selected_row').removeClass(
+                                        'selected_row');
+                                $(this).addClass('selected_row');
+                            }
+                        });
+            });
+
+
     $(function () {
+
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
         $("#organisation_type").autocomplete({
 
             source: function (request, response) {
@@ -149,6 +184,7 @@
         document.getElementById("organisation_type").disabled = false;
         document.getElementById("code").disabled = false;
         document.getElementById("description").disabled = false;
+        document.getElementById("save").disabled = false;
         if (id === 'new') {
             // document.getElementById("message").innerHTML = "";      // Remove message
             $("#message").html("");
@@ -170,7 +206,7 @@
             document.getElementById("save_As").disabled = true;
             document.getElementById("delete").disabled = false;
         }
-        document.getElementById("save").disabled = false;
+        // document.getElementById("save").disabled = false;
     }
     function setDefaultColor(noOfRowsTraversed, noOfColumns) {
         for (var i = 0; i < noOfRowsTraversed; i++) {
@@ -179,40 +215,7 @@
             }
         }
     }
-    function fillColumns(id) {
-        debugger;
 
-        var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-        var noOfColumns = 6;
-        var columnId = id;
-    <%-- holds the id of the column being clicked, excluding the prefix t1c e.g. t1c3 (column 3 of table 1). --%>
-        columnId = columnId.substring(3, id.length);
-    <%-- for e.g. suppose id is t1c3 we want characters after t1c i.e beginIndex = 3. --%>
-        var lowerLimit, higherLimit, rowNo = 0;
-        for (var i = 0; i < noOfRowsTraversed; i++)
-        {
-            lowerLimit = i * noOfColumns + 1;       // e.g. 11 = (1 * 10 + 1)
-            higherLimit = (i + 1) * noOfColumns;    // e.g. 20 = ((1 + 1) * 10)
-            rowNo++;
-            if ((columnId >= lowerLimit) && (columnId <= higherLimit))
-                break;
-        }
-
-        // set default color of rows (i.e. of multiple coloumns).
-        var t1id = "t1c";       // particular column id of table 1 e.g. t1c3.
-
-        document.getElementById("organisation_id").value = document.getElementById("organisation_id" + rowNo).value;
-
-        document.getElementById("organisation_type").value = document.getElementById(t1id + (lowerLimit + 1)).innerHTML;
-        //document.getElementById("organisation_sub_type_name").value = document.getElementById(t1id + (lowerLimit + 2)).innerHTML;
-        document.getElementById("organisation_name").value = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
-        document.getElementById("code").value = document.getElementById(t1id + (lowerLimit + 4)).innerHTML;
-        document.getElementById("description").value = document.getElementById(t1id + (lowerLimit + 5)).innerHTML;
-
-
-        $("#message").html("");
-    }
-    ;
 
     function setStatus(id) {
         if (id === 'save') {
@@ -308,28 +311,19 @@
         }
     }
 
-//             function changeClass(){
-//                        var language=document.getElementById("language").value;
-//                        if(language=='English'){
-//                            $( "#organisation_name" ).addClass('input').removeClass('new_input');
-//                            $("#description" ).addClass('input').removeClass('new_input');
-//                             $("#org_name" ).addClass('input').removeClass('new_input');
-//                              }
-//                        else{
-//                            $( "#organisation_name" ).addClass('new_input').removeClass('input');
-//                            $("#description" ).addClass('new_input').removeClass('input');
-//                                $("#org_name" ).addClass('new_input').removeClass('input');
-//                            }
-//                    }
-//                     function changeSearchClass(){
-//                        var language=document.getElementById("language_type").value;
-//                        if(language=='English'){
-//                            $( "#org_name" ).addClass('input').removeClass('new_input');
-//                              }
-//                        else{
-//                            $( "#org_name" ).addClass('new_input').removeClass('input');
-//                                            }
-//                    }
+
+    function fillColumn(organisation_id, count) {
+        $('#organisation_type').val($("#" + count + '6').val());
+        $('#organisation_id').val($("#" + count + '2').html());
+        $('#organisation_name').val($("#" + count + '3').html());
+        $('#code').val($("#" + count + '5').html());
+        $('#description').val($("#" + count + '4').html());
+        document.getElementById("edit").disabled = false;
+        document.getElementById("delete").disabled = false;
+
+    }
+
+
 </script>
 
 
@@ -359,7 +353,7 @@
                 <div class="col-md-12">
                     <div class="form-group mb-md-0">
                         <label>Organization Name</label>
-                        <input type="text"  id="org_name" name="org_name" value="" Placeholder="Organization Name" class="form-control myInput searchInput1 w-100" >
+                        <input type="text"  id="org_name" name="org_name" value="${searchOrganisation_name}" Placeholder="Organization Name" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
                 <!--                <div class="col-md-3">
@@ -408,14 +402,15 @@
                             <c:forEach var="beanType" items="${requestScope['orgNameList']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn();">
+                                    onclick="fillColumn('${beanType.organisation_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.organisation_id}</td>
                                     <td id="${loopCounter.count }3">${beanType.organisation_name}</td>
                                     <td id="${loopCounter.count }4">${beanType.description}</td>
-                                    <td id="${loopCounter.count }5">${beanType.organisation_code}</td>                                                
-                                </tr>
-                            </c:forEach>
+                                    <td id="${loopCounter.count }5">${beanType.organisation_code}</td>
+                            <input id="${loopCounter.count }6" type="hidden" value="${beanType.organisation_type}"/>                                              
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -480,10 +475,10 @@
                     </c:if>
                 </div>
                 <div class="col-md-12 text-center">                       
-                    <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)">
-                    <input type="reset" class="btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" >
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" disabled="" onclick="makeEditable(id)" >
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" disabled=""  onclick="setStatus(id)">
+                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New"   onclick="makeEditable(id)" >
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" disabled=""  onclick="setStatus(id)" >
                 </div>
             </div>
         </form>

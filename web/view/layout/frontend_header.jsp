@@ -122,7 +122,8 @@
                       </ul>
                   </li>
                   <li><a href="blogs">Blogs</a></li>
-                  <li><a href="contact">Contact Us</a></li> 
+                  <!--<li><a href="contact">Contact Us</a></li>--> 
+                  <li><a href="ContactUsController">Contact Us</a></li> 
               </ul>
               <div class="px-3 pr-md-0 mb-3 mb-md-0">
                   <a href="home#enquiryForm" class="myButtonEffect text-white" style="font-size: 14px;">Enquiry Now</a>

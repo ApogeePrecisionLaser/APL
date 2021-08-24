@@ -140,20 +140,20 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             String active1 = request.getParameter("active");
 
             if (task.equals("Delete")) {
-                organisationModel.deleteRecord(Integer.parseInt(request.getParameter("designation_id")));  // Pretty sure that org_office_id will be available.
+                organisationModel.deleteRecord(Integer.parseInt(request.getParameter("org_office_designation_map_id")));  // Pretty sure that org_office_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New")) {
-                int org_office_id;
+                int org_office_designation_map_id;
                 try {
-                    org_office_id = Integer.parseInt(request.getParameter("designation_id"));            // org_office_id may or may NOT be available i.e. it can be update or new record.
+                    org_office_designation_map_id = Integer.parseInt(request.getParameter("org_office_designation_map_id"));            // org_office_id may or may NOT be available i.e. it can be update or new record.
                 } catch (Exception e) {
-                    org_office_id = 0;
+                    org_office_designation_map_id = 0;
                 }
                 if (task.equals("Save AS New")) {
                     //  org_office_id = 0;
                 }
 
                 OrganisationDesignationBean orgOffice = new OrganisationDesignationBean();
-                orgOffice.setId(org_office_id);
+                orgOffice.setId(org_office_designation_map_id);
                 orgOffice.setOrganisation((request.getParameter("org_office").trim()));
                 orgOffice.setDesignation(request.getParameter("designation").trim());
                 orgOffice.setSerialnumber(request.getParameter("description").trim());
@@ -166,12 +166,12 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
 //                orgOffice.setSuperp(superr);
 //                orgOffice.setP_designation(p_designation);
 
-                if (org_office_id == 0) {
+                if (org_office_designation_map_id == 0) {
                     // if org_office_id was not provided, that means insert new record.
                     organisationModel.insertRecord(orgOffice);
                 } else {
                     // update existing record.
-                    organisationModel.updateRecord(orgOffice, org_office_id);
+                    organisationModel.updateRecord(orgOffice, org_office_designation_map_id);
                 }
             }
           
@@ -243,6 +243,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             // Logic to show data in the table.
             List<OrganisationDesignationBean> organisationList = organisationModel.showData(searchOrgOffice, designation);
        
+            request.setAttribute("searchOrgOffice", searchOrgOffice);
             request.setAttribute("message", organisationModel.getMessage());
             request.setAttribute("msgBgColor", organisationModel.getMsgBgColor());
 

@@ -148,33 +148,15 @@ public class OrganisationTypeController extends HttpServlet {
                     // update existing record.
                     orgTypeModel.updateRecord(organisationType, organisation_type_id);
                 }
-            }
-
-            String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
-            if (buttonAction == null) {
-                buttonAction = "none";
-            } else {
-                active = active1;
-                ac = active;
-
-                if (active.equals("")) {
-                    ac = "ALL RECORDS";
-                } else if (active.equals("Y")) {
-                    ac = "ACTIVE RECORDS";
-                } else {
-                    ac = "INACTIVE RECORDS";
-                }
-            }
-            if (task.equals("Show All Records")) {
-                searchOrgType = "";
-                searchgeneration = "";
-                searchhierarchy = "";
-            }
+            }   
 
             // Logic to show data in the table.
             
             List<OrganisationType> orgTypeList = orgTypeModel.showData(searchOrgType, searchgeneration, active, searchhierarchy);
 
+            request.setAttribute("searchOrgType", searchOrgType);
+            request.setAttribute("searchgeneration", searchgeneration);
+            request.setAttribute("hierarchysearch", searchhierarchy);
             request.setAttribute("orgTypeList", orgTypeList);
             request.setAttribute("message", orgTypeModel.getMessage());
             request.setAttribute("msgBgColor", orgTypeModel.getMsgBgColor());

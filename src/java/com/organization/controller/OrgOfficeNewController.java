@@ -37,6 +37,7 @@ public class OrgOfficeNewController extends HttpServlet {
         } catch (Exception e) {
             System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
         }
+
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
             String serial_no = request.getParameter("searchDesignationCode");
@@ -182,7 +183,7 @@ public class OrgOfficeNewController extends HttpServlet {
             } else if (task.equals("Save") || task.equals("Save AS New")) {
                 int org_office_id;
                 try {
-                    org_office_id = Integer.parseInt(request.getParameter("org_office_id"));            // org_office_id may or may NOT be available i.e. it can be update or new record.
+                    org_office_id = Integer.parseInt("0"+request.getParameter("org_office_id"));            // org_office_id may or may NOT be available i.e. it can be update or new record.
                 } catch (Exception e) {
                     org_office_id = 0;
                 }
@@ -215,14 +216,18 @@ public class OrgOfficeNewController extends HttpServlet {
                 String superp = request.getParameter("super");
                 String p_org_office = request.getParameter("serialnumber");
 
-                if (superp.equals(null) || p_org_office.equals(null)) {
+                if (superp.equals(null)) {
                     superp = "";
+                }
+                if (p_org_office.equals(null)) {
                     p_org_office = "";
                 }
                 orgOffice.setSuperp(superp);
                 orgOffice.setP_org(p_org_office);
+                System.err.println("org_office_id----------------" + org_office_id);
                 if (org_office_id == 0) {
                     // if org_office_id was not provided, that means insert new record.
+
                     organisationModel.insertRecord(orgOffice);
                 } else {
                     // update existing record.
@@ -243,8 +248,8 @@ public class OrgOfficeNewController extends HttpServlet {
                     longitude = words[1];
                     System.out.println(latitude + "  " + longitude);
                 }
-                request.setAttribute("longi", latitude);
-                request.setAttribute("latti", longitude);
+                request.setAttribute("longi", longitude);
+                request.setAttribute("latti", latitude);
                 //System.out.println(latti + "," + longi);
                 request.getRequestDispatcher("openMapWindowView").forward(request, response);
                 return;
@@ -322,8 +327,7 @@ public class OrgOfficeNewController extends HttpServlet {
                 }
             }
 
-            List<Org_Office> organisationList1 = organisationModel.showDataa(org_name, office_code_search, office_name_search, mobile, searchgeneration, active, searchhierarchy);
-
+            // List<Org_Office> organisationList1 = organisationModel.showDataa(org_name, office_code_search, office_name_search, mobile, searchgeneration, active, searchhierarchy);
             // Logic to show data in the table.
             List<Org_Office> organisationList = organisationModel.showData(org_name, office_code_search, office_name_search, mobile, searchgeneration, active, searchhierarchy);
 

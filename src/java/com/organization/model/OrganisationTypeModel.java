@@ -131,12 +131,6 @@ public class OrganisationTypeModel {
             return list1;
         }
 
-//        String query = " SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
-//                + " FROM organisation_type where "
-//                + "  IF('" + active + "' = '', active LIKE '%%',active =?) and "
-//                + "  IF('" + searchOrgType + "' = '', org_type_name LIKE '%%',org_type_name =?) and "
-//                + "  IF('" + searchgeneration + "' = '', generation LIKE '%%',generation =?) "
-//                + " ORDER BY generation,org_type_name asc ";
         String query = "SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
                 + " FROM organisation_type  where active='Y' ";
 

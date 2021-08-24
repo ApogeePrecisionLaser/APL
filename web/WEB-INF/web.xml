@@ -31,6 +31,20 @@
         <!--<param-value>root</param-value>-->
     </context-param>
    
+   <!-- start webservices-->
+    <servlet>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.webservice.controller</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <url-pattern>/webAPI/*</url-pattern>
+    </servlet-mapping>
+    <!--end webservices-->
     
     <servlet>
         <servlet-name>OrganizationNameController</servlet-name>
@@ -248,6 +262,50 @@
     </servlet-mapping>
     <!--end generate spreadsheet-->
     
+    
+    <!--Start Item type-->
+    
+    <servlet>
+        <servlet-name>ItemTypeController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemTypeController</servlet-name>
+        <url-pattern>/ItemTypeController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_type</servlet-name>
+        <jsp-file>/view/Inventory/item_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_type</servlet-name>
+        <url-pattern>/item_type</url-pattern>
+    </servlet-mapping>
+    <!--End Item Type-->
+    
+    
+      <!--Start Item name-->
+    
+    <servlet>
+        <servlet-name>ItemNameController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemNameController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemNameController</servlet-name>
+        <url-pattern>/ItemNameController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_name</servlet-name>
+        <jsp-file>/view/Inventory/item_name.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_name</servlet-name>
+        <url-pattern>/item_name</url-pattern>
+    </servlet-mapping>
+    <!--End Item name-->
+    
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>
         <jsp-file>/view/organization/organizationDesignation.jsp</jsp-file>
@@ -412,6 +470,19 @@
         <url-pattern>/video_gallery</url-pattern>
     </servlet-mapping>
     
+    
+    
+    <!--Start contact us page-->
+    
+    <servlet>
+        <servlet-name>ContactUsController</servlet-name>
+        <servlet-class>com.website.controller.ContactUsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContactUsController</servlet-name>
+        <url-pattern>/ContactUsController</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>contact</servlet-name>
         <jsp-file>/view/frontend/contact.jsp</jsp-file>
@@ -420,6 +491,8 @@
         <servlet-name>contact</servlet-name>
         <url-pattern>/contact</url-pattern>
     </servlet-mapping>
+    
+    <!--End contact us page-->
     
     
     <servlet>

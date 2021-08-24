@@ -19,25 +19,55 @@
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+
 
 <script>
-//$(document).ready(function () {
-//    $('#mytable').DataTable();
-//});
+//$(document).ready(function() {
+//    $('#mytable').DataTable( {
+//        dom: 'Bfrtip',
+//        buttons: [
+//            'copy', 'csv', 'excel', 'pdf', 'print'
+//        ]
+//    } );
+//} );
+
+
 $(document).ready(function() {
     $('#mytable').DataTable( {
         dom: 'Bfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            'colvis'
         ]
     } );
 } );
+
+
+
 </script>
 <script>
-$('.js-example-basic-single').select2({
-  placeholder: 'Select an option'
-});
-$(".js-example-responsive").select2({
-    width: 'resolve' // need to override the changed default
-});
+//$('.js-example-basic-single').select2({
+//  placeholder: 'Select an option'
+//});
+//$(".js-example-responsive").select2({
+//    width: 'resolve' // need to override the changed default
+//});
 </script>

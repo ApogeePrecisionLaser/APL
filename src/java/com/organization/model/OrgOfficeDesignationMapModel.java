@@ -488,87 +488,23 @@ public class OrgOfficeDesignationMapModel {
         String is_child = "", active = "";
         int rowsAffected = 0;
         int count = 0;
-//        is_child = bean.getSuperp().trim();
-//        active = bean.getIsActive();
-//        if (is_child != null) {
-//            if (is_child.equals("yes") || is_child.equals("Yes") || is_child.equals("YES") || is_child.equals("Y") || is_child.equals("y")) {
-//                is_child = "Y";
-//            } else {
-//                is_child = "N";
-//            }
-//        }
+
         int orgid = getOrganisationOfficeId(bean.getOrganisation());
         int desigid = getDesignation_id(bean.getDesignation());
-//        int desigid2 = getDesignation_id(bean.getP_designation());
-//        int generation = 0;
-//        if (desigid2 == 0) {
-//            generation = 1;
-//        } else {
-//            generation = getParentGeneration(orgid, desigid2) + 1;
-//
-//        }
-//        if (desigid1 == desigid2) {
-//            message = "Sorry! Parent-Child cannot be same!";
-//            msgBgColor = COLOR_ERROR;
-//            return rowsAffected;
-//        }
 
-        // to check if parent exist or not
-//        String qry2 = "select count(*) from organisation_designation where organisation_id='" + orgid + "' and "
-//                + " organisation_designation_map_id_1='" + desigid1 + "' and active='Y' ";
-//        try {
-//            PreparedStatement pst1 = connection.prepareStatement(qry2);
-//            System.out.println("query for check -" + pst1);
-//            ResultSet rst1 = pst1.executeQuery();
-//            while (rst1.next()) {
-//                count = rst1.getInt(1);
-//            }
-//        } catch (Exception e) {
-//            System.out.println("error in insertRecord model -" + e);
-//        }
-//        if (count > 0) {
-//            message = "Cannot save the record, already mapped!";
-//            msgBgColor = COLOR_ERROR;
-//            return rowsAffected;
-//        }
-//
-//        //
-//        String query1 = "select count(*) "
-//                + " from organisation_designation where organisation_id='" + orgid + "' "
-//                + " and organisation_designation_map_id_1='" + desigid2 + "' and "
-//                + " organisation_designation_map_id_2='" + desigid1 + "' and active='Y' ";
-//
-//        try {
-//            PreparedStatement pst = connection.prepareStatement(query1);
-//            System.out.println("query for check -" + pst);
-//            ResultSet rst = pst.executeQuery();
-//            while (rst.next()) {
-//                count = rst.getInt(1);
-//            }
-//        } catch (Exception e) {
-//            System.out.println("error in insertRecord model -" + e);
-//        }
-//        if (count > 0) {
-//            message = "Cannot save the record, already mapped!";
-//            msgBgColor = COLOR_ERROR;
-//            return rowsAffected;
-//        }
         String query = "insert into org_office_designation_map(org_office_id,designation_id,"
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
 
-        //int rowsAffected = 0;
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, orgid);
             pstmt.setInt(2, desigid);
-//            pstmt.setInt(3, desigid2);
             pstmt.setString(3, "Y");
             pstmt.setString(4, "0");
             pstmt.setString(5, bean.getRemark());
             pstmt.setString(6, "Komal");
             pstmt.setString(7, bean.getSerialnumber());
-            //pstmt.setString(9, "0");
 
             System.out.println("insert query -" + pstmt);
 
@@ -586,210 +522,69 @@ public class OrgOfficeDesignationMapModel {
         return rowsAffected;
 
     }
-
-    public int updateRecord(OrganisationDesignationBean orgOffice, int org_office_id) throws SQLException {
-        int revision = OrganisationDesignationNewModel.getRevisionno(orgOffice, org_office_id);
-        //int orgid = getOrganisation_id(orgOffice.getOrganisation());
-        int desigid = getDesignation_id(orgOffice.getDesignation());
-        String oldserial, oldsuper;
-        String newserial = orgOffice.getSerialnumber();
-        String newsuper = orgOffice.getSuperp();
-        String superstatus = orgOffice.getSuperp();
-        String serialnumber = orgOffice.getSerialnumber();
-        int key = orgOffice.getId();
-        int updateRowsAffected = 0;
+    
+   
+    
+    public int updateRecord(OrganisationDesignationBean bean, int org_office_designation_map_id) throws SQLException {
+        int revision = OrgOfficeDesignationMapModel.getRevisionno(bean, org_office_designation_map_id);
         int rowsAffected = 0;
         int count = 0;
+        int updateRowsAffected = 0;
+        Boolean status = false;
 
-        String is_child = "", active = "", prev_is_child = "";
-        int prev_mapId1 = 0;
-        is_child = orgOffice.getSuperp().trim();
-        if (is_child != null) {
-            if (is_child.equals("yes") || is_child.equals("Yes") || is_child.equals("YES") || is_child.equals("Y") || is_child.equals("y")) {
-                is_child = "Y";
-            } else {
-                is_child = "N";
-            }
-        }
-        int org_desig_id = orgOffice.getId();
-        int orgid = getOrganisation_id(orgOffice.getOrganisation());
-        int desigid1 = getDesignation_id(orgOffice.getDesignation());
-        int desigid2 = getDesignation_id(orgOffice.getP_designation());
-        int generation = 0;
-        if (desigid2 == 0) {
-            generation = 1;
-        } else {
+        int org_office_id = getOrganisationOfficeId(bean.getOrganisation());
+        int desigid = getDesignation_id(bean.getDesignation());
 
-            generation = getParentGeneration(orgid, desigid2) + 1;
+        String query1 = "SELECT max(revision) FROM org_office_designation_map WHERE "
+                + "org_office_designation_map_id = " + org_office_designation_map_id + " and active='Y' ";
 
-        }
+        String query2 = "UPDATE org_office_designation_map SET active=? WHERE org_office_designation_map_id=? and revision=? ";
 
-        if (desigid1 == desigid2) {
-            message = "Sorry! Parent-Child cannot be same!";
-            msgBgColor = COLOR_ERROR;
-            return rowsAffected;
-        }
-
-        // to check if child present or not for update logic
-        String qry3 = "select count(*),organisation_designation_map_id_1 from organisation_designation where "
-                + " organisation_designation_id='" + org_desig_id + "' and organisation_id='" + orgid + "'  "
-                //+ " organisation_id='" + orgid + "' and organisation_designation_map_id_2='"+prev_mapId1+"' "
-                + " and active='Y' ";
-        try {
-            PreparedStatement pst2 = connection.prepareStatement(qry3);
-            System.out.println("query for check -" + pst2);
-            ResultSet rst2 = pst2.executeQuery();
-            while (rst2.next()) {
-                count = rst2.getInt(1);
-                prev_mapId1 = rst2.getInt(2);
-
-            }
-        } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
-        }
-        if (prev_mapId1 != desigid) {
-            int c = 0;
-            String query3 = "select count(*),organisation_designation_map_id_1 from organisation_designation where "
-                    //+ " organisation_designation_id='" + org_desig_id + "' and organisation_id='" + orgid + "'  "
-                    + " organisation_id='" + orgid + "' and organisation_designation_map_id_2='" + prev_mapId1 + "' "
-                    + " and active='Y' ";
-            try {
-                PreparedStatement pst3 = connection.prepareStatement(query3);
-                System.out.println("query for check -" + pst3);
-                ResultSet rst3 = pst3.executeQuery();
-                while (rst3.next()) {
-                    c = rst3.getInt(1);
-                    prev_mapId1 = rst3.getInt(2);
-
-                }
-            } catch (Exception e) {
-                System.out.println("error in insertRecord model -" + e);
-            }
-
-            if (c > 0) {
-                message = "Cannot save the record, already mapped!";
-                msgBgColor = COLOR_ERROR;
-                return rowsAffected;
-            }
-        }
-
-        // to check if child exist or not for duplicate entry of child
-        String qry2 = "select count(*) from organisation_designation where organisation_id='" + orgid + "' and "
-                + " organisation_designation_map_id_1='" + desigid1 + "' and active='Y' ";
-        try {
-            PreparedStatement pst1 = connection.prepareStatement(qry2);
-            System.out.println("query for check -" + pst1);
-            ResultSet rst1 = pst1.executeQuery();
-            while (rst1.next()) {
-                count = rst1.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
-        }
-        if (count > 1) {
-            message = "Cannot save the record, already existed!";
-            msgBgColor = COLOR_ERROR;
-            return rowsAffected;
-        }
-
-        boolean status = false;
-
-        // to check child - parent mapping
-        //int count = 0;
-        String qry = "select count(*) from organisation_designation "
-                + " where organisation_id='" + orgid + "' and "
-                + " organisation_designation_map_id_2='" + desigid1 + "' and active='Y' ";
-
-        String qry1 = "select is_super_child from organisation_designation where organisation_designation_id='" + org_desig_id + "'  "
-                + " and active='Y' ";
-
-        //
-        //String query1 = "SELECT max(revision),serial_no,super  FROM organisation_designation_map WHERE organisation_designation_map_id = " + org_office_id + "  && active=? ";
-        String query1 = "SELECT max(revision_no),is_super_child FROM organisation_designation WHERE organisation_designation_id = " + org_office_id + "  && active='Y' ";
-        //String query2 = "UPDATE organisation_designation_map SET active=? WHERE organisation_designation_map_id=? and revision=?";
-        String query2 = "UPDATE organisation_designation SET active=? WHERE organisation_designation_id=? and revision_no=?";
-
-//        String query3 = "INSERT INTO "
-//                + "organisation_designation_map(organisation_designation_map_id,organisation_id,designation_id,serial_no, super,revision,active,parent_designation) "
-//                + "VALUES(?,?,?,?,?,?,?,?)";
-        String query3 = " insert into organisation_designation(organisation_id,organisation_designation_map_id_1,"
-                + " organisation_designation_map_id_2,is_super_child,active,revision_no,remark,"
-                + " created_by,created_at,organisation_designation_id,generation) "
-                + " values (?,?,?,?,?,?,?,?,now(),?,?) ";
-
-        //int rowsAffected = 0;
+        String query3 = "insert into org_office_designation_map(org_office_id,designation_id,"
+                + " active,revision,remark,created_by,serial_no,created_at) "
+                + " values (?,?,?,?,?,?,?,now()) ";
+        
         try {
             connection.setAutoCommit(false);
 
-            // for child-parent mapping
-            PreparedStatement pst1 = connection.prepareStatement(qry1);
-            ResultSet rst1 = pst1.executeQuery();
-            while (rst1.next()) {
-                prev_is_child = rst1.getString(1);
-            }
-            if (!is_child.equals(prev_is_child)) {
+            PreparedStatement pstmt = connection.prepareStatement(query1);
 
-                PreparedStatement pst = connection.prepareStatement(qry);
-                ResultSet rst = pst.executeQuery();
-                if (rst.next()) {
-                    count = rst.getInt(1);
-                }
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                revision = rs.getInt("max(revision)");
 
-            }
+                PreparedStatement pstm = connection.prepareStatement(query2);
+                pstm.setString(1, "N");
 
-            if (count <= 1) {
+                pstm.setInt(2, org_office_designation_map_id);
+                pstm.setInt(3, revision);
+                updateRowsAffected = pstm.executeUpdate();
+                if (updateRowsAffected >= 1) {
+                    revision = rs.getInt("max(revision)") + 1;
+                    PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
 
-                PreparedStatement pstmt = connection.prepareStatement(query1);
-//           pstmt.setInt(1,organisation_type_id);
-                //pstmt.setString(1, "Y");
+                    psmt.setInt(1, org_office_id);
+                    psmt.setInt(2, desigid);
+                    psmt.setString(3, "Y");
+                    psmt.setInt(4, revision);
+                    psmt.setString(5, bean.getRemark());
+                    psmt.setString(6, "Komal");
+                    psmt.setString(7, bean.getSerialnumber());
 
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    revision = rs.getInt("max(revision_no)");
-                    oldsuper = rs.getString("is_super_child");
-
-                    PreparedStatement pstm = connection.prepareStatement(query2);
-                    pstm.setString(1, "N");
-
-                    pstm.setInt(2, org_office_id);
-                    pstm.setInt(3, revision);
-                    updateRowsAffected = pstm.executeUpdate();
-                    if (updateRowsAffected >= 1) {
-                        revision = rs.getInt("max(revision_no)") + 1;
-                        PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
-
-                        psmt.setInt(1, orgid);
-                        System.out.println("querrrrry --" + pstmt);
-                        psmt.setInt(2, desigid1);
-                        psmt.setInt(3, desigid2);
-                        psmt.setString(4, is_child);
-                        psmt.setString(5, "Y");
-                        psmt.setInt(6, revision);
-                        psmt.setString(7, orgOffice.getRemark());
-                        psmt.setString(8, "Vikrant");
-                        psmt.setInt(9, org_office_id);
-                        psmt.setInt(10, generation);
-
-                        //pstmt.setString(9, "0");
-                        System.out.println("insert query -" + psmt);
-                        rowsAffected = psmt.executeUpdate();
-                        if (rowsAffected > 0) {
-                            status = true;
-
-                            updateallRecorf(orgid);
-
-                            message = "Record updated successfully.";
-                            msgBgColor = COLOR_OK;
-                            connection.commit();
-                            //delete record
-                        } else {
-                            status = false;
-                            message = "Cannot update the record, some error.";
-                            msgBgColor = COLOR_ERROR;
-                            connection.rollback();
-                        }
+                    System.out.println("insert query -" + psmt);
+                    rowsAffected = psmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        status = true;
+                        message = "Record updated successfully.";
+                        msgBgColor = COLOR_OK;
+                        connection.commit();
+                        //delete record
+                    } else {
+                        status = false;
+                        message = "Cannot update the record, some error.";
+                        msgBgColor = COLOR_ERROR;
+                        connection.rollback();
                     }
-
                 }
 
             } else {
@@ -805,48 +600,13 @@ public class OrgOfficeDesignationMapModel {
         return rowsAffected;
     }
 
-    public Boolean updateallRecorf(int id) throws SQLException {
-        Boolean status = false;
 
-        String querynw = "select * from organisation_designation where organisation_id=?  and active=?  order by generation";
-        PreparedStatement psmtnw = (PreparedStatement) connection.prepareStatement(querynw);
-        psmtnw.setInt(1, id);
-
-        psmtnw.setString(2, "Y");
-
-        ResultSet rstnw = psmtnw.executeQuery();
-        while (rstnw.next()) {
-            int generation = 0;
-            int selfdesig = rstnw.getInt("organisation_designation_map_id_1");
-            int desig = rstnw.getInt("organisation_designation_map_id_2");
-
-            if (desig == 0) {
-
-                generation = 1;
-            } else {
-                generation = getParentGeneration(id, desig) + 1;
-
-            }
-
-            String querynw2 = "update organisation_designation SET generation=?  where organisation_id=?  and organisation_designation_map_id_1=? and active=?  order by generation";
-            PreparedStatement psmtnw2 = (PreparedStatement) connection.prepareStatement(querynw2);
-            psmtnw2.setInt(1, generation);
-            psmtnw2.setInt(2, id);
-            psmtnw2.setInt(3, selfdesig);
-            psmtnw2.setString(4, "Y");
-
-            int n = psmtnw2.executeUpdate();
-
-        }
-
-        return status;
-    }
-
-    public static int getRevisionno(OrganisationDesignationBean orgOffice, int org_office_id) {
+    public static int getRevisionno(OrganisationDesignationBean orgOffice, int org_office_designation_map_id) {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM organisation_designation WHERE organisation_designation_id =" + org_office_id + "  && active='Y';";
+            String query = " SELECT max(revision) as revision_no FROM org_office_designation_map"
+                    + " WHERE org_office_designation_map_id =" + org_office_designation_map_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -861,66 +621,15 @@ public class OrgOfficeDesignationMapModel {
         return revision;
     }
 
-    public int deleteRecord(int org_office_id) throws SQLException {
+    public int deleteRecord(int org_office_designation_map_id) throws SQLException {
 
         int org_id = 0, org_map1 = 0, org_map2 = 0, count = 0;
         int rowsAffected = 0;
         PreparedStatement psmt;
         ResultSet rst;
-        String query = "select organisation_id,organisation_designation_map_id_1,organisation_designation_map_id_2 "
-                + " from organisation_designation where organisation_designation_id='" + org_office_id + "' "
-                + " and active='Y' ";
-        try {
-            psmt = connection.prepareStatement(query);
-            rst = psmt.executeQuery();
-            while (rst.next()) {
-                org_id = rst.getInt(1);
-                org_map1 = rst.getInt(2);
-                org_map2 = rst.getInt(3);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        } finally {
-            psmt = null;
-            rst = null;
-            rowsAffected = 0;
-            query = null;
-        }
-        query = "select count(*) from organisation_designation where "
-                + " organisation_id='" + org_id + "' and organisation_designation_map_id_2='" + org_map1 + "' and active='Y' ";
-        try {
-            psmt = connection.prepareStatement(query);
-            rst = psmt.executeQuery();
-            while (rst.next()) {
-                count = rst.getInt(1);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        } finally {
-            psmt = null;
-            rst = null;
-            rowsAffected = 0;
-            query = null;
-        }
-
-        if (count > 0) {
-            message = "Sorry!, cannot delete because child already mapped as Parent!";
-            msgBgColor = COLOR_ERROR;
-
-            return rowsAffected;
-        }
-
-//        if (rowsAffected > 0) {
-//            message = "Record deleted successfully.";
-//            msgBgColor = COLOR_OK;
-//        } else {
-//            message = "Cannot delete the record, some error.";
-//            msgBgColor = COLOR_ERROR;
-//        }
-        query = "DELETE FROM organisation_designation WHERE organisation_designation_id = '" + org_office_id + "' and "
-                + " active='Y' ";
+  
+        String query = "DELETE FROM org_office_designation_map WHERE org_office_designation_map_id = '" + org_office_designation_map_id + "' "
+                + "and active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
             rowsAffected = psmt.executeUpdate();

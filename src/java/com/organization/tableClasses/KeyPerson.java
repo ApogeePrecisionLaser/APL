@@ -12,20 +12,6 @@ import java.util.List;
  */
 public class KeyPerson {
 
-    /**
-     * @return the org_office_des_map_id
-     */
-    public int getOrg_office_des_map_id() {
-        return org_office_des_map_id;
-    }
-
-    /**
-     * @param org_office_des_map_id the org_office_des_map_id to set
-     */
-    public void setOrg_office_des_map_id(int org_office_des_map_id) {
-        this.org_office_des_map_id = org_office_des_map_id;
-    }
-
     private int key_person_id;
     private String key_person_name;
     private int designation_id;
@@ -554,6 +540,20 @@ public class KeyPerson {
 
     public void setId_type(String id_type) {
         this.id_type = id_type;
+    }
+
+    /**
+     * @return the org_office_des_map_id
+     */
+    public int getOrg_office_des_map_id() {
+        return org_office_des_map_id;
+    }
+
+    /**
+     * @param org_office_des_map_id the org_office_des_map_id to set
+     */
+    public void setOrg_office_des_map_id(int org_office_des_map_id) {
+        this.org_office_des_map_id = org_office_des_map_id;
     }
 
     

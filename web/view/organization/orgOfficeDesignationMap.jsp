@@ -1,11 +1,25 @@
-
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@include file="../layout/header.jsp" %>
 
+<style>
+
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+
+</style>
 
 <script>
     $(function () {
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
 
         $("#searchOrgOffice").autocomplete({
 
@@ -60,6 +74,7 @@
             }
         });
 
+
         $("#org_office").autocomplete({
 
             source: function (request, response) {
@@ -113,8 +128,9 @@
             }
         });
 
-
     });
+
+
     function makeEditable(id) {
         //  document.getElementById("designation_id").disabled = false;
         document.getElementById("designation").disabled = false;
@@ -127,7 +143,7 @@
             document.getElementById("delete").disabled = true;
             // document.getElementById("save_As").disabled = true;
             document.getElementById("description").disabled = false;
-            document.getElementById("super").disabled = false;
+            // document.getElementById("super").disabled = false;
             document.getElementById("org_office").focus();
             setDefaultColor(document.getElementById("noOfRowsTraversed").value, 4);
         }
@@ -136,10 +152,11 @@
             document.getElementById("delete").disabled = false;
             document.getElementById("org_office").focus();
             document.getElementById("description").disabled = false;
-            document.getElementById("super").disabled = false;
+//            document.getElementById("super").disabled = false;
         }
-
     }
+
+
     function setDefaultColor(noOfRowsTraversed, noOfColumns) {
         for (var i = 0; i < noOfRowsTraversed; i++) {
             for (var j = 1; j <= noOfColumns; j++) {
@@ -147,42 +164,8 @@
             }
         }
     }
-    function fillColumns(id)
-    {
 
-        var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-        var noOfColumns = 5;
-        var columnId = id;
-    <%-- holds the id of the column being clicked, excluding the prefix t1c e.g. t1c3 (column 3 of table 1). --%>
-        columnId = columnId.substring(3, id.length);
-    <%-- for e.g. suppose id is t1c3 we want characters after t1c i.e beginIndex = 3. --%>
-        var lowerLimit, higherLimit, rowNo = 0;
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            lowerLimit = i * noOfColumns + 1;       // e.g. 11 = (1 * 10 + 1)
-            higherLimit = (i + 1) * noOfColumns;    // e.g. 20 = ((1 + 1) * 10)
-            rowNo++;
-            if ((columnId >= lowerLimit) && (columnId <= higherLimit))
-                break;
-        }
-        setDefaultColor(noOfRowsTraversed, noOfColumns);        // set default color of rows (i.e. of multiple coloumns).
-        var t1id = "t1c";       // particular column id of table 1 e.g. t1c3.
-        var t2id = "t2c";       // particular column id of table 2 e.g. t2c3.
 
-        document.getElementById("designation_id").value = document.getElementById("designation_id" + rowNo).value;
-        document.getElementById("org_office").value = document.getElementById(t1id + (lowerLimit + 1)).innerHTML;
-        document.getElementById("designation").value = document.getElementById(t1id + (lowerLimit + 2)).innerHTML;
-        document.getElementById("description").value = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
-        document.getElementById("super").value = document.getElementById(t1id + (lowerLimit + 4)).innerHTML;
-        for (var i = 0; i < noOfColumns; i++) {
-            document.getElementById(t1id + (lowerLimit + i)).bgColor = "#d0dafd";        // set the background color of clicked row to yellow.
-        }
-        document.getElementById("edit").disabled = false;
-        if (!document.getElementById("save").disabled) {   // if save button is already enabled, then make edit, and delete button enabled too.
-            document.getElementById("save_As").disabled = true;
-            document.getElementById("delete").disabled = false;
-        }
-        $("#message").html("");
-    }
     function setStatus(id) {
         if (id == 'save') {
             document.getElementById("clickedButton").value = "Save";
@@ -191,6 +174,8 @@
         } else
             document.getElementById("clickedButton").value = "Delete";
     }
+
+
     function myLeftTrim(str) {
         var beginIndex = 0;
         for (var i = 0; i < str.length; i++) {
@@ -201,6 +186,8 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
+
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
@@ -231,6 +218,8 @@
             result = confirm("Are you sure you want to delete this record?")
         return result;
     }
+
+
     function searchDesignationList(id)
     {
         var searchDesignation = document.getElementById('searchDesignation').value;
@@ -243,11 +232,41 @@
         var url = "designationCont.do?" + action;
         popup = popupWindow(url, "Designation_View_Report");
     }
+
+
     function popupWindow(url, windowName)
     {
         var windowfeatures = "left=50, top=50, width=1000, height=500, resizable=no, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
         return window.open(url, windowName, windowfeatures)
     }
+
+
+    function fillColumn(id, count) {
+        // alert(id);
+        $('#org_office_designation_map_id').val(id);
+        $('#org_office').val($("#" + count + '2').html());
+        $('#designation').val($("#" + count + '3').html());
+        $('#description').val($("#" + count + '4').html());
+
+        $('#edit').attr('disabled', false);
+        $('#delete').attr('disabled', false);
+    }
+
+
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
+
+
 </script>
 
 
@@ -308,8 +327,7 @@
                         <tbody>   
                             <c:forEach var="beanType" items="${requestScope['organisationList']}" varStatus="loopCounter">
 
-                                <tr
-                                    onclick="fillColumn();">
+                                <tr onclick="fillColumn('${beanType.id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.organisation}</td>
                                     <td id="${loopCounter.count }3">${beanType.designation}</td>
@@ -327,7 +345,6 @@
 
 
 
-
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
@@ -338,6 +355,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
+                            <input type="hidden" id="org_office_designation_map_id" name="org_office_designation_map_id" value="" >
                             <label>Org. Office<span class="text-danger">*</span></label>                            
                             <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" size="45" disabled>
                         </div>

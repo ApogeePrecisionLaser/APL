@@ -2,8 +2,36 @@
 
 <%@include file="../layout/header.jsp" %>
 
+<style>
 
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+
+</style>
 <script>
+    setTimeout(function () {
+        $('#message').fadeOut('fast');
+    }, 10000);
+
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
+
     $(function () {
         $("#searchDesignationCode").autocomplete({
 
@@ -191,6 +219,15 @@
         var windowfeatures = "left=50, top=50, width=1000, height=500, resizable=no, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
         return window.open(url, windowName, windowfeatures)
     }
+
+    function fillColumn(id, count) {
+        $('#designation_id').val(id);
+        $('#designation_code').val($("#" + count + '2').html());
+        $('#designation').val($("#" + count + '3').html());
+        $('#description').val($("#" + count + '4').html());
+        $('#edit').attr('disabled', false);
+        $('#delete').attr('disabled', false);
+    }
 </script>
 
 
@@ -213,39 +250,19 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="form-group mb-md-0">
-                        <input type="hidden" id="designation_id" name="designation_id" value="">
+
                         <label>Designation Code</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignationCode" name="searchDesignationCode" value="${searchDesignationCode}" size="150" >
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignationCode"
+                               name="searchDesignationCode" value="${searchDesignationCode}" size="150" >
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group mb-md-0">
                         <label>Designation</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignation" name="searchDesignation" value="${searchDesignation}" size="150" >
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignation"
+                               name="searchDesignation" value="${searchDesignation}" size="150" >
                     </div>
                 </div>
-                <!--                <div class="col-md-4">
-                                    <div class="form-group mb-md-0">
-                                        <label>Org Type Hierarchy</label>
-                                        <input class="form-control myInput searchInput1 w-100" type="text" id="hierarchysearch" name="hierarchysearch" value="${hierarchysearch}" size="30" >
-                                    </div>
-                                </div>-->
-                <!--                <div class="col-md-3">
-                                    <div class="form-group mb-md-0">
-                                        <label>Status</label>
-                                        <select class="ui dropdown form-control selectInput mySelect" name="task" id="hiera" >
-                                            <option>${ac}(CURRENTLY)</option>
-                                            <option value="ACTIVE RECORDS">ACTIVE RECORDS</option>
-                                            <option value="INACTIVE RECORDS">INACTIVE RECORDS</option>
-                                            <option value="ALL RECORDS">ALL RECORDS</option>
-                                        </select>
-                                    </div>
-                                </div>-->
-                <!--                <div class="col-md-3">
-                                    <div class="formBtnWrap">
-                                        <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
-                                    </div>
-                                </div>-->
             </div>
 
             <hr>
@@ -279,18 +296,8 @@
                         </thead>
                         <tbody>                                
                             <c:forEach var="beanType" items="${requestScope['mediaList']}" varStatus="loopCounter">
-<!--                                <tr>
-                                    <td id="t1c${IDGenerator.uniqueID}" onclick="fillColumns(id)">
-                                        <input type="hidden" id="designation_id${loopCounter.count}" value="${media.designation_id}">${lowerLimit - noOfRowsTraversed + loopCounter.count}
-                                    </td>
-                                    <td id="t1c${IDGenerator.uniqueID}" onclick="fillColumns(id)" >${media.designation_code}</td>
-                                    <td id="t1c${IDGenerator.uniqueID}" onclick="fillColumns(id)" >${media.designation}</td>
-                                    <td id="t1c${IDGenerator.uniqueID}" onclick="fillColumns(id)" >${media.description}</td>
-                                </tr>-->
-                                
-                                
                                 <tr
-                                    onclick="fillColumn();">
+                                    onclick="fillColumn('${beanType.designation_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.designation_code}</td>
                                     <td id="${loopCounter.count }3">${beanType.designation}</td>
@@ -319,7 +326,8 @@
                 <div class="col-md-4">
                     <div class="">
                         <div class="form-group">
-                            <label>Designation code<span class="text-danger">*</span></label>                            
+                            <label>Designation code<span class="text-danger">*</span></label> 
+                            <input type="hidden" id="designation_id" name="designation_id" value="" >
                             <input class="form-control myInput  w-100" type="text" id="designation_code" name="designation_code" value="" size="45" disabled>
                         </div>
                     </div>
@@ -331,32 +339,7 @@
                             <input class="form-control myInput  w-100" type="text" id="designation" name="designation" value=""  size="45" disabled>
                         </div>
                     </div>
-                </div>
-                <!--                <div class="col-md-2">
-                                    <div class="">
-                                        <div class="form-group mb-1">
-                                            <label class="" for="email">Is super child<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
-                                            <label class="form-check-label ">
-                                                <input type="radio" id="supery" name="super"  disabled> Yes
-                                            </label>
-                                        </div>
-                                        <div class="form-group form-check d-inline pl-0">
-                                            <label class="form-check-label">
-                                                <input type="radio" id="supern" name="super" disabled> No
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>-->
-                <!--                <div class="col-md-2">
-                                    <div class="">
-                                        <div class="form-group">
-                                            <label>Generation<span class="text-danger">*</span></label>
-                                            <input  class="form-control myInput  w-100" type="hidden" id="generation" name="generation" value="" size="40" disabled>
-                                        </div>
-                                    </div>
-                                </div>-->
+                </div>                
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
@@ -378,7 +361,6 @@
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                    <input type="submit" class="btn normalBtn" name="task" id="save_As" value="Save AS New" onclick="setStatus(id)" disabled>
                     <input type="reset" class=" btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
                 </div>

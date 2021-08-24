@@ -2,9 +2,22 @@
 
 <%@include file="../layout/header.jsp" %>
 
-
+<style>
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+</style>
 <script>
     $(function () {
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+
 
         $("#org_office_name").autocomplete({
 
@@ -196,10 +209,11 @@
 
             source: function (request, response) {
                 var random = document.getElementById("searchmobile").value;
+                var code = document.getElementById("searchKeyPerson").value;
                 $.ajax({
                     url: "KeypersonController",
                     dataType: "json",
-                    data: {action1: "getMobile", str: random},
+                    data: {action1: "getMobile", str: random, action2: code},
                     success: function (data) {
 
                         console.log(data);
@@ -253,13 +267,13 @@
 
             source: function (request, response) {
 
-                //                var code = document.getElementById("searchOfficeCode").value;
+                var code = document.getElementById("searchfamily").value;
                 var random = document.getElementById("searchKeyPerson").value;
                 $.ajax({
                     url: "KeypersonController",
                     dataType: "json",
                     data: {action1: "getSearchKeyPerson",
-                        str: random},
+                        str: random,action2:code},
                     success: function (data) {
 
                         console.log(data);
@@ -285,11 +299,12 @@
 
                 //                var code = document.getElementById("searchOfficeCode").value;
                 var random = document.getElementById("searchfamily").value;
+                var code = document.getElementById("searchOrg").value;
                 $.ajax({
                     url: "KeypersonController",
                     dataType: "json",
                     data: {action1: "getfamilycode",
-                        str: random},
+                        str: random, action2: code},
                     success: function (data) {
 
                         console.log(data);
@@ -345,7 +360,22 @@
     });
 
 
+    $(document).ready(function () {
+        $('#mytable tbody').on(
+                'click',
+                'tr',
+                function () {
 
+                    if ($(this).hasClass('selected_row')) {
+                        $(this).removeClass('selected_row');
+                    } else {
+                        $("#mytable").DataTable().$(
+                                'tr.selected_row').removeClass(
+                                'selected_row');
+                        $(this).addClass('selected_row');
+                    }
+                });
+    });
 
 
 
@@ -420,123 +450,82 @@
         }
     }
 
-    function fillColumnKeyPerson(id) {
-        // debugger;
-        //  var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-        var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-        //                alert("get total count rows"+ noOfRowsTraversed);
-        var noOfColumns = 35;
-        var columnId = id;
-        //                alert("Get  Column id of the Row "+ columnId);<%-- holds the id of the column being clicked, excluding the prefix t1c e.g. t1c3 (column 3 of table 1). --%>
-        columnId = columnId.substring(3, id.length);
-    <%-- for e.g. suppose id is t1c3 we want characters after t1c i.e beginIndex = 3. --%>
-        //                alert("After getting the column  " +columnId );
-        var lowerLimit, higherLimit, rowNo = 0;
-        var noOfRows;
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            noOfRows = i;
-            lowerLimit = i * noOfColumns + 1;       // e.g. 11 = (1 * 10 + 1)
-            //                    alert("lower limit of row " +lowerLimit);
-            higherLimit = (i + 1) * noOfColumns;
-            //                    alert("higher limit of row "+higherLimit)// e.g. 20 = ((1 + 1) * 10)
-            rowNo++;
-            if ((columnId >= lowerLimit) && (columnId <= higherLimit))
-                break;
-        }
-        //                alert("noOfRows: " + ++noOfRows);
+    function fillColumn(id, count) {
+        $('#key_person_id').val(id);
 
-        var lower = lowerLimit;
-        // alert(lower);
-        var upper = higherLimit;
-        setDefaultColordOrgn(noOfRowsTraversed, noOfColumns);// set default color of rows (i.e. of multiple coloumns).
-        //                alert("Total number of column in the set the valeu   "+  noOfColumns);
-        var t1id = "t1c";       // particular column id of table 1 e.g. t1c3.
-        //var t2id = "t2c";
-        document.getElementById("key_person_id").value = document.getElementById("key_person_id" + rowNo).value;
-        // document.getElementById("office_type").value = document.getElementById(t1id +(lower+1)).innerHTML
-        document.getElementById("office_code").value = document.getElementById(t1id + (lower + 2)).innerHTML
-        //  document.getElementById("office_type").value = document.getElementById(t1id +(lower+3)).innerHTML
-        document.getElementById("org_office_name").value = document.getElementById(t1id + (lower + 4)).innerHTML
-        document.getElementById("employeeId").value = $.trim(document.getElementById(t1id + (lower + 5)).innerHTML);
-        /*var role=  $.trim(document.getElementById(t1id +(lower+5)).innerHTML);
-         $("#salutation option" ).each(function()
-         {
-         if($(this).val() == role){
-         $(this).attr('selected', true);
-         }
-         });*/
-        document.getElementById("salutation").value = $.trim(document.getElementById(t1id + (lower + 6)).innerHTML);
-        document.getElementById("key_person_name").value = document.getElementById(t1id + (lower + 7)).innerHTML;
-
-        document.getElementById("password").value = document.getElementById(t1id + (lower + 8)).innerHTML;
-
-        document.getElementById("father_name").value = document.getElementById(t1id + (lower + 9)).innerHTML;
-
-        document.getElementById("blood").value = document.getElementById(t1id + (lower + 10)).innerHTML;
-
-        if (document.getElementById(t1id + (lower + 11)).innerHTML == 'M')
-        {
-            document.getElementById("genderm").checked = document.getElementById(t1id + (lower + 11)).innerHTML;
-            document.getElementById("genderf").unchecked = document.getElementById(t1id + (lower + 11)).innerHTML;
-        } else
-        {
-            document.getElementById("genderf").checked = document.getElementById(t1id + (lower + 11)).innerHTML;
-            document.getElementById("genderm").unchecked = document.getElementById(t1id + (lower + 11)).innerHTML;
+        $('#office_code').val($("#" + count + '3').html());
+        $('#org_office_name').val($("#" + count + '5').html());
+        $('#employeeId').val($("#" + count + '6').html());
+        $('#salutation').val($("#" + count + '7').html());
+        $('#key_person_name').val($("#" + count + '8').html());
+        $('#password').val($("#" + count + '9').html());
+        $('#father_name').val($("#" + count + '10').html());
+        $('#blood').val($("#" + count + '11').html());
+        var gender = $("#" + count + '12').html();
+        if (gender == 'M') {
+            $('#genderm').attr('checked', true);
+        } else {
+            $('#genderf').attr('checked', true);
         }
 
+        $('#date_of_birth').val($("#" + count + '13').html());
+        $('#designation').val($("#" + count + '14').html());
+        $('#address_line1').val($("#" + count + '15').html());
+        $('#address_line2').val($("#" + count + '16').html());
+        $('#address_line3').val($("#" + count + '17').html());
+        $('#emergency_name').val($("#" + count + '18').html());
+        $('#emergency_number').val($("#" + count + '19').html());
+        $('#id_type').val($("#" + count + '20').html());
+        $('#id_no').val($("#" + count + '21').html());
+        $('#city_name').val($("#" + count + '22').html());
+        $('#mobile_no1').val($("#" + count + '23').html());
+        $('#mobile_no2').val($("#" + count + '24').html());
+        $('#landline_no1').val($("#" + count + '25').html());
+        $('#landline_no2').val($("#" + count + '26').html());
+        $('#email_id1').val($("#" + count + '27').html());
+        $('#email_id2').val($("#" + count + '28').html());
+        $('#latitude').val($("#" + count + '29').html());
+        $('#longitude').val($("#" + count + '18').html());
+        $('#serialnumber').val($("#" + count + '30').html());
+        $('#general_image_details_id').val($("#" + count + '33').html());
+        $('#familyoffice').val($("#" + count + '35').html());
+        $('#familydesignation').val($("#" + count + '36').html());
+        $('#relation').val($("#" + count + '37').html());
+        //getImagePath(id);
 
-
-        document.getElementById("date_of_birth").value = document.getElementById(t1id + (lower + 12)).innerHTML;
-        document.getElementById("designation").value = document.getElementById(t1id + (lower + 13)).innerHTML;
-        document.getElementById("address_line1").value = document.getElementById(t1id + (lower + 14)).innerHTML;
-        document.getElementById("address_line2").value = document.getElementById(t1id + (lower + 15)).innerHTML;
-        document.getElementById("address_line3").value = document.getElementById(t1id + (lower + 16)).innerHTML;
-
-        document.getElementById("emergency_name").value = document.getElementById(t1id + (lower + 17)).innerHTML;
-        document.getElementById("emergency_number").value = document.getElementById(t1id + (lower + 18)).innerHTML;
-
-        document.getElementById("id_type").value = document.getElementById(t1id + (lower + 19)).innerHTML;
-        document.getElementById("id_no").value = document.getElementById(t1id + (lower + 20)).innerHTML;
-
-        document.getElementById("city_name").value = document.getElementById(t1id + (lower + 21)).innerHTML;
-        // document.getElementById("state_name").value = document.getElementById(t1id +(lower+15)).innerHTML;
-        document.getElementById("mobile_no1").value = document.getElementById(t1id + (lower + 22)).innerHTML;
-        document.getElementById("mobile_no2").value = document.getElementById(t1id + (lower + 23)).innerHTML;
-        document.getElementById("landline_no1").value = document.getElementById(t1id + (lower + 24)).innerHTML;
-        document.getElementById("landline_no2").value = document.getElementById(t1id + (lower + 25)).innerHTML;
-        document.getElementById("email_id1").value = document.getElementById(t1id + (lower + 26)).innerHTML;
-        document.getElementById("email_id2").value = document.getElementById(t1id + (lower + 27)).innerHTML;
-
-
-        document.getElementById("latitude").value = document.getElementById(t1id + (lower + 28)).innerHTML;
-        document.getElementById("longitude").value = document.getElementById(t1id + (lower + 29)).innerHTML;
-        document.getElementById("general_image_details_id").value = document.getElementById(t1id + (lower + 30)).innerHTML;
-        document.getElementById("familyoffice").value = document.getElementById(t1id + (lower + 32)).innerHTML;
-        document.getElementById("familydesignation").value = document.getElementById(t1id + (lower + 33)).innerHTML;
-        document.getElementById("relation").value = document.getElementById(t1id + (lower + 34)).innerHTML;
-
-        for (var i = 0; i <= 34; i++) {
-
-            document.getElementById(t1id + (lower + i)).bgColor = "#d0dafd";        // set the background color of clicked row to yellow.
-        }
-        document.getElementById("edit").disabled = false;
-        if (!document.getElementById("save").disabled)   // if save button is already enabled, then make edit, and send button enabled too.
-        {
-            //  document.getElementById("save_As").disabled = true;
-            document.getElementById("delete").disabled = false;
-        }
-        $("#message").html("");
+        $('#edit').attr('disabled', false);
+        $('#delete').attr('disabled', false);
     }
+
+
+    function getImagePath(key_person_id) {
+        $.ajax({
+            url: "KeypersonController",
+            dataType: "json",
+            data: {action1: "getImagePath", str: key_person_id},
+            success: function (data) {
+                console.log(data);
+                console.log(data.list);
+                var image = data.list;
+                for (var i = 0; i < image.length; i++) {
+                    var path = image[i];
+                    var url = "file:///C:\\ssadvt_repository\\ipms\\key_person\\" + path;
+                    var image = new Image();
+                    image.src = url;
+                    $('#image_div').append(image);
+
+                }
+            }
+        });
+    }
+
+
     function setStatus(id) {
         if (id == 'save') {
             document.getElementById("clickedButton").value = "Save";
-        }
-//        else if (id == 'save_As') {
-//            document.getElementById("clickedButton").value = "Save AS New";
-//        }
-        else
+        } else
             document.getElementById("clickedButton").value = "Delete";
-        ;
+
     }
     function myLeftTrim(str) {
         var beginIndex = 0;
@@ -634,24 +623,6 @@
     }
 
 
-    function displayOrgnList(id) {
-        var queryString;
-        var organisation = document.getElementById("searchOrg").value;
-        var searchKeyPerson = document.getElementById("searchKeyPerson").value;
-        var searchmobile = document.getElementById("searchmobile").value;
-        var active = document.getElementById("activee").value;
-        var searchfamily = document.getElementById("searchfamily").value;
-
-        // alert(designation);
-        if (id == "viewPdf")
-            queryString = "task1=PRINTRecordList&searchOrg=" + organisation + "&searchKeyPerson=" + searchKeyPerson + "&searchmobile=" + searchmobile + "&active=" + active + "&searchfamily=" + searchfamily;
-        else
-            queryString = "task1=PRINTExcelList&searchOrg=" + organisation + "&searchKeyPerson=" + searchKeyPerson + "&searchmobile=" + searchmobile + "&active=" + active + "&searchfamily=" + searchfamily;
-        //alert(queryString);
-        var url = "personCount.do?" + queryString;
-        popupwin = openPopUp(url, "Division List", 600, 900);
-    }
-
 
     function openPopUp(url, window_name, popup_height, popup_width) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
@@ -675,32 +646,8 @@
         var url = "KeypersonController?" + queryString;
         popupwin = openPopUp(url, "Show Image", 600, 900);
     }
-    function  codeIsEmpty()
-    {
-        var office_code = document.getElementById("searchOfficeCode").value;
 
-        if (myLeftTrim(office_code).length == 0) {
-            // document.getElementById("message").innerHTML = "<td colspan='8' bgcolor='coral'><b>Organisation Name is required...</b></td>";
-            $("#message").html("<td colspan='8' bgcolor='coral'><b>Office Code is required...</b></td>");
-            document.getElementById("office_code").focus();
 
-        } else {
-            $("#message").html("");
-        }
-    }
-    function  EmpCodeIsEmpty()
-    {
-        var emp_code = document.getElementById("searchEmpCode").value;
-
-        if (myLeftTrim(emp_code).length == 0) {
-            // document.getElementById("message").innerHTML = "<td colspan='8' bgcolor='coral'><b>Organisation Name is required...</b></td>";
-            $("#message").html("<td colspan='8' bgcolor='coral'><b>Employee Id is required...</b></td>");
-            document.getElementById("emp_code").focus();
-
-        } else {
-            $("#message").html("");
-        }
-    }
     function readURL(input) {
         document.getElementById("image_perview").style.visibility = 'visible';
         if (input.files && input.files[0]) {
@@ -713,16 +660,6 @@
                         .height(200);
             };
             reader.readAsDataURL(input.files[0]);
-        }
-    }
-    function changeClass() {
-        var language = document.getElementById("language").value;
-        if (language == 'English') {
-            $("#status_type").addClass('input').removeClass('new_input');
-            $("#remark").addClass('input').removeClass('new_input');
-        } else {
-            $("#status_type").addClass('new_input').removeClass('input');
-            $("#remark").addClass('new_input').removeClass('input');
         }
     }
 
@@ -748,14 +685,11 @@
     }
 
 
-
-
     function openMap(id) {
         //alert(vehicle_key_person_map_id);
         var url = "KeypersonController?task1=showMapWindow&keyperson_id=" + id;
 
         popupwin = openPopUp(url, "", 580, 620);
-
     }
 
 
@@ -784,7 +718,7 @@
 
                     if (response_data.list[0] == ("Mobile no exist"))
                     {
-                       // alert(response_data.list[0]);
+                        // alert(response_data.list[0]);
                         document.getElementById("mobile_no1").value = "";
                     }
 
@@ -801,14 +735,6 @@
 
     }
 
-
-
-    //    $(document).ready(function() {
-    //    $('#add').click(function(){ 
-    ////        $('#emergency').append(' <tr> <td>Emergency Contact Name</td> <td>:</td> <td colspan="2"><input size="20" type="text" /></td> <td>Emergency Contact Numbe</td> <td>:</td> <td><input type="text" /></td> </tr>');
-    //            $('#emergency').append(' <tr> <td>Emergency Contact Name</td> <td>:</td> <td colspan="2"><input size="20" class="form-control" type="text" /></td> <td>Emergency Contact Numbe</td> <td>:</td> <td><input type="text"  class="form-control"/></td> </tr>');
-    //}); 
-    //});
     var i = 0;
     $(document).ready(function () {
 
@@ -953,6 +879,12 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group mb-md-0">
+                        <label>Office Code</label>
+                        <input class="form-control myInput" type="text" id="searchfamily" name="searchfamily" value="${searchfamily}" size="20">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-md-0">
                         <label>Person Name</label>
                         <input class="form-control myInput" type="text" id="searchKeyPerson" name="searchKeyPerson" value="${searchKeyPerson}"  size="20">
                     </div>
@@ -963,12 +895,7 @@
                         <input class="form-control myInput" type="text" id="searchmobile" name="searchmobile" value="${searchmobile}" size="20">
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-md-0">
-                        <label>Office Code</label>
-                        <input class="form-control myInput" type="text" id="searchfamily" name="searchfamily" value="${searchfamily}" size="20">
-                    </div>
-                </div>
+
 
             </div>
 
@@ -976,8 +903,7 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <input type="submit" class="btn normalBtn" name="task" id="search" value="SEARCH RECORDS">
-                    <!--                <input type="button" class="btn normalBtn" id="viewPdf" name="viewPdf" value="PDF" onclick="displayOrgnList(id)">
-                                    <input type="button" class="btn normalBtn" id="viewXls" name="viewXls" value="Excel" onclick="displayOrgnList(id)">-->
+
                 </div>
             </div>
         </form>
@@ -1039,7 +965,7 @@
 
                         <tbody>                                     
                             <c:forEach var="key" items="${requestScope['keyList']}"  varStatus="loopCounter">
-                                <tr onclick="fillColumn();">
+                                <tr  onclick="fillColumn('${key.key_person_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${key.organisation_name}</td>
                                     <td id="${loopCounter.count }3">${key.org_office_code}</td>
@@ -1099,8 +1025,6 @@
 
     </div>
 </section>
-
-
 
 
 <section class="marginTop30">
@@ -1434,7 +1358,13 @@
                     </div>
                 </div>
 
-            </div>      
+            </div>   
+            <div class="row mt-3">
+                <div class="col-md-3" id="image_div">
+
+                </div>
+
+            </div>
             <hr>
             <div class="row">
                 <div id="message">

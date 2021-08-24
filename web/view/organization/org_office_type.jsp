@@ -2,10 +2,43 @@
 
 <%@include file="../layout/header.jsp" %>
 
+<style>
 
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+
+</style>
 <script>
-    $(function () {
 
+    $(document).ready(
+            function () {
+                $('#mytable tbody').on(
+                        'click',
+                        'tr',
+                        function () {
+                            if ($(this).hasClass('selected_row')) {
+                                $(this).removeClass('selected_row');
+                            } else {
+                                $("#mytable").DataTable().$(
+                                        'tr.selected_row').removeClass(
+                                        'selected_row');
+                                $(this).addClass('selected_row');
+                            }
+                        });
+            });
+
+    $(function () {
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+        
+        
         $("#searchOrgOfficeType").autocomplete({
 
             source: function (request, response) {
@@ -47,7 +80,7 @@
             document.getElementById("office_code").focus();
         }
         if (id == 'edit') {
-            document.getElementById("save_As").disabled = false;
+            document.getElementById("save").disabled = false;
             document.getElementById("delete").disabled = false;
         }
         document.getElementById("save").disabled = false;
@@ -170,10 +203,16 @@
         var active = document.getElementById("active").value;
         var inactive = document.getElementById("inactive").value;
         var all = document.getElementById("all").value;
-
-
-
     }
+
+    function fillColumn(id, count) {
+        $('#office_type_id').val(id);
+        $('#office_type').val($("#" + count + '2').html());
+        $('#description').val($("#" + count + '3').html());
+        $('#edit').attr('disabled', false);
+        $('#delete').attr('disabled', false);
+    }
+
 </script>
 
 
@@ -197,7 +236,8 @@
                 <div class="col-md-12">
                     <div class="form-group mb-md-0">
                         <label>Office Type</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchOrgOfficeType" name="searchOrgOfficeType" value="${searchOrgOfficeType}" size="30" >
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchOrgOfficeType" name="searchOrgOfficeType" 
+                               value="${searchOrgOfficeType}" size="30" >
                     </div>
                 </div>
             </div>
@@ -232,7 +272,7 @@
                             <c:forEach var="beanType" items="${requestScope['orgOfficeTypeList']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn();">
+                                    onclick="fillColumn('${beanType.office_type_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.office_type}</td>
                                     <td id="${loopCounter.count }3">${beanType.description}</td>                                               

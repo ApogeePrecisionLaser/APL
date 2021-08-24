@@ -140,26 +140,11 @@ public class DesignationController extends HttpServlet {
                 bgColor = designationModel.getMsgBgColor();
             }
 
-            String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
-            if (buttonAction == null) {
-                buttonAction = "none";
-
-            } else {
-                active = active1;
-                ac = active;
-
-                if (active.equals("")) {
-                    ac = "ALL RECORDS";
-                } else if (active.equals("Y")) {
-                    ac = "ACTIVE RECORDS";
-                } else {
-                    ac = "INACTIVE RECORDS";
-                }
-            }
-
             // Logic to show data in the table.
             List<Designation> mediaList = designationModel.showData(searchDesignation, searchDesignationCode, active);
 
+            request.setAttribute("searchDesignationCode", searchDesignationCode);
+            request.setAttribute("searchDesignation", searchDesignation);
             request.setAttribute("message", message);
             request.setAttribute("msgBgColor", bgColor);
             request.setAttribute("mediaList", mediaList);

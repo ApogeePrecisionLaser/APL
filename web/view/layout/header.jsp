@@ -34,9 +34,9 @@
                         </button>
                         <div class="collapse navbar-collapse" id="collapsibleNavbar">
                             <ul class="navbar-nav mx-auto">
-<!--                                <li class="nav-item">
-                                    <a class="nav-link" href="dashboard">Home</a>
-                                </li>-->
+                                <!--                                <li class="nav-item">
+                                                                    <a class="nav-link" href="dashboard">Home</a>
+                                                                </li>-->
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Organization
@@ -49,134 +49,33 @@
                                         <a class="dropdown-item" href="DesignationController" class="dropdown-item">Designation</a>
                                         <a class="dropdown-item" href="OrgOfficeDesignationMapController" class="dropdown-item">Org. Office Designation Map</a>
                                         <a class="dropdown-item" href="KeypersonController" class="dropdown-item">Org Person's Name</a>
-                                         <a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Report</a>
-                                        <!--<a class="dropdown-item" href="organizationDesignation" class="dropdown-item">Designation Organisation</a>-->
-                                        <a class="dropdown-item" href="organizationtypeDesignation" class="dropdown-item">Designation Organisation Type</a>
-                                        <!--<a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Generate Spreadheet</a>-->
-                                        <a class="dropdown-item" href="formdata" class="dropdown-item">FormData</a>
-                                        <a class="dropdown-item" href="#" class="dropdown-item">Org Detail Entry</a>
-                                        <a class="dropdown-item" href="allinone" class="dropdown-item">All in One</a>
-                                        <a class="dropdown-item" href="#" class="dropdown-item">KeyPerson New</a>
+                                        <a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Report</a>
+
                                     </div>
-                                </li>   
+                                </li>  
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                        Inventory
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a href="ItemTypeController" class="dropdown-item">Item Type</a>
+                                        <a href="ItemNameController" class="dropdown-item">Item Name</a>
+                                    </div>
+                                </li>
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Location
                                     </a>
                                     <div class="dropdown-menu">
                                         <a href="CityController" class="dropdown-item">City</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="DesignationController" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
                                     </div>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        Shift
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="designationCont.do" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
-                                    </div>
-                                </li> 
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        E-Pass
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="designationCont.do" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        Quarantine Mgnt
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="designationCont.do" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        Document
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="designationCont.do" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
-                                    </div>
-                                </li>
-                               <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        Medical Survey
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a href="orgNameCont.do" class="dropdown-item">Org. Name</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="designationCont.do" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
-                                    </div>
-                                </li>
+
                             </ul>
 
                             <div>
-                                
+
                                 <a href="#"> 
                                     <img src="assets/images/logout.png" width="27">
                                 </a>&nbsp 

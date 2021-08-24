@@ -2,10 +2,44 @@
 
 <%@include file="../layout/header.jsp" %>
 
+<style>
 
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+
+</style>
 <script>
 
+    $(document).ready(
+            function () {
+                $('#mytable tbody').on(
+                        'click',
+                        'tr',
+                        function () {
+                            if ($(this).hasClass('selected_row')) {
+                                $(this).removeClass('selected_row');
+                            } else {
+                                $("#mytable").DataTable().$(
+                                        'tr.selected_row').removeClass(
+                                        'selected_row');
+                                $(this).addClass('selected_row');
+                            }
+                        });
+            });
+
+
     $(function () {
+
+
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
 
         $("#searchOrgType").autocomplete({
 
@@ -149,12 +183,12 @@
 //            document.getElementById("save_As").disabled = true;
             document.getElementById("supern").disabled = false;
             document.getElementById("supery").disabled = false;
-          //  setDefaultColor(document.getElementById("noOfRowsTraversed").value, 3);
+            //  setDefaultColor(document.getElementById("noOfRowsTraversed").value, 3);
             document.getElementById("org_type_name").focus();
         }
         if (id == 'edit') {
             editable = "true";
-          //  document.getElementById("save_As").disabled = false;
+            //  document.getElementById("save_As").disabled = false;
             document.getElementById("delete").disabled = false;
             document.getElementById("supern").disabled = false;
             document.getElementById("supery").disabled = false;
@@ -278,16 +312,34 @@
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
-            return window.open(url, window_name, window_features);
+        return window.open(url, window_name, window_features);
+    }
+    if (!document.all) {
+        document.captureEvents(Event.CLICK);
+    }
+    document.onclick = function () {
+        if (popupwin != null && !popupwin.closed) {
+            popupwin.focus();
         }
-        if (!document.all) {
-            document.captureEvents(Event.CLICK);
+    }
+
+
+    function fillColumn(id, count) {
+        $('#organisation_type_id').val(id);
+        $('#org_type_name').val($("#" + count + '2').html());
+        $('#p_ot').val($("#" + count + '3').html());
+        $('#description').val($("#" + count + '5').html());
+        var isCheck = $("#" + count + '4').html();
+        if (isCheck == 'Y') {
+            $('#supery').prop('checked', true);
+        } else {
+            $('#supern').prop('checked', true);
         }
-        document.onclick = function () {
-            if (popupwin != null && !popupwin.closed) {
-                popupwin.focus();
-            }
-        }
+        $('#edit').attr('disabled', false);
+        $('#delete').attr('disabled', false);
+    }
+
+
 </script>
 
 
@@ -326,22 +378,7 @@
                         <input class="form-control myInput searchInput1 w-100" type="text" id="hierarchysearch" name="hierarchysearch" value="${hierarchysearch}" size="30" >
                     </div>
                 </div>
-                <!--                <div class="col-md-3">
-                                    <div class="form-group mb-md-0">
-                                        <label>Status</label>
-                                        <select class="ui dropdown form-control selectInput mySelect" name="task" id="hiera" >
-                                            <option>${ac}(CURRENTLY)</option>
-                                            <option value="ACTIVE RECORDS">ACTIVE RECORDS</option>
-                                            <option value="INACTIVE RECORDS">INACTIVE RECORDS</option>
-                                            <option value="ALL RECORDS">ALL RECORDS</option>
-                                        </select>
-                                    </div>
-                                </div>-->
-                <!--                <div class="col-md-3">
-                                    <div class="formBtnWrap">
-                                        <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
-                                    </div>
-                                </div>-->
+
             </div>
 
             <hr>
@@ -381,7 +418,7 @@
                             <c:forEach var="orgType" items="${requestScope['orgTypeList']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn();">
+                                    onclick="fillColumn('${orgType.organisation_type_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${orgType.org_type_name}</td>
                                     <td id="${loopCounter.count }3">${orgType.p_ot}</td>
@@ -470,9 +507,9 @@
                     </c:if>
                 </div>
                 <div class="col-md-12 text-center">                                           
-                    <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                    <input type="reset" class=" btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
+                    <input type="reset" class=" btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" >
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
                 </div>
             </div>

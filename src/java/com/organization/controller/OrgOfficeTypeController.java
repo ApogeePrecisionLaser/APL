@@ -23,7 +23,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author Tarun
+ * @author Komal
  */
 public class OrgOfficeTypeController extends HttpServlet {
 
@@ -119,28 +119,10 @@ public class OrgOfficeTypeController extends HttpServlet {
                 }
             }
 
-            String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
-            if (buttonAction == null) {
-                buttonAction = "none";
-            } else {
-                active = active1;
-                ac = active;
-                if (active.equals("")) {
-                    ac = "ALL RECORDS";
-                } else if (active.equals("Y")) {
-                    ac = "ACTIVE RECORDS";
-                } else {
-                    ac = "INACTIVE RECORDS";
-                }
-            }
-            if (task.equals("Show All Records")) {
-                searchOrgOfficeType = "";
-                searchOrgOfficeCode = "";
-            }
-
             // Logic to show data in the table.
             List<OrgOfficeType> orgOfficeTypeList = orgOfficeTypeModel.showData(searchOrgOfficeType, active);
             request.setAttribute("orgOfficeTypeList", orgOfficeTypeList);
+            request.setAttribute("searchOrgOfficeType", searchOrgOfficeType);
             request.setAttribute("message", orgOfficeTypeModel.getMessage());
             request.setAttribute("msgBgColor", orgOfficeTypeModel.getMsgBgColor());
 

@@ -19,7 +19,7 @@
             <div class="row">
 
 
-               <div class="col-md-8 col-lg-8 marginBottom30">
+               <div class="col-lg-8 col-md-12 col-lg-8 marginBottom30">
                   <div class="blogCard blogDetail">
                      <div class="blogCardImage">
                         <a href="blog_details.html"><img src="https://ninetheme.com/themes/html-templates/agrikon/assets/images/blog/blog-grid-1.jpg" class="w-100"></a>
@@ -45,7 +45,7 @@
                      </div>                     
                   </div>
                </div>
-               <div class="col-md-4 col-lg-4 marginBottom30">
+               <div class="col-lg-4 col-md-12  marginBottom30">
                   <div class="recentPostBox" style="">
                      <h3 class="headText">Recent Post</h3>
                      <hr>

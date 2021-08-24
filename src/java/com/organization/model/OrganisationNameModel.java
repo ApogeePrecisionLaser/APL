@@ -109,7 +109,7 @@ public class OrganisationNameModel {
 //        }
 //        return list;
 //    }
-    public List<OrganisationName> showData(int lowerLimit, int noOfRowsToDisplay, String org_name, String searchOrgSubType) {
+    public List<OrganisationName> showData(String org_name, String searchOrgSubType) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
 
         if (org_name == null) {
@@ -124,7 +124,7 @@ public class OrganisationNameModel {
         if (!org_name.equals("") && org_name != null) {
             query += " and org.organisation_name='" + org_name + "' ";
         }
-        query += "  and orgT.active='Y' order by org.organisation_id desc ";
+        query += "  and orgT.active='Y' and org.active='y' order by org.organisation_id desc ";
 
         try {
             System.out.println("query----- -" + query);

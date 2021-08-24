@@ -123,7 +123,7 @@ public class FormDataController extends HttpServlet {
                     } else if (JQstring.equals("mobile_number")) {
                         list = keyModel.getMobilevalidty(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getMobile")) {
-                        list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
+                     //   list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getCityName")) {
                         list = keyModel.getCityName(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getOfficeType")) {
@@ -580,7 +580,7 @@ public class FormDataController extends HttpServlet {
 
                 } else {
                     // update existing record.
-                    keyModel.updateRecord(key, key_person_id);
+                   // keyModel.updateRecord(key, key_person_id);
                     keyModel.insertemergency(List, List1, key_person_id, k, mobile_no1);
                     //  keyModel.updateRecord(key, itr, photo_destination, iD_destination);
                 }

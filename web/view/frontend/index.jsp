@@ -61,11 +61,11 @@
 <section class="SliderBotSec bgGreen1">
   <div class="container">
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-8 col-lg-7">
         <h2 class="text-white">CLICK HERE TO CHECK OUT OUR NEW EBOOK</h2>
         <p class="mb-0 text-white">It is a long established fact that a reader will be distracted</p>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-4 col-md-4">
         <div class="downloadBtnWrap text-right">
           <a href="#" class="myButtonEffect downloadBtn">Download Brochure &nbsp <i class="fas fa-angle-double-down downLoadIconAnimate"></i></a>
         </div>
@@ -77,10 +77,10 @@
 
 
 
-<section class="aboutSection sectionPadding mt-3">
+<section class="aboutSection sectionPadding mt-3 pb-md-4">
   <div class="container">
     <div class="row">
-      <div class="col-md-5" data-aos="fade-right" data-aos-duration="800" data-aos-easing="linear">
+      <div class="col-md-4 col-lg-5" data-aos="fade-right" data-aos-duration="800" data-aos-easing="linear">
         <div class="aboutImgSec position-relative">
           <img src="assets/frontend/images/about.jpg" class="img-fluid">
           <div class="mx-auto experienceBox bgGreen thumbnail" style="background-image: linear-gradient(to right top , #F7C35F 0%, #10573d  51%, #059862  100%);">
@@ -89,8 +89,8 @@
           </div>
         </div>
       </div>
-      <div class="col-md-1"></div>
-      <div class="col-md-6" data-aos="fade-left" data-aos-duration="800" data-aos-easing="linear">
+      <div class="col-lg-1 col-md-1"></div>
+      <div class="col-md-7 col-lg-6 pl-md-0" data-aos="fade-left" data-aos-duration="800" data-aos-easing="linear">
         <div class="sectionHeadAbout text-left">
           <h5>WELCOME TO APOGEE</h5>
           <h2 class="text-left textGreen">Better Agriculture for Better Future</h2>
@@ -125,7 +125,7 @@
                 <h2>Laser Land </h2>
                 <p class="prodDesc text-justify">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary,   </p>
                 <div class="">
-                  <a href="#" class="myButtonEffect" >Download Catalogue</a>
+                  <a href="#" class="myButtonEffect" >Download Brochure</a>
                 </div>
               </div>
             </div>
@@ -155,7 +155,7 @@
                 <h2>Grass Land Leveller </h2>
                 <p class="prodDesc text-justify">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary,   </p>
                 <div class="">
-                  <a href="#" class="myButtonEffect" >Download Catalogue</a>
+                  <a href="#" class="myButtonEffect" >Download Brochure</a>
                 </div>
               </div>
             </div>            
@@ -174,7 +174,7 @@
                 <h2>Auto Steering Transplant </h2>
                 <p class="prodDesc text-justify">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary,   </p>
                 <div class="">
-                  <a href="#" class="myButtonEffect" >Download Catalogue</a>
+                  <a href="#" class="myButtonEffect" >Download Brochure</a>
                 </div>
               </div>
             </div>
@@ -189,7 +189,7 @@
   </div>
   <div class="container">
     <div class="text-center">
-      <a href="#" class="seeAllProd">See all product </a> &nbsp&nbsp<span class="clickArrowAnimate"> >> </span>
+      <a href="#" class="seeAllProd textGreen">See all product </a> &nbsp&nbsp<span class="clickArrowAnimate"> >> </span>
     </div>
   </div>
 </section>
@@ -197,47 +197,46 @@
 
 
 
-
 <section class="whyChooseSection sectionPadding position-relative " >
   <div class="clipPath" ></div>
   <div class="whyChooseSectionInner">
-    <div class="sectionHead mb-5 px-3">
+    <div class="sectionHead mb-lg-5 px-3">
         <h2 class="marginBottom33">Why Choose Us</h2>
         <p class="text-center width700 mx-auto mb-0" >There are many variations of passages of lorem ipsum available but the majority have suffered alteration in some</p>
     </div><br>
     <div class="container "  >
       <div class="row">
-        <div class="col-md-3 marginBottom" data-aos="zoom-in-up" data-aos-duration="300" data-aos-easing="linear">
+        <div class="col-lg-3 col-md-6 marginBottom" data-aos="zoom-in-up" data-aos-duration="300" data-aos-easing="linear">
           <div class="card">
             <img class="mx-auto" src="assets/frontend/images/network.png" width="70">
-            <div class="card-body text-center">
+            <div class="card-body text-center pb-0">
               <h4 class="card-title textGreen">OUR NETWORK</h4>
               <p class="card-text fontFifteen">Levelling, smoothing and shaping the field surface is as important to the surface system as the design of laterals, manifolds etc.</p>
             </div>
           </div>
         </div>
-        <div class="col-md-3 marginBottom" data-aos="zoom-in-up" data-aos-duration="600" data-aos-easing="linear">
+        <div class="col-lg-3 col-md-6 marginBottom" data-aos="zoom-in-up" data-aos-duration="600" data-aos-easing="linear">
           <div class="card">
             <img class="mx-auto" src="assets/frontend/images/quality.png" width="70">
-            <div class="card-body text-center">
+            <div class="card-body text-center pb-0">
               <h4 class="card-title textGreen">QUALITY PRODUCTS</h4>
               <p class="card-text fontFifteen">Levelling, smoothing and shaping the field surface is as important to the surface system as the design of laterals, manifolds etc.</p>
             </div>
           </div>
         </div>
-        <div class="col-md-3 marginBottom" data-aos="zoom-in-up" data-aos-duration="900" data-aos-easing="linear">
+        <div class="col-lg-3 col-md-6 marginBottom" data-aos="zoom-in-up" data-aos-duration="900" data-aos-easing="linear">
           <div class="card">
             <img class="mx-auto" src="assets/frontend/images/on-time.png" width="70">
-            <div class="card-body text-center">
+            <div class="card-body text-center pb-0">
               <h4 class="card-title textGreen">ON TIME DELIVERY</h4>
               <p class="card-text fontFifteen">Levelling, smoothing and shaping the field surface is as important to the surface system as the design of laterals, manifolds etc.</p>
             </div>
           </div>
         </div>
-        <div class="col-md-3" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-easing="linear">
+        <div class="col-lg-3 col-md-6" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-easing="linear">
           <div class="card">
             <img class="mx-auto" src="assets/frontend/images/24-hours-support.png" width="70">
-            <div class="card-body text-center">
+            <div class="card-body text-center pb-0">
               <h4 class="card-title textGreen">24*7 SUPPORT</h4>
               <p class="card-text fontFifteen">Levelling, smoothing and shaping the field surface is as important to the surface system as the design of laterals, manifolds etc.</p>
             </div>
@@ -247,8 +246,6 @@
     </div>
   </div>
 </section>
-
-
 
 
 
@@ -367,9 +364,9 @@
             <h3 class="text-white specialFont" style="font-size:50px;">Order Now</h3>
             <p>Call us for booking information</p>
             <hr class="bg-white">
-            <h3 class="specialFont text-white" style="font-size:30px;"> +91 8954894145</a></h3>
-            <h3 class="specialFont text-white" style="font-size:30px;"> +91 7624002261</a></h3>
-            <h3 class="specialFont text-white" style="font-size:30px;"> +91 7624002266</a></h3>
+            <h4 class="specialFont text-white"> +91 8954894145</a></h4>
+            <h4 class="specialFont text-white"> +91 7624002261</a></h4>
+            <h4 class="specialFont text-white"> +91 7624002266</a></h4>
           </div>
         </div>
       </div>

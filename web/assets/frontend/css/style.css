@@ -610,9 +610,9 @@ body[data-aos-easing="ease"]{
     transition: all .3s ease;
     font-size: 21px;
 
-   background: -webkit-linear-gradient(to right, #059862, #F7C35F);
+/*   background: -webkit-linear-gradient(to right, #059862, #F7C35F);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;*/
 
   }
   .seeAllProd:hover{
@@ -779,9 +779,12 @@ body[data-aos-easing="ease"]{
     padding: 25px 15px;
     border-radius: 5px;
   }
-  .contactSection .contactLeft h3{
-    font-size: 22px;
+ .contactSection .contactLeft h3{
+    font-size: 50px;
   }
+  .contactSection .contactLeft h4{
+    font-size: 30px;
+}
   .contactSection .contactLeft p{
     font-size: 13.5px;
     color: #f8f8f8;
@@ -798,7 +801,16 @@ body[data-aos-easing="ease"]{
     font-size: 13.5px;
     color: #f8f8f8;
   }
-
+.dealerListInput{
+    border: none!important;
+    padding: 2px;
+    height: auto;
+    font-size: 14px;
+    border-bottom: 1px solid #f2f2f2!important;
+  }
+  .getCoordinate{
+    padding:7.5px 10px;
+  }
 
 
 
@@ -835,6 +847,36 @@ body[data-aos-easing="ease"]{
     font-weight: 700;
     margin-top: 15px;
   }
+  
+  
+  
+  
+  
+  
+  /*About Page Start*/
+  .sliderTimeline .timelineBoxWrap .imgWrap{
+    height:177px;
+  }
+  .sliderTimeline .timelineBoxWrap .imgWrap .circleImg{
+    width: 136px;
+  }
+  .sliderTimeline .timelineBoxWrap .imgWrap .iconImg{
+    margin: -144px 87px;
+    z-index: 99;
+    width: 43px;
+  }
+  .sliderTimeline .owl-nav .owl-prev{
+    width: 22px;
+    height: 23px;
+    background-color: #059862!important;
+    color: #fff!important;
+}
+.sliderTimeline .owl-nav .owl-next{
+    width: 22px;
+    height: 23px;
+    background-color: #059862!important;
+    color: #fff!important;
+}
   .aboutBox .text_side{
   transform: translateY(22%);
 }
@@ -1099,7 +1141,7 @@ footer .bottomTopBtn a i {
   }
   .contactPage .formWrap{
     box-shadow: 4px 4px 14px #999;
-    padding: 30px 40px;
+    padding: 52px 40px;
   }
   .squareArrowBox{
     background-color: #255946;

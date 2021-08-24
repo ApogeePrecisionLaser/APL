@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -88,7 +89,7 @@ public class DesignationModel {
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-           // pstmt.setString(1, searchDesignationCode);
+            // pstmt.setString(1, searchDesignationCode);
 
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
@@ -184,13 +185,19 @@ public class DesignationModel {
         return rowsAffected;
     }
 
-    public int deleteRecord(int designation_id) {
+    public int deleteRecord(int designation_id) throws SQLException {
         String query = "DELETE FROM designation WHERE designation_id = '" + designation_id + "' && active='Y'";
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
-        } catch (Exception e) {
-            System.out.println("designationModel Error: " + e);
+        } catch (SQLException e) {
+            System.out.println("designationModel Error: " + e.getMessage());
+//            System.out.println("Error Code = " + e.getErrorCode());
+//            System.out.println("SQL state = " + e.getSQLState());
+//            System.out.println("Message = " + e.getMessage());
+            message = e.getMessage();
+            msgBgColor = COLOR_ERROR;
+            return rowsAffected;
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
