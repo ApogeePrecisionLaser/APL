@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Shobha
+ * @author Komal
  */
 public class LoginController extends HttpServlet {
 
