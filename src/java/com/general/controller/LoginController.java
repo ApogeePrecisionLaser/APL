@@ -71,10 +71,10 @@ public class LoginController extends HttpServlet {
                     session.setAttribute("login_designation", designation);
                     session.setAttribute("logged_org_name_id", logged_org_name_id);
                     session.setAttribute("logged_key_person_id", logged_key_person_id);
-                    request.getRequestDispatcher("index").forward(request, response);
+                    request.getRequestDispatcher("dashboard").forward(request, response);
                 }else{
                     request.setAttribute("message", "Credentials mis-match!");
-                    request.getRequestDispatcher("beforeLoginHomeView").forward(request, response);
+                    request.getRequestDispatcher("/").forward(request, response);
                 }
                 
 
@@ -98,7 +98,7 @@ public class LoginController extends HttpServlet {
             }
             if (task.equals("logout")) {
                 session.invalidate();
-                request.getRequestDispatcher("beforeLoginHomeView").forward(request, response);
+                request.getRequestDispatcher("/").forward(request, response);
             }
             //request.getRequestDispatcher("index").forward(request, response);
         } catch (Exception e) {

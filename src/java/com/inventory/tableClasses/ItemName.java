@@ -26,6 +26,7 @@ public class ItemName {
     private int item_image_details_id;
     private String image_path;
     private String image_name;
+    private String destination_path;
     /**
      * @return the item_names_id
      */
@@ -220,6 +221,20 @@ public class ItemName {
      */
     public void setImage_name(String image_name) {
         this.image_name = image_name;
+    }
+
+    /**
+     * @return the destination_path
+     */
+    public String getDestination_path() {
+        return destination_path;
+    }
+
+    /**
+     * @param destination_path the destination_path to set
+     */
+    public void setDestination_path(String destination_path) {
+        this.destination_path = destination_path;
     }
 
 }

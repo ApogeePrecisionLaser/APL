@@ -516,68 +516,67 @@ public class KeypersonModel {
 
                         String[] image_name = {key.getImage_path(), key.getId_proof()};
                         String revision_no = getRevisionnoForImage(key, key_id);
-                       if (revision_no == null) {
+                        if (revision_no == null) {
                             revision_no = "0";
-
                         }
                         for (int i = 0; i < image_name.length; i++) {
                             String tempExt = image_name[i];
                             String image_uploaded_for = "";
-                            if (!tempExt.isEmpty()) {
-                                String middleName = "";
-                                String destination = "";
-                                String fieldName = "";
-                                String update_image_query = "";
+                            // if (!tempExt.isEmpty()) {
+                            String middleName = "";
+                            String destination = "";
+                            String fieldName = "";
+                            String update_image_query = "";
 
-                                if (tempExt.equals(image_name[0])) {
-                                    middleName = "img_Key_person_";
-                                    destination = photo_destination;
-                                    fieldName = "design_name";
-                                    image_uploaded_for = "key_person_photo";
+                            if (tempExt.equals(image_name[0])) {
+                                middleName = "img_Key_person_";
+                                destination = photo_destination;
+                                fieldName = "design_name";
+                                image_uploaded_for = "key_person_photo";
 
-                                    update_image_query = " UPDATE general_image_details SET active=? "
-                                            + "WHERE key_person_id=? and revision_no=?  and image_destination_id=1 ";
+                                update_image_query = " UPDATE general_image_details SET active=? "
+                                        + "WHERE key_person_id=? and revision_no=?  and image_destination_id=1 ";
 
-                                } else if (tempExt.equals(image_name[1])) {
-                                    middleName = "img_Id_";
-                                    destination = iD_destination;
-                                    fieldName = "id_proof";
-                                    image_uploaded_for = "key_person_ID";
+                            } else if (tempExt.equals(image_name[1])) {
+                                middleName = "img_Id_";
+                                destination = iD_destination;
+                                fieldName = "id_proof";
+                                image_uploaded_for = "key_person_ID";
 
-                                    update_image_query = " UPDATE general_image_details SET active=? "
-                                            + "WHERE key_person_id=? and revision_no=? and image_destination_id=2  ";
+                                update_image_query = " UPDATE general_image_details SET active=? "
+                                        + "WHERE key_person_id=? and revision_no=? and image_destination_id=2  ";
 
-                                }
+                            }
 
-                                PreparedStatement pstmt1 = (PreparedStatement) connection.prepareStatement(query4);
+                            PreparedStatement pstmt1 = (PreparedStatement) connection.prepareStatement(query4);
 
-                                ResultSet rset = pstmt1.executeQuery();
-                                if (rset.next()) {
-                                    System.err.print("UPDATE--------------");
+                            ResultSet rset = pstmt1.executeQuery();
+                            if (rset.next()) {
+                                System.err.print("UPDATE--------------");
 
-                                    pstmt1 = connection.prepareStatement(update_image_query);
-                                    pstmt1.setString(1, "N");
-                                    pstmt1.setInt(2, key_id);
-                                    pstmt1.setString(3, revision_no);
-                                    int rowsAffectedImage = pstmt1.executeUpdate();
-                                    if (rowsAffectedImage >= 1) {
-                                        revision_no = revision_no + 1;
-                                    }
-                                }
-
-                                int index = tempExt.lastIndexOf(".");
-                                int index1 = tempExt.length();
-                                String Extention = tempExt.substring(index + 1, index1);
-                                tempExt = "." + Extention;
-                                String imageName = middleName + kp_id + tempExt;
-                                key.setImage_name(imageName);
-                                //        rowsAffected = insertImageRecord(KeyPerson key,imageName, image_uploaded_for, current_date, kp_id);
-                                if (rowsAffected > 0) {
-                                    WirteImage(key, itr, destination, imageName, fieldName);
+                                pstmt1 = connection.prepareStatement(update_image_query);
+                                pstmt1.setString(1, "N");
+                                pstmt1.setInt(2, key_id);
+                                pstmt1.setString(3, revision_no);
+                                int rowsAffectedImage = pstmt1.executeUpdate();
+                                if (rowsAffectedImage >= 1) {
+                                    revision_no = revision_no + 1;
                                 }
                             }
-                            if(revision_no==null){
-                                revision_no="";
+
+                            int index = tempExt.lastIndexOf(".");
+                            int index1 = tempExt.length();
+                            String Extention = tempExt.substring(index + 1, index1);
+                            tempExt = "." + Extention;
+                            String imageName = middleName + kp_id + tempExt;
+                            key.setImage_name(imageName);
+                            //        rowsAffected = insertImageRecord(KeyPerson key,imageName, image_uploaded_for, current_date, kp_id);
+                            if (rowsAffected > 0) {
+                                WirteImage(key, itr, destination, imageName, fieldName);
+                            }
+                            //}
+                            if (revision_no == null) {
+                                revision_no = "";
                             }
                             pstmt = connection.prepareStatement(query5);
                             pstmt.setString(1, key.getImage_name());
@@ -2173,9 +2172,9 @@ public class KeypersonModel {
         }
         return image_name;
     }
-    
+
     public String getImagePath(String key_person_id, String uploadedFor) {
-        
+
         String img_name = "";
         if (uploadedFor.equals("ph")) {
             uploadedFor = "key_person_photo";

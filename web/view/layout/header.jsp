@@ -71,12 +71,21 @@
                                         <a href="CityController" class="dropdown-item">City</a>
                                     </div>
                                 </li>
+                                
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                        Admin
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>                                        
+                                    </div>
+                                </li>
 
                             </ul>
 
                             <div>
 
-                                <a href="#"> 
+                                <a href="LoginController?task=logout"> 
                                     <img src="assets/images/logout.png" width="27">
                                 </a>&nbsp 
                                 <a href="home" class="btn btn-info"> 

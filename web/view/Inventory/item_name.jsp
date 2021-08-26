@@ -247,19 +247,23 @@
         }
     }
 
-    function viewDemandNote(id, img) {
-        //alert(id);
-        //var emp_code= document.getElementById("emp_code1"+id).value;
-        var queryString = "task1=viewImage&item_names_id=" + id ;
-        // alert(queryString);
-        var url = "ItemNameController?" + queryString;
-        popupwin = openPopUp(url, "Show Image", 600, 900);
+    function showImageList(image_path_arr) {
+        alert(image_path_arr);
+        var queryString = "task1=viewImage&item_names_id=";
+        //alert(queryString);
+        var url = "ItemImageController";
     }
 
-    function openPopUp(url, window_name, popup_height, popup_width) {
+    function viewImages(id, img) {
+        popupwin = openPopUp("Show Image List", 1000, 1000,id);
+    }
+
+    function openPopUp(window_name, popup_height, popup_width,id) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
+        var queryString = "task1=getImageList&item_names_id=" + id;
+        var url = "ItemImagesController?" + queryString;
         return window.open(url, window_name, window_features);
     }
     if (!document.all) {
@@ -274,6 +278,7 @@
 
     function fillColumn(id, count) {
         $('#item_name_id').val(id);
+        //alert(id);
         $('#item_name').val($("#" + count + '2').html());
         $('#item_code').val($("#" + count + '3').html());
         $('#item_type').val($("#" + count + '4').html());
@@ -372,7 +377,7 @@
                                     <td id="${loopCounter.count }7" style="display: none">${beanType.item_image_details_id}</td>
                                     <td id="${loopCounter.count }8" >
                                         <input type="button" class="btn btn-info" id="${loopCounter.count}" name="item_photo"
-                                               value="Item Image" onclick="viewDemandNote(${beanType.item_names_id}, 'ph')">
+                                               value="View Images" onclick="viewImages(${beanType.item_names_id}, 'ph')">
                                     </td>
                                 </tr>
                             </c:forEach>
