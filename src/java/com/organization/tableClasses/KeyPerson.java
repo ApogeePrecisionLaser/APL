@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  *
- * @author SoftTech
+ * @author komal
  */
 public class KeyPerson {
 

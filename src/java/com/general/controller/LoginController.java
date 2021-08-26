@@ -63,7 +63,7 @@ public class LoginController extends HttpServlet {
                 if(designation.equals("")){
                     designation="normal_user";
                 }
-                
+               
                 int logged_key_person_id=am.getKeyPersonId(user_name,password);
                 int logged_org_name_id=am.getOrgNameId(user_name,password);
                 
