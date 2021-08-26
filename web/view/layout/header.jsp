@@ -60,7 +60,7 @@
                                     <div class="dropdown-menu">
                                         <a href="ItemTypeController" class="dropdown-item">Item Type</a>
                                         <a href="ItemNameController" class="dropdown-item">Item Name</a>
-                                    </div>
+                                    </div> 
                                 </li>
 
                                 <li class="nav-item dropdown">
