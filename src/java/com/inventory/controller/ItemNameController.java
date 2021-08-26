@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -56,6 +57,9 @@ public class ItemNameController extends HttpServlet {
         String item_name = "";
         String item_type = "";
         String item_code = "";
+        String image_folder = "";
+        String image_name = "";
+        int no_of_col = 1;
         int quantity = 0;
         String auto_item_code = "";
         int auto_increment_key = 100;
@@ -124,14 +128,26 @@ public class ItemNameController extends HttpServlet {
                 System.out.println("\n Error --ItemNameController get JQuery Parameters Part-" + e);
             }
 
-            //System.err.println("task organization name ----"+task);
+            List image_name_list = new ArrayList();
+
+            String destination_path = "";
+            String imagePath = "";
+
+            String junction = "jp";
+            String side = "side_name";
+            String string = "";
+            List<String> imageNameList = new ArrayList<String>();
+
+            boolean isCreated = true;
             List items = null;
             Iterator itr = null;
+            List<File> list2 = new ArrayList<File>();
             DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(); //Set the size threshold, above which content will be stored on disk.
-            fileItemFactory.setSizeThreshold(1 * 1024 * 1024); //1 MB Set the temporary directory to store the uploaded files of size above threshold.
-            fileItemFactory.setRepository(tmpDir);
+            fileItemFactory.setSizeThreshold(8 * 1024 * 1024); //1 MB Set the temporary directory to store the uploaded files of size above threshold.
+            fileItemFactory.setRepository(new File(""));
             ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
             try {
+                String auto_no = "";
                 items = uploadHandler.parseRequest(request);
                 itr = items.iterator();
                 while (itr.hasNext()) {
@@ -139,22 +155,36 @@ public class ItemNameController extends HttpServlet {
                     if (item.isFormField()) {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getString() + "\n");//(getString())its for form field
                         map.put(item.getFieldName(), item.getString("UTF-8"));
+
                     } else {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getName());//it is (getName()) for file related things
                         if (item.getName() == null || item.getName().isEmpty()) {
                             map.put(item.getFieldName(), "");
                         } else {
-                            String image_name = item.getName();
+
+                            image_name = item.getName();
+
+                            imageNameList.add(image_name);// add all image name to list
                             image_name = image_name.substring(0, image_name.length());
+                            int index = image_name.indexOf('.');
+                            System.out.println(index);
+                            String ext = image_name.substring(index, image_name.length());
                             System.out.println(image_name);
                             map.put(item.getFieldName(), item.getName());
+                            destination_path = "C:\\ssadvt_repository\\APL\\item";
+                            String folder = map.get("item_name");
+                            image_folder = destination_path + "\\" + folder;
+                            imagePath = image_folder;
+                            image_name_list.add(image_name);
+                            list2.add(new File(imagePath + "\\" + image_name));
+//                            }
                         }
-                    }
+                    }//else end
                 }
                 itr = null;
                 itr = items.iterator();
-            } catch (Exception ex) {
-                System.out.println("Error encountered while uploading file" + ex);
+            } catch (Exception e) {
+                System.out.println("Error is :" + e);
             }
 
             String task = map.get("task");
@@ -174,17 +204,21 @@ public class ItemNameController extends HttpServlet {
             }
 
             String task1 = request.getParameter("task1");
+            String item_image_detail_id = request.getParameter("item_image_details_id");
             if (task1 == null) {
                 task1 = "";
             }
-            
+
             if (task1.equals("viewImage")) {
                 try {
 
+                    List<String> image_list = null;
                     String destinationPath = "";
-                    String item_names_id = request.getParameter("item_names_id");
-                    if (item_names_id != null && !item_names_id.isEmpty()) {
-                        destinationPath = model.getImagePath(item_names_id);
+
+                    if (item_image_detail_id != null && !item_image_detail_id.isEmpty()) {
+
+                        destinationPath = model.getImagePath(item_image_detail_id);
+
                         if (destinationPath.isEmpty()) {
                             destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
                         }
@@ -228,12 +262,17 @@ public class ItemNameController extends HttpServlet {
 
                     model.closeConnection();
                     return;
+//request.getRequestDispatcher("item_images").forward(request, response);
+
                 } catch (Exception e) {
                     System.out.println("ItemNameController Demand Note Error :" + e);
                     return;
                 }
             }
 
+//            if (task1.equals("deleteImage")) {
+//                model.deleteImageRecord(item_image_detail_id);
+//            }
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(map.get("item_name_id")));  // Pretty sure that tp_works_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New") || task.equals("Save & Next")) {
@@ -259,17 +298,36 @@ public class ItemNameController extends HttpServlet {
                 bean.setQuantity(Integer.parseInt(map.get("quantity").trim()));
                 bean.setItem_name(map.get("item_name").trim());
                 bean.setDescription(map.get("description").trim());
-                bean.setItem_image_details_id(item_image_details_id);
-                bean.setImage_path(map.get("item_image"));
-                String item_image = model.getDestination_Path("item_img");
-                response.setContentType("image/jpeg");
 
+                
+                String item_image = "";
                 if (item_name_id == 0) {
-                    // if tp_works_id was not provided, that means insert new record.
-                    model.insertRecord(bean, itr, item_image);
+
+                    for (int i = 0; i < imageNameList.size(); i++) {
+                        bean.setItem_image_details_id(item_image_details_id);
+                        bean.setImage_path(image_folder);
+                        bean.setImage_name(image_name);
+                        item_image = model.getDestination_Path("item_img");
+                        response.setContentType("image/jpeg");
+                        model.insertRecord(bean, itr, image_name, image_folder, i);
+                    }
+
                 } else {
                     // update existing record.
-                    model.updateRecord(bean, itr, item_name_id, item_image);
+                    int image_count=model.getImageCount(item_name_id);
+                    if(image_count==0){
+                        image_count=0;
+                    }
+                    for (int i = image_count+1; i < image_count+1+imageNameList.size(); i++) {
+                        bean.setItem_image_details_id(item_image_details_id);
+                        bean.setImage_path(image_folder);
+                        bean.setImage_name(image_name);
+                        item_image = model.getDestination_Path("item_img");
+                        response.setContentType("image/jpeg");
+                       model.updateRecord(bean, itr, item_name_id, image_name, image_folder,i);
+                    }
+                    
+
                 }
             }
 

@@ -29,14 +29,13 @@ public class CityController extends HttpServlet {
         ServletContext ctx = getServletContext();
         CityModel cityModel = new CityModel();
 
-        
         try {
             //       organisationNameModel.setConnection(DBConnection.getConnection(ctx, session));
             cityModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in OrganisationNameController setConnection() calling try block" + e);
         }
-        
+
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         System.out.println(cityModel.getConnection());
@@ -73,38 +72,6 @@ public class CityController extends HttpServlet {
 
         if (task == null) {
             task = "";
-        } else if (task.equals("generateMapReport"))//start from here
-        {
-            List listAll = null;
-            String jrxmlFilePath;
-            String search = request.getParameter("searchCity");
-            response.setContentType("application/pdf");
-            ServletOutputStream servletOutputStream = response.getOutputStream();
-            listAll = cityModel.showAllData(search);
-            jrxmlFilePath = ctx.getRealPath("/report/location/CityReport.jrxml");
-            byte[] reportInbytes = cityModel.generateMapReport(jrxmlFilePath, listAll);
-            response.setContentLength(reportInbytes.length);
-            servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
-            servletOutputStream.flush();
-            servletOutputStream.close();
-            return;
-        } else if (task.equals("generateMapXlsReport")) {
-            String jrxmlFilePath;
-            List listAll = null;
-            String search = request.getParameter("searchCity");
-            response.setContentType("application/vnd.ms-excel");
-            response.addHeader("Content-Disposition", "attachment; filename=city.xls");
-            ServletOutputStream servletOutputStream = response.getOutputStream();
-            jrxmlFilePath = ctx.getRealPath("/report/location/CityReport.jrxml");
-            listAll = cityModel.showAllData(search);
-            ByteArrayOutputStream reportInbytes = cityModel.generateCityXlsRecordList(jrxmlFilePath, listAll);
-            response.setContentLength(reportInbytes.size());
-            servletOutputStream.write(reportInbytes.toByteArray());
-            servletOutputStream.flush();
-            servletOutputStream.close();
-            return;
-        } else if (task.equals("Search All Records")) {
-            searchCity = "";
         } else if (task.equals("Save all records") || task.equals("Save As New") || task.equals("Save")) {
             int city_id = 0;
             try {
@@ -117,7 +84,7 @@ public class CityController extends HttpServlet {
             String cityDescription = request.getParameter("cityDescription");
             String cityName = request.getParameter("cityName");
             String tehsilName = request.getParameter("tehsil");
-            city_id = CityModel.getCityId(request.getParameter("cityName"));
+            // city_id = CityModel.getCityId(request.getParameter("cityName"));
             CityBean b = new CityBean();
             b.setCityId(city_id);
             b.setCityName(cityName);
@@ -139,13 +106,12 @@ public class CityController extends HttpServlet {
 
             }
         } else if (task.equals("Delete")) {
-            cityModel.deleteRecord(Integer.parseInt(request.getParameter("cityId")));
+            cityModel.deleteRecord(Integer.parseInt(request.getParameter("city_id")));
         }
-
 
         ArrayList<CityBean> list = cityModel.getAllRecords(searchCity);
         request.setAttribute("message", cityModel.getMessage());
-        request.setAttribute("messageBGColor", cityModel.getMessageBGColor());
+        request.setAttribute("msgBgColor", cityModel.getMessageBGColor());
         request.setAttribute("cityList", list);
         cityModel.closeConnection();
 

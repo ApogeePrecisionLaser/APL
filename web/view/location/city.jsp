@@ -1,22 +1,55 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@include file="../layout/header.jsp" %>
+<style>
+
+    .selected_row {
+        font-weight: bolder;
+        color: blue;
+        border: 3px solid black;
+    }
+    table.dataTable {      
+        border-collapse: collapse;
+    }
+
+</style>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
 <script type="text/javascript" language="javascript">
-          
-           $(function(){  
-                 
-              $("#tehsil").autocomplete({
-           
+    $(document).ready(
+            function () {
+                $('#mytable tbody').on(
+                        'click',
+                        'tr',
+                        function () {
+                            if ($(this).hasClass('selected_row')) {
+                                $(this).removeClass('selected_row');
+                            } else {
+                                $("#mytable").DataTable().$(
+                                        'tr.selected_row').removeClass(
+                                        'selected_row');
+                                $(this).addClass('selected_row');
+                            }
+                        });
+            });
+    $(function () {
+
+        setTimeout(function () {
+            $('#message').fadeOut('fast');
+        }, 10000);
+
+
+
+        $("#tehsil").autocomplete({
+
             source: function (request, response) {
-                        
+
                 $.ajax({
                     url: "cityTypeCont",
                     dataType: "json",
                     data: {action1: "getTehsil"},
-                      success: function (data) {
+                    success: function (data) {
 
                         console.log(data);
                         response(data.list);
@@ -31,18 +64,18 @@
                 $('#tehsil').val(ui.item.label); // display the selected text
                 return false;
             }
-        }); 
-        
-        
-                   $("#searchCity").autocomplete({
-           
+        });
+
+
+        $("#searchCity").autocomplete({
+
             source: function (request, response) {
-                        
+
                 $.ajax({
-                    url: "cityTypeCont",
+                    url: "CityController",
                     dataType: "json",
                     data: {action1: "getCity"},
-                      success: function (data) {
+                    success: function (data) {
 
                         console.log(data);
                         response(data.list);
@@ -57,248 +90,64 @@
                 $('#searchCity').val(ui.item.label); // display the selected text
                 return false;
             }
-        }); 
-        
-           });
-           
-           
-           
-            function setButton(id)
-            {
-                if (id == "delete")
-                    document.getElementById('buttonClick').value = "delete";
-                if (id == "saveAsNew")
-                    document.getElementById('buttonClick').value = "saveAsNew";
-                if (id == "save")
-                    document.getElementById('buttonClick').value = "save";
-            }
-            
-            
-            function makeEditable(id)
-            {
-                debugger;
+        });
 
-                if (id == "new")
-                {
-                    document.getElementById('edit').disabled = true;
-                    document.getElementById('delete').disabled = true;
-                    //document.getElementById('saveAsNew').disabled = true;
-                    document.getElementById('cityName').disabled = false;
-                    document.getElementById('cityDescription').disabled = false;
-                    document.getElementById('pin_code').disabled = false;
-                    document.getElementById('std_code').disabled = false;
-                    document.getElementById('tehsil').disabled = false;
-                    document.getElementById('save').disabled = false;
+    });
 
-                    document.getElementById('message').innerHTML = "";
 
-                }
-                if (id == "edit")
-                {
-                    document.getElementById('pin_code').disabled = false;
-                    document.getElementById('std_code').disabled = false;
-                    document.getElementById('cityName').disabled = false;
-                    document.getElementById('tehsil').disabled = false;
-                    document.getElementById('cityDescription').disabled = false;
-                    document.getElementById('save').disabled = false;
-                    document.getElementById('saveAsNew').disabled = false;
-                    document.getElementById('delete').disabled = false;
-                }
 
-            }
-            function varification()
-            {
-                var click = document.getElementById('buttonClick').value;
-                if (click == "delete")
-                {
-                    var con = confirm("Do you want to delete this record")
-                    return con;
-                }
-                if (click == "saveAsNew")
-                {
-                    var con = confirm("Do you want to save as this this record")
-                    return con;
-                }
-                if ($.trim(document.getElementById('divisionName').value) == "")
-                {
-                    alert("Please enter division name")
-                    document.getElementById('divisionName').value = "";
-                    document.getElementById('divisionName').focus()
-                    return false;
-                }
-                if ($.trim(document.getElementById('districtName').value) == "")
-                {
-                    alert("Please enter district name")
-                    document.getElementById('districtName').value = "";
-                    document.getElementById('districtName').focus()
-                    return false;
-                }
-                if ($.trim(document.getElementById('cityName').value) == "")
-                {
-                    alert("Please enter city name")
-                    document.getElementById('cityName').value = "";
-                    document.getElementById('cityName').focus()
-                    return false;
-                }
-//                if($.trim(document.getElementById('cityDescription').value)=="")
-//                {
-//                    alert("Please enter city description")
-//                    document.getElementById('cityDescription').value="";
-//                    document.getElementById('cityDescription').focus()
-//                    return false;
-//                }
-                if (document.getElementById('cityId').value == "")
-                {
-                    addRow();
-                    return false;
-                }
-                if (click == "save")
-                {
-                    var con = confirm("Do you want to update this record")
-                    return con;
-                }
-                return true;
-            }
-            function addRow()
-            {
-                var table = document.getElementById('insetTable');
-                var rowCount = table.rows.length;
-                var row = table.insertRow(rowCount);
+    function makeEditable(id)
+    {
+        //debugger;
 
-                var cell1 = row.insertCell(0);
-                cell1.innerHTML = rowCount;
-                var element1 = document.createElement("input");
-                element1.name = "city_id";
-                element1.id = "city_id" + rowCount;
-                element1.type = "hidden";
-                element1.value = 1;
-                element1.size = 1;
-                cell1.appendChild(element1);
+        if (id == "new")
+        {
+            document.getElementById('edit').disabled = true;
+            document.getElementById('delete').disabled = true;
+            //document.getElementById('saveAsNew').disabled = true;
+            document.getElementById('cityName').disabled = false;
+            document.getElementById('cityDescription').disabled = false;
+            document.getElementById('pin_code').disabled = false;
+            document.getElementById('std_code').disabled = false;
+            document.getElementById('tehsil').disabled = false;
+            document.getElementById('save').disabled = false;
 
-                var element2 = document.createElement("input");
-                element2.name = "cityCheckbox";
-                element2.id = "cityCheckbox" + rowCount;
-                element2.type = "checkbox";
-                element2.checked = true;
-                element2.setAttribute("onclick", 'singleCheck(' + rowCount + ')');
-                cell1.appendChild(element2);
-                ////////////////////////////////////
-                var cell2 = row.insertCell(1);
-                var element3 = document.createElement("input");
-                element3.name = "divisionName";
-                element3.id = "divisionName" + rowCount;
-                element3.value = document.getElementById('divisionName').value;
-                element3.size = 30;
-                element3.className = "new_input";
-                cell2.appendChild(element3);
+            document.getElementById('message').innerHTML = "";
 
-                var cell3 = row.insertCell(2);
-                var element4 = document.createElement("input");
-                element4.name = "districtName";
-                element4.id = "districtName" + rowCount;
-                element4.value = document.getElementById('districtName').value;
-                element4.size = 30;
-                element4.className = "new_input";
-                cell3.appendChild(element4);
+        }
+        if (id == "edit")
+        {
+            document.getElementById('pin_code').disabled = false;
+            document.getElementById('std_code').disabled = false;
+            document.getElementById('cityName').disabled = false;
+            document.getElementById('tehsil').disabled = false;
+            document.getElementById('cityDescription').disabled = false;
+            document.getElementById('save').disabled = false;
+            document.getElementById('saveAsNew').disabled = false;
+            document.getElementById('delete').disabled = false;
+        }
 
-                ///////////////////////////////////////////
-                var cell4 = row.insertCell(3);
-                var element5 = document.createElement("input");
-                element5.name = "cityName";
-                element5.id = "cityName" + rowCount;
-                element5.value = document.getElementById('cityName').value;
-                element5.size = 30;
-                element5.className = "new_input";
-                cell4.appendChild(element5);
+    }
 
-                var cell5 = row.insertCell(4);
-                var element6 = document.createElement("input");
-                element6.name = "cityDescription";
-                element6.id = "cityDescription" + rowCount;
-                element6.value = document.getElementById('cityDescription').value;
-                element6.size = 30;
-                element6.className = "new_input";
-                cell5.appendChild(element6);
-                var height = (rowCount * 40) + 60;
-                document.getElementById('autoCreatedTableDiv').style.visibility = "visible";
-                document.getElementById("autoCreatedTableDiv").style.height = height + 'px';
-            }
-            function singleCheck(id)
-            {
-                if (document.getElementById('cityCheckbox' + id).checked == true)
-                    document.getElementById('city_id' + id).value = 1;
-                else
-                    document.getElementById('city_id' + id).value = 0;
-            }
-            function deleteTable()
-            {
-                var table = document.getElementById('insetTable');
-                var rowCount = table.rows.length;
-                for (var i = 0; i < rowCount - 1; i++)
-                    table.deleteRow(1);
-                document.getElementById('autoCreatedTableDiv').style.visibility = "hidden";
 
-            }
-            function check()
-            {
-                var value = document.getElementById('uncheckAll').value;
-                var length = document.getElementsByName('cityCheckbox').length;
-                if (value == "UncheckAll")
-                {
-                    for (var checkbox = 0; checkbox < length; checkbox++)
-                    {
-                        document.getElementsByName('cityCheckbox')[checkbox].checked = false;
-                        document.getElementsByName('city_id')[checkbox].value = 0;
-                    }
-                    document.getElementById('uncheckAll').value = "CheckAll";
-                } else
-                {
-                    for (var checkbox = 0; checkbox < length; checkbox++)
-                    {
-                        document.getElementsByName('cityCheckbox')[checkbox].checked = true;
-                        document.getElementsByName('city_id')[checkbox].value = 1;
-                    }
-                    document.getElementById('uncheckAll').value = "UncheckAll";
-                }
-            }
-            function findfill(id)
-            {
-               debugger;
-               // setDefault();
-              //  document.getElementById(id).bgColor = "#d0dafd";
-                document.getElementById('edit').disabled = false;
-                document.getElementById('save').disabled = true;
-                document.getElementById('cityId').value = document.getElementById(id + '1').innerHTML;
-                document.getElementById('cityName').value = document.getElementById(id + '3').innerHTML;
-                document.getElementById('pin_code').value = document.getElementById(id + '4').innerHTML;
-                document.getElementById('std_code').value = document.getElementById(id + '5').innerHTML;
-                document.getElementById('cityDescription').value = document.getElementById(id + '6').innerHTML;
-                document.getElementById('tehsil').value = document.getElementById(id + '7').innerHTML;
-                document.getElementById('message').innerHTML = "";
-            }
-            function setDefault()
-            {
-                for (var i = 1; i <= document.getElementById('noOfRowsTraversed').value; i++)
-                    document.getElementById(i).bgColor = "";
-            }
-            function displayMapList(id)
-            {
-                var searchCity = document.getElementById('searchCity').value;
-                var action;
-                if (id == 'viewPdf')
-                    action = "task=generateMapReport&searchCity=" + searchCity;
-                else
-                    action = "task=generateMapXlsReport&searchCity=" + searchCity;
-                var url = "cityTypeCont?" + action;
-                popup = popupWindow(url, "City_View_Report");
-            }
-            function popupWindow(url, windowName)
-            {
-                var windowfeatures = "left=50, top=50, width=1000, height=500, resizable=no, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
-                return window.open(url, windowName, windowfeatures)
-            }
-            
-        </script>
+    function popupWindow(url, windowName)
+    {
+        var windowfeatures = "left=50, top=50, width=1000, height=500, resizable=no, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+        return window.open(url, windowName, windowfeatures)
+    }
+
+    function fillColumn(id, count) {
+        $('#city_id').val(id);
+        $('#cityName').val($("#" + count + '2').html());
+        $('#pin_code').val($("#" + count + '3').html());
+        $('#std_code').val($("#" + count + '4').html());
+        $('#cityDescription').val($("#" + count + '5').html());
+        $('#tehsil').val($("#" + count + '6').html());
+        document.getElementById("edit").disabled = false;
+        document.getElementById("delete").disabled = false;
+    }
+
+</script>
 
 
 
@@ -316,7 +165,7 @@
         <div class="headBox">
             <h5 class="">Search Engine</h5>
         </div>
-        <form name="form1" method="POST" action="OrganizationNameController" onsubmit="return verifySearch();" >
+        <form name="form1" method="POST" action="CityController" onsubmit="return verifySearch();" >
             <div class="row mt-3">
 
                 <div class="col-md-12">
@@ -361,7 +210,7 @@
                             <c:forEach var="beanType" items="${requestScope['cityList']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn();">
+                                    onclick="fillColumn('${beanType.cityId}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.cityName}</td>
                                     <td id="${loopCounter.count }3">${beanType.pin_code}</td>
@@ -442,10 +291,10 @@
                     </c:if>
                 </div>
                 <div class="col-md-12 text-center">                       
-                    <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)">
+                    <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
                     <input type="reset" class="btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" >
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
                 </div>
             </div>
         </form>
