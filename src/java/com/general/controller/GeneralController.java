@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author jpss
+ * @author komal
  */
 public class GeneralController extends HttpServlet {
    

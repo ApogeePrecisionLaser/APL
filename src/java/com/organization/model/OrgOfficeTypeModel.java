@@ -23,7 +23,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
  *
- * @author Tarun
+ * @author komal
  */
 public class OrgOfficeTypeModel {
 

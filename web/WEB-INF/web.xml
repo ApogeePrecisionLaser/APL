@@ -31,7 +31,7 @@
         <!--<param-value>root</param-value>-->
     </context-param>
    
-   <!-- start webservices-->
+    <!-- start webservices-->
     <servlet>
         <servlet-name>ServletAdaptor</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -285,7 +285,7 @@
     <!--End Item Type-->
     
     
-      <!--Start Item name-->
+    <!--Start Item name-->
     
     <servlet>
         <servlet-name>ItemNameController</servlet-name>
@@ -305,7 +305,7 @@
         <url-pattern>/item_name</url-pattern>
     </servlet-mapping>
     
-     <servlet>
+    <servlet>
         <servlet-name>ItemImagesController</servlet-name>
         <servlet-class>com.inventory.controller.ItemImagesController</servlet-class>
     </servlet>
@@ -324,6 +324,74 @@
     </servlet-mapping>
     
     <!--End Item name-->
+    
+    
+    
+     
+    <!--Start Manufacturer -->
+    
+    <servlet>
+        <servlet-name>ManufacturerController</servlet-name>
+        <servlet-class>com.inventory.controller.ManufacturerController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManufacturerController</servlet-name>
+        <url-pattern>/ManufacturerController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>manufacturer</servlet-name>
+        <jsp-file>/view/Inventory/manufacturer.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manufacturer</servlet-name>
+        <url-pattern>/manufacturer</url-pattern>
+    </servlet-mapping>
+    <!--End Manufacturer-->
+    
+    
+    <!--Start model_name -->
+    
+    <servlet>
+        <servlet-name>ModelNameController</servlet-name>
+        <servlet-class>com.inventory.controller.ModelNameController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ModelNameController</servlet-name>
+        <url-pattern>/ModelNameController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>model_name</servlet-name>
+        <jsp-file>/view/Inventory/model_name.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>model_name</servlet-name>
+        <url-pattern>/model_name</url-pattern>
+    </servlet-mapping>
+    <!--End model_name-->
+   
+    
+    <!--Start manufacturer item -->
+    
+    <servlet>
+        <servlet-name>ManufacturerItemMapController</servlet-name>
+        <servlet-class>com.inventory.controller.ManufacturerItemMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManufacturerItemMapController</servlet-name>
+        <url-pattern>/ManufacturerItemMapController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>manufacturer_item_map</servlet-name>
+        <jsp-file>/view/Inventory/manufacturer_item_map.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manufacturer_item_map</servlet-name>
+        <url-pattern>/manufacturer_item_map</url-pattern>
+    </servlet-mapping>
+    <!--End manufacturer item -->
     
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>

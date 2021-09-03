@@ -1,11 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
 <style>
-
     .selected_row {
         font-weight: bolder;
         color: blue;
@@ -14,45 +11,37 @@
     table.dataTable {      
         border-collapse: collapse;
     }
-
 </style>
+
 <script>
 
-
-    $(document).ready(
-            function () {
-                $('#mytable tbody').on(
-                        'click',
-                        'tr',
-                        function () {
-                            if ($(this).hasClass('selected_row')) {
-                                $(this).removeClass('selected_row');
-                            } else {
-                                $("#mytable").DataTable().$(
-                                        'tr.selected_row').removeClass(
-                                        'selected_row');
-                                $(this).addClass('selected_row');
-                            }
-                        });
-            });
-
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
 
     $(function () {
-
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
+
+
         $("#organisation_type").autocomplete({
-
             source: function (request, response) {
-
                 var random = document.getElementById("organisation_type").value;
                 $.ajax({
                     url: "OrganizationNameController",
                     dataType: "json",
                     data: {action1: "getOrganisationTypeName", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -67,14 +56,10 @@
                 return false;
             }
         });
-
     });
 
-
     $(function () {
-
         $("#organisation_sub_type_name").autocomplete({
-
             source: function (request, response) {
                 var org_type = document.getElementById("organisation_type").value;
                 var random = document.getElementById("organisation_sub_type_name").value;
@@ -85,7 +70,6 @@
                         action2: org_type,
                         str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -99,23 +83,16 @@
                 $('#organisation_sub_type_name').val(ui.item.label); // display the selected text
                 return false;
             }
-
-
         });
 
-
         $("#org_name").autocomplete({
-
             source: function (request, response) {
-
                 var random = document.getElementById("org_name").value;
-
                 $.ajax({
                     url: "OrganizationNameController",
                     dataType: "json",
                     data: {action1: "searchOrganisationName", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -129,54 +106,8 @@
                 $('#org_name').val(ui.item.label); // display the selected text
                 return false;
             }
-
-
         });
-
-
-
     });
-//       $(function () {  
-//                 
-//              $("#organisation_name").autocomplete({
-//                    
-//            source: function (request, response) {
-//                debugger;
-//                $.ajax({
-//                    url: "orgNameCont.do",
-//                    dataType: "json",
-//                    data: {action1: "getOrganisationName"},
-//                    success: function (data) {
-//
-//                        console.log(data);
-//                        response(data.list);
-//                    }, error: function (error) {
-//                        console.log(error.responseText);
-//                        response(error.responseText);
-//                    }
-//                });
-//            },
-//            select: function (events, ui) {
-//                console.log(ui);
-//                $('#organisation_name').val(ui.item.label); // display the selected text
-//                return false;
-//            }
-//        });
-
-//        $('#btnDialog').click(function ()
-//{
-//    $(this).speedoPopup(
-//    {
-//        width:550,
-//        height:265,
-//        useFrame: TRUE,
-//        href: '#divContentToPopup'
-//    });
-//});
-
-
-
-
 
     function makeEditable(id) {
         debugger;
@@ -186,17 +117,12 @@
         document.getElementById("description").disabled = false;
         document.getElementById("save").disabled = false;
         if (id === 'new') {
-            // document.getElementById("message").innerHTML = "";      // Remove message
             $("#message").html("");
             document.getElementById("organisation_id").value = "";
-            //document.getElementById("organisation_sub_type_id").value = "";
-            //document.getElementById("organisation_type_id").value = "";
             document.getElementById("edit").disabled = true;
             document.getElementById("delete").disabled = true;
             document.getElementById("save_As").disabled = true;
             document.getElementById("save").disabled = false;
-
-            setDefaultColor(document.getElementById("noOfRowsTraversed").value, 4);
             document.getElementById("organisation_name").focus();
             document.getElementById("organisation_type").focus();
             document.getElementById("description").focus();
@@ -206,16 +132,7 @@
             document.getElementById("save_As").disabled = true;
             document.getElementById("delete").disabled = false;
         }
-        // document.getElementById("save").disabled = false;
     }
-    function setDefaultColor(noOfRowsTraversed, noOfColumns) {
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            for (var j = 1; j <= noOfColumns; j++) {
-                document.getElementById("t1c" + (i * noOfColumns + j)).bgColor = "";     // set the default color.
-            }
-        }
-    }
-
 
     function setStatus(id) {
         if (id === 'save') {
@@ -248,13 +165,13 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
             var organisation_name = document.getElementById("organisation_name").value;
             if (myLeftTrim(organisation_name).length === 0) {
-                // document.getElementById("message").innerHTML = "<td colspan='5' bgcolor='coral'><b>Organisation Name is required...</b></td>";
-                $("#message").html("<td colspan='2' bgcolor='coral'><b>Organisation Name is required...</b></td>");
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Name is required...</b></label></div>');
                 document.getElementById("organisation_name").focus();
                 return false; // code to stop from submitting the form2.
             }
@@ -474,6 +391,7 @@
                         </div>
                     </c:if>
                 </div>
+                <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" disabled="" onclick="makeEditable(id)" >
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" disabled=""  onclick="setStatus(id)">

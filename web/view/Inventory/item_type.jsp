@@ -1,5 +1,4 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@include file="../layout/header.jsp" %>
 
 <style>
@@ -13,36 +12,28 @@
     }
 </style>
 
-
 <script>
-
-    $(document).ready(
-            function () {
-                $('#mytable tbody').on(
-                        'click',
-                        'tr',
-                        function () {
-                            if ($(this).hasClass('selected_row')) {
-                                $(this).removeClass('selected_row');
-                            } else {
-                                $("#mytable").DataTable().$(
-                                        'tr.selected_row').removeClass(
-                                        'selected_row');
-                                $(this).addClass('selected_row');
-                            }
-                        });
-            });
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
 
 
     $(function () {
-
-
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
 
-        $("#searchItemType").autocomplete({
 
+        $("#searchItemType").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("searchItemType").value;
                 $.ajax({
@@ -50,7 +41,6 @@
                     dataType: "json",
                     data: {action1: "getItemType", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -68,13 +58,12 @@
     });
 
 
-
     var editable = false;
     function makeEditable(id) {
-        //debugger;
         document.getElementById("item_type_name").disabled = false;
         document.getElementById("description").disabled = false;
-
+       // document.getElementById("supern").disabled = false;
+       // document.getElementById("supery").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             editable = "false";
@@ -88,14 +77,6 @@
             editable = "true";
             document.getElementById("delete").disabled = false;
         }
-
-    }
-    function setDefaultColor(noOfRowsTraversed, noOfColumns) {
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            for (var j = 1; j <= noOfColumns; j++) {
-                document.getElementById("t1c" + (i * noOfColumns + j)).bgColor = "";     // set the default color.
-            }
-        }
     }
 
     function setStatus(id) {
@@ -105,8 +86,8 @@
             document.getElementById("clickedButton").value = "Save AS New";
         } else
             document.getElementById("clickedButton").value = "Delete";
-        ;
     }
+
     function myLeftTrim(str) {
         var beginIndex = 0;
         for (var i = 0; i < str.length; i++) {
@@ -117,17 +98,17 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
-            var org_type_name = document.getElementById("org_type_name").value;
-            if (myLeftTrim(org_type_name).length == 0) {
-                // document.getElementById("message").innerHTML = "<td colspan='5' bgcolor='coral'><b>Organisation Type Name is required...</b></td>";
-                $("#message").html("<td colspan='5' bgcolor='coral'><b>Organisation Type Name is required...</b></td>");
-                document.getElementById("org_type_name").focus();
-                return false; // code to stop from submitting the form2.
+            var item_type_name = document.getElementById("item_type_name").value;
+            if (myLeftTrim(item_type_name).length == 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Type is required...</b></label></div>');
+                document.getElementById("item_type_name").focus();
+                return false;
             }
-            if (result == false)    // if result has value false do nothing, so result will remain contain value false.
+            if (result == false)
             {
 
             } else {
@@ -158,12 +139,17 @@
         }
     }
 
-
     function fillColumn(id, count) {
+      //  alert(id);
         $('#item_type_id').val(id);
         $('#item_type_name').val($("#" + count + '2').html());
+//        var super_child = $("#" + count + '3').html();
+//        if (super_child == 'Y') {
+//            $('#supery').attr('checked', true);
+//        } else {
+//            $('#supern').attr('checked', true);
+//        }
         $('#description').val($("#" + count + '3').html());
-
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
     }
@@ -172,15 +158,11 @@
 </script>
 
 
-
-
 <section>
     <div class="container-fluid page_heading sectionPadding35">
         <h1>Item Type</h1>
     </div>
 </section>
-
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -219,6 +201,7 @@
                             <tr>
                                 <th>S.No.</th>
                                 <th>Item Type Name</th>
+                                <!--<th>Is Super Child</th>-->
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -229,6 +212,7 @@
                                     onclick="fillColumn('${beanType.item_type_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.item_type}</td>
+                                    <!--<td id="${loopCounter.count }3">${beanType.superp}</td>-->
                                     <td id="${loopCounter.count }3">${beanType.description}</td>                                               
                                 </tr>
                             </c:forEach>
@@ -237,12 +221,8 @@
                 </div>
             </div>
         </div>
-
     </div>
 </section>
-
-
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -260,6 +240,21 @@
                         </div>
                     </div>
                 </div>
+                <!--                <div class="col-md-3">
+                                    <div class="form-group mb-1">
+                                        <label class="" for="email">Is super child<span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
+                                        <label class="form-check-label">
+                                            <input type="radio" id="supery" name="super" value="Y" disabled> Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-group form-check d-inline pl-0">
+                                        <label class="form-check-label">
+                                            <input type="radio" id="supern" name="super" value="N" disabled> No
+                                        </label>
+                                    </div>
+                                </div>-->
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
@@ -270,6 +265,7 @@
                 </div>
             </div>      
             <hr>
+
             <div class="row">
                 <div id="message">
                     <c:if test="${not empty message}">
@@ -278,6 +274,7 @@
                         </div>
                     </c:if>
                 </div>
+                <input type="hidden" id="clickedButton" name="clickedButton">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
@@ -288,8 +285,6 @@
         </form>
     </div>
 </section>
-
-
 
 <%@include file="../layout/footer.jsp" %>
 

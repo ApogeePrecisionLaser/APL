@@ -7,7 +7,7 @@ package com.organization.tableClasses;
 
 /**
  *
- * @author Dell
+ * @author komal
  */
 public class OrganisationDesignationBean {
     private int id;

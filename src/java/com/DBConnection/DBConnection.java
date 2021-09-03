@@ -12,7 +12,7 @@ import javax.servlet.ServletContext;
 
 /**
  *
- * @author Shobha
+ * @author komal
  */
 public class DBConnection {
 

@@ -7,7 +7,7 @@ package com.website.tableClasses;
 
 /**
  *
- * @author DELL
+ * @author komal
  */
 public class ContactUs {
     

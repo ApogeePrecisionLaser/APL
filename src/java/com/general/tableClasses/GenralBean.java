@@ -7,7 +7,7 @@ package com.general.tableClasses;
 
 /**
  *
- * @author jpss
+ * @author komal
  */
 public class GenralBean {
 private String node_name;

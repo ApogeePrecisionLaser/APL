@@ -28,7 +28,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -55,6 +54,7 @@ public class KeypersonController extends HttpServlet {
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         KeypersonModel keyModel = new KeypersonModel();
         String k = "";
+        int counting = 101;
 
         try {
             keyModel.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -69,6 +69,9 @@ public class KeypersonController extends HttpServlet {
             String person = request.getParameter("searchKeyPerson");
             String designation = request.getParameter("searchDesignation");
             String mobile = request.getParameter("searchmobile");
+           // if (counting != 101) {
+                counting = keyModel.getCounting();
+            //}
 
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
                 isOrgBasicStep = isOrgBasicStep.trim();
@@ -142,13 +145,13 @@ public class KeypersonController extends HttpServlet {
                         int parent_check = 0;
                         //String key_person = request.getParameter("action3");
                         list = keyModel.getDesgnation(q, org_office, parent_check);
-                        System.out.println(list.toString());
+                        //  System.out.println(list.toString());
                     } else if (JQstring.equals("getunknownDesignation")) {
                         String org_office = request.getParameter("action2");
                         int parent_check = 0;
                         //String key_person = request.getParameter("action3");
                         list = keyModel.getunDesgnation(q, org_office, parent_check);
-                        System.out.println(list.toString());
+                        //System.out.println(list.toString());
                     } else if (JQstring.equals("getOrgOfficeCode")) {
                         list = keyModel.getOrgOfficeCode(q);
                     } else if (JQstring.equals("searchOrg")) {
@@ -194,7 +197,7 @@ public class KeypersonController extends HttpServlet {
                         } else {
                             String image_name = item.getName();
                             image_name = image_name.substring(0, image_name.length());
-                            System.out.println(image_name);
+                            // System.out.println(image_name);
                             map.put(item.getFieldName(), item.getName());
                         }
                     }
@@ -204,7 +207,7 @@ public class KeypersonController extends HttpServlet {
             } catch (Exception ex) {
                 System.out.println("Error encountered while uploading file" + ex);
             }
-            
+
             String task1 = request.getParameter("task1");
             if (task1 == null) {
                 task1 = "";
@@ -278,12 +281,12 @@ public class KeypersonController extends HttpServlet {
                             destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
                         }
                     } else {
-                        System.out.println("Image Not Found");
+                        // System.out.println("Image Not Found");
                         destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
                     }
                     //destinationPath = keyModel.getImagePath(emp_code);
 
-                    System.err.println("destinationPath=-------------" + destinationPath);
+                    //System.err.println("destinationPath=-------------" + destinationPath);
                     File f = new File(destinationPath);
                     FileInputStream fis = null;
                     if (!f.exists()) {
@@ -328,7 +331,7 @@ public class KeypersonController extends HttpServlet {
                 String latitude = "";
                 String longitude = "";
                 String LatLong = keyModel.getPointLatLong(point_id);
-                System.out.println(LatLong);
+                //   System.out.println(LatLong);
                 String[] words = LatLong.split("\\,");
                 for (int i = 0; i < words.length; i++) {
                     latitude = words[0];
@@ -485,7 +488,7 @@ public class KeypersonController extends HttpServlet {
                 mobile = "";
                 searchfamily = "";
             }
-
+            
             String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
             if (buttonAction == null) {
                 buttonAction = "none";
@@ -517,11 +520,12 @@ public class KeypersonController extends HttpServlet {
 //                request.getRequestDispatcher("Emergency").forward(request, response);
             }
             keyModel.closeConnection();
-            System.err.println("emerList----" + emerList.size());
+            //  System.err.println("emerList----" + emerList.size());
             if (emerList.size() > 0) {
                 request.setAttribute("emerList", emerList);
                 request.getRequestDispatcher("Emergency").forward(request, response);
             } else {
+                request.setAttribute("counting", counting);
                 request.setAttribute("searchOrg", office_code);
                 request.setAttribute("searchKeyPerson", person);
                 request.setAttribute("searchmobile", mobile);

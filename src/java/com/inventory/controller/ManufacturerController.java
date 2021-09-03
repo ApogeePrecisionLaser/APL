@@ -6,8 +6,9 @@ package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
 import com.general.model.GeneralModel;
-import com.inventory.model.ItemTypeModel;
+import com.inventory.model.ManufacturerModel;
 import com.inventory.tableClasses.ItemType;
+import com.inventory.tableClasses.Manufacturer;
 import com.organization.tableClasses.Designation;
 import com.website.model.ContactUsModel;
 import java.io.IOException;
@@ -26,33 +27,32 @@ import org.json.simple.JSONObject;
  *
  * @author Komal
  */
-public class ItemTypeController extends HttpServlet {
+public class ManufacturerController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ServletContext ctx = getServletContext();
-        System.err.println("----------------------- item controller -----------------------------");
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
-        ItemTypeModel model = new ItemTypeModel();
+        ManufacturerModel model = new ManufacturerModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
+            System.out.println("error in ManufacturerController setConnection() calling try block" + e);
         }
         try {
-            String searchItemType = "";
+            String searchManufacturer = "";
             try {
                 String JQstring = request.getParameter("action1");
-                String q = request.getParameter("str");  
+                String q = request.getParameter("str");
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
-                    if (JQstring.equals("getItemType")) {
-                        list = model.getItemType(q);
+                    if (JQstring.equals("getManufacturer")) {
+                        list = model.getManufacturer(q);
                     }
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
@@ -61,16 +61,16 @@ public class ItemTypeController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ManufacturerController get JQuery Parameters Part-" + e);
             }
-            searchItemType = request.getParameter("searchItemType");
+            searchManufacturer = request.getParameter("searchManufacturer");
             try {
-                if (searchItemType == null) {
-                    searchItemType = "";
+                if (searchManufacturer == null) {
+                    searchManufacturer = "";
                 }
             } catch (Exception e) {
             }
-            String search = request.getParameter("searchItemType");
+            String search = request.getParameter("searchManufacturer");
             if (search == null) {
                 search = "";
             }
@@ -79,7 +79,7 @@ public class ItemTypeController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-            
+
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";
                 ac = "ACTIVE RECORDS";
@@ -91,48 +91,42 @@ public class ItemTypeController extends HttpServlet {
                 active = "";
                 ac = "ALL RECORDS";
             }
+
             if (task.equals("Delete")) {
-                model.deleteRecord(Integer.parseInt(request.getParameter("item_type_id")));  // Pretty sure that office_type_id will be available.
+                model.deleteRecord(Integer.parseInt(request.getParameter("manufacturer_id")));  // Pretty sure that office_type_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New")) {
-                int item_type_id=0;
+                int manufacturer_id;
                 try {
-                    item_type_id = Integer.parseInt(request.getParameter("item_type_id"));
+                    manufacturer_id = Integer.parseInt(request.getParameter("manufacturer_id"));
                 } catch (Exception e) {
-                    item_type_id = 0;
+                    manufacturer_id = 0;
                 }
                 if (task.equals("Save AS New")) {
                     //office_type_id = 0;
                 }
-                ItemType itemType = new ItemType();
-                itemType.setItem_type_id(item_type_id);
-                itemType.setItem_type(request.getParameter("item_type_name").trim());
-//                String superp = request.getParameter("super");
-//                if (superp.equals(null)) {
-//                    superp = "";
-//                }
-//                itemType.setSuperp(superp);
-                itemType.setDescription(request.getParameter("description").trim());
-                
-                if (item_type_id == 0) {
-                    // if office_type_id was not provided, that means insert new record.
-                    model.insertRecord(itemType);
+
+                Manufacturer bean = new Manufacturer();
+                bean.setManufacturer_id(manufacturer_id);
+                bean.setManufacturer_name(request.getParameter("manufacturer_name").trim());
+                bean.setDescription(request.getParameter("description").trim());
+
+                if (manufacturer_id == 0) {
+                    model.insertRecord(bean);
                 } else {
-                    // update existing record.
-                    model.updateRecord(itemType, item_type_id);
+                    model.updateRecord(bean, manufacturer_id);
                 }
             }
 
-            // Logic to show data in the table.
-            List<ItemType> list = model.showData(searchItemType, active);
+            List<Manufacturer> list = model.showData(searchManufacturer, active);
             request.setAttribute("list", list);
-            request.setAttribute("searchItemType", searchItemType);
+            request.setAttribute("searchManufacturer", searchManufacturer);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
 
             model.closeConnection();
-            request.getRequestDispatcher("item_type").forward(request, response);
+            request.getRequestDispatcher("manufacturer").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("ItemTypeController error: " + ex);
+            System.out.println("ManufacturerController error: " + ex);
         }
 
     }

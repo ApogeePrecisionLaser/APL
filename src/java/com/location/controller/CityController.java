@@ -46,7 +46,7 @@ public class CityController extends HttpServlet {
         try {
             //----- This is only for Vendor key Person JQuery
             String JQstring = request.getParameter("action1");
-            String q = request.getParameter("q");   // field own input           
+            String q = request.getParameter("str");   // field own input           
             if (JQstring != null) {
                 PrintWriter out = response.getWriter();
                 List<String> list = null;

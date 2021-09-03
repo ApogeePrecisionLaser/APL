@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  *
- * @author SoftTech
+ * @author Komal
  */
 public class ItemName {
 
@@ -27,6 +27,9 @@ public class ItemName {
     private String image_path;
     private String image_name;
     private String destination_path;
+    private String parent_item;
+    private int generation;
+    private String superp;
     /**
      * @return the item_names_id
      */
@@ -235,6 +238,48 @@ public class ItemName {
      */
     public void setDestination_path(String destination_path) {
         this.destination_path = destination_path;
+    }
+
+    /**
+     * @return the parent_item
+     */
+    public String getParent_item() {
+        return parent_item;
+    }
+
+    /**
+     * @param parent_item the parent_item to set
+     */
+    public void setParent_item(String parent_item) {
+        this.parent_item = parent_item;
+    }
+
+    /**
+     * @return the generation
+     */
+    public int getGeneration() {
+        return generation;
+    }
+
+    /**
+     * @param generation the generation to set
+     */
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+    
+    /**
+     * @return the superp
+     */
+    public String getSuperp() {
+        return superp;
+    }
+
+    /**
+     * @param superp the superp to set
+     */
+    public void setSuperp(String superp) {
+        this.superp = superp;
     }
 
 }

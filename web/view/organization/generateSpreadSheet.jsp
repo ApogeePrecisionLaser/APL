@@ -1,37 +1,28 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@include file="../layout/header.jsp" %>
 
-
 <script>
-
     $(document).ready(function () {
         $("#email").blur(function () {
-            // alert("hello");
             if (/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test($('#email').val()))
             {
-
                 return true;
             }
             alert("Please Enter Valid Email Address!...");
             return (false)
-
         });
-
     });
 
     function verify() {
         if ((document.getElementById("email").value).trim().length == 0) {
             $("#message").append('<div class="col-md-12 text-center"><label style="color:#a2a220"><b>Result: Please Enter Email Id!...</b></label></div>');
             document.getElementById("email").focus();
-            return false; // code to stop from submitting the form2.
+            return false;
         }
     }
 
-
     $(function () {
         $("#search_org_name").autocomplete({
-
             source: function (request, response) {
                 var random = document.getElementById("search_org_name").value;
                 $.ajax({
@@ -39,7 +30,6 @@
                     dataType: "json",
                     data: {action1: "getOrgName", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -54,8 +44,8 @@
                 return false;
             }
         });
-        $("#search_org_office_name").autocomplete({
 
+        $("#search_org_office_name").autocomplete({
             source: function (request, response) {
                 var search_org_name = document.getElementById("search_org_name").value;
                 var search_org_office_name = document.getElementById("search_org_office_name").value;
@@ -65,7 +55,6 @@
                     data: {action1: "getOrgOfficeName",
                         search_org_name: search_org_name, search_org_office_name: search_org_office_name},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -80,8 +69,8 @@
                 return false;
             }
         });
-        $("#search_org_office_type").autocomplete({
 
+        $("#search_org_office_type").autocomplete({
             source: function (request, response) {
                 var search_org_name = document.getElementById("search_org_name").value;
                 var search_org_office_name = document.getElementById("search_org_office_name").value;
@@ -92,7 +81,6 @@
                     data: {action1: "getOrgOfficeType",
                         search_org_name: search_org_name, search_org_office_name: search_org_office_name, search_org_office_type: search_org_office_type},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -107,8 +95,8 @@
                 return false;
             }
         });
-        $("#searchDesignation").autocomplete({
 
+        $("#searchDesignation").autocomplete({
             source: function (request, response) {
                 var search_org_name = document.getElementById("search_org_name").value;
                 var search_org_office_name = document.getElementById("search_org_office_name").value;
@@ -121,7 +109,6 @@
                         search_org_name: search_org_name, search_org_office_name: search_org_office_name,
                         search_org_office_type: search_org_office_type, searchDesignation: searchDesignation},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -136,8 +123,8 @@
                 return false;
             }
         });
-        $("#searchPerson").autocomplete({
 
+        $("#searchPerson").autocomplete({
             source: function (request, response) {
                 var search_org_name = document.getElementById("search_org_name").value;
                 var search_org_office_name = document.getElementById("search_org_office_name").value;
@@ -151,7 +138,6 @@
                         search_org_name: search_org_name, search_org_office_name: search_org_office_name,
                         search_org_office_type: search_org_office_type, searchDesignation: searchDesignation, searchPerson: searchPerson},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -168,10 +154,7 @@
         });
     });
 
-
 </script>
-
-
 
 
 <section>
@@ -179,8 +162,6 @@
         <h1>Report</h1>
     </div>
 </section>
-
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -335,42 +316,6 @@
 
     </div>
 </section>
-
-
-
-<!--<section class="marginTop30">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Send Report</h5>
-        </div>
-        <form name="form1" method="POST" action="generateSpreadSheetController">
-            <div class="row">
-                <div id="message">
-<c:if test="${not empty message}">
-    <div class="col-md-12 text-center">
-        <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-    </div>
-</c:if>
-</div>
-</div>
-<div class="row mt-3">
-<div class="col-md-12">
-<div class="form-group mb-md-0">
-    <input type="hidden" id="designation_id" name="designation_id" value="">
-    <label>Email</label>
-    <input class="form-control myInput searchInput1 w-100" type="text" id="email" name="email" value="" size="150" >
-</div>
-</div>
-</div>
-<hr>
-<div class="row">
-<div class="col-md-12 text-center">
-<input type="submit" class="btn normalBtn" id="genrateReport" name="genrateReport" value="Send Report" onclick="verify()">
-</div>
-</div>
-</form>
-</div>
-</section>-->
 
 <%@include file="../layout/footer.jsp" %>
 

@@ -1,9 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@include file="../layout/header.jsp" %>
 
 <style>
-
     .selected_row {
         font-weight: bolder;
         color: blue;
@@ -12,7 +10,6 @@
     table.dataTable {      
         border-collapse: collapse;
     }
-
 </style>
 
 <script>
@@ -20,17 +17,14 @@
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
-
-        $("#searchOrgOffice").autocomplete({
-
+        $("#searchManufacturer").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("searchOrgOffice").value;
+                var random = document.getElementById("searchManufacturer").value;
                 $.ajax({
-                    url: "OrgOfficeDesignationMapController",
+                    url: "ManufacturerItemMapController",
                     dataType: "json",
-                    data: {action1: "getOrgOffice", str: random},
+                    data: {action1: "getManufacturer", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -41,24 +35,20 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#searchOrgOffice').val(ui.item.label); // display the selected text
+                $('#searchManufacturer').val(ui.item.label);
                 return false;
             }
         });
-
-
-        $("#designation").autocomplete({
-
+        $("#searchItem").autocomplete({
             source: function (request, response) {
-                var code = document.getElementById("org_office").value;
-                var random = document.getElementById("designation").value;
+                var code = document.getElementById("searchManufacturer").value;
+                var random = document.getElementById("searchItem").value;
                 $.ajax({
-                    url: "OrgOfficeDesignationMapController",
+                    url: "ManufacturerItemMapController",
                     dataType: "json",
-                    data: {action1: "getDesignation",
+                    data: {action1: "getItem",
                         action2: code, str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -69,22 +59,42 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#designation').val(ui.item.label); // display the selected text
+                $('#searchItem').val(ui.item.label);
                 return false;
             }
         });
-
-
-        $("#org_office").autocomplete({
-
+//        $("#searchModel").autocomplete({
+//            source: function (request, response) {
+//                var code = document.getElementById("searchManufacturer").value;
+//                var searchItem = document.getElementById("searchItem").value;
+//                var random = document.getElementById("searchModel").value;
+//                $.ajax({
+//                    url: "ManufacturerItemModelMapController",
+//                    dataType: "json",
+//                    data: {action1: "getModel", str: random, str2: code, str3: searchItem},
+//                    success: function (data) {
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#searchModel').val(ui.item.label);
+//                return false;
+//            }
+//        });
+        $("#manufacturer_name").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("org_office").value;
+                var random = document.getElementById("manufacturer_name").value;
                 $.ajax({
-                    url: "OrgOfficeDesignationMapController",
+                    url: "ManufacturerItemMapController",
                     dataType: "json",
-                    data: {action1: "getOrgOffice", str: random},
+                    data: {action1: "getManufacturer", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -95,24 +105,19 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#org_office').val(ui.item.label); // display the selected text
-                return false;
+                $('#manufacturer_name').val(ui.item.label);
             }
         });
-
-
-        $("#searchDesignation").autocomplete({
-
+        $("#item_name").autocomplete({
             source: function (request, response) {
-                var code = document.getElementById("searchDesignationCode").value;
-                var random = document.getElementById("searchDesignation").value;
+                var code = document.getElementById("manufacturer_name").value;
+                var random = document.getElementById("item_name").value;
                 $.ajax({
-                    url: "organisationdesignationCont.do",
+                    url: "ManufacturerItemMapController",
                     dataType: "json",
-                    data: {action1: "searchDesignation",
+                    data: {action1: "getItem",
                         action2: code, str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -123,45 +128,51 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#searchDesignation').val(ui.item.label); // display the selected text
+                $('#item_name').val(ui.item.label);
                 return false;
             }
         });
-
+//        $("#model_name").autocomplete({
+//            source: function (request, response) {
+//                var code = document.getElementById("manufacturer_name").value;
+//                var searchItem = document.getElementById("item_name").value;
+//                var random = document.getElementById("model_name").value;
+//                $.ajax({
+//                    url: "ManufacturerItemModelMapController",
+//                    dataType: "json",
+//                    data: {action1: "getModel", str: random, str2: code, str3: searchItem},
+//                    success: function (data) {
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#model_name').val(ui.item.label);
+//                return false;
+//            }
+//        });
     });
-
-
     function makeEditable(id) {
-        //  document.getElementById("designation_id").disabled = false;
-        document.getElementById("designation").disabled = false;
-        document.getElementById("org_office").disabled = false;
+        document.getElementById("manufacturer_name").disabled = false;
+        document.getElementById("item_name").disabled = false;
+       // document.getElementById("model_name").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             $("#message").html("");
-            // document.getElementById("designation_id").value = "";
             document.getElementById("edit").disabled = true;
             document.getElementById("delete").disabled = true;
-            // document.getElementById("save_As").disabled = true;
             document.getElementById("description").disabled = false;
-            // document.getElementById("super").disabled = false;
-            document.getElementById("org_office").focus();
-            setDefaultColor(document.getElementById("noOfRowsTraversed").value, 4);
+            document.getElementById("manufacturer_name").focus();
         }
         if (id == 'edit') {
-            //  document.getElementById("save_As").disabled = false;
             document.getElementById("delete").disabled = false;
-            document.getElementById("org_office").focus();
+            document.getElementById("manufacturer_name").focus();
             document.getElementById("description").disabled = false;
-//            document.getElementById("super").disabled = false;
-        }
-    }
-
-
-    function setDefaultColor(noOfRowsTraversed, noOfColumns) {
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            for (var j = 1; j <= noOfColumns; j++) {
-                document.getElementById("t1c" + (i * noOfColumns + j)).bgColor = "";     // set the default color.
-            }
         }
     }
 
@@ -174,7 +185,6 @@
         } else
             document.getElementById("clickedButton").value = "Delete";
     }
-
 
     function myLeftTrim(str) {
         var beginIndex = 0;
@@ -191,24 +201,28 @@
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
-            var designation = document.getElementById("designation").value;
-            var org_office = document.getElementById("org_office").value;
-            if (myLeftTrim(designation).length == 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Designation is required...</b></label></div>');
-                document.getElementById("designation").focus();
-                return  false; // code to stop from submitting the form2.
+            var manufacturer_name = document.getElementById("manufacturer_name").value;
+            var item_name = document.getElementById("item_name").value;
+           // var model_name = document.getElementById("model_name").value;
+            if (myLeftTrim(manufacturer_name).length == 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Manufacturer Name is required...</b></label></div>');
+                document.getElementById("manufacturer_name").focus();
+                return  false;
             }
-            if (myLeftTrim(org_office).length == 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office is required...</b></label></div>');
-                document.getElementById("org_office").focus();
-                return  false; // code to stop from submitting the form2.
+//            if (myLeftTrim(model_name).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Model Name is required...</b></label></div>');
+//                document.getElementById("model_name").focus();
+//                return  false;
+//            }
+            if (myLeftTrim(item_name).length == 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Name is required...</b></label></div>');
+                document.getElementById("item_name").focus();
+                return  false;
             }
             if (result == false)
-            {// if result has value false do nothing, so result will remain contain value false.
-
+            {
             } else {
                 result = true;
-
             }
             if (document.getElementById("clickedButton").value == 'Save AS New') {
                 result = confirm("Are you sure you want to save it as New record?")
@@ -219,39 +233,21 @@
         return result;
     }
 
-
-    function searchDesignationList(id)
-    {
-        var searchDesignation = document.getElementById('searchDesignation').value;
-        var searchDesignationCode = document.getElementById('searchDesignationCode').value;
-        var action;
-        if (id == 'viewPdf')
-            action = "task=generateDesignationReport&searchDesignation=" + searchDesignation + "&searchDesignationCode=" + searchDesignationCode;
-        else
-            action = "task=generateDesignationXlsReport&searchDesignation=" + searchDesignation + "&searchDesignationCode=" + searchDesignationCode;
-        var url = "designationCont.do?" + action;
-        popup = popupWindow(url, "Designation_View_Report");
-    }
-
-
     function popupWindow(url, windowName)
     {
         var windowfeatures = "left=50, top=50, width=1000, height=500, resizable=no, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
         return window.open(url, windowName, windowfeatures)
     }
 
-
     function fillColumn(id, count) {
-        // alert(id);
-        $('#org_office_designation_map_id').val(id);
-        $('#org_office').val($("#" + count + '2').html());
-        $('#designation').val($("#" + count + '3').html());
+        $('#manufacturer_item_map_id').val(id);
+        $('#manufacturer_name').val($("#" + count + '2').html());
+        $('#item_name').val($("#" + count + '3').html());
+       // $('#model_name').val($("#" + count + '4').html());
         $('#description').val($("#" + count + '4').html());
-
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
     }
-
 
     $(document).ready(function () {
         $('#mytable tbody').on('click', 'tr', function () {
@@ -264,43 +260,47 @@
                 $(this).addClass('selected_row');
             }
         });
-    });
-
-
-</script>
-
-
+    });</script>
 
 
 <section>
     <div class="container-fluid page_heading sectionPadding35">
-        <h1>Org. Office Designation Map</h1>
+        <h1>Manufacturer Item Model Map</h1>
     </div>
 </section>
-
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Search Engine</h5>
         </div>
-        <form name="form1" method="POST" action="OrgOfficeDesignationMapController" onsubmit="return verifySearch();" >
+        <form name="form1" method="POST" action="ManufacturerItemMapController" onsubmit="return verifySearch();" >
             <div class="row mt-3">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group mb-md-0">
-                        <label>Org. Office</label>
-                        <input class="form-control myInput" type="text" id="searchOrgOffice" name="searchOrgOffice" value="${searchOrgOffice}" size="150" >
+                        <label>Manufacturer</label>
+                        <input class="form-control myInput" type="text" id="searchManufacturer" name="searchManufacturer" value="${searchManufacturer}" size="150" >
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Item</label>
+                        <input class="form-control myInput" type="text" id="searchItem" name="searchItem" value="${searchItem}" size="150" >
+                    </div>
+                </div>
+<!--                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Model</label>
+                        <input class="form-control myInput" type="text" id="searchModel" name="searchModel" value="${searchModel}" size="150" >
+                    </div>
+                </div>-->
             </div>
 
             <hr>
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <input class="btn normalBtn" type="submit" name="task" id="searchInDesignation" value="SEARCH RECORDS">
-                    <!--                <input type="button" class="btn normalBtn" id="viewPdf" name="viewPdf" value="PDF" onclick="displayOrgnList(id)">
-                                    <input type="button" class="btn normalBtn" id="viewXls" name="viewXls" value="Excel" onclick="displayOrgnList(id)">-->
+                    <input class="btn normalBtn" type="submit" name="task" id="searchInMapping" value="SEARCH RECORDS">
+
                 </div>
             </div>
         </form>
@@ -319,21 +319,25 @@
                         <thead>
                             <tr>                                
                                 <th>S.No.</th>
-                                <th>Org. Office</th>
-                                <th>Designation</th>
-                                <th>Serial No</th>
+                                <th>Manufacturer</th>
+                                <th>Item</th>
+                                <!--<th>Model</th>-->
+                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>   
-                            <c:forEach var="beanType" items="${requestScope['organisationList']}" varStatus="loopCounter">
-
-                                <tr onclick="fillColumn('${beanType.id}', '${loopCounter.count }');">
+                            <c:forEach var="beanType" items="${requestScope['list']}"
+                                       varStatus="loopCounter">
+                                <tr
+                                    onclick="fillColumn('${beanType.manufacturer_item_map_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
-                                    <td id="${loopCounter.count }2">${beanType.organisation}</td>
-                                    <td id="${loopCounter.count }3">${beanType.designation}</td>
-                                    <td id="${loopCounter.count }4">${beanType.serialnumber}</td>
+                                    <td id="${loopCounter.count }2">${beanType.manufacturer_name}</td>
+                                    <td id="${loopCounter.count }3">${beanType.item_name}</td>                                               
+                                    <!--<td id="${loopCounter.count }4">${beanType.model_name}</td>-->                                               
+                                    <td id="${loopCounter.count }4">${beanType.description}</td>     
                                 </tr>
                             </c:forEach>
+
                         </tbody>
                     </table>
                 </div>
@@ -350,26 +354,35 @@
         <div class="headBox">
             <h5 class="">Data Entry</h5>
         </div>
-        <form name="form2" method="POST" action="OrgOfficeDesignationMapController" onsubmit="return verify()">
+        <form name="form2" method="POST" action="ManufacturerItemMapController" onsubmit="return verify()">
             <div class="row mt-3">
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <input type="hidden" id="org_office_designation_map_id" name="org_office_designation_map_id" value="" >
-                            <label>Org. Office<span class="text-danger">*</span></label>                            
-                            <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" size="45" disabled>
+                            <input type="hidden" id="manufacturer_item_map_id" name="manufacturer_item_map_id" value="" >
+                            <label>Manufacturer Name<span class="text-danger">*</span></label>                            
+                            <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" size="45" disabled>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Designation<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="designation" name="designation" value=""  size="45" disabled>
+                            <label>Item Name<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="item_name" name="item_name" value=""  size="45" disabled>
                         </div>
                     </div>
                 </div>
+                <!--                <div class="col-md-3">
+                                    <div class="">
+                                        <div class="form-group">
+                                            <label>Model Name<span class="text-danger">*</span></label>
+                                            <input class="form-control myInput" type="text" id="model_name" name="model_name" value=""  size="45" disabled>
+                                        </div>
+                                    </div>
+                                </div>-->
             </div>
+
             <div class="row mt-3">
                 <div class="col-md-12">
                     <div class="">
@@ -380,15 +393,6 @@
                     </div>
                 </div>
             </div>
-            <!--                <div class="col-md-3">
-                                <div class="">
-                                    <div class="form-group">
-                                        <label>Super<span class="text-danger">*</span></label>
-                                        <input class="form-control myInput" type="text" id="super" name="super" value="" size="45" disabled>
-                                    </div>
-                                </div>
-                            </div>-->
-
 
             <div class="row">
                 <div id="message">
@@ -398,7 +402,7 @@
                         </div>
                     </c:if>
                 </div>
-                <input type="hidden" id="clickedButton" value="">
+                <input type="hidden" id="clickedButton" name="clickedButton">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
@@ -406,11 +410,10 @@
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
                 </div>
             </div>
+
         </form>
     </div>
 </section>
-
-
 
 <%@include file="../layout/footer.jsp" %>
 

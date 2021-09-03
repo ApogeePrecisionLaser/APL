@@ -11,6 +11,7 @@
         border-collapse: collapse;
     }
 </style>
+
 <script>
     $(document).ready(function () {
         $('#mytable tbody').on('click', 'tr', function () {
@@ -31,13 +32,13 @@
         }, 10000);
 
 
-        $("#searchOrgOfficeType").autocomplete({
+        $("#searchManufacturer").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("searchOrgOfficeType").value;
+                var random = document.getElementById("searchManufacturer").value;
                 $.ajax({
-                    url: "OrgOfficeTypeController",
+                    url: "ManufacturerController",
                     dataType: "json",
-                    data: {action1: "getOrganisationOfficeType", str: random},
+                    data: {action1: "getManufacturer", str: random},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -49,30 +50,31 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#searchOrgOfficeType').val(ui.item.label); // display the selected text
+                $('#searchManufacturer').val(ui.item.label); // display the selected text
                 return false;
             }
         });
     });
 
+
+    var editable = false;
     function makeEditable(id) {
-        document.getElementById("office_type").disabled = false;
+        document.getElementById("manufacturer_name").disabled = false;
         document.getElementById("description").disabled = false;
+        document.getElementById("save").disabled = false;
         if (id == 'new') {
+            editable = "false";
             $("#message").html("");
-            document.getElementById("office_type_id").value = "";
-            document.getElementById("save").disabled = false;
+            document.getElementById("manufacturer_id").value = "";
             document.getElementById("edit").disabled = true;
             document.getElementById("delete").disabled = true;
-            document.getElementById("save_As").disabled = true;
-            setDefaultColor(document.getElementById("noOfRowsTraversed").value, 4);
-            document.getElementById("office_code").focus();
+            document.getElementById("manufacturer_name").focus();
         }
         if (id == 'edit') {
-            document.getElementById("save").disabled = false;
+            editable = "true";
             document.getElementById("delete").disabled = false;
         }
-        document.getElementById("save").disabled = false;
+
     }
 
     function setStatus(id) {
@@ -80,12 +82,10 @@
             document.getElementById("clickedButton").value = "Save";
         } else if (id == 'save_As') {
             document.getElementById("clickedButton").value = "Save AS New";
-        } else {
+        } else
             document.getElementById("clickedButton").value = "Delete";
-            ;
-        }
+        ;
     }
-
     function myLeftTrim(str) {
         var beginIndex = 0;
         for (var i = 0; i < str.length; i++) {
@@ -100,16 +100,15 @@
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
-            var office_type = document.getElementById("office_type").value;
-
-            if (myLeftTrim(office_type).length == 0) {
-                //  document.getElementById("message").innerHTML = "<td colspan='5' bgcolor='coral'><b>Organisation Office Type is required...</b></td>";
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office Type is required...</b></label></div>');
-                document.getElementById("office_type").focus();
-                return false; // code to stop from submitting the form2.
+            var manufacturer_name = document.getElementById("manufacturer_name").value;
+            if (myLeftTrim(manufacturer_name).length == 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Manufacturer Name is required...</b></label></div>');
+                document.getElementById("manufacturer_name").focus();
+                return false;
             }
-            if (result == false) {
-                // if result has value false do nothing, so result will remain contain value false.
+            if (result == false)
+            {
+
             } else {
                 result = true;
             }
@@ -118,78 +117,58 @@
                 result = confirm("Are you sure you want to save it as New record?")
                 return result;
             }
-        } else {
-            result = confirm("Are you sure you want to delete this record?");
-        }
+        } else
+            result = confirm("Are you sure you want to delete this record?")
         return result;
     }
-    function orgOfficeReport(id)
-    {
-        var searchOfficeType = document.getElementById('searchOrgOfficeType').value;
-        var active = document.getElementById("activee").value;
-        var action;
-        if (id == 'viewPdf')
-        {
-            action = "task=generateOrgOfficeReport&searchOrgOfficeType=" + searchOfficeType + "&active=" + active;
 
-        } else
-        {
-            action = "task=generateOrgOfficeXlsReport&searchOrgOfficeType=" + searchOfficeType + "&active=" + active;
+    function openPopUp(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
+        return window.open(url, window_name, window_features);
+    }
+    if (!document.all) {
+        document.captureEvents(Event.CLICK);
+    }
+    document.onclick = function () {
+        if (popupwin != null && !popupwin.closed) {
+            popupwin.focus();
         }
-        var url = "orgOfficeTypeCont.do?" + action;
-        popup = popupWindow(url, "Org_Office_View_Report");
-    }
-    function popupWindow(url, windowName)
-    {
-        var windowfeatures = "left=50, top=50, width=1000, height=500, resizable=no, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
-        return window.open(url, windowName, windowfeatures)
-    }
-
-
-    function  myrequest()
-    {
-        var active = document.getElementById("active").value;
-        var inactive = document.getElementById("inactive").value;
-        var all = document.getElementById("all").value;
     }
 
     function fillColumn(id, count) {
-        $('#office_type_id').val(id);
-        $('#office_type').val($("#" + count + '2').html());
+        $('#manufacturer_id').val(id);
+        $('#manufacturer_name').val($("#" + count + '2').html());
         $('#description').val($("#" + count + '3').html());
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
     }
 
+
 </script>
-
-
 
 
 <section>
     <div class="container-fluid page_heading sectionPadding35">
-        <h1>Org Office Type</h1>
+        <h1>Manufacturer</h1>
     </div>
 </section>
-
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Search Engine</h5>
         </div>
-        <form name="form1" method="POST" action="OrgOfficeTypeController" onsubmit="return verifySearch();" >
+        <form name="form1" method="POST" action="ManufacturerController" onsubmit="return verifySearch();" >
             <div class="row mt-3">
                 <div class="col-md-12">
                     <div class="form-group mb-md-0">
-                        <label>Office Type</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchOrgOfficeType" name="searchOrgOfficeType" 
-                               value="${searchOrgOfficeType}" size="30" >
+                        <label>Manufacturer</label>
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchManufacturer" name="searchManufacturer" value="${searchManufacturer}" size="30" >
                     </div>
                 </div>
             </div>
-
             <hr>
             <div class="row">
                 <div class="col-md-12 text-center">
@@ -210,19 +189,19 @@
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered" id="mytable" style="width:100%">
                         <thead>
-                            <tr>                                
+                            <tr>
                                 <th>S.No.</th>
-                                <th>Office Type</th>
+                                <th>Manufacturer Name</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
-                        <tbody>       
-                            <c:forEach var="beanType" items="${requestScope['orgOfficeTypeList']}"
+                        <tbody>
+                            <c:forEach var="beanType" items="${requestScope['list']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn('${beanType.office_type_id}', '${loopCounter.count }');">
+                                    onclick="fillColumn('${beanType.manufacturer_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
-                                    <td id="${loopCounter.count }2">${beanType.office_type}</td>
+                                    <td id="${loopCounter.count }2">${beanType.manufacturer_name}</td>
                                     <td id="${loopCounter.count }3">${beanType.description}</td>                                               
                                 </tr>
                             </c:forEach>
@@ -235,32 +214,37 @@
     </div>
 </section>
 
+
+
+
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Data Entry</h5>
         </div>
-        <form name="form2" method="POST" action="OrgOfficeTypeController" onsubmit="return verify()">
+        <form name="form2" method="POST" action="ManufacturerController" onsubmit="return verify()">
             <div class="row mt-3">
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
-                            <label>Office Type<span class="text-danger">*</span></label>                            
-                            <input type="hidden" id="office_type_id" name="office_type_id" value="" >
-                            <input class="form-control myInput" type="text" id="office_type" name="office_type" size="30" value="" disabled>
+                            <label>Manufacturer Name<span class="text-danger">*</span></label>                            
+                            <input class="form-control myInput" type="hidden" id="manufacturer_id" name="manufacturer_id" value="" >
+                            <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value=""
+                                   size="40" disabled>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
-                            <label>Description<span class="text-danger"></span></label>
+                            <label>Description</label>
                             <textarea class="form-control myTextArea"  id="description" name="description" disabled></textarea>
                         </div>
                     </div>
                 </div>
             </div>      
             <hr>
+
             <div class="row">
                 <div id="message">
                     <c:if test="${not empty message}">
@@ -269,11 +253,11 @@
                         </div>
                     </c:if>
                 </div>
-                <input type="hidden" id="clickedButton" value="">
+                 <input type="hidden" id="clickedButton" name="clickedButton">
                 <div class="col-md-12 text-center">                                           
-                    <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                    <input type="reset" class=" btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
+                    <input type="reset" class=" btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" >
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
                 </div>
             </div>

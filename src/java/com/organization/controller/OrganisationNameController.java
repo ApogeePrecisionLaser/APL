@@ -8,7 +8,6 @@ import com.organization.model.OrganisationNameModel;
 import com.DBConnection.DBConnection;
 import com.organization.tableClasses.OrganisationName;
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -24,7 +23,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author Vikrant
+ * @author Komal
  */
 public class OrganisationNameController extends HttpServlet {
 

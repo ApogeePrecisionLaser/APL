@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author jpss
+ * @author komal
  */
 public class ContactUsModel {
 

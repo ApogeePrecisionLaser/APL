@@ -766,8 +766,8 @@ public class APLWebServiceModel {
             int i = 0;
             if (type.equals("coming")) {
                 coming_time = current_time;
-                query = "insert into attendance(key_person_id,coming_time,going_time,latitude,longitude,remark) "
-                        + " values(?,?,?,?,?,?) ";
+                query = "insert into attendance(key_person_id,coming_time,going_time,latitude,longitude,remark,status_type_id) "
+                        + " values(?,?,?,?,?,?,?) ";
                 psmt = connection.prepareStatement(query);
                 psmt.setInt(++i, key_person_id);
                 psmt.setString(++i, coming_time);
@@ -775,28 +775,35 @@ public class APLWebServiceModel {
                 psmt.setString(++i, latitude);
                 psmt.setString(++i, longitude);
                 psmt.setString(++i, "attendance data");
+                psmt.setString(++i, "2");
 
                 count = psmt.executeUpdate();
             } else {
                 query = " select a.attendance_id "
                         + " from attendance a,key_person kp where a.active='y' and kp.active='y' "
-                        + " and kp.key_person_id=a.key_person_id and a.status='incomplete' "
+                        //+ " and kp.key_person_id=a.key_person_id and a.status='incomplete' "
+                        + " and kp.key_person_id=a.key_person_id and a.status_type_id=2 "
                         + " and " + number + " in(mobile_no1,mobile_no2)";
                 psmt = connection.prepareStatement(query);
                 rst = psmt.executeQuery();
                 while (rst.next()) {
                     prev_id = rst.getInt(1);
                 }
-                psmt = null;
-                rst = null;
-                query = "";
-                query = " update attendance set going_time=?, status=?, updated_at=? where attendance_id=? ";
-                psmt = connection.prepareStatement(query);
-                psmt.setString(1, current_time);
-                psmt.setString(2, "complete");
-                psmt.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
-                psmt.setInt(4, prev_id);
-                count = psmt.executeUpdate();
+
+                if (prev_id == 0) {
+                    count=0;
+                } else {
+                    psmt = null;
+                    rst = null;
+                    query = "";
+                    query = " update attendance set going_time=?, status_type_id=?, updated_at=? where attendance_id=? ";
+                    psmt = connection.prepareStatement(query);
+                    psmt.setString(1, current_time);
+                    psmt.setString(2, "1");
+                    psmt.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
+                    psmt.setInt(4, prev_id);
+                    count = psmt.executeUpdate();
+                }
             }
 
             if (count > 0) {

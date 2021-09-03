@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
  *
- * @author Soft_Tech
+ * @author komal
  */
 public class OrganisationTypeModel {
 
@@ -115,7 +115,7 @@ public class OrganisationTypeModel {
         list1.clear();
         count = 0;
         searchOrgType = (searchOrgType);
-        
+
         int org_id = OrganisationTypeModel.getOrgid(searchhierarchy);
         int count = 0;
         int o_id = 0;
@@ -276,7 +276,7 @@ public class OrganisationTypeModel {
 //            pstmt.setInt(2, org_id);
 //                pstmt.setInt(3, o_id);
             ResultSet rset = pstmt.executeQuery();
-            System.out.println("hierarchy org type -" + pstmt);
+            // System.out.println("hierarchy org type -" + pstmt);
             while (rset.next()) {
                 OrganisationType organisationType = new OrganisationType();
                 id = rset.getInt("organisation_type_id");
@@ -505,7 +505,7 @@ public class OrganisationTypeModel {
                 + "  and active='Y' ";
         try {
             PreparedStatement pst1 = connection.prepareStatement(qry2);
-            System.out.println("query for check -" + pst1);
+            // System.out.println("query for check -" + pst1);
             ResultSet rst1 = pst1.executeQuery();
             while (rst1.next()) {
                 count = rst1.getInt(1);
@@ -526,7 +526,7 @@ public class OrganisationTypeModel {
 
         try {
             PreparedStatement pst = connection.prepareStatement(query1);
-            System.out.println("query for check -" + pst);
+            // System.out.println("query for check -" + pst);
             ResultSet rst = pst.executeQuery();
             while (rst.next()) {
                 count = rst.getInt(1);
@@ -628,7 +628,7 @@ public class OrganisationTypeModel {
                 + " and active='Y' ";
         try {
             PreparedStatement pst2 = connection.prepareStatement(qry3);
-            System.out.println("query for check -" + pst2);
+            // System.out.println("query for check -" + pst2);
             ResultSet rst2 = pst2.executeQuery();
             while (rst2.next()) {
                 count = rst2.getInt(1);
@@ -646,7 +646,7 @@ public class OrganisationTypeModel {
                     + " and active='Y' ";
             try {
                 PreparedStatement pst3 = connection.prepareStatement(query3);
-                System.out.println("query for check -" + pst3);
+                //  System.out.println("query for check -" + pst3);
                 ResultSet rst3 = pst3.executeQuery();
                 while (rst3.next()) {
                     c = rst3.getInt(1);
@@ -669,7 +669,7 @@ public class OrganisationTypeModel {
                 + " organisation_type_id='" + org_type_id + "' and active='Y' ";
         try {
             PreparedStatement pst1 = connection.prepareStatement(qry2);
-            System.out.println("query for check -" + pst1);
+            //  System.out.println("query for check -" + pst1);
             ResultSet rst1 = pst1.executeQuery();
             while (rst1.next()) {
                 count = rst1.getInt(1);
@@ -753,7 +753,7 @@ public class OrganisationTypeModel {
                         psmt.setString(8, is_child);
                         psmt.setInt(9, generation);
                         //pstmt.setString(9, "0");
-                        System.out.println("insert query -" + psmt);
+                        //  System.out.println("insert query -" + psmt);
                         rowsAffected = psmt.executeUpdate();
                         if (rowsAffected > 0) {
                             status = true;

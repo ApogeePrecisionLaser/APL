@@ -67,7 +67,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
- * @author jpss
+ * @author komal
  */
 public class GeneralModel {
     private Connection connection;

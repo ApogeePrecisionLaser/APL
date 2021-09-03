@@ -40,12 +40,17 @@ public class CityModel {
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
-
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String city_type = rset.getString("city_name");
 
-                list.add(city_type);
-                count++;
+                q = q.trim();
+                while (rset.next()) {
+                    String city_name = (rset.getString("city_name"));
+                    if (city_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(city_name);
+                        count++;
+                    }
+
+                }
 
             }
             if (count == 0) {

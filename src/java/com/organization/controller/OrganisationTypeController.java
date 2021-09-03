@@ -23,7 +23,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author Soft_Tech
+ * @author komal
  */
 public class OrganisationTypeController extends HttpServlet {
 

@@ -7,7 +7,7 @@ package com.organization.tableClasses;
 
 /**
  *
- * @author SoftTech
+ * @author komal
  */
 public class OrgOfficeType {
 

@@ -70,13 +70,12 @@
         $("#searchCity").autocomplete({
 
             source: function (request, response) {
-
+                var random = document.getElementById("searchCity").value;
                 $.ajax({
                     url: "CityController",
                     dataType: "json",
-                    data: {action1: "getCity"},
+                    data: {action1: "getCity", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -266,7 +265,7 @@
                 <div class="col-md-4">
                     <div class="">
                         <div class="form-group">
-                            <label>Tehsil Name<span class="text-danger">*</span></label>
+                            <label>Tehsil Name<span class="text-danger"></span></label>
                             <input class="form-control myInput" type="text" id="tehsil" name="tehsil" value="" disabled>
                         </div>
                     </div>

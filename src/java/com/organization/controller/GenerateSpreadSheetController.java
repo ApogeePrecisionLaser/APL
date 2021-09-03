@@ -103,11 +103,9 @@ import com.organization.tableClasses.GenerateSpreadSheet;
 
 /**
  *
- * @author JPSS
+ * @author Komal
  */
 public class GenerateSpreadSheetController extends HttpServlet {
-
-   
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -122,7 +120,7 @@ public class GenerateSpreadSheetController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in DesignationController setConnection() calling try block" + e);
+            System.out.println("error in ItemNameController setConnection() calling try block" + e);
         }
         String message = null;
         String bgColor = null;
@@ -191,8 +189,8 @@ public class GenerateSpreadSheetController extends HttpServlet {
         String sheet_link = "";
         try {
             if ((task.equals("Send Report")) && (!email.equals(""))) {
-                
-                message=model.sendReport(task,org_name, office_name, search_org_office_type, searchDesignation, searchPerson,email);
+
+                message = model.sendReport(task, org_name, office_name, search_org_office_type, searchDesignation, searchPerson, email);
             }
 
             List<GenerateSpreadSheet> list = model.getData(task, org_name, office_name, search_org_office_type, searchDesignation, searchPerson);
@@ -249,7 +247,6 @@ public class GenerateSpreadSheetController extends HttpServlet {
 //                .build()
 //                .setFromTokenResponse(tokenResponse);
 //    }
-
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doGet(request, response);

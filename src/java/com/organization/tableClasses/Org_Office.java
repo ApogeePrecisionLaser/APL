@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  *
- * @author Soft_Tech
+ * @author komal
  */
 public class Org_Office {
     //SELECT o.organisation_id, o.organisation_name, ot.org_type_name, o.address_line1, o.address_line2, o.address_line3, c.city_name, o.email_id, o.mobile_no1, o.mobile_no2, o.landline_no1, o.landline_no2, o.landline_no3 
@@ -52,6 +52,7 @@ public class Org_Office {
     private String generation;
     private String latitude;
     private String longitude;
+    private String gst_number;
    List<Org_Office> list;
 
     public List<Org_Office> getList() {
@@ -331,6 +332,20 @@ public class Org_Office {
 
     public void setP_org(String p_org) {
         this.p_org = p_org;
+    }
+
+    /**
+     * @return the gst_number
+     */
+    public String getGst_number() {
+        return gst_number;
+    }
+
+    /**
+     * @param gst_number the gst_number to set
+     */
+    public void setGst_number(String gst_number) {
+        this.gst_number = gst_number;
     }
 
    

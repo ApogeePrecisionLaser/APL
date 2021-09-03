@@ -4,7 +4,7 @@
  */
 package com.inventory.model;
 
-import com.inventory.tableClasses.ItemType;
+import com.inventory.tableClasses.Manufacturer;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
  *
  * @author Komal
  */
-public class ItemTypeModel {
+public class ManufacturerModel {
 
     private static Connection connection;
 
@@ -43,45 +43,47 @@ public class ItemTypeModel {
         }
     }
 
-    public List<ItemType> showData(String searchItemType, String active) {
-        List<ItemType> list = new ArrayList<ItemType>();
-        String query = " SELECT item_type_id, item_type ,description FROM item_type where active='Y' ";
+    public List<Manufacturer> showData(String searchManufacturer, String active) {
+        List<Manufacturer> list = new ArrayList<Manufacturer>();
 
-        if (!searchItemType.equals("") && searchItemType != null) {
-            query += " and item_type='" + searchItemType + "' ";
+        
+        String query = " SELECT manufacturer_id, manufacturer_name,description FROM manufacturer where active='Y' ";
+
+        if (!searchManufacturer.equals("") && searchManufacturer != null) {
+            query += " and manufacturer_name='" + searchManufacturer + "' ";
         }
 
         try {
-            System.err.println("--query ---"+query);
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
-                ItemType bean = new ItemType();
-                bean.setItem_type_id(rset.getInt("item_type_id"));
-                bean.setItem_type((rset.getString("item_type")));
+                Manufacturer bean = new Manufacturer();
+                bean.setManufacturer_id(rset.getInt("manufacturer_id"));
+                bean.setManufacturer_name((rset.getString("manufacturer_name")));
                 bean.setDescription((rset.getString("description")));
+
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("ItemTypeModel showData() Error: " + e);
+            System.out.println("ManufacturerModel showData() Error: " + e);
         }
         return list;
     }
 
-    public int insertRecord(ItemType item_Type) {
-        String query = "INSERT INTO item_type(item_type, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
+    public int insertRecord(Manufacturer manufacturer) {
+        String query = "INSERT INTO manufacturer(manufacturer_name, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, (item_Type.getItem_type()));
-            pstmt.setString(2, (item_Type.getDescription()));
-            pstmt.setInt(3, item_Type.getRevision_no());
+            pstmt.setString(1, (manufacturer.getManufacturer_name()));
+            pstmt.setString(2, (manufacturer.getDescription()));
+            pstmt.setInt(3, manufacturer.getRevision_no());
             pstmt.setString(4, "Y");
             pstmt.setString(5, "OK");
 
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("ItemTypeModel insertRecord() Error: " + e);
+            System.out.println("ManufacturerModel insertRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -93,67 +95,42 @@ public class ItemTypeModel {
         return rowsAffected;
     }
 
-    public int updateRecord(ItemType item_type, int item_type_id) {
-        int revision = ItemTypeModel.getRevisionno(item_type, item_type_id);
+    public int updateRecord(Manufacturer manufacturer, int manufacturer_id) {
+        int revision = ManufacturerModel.getRevisionno(manufacturer, manufacturer_id);
         int updateRowsAffected = 0;
-//        String is_child = item_type.getSuperp();
-//        if (is_child != null) {
-//            if (is_child.equals("yes") || is_child.equals("Yes") || is_child.equals("YES") || is_child.equals("Y") || is_child.equals("y")) {
-//                is_child = "Y";
-//            } else {
-//                is_child = "N";
-//            }
-//        }
-        int item_count = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM item_type WHERE item_type_id = " + item_type_id + "  && active=? ";
-        String query2 = "UPDATE item_type SET active =? WHERE item_Type_id =? and revision_no=? ";
-        // String query3 = "INSERT INTO item_type(item_type_id,item_type,description,revision_no,active,remark,is_super_child) VALUES(?,?,?,?,?,?,?)";
-        String query3 = "INSERT INTO item_type(item_type_id,item_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
-//        String query4 = " select is_super_child from item_type where item_type_id='" + item_type_id + "' ";
-//        String query5 = " select count(*) as count from item_names inn,item_type itt where inn.item_type_id=itt.item_type_id and"
-//                + " inn.item_type_id='" + item_type_id + "' and itt.is_super_child='N'  ";
+        String query1 = "SELECT max(revision_no) revision_no FROM manufacturer WHERE manufacturer_id = " + manufacturer_id + "  && active='Y' ";
+        String query2 = "UPDATE manufacturer SET active =? WHERE manufacturer_id =? and revision_no=? ";
+        String query3 = "INSERT INTO manufacturer(manufacturer_id,manufacturer_name,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
         int rowsAffected = 0;
-        //String is_super_child = "";
         try {
-//            PreparedStatement pstmnt = connection.prepareStatement(query4);
-//            ResultSet rst = pstmnt.executeQuery();
-//            while (rst.next()) {
-//                is_super_child = rst.getString("is_super_child");
-//                System.err.println("is_super_child----" + is_super_child);
-//            }
-//            if (is_super_child.equals('Y')) {
-            //System.err.println("if is_super_child y----");
             PreparedStatement pstmt = connection.prepareStatement(query1);
-            pstmt.setString(1, "Y");
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 PreparedStatement pstm = connection.prepareStatement(query2);
                 pstm.setString(1, "n");
-                pstm.setInt(2, item_type_id);
+                pstm.setInt(2, manufacturer_id);
                 pstm.setInt(3, revision);
                 updateRowsAffected = pstm.executeUpdate();
                 if (updateRowsAffected >= 1) {
                     revision = rs.getInt("revision_no") + 1;
                     PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
-                    psmt.setInt(1, (item_type_id));
-                    psmt.setString(2, item_type.getItem_type());
-                    psmt.setString(3, item_type.getDescription());
+                    psmt.setInt(1, (manufacturer_id));
+                    psmt.setString(2, manufacturer.getManufacturer_name());
+                    psmt.setString(3, manufacturer.getDescription());
                     psmt.setInt(4, revision);
                     psmt.setString(5, "Y");
                     psmt.setString(6, "OK");
-//                    psmt.setString(7, is_child);
                     rowsAffected = psmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        status = true;
+                    } else {
+                        status = false;
+                    }
                 }
             }
-
-            if (rowsAffected > 0) {
-                status = true;
-            } else {
-                status = false;
-            }
         } catch (Exception e) {
-            System.out.println("ItemTypeModel updateRecord() Error: " + e);
+            System.out.println("ManufacturerModel updateRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -162,15 +139,15 @@ public class ItemTypeModel {
             message = "Cannot update the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-
         return rowsAffected;
     }
 
-    public static int getRevisionno(ItemType bean, int item_type_id) {
+    public static int getRevisionno(Manufacturer bean, int manufacturer_id) {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM item_type WHERE item_type_id =" + item_type_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM manufacturer WHERE manufacturer_id =" + manufacturer_id + " "
+                    + " && active='Y';";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -185,20 +162,13 @@ public class ItemTypeModel {
         return revision;
     }
 
-    public int deleteRecord(int item_type_id) {
-//        String query4 = " select is_super_child from item_type where item_type_id='" + item_type_id + "' ";
-//        String query5 = " select count(*) as count from item_names inn,item_type itt where inn.item_type_id=itt.item_type_id and"
-//                + " inn.item_type_id='" + item_type_id + "' and itt.is_super_child='N'  ";
-
-        String query = "DELETE FROM item_type WHERE active='Y' and item_type_id = " + item_type_id;
+    public int deleteRecord(int manufacturer_id) {
+        String query = "DELETE FROM manufacturer WHERE active='Y' and manufacturer_id = " + manufacturer_id;
         int rowsAffected = 0;
-        String is_super_child = "";
-        int item_count = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
-
         } catch (Exception e) {
-            System.out.println("ItemTypeModel deleteRecord() Error: " + e);
+            System.out.println("ManufacturerModel deleteRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -207,29 +177,28 @@ public class ItemTypeModel {
             message = "Cannot delete the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-
         return rowsAffected;
     }
 
-    public List<String> getItemType(String q) {
+    public List<String> getManufacturer(String q) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT item_type_id, item_type FROM item_type i where i.active='Y' ORDER BY item_type ";
+        String query = " SELECT manufacturer_id, manufacturer_name FROM manufacturer  where active='Y' ORDER BY manufacturer_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
-            while (rset.next()) {
-                String item_type = (rset.getString("item_type"));
-                if (item_type.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(item_type);
+            while (rset.next()) {    // move cursor from BOR to valid record.
+                String manufacturer_name = (rset.getString("manufacturer_name"));
+                if (manufacturer_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(manufacturer_name);
                     count++;
                 }
             }
             if (count == 0) {
-                list.add("No such Item Type exists.");
+                list.add("No such manufacturer_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("ItemTypeModel getItemType ERROR - " + e);
+            System.out.println("ManufacturerModel getManufacturer ERROR - " + e);
         }
         return list;
     }

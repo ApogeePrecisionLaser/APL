@@ -4,141 +4,115 @@
  */
 package com.inventory.controller;
 
-import com.organization.model.OrganisationNameModel;
 import com.DBConnection.DBConnection;
-import com.inventory.model.ItemNameModel;
-import com.inventory.tableClasses.ItemName;
-import com.organization.tableClasses.OrganisationName;
+import com.general.model.GeneralModel;
+import com.inventory.model.ManufacturerModel;
+import com.inventory.model.ModelNameModel;
+import com.inventory.tableClasses.ItemType;
+import com.inventory.tableClasses.Manufacturer;
+import com.inventory.tableClasses.ModelName;
+import com.organization.tableClasses.Designation;
+import com.website.model.ContactUsModel;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import java.util.Map;
+import java.util.HashMap;
+import javax.servlet.ServletOutputStream;
 
 /**
  *
  * @author Komal
  */
-public class ItemNameController extends HttpServlet {
+public class ModelNameController extends HttpServlet {
 
     private File tmpDir;
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        System.err.println("model name controller***********************");
         ServletContext ctx = getServletContext();
         Map<String, String> map = new HashMap<String, String>();
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
-        ItemNameModel model = new ItemNameModel();
+        ModelNameModel model = new ModelNameModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
-        String item_name = "";
-        String item_type = "";
-        String item_code = "";
         String image_folder = "";
         String image_name = "";
-        int no_of_col = 1;
-        int quantity = 0;
-        int counting = 100;
-//        String auto_item_code = "";
-//        int auto_increment_key = 100;
-//        Random rnd = new Random();
-//        int number = rnd.nextInt(999999);
-//        auto_item_code = "APL_ITEM_" + number;
-
-        String search_item_name = "";
-        String search_item_type = "";
-        String search_item_code = "";
-
-//        String hex1 = (Integer.toHexString(9).toString());
-//        String hex2 = (Integer.toHexString(121).toString());
-//        String hex = hex1 + hex2;
-//        int decimal = Integer.parseInt(hex, 16);
-//        float b = decimal;
-//        float decimal_value=b/1000;
-//        System.out.println(decimal_value);
-//        1 bar to meters head = 10.19977 meters 
-        search_item_name = request.getParameter("search_item_name");
-        search_item_type = request.getParameter("search_item_type");
-        search_item_code = request.getParameter("search_item_code");
-
-        if (search_item_name == null) {
-            search_item_name = "";
-        }
-        if (search_item_type == null) {
-            search_item_type = "";
-        }
-        if (search_item_code == null) {
-            search_item_code = "";
-        }
-
+        String active1 = request.getParameter("active");
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ItemNameController setConnection() calling try block" + e);
+            System.out.println("error in ModelNameController setConnection() calling try block" + e);
         }
 
         try {
-            String requester = request.getParameter("requester");
+            String searchModel = "";
+            String searchItem = "";
+            String searchManufacturer = "";
             try {
                 String JQstring = request.getParameter("action1");
                 String q = request.getParameter("str");
-                String str2 = request.getParameter("str2");
-                String str3 = request.getParameter("str3");
-
-                //Auto increment count for emp code
-                counting = model.getCounting();
-
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
-                    JSONObject json = null;
-                    if (JQstring.equals("getItemType")) {
-
-                        list = model.getItemType(q);
+                    if (JQstring.equals("getManufacturer")) {
+                        list = model.getManufacturer(q);
                     }
-                    if (JQstring.equals("getItemName")) {
-                        list = model.getItemName(q, str2);
+                    if (JQstring.equals("getItem")) {
+                        String str2 = request.getParameter("str2");
+                        list = model.getItem(q, str2);
                     }
-                    if (JQstring.equals("getItemCode")) {
-                        list = model.getItemCode(q, str2, str3);
+                    if (JQstring.equals("getModel")) {
+                        list = model.getModel(q);
                     }
-                    if (JQstring.equals("getParentItemName")) {
-                        list = model.getParentItemName(q);
-                    }
-                    if (json != null) {
-
-                        out.println(json);
-                    } else {
-                        Iterator<String> iter = list.iterator();
-                        JSONObject gson = new JSONObject();
-                        gson.put("list", list);
-                        out.println(gson);
-                    }
+                    JSONObject gson = new JSONObject();
+                    gson.put("list", list);
+                    out.println(gson);
+                    model.closeConnection();
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ItemNameController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ModelNameController get JQuery Parameters Part-" + e);
+            }
+            searchModel = request.getParameter("searchModel");
+            searchItem = request.getParameter("searchItem");
+            searchManufacturer = request.getParameter("searchManufacturer");
+            try {
+
+                if (searchManufacturer == null) {
+                    searchManufacturer = "";
+                }
+                if (searchModel == null) {
+                    searchModel = "";
+                }
+                if (searchItem == null) {
+                    searchItem = "";
+                }
+            } catch (Exception e) {
+            }
+            String search = request.getParameter("searchModel");
+            if (search == null) {
+                search = "";
             }
 
             List image_name_list = new ArrayList();
@@ -176,8 +150,8 @@ public class ItemNameController extends HttpServlet {
                             int index = image_name.indexOf('.');
                             String ext = image_name.substring(index, image_name.length());
                             map.put(item.getFieldName(), item.getName());
-                            destination_path = "C:\\ssadvt_repository\\APL\\item";
-                            String folder = map.get("item_name");
+                            destination_path = "C:\\ssadvt_repository\\APL\\item\\" + map.get("item_name") + "\\";
+                            String folder = map.get("model");
                             image_folder = destination_path + "\\" + folder;
                             imagePath = image_folder;
                             image_name_list.add(image_name);
@@ -185,6 +159,7 @@ public class ItemNameController extends HttpServlet {
                         }
                     }
                 }
+
                 itr = null;
                 itr = items.iterator();
             } catch (Exception e) {
@@ -199,6 +174,7 @@ public class ItemNameController extends HttpServlet {
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";
                 ac = "ACTIVE RECORDS";
+
             } else if (task.equals("INACTIVE RECORDS")) {
                 active = "n";
                 ac = "INACTIVE RECORDS";
@@ -270,87 +246,98 @@ public class ItemNameController extends HttpServlet {
             }
 
             if (task.equals("Delete")) {
-                model.deleteRecord(Integer.parseInt(map.get("item_name_id")));
-            } else if (task.equals("Save") || task.equals("Save AS New") || task.equals("Save & Next")) {
-                int item_name_id = 0;
-                //  int item_image_details_id = 0;
+                model.deleteRecord(Integer.parseInt(map.get("model_id")));  // Pretty sure that office_type_id will be available.
+            } else if (task.equals("Save") || task.equals("Save AS New")) {
+                int model_id;
+                int manufacturer_item_map_id;
+                int item_image_details_id = 0;
                 try {
+                    model_id = Integer.parseInt(map.get("model_id"));
+                    manufacturer_item_map_id = Integer.parseInt(map.get("manufacturer_item_map_id"));
+                    item_image_details_id = Integer.parseInt(map.get("item_image_details_id"));
 
-                    item_name_id = Integer.parseInt(map.get("item_name_id"));
-                    // item_image_details_id = Integer.parseInt(map.get("item_image_details_id"));
                 } catch (Exception e) {
-//                    item_name_id = 0;
-//                    item_image_details_id = 0;
+                    model_id = 0;
+                    manufacturer_item_map_id = 0;
+                    item_image_details_id = 0;
                 }
-
                 if (task.equals("Save AS New")) {
-                    item_name_id = 0;
-                    // item_image_details_id = 0;
+                    //office_type_id = 0;
                 }
 
-                ItemName bean = new ItemName();
-                bean.setItem_names_id(item_name_id);
-                bean.setItem_code(map.get("item_code").trim());
-                bean.setItem_type_id(model.getItemTypeID(map.get("item_type").trim()));
-                bean.setQuantity(Integer.parseInt(map.get("quantity").trim()));
-                bean.setItem_name(map.get("item_name").trim());
-                bean.setParent_item(map.get("parent_item").trim());
+                ModelName bean = new ModelName();
+                bean.setModel_id(model_id);
+                bean.setModel(map.get("model").trim());
+                bean.setManufacturer_name(map.get("manufacturer_name"));
+                bean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id")));
+                bean.setItem_name(map.get("item_name"));
+                bean.setLead_time(Integer.parseInt("0" + map.get("lead_time")));
+                bean.setMin_qty(Integer.parseInt("0" + map.get("min_quantity")));
+                bean.setDaily_req(Integer.parseInt("0" + map.get("daily_req")));
                 bean.setDescription(map.get("description").trim());
-                String superp = map.get("super").trim();
-                if (superp == null) {
-                    superp = "";
-                }
-                bean.setSuperp(superp);
-                String item_image = "";
-                if (item_name_id == 0) {
-//                    if (imageNameList.size() > 0) {
-//                        for (int i = 0; i < imageNameList.size(); i++) {
-//                            bean.setItem_image_details_id(item_image_details_id);
-//                            bean.setImage_path(image_folder);
-//                            bean.setImage_name(image_name);
-//                            item_image = model.getDestination_Path("item_img");
-//                            response.setContentType("image/jpeg");
-//                            model.insertRecord(bean, itr, image_name, image_folder, i);
-//                        }
-//                    } else {
-                    model.insertRecord(bean, itr);
-                    // }
-                } else {
-//                    int image_count = model.getImageCount(item_name_id);
-//                    if (image_count == 0 || imageNameList.size() == 0) {
-                    model.updateRecord(bean, itr,item_name_id);
-                    // }
-//                    for (int i = (image_count + 1); i < (image_count + 1 + imageNameList.size()); i++) {
-//                        bean.setItem_image_details_id(item_image_details_id);
-//                        bean.setImage_path(image_folder);
-//                        bean.setImage_name(image_name);
-//                        item_image = model.getDestination_Path("item_img");
-//                        response.setContentType("image/jpeg");
-//                        model.updateRecord(bean, itr, item_name_id, image_name, image_folder, i);
-//                    }
 
+                String item_image = "";
+                if (model_id == 0) {
+                    if (imageNameList.size() > 0) {
+                        for (int i = 0; i < imageNameList.size(); i++) {
+                            bean.setItem_image_details_id(item_image_details_id);
+                            bean.setImage_path(image_folder);
+                            bean.setImage_name(image_name);
+                            item_image = model.getDestination_Path("item_img");
+                            response.setContentType("image/jpeg");
+                            model.insertRecord(bean, itr, image_name, image_folder, i);
+                        }
+                    } else {
+                        model.insertRecord(bean, itr, image_name, image_folder, 0);
+                    }
+                } else {
+                    int image_count = model.getImageCount(model_id);
+                    if (image_count == 0 || imageNameList.size() == 0) {
+                        model.updateRecord(bean, itr, model_id, image_name, image_folder, 0);
+                    }
+                    for (int i = (image_count + 1); i < (image_count + 1 + imageNameList.size()); i++) {
+                        bean.setItem_image_details_id(item_image_details_id);
+                        bean.setImage_path(image_folder);
+                        bean.setImage_name(image_name);
+                        item_image = model.getDestination_Path("item_img");
+                        response.setContentType("image/jpeg");
+                        model.updateRecord(bean, itr, model_id, image_name, image_folder, i);
+                    }
                 }
+
+//                if (model_id == 0) {
+//                    model.insertRecord(bean);
+//                } else {
+//                    model.updateRecord(bean, model_id);
+//                }
             }
 
-            List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code);
-            String auto_item_code = "APL_ITEM_" + counting;
+            List<ModelName> list = model.showData(searchManufacturer, searchModel, searchItem, active);
             request.setAttribute("list", list);
-            request.setAttribute("auto_item_code", auto_item_code);
-            request.setAttribute("search_item_name", search_item_name);
-            request.setAttribute("search_item_type", search_item_type);
-            request.setAttribute("search_item_code", search_item_code);
+            request.setAttribute("searchManufacturer", searchManufacturer);
+            request.setAttribute("searchModel", searchModel);
+            request.setAttribute("searchItem", searchItem);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
-            model.closeConnection();
 
-            request.getRequestDispatcher("item_name").forward(request, response);
+            model.closeConnection();
+            request.getRequestDispatcher("model_name").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("ItemNameController error: " + ex);
+            System.out.println("ModelNameController error: " + ex);
         }
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doGet(request, response);
     }
+
 }

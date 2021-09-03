@@ -60,6 +60,9 @@
                                     <div class="dropdown-menu">
                                         <a href="ItemTypeController" class="dropdown-item">Item Type</a>
                                         <a href="ItemNameController" class="dropdown-item">Item Name</a>
+                                        <a href="ManufacturerController" class="dropdown-item">Manufacturer</a>
+                                        <a href="ManufacturerItemMapController" class="dropdown-item">Manufacturer Item Map</a>
+                                        <a href="ModelNameController" class="dropdown-item">Model Name</a>
                                     </div> 
                                 </li>
 
@@ -71,7 +74,7 @@
                                         <a href="CityController" class="dropdown-item">City</a>
                                     </div>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Admin
