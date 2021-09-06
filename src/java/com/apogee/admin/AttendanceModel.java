@@ -24,6 +24,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
+import static java.lang.Math.PI;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  *
@@ -46,11 +49,26 @@ public class AttendanceModel {
         }
     }
 
-    public List<AttendanceBean> showData() {
+    public List<AttendanceBean> showData(String key_person, String date) {
         List<AttendanceBean> list = new ArrayList<AttendanceBean>();
-        String query = " select kp.key_person_name,a.coming_time,a.going_time,a.latitude,a.longitude "
+        NumberFormat df = new DecimalFormat("###.###");
+        String query = " select kp.key_person_name,a.coming_time,a.going_time,a.latitude,a.longitude,"
+                + " 111.045 * DEGREES(ACOS(COS(RADIANS(28.6126243)) "
+                + " * COS(RADIANS(a.latitude)) "
+                + " * COS(RADIANS(a.longitude) - RADIANS(77.3776654)) "
+                + " + SIN(RADIANS(28.6126243)) "
+                + " * SIN(RADIANS(a.latitude)))) "
+                + " AS distance_in_km "
                 + " from attendance a, key_person kp "
                 + " where a.active='y' and kp.active='y' and a.key_person_id=kp.key_person_id ";
+        if (date.equals("")) {
+            query += " and date(a.created_at)=curdate() ";
+        } else {
+            query += " and date(a.created_at)='" + date + "' ";
+        }
+        if(!key_person.equals("")){
+         query+=" and kp.key_person_name='"+key_person+"' ";   
+        }
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -61,10 +79,38 @@ public class AttendanceModel {
                 bean.setLatitude(rset.getString(4));
                 bean.setLongitude(rset.getString(5));
 
+                double obj = Double.valueOf(rset.getString(6));
+                String vall = df.format(obj);
+                bean.setDistance_between(vall);
+
                 list.add(bean);
             }
         } catch (Exception e) {
             System.out.println("com.apogee.admin.AttendanceModel.showData() -" + e);
+        }
+        return list;
+    }
+
+    public List<String> getKeyPerson(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = " select kp.key_person_name from key_person kp, org_office oo where kp.active='y' and oo.active='y' "
+                + " and oo.org_office_id=kp.org_office_id and oo.org_office_name='apogee LLP' ";
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {    // move cursor from BOR to valid record.
+                String name = (rset.getString(1));
+                if (name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(name);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such key person exists.......");
+            }
+        } catch (Exception e) {
+            System.out.println("com.apogee.admin.AttendanceModel.getKeyPerson()-" + e);
         }
         return list;
     }

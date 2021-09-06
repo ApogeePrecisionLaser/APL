@@ -64,7 +64,7 @@ public class ModelNameController extends HttpServlet {
         } catch (Exception e) {
             System.out.println("error in ModelNameController setConnection() calling try block" + e);
         }
-
+        
         try {
             String searchModel = "";
             String searchItem = "";
@@ -83,7 +83,9 @@ public class ModelNameController extends HttpServlet {
                         list = model.getItem(q, str2);
                     }
                     if (JQstring.equals("getModel")) {
-                        list = model.getModel(q);
+                        String str2 = request.getParameter("str2");
+                        String str3 = request.getParameter("str3");
+                        list = model.getModel(q, str2, str3);
                     }
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);

@@ -636,6 +636,23 @@
         <url-pattern>/view_attendance</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>CalendarController</servlet-name>
+        <servlet-class>com.apogee.admin.CalendarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarController</servlet-name>
+        <url-pattern>/CalendarController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>view_calendar</servlet-name>
+        <jsp-file>/view/admin/view_calendar.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>view_calendar</servlet-name>
+        <url-pattern>/view_calendar</url-pattern>
+    </servlet-mapping>
+    
     
     
 </web-app>

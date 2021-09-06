@@ -384,12 +384,12 @@ public class APLWebServiceModel {
         String key_person_id = "", key_person_name = "", image_name = "", person_photo = "", person_id_photo = "";
         try {
             query = " select distinct kp.key_person_name,gid.image_name,idd.destination_path,idd.image_uploaded_for_id, "
-                    + " iuf.image_uploaded_for,kp.key_person_id,concat(idd.destination_path,gid.image_name) as image_path "
+                    + " kp.key_person_id,concat(idd.destination_path,gid.image_name) as image_path "
                     + " from key_person kp,general_image_details gid,image_destination idd,image_uploaded_for iuf "
                     + " where kp.active='y' and gid.active='y' and idd.active='y' and iuf.active='y' and "
                     + " kp.key_person_id=gid.key_person_id and gid.image_destination_id=idd.image_destination_id "
                     //+ " and iuf.image_uploaded_for_id=idd.image_uploaded_for_id "
-                    + " and 9758128792 in(kp.mobile_no1,kp.mobile_no2) ";
+                    + " and "+number+" in(kp.mobile_no1,kp.mobile_no2) ";
             PreparedStatement psmt = connection.prepareStatement(query);
             ResultSet rst = psmt.executeQuery();
             while (rst.next()) {
@@ -814,6 +814,35 @@ public class APLWebServiceModel {
             System.out.println("com.webservice.model.APLWebServiceModel.saveAttendance()- " + e);
         }
         return count;
+    }
+    
+    public JSONArray getAttendanceData(String number) {
+        JSONArray rowData = new JSONArray();
+        String query = null;
+        query = " Select a.attendance_id,a.coming_time,a.going_time,a.latitude,a.longitude,st.status_type,st.status_type_id "
+                + " from attendance a, key_person kp, status_type st "
+                + " where a.active='y' and kp.active='y' and st.active='y' and st.status_type_id=a.status_type_id "
+                + " and kp.key_person_id=a.key_person_id and "+number+" in(kp.mobile_no1,kp.mobile_no2) "
+                + " and date(a.created_at)=curdate() ";
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                JSONObject obj = new JSONObject();
+                obj.put("attendance_id", rset.getInt(1));
+                obj.put("coming_time", rset.getString(2));
+                obj.put("going_time", rset.getString(3));
+                obj.put("latitude", rset.getString(4));
+                obj.put("longitude", rset.getString(5));
+                obj.put("status_type_id", rset.getString(6));
+                obj.put("status_type", rset.getString(7));
+                rowData.put(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("Error inside getCity of survey: " + e);
+        }
+        return rowData;
     }
 
     public Connection getConnection() {

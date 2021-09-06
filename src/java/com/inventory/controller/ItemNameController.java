@@ -302,6 +302,10 @@ public class ItemNameController extends HttpServlet {
                 }
                 bean.setSuperp(superp);
                 String item_image = "";
+                
+                
+                System.err.println("item name id ----------------"+item_name_id);
+                
                 if (item_name_id == 0) {
 //                    if (imageNameList.size() > 0) {
 //                        for (int i = 0; i < imageNameList.size(); i++) {

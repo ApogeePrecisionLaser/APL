@@ -20,28 +20,34 @@ import org.json.simple.JSONObject;
 /**
  *
  * @author Vikrant
- */    
+ */
 public class AttendanceController extends HttpServlet {
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {        
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         AttendanceModel model = new AttendanceModel();
-        String active = "Y";
-        String ac = "ACTIVE RECORDS";
-        String org_name = "";
-        String sub_org_name = "";
+        String task = request.getParameter("search_record");
+        String key_person = request.getParameter("key_person");
+        String date = request.getParameter("date");
+        if (task == null) {
+            task = "";
+        }
+        if (key_person == null) {
+            key_person = "";
+        }
+        if (date == null) {
+            date = "";
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrganisationNameController setConnection() calling try block" + e);
+            System.out.println("com.apogee.admin.AttendanceController.doGet() -"+e);
         }
         try {
-            String requester = request.getParameter("requester");
             try {
-                //----- This is only for Vendor key Person JQuery
                 String JQstring = request.getParameter("action1");
                 String q = request.getParameter("str");   // field own input
                 if (JQstring != null) {
@@ -53,10 +59,10 @@ public class AttendanceController extends HttpServlet {
 //                        String organisation_sub_type = request.getParameter("action3");
 //                        list = model.getOrganisationName(q, organisation_type, organisation_sub_type);
 //                    }
-//                    if (JQstring.equals("getOrganisationTypeName")) {
-//                        list = organisationNameModel.getOrganisationTypeName(q);
-//                    }
-                    
+                    if (JQstring.equals("getKeyPerson")) {
+                        list = model.getKeyPerson(q);
+                    }
+
                     if (json != null) {
 
                         out.println(json);
@@ -70,9 +76,9 @@ public class AttendanceController extends HttpServlet {
                 }
             } catch (Exception e) {
 
-            }                      
+            }
 
-            List<AttendanceBean> list = model.showData();
+            List<AttendanceBean> list = model.showData(key_person,date);
 
             request.setAttribute("list", list);
             request.setAttribute("message", model.getMessage());
@@ -81,7 +87,7 @@ public class AttendanceController extends HttpServlet {
 
             request.getRequestDispatcher("view_attendance").forward(request, response);
         } catch (Exception ex) {
-            
+
         }
     }
 
@@ -90,4 +96,3 @@ public class AttendanceController extends HttpServlet {
         doGet(request, response);
     }
 }
-

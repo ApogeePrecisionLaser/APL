@@ -167,6 +167,9 @@ public class APLWebServiceController {
             
             json=model.getImageData(number);
             obj.put("image_data", json);
+            
+            json=model.getAttendanceData(number);
+            obj.put("attendance", json);
 //            json = model.getItemType(number);
 //            obj.put("item_type", json);
 //            json = model.getItemNames(number);
@@ -219,6 +222,7 @@ public class APLWebServiceController {
             String current_time = jObj.get("current_time").toString();
             String latitude = jObj.get("latitude").toString();
             String longitude = jObj.get("longitude").toString();
+            
 
             int count = model.saveAttendance(type, number, current_time, latitude, longitude);
             if (count > 0) {

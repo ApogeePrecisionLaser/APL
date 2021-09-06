@@ -208,7 +208,7 @@ public class ModelNameModel {
         }
         return rowsAffected;
     }
-    
+
     public int insertImageRecord(int rowsAffected, ModelName model_name, Iterator itr, String destination, int model_id, String image_name, int image_count) {
         String img_message = "";
         DateFormat dateFormat1 = new SimpleDateFormat("dd.MMMMM.yyyy");
@@ -550,7 +550,8 @@ public class ModelNameModel {
         String query = "";
         if (!manufacturer_name.equals("") && manufacturer_name != null) {
             query = " SELECT inn.item_name FROM item_names inn,manufacturer mr,manufacturer_item_map mim where inn.active='Y' and mr.active='Y' "
-                    + " and mim.active='Y' and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and mr.manufacturer_name='" + manufacturer_name + "'"
+                    + " and mim.active='Y' and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and "
+                    + " mr.manufacturer_name='" + manufacturer_name + "'"
                     + " ORDER BY inn.item_name ";
         } else {
             query = " SELECT inn.item_name FROM item_names inn where inn.active='Y' "
@@ -577,9 +578,21 @@ public class ModelNameModel {
         return list;
     }
 
-    public List<String> getModel(String q) {
+    public List<String> getModel(String q, String manufacturer_name, String item_name) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT model_id, model FROM model  where active='Y' ORDER BY model ";
+        String query = " select m.model from model m,manufacturer mr,item_names inn,manufacturer_item_map mim "
+                + " where m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
+                + " and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and m.active='Y' and mr.active='Y' "
+                + " and mim.active='Y'";
+
+        if (!manufacturer_name.equals("") && manufacturer_name != null) {
+            query += " and mr.manufacturer_name='" + manufacturer_name + "' ";
+        }
+        if (!item_name.equals("") && item_name != null) {
+            query += " and inn.item_name='" + item_name + "' ";
+        }
+        query += " group by m.model order by model ";
+
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

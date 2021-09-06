@@ -80,7 +80,8 @@
                                         Admin
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>                                        
+                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
+                                        <a href="CalendarController" class="dropdown-item">View Calendar</a>
                                     </div>
                                 </li>
 

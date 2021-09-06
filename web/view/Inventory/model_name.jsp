@@ -132,11 +132,13 @@
 
         $("#searchModel").autocomplete({
             source: function (request, response) {
+                var manufacturer_name = document.getElementById("searchManufacturer").value;
+                var searchItem = document.getElementById("searchItem").value;
                 var random = document.getElementById("searchModel").value;
                 $.ajax({
                     url: "ModelNameController",
                     dataType: "json",
-                    data: {action1: "getModel", str: random},
+                    data: {action1: "getModel", str: random,str2:manufacturer_name,str3:searchItem},
                     success: function (data) {
                         console.log(data);
                         response(data.list);

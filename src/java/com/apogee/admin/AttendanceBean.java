@@ -18,6 +18,7 @@ public class AttendanceBean {
     private String longitude;
     private String coming_time;
     private String going_time;
+    private String distance_between;
 
     /**
      * @return the kp_id
@@ -101,6 +102,20 @@ public class AttendanceBean {
      */
     public void setGoing_time(String going_time) {
         this.going_time = going_time;
+    }
+
+    /**
+     * @return the distance_between
+     */
+    public String getDistance_between() {
+        return distance_between;
+    }
+
+    /**
+     * @param distance_between the distance_between to set
+     */
+    public void setDistance_between(String distance_between) {
+        this.distance_between = distance_between;
     }
     
     

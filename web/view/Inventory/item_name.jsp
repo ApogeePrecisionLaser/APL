@@ -168,6 +168,7 @@
 
 
     function makeEditable(id) {
+        $('#item_name_id').val("");
         document.getElementById("item_type").disabled = false;
         document.getElementById("item_name").disabled = false;
         document.getElementById("item_code").disabled = false;

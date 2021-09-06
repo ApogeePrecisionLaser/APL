@@ -25,36 +25,30 @@
 <script>
 
 
-    $(document).ready(
-            function () {
-                $('#mytable tbody').on(
-                        'click',
-                        'tr',
-                        function () {
-                            if ($(this).hasClass('selected_row')) {
-                                $(this).removeClass('selected_row');
-                            } else {
-                                $("#mytable").DataTable().$(
-                                        'tr.selected_row').removeClass(
-                                        'selected_row');
-                                $(this).addClass('selected_row');
-                            }
-                        });
-            });
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
 
 
     $(function () {
-        $("#organisation_type").autocomplete({
+        $("#key_person").autocomplete({
 
             source: function (request, response) {
-
-                var random = document.getElementById("organisation_type").value;
+                var random = document.getElementById("key_person").value;
                 $.ajax({
-                    url: "OrganizationNameController",
+                    url: "AttendanceController",
                     dataType: "json",
-                    data: {action1: "getOrganisationTypeName", str: random},
+                    data: {action1: "getKeyPerson", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -65,17 +59,14 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#organisation_type').val(ui.item.label); // display the selected text
+                $('#key_person').val(ui.item.label); // display the selected text
                 return false;
             }
         });
-
     });
 
 
 </script>
-
-
 
 
 <section>
@@ -84,36 +75,35 @@
     </div>
 </section>
 
-
-
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Search Engine</h5>
         </div>
-        <form name="form1" method="POST" action="AttendanceController" onsubmit="return verifySearch();" >
+        <form name="form1" method="POST" action="AttendanceController">
             <div class="row mt-3">
-                <!--                <div class="col-md-3">
-                                    <div class="form-group mb-md-0">
-                                        <label>Organization Type</label>
-                                        <input type="text" Placeholder="Organization Type" class="form-control myInput searchInput1 w-100">
-                                    </div>
-                                </div>-->
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="form-group mb-md-0">
-                        <label>Key Person Name</label>
-                        <input type="text"  id="kp_name" name="kp_name" value="" Placeholder="Key Person Name" class="form-control myInput searchInput1 w-100" >
+                        <label>Key Person</label>
+                        <input type="text" Placeholder="Key Person" name="key_person" id="key_person" value="${key_person}" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Date</label>
+                        <input type="date" name="date" id="date" value="" Placeholder="Item Name" class="form-control myInput searchInput1 w-100" >
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <input type="submit" class="btn formBtn" id="search_record" name="search_record" value="SEARCH RECORDS">
+                </div>
             </div>
         </form>
-        <hr>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
-            </div>
-        </div>
     </div>
 </section>
 
@@ -132,6 +122,7 @@
                                 <th>Name</th>
                                 <th>Entry Time</th>                                    
                                 <th>Exit Time</th>
+                                <th>Distance(Km)</th>
                                 <th>Latitude</th>
                                 <th>Longitude</th>
                             </tr>
@@ -145,24 +136,17 @@
                                     <td id="${loopCounter.count }2">${beanType.kp_name}</td>
                                     <td id="${loopCounter.count }3">${beanType.coming_time}</td>
                                     <td id="${loopCounter.count }4">${beanType.going_time}</td>
-                                    <td id="${loopCounter.count }5">${beanType.latitude}</td>
-                                    <td id="${loopCounter.count }6">${beanType.longitude}</td>                            
-                            </tr>
-                        </c:forEach>
+                                    <td id="${loopCounter.count }5">${beanType.distance_between}</td>
+                                    <td id="${loopCounter.count }6">${beanType.latitude}</td>
+                                    <td id="${loopCounter.count }7">${beanType.longitude}</td>                            
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
 </section>
-
-
-
-
-
-
-
 
 <%@include file="../layout/footer.jsp" %>
