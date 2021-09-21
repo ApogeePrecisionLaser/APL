@@ -154,6 +154,9 @@ public class OrganisationTypeController extends HttpServlet {
             
             List<OrganisationType> orgTypeList = orgTypeModel.showData(searchOrgType, searchgeneration, active, searchhierarchy);
 
+            request.setAttribute("searchOrgType", searchOrgType);
+            request.setAttribute("searchgeneration", searchgeneration);
+            request.setAttribute("hierarchysearch", searchhierarchy);
             request.setAttribute("orgTypeList", orgTypeList);
             request.setAttribute("message", orgTypeModel.getMessage());
             request.setAttribute("msgBgColor", orgTypeModel.getMsgBgColor());

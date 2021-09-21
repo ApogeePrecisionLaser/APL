@@ -40,6 +40,9 @@ public class OrgOfficeController extends HttpServlet {
             String designation = request.getParameter("searchDesignation");
             String after_save_organisation = (request.getParameter("organisation_name"));
             String after_save_office_type = (request.getParameter("office_type"));
+            String searchmobile=request.getParameter("searchmobile");
+            String searchgeneration=request.getParameter("searchgeneration");
+            String searchhierarchy=request.getParameter("searchhierarchy");
 
             if (serial_no != null && !serial_no.isEmpty()) {
                 serial_no = serial_no.trim();
@@ -213,6 +216,7 @@ public class OrgOfficeController extends HttpServlet {
             office_name_search = request.getParameter("office_name_search");
             serial_no = request.getParameter("searchDesignationCode");
             designation = request.getParameter("searchDesignation");
+            
 
             try {
 
@@ -263,6 +267,9 @@ public class OrgOfficeController extends HttpServlet {
             request.setAttribute("org_name", org_name);
             request.setAttribute("office_code_search", office_code_search);
             request.setAttribute("office_name_search", office_name_search);
+            request.setAttribute("searchmobile",searchmobile );
+            request.setAttribute("searchgeneration", searchgeneration);
+            request.setAttribute("searchhierarchy", searchhierarchy);
             organisationModel.closeConnection();
 //            if (isOrgBasicStep.equals("Yes")) {
 //                if (task.equals("Save & Next")) {

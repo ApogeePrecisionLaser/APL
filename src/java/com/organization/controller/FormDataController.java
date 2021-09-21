@@ -123,7 +123,7 @@ public class FormDataController extends HttpServlet {
                     } else if (JQstring.equals("mobile_number")) {
                         list = keyModel.getMobilevalidty(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getMobile")) {
-                        list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
+                     //   list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getCityName")) {
                         list = keyModel.getCityName(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getOfficeType")) {

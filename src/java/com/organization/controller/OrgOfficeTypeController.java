@@ -122,6 +122,7 @@ public class OrgOfficeTypeController extends HttpServlet {
             // Logic to show data in the table.
             List<OrgOfficeType> orgOfficeTypeList = orgOfficeTypeModel.showData(searchOrgOfficeType, active);
             request.setAttribute("orgOfficeTypeList", orgOfficeTypeList);
+            request.setAttribute("searchOrgOfficeType", searchOrgOfficeType);
             request.setAttribute("message", orgOfficeTypeModel.getMessage());
             request.setAttribute("msgBgColor", orgOfficeTypeModel.getMsgBgColor());
 

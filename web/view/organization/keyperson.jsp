@@ -209,10 +209,11 @@
 
             source: function (request, response) {
                 var random = document.getElementById("searchmobile").value;
+                var code = document.getElementById("searchKeyPerson").value;
                 $.ajax({
                     url: "KeypersonController",
                     dataType: "json",
-                    data: {action1: "getMobile", str: random},
+                    data: {action1: "getMobile", str: random, action2: code},
                     success: function (data) {
 
                         console.log(data);
@@ -266,13 +267,13 @@
 
             source: function (request, response) {
 
-                //                var code = document.getElementById("searchOfficeCode").value;
+                var code = document.getElementById("searchfamily").value;
                 var random = document.getElementById("searchKeyPerson").value;
                 $.ajax({
                     url: "KeypersonController",
                     dataType: "json",
                     data: {action1: "getSearchKeyPerson",
-                        str: random},
+                        str: random,action2:code},
                     success: function (data) {
 
                         console.log(data);
@@ -298,11 +299,12 @@
 
                 //                var code = document.getElementById("searchOfficeCode").value;
                 var random = document.getElementById("searchfamily").value;
+                var code = document.getElementById("searchOrg").value;
                 $.ajax({
                     url: "KeypersonController",
                     dataType: "json",
                     data: {action1: "getfamilycode",
-                        str: random},
+                        str: random, action2: code},
                     success: function (data) {
 
                         console.log(data);
@@ -489,7 +491,7 @@
         $('#familyoffice').val($("#" + count + '35').html());
         $('#familydesignation').val($("#" + count + '36').html());
         $('#relation').val($("#" + count + '37').html());
-        getImagePath(id);
+        //getImagePath(id);
 
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
@@ -877,6 +879,12 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group mb-md-0">
+                        <label>Office Code</label>
+                        <input class="form-control myInput" type="text" id="searchfamily" name="searchfamily" value="${searchfamily}" size="20">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group mb-md-0">
                         <label>Person Name</label>
                         <input class="form-control myInput" type="text" id="searchKeyPerson" name="searchKeyPerson" value="${searchKeyPerson}"  size="20">
                     </div>
@@ -887,12 +895,7 @@
                         <input class="form-control myInput" type="text" id="searchmobile" name="searchmobile" value="${searchmobile}" size="20">
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group mb-md-0">
-                        <label>Office Code</label>
-                        <input class="form-control myInput" type="text" id="searchfamily" name="searchfamily" value="${searchfamily}" size="20">
-                    </div>
-                </div>
+
 
             </div>
 

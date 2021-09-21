@@ -119,7 +119,7 @@ public class KeyPersonNewController extends HttpServlet {
                     } else if (JQstring.equals("mobile_number")) {
                         list = keyModel.getMobilevalidty(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getMobile")) {
-                        list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
+//                        list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getCityName")) {
                         list = keyModel.getCityName(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getOfficeType")) {
@@ -157,7 +157,7 @@ public class KeyPersonNewController extends HttpServlet {
                     } else if (JQstring.equals("searchOrgOfficeCode")) {
                         list = keyModel.searchOrgOfficeCode(q);
                     } else if (JQstring.equals("getfamilycode")) {
-                        list = keyModel.searchfamilyOfficeCode(q);
+//                        list = keyModel.searchfamilyOfficeCode(q);
                     }
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);

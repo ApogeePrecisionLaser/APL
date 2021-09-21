@@ -236,7 +236,8 @@
                 <div class="col-md-12">
                     <div class="form-group mb-md-0">
                         <label>Office Type</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchOrgOfficeType" name="searchOrgOfficeType" value="${searchOrgOfficeType}" size="30" >
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchOrgOfficeType" name="searchOrgOfficeType" 
+                               value="${searchOrgOfficeType}" size="30" >
                     </div>
                 </div>
             </div>

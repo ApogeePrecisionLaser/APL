@@ -243,6 +243,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             // Logic to show data in the table.
             List<OrganisationDesignationBean> organisationList = organisationModel.showData(searchOrgOffice, designation);
        
+            request.setAttribute("searchOrgOffice", searchOrgOffice);
             request.setAttribute("message", organisationModel.getMessage());
             request.setAttribute("msgBgColor", organisationModel.getMsgBgColor());
 

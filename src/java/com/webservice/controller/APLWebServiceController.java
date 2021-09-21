@@ -26,6 +26,10 @@ import java.time.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+
+
+
+
 /**
  *
  * @author Vikrant
@@ -124,7 +128,7 @@ public class APLWebServiceController {
     @Path("/getAllTableRecords")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public JSONObject getAllTableRecords(String dataString) {
+    public JSONObject getAllTableRecords(String number) {
         System.err.println("aplService--------------------");
         APLWebServiceModel model = new APLWebServiceModel();
         try {
@@ -139,36 +143,45 @@ public class APLWebServiceController {
             //JSONObject obj = new JSONObject();
             JSONArray json = null;
 
-            json = model.getOrganisationType();
+            json = model.getOrganisationType(number);
             obj.put("organisation_type", json);
-            json = model.getOrganisationName();
+            json = model.getOrganisationName(number);
             obj.put("organisation_name", json);
-            json = model.getOrgOfficeType();
+            json = model.getOrgOfficeType(number);
             obj.put("org_office_type", json);
-            json = model.getOrgOffice();
+            json = model.getOrgOffice(number);
             obj.put("org_office", json);
-            json = model.getOrgOfficeDesignationMap();
+            json = model.getOrgOfficeDesignationMap(number);
             obj.put("org_office_designation_map", json);
-            json = model.getDesignation();
+            json = model.getDesignation(number);
             obj.put("designation", json);
-            json = model.getCity();
+            json = model.getCity(number);
             obj.put("city", json);
-            json = model.getKeyPerson();
+            json = model.getKeyPerson(number);
             obj.put("key_person", json);
-            json = model.getItemType();
-            obj.put("item_type", json);
-            json = model.getItemNames();
-            obj.put("item_names", json);
-            json = model.getGeneralImageDetails();
-            obj.put("general_image_details", json);
-            json = model.getImageDestination();
-            obj.put("image_destination", json);
-            json = model.getImageUploadedFor();
-            obj.put("image_uploaded_for", json);
-            json = model.getItemImageDetails();
-            obj.put("item_image_details", json);
-            json = model.getIdType();
-            obj.put("id_type", json);
+
+            json = model.getImageData(number);
+            obj.put("image_data", json);
+
+            json = model.getAttendanceData(number);
+            obj.put("attendance", json);
+
+            json = model.getHolidayData(number);
+            obj.put("holiday", json);
+//            json = model.getItemType(number);
+//            obj.put("item_type", json);
+//            json = model.getItemNames(number);
+//            obj.put("item_names", json);
+//            json = model.getGeneralImageDetails(number);
+//            obj.put("general_image_details", json);
+//            json = model.getImageDestination(number);
+//            obj.put("image_destination", json);
+//            json = model.getImageUploadedFor(number);
+//            obj.put("image_uploaded_for", json);
+//            json = model.getItemImageDetails(number);
+//            obj.put("item_image_details", json);
+//            json = model.getIdType(number);
+//            obj.put("id_type", json);
         } catch (Exception e) {
             System.out.println("Error in aplService getAllTableRecords()..." + e);
         }
@@ -183,7 +196,6 @@ public class APLWebServiceController {
         String result = "Failure";
 
         // Start check date time 
-
 //        ZoneId zoneid1 = ZoneId.of("Asia/Kolkata");
 //        ZoneId zoneid2 = ZoneId.of("Asia/Tokyo");
 //        LocalTime id1 = LocalTime.now(zoneid1);
@@ -191,9 +203,7 @@ public class APLWebServiceController {
 //        System.out.println("Kolkata --------"+id1);
 //        System.out.println("Japan --------"+id2);
 //        System.out.println(id1.isBefore(id2));
-
         // End check date time 
-        
         APLWebServiceModel model = new APLWebServiceModel();
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
@@ -209,14 +219,51 @@ public class APLWebServiceController {
             String longitude = jObj.get("longitude").toString();
 
             int count = model.saveAttendance(type, number, current_time, latitude, longitude);
-            if (count > 0) {
-                result = "Success";
+            if(count==60){
+                result="You are already IN";
+            }
+            if(count==50){
+                result="You are already OUT";
+            }
+            if (count==111) {
+                result = "Attendance Marked";
             }
         } catch (JSONException e) {
             System.out.println("com.webservice.controller.APLWebServiceController.saveAttendanceInOut()- " + e);
             result = e.toString();
         }
         return result;
+    }
+
+    @POST
+    @Path("/getCalendarData")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JSONObject getCalendarData(String number) {
+        APLWebServiceModel model = new APLWebServiceModel();
+        try {
+            model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
+        } catch (Exception e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
+        }
+        JSONObject obj = new JSONObject();
+
+        try {
+            JSONArray json = null;
+
+            json = model.getHolidayData(number);
+            obj.put("holiday_data", json);
+            json = model.getLeaveData(number);
+            obj.put("leave_data", json);
+            json = model.getLeaveTypeData(number);
+            obj.put("leave_type", json);
+            json = model.getStatusTypeData(number);
+            obj.put("status_type", json);
+
+        } catch (Exception e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
+        }
+        return obj;
     }
 
 }

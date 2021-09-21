@@ -143,6 +143,8 @@ public class DesignationController extends HttpServlet {
             // Logic to show data in the table.
             List<Designation> mediaList = designationModel.showData(searchDesignation, searchDesignationCode, active);
 
+            request.setAttribute("searchDesignationCode", searchDesignationCode);
+            request.setAttribute("searchDesignation", searchDesignation);
             request.setAttribute("message", message);
             request.setAttribute("msgBgColor", bgColor);
             request.setAttribute("mediaList", mediaList);

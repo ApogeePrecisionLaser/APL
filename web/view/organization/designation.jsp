@@ -252,13 +252,15 @@
                     <div class="form-group mb-md-0">
 
                         <label>Designation Code</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignationCode" name="searchDesignationCode" value="${searchDesignationCode}" size="150" >
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignationCode"
+                               name="searchDesignationCode" value="${searchDesignationCode}" size="150" >
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group mb-md-0">
                         <label>Designation</label>
-                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignation" name="searchDesignation" value="${searchDesignation}" size="150" >
+                        <input class="form-control myInput searchInput1 w-100" type="text" id="searchDesignation"
+                               name="searchDesignation" value="${searchDesignation}" size="150" >
                     </div>
                 </div>
             </div>

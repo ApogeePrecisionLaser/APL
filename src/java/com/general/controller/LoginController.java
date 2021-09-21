@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Shobha
+ * @author Komal
  */
 public class LoginController extends HttpServlet {
 
@@ -47,36 +47,44 @@ public class LoginController extends HttpServlet {
             System.out.print(e);
         }
         try {
-            System.out.println("conn -"+am);
+            System.out.println("conn -" + am);
 
             if (task.equals("login")) {
                 String user_name = request.getParameter("user_name");
                 String password = request.getParameter("password");
                 int count = am.checkLogin(user_name, password);
+                
+                session.setAttribute("log_user", user_name);
 
-                String designation = "";                                
+                String designation = "";
 
                 session.setAttribute("user_name", user_name);
                 session.setAttribute("password", password);
-                
-                designation=am.getDesignation(user_name,password);
-                if(designation.equals("")){
-                    designation="normal_user";
+
+                designation = am.getDesignation(user_name, password);
+                if (designation.equals("")) {
+                    designation = "normal_user";
                 }
-                
-                int logged_key_person_id=am.getKeyPersonId(user_name,password);
-                int logged_org_name_id=am.getOrgNameId(user_name,password);
-                
-                if(count>0){
-                    session.setAttribute("login_designation", designation);
+
+                int logged_key_person_id = am.getKeyPersonId(user_name, password);
+                int logged_org_name_id = am.getOrgNameId(user_name, password);
+                int logged_org_office_id = am.getOrgOfficeId(user_name, password);
+                String logged_org_name = am.getOrgName(user_name, password);
+                String logged_org_office = am.getOrgOffice(user_name, password);
+
+                if (count > 0) {
+                    session.setAttribute("logged_user_name", user_name);
+                    session.setAttribute("logged_designation", designation);
                     session.setAttribute("logged_org_name_id", logged_org_name_id);
+                    session.setAttribute("logged_org_office_id", logged_org_office_id);
+                    session.setAttribute("logged_org_name", logged_org_name);
+                    session.setAttribute("logged_org_office", logged_org_office);
                     session.setAttribute("logged_key_person_id", logged_key_person_id);
-                    request.getRequestDispatcher("index").forward(request, response);
-                }else{
+                    request.getRequestDispatcher("dashboard").forward(request, response);
+                } else {
                     request.setAttribute("message", "Credentials mis-match!");
-                    request.getRequestDispatcher("beforeLoginHomeView").forward(request, response);
+                    request.getRequestDispatcher("/").forward(request, response);
                 }
-                
 
 //                if (!designation.equals("")) {
 //
@@ -98,7 +106,7 @@ public class LoginController extends HttpServlet {
             }
             if (task.equals("logout")) {
                 session.invalidate();
-                request.getRequestDispatcher("beforeLoginHomeView").forward(request, response);
+                request.getRequestDispatcher("/").forward(request, response);
             }
             //request.getRequestDispatcher("index").forward(request, response);
         } catch (Exception e) {

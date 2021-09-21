@@ -232,7 +232,7 @@ public class OrgOfficeModel {
             }
             query += " ORDER BY og.organisation_name asc ";
 
-           // System.err.println("query--------------" + query);
+            // System.err.println("query--------------" + query);
             pstmt = connection.prepareStatement(query);
 
 //            pstmt.setString(1, org_name);
@@ -269,7 +269,7 @@ public class OrgOfficeModel {
                 organisation.setLatitude(rset.getString("latitude"));
                 organisation.setLongitude(rset.getString("longitude"));
                 list.add(organisation);
-              //  System.err.println("org-------------"+list.size());
+                //  System.err.println("org-------------"+list.size());
             }
         } catch (Exception e) {
             System.out.println("Error:--organisation--- showData--" + e);
@@ -951,7 +951,7 @@ public class OrgOfficeModel {
    
     
     public int getOrg_Office_id(String organisation_name) {
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '"+organisation_name+"' and active='Y' ";
+        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -983,7 +983,7 @@ public class OrgOfficeModel {
         return organisation_id;
     }
 
-    public int insertRecord(Org_Office orgOffice) {
+    public int insertRecord(Org_Office orgOffice) throws SQLException {
         String is_child = "", active = "";
         int rowsAffected = 0;
         int count = 0;
@@ -999,7 +999,6 @@ public class OrgOfficeModel {
                 is_child = "N";
             }
         }
-
         int orgid = orgOffice.getOrganisation_id();
         int org_officeid1 = getOrg_Office_id(orgOffice.getOrg_office_name());
         int org_officeid2 = getOrg_Office_id(orgOffice.getP_org());
@@ -1015,34 +1014,36 @@ public class OrgOfficeModel {
             if (org_officeid1 == org_officeid2) {
                 message = "Sorry! Parent-Child cannot be same!";
                 msgBgColor = COLOR_ERROR;
-                return rowsAffected;
+//                return rowsAffected;
             }
+
         }
         // to check if parent exist or not
-        String qry2 = "select count(*) from org_office where organisation_id='" + orgid + "' and "
-                + " org_office_id='" + org_officeid1 + "' and active='Y' ";
-        try {
-            PreparedStatement pst1 = connection.prepareStatement(qry2);
-            System.out.println("query for check -" + pst1);
-            ResultSet rst1 = pst1.executeQuery();
-            while (rst1.next()) {
-                count = rst1.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
-        }
-        if (count > 0) {
-            message = "Cannot save the record, already mapped!";
-            msgBgColor = COLOR_ERROR;
-            return rowsAffected;
-        }
-
-        //
+//        String qry2 = "select count(*) from org_office where organisation_id='" + orgid + "' and "
+//                + " org_office_id='" + org_officeid1 + "' and active='Y' ";
+//        try {
+//            PreparedStatement pst1 = connection.prepareStatement(qry2);
+//            System.out.println("query for check -" + pst1);
+//            ResultSet rst1 = pst1.executeQuery();
+//            while (rst1.next()) {
+//                count = rst1.getInt(1);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("error in insertRecord model -"de + e);
+//        }
+//
+//
+//
+//        if (count > 0) {
+//            message = "Cannot save the record, already mapped!";
+//            msgBgColor = COLOR_ERROR;
+//            return rowsAffected;
+//        }
+//
         String query1 = "select count(*) "
                 + " from org_office where organisation_id='" + orgid + "' "
                 + " and org_office_id='" + org_officeid1 + "' and "
                 + " parent_org_office_id='" + org_officeid2 + "' and active='Y' ";
-
         try {
             PreparedStatement pst = connection.prepareStatement(query1);
             System.out.println("query for check -" + pst);
@@ -1056,15 +1057,14 @@ public class OrgOfficeModel {
         if (count > 0) {
             message = "Cannot save the record, already mapped!";
             msgBgColor = COLOR_ERROR;
-            return rowsAffected;
+//            return rowsAffected;
         }
-
         String query = "INSERT INTO "
                 + "org_office( org_office_name,org_office_code,office_type_id, address_line1, "
                 + "address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
                 + "landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super,generation,latitude,longitude) "
                 + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?)";
-        //  int rowsAffected = 0;
+//  int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             //   pstmt.setInt(1, orgOffice.getOrganisation_id());
@@ -1451,7 +1451,8 @@ public class OrgOfficeModel {
 
             }
 
-            if (count <= 1 || count1 >= 1) {
+            if (count > 0) {
+                //count=0;
 
                 PreparedStatement pstmt = connection.prepareStatement(query1);
 //           pstmt.setInt(1,organisation_type_id);
@@ -1923,8 +1924,8 @@ public class OrgOfficeModel {
         }
         return list;
     }
-    
-     public List<String> getMobile(String q) {
+
+    public List<String> getMobile(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
         String query = "SELECT mobile_no1 from org_office where active='Y' group by mobile_no1";
@@ -1950,8 +1951,8 @@ public class OrgOfficeModel {
         }
         return list;
     }
-     
-       public List<String> gethierarchysearch(String q) {
+
+    public List<String> gethierarchysearch(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
         String query = "SELECT mobile_no1 from org_office where active='Y'";
@@ -1977,8 +1978,6 @@ public class OrgOfficeModel {
         }
         return list;
     }
-     
-     
 
     public int getDesgn_id(String office) {
         String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ?";
@@ -2073,13 +2072,14 @@ public class OrgOfficeModel {
 
     public List<String> getOrgOfficeCodeSearch(String q, String code) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_code FROM org_office as oo where oo.active='Y'"
-                + " AND if('" + code + "' = '' , oo.org_office_name like '%%' , oo.org_office_name = ? ) ";
+        String query = "SELECT oo.org_office_code FROM org_office as oo,organisation_name onn where oo.active='Y' and onn.active='Y' "
+                + "and oo.organisation_id=onn.organisation_id and onn.organisation_name='" + code + "'";
+
+        System.err.println("query-----------" + query);
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
             int count = 0;
-            pstmt.setString(1, code);
             q = q.trim();
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {    // move cursor from BOR to valid record.

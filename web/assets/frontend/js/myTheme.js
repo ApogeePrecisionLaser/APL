@@ -106,7 +106,23 @@ $('.clientSlider').owlCarousel({
      }
 })
 
-
+$('.sixSlider').owlCarousel({
+     loop:true,
+     margin:16,
+     nav:true,
+     dots:false,
+     responsive:{
+         0:{
+             items:1
+         },
+         600:{
+             items:4
+         },
+         1000:{
+             items:6
+         }
+     }
+})
 
 window.onscroll = function() {myFunction()};
 var navbar = document.getElementById("mainMenuWrap");

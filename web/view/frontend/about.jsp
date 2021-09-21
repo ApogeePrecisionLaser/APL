@@ -15,6 +15,120 @@
 
 
 
+<section class="sliderTimeline sectionPadding" >
+  <div class="container">
+    <div class="sectionHead mb-5">
+        <h2 class="specialFont marginBottom33">History and Timeline</h2>
+        <p class="text-center" >Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+    </div>
+    <div class="row1">
+      <div class="owl-carousel sixSlider owl-theme">
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/company.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2010</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/motion-sensor.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2011</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/factory.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2012</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/office-building.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2015</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/automation.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2016</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/office-building.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2019</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="">
+            <div class="timelineBoxWrap">
+              <div class="imgWrap">
+                <img src="assets/frontend/images/aboutCircle.png" class="circleImg mx-auto">
+                <img src="assets/frontend/images/product/steering-wheel.png" class="iconImg">
+              </div>
+              <div>
+                <p class="text-center mt-1 mb-0" style="font-weight: 600;">2021</p>
+                <p class="text-center fontFourteen">Glancing Back at Milestones of Success! Our Story Through Milestones</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
 <section class="aboutBox sectionPadding">
   <div class="container">
     <div class="row">

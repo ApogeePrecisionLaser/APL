@@ -134,22 +134,34 @@ form input:focus{
 .myTable table.dataTable th{
    white-space:nowrap;
    font-weight:600;
+   font-size: 14px;
 }
 .myTable table.dataTable td{
-   font-size:14.5px;
+   font-size:14px;
 }
-.table th, .table td {
-    padding: 7px 0.75rem;
+.table th {
+    vertical-align: middle!important;
+    padding: 10px 10px!important;
+}
+.table td {
+    vertical-align: middle!important;
+    padding: 10px 10px!important;
+}
+table.dataTable thead .sorting{
+    background-image: url("");
+}
+table.dataTable thead .sorting_asc {
+    background-image: url("")!important;
 }
 .myTable #mytable_paginate a {
-    padding: 4px 12px;
+    padding: 0px 8px;
     border-radius: 4px;
     color: #000;
     margin: 3px;
     border: 1px solid #000
 }
 .myTable #mytable_paginate a.current {
-    padding: 4px 12px;
+    padding: 0px 8px;
     border-radius: 4px;
     color: #fff;
     margin: 3px;

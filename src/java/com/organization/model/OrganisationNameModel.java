@@ -109,7 +109,7 @@ public class OrganisationNameModel {
 //        }
 //        return list;
 //    }
-    public List<OrganisationName> showData(int lowerLimit, int noOfRowsToDisplay, String org_name, String searchOrgSubType) {
+    public List<OrganisationName> showData(String org_name, String searchOrgSubType) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
 
         if (org_name == null) {

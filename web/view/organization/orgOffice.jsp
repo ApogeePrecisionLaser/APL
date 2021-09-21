@@ -672,25 +672,29 @@
                 <div class="col-md-4 mb-md-2">
                     <div class="form-group mb-md-0">
                         <label>Office Code</label>
-                        <input type="text"  class="form-control myInput" id="office_code_search" name="office_code_search" value="${office_code_search}" size="20">
+                        <input type="text"  class="form-control myInput" id="office_code_search" name="office_code_search" 
+                               value="${office_code_search}" size="20">
                     </div>
                 </div>
                 <div class="col-md-4 mb-md-2">
                     <div class="form-group mb-md-0">
                         <label>Office Name</label>
-                        <input type="text"  class="form-control myInput" id="office_name_search" name="office_name_search" value="${office_name_search}" size="20">
+                        <input type="text"  class="form-control myInput" id="office_name_search" name="office_name_search" 
+                               value="${office_name_search}" size="20">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Mobile Number</label>
-                        <input type="text"  class="form-control myInput" id="searchmobile" name="searchmobile" value="${searchmobile}" size="20">
+                        <input type="text"  class="form-control myInput" id="searchmobile" name="searchmobile" 
+                               value="${searchmobile}" size="20">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Generation</label>
-                        <input type="text"  class="form-control myInput" id="searchgeneration" name="searchgeneration" value="${searchgeneration}" size="20">
+                        <input type="text"  class="form-control myInput" id="searchgeneration" name="searchgeneration"
+                               value="${searchgeneration}" size="20">
                     </div>
                 </div>
                 <div class="col-md-4">

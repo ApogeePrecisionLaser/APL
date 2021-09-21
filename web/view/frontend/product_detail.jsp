@@ -23,7 +23,7 @@
       <p class="bottom30">7 ft Pro- 2000  for 40-45 HP</p>
     </div>
     <div class="row">
-      <div class="col-md-5 mb-4">
+      <div class="col-md-6 col-lg-5 mb-4">
         <div class="carousel-container position-relative row1">
           <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner thumbnailTop">
@@ -103,8 +103,8 @@
       </div>
 
 
-      <div class="col-md-1" style="max-width: 50px;"></div>
-      <div class="col-md-6">
+      <div class="col-lg-1 d-none d-lg-block" style="max-width: 50px;"></div>
+      <div class="col-md-6 col-lg-6">
         <div class="d-blok">
           <h2 class=" textGreen specialFont" style="font-weight: 600;">Scrapper</h2>
           <p class="textColor">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et dui vestibulum, bibendum purus sit amet, vulputate mauris. Ut adipiscing gravida tincidunt. Duis euismod placerat rhoncus. Phasellus mollis imperdiet placerat. Sed ac turpis nisl. Mauris at ante mauris. Aliquam posuere fermentum lorem, a aliquam mauris rutrum a. Curabitur sit amet pretium lectus, nec consequat orci.</p>
@@ -150,7 +150,7 @@
           </div>
         </div>
         <div class="mt-3">
-          <a href="contact" class="myButtonEffect mb-3" >Book Now</a> &nbsp <a href="#" class="myButtonEffect borderBtn" >Download Catalogue</a>
+          <a href="contact" class="myButtonEffect mb-3" >Book Now</a> &nbsp <a href="#" class="myButtonEffect borderBtn" >Download Brochure</a>
         </div>
       </div>
     </div>
@@ -204,7 +204,7 @@
       <div class="tab-pane fade show active" id="profile-just" role="tabpanel" aria-labelledby="profile-tab-just">
         <div>
           <div class="row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3 pr-md-0">
               <ul class="specificationList">
                 <li class="headList">Laser Guided Land Leveller</li>
                 <li class="bgGreen"></li>
@@ -221,7 +221,7 @@
                 <li>Axel: 2 Axels, 4 Tyres, Cross Type</li>
               </ul>
             </div>  
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3 pr-md-0">
               <ul class="specificationList">
                 <li class="headList">Rotary Laser Transmitter</li>
                 <li class="bgGreen"></li>
@@ -238,7 +238,7 @@
                 <li>Axel: 2 Axels, 4 Tyres, Cross Type</li>
               </ul>
             </div>      
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3 pr-md-0">
               <ul class="specificationList">
                 <li class="headList">Rotary Laser Receiver</li>
                 <li class="bgGreen"></li>

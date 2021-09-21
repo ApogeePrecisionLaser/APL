@@ -51,6 +51,17 @@
 	text-align: center!important;
 	margin-top: 33px;
 }
+  .sliderTimeline .timelineBoxWrap .imgWrap {
+    height: 215px;
+  }
+  .sliderTimeline .timelineBoxWrap .imgWrap .circleImg {
+    width: 160px;
+}
+  .sliderTimeline .timelineBoxWrap .imgWrap .iconImg {
+    margin: -166px 141px;
+    z-index: 99;
+    width: 45px;
+  }
 .aboutSection .experienceBox {
     width: 120px;
     padding: 17px 15px;

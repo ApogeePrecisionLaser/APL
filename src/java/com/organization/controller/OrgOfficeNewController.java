@@ -227,7 +227,6 @@ public class OrgOfficeNewController extends HttpServlet {
                 System.err.println("org_office_id----------------" + org_office_id);
                 if (org_office_id == 0) {
                     // if org_office_id was not provided, that means insert new record.
-                    System.err.println("insert------------------");
 
                     organisationModel.insertRecord(orgOffice);
                 } else {

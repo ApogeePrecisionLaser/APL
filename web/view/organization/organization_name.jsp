@@ -184,6 +184,7 @@
         document.getElementById("organisation_type").disabled = false;
         document.getElementById("code").disabled = false;
         document.getElementById("description").disabled = false;
+        document.getElementById("save").disabled = false;
         if (id === 'new') {
             // document.getElementById("message").innerHTML = "";      // Remove message
             $("#message").html("");
@@ -205,7 +206,7 @@
             document.getElementById("save_As").disabled = true;
             document.getElementById("delete").disabled = false;
         }
-        document.getElementById("save").disabled = false;
+        // document.getElementById("save").disabled = false;
     }
     function setDefaultColor(noOfRowsTraversed, noOfColumns) {
         for (var i = 0; i < noOfRowsTraversed; i++) {
@@ -317,6 +318,9 @@
         $('#organisation_name').val($("#" + count + '3').html());
         $('#code').val($("#" + count + '5').html());
         $('#description').val($("#" + count + '4').html());
+        document.getElementById("edit").disabled = false;
+        document.getElementById("delete").disabled = false;
+
     }
 
 
@@ -349,7 +353,7 @@
                 <div class="col-md-12">
                     <div class="form-group mb-md-0">
                         <label>Organization Name</label>
-                        <input type="text"  id="org_name" name="org_name" value="" Placeholder="Organization Name" class="form-control myInput searchInput1 w-100" >
+                        <input type="text"  id="org_name" name="org_name" value="${searchOrganisation_name}" Placeholder="Organization Name" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
                 <!--                <div class="col-md-3">
@@ -365,13 +369,14 @@
                                 </div>-->
 
             </div>
-        </form>
-        <hr>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
+
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <input type="submit" class="btn formBtn" id="hiera" name="search_org" value="SEARCH RECORDS" onclick="setStatus(id)">
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
 
@@ -470,10 +475,10 @@
                     </c:if>
                 </div>
                 <div class="col-md-12 text-center">                       
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)">
-                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" >
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" disabled="" onclick="makeEditable(id)" >
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" disabled=""  onclick="setStatus(id)">
+                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New"   onclick="makeEditable(id)" >
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" disabled=""  onclick="setStatus(id)" >
                 </div>
             </div>
         </form>
