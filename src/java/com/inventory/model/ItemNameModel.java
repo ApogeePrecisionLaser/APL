@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.ItemName;
+import com.lowagie.text.pdf.ArabicLigaturizer;
 import static com.organization.model.KeypersonModel.getRevisionnoForImage;
 import com.organization.tableClasses.KeyPerson;
 import java.io.File;
@@ -34,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.fileupload.FileItem;
 import org.json.simple.JSONArray;
 
@@ -52,14 +55,13 @@ public class ItemNameModel {
 
     public void setConnection(Connection con) {
         try {
-
             connection = con;
         } catch (Exception e) {
             System.out.println("ItemNameModel setConnection() Error: " + e);
         }
     }
 
-    public List<ItemName> showData(String searchItemName, String searchItemType, String itemCode) {
+    public List<ItemName> showData(String searchItemName, String searchItemType, String itemCode, String search_super_child, String search_generation) {
         List<ItemName> list = new ArrayList<ItemName>();
 
         if (searchItemName == null) {
@@ -71,64 +73,150 @@ public class ItemNameModel {
         if (itemCode == null) {
             itemCode = "";
         }
+        if (search_super_child == null) {
+            search_super_child = "";
+        }
+        if (search_generation == null) {
+            search_generation = "";
+        }
         int p_item_id = 0;
         if (!searchItemName.equals("")) {
             p_item_id = getParent_Item_id(searchItemName);
         }
         List<Integer> idList = new ArrayList<Integer>();
-        idList = getAllParentChildList(searchItemName);
-
-        String query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                + "itn.generation,itn.is_super_child "
-                + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
-
-//        if (!searchItemName.equals("") && searchItemName != null) {
-//            query += " and (itn.item_name='" + searchItemName + "' or itn.parent_id='" + p_item_id + "') ";
-//        }
-        if (!searchItemType.equals("") && searchItemType != null) {
-            query += " and itt.item_type='" + searchItemType + "' ";
-        }
-        if (!itemCode.equals("") && itemCode != null) {
-            query += " and itn.item_code='" + itemCode + "' ";
-        }
-        if (!searchItemName.equals("")) {
-            query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
-        }
-        if (!searchItemName.equals("")) {
-            query += " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
-
-        } else {
-            query += "order by generation ";
-
-        }
+        List<String> parentItemNameList = new ArrayList<String>();
+        String query = "";
 
         try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            while (rset.next()) {
-                ItemName bean = new ItemName();
-                bean.setItem_names_id(rset.getInt("item_names_id"));
-                bean.setItem_name((rset.getString("item_name")));
-                bean.setDescription(rset.getString("description"));
-                bean.setItem_code(rset.getString("item_code"));
-                bean.setItem_type(rset.getString("item_type"));
-                bean.setQuantity(rset.getInt("quantity"));
-                String parent_id = rset.getString("parent_id");
-                int generation = rset.getInt("generation");
-                if (parent_id == null) {
-                    parent_id = "";
+            if (searchItemName.equals("")) {
+                parentItemNameList = getParentItemNameList();
+                for (int i = 0; i < parentItemNameList.size(); i++) {
+                    searchItemName = parentItemNameList.get(i);
+                    idList = getAllParentChildList(searchItemName);
+                    query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+                            + "itn.generation,itn.is_super_child,itn.prefix "
+                            + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
+
+                    if (!searchItemType.equals("") && searchItemType != null) {
+                        query += " and itt.item_type='" + searchItemType + "' ";
+                    }
+
+                    if (!search_super_child.equals("") && search_super_child != null) {
+                        query += " and itn.is_super_child='" + search_super_child + "' ";
+                    }
+                    if (!search_generation.equals("") && search_generation != null) {
+                        query += " and itn.generation='" + search_generation + "' ";
+                    }
+                    if (!itemCode.equals("") && itemCode != null) {
+                        query += " and itn.item_code='" + itemCode + "' ";
+                    }
+
+                    query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                            + " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+
+                    ResultSet rset = connection.prepareStatement(query).executeQuery();
+                    while (rset.next()) {
+                        ItemName bean = new ItemName();
+                        bean.setItem_names_id(rset.getInt("item_names_id"));
+                        bean.setItem_name((rset.getString("item_name")));
+                        bean.setDescription(rset.getString("description"));
+                        bean.setItem_code(rset.getString("item_code"));
+                        bean.setItem_type(rset.getString("item_type"));
+                        bean.setQuantity(rset.getInt("quantity"));
+                        String parent_id = rset.getString("parent_id");
+                        int generation = rset.getInt("generation");
+                        if (parent_id == null) {
+                            parent_id = "";
+                        }
+                        String p_item = "";
+                        if (!parent_id.equals("")) {
+                            p_item = getparentItemName(parent_id);
+                        }
+                        bean.setParent_item(p_item);
+                        bean.setParent_item_id(parent_id);
+                        bean.setGeneration(generation);
+                        bean.setSuperp(rset.getString("is_super_child"));
+                        bean.setPrefix(rset.getString("prefix"));
+                        list.add(bean);
+                    }
                 }
-                String p_item = "";
-                if (!parent_id.equals("")) {
-                    p_item = getparentItemName(parent_id);
+            } else {
+                idList = getAllParentChildList(searchItemName);
+                query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+                        + "itn.generation,itn.is_super_child,itn.prefix "
+                        + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
+
+                if (!searchItemType.equals("") && searchItemType != null) {
+                    query += " and itt.item_type='" + searchItemType + "' ";
                 }
-                bean.setParent_item(p_item);
-                bean.setGeneration(generation);
-                bean.setSuperp(rset.getString("is_super_child"));
-                list.add(bean);
+                if (!search_super_child.equals("") && search_super_child != null) {
+                    query += " and itn.is_super_child='" + search_super_child + "' ";
+                }
+                if (!search_generation.equals("") && search_generation != null) {
+                    query += " and itn.generation='" + search_generation + "' ";
+                }
+                if (!itemCode.equals("") && itemCode != null) {
+                    query += " and itn.item_code='" + itemCode + "' ";
+                }
+                if (!searchItemName.equals("")) {
+                    query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+
+                }
+                if (!searchItemName.equals("")) {
+                    query += " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+                } else {
+                    query += "order by generation ";
+                }
+
+                ResultSet rset = connection.prepareStatement(query).executeQuery();
+                while (rset.next()) {
+                    ItemName bean = new ItemName();
+                    bean.setItem_names_id(rset.getInt("item_names_id"));
+                    bean.setItem_name((rset.getString("item_name")));
+                    bean.setDescription(rset.getString("description"));
+                    bean.setItem_code(rset.getString("item_code"));
+                    bean.setItem_type(rset.getString("item_type"));
+                    bean.setQuantity(rset.getInt("quantity"));
+                    String parent_id = rset.getString("parent_id");
+                    int generation = rset.getInt("generation");
+                    if (parent_id == null) {
+                        parent_id = "";
+                    }
+                    String p_item = "";
+                    if (!parent_id.equals("")) {
+                        p_item = getparentItemName(parent_id);
+                    }
+                    bean.setParent_item(p_item);
+                    bean.setParent_item_id(parent_id);
+                    bean.setGeneration(generation);
+                    bean.setSuperp(rset.getString("is_super_child"));
+                    bean.setPrefix(rset.getString("prefix"));
+                    list.add(bean);
+                }
             }
         } catch (Exception e) {
-            System.out.println("Error: ItemNameModel showdata-" + e);
+            System.err.println("Error:--ItemNameModel--- showData--" + e);
         }
+        return list;
+    }
+
+    public List<String> getParentItemNameList() {
+        PreparedStatement pstmt;
+        List<String> list = new ArrayList<String>();
+        String searchItemName = "";
+        try {
+            String query = " select item_name from item_names where (parent_id=0 or parent_id is null) and active='Y' ";
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                searchItemName = rst.getString("item_name");
+                list.add(searchItemName);
+            }
+        } catch (Exception e) {
+            System.out.println("Error:--ItemNameModel--- getParentItemNameList--" + e);
+        }
+
+        list.removeAll(Arrays.asList(0));
+
         return list;
     }
 
@@ -167,7 +255,7 @@ public class ItemNameModel {
         }
 
         try {
-            query = "SELECT distinct t2.item_names_id as lev2, t3.item_names_id as lev3, "
+            query = " SELECT distinct t2.item_names_id as lev2, t3.item_names_id as lev3, "
                     + " t4.item_names_id as lev4,t5.item_names_id as lev5,t6.item_names_id as lev6, "
                     + " t7.item_names_id as lev7,t8.item_names_id as lev8,t9.item_names_id as lev9,t10.item_names_id as lev10 "
                     + " FROM item_names AS t1 "
@@ -180,7 +268,7 @@ public class ItemNameModel {
                     + " LEFT JOIN item_names AS t8 ON t8.parent_id = t7.item_names_id and t8.active='Y' "
                     + " LEFT JOIN item_names AS t9 ON t9.parent_id = t8.item_names_id and t9.active='Y' "
                     + " LEFT JOIN item_names AS t10 ON t10.parent_id = t9.item_names_id and t10.active='Y' "
-                    + "  WHERE '" + item_names_id + "' in (t1.parent_id,t2.parent_id,t3.parent_id,t4.parent_id) ";
+                    + "  WHERE '" + item_names_id + "' in (t1.parent_id,t2.parent_id) ";
 
             pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -194,7 +282,6 @@ public class ItemNameModel {
                 list.add(rset.getInt(7));
                 list.add(rset.getInt(8));
                 list.add(rset.getInt(9));
-
             }
         } catch (Exception e) {
             System.out.println("Error:--ItemNameModel--- showData--" + e);
@@ -224,14 +311,10 @@ public class ItemNameModel {
         }
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
-
             ResultSet rset = pstmt.executeQuery();
-
             while (rset.next()) {
                 name = rset.getString("item_name");
-
             }
-
         } catch (Exception ex) {
             System.err.println("getparentItemName error---------" + ex);
         }
@@ -241,10 +324,11 @@ public class ItemNameModel {
 
     public int insertRecord(ItemName item_name, Iterator itr) throws SQLException {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
-                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child) VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
+                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         int p_item_id = 0;
+        int p_item_id_for_code = 0;
         String is_child = item_name.getSuperp();
         if (is_child != null) {
             if (is_child.equals("yes") || is_child.equals("Yes") || is_child.equals("YES") || is_child.equals("Y") || is_child.equals("y")) {
@@ -254,9 +338,13 @@ public class ItemNameModel {
             }
         }
         if (!item_name.getParent_item().equals("")) {
-            p_item_id = getParent_Item_id(item_name.getParent_item());
+            String parent_item_name_arr[] = item_name.getParent_item().split(" - ");
+            String p_item_name = parent_item_name_arr[0];
+            String item_code = parent_item_name_arr[1];
+            p_item_id_for_code = getParent_Item_id_for_code(p_item_name, item_code);
+            p_item_id = getParent_Item_id(p_item_name);
         }
-
+        
         int generation = 0;
         if (p_item_id == 0) {
             generation = 1;
@@ -264,18 +352,38 @@ public class ItemNameModel {
             generation = getParentGeneration(p_item_id) + 1;
         }
         String query2 = " select count(*) as count from item_names where item_code='" + item_name.getItem_code() + "' ";
-//        String query3 = " INSERT INTO item_image_details (image_name, image_path, date_time, description,item_names_id, "
-//                + " revision_no,active,remark) "
-//                + " VALUES(?,?,?,?,?,?,?,?) ";
+
         try {
-            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, item_name.getItem_name());
             pstmt.setInt(2, item_name.getItem_type_id());
             pstmt.setString(3, item_name.getDescription());
             pstmt.setInt(4, item_name.getRevision_no());
             pstmt.setString(5, "Y");
             pstmt.setString(6, "OK");
-            pstmt.setString(7, item_name.getItem_code());
+
+            List<String> list = new ArrayList<String>();
+            String parent_prefix = "";
+            String item_code = "";
+
+            StringBuilder item_code_builder = new StringBuilder();
+            item_code_builder.delete(0, item_code_builder.length());
+
+            if (p_item_id != 0) {
+                list = getParentPrefix(p_item_id_for_code);
+
+                if (list != null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        parent_prefix = list.get(i);
+                        item_code_builder.append(parent_prefix).toString();
+                    }
+                    item_code = (item_code_builder.toString() + item_name.getPrefix()).toString();
+                }
+            } else {
+                item_code = item_name.getPrefix();
+            }
+
+            pstmt.setString(7, item_code);
             pstmt.setInt(8, item_name.getQuantity());
             if (p_item_id == 0) {
                 pstmt.setString(9, null);
@@ -285,6 +393,7 @@ public class ItemNameModel {
 
             pstmt.setInt(10, generation);
             pstmt.setString(11, is_child);
+            pstmt.setString(12, item_name.getPrefix());
 
             ResultSet rset = connection.prepareStatement(query2).executeQuery();
             int count = 0;
@@ -296,10 +405,6 @@ public class ItemNameModel {
                 msgBgColor = COLOR_ERROR;
             } else {
                 rowsAffected = pstmt.executeUpdate();
-                ResultSet rs = pstmt.getGeneratedKeys();
-                while (rs.next()) {
-                    item_id = rs.getInt(1);
-                }
             }
             // rowsAffected = insertImageRecord(rowsAffected, item_name, itr, destination, item_id, image_name, image_count);
 
@@ -330,8 +435,51 @@ public class ItemNameModel {
         return generation;
     }
 
+    public List<String> getParentPrefix(int p_id) {
+        List<String> list = new ArrayList<String>();
+//        String query = "SELECT prefix FROM item_names WHERE item_names_id='" + p_id + "' and active='Y' ";
+
+        String query = " SELECT T2.prefix FROM (SELECT @r AS _id,"
+                + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id) AS parent_id, "
+                + " @l := @l + 1 AS lvl "
+                + " FROM"
+                + " (SELECT @r := '" + p_id + "', @l := 0) vars, "
+                + " item_names h "
+                + " WHERE @r <> 0) T1 "
+                + " JOIN item_names T2 "
+                + " ON T1._id = T2.item_names_id where T2.active='y'  "
+                + " ORDER BY T1.lvl DESC ";
+        String prefix = "";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                prefix = rset.getString("prefix");
+                list.add(prefix);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: getParentPrefix--" + e);
+        }
+        return list;
+    }
+
     public int getParent_Item_id(String item_name) {
         String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y' ";
+        int p_id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            p_id = rset.getInt("item_names_id");
+        } catch (Exception e) {
+            System.out.println("Error: getParent_Item_id--" + e);
+        }
+        return p_id;
+    }
+
+    public int getParent_Item_id_for_code(String item_name, String item_code) {
+
+        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and item_code='" + item_code + "' and active='Y' ";
         int p_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -468,7 +616,17 @@ public class ItemNameModel {
         DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
         Date date = new Date();
         String current_date = dateFormat.format(date);
-        int p_item_id = getParent_Item_id(item_name.getParent_item());
+        int p_item_id = 0;
+        int p_item_id_for_code = 0;
+
+        if (!item_name.getParent_item().equals("")) {
+            String parent_item_name_arr[] = item_name.getParent_item().split(" - ");
+            String p_item_name = parent_item_name_arr[0];
+            String item_code = parent_item_name_arr[1];
+            p_item_id_for_code = getParent_Item_id_for_code(p_item_name, item_code);
+            p_item_id = getParent_Item_id(p_item_name);
+        }
+
         int generation = 0;
 
         if (p_item_id == 0) {
@@ -480,15 +638,11 @@ public class ItemNameModel {
         String query1 = "SELECT max(revision_no) revision_no FROM item_names WHERE item_names_id = " + item_names_id + "  && active='Y' ";
         String query2 = "UPDATE item_names SET active=? WHERE item_names_id=? and revision_no=? ";
         String query3 = "INSERT INTO item_names(item_names_id,item_name,item_type_id,description,revision_no, "
-                + " active,remark,item_code,quantity,parent_id,generation,is_super_child) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        // String query4 = " select count(*) from item_image_details where item_names_id='" + item_names_id + "' ";
-//        String query5 = " INSERT INTO item_image_details (image_name, image_path, date_time, description,item_names_id,"
-//                + "active,remark) "
-//                + " VALUES(?,?,?,?,?,?,?)";
         int rowsAffected = 0;
         try {
-            connection.setAutoCommit(false);
+//            connection.setAutoCommit(false);
             PreparedStatement pstmt = connection.prepareStatement(query1);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -511,32 +665,54 @@ public class ItemNameModel {
                     psmt.setInt(5, revision);
                     psmt.setString(6, "Y");
                     psmt.setString(7, "OK");
-                    psmt.setString(8, item_name.getItem_code());
+
+                    List<String> list = new ArrayList<String>();
+                    String parent_prefix = "";
+                    String item_code = "";
+
+                    StringBuilder item_code_builder = new StringBuilder();
+                    item_code_builder.delete(0, item_code_builder.length());
+                    if (p_item_id_for_code != 0) {
+                        list = getParentPrefix(p_item_id_for_code);
+
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                parent_prefix = list.get(i);
+                                item_code_builder.append(parent_prefix).toString();
+                            }
+                            item_code = (item_code_builder.toString() + item_name.getPrefix()).toString();
+                        }
+                    } else {
+                        item_code = item_name.getPrefix();
+                    }
+
+                    psmt.setString(8, item_code);
                     psmt.setInt(9, item_name.getQuantity());
                     psmt.setInt(10, p_item_id);
                     psmt.setInt(11, generation);
                     psmt.setString(12, is_child);
+                    psmt.setString(13, item_name.getPrefix());
                     rowsAffected = psmt.executeUpdate();
 
-                    if (rowsAffected > 0) {
-                        status = true;
-                        item_id = item_names_id;
-                    } else {
-                        status = false;
-                    }
-                    //  rowsAffected = insertImageRecord(rowsAffected, item_name, itr, destination, item_id, image_name, image_count);
-
-                    if (rowsAffected > 0) {
-                        status = true;
-                        message = "Record updated successfully.";
-                        msgBgColor = COLOR_OK;
-                        connection.commit();
-                    } else {
-                        status = false;
-                        message = "Cannot update the record, some error.";
-                        msgBgColor = COLOR_ERROR;
-                        connection.rollback();
-                    }
+//                    if (rowsAffected > 0) {
+//                        status = true;
+//                        item_id = item_names_id;
+//                    } else {
+//                        status = false;
+//                    }
+//                    //  rowsAffected = insertImageRecord(rowsAffected, item_name, itr, destination, item_id, image_name, image_count);
+//
+//                    if (rowsAffected > 0) {
+//                        status = true;
+//                        message = "Record updated successfully.";
+//                        msgBgColor = COLOR_OK;
+//                        connection.commit();
+//                    } else {
+//                        status = false;
+//                        message = "Cannot update the record, some error.";
+//                        msgBgColor = COLOR_ERROR;
+//                        connection.rollback();
+//                    }
                 }
 
             }
@@ -624,14 +800,11 @@ public class ItemNameModel {
         int revision = 0;
         try {
             String query = " SELECT max(revision_no) as revision_no FROM item_names WHERE item_names_id =" + item_names_id + "  && active='Y' ";
-
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-
             ResultSet rset = pstmt.executeQuery();
 
             while (rset.next()) {
                 revision = rset.getInt("revision_no");
-
             }
         } catch (Exception e) {
             System.err.println("getRevisionno error:" + e);
@@ -642,17 +815,14 @@ public class ItemNameModel {
     public static String getRevisionnoForImage(ItemName key, int item_names_id) {
         String revision = "";
         try {
-
             String query = " SELECT max(revision_no) as revision_no FROM item_image_details"
                     + " WHERE item_names_id =" + item_names_id + "  && active='Y';";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-
             ResultSet rset = pstmt.executeQuery();
 
             while (rset.next()) {
                 revision = rset.getString("revision_no");
-
             }
         } catch (Exception e) {
             System.err.println("getRevisionnoForImage error:--" + e);
@@ -728,16 +898,12 @@ public class ItemNameModel {
     public static int getImageRevisionno(ItemName itemName, int item_names_id) {
         int revision = 0;
         try {
-
             String query = " SELECT max(revision_no) as revision_no FROM item_names WHERE item_names_id =" + item_names_id + "  && active='Y' ";
-
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-
             ResultSet rset = pstmt.executeQuery();
 
             while (rset.next()) {
                 revision = rset.getInt("revision_no");
-
             }
         } catch (Exception e) {
             System.err.println("getImageRevisionno error:--" + e);
@@ -746,7 +912,6 @@ public class ItemNameModel {
     }
 
     public int getItemNamesId(String item_name) {
-
         String query = "SELECT item_names_id FROM item_name WHERE item_name = ?";
         int id = 0;
         try {
@@ -819,7 +984,6 @@ public class ItemNameModel {
                     list.add(item_type);
                     count++;
                 }
-
             }
             if (count == 0) {
                 list.add("No such item_type exists.......");
@@ -848,7 +1012,6 @@ public class ItemNameModel {
                     list.add(item_name);
                     count++;
                 }
-
             }
             if (count == 0) {
                 list.add("No such item_name  exists.");
@@ -862,7 +1025,7 @@ public class ItemNameModel {
     public List<String> getItemCode(String q, String item_type, String item_name) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT itn.item_code FROM item_names itn,item_type itt where itn.item_type_id=itt.item_type_id and"
-                + " itn.active='Y' and itt.active='Y'  ";
+                + " itn.active='Y' and itt.active='Y' and itn.is_super_child='Y' ";
         if (!item_type.equals("") && item_type != null) {
             query += " and itt.item_type='" + item_type + "' ";
         }
@@ -880,7 +1043,6 @@ public class ItemNameModel {
                     list.add(item_code);
                     count++;
                 }
-
             }
             if (count == 0) {
                 list.add("No such item_code exists.......");
@@ -893,26 +1055,75 @@ public class ItemNameModel {
 
     public List<String> getParentItemName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_name  FROM item_names itn where"
-                + " itn.active='Y' and itn.is_super_child='N' group by itn.item_name ORDER BY itn.item_name ";
+        String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as parent_item_name  FROM item_names itn where"
+                + " itn.active='Y' and itn.is_super_child='N' ORDER BY itn.item_name ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
             while (rset.next()) {
-                String item_name = (rset.getString("item_name"));
+                String item_name = (rset.getString("parent_item_name"));
                 if (item_name.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(item_name);
                     count++;
                 }
-
             }
             if (count == 0) {
                 list.add("No such item_name exists.......");
             }
         } catch (Exception e) {
             System.out.println("Error:ItemNameModel--getParentItemName()-- " + e);
+        }
+        return list;
+    }
+
+    public List<String> getGeneration(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = "SELECT generation  FROM item_names itn where"
+                + " itn.active='Y' group by itn.generation ORDER BY itn.generation ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String generation = (rset.getString("generation"));
+                if (generation.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(generation);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such generation exists.......");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:ItemNameModel--getGeneration()-- " + e);
+        }
+        return list;
+    }
+
+    public List<String> getSuperChild(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = "SELECT is_super_child  FROM item_names itn where"
+                + " itn.active='Y' group by itn.is_super_child ORDER BY itn.is_super_child ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String is_super_child = (rset.getString("is_super_child"));
+                if (is_super_child.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(is_super_child);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such is_super_child exists.......");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:ItemNameModel--getSuperChild()-- " + e);
         }
         return list;
     }
@@ -933,27 +1144,26 @@ public class ItemNameModel {
         return destination_path;
     }
 
-    public int getCounting() {
-        int counting = 100;
-        int count = 0;
-        String query = " SELECT item_code FROM item_names order by item_names_id desc limit 1 ";
-        try {
-            PreparedStatement psmt = connection.prepareStatement(query);
-            ResultSet rs = psmt.executeQuery();
-            while (rs.next()) {
-                String item_code = rs.getString("item_code");
-                String item_code_arr[] = item_code.split("_");
-                int length = (item_code_arr.length) - 1;
-                count = Integer.parseInt(item_code_arr[length]);
-
-                counting = count;
-            }
-        } catch (Exception ex) {
-            System.out.println("ERROR: in getCounting in TraffiPoliceSearchModel : " + ex);
-        }
-        return counting + 1;
-    }
-
+//    public int getCounting() {
+//        int counting = 100;
+//        int count = 0;
+//        String query = " SELECT item_code FROM item_names order by item_names_id desc limit 1 ";
+//        try {
+//            PreparedStatement psmt = connection.prepareStatement(query);
+//            ResultSet rs = psmt.executeQuery();
+//            while (rs.next()) {
+//                String item_code = rs.getString("item_code");
+//                String item_code_arr[] = item_code.split("_");
+//                int length = (item_code_arr.length) - 1;
+//                count = Integer.parseInt(item_code_arr[length]);
+//
+//                counting = count;
+//            }
+//        } catch (Exception ex) {
+//            System.out.println("ERROR: in getCounting in TraffiPoliceSearchModel : " + ex);
+//        }
+//        return counting + 1;
+//    }
     public String getMessage() {
         return message;
     }

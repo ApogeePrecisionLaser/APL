@@ -28,8 +28,10 @@ public class ItemName {
     private String image_name;
     private String destination_path;
     private String parent_item;
+    private String parent_item_id;
     private int generation;
     private String superp;
+    private String prefix;
     /**
      * @return the item_names_id
      */
@@ -280,6 +282,34 @@ public class ItemName {
      */
     public void setSuperp(String superp) {
         this.superp = superp;
+    }
+
+    /**
+     * @return the parent_item_id
+     */
+    public String getParent_item_id() {
+        return parent_item_id;
+    }
+
+    /**
+     * @param parent_item_id the parent_item_id to set
+     */
+    public void setParent_item_id(String parent_item_id) {
+        this.parent_item_id = parent_item_id;
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
 }

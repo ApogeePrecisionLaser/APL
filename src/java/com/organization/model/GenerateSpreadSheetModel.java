@@ -118,7 +118,7 @@ public class GenerateSpreadSheetModel {
                 + " d.designation,d.designation_code ,oot.office_type"
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
                 + " org_office_designation_map oodm, org_office_type oot"
-                + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' "
+                + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
                 + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id ";

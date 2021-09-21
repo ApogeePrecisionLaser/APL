@@ -18,6 +18,9 @@ public class AttendanceBean {
     private String longitude;
     private String coming_time;
     private String going_time;
+    private String distance_between;
+    private String date;
+    private String contact;
 
     /**
      * @return the kp_id
@@ -101,6 +104,48 @@ public class AttendanceBean {
      */
     public void setGoing_time(String going_time) {
         this.going_time = going_time;
+    }
+
+    /**
+     * @return the distance_between
+     */
+    public String getDistance_between() {
+        return distance_between;
+    }
+
+    /**
+     * @param distance_between the distance_between to set
+     */
+    public void setDistance_between(String distance_between) {
+        this.distance_between = distance_between;
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     * @return the contact
+     */
+    public String getContact() {
+        return contact;
+    }
+
+    /**
+     * @param contact the contact to set
+     */
+    public void setContact(String contact) {
+        this.contact = contact;
     }
     
     

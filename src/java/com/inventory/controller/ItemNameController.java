@@ -40,7 +40,7 @@ import org.json.simple.JSONObject;
  * @author Komal
  */
 public class ItemNameController extends HttpServlet {
-
+    
     private File tmpDir;
 
     @Override
@@ -69,18 +69,14 @@ public class ItemNameController extends HttpServlet {
         String search_item_name = "";
         String search_item_type = "";
         String search_item_code = "";
+        String search_generation = "";
+        String search_super_child = "";
 
-//        String hex1 = (Integer.toHexString(9).toString());
-//        String hex2 = (Integer.toHexString(121).toString());
-//        String hex = hex1 + hex2;
-//        int decimal = Integer.parseInt(hex, 16);
-//        float b = decimal;
-//        float decimal_value=b/1000;
-//        System.out.println(decimal_value);
-//        1 bar to meters head = 10.19977 meters 
         search_item_name = request.getParameter("search_item_name");
         search_item_type = request.getParameter("search_item_type");
         search_item_code = request.getParameter("search_item_code");
+        search_generation = request.getParameter("search_generation");
+        search_super_child = request.getParameter("search_super_child");
 
         if (search_item_name == null) {
             search_item_name = "";
@@ -91,7 +87,12 @@ public class ItemNameController extends HttpServlet {
         if (search_item_code == null) {
             search_item_code = "";
         }
-
+        if (search_generation == null) {
+            search_generation = "";
+        }
+        if (search_super_child == null) {
+            search_super_child = "";
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -105,9 +106,6 @@ public class ItemNameController extends HttpServlet {
                 String q = request.getParameter("str");
                 String str2 = request.getParameter("str2");
                 String str3 = request.getParameter("str3");
-
-                //Auto increment count for emp code
-                counting = model.getCounting();
 
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
@@ -126,8 +124,14 @@ public class ItemNameController extends HttpServlet {
                     if (JQstring.equals("getParentItemName")) {
                         list = model.getParentItemName(q);
                     }
-                    if (json != null) {
+                    if (JQstring.equals("getGeneration")) {
+                        list = model.getGeneration(q);
+                    }
+                    if (JQstring.equals("getSuperChild")) {
+                        list = model.getSuperChild(q);
+                    }
 
+                    if (json != null) {
                         out.println(json);
                     } else {
                         Iterator<String> iter = list.iterator();
@@ -150,8 +154,8 @@ public class ItemNameController extends HttpServlet {
             List items = null;
             Iterator itr = null;
             List<File> list2 = new ArrayList<File>();
-            DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(); //Set the size threshold, above which content will be stored on disk.
-            fileItemFactory.setSizeThreshold(8 * 1024 * 1024); //1 MB Set the temporary directory to store the uploaded files of size above threshold.
+            DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+            fileItemFactory.setSizeThreshold(8 * 1024 * 1024);
             fileItemFactory.setRepository(new File(""));
             ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
             try {
@@ -161,11 +165,11 @@ public class ItemNameController extends HttpServlet {
                 while (itr.hasNext()) {
                     FileItem item = (FileItem) itr.next();
                     if (item.isFormField()) {
-                        System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getString() + "\n");//(getString())its for form field
+                        System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getString() + "\n");
                         map.put(item.getFieldName(), item.getString("UTF-8"));
 
                     } else {
-                        System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getName());//it is (getName()) for file related things
+                        System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getName());
                         if (item.getName() == null || item.getName().isEmpty()) {
                             map.put(item.getFieldName(), "");
                         } else {
@@ -273,27 +277,24 @@ public class ItemNameController extends HttpServlet {
                 model.deleteRecord(Integer.parseInt(map.get("item_name_id")));
             } else if (task.equals("Save") || task.equals("Save AS New") || task.equals("Save & Next")) {
                 int item_name_id = 0;
-                //  int item_image_details_id = 0;
                 try {
 
-                    item_name_id = Integer.parseInt(map.get("item_name_id"));
-                    // item_image_details_id = Integer.parseInt(map.get("item_image_details_id"));
+                    item_name_id = Integer.parseInt(map.get("item_name_id").trim());
                 } catch (Exception e) {
-//                    item_name_id = 0;
-//                    item_image_details_id = 0;
+                    item_name_id = 0;
                 }
 
                 if (task.equals("Save AS New")) {
                     item_name_id = 0;
-                    // item_image_details_id = 0;
                 }
 
                 ItemName bean = new ItemName();
                 bean.setItem_names_id(item_name_id);
-                bean.setItem_code(map.get("item_code").trim());
+                // bean.setItem_code(map.get("item_code").trim());
                 bean.setItem_type_id(model.getItemTypeID(map.get("item_type").trim()));
                 bean.setQuantity(Integer.parseInt(map.get("quantity").trim()));
                 bean.setItem_name(map.get("item_name").trim());
+                bean.setPrefix(map.get("prefix").trim());
                 bean.setParent_item(map.get("parent_item").trim());
                 bean.setDescription(map.get("description").trim());
                 String superp = map.get("super").trim();
@@ -302,43 +303,25 @@ public class ItemNameController extends HttpServlet {
                 }
                 bean.setSuperp(superp);
                 String item_image = "";
-                if (item_name_id == 0) {
-//                    if (imageNameList.size() > 0) {
-//                        for (int i = 0; i < imageNameList.size(); i++) {
-//                            bean.setItem_image_details_id(item_image_details_id);
-//                            bean.setImage_path(image_folder);
-//                            bean.setImage_name(image_name);
-//                            item_image = model.getDestination_Path("item_img");
-//                            response.setContentType("image/jpeg");
-//                            model.insertRecord(bean, itr, image_name, image_folder, i);
-//                        }
-//                    } else {
-                    model.insertRecord(bean, itr);
-                    // }
-                } else {
-//                    int image_count = model.getImageCount(item_name_id);
-//                    if (image_count == 0 || imageNameList.size() == 0) {
-                    model.updateRecord(bean, itr,item_name_id);
-                    // }
-//                    for (int i = (image_count + 1); i < (image_count + 1 + imageNameList.size()); i++) {
-//                        bean.setItem_image_details_id(item_image_details_id);
-//                        bean.setImage_path(image_folder);
-//                        bean.setImage_name(image_name);
-//                        item_image = model.getDestination_Path("item_img");
-//                        response.setContentType("image/jpeg");
-//                        model.updateRecord(bean, itr, item_name_id, image_name, image_folder, i);
-//                    }
 
+                if (item_name_id == 0) {
+                    model.insertRecord(bean, itr);
+                } else {
+                    model.updateRecord(bean, itr, item_name_id);
                 }
             }
 
-            List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code);
+            //Auto increment count for item code
+            //  counting = model.getCounting();
+            List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code,search_super_child,search_generation);
             String auto_item_code = "APL_ITEM_" + counting;
             request.setAttribute("list", list);
-            request.setAttribute("auto_item_code", auto_item_code);
+            // request.setAttribute("auto_item_code", auto_item_code);
             request.setAttribute("search_item_name", search_item_name);
             request.setAttribute("search_item_type", search_item_type);
             request.setAttribute("search_item_code", search_item_code);
+            request.setAttribute("search_super_child", search_super_child);
+            request.setAttribute("search_generation", search_generation);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             model.closeConnection();

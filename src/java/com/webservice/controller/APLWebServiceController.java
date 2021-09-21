@@ -167,6 +167,9 @@ public class APLWebServiceController {
             
             json=model.getImageData(number);
             obj.put("image_data", json);
+            
+            json=model.getAttendanceData(number);
+            obj.put("attendance", json);
 //            json = model.getItemType(number);
 //            obj.put("item_type", json);
 //            json = model.getItemNames(number);
@@ -195,7 +198,6 @@ public class APLWebServiceController {
         String result = "Failure";
 
         // Start check date time 
-
 //        ZoneId zoneid1 = ZoneId.of("Asia/Kolkata");
 //        ZoneId zoneid2 = ZoneId.of("Asia/Tokyo");
 //        LocalTime id1 = LocalTime.now(zoneid1);
@@ -203,9 +205,7 @@ public class APLWebServiceController {
 //        System.out.println("Kolkata --------"+id1);
 //        System.out.println("Japan --------"+id2);
 //        System.out.println(id1.isBefore(id2));
-
         // End check date time 
-        
         APLWebServiceModel model = new APLWebServiceModel();
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
@@ -221,14 +221,51 @@ public class APLWebServiceController {
             String longitude = jObj.get("longitude").toString();
 
             int count = model.saveAttendance(type, number, current_time, latitude, longitude);
-            if (count > 0) {
-                result = "Success";
+            if(count==60){
+                result="You are already IN";
+            }
+            if(count==50){
+                result="You are already OUT";
+            }
+            if (count==111) {
+                result = "Attendance Marked";
             }
         } catch (JSONException e) {
             System.out.println("com.webservice.controller.APLWebServiceController.saveAttendanceInOut()- " + e);
             result = e.toString();
         }
         return result;
+    }
+    
+    @POST
+    @Path("/getCalendarData")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JSONObject getCalendarData(String number) {
+        APLWebServiceModel model = new APLWebServiceModel();
+        try {
+            model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
+        } catch (Exception e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -"+e);
+        }
+        JSONObject obj = new JSONObject();
+
+        try {
+            JSONArray json = null;
+
+            json = model.getHolidayData(number);
+            obj.put("holiday_data", json);
+            json = model.getLeaveData(number);
+            obj.put("leave_data", json);
+            json = model.getLeaveTypeData(number);
+            obj.put("leave_type", json);
+            json = model.getStatusTypeData(number);
+            obj.put("status_type", json);
+
+        } catch (Exception e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -"+e);
+        }
+        return obj;
     }
 
 }

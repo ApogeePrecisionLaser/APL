@@ -53,20 +53,20 @@ public class ModelNameModel {
         }
     }
 
-    public List<ModelName> showData(String searchManufacturer, String searchModel, String searchItem, String active) {
+    public List<ModelName> showData(String searchManufacturer, String searchModel, String searchItemCode, String active) {
         List<ModelName> list = new ArrayList<ModelName>();
 
-        String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_name,mim.manufacturer_item_map_id,m.lead_time,"
-                + " m.min_quantity,m.daily_req FROM"
-                + " model m,manufacturer_item_map mim,item_names inn,manufacturer mr where m.active='Y' "
+        String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_code,mim.manufacturer_item_map_id,m.lead_time"
+                + " ,m.model_no,m.part_no "
+                + "  FROM model m,manufacturer_item_map mim,item_names inn,manufacturer mr where m.active='Y' "
                 + " and mim.active='Y' and mr.active='Y' and inn.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=inn.item_names_id and"
                 + " mim.manufacturer_id=mr.manufacturer_id ";
 
         if (!searchModel.equals("") && searchModel != null) {
             query += " and m.model='" + searchModel + "' ";
         }
-        if (!searchItem.equals("") && searchItem != null) {
-            query += " and inn.item_name='" + searchItem + "' ";
+        if (!searchItemCode.equals("") && searchItemCode != null) {
+            query += " and inn.item_code='" + searchItemCode + "' ";
         }
         if (!searchManufacturer.equals("") && searchManufacturer != null) {
             query += " and mr.manufacturer_name='" + searchManufacturer + "' ";
@@ -80,12 +80,13 @@ public class ModelNameModel {
                 bean.setModel_id(rset.getInt("model_id"));
                 bean.setModel((rset.getString("model")));
                 bean.setManufacturer_name(rset.getString("manufacturer_name"));
-                bean.setItem_name(rset.getString("item_name"));
+//                bean.setItem_name(rset.getString("item_name"));
+                bean.setItem_code(rset.getString("item_code"));
                 bean.setManufacturer_item_map_id(rset.getInt("manufacturer_item_map_id"));
-                bean.setDaily_req(rset.getInt("daily_req"));
-                bean.setMin_qty(rset.getInt("min_quantity"));
                 bean.setLead_time(rset.getInt("lead_time"));
                 bean.setDescription((rset.getString("description")));
+                bean.setModel_no(rset.getString("model_no"));
+                bean.setPart_no(rset.getString("part_no"));
 
                 list.add(bean);
             }
@@ -96,30 +97,63 @@ public class ModelNameModel {
     }
 
     public int insertRecord(ModelName model_name, Iterator itr, String image_name, String destination, int image_count) {
-        String query2 = " select count(*) as count from model where model='" + model_name.getModel() + "' ";
-        String query = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,min_quantity,daily_req,"
-                + " description,revision_no,active,remark) VALUES(?,?,?,?,?,?,?,?,?) ";
+        String query2 = " select count(*) as count from model where model='" + model_name.getModel() + "' and active='Y' ";
+        String query = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,"
+                + " description,revision_no,active,remark,model_no,part_no) VALUES(?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
-        int item_id = getItemId(model_name.getItem_name());
+        int manufacturer_item_map_id = 0;
+        int map_count = 0;
+        int item_id = getItemId(model_name.getItem_code());
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
-        int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
+        //  int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
 
-        if (manufacturer_item_map_id == 0) {
-            message = "First map this item to manufacturer!...";
-            msgBgColor = COLOR_ERROR;
-        }
+//        if (manufacturer_item_map_id == 0) {
+//            message = "First map this item to manufacturer!...";
+//            msgBgColor = COLOR_ERROR;
+//        }
         try {
-            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, (model_name.getModel()));
-            pstmt.setInt(2, manufacturer_item_map_id);
-            pstmt.setInt(3, model_name.getLead_time());
-            pstmt.setInt(4, model_name.getMin_qty());
-            pstmt.setInt(5, model_name.getDaily_req());
-            pstmt.setString(6, (model_name.getDescription()));
-            pstmt.setInt(7, model_name.getRevision_no());
-            pstmt.setString(8, "Y");
-            pstmt.setString(9, "OK");
+            String query3 = "insert into manufacturer_item_map(manufacturer_id,item_names_id,"
+                    + " active,revision,remark,created_by,serial_no,created_at) "
+                    + " values (?,?,?,?,?,?,?,now()) ";
+            
+            java.sql.PreparedStatement pstmt = connection.prepareStatement(query3, Statement.RETURN_GENERATED_KEYS);
+            String query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
+                    + " and active='Y'  ";
 
+            PreparedStatement pstmt1 = connection.prepareStatement(query4);
+            ResultSet rs1 = pstmt1.executeQuery();
+            while (rs1.next()) {
+                map_count = rs1.getInt("count");
+            }
+            if (map_count > 0) {
+                message = "Item has already mapped with this manufacturer!..";
+                msgBgColor = COLOR_ERROR;
+            } else {
+                pstmt.setInt(1, manufacturer_id);
+                pstmt.setInt(2, item_id);
+                pstmt.setString(3, "Y");
+                pstmt.setString(4, "0");
+                pstmt.setString(5, "OK");
+                pstmt.setString(6, "Komal");
+                pstmt.setString(7, model_name.getDescription());
+                rowsAffected = pstmt.executeUpdate();
+                ResultSet rs2 = pstmt.getGeneratedKeys();
+                while (rs2.next()) {
+                    manufacturer_item_map_id = rs2.getInt(1);
+                }
+            }
+
+            PreparedStatement pstm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstm.setString(1, (model_name.getModel()));
+            pstm.setInt(2, manufacturer_item_map_id);
+            pstm.setInt(3, model_name.getLead_time());
+            pstm.setString(4, (model_name.getDescription()));
+            pstm.setInt(5, model_name.getRevision_no());
+            pstm.setString(6, "Y");
+            pstm.setString(7, "OK");
+            pstm.setString(8, model_name.getModel_no());
+            pstm.setString(9, model_name.getPart_no());
             ResultSet rset = connection.prepareStatement(query2).executeQuery();
             int count = 0;
             while (rset.next()) {
@@ -129,8 +163,8 @@ public class ModelNameModel {
                 message = "Model Already Exists.";
                 msgBgColor = COLOR_ERROR;
             } else {
-                rowsAffected = pstmt.executeUpdate();
-                ResultSet rs = pstmt.getGeneratedKeys();
+                rowsAffected = pstm.executeUpdate();
+                ResultSet rs = pstm.getGeneratedKeys();
                 while (rs.next()) {
                     model_id = rs.getInt(1);
                 }
@@ -146,26 +180,86 @@ public class ModelNameModel {
             message = "Cannot save the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-        if (manufacturer_item_map_id == 0) {
-            message = "First map this item to manufacturer!...";
+        if (map_count > 0) {
+            message = "Item has already mapped with this manufacturer!..";
             msgBgColor = COLOR_ERROR;
         }
+
         return rowsAffected;
     }
 
     public int updateRecord(ModelName model_name, Iterator itr, int model_id, String image_name, String destination, int image_count) {
         int revision = ModelNameModel.getRevisionno(model_name, model_id);
         int updateRowsAffected = 0;
-        int item_id = getItemId(model_name.getItem_name());
+        int map_count = 0;
+        int item_id = getItemId(model_name.getItem_code());
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
-        int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
+        int manufacturer_item_map_id = model_name.getManufacturer_item_map_id();
+        //  int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
         boolean status = false;
         String query1 = "SELECT max(revision_no) revision_no FROM model WHERE model_id = " + model_id + "  && active='Y' ";
         String query2 = "UPDATE model SET active =? WHERE model_id =? and revision_no=? ";
-        String query3 = "INSERT INTO model(model_id,model,manufacturer_item_map_id,lead_time,min_quantity,daily_req,"
-                + " description,revision_no,active,remark) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String query3 = "INSERT INTO model(model_id,model,manufacturer_item_map_id,lead_time,"
+                + " description,revision_no,active,remark,model_no,part_no) VALUES(?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
         try {
+
+            int revision_no = ModelNameModel.getManufacturerItemMapRevisionno(model_name, manufacturer_item_map_id);
+
+            int rowsAffected_map = 0;
+            int count_map = 0;
+            int updateRowsAffected_map = 0;
+
+            String map_query1 = "SELECT max(revision) FROM manufacturer_item_map WHERE "
+                    + " manufacturer_item_map_id = " + manufacturer_item_map_id + " and active='Y' ";
+
+            String map_query2 = "UPDATE manufacturer_item_map SET active=? WHERE manufacturer_item_map_id=? and revision=? ";
+
+            String map_query3 = "insert into manufacturer_item_map(manufacturer_item_map_id,manufacturer_id,item_names_id, "
+                    + " active,revision,remark,created_by,serial_no,created_at) "
+                    + " values (?,?,?,?,?,?,?,?,now()) ";
+            String map_query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
+                    + " and active='Y'  ";
+
+            PreparedStatement pstmt1_map = connection.prepareStatement(map_query4);
+            ResultSet rs1_map = pstmt1_map.executeQuery();
+            while (rs1_map.next()) {
+                map_count = rs1_map.getInt("count");
+            }
+            if (map_count > 0) {
+                status = false;
+                message = "Item has already mapped with this manufacturer!..";
+                msgBgColor = COLOR_ERROR;
+            } else {
+                PreparedStatement pstmt_map = connection.prepareStatement(map_query1);
+                ResultSet rs_map = pstmt_map.executeQuery();
+
+                if (rs_map.next()) {
+                    revision_no = rs_map.getInt("max(revision)");
+                    PreparedStatement pstm_map = connection.prepareStatement(map_query2);
+                    pstm_map.setString(1, "N");
+                    pstm_map.setInt(2, manufacturer_item_map_id);
+                    pstm_map.setInt(3, revision_no);
+                    updateRowsAffected_map = pstm_map.executeUpdate();
+                    if (updateRowsAffected_map >= 1) {
+                        revision_no = rs_map.getInt("max(revision)") + 1;
+                        PreparedStatement psmt_map = (PreparedStatement) connection.prepareStatement(map_query3);
+                        psmt_map.setInt(1, manufacturer_item_map_id);
+                        psmt_map.setInt(2, manufacturer_id);
+                        psmt_map.setInt(3, item_id);
+                        psmt_map.setString(4, "Y");
+                        psmt_map.setInt(5, revision_no);
+                        psmt_map.setString(6, "OK");
+                        psmt_map.setString(7, "Komal");
+                        psmt_map.setString(8, model_name.getDescription());
+                        rowsAffected_map = psmt_map.executeUpdate();
+                    }
+                } else {
+                    message = "Key already mapped with some child!";
+                    msgBgColor = COLOR_ERROR;
+                }
+            }
             PreparedStatement pstmt = connection.prepareStatement(query1);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -181,12 +275,12 @@ public class ModelNameModel {
                     psmt.setString(2, (model_name.getModel()));
                     psmt.setInt(3, manufacturer_item_map_id);
                     psmt.setInt(4, model_name.getLead_time());
-                    psmt.setInt(5, model_name.getMin_qty());
-                    psmt.setInt(6, model_name.getDaily_req());
-                    psmt.setString(7, (model_name.getDescription()));
-                    psmt.setInt(8, revision);
-                    psmt.setString(9, "Y");
-                    psmt.setString(10, "OK");
+                    psmt.setString(5, (model_name.getDescription()));
+                    psmt.setInt(6, revision);
+                    psmt.setString(7, "Y");
+                    psmt.setString(8, "OK");
+                    psmt.setString(9, model_name.getModel_no());
+                    psmt.setString(10, model_name.getPart_no());
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
@@ -206,9 +300,14 @@ public class ModelNameModel {
             message = "Cannot update the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
+//        if (map_count > 0) {
+//            status = false;
+//            message = "Item has already mapped with this manufacturer!..";
+//            msgBgColor = COLOR_ERROR;
+//        }
         return rowsAffected;
     }
-    
+
     public int insertImageRecord(int rowsAffected, ModelName model_name, Iterator itr, String destination, int model_id, String image_name, int image_count) {
         String img_message = "";
         DateFormat dateFormat1 = new SimpleDateFormat("dd.MMMMM.yyyy");
@@ -230,7 +329,7 @@ public class ModelNameModel {
                         if (tempExt.equals(image_name)) {
                             String model = model_name.getModel().replaceAll("[^a-zA-Z0-9]", "_");
                             middleName = "img_Item_" + model + "_" + image_count;
-                            destination = "C:\\ssadvt_repository\\APL\\item\\" + model_name.getItem_name() + "\\" + model + "\\";
+                            destination = "C:\\ssadvt_repository\\APL\\item\\" + model_name.getItem_code()+ "\\" + model + "\\";
                             fieldName = "item_image";
                         }
 
@@ -304,6 +403,23 @@ public class ModelNameModel {
             }
         }
         return result;
+    }
+
+    public static int getManufacturerItemMapRevisionno(ModelName model_name, int manufacturer_item_map_id) {
+        int revision = 0;
+        try {
+            String query = " SELECT max(revision) as revision_no FROM manufacturer_item_map"
+                    + " WHERE manufacturer_item_map_id =" + manufacturer_item_map_id + "  && active='Y' ";
+
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+
+            while (rset.next()) {
+                revision = rset.getInt("revision_no");
+            }
+        } catch (Exception e) {
+        }
+        return revision;
     }
 
     public String getDestination_Path(String image_uploaded_for) {
@@ -467,10 +583,10 @@ public class ModelNameModel {
         return manufacturer_id;
     }
 
-    public static int getItemId(String item_name) {
+    public static int getItemId(String item_code) {
         int item_id = 0;
         try {
-            String query = " SELECT item_names_id FROM item_names WHERE item_name='" + item_name + "' "
+            String query = " SELECT item_names_id FROM item_names WHERE item_code='" + item_code + "' "
                     + " AND active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -486,11 +602,10 @@ public class ModelNameModel {
         return item_id;
     }
 
-    public static int getManufacturerItemMapId(int manufacturer_id, int item_id) {
+    public static int getManufacturerItemMapId(int model_id) {
         int manufacturer_item_map_id = 0;
         try {
-            String query = " SELECT manufacturer_item_map_id from manufacturer_item_map where item_names_id='" + item_id + "' "
-                    + " and manufacturer_id='" + manufacturer_id + "' and active='Y' ";
+            String query = " SELECT manufacturer_item_map_id from model where model_id='" + model_id + "' and active='Y' ";
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
 
@@ -505,9 +620,17 @@ public class ModelNameModel {
 
     public int deleteRecord(int model_id) {
         String query = "update model set active='N' where model_id = " + model_id;
+        int manufacturer_item_map_id = getManufacturerItemMapId(model_id);
+
         int rowsAffected = 0;
         try {
+            String query1 = "DELETE FROM manufacturer_item_map WHERE manufacturer_item_map_id = '" + manufacturer_item_map_id + "' "
+                    + "and active='Y' ";
+
             rowsAffected = connection.prepareStatement(query).executeUpdate();
+            PreparedStatement pstmt1 = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=0");
+            pstmt1.executeUpdate();
+            connection.prepareStatement(query1).executeUpdate();
         } catch (Exception e) {
             System.out.println("ModelNameModel deleteRecord() Error: " + e);
         }
@@ -518,6 +641,7 @@ public class ModelNameModel {
             message = "Cannot delete the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
+
         return rowsAffected;
     }
 
@@ -545,31 +669,32 @@ public class ModelNameModel {
         return list;
     }
 
-    public List<String> getItem(String q, String manufacturer_name) {
+    public List<String> getItemCode(String q, String manufacturer_name) {
         List<String> list = new ArrayList<String>();
         String query = "";
-        if (!manufacturer_name.equals("") && manufacturer_name != null) {
-            query = " SELECT inn.item_name FROM item_names inn,manufacturer mr,manufacturer_item_map mim where inn.active='Y' and mr.active='Y' "
-                    + " and mim.active='Y' and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and mr.manufacturer_name='" + manufacturer_name + "'"
-                    + " ORDER BY inn.item_name ";
-        } else {
-            query = " SELECT inn.item_name FROM item_names inn where inn.active='Y' "
-                    + " ORDER BY inn.item_name ";
-        }
-
+//        if (!manufacturer_name.equals("") && manufacturer_name != null) {
+//            query = " SELECT inn.item_name FROM item_names inn,manufacturer mr,manufacturer_item_map mim where inn.active='Y' and mr.active='Y' "
+//                    + " and mim.active='Y' and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and "
+//                    + " mr.manufacturer_name='" + manufacturer_name + "'"
+//                    + " ORDER BY inn.item_name ";
+//        } else {
+        query = " SELECT inn.item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
+                + " ORDER BY inn.item_code ";
+        // }
+       
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String item_name = (rset.getString("item_name"));
-                if (item_name.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(item_name);
+                String item_code = (rset.getString("item_code"));
+                if (item_code.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(item_code);
                     count++;
                 }
             }
             if (count == 0) {
-                list.add("No such item_name exists.");
+                list.add("No such item_code exists.");
             }
         } catch (Exception e) {
             System.out.println("ModelNameModel getItem ERROR - " + e);
@@ -577,9 +702,21 @@ public class ModelNameModel {
         return list;
     }
 
-    public List<String> getModel(String q) {
+    public List<String> getModel(String q, String manufacturer_name, String item_code) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT model_id, model FROM model  where active='Y' ORDER BY model ";
+        String query = " select m.model from model m,manufacturer mr,item_names inn,manufacturer_item_map mim "
+                + " where m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
+                + " and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and m.active='Y' and mr.active='Y' "
+                + " and mim.active='Y'";
+
+        if (!manufacturer_name.equals("") && manufacturer_name != null) {
+            query += " and mr.manufacturer_name='" + manufacturer_name + "' ";
+        }
+        if (!item_code.equals("") && item_code != null) {
+            query += " and inn.item_code='" + item_code + "' ";
+        }
+        query += " group by m.model order by model ";
+
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -596,6 +733,30 @@ public class ModelNameModel {
             }
         } catch (Exception e) {
             System.out.println("ModelNameModel getModel ERROR - " + e);
+        }
+        return list;
+    }
+
+    public List<String> getItemTypeForModelOrPart(String item_code) {
+        List<String> list = new ArrayList<String>();
+        String query = " select itemt.item_type from item_type itemt,item_names itemn where itemn.item_type_id=itemt.item_type_id and itemn.active='Y' "
+                + " and itemt.active='Y' ";
+
+        if (!item_code.equals("") && item_code != null) {
+            query += " and itemn.item_code='" + item_code + "' ";
+        }
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            while (rset.next()) {
+                String item_type = (rset.getString("item_type"));
+                list.add(item_type);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("ModelNameModel getItemTypeForModelOrPart ERROR - " + e);
         }
         return list;
     }

@@ -392,6 +392,112 @@
         <url-pattern>/manufacturer_item_map</url-pattern>
     </servlet-mapping>
     <!--End manufacturer item -->
+	
+	
+	
+	
+    <!--Start Basic Inventory -->
+    
+    <servlet>
+        <servlet-name>InventoryBasicController</servlet-name>
+        <servlet-class>com.inventory.controller.InventoryBasicController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InventoryBasicController</servlet-name>
+        <url-pattern>/InventoryBasicController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>inventory_basic</servlet-name>
+        <jsp-file>/view/Inventory/inventory_basic.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>inventory_basic</servlet-name>
+        <url-pattern>/inventory_basic</url-pattern>
+    </servlet-mapping>
+    <!--End Basic Inventory -->
+    
+    
+    <!--Start Inventory -->
+    
+    <servlet>
+        <servlet-name>InventoryController</servlet-name>
+        <servlet-class>com.inventory.controller.InventoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InventoryController</servlet-name>
+        <url-pattern>/InventoryController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>inventory</servlet-name>
+        <jsp-file>/view/Inventory/inventory.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>inventory</servlet-name>
+        <url-pattern>/inventory</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Inventory -->
+    
+    
+    <!--Start Indent -->
+    
+    <servlet>
+        <servlet-name>IndentController</servlet-name>
+        <servlet-class>com.inventory.controller.IndentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndentController</servlet-name>
+        <url-pattern>/IndentController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>indent</servlet-name>
+        <jsp-file>/view/Inventory/indent.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>indent</servlet-name>
+        <url-pattern>/indent</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Indent -->
+    
+    
+    <!--Start Item authorization -->
+    
+    <servlet>
+        <servlet-name>ItemAuthorizationController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemAuthorizationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemAuthorizationController</servlet-name>
+        <url-pattern>/ItemAuthorizationController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_authorization</servlet-name>
+        <jsp-file>/view/Inventory/item_authorization.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_authorization</servlet-name>
+        <url-pattern>/item_authorization</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Item authorization -->
+    
+    
+    <servlet>
+        <servlet-name>items_list</servlet-name>
+        <jsp-file>/view/Inventory/items_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>items_list</servlet-name>
+        <url-pattern>/items_list</url-pattern>
+    </servlet-mapping>
+    
+    
+    
     
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>
@@ -634,6 +740,23 @@
     <servlet-mapping>
         <servlet-name>view_attendance</servlet-name>
         <url-pattern>/view_attendance</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>CalendarController</servlet-name>
+        <servlet-class>com.apogee.admin.CalendarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarController</servlet-name>
+        <url-pattern>/CalendarController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>view_calendar</servlet-name>
+        <jsp-file>/view/admin/view_calendar.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>view_calendar</servlet-name>
+        <url-pattern>/view_calendar</url-pattern>
     </servlet-mapping>
     
     

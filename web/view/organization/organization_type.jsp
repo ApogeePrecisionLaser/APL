@@ -56,28 +56,28 @@
             }
         });
 
-        $("#hierarchysearch").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("hierarchysearch").value;
-                $.ajax({
-                    url: "OrganisationTypeController",
-                    dataType: "json",
-                    data: {action1: "gethierarchysearch", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#hierarchysearch').val(ui.item.label); // display the selected text
-                return false;
-            }
-        });
+//        $("#hierarchysearch").autocomplete({
+//            source: function (request, response) {
+//                var random = document.getElementById("hierarchysearch").value;
+//                $.ajax({
+//                    url: "OrganisationTypeController",
+//                    dataType: "json",
+//                    data: {action1: "gethierarchysearch", str: random},
+//                    success: function (data) {
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#hierarchysearch').val(ui.item.label); // display the selected text
+//                return false;
+//            }
+//        });
 
 
         $("#searchgeneration").autocomplete({
@@ -268,12 +268,12 @@
                         <input class="form-control myInput searchInput1 w-100" type="text" id="searchgeneration" name="searchgeneration" value="${searchgeneration}" size="30" >
                     </div>
                 </div>
-                <div class="col-md-4">
+<!--                <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Org Type Hierarchy</label>
                         <input class="form-control myInput searchInput1 w-100" type="text" id="hierarchysearch" name="hierarchysearch" value="${hierarchysearch}" size="30" >
                     </div>
-                </div>
+                </div>-->
 
             </div>
 

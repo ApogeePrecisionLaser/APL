@@ -61,8 +61,12 @@
                                         <a href="ItemTypeController" class="dropdown-item">Item Type</a>
                                         <a href="ItemNameController" class="dropdown-item">Item Name</a>
                                         <a href="ManufacturerController" class="dropdown-item">Manufacturer</a>
-                                        <a href="ManufacturerItemMapController" class="dropdown-item">Manufacturer Item Map</a>
-                                        <a href="ModelNameController" class="dropdown-item">Model Name</a>
+                                        <!--<a href="ManufacturerItemMapController" class="dropdown-item">Manufacturer Item Map</a>-->
+                                        <a href="ModelNameController" class="dropdown-item">Manufacturer Item Model Map</a>
+                                        <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
+                                        <a href="InventoryController" class="dropdown-item">Inventory</a>
+                                        <a href="IndentController" class="dropdown-item">Indent</a>
+                                        <a href="ItemAuthorizationController" class="dropdown-item">Item Authorization</a>
                                     </div> 
                                 </li>
 
@@ -80,7 +84,8 @@
                                         Admin
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>                                        
+                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
+                                        <a href="CalendarController" class="dropdown-item">View Calendar</a>
                                     </div>
                                 </li>
 

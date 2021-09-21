@@ -64,7 +64,7 @@ public class LoginModel {
         return count;
 
     }
-    
+
     public String getDesignation(String user_name, String password) {
         String str = "";
         PreparedStatement pstmt;
@@ -100,17 +100,17 @@ public class LoginModel {
                 str = rst.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("getDesignation ERROR inside orderMgmtModel - " + e);
+            System.out.println("getKeyPersonId ERROR inside LoginModel - " + e);
         }
         return str;
     }
-    
-    public int getOrgNameId(String user_name, String password) {
+
+    public int getOrgOfficeId(String user_name, String password) {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.organisation_id from org_office oo, key_person kp, login l "
-                + " where l.user_name='"+user_name+"' and l.password='"+password+"' "
+        String query = "select oo.org_office_id from org_office oo, key_person kp, login l "
+                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
         try {
             connection.setAutoCommit(false);
@@ -120,7 +120,89 @@ public class LoginModel {
                 str = rst.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("getDesignation ERROR inside orderMgmtModel - " + e);
+            System.out.println("getOrgOfficeId ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+
+    public String getOrgOffice(String user_name, String password) {
+        String str = "";
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = "select oo.org_office_name from org_office oo, key_person kp, login l "
+                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                str = rst.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getOrgOfficeId ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+    
+    public String getOfficeAdmin(String user_name, String password, int logged_org_office_id) {
+        String str = "";
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
+                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='"+logged_org_office_id+"' and kp.designation_id=d.designation_id "
+                + " and d.designation='Owner' and  oo.active='Y' and kp.active='Y' ";
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                str = rst.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getOfficeAdmin ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+
+    public int getOrgNameId(String user_name, String password) {
+        int str = 0;
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = "select oo.organisation_id from org_office oo, key_person kp, login l "
+                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                str = rst.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getDesignation ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+
+    public String getOrgName(String user_name, String password) {
+        String str = "";
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = "select orgn.organisation_name from org_office oo, key_person kp, login l,organisation_name orgn "
+                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and orgn.organisation_id=oo.organisation_id "
+                + " and oo.active='Y' and orgn.active='Y' ";
+        System.err.println("query" + query);
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                str = rst.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getOrgName ERROR inside LoginModel - " + e);
         }
         return str;
     }

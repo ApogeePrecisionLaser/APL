@@ -67,8 +67,9 @@ public class ModelNameController extends HttpServlet {
 
         try {
             String searchModel = "";
-            String searchItem = "";
+//            String searchItem = "";
             String searchManufacturer = "";
+            String searchItemCode = "";
             try {
                 String JQstring = request.getParameter("action1");
                 String q = request.getParameter("str");
@@ -78,12 +79,24 @@ public class ModelNameController extends HttpServlet {
                     if (JQstring.equals("getManufacturer")) {
                         list = model.getManufacturer(q);
                     }
-                    if (JQstring.equals("getItem")) {
+//                    if (JQstring.equals("getItem")) {
+//                        String str2 = request.getParameter("str2");
+//                        list = model.getItem(q, str2);
+//                    }
+                    if (JQstring.equals("getItemCode")) {
                         String str2 = request.getParameter("str2");
-                        list = model.getItem(q, str2);
+                        list = model.getItemCode(q, str2);
                     }
                     if (JQstring.equals("getModel")) {
-                        list = model.getModel(q);
+                        String str2 = request.getParameter("str2");
+                        String str3 = request.getParameter("str3");
+                        list = model.getModel(q, str2, str3);
+                    }
+                   
+                    
+                    if (JQstring.equals("getItemTypeForModelOrPart")) {
+                        String item_code = request.getParameter("item_code");
+                        list = model.getItemTypeForModelOrPart(item_code);
                     }
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
@@ -95,7 +108,8 @@ public class ModelNameController extends HttpServlet {
                 System.out.println("\n Error --ModelNameController get JQuery Parameters Part-" + e);
             }
             searchModel = request.getParameter("searchModel");
-            searchItem = request.getParameter("searchItem");
+           // searchItem = request.getParameter("searchItem");
+            searchItemCode = request.getParameter("searchItemCode");
             searchManufacturer = request.getParameter("searchManufacturer");
             try {
 
@@ -105,8 +119,11 @@ public class ModelNameController extends HttpServlet {
                 if (searchModel == null) {
                     searchModel = "";
                 }
-                if (searchItem == null) {
-                    searchItem = "";
+//                if (searchItem == null) {
+//                    searchItem = "";
+//                }
+                if (searchItemCode == null) {
+                    searchItemCode = "";
                 }
             } catch (Exception e) {
             }
@@ -265,15 +282,29 @@ public class ModelNameController extends HttpServlet {
                     //office_type_id = 0;
                 }
 
+                String model_no = "";
+                String part_no = "";
                 ModelName bean = new ModelName();
+                System.err.println("map.get(\"model_no\")---" + map.get("model_no"));
                 bean.setModel_id(model_id);
                 bean.setModel(map.get("model").trim());
                 bean.setManufacturer_name(map.get("manufacturer_name"));
                 bean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id")));
-                bean.setItem_name(map.get("item_name"));
-                bean.setLead_time(Integer.parseInt("0" + map.get("lead_time")));
-                bean.setMin_qty(Integer.parseInt("0" + map.get("min_quantity")));
-                bean.setDaily_req(Integer.parseInt("0" + map.get("daily_req")));
+//                bean.setItem_name(map.get("item_name"));
+                bean.setItem_code(map.get("item_code"));
+                bean.setLead_time(Integer.parseInt("0" + map.get("lead_time").trim()));
+                if (map.get("model_no") == null) {
+                    model_no = "";
+                } else {
+                    model_no = map.get("model_no");
+                }
+                if (map.get("part_no") == null) {
+                    part_no = "";
+                } else {
+                    part_no = map.get("part_no");
+                }
+                bean.setModel_no(model_no);
+                bean.setPart_no(part_no);
                 bean.setDescription(map.get("description").trim());
 
                 String item_image = "";
@@ -312,11 +343,11 @@ public class ModelNameController extends HttpServlet {
 //                }
             }
 
-            List<ModelName> list = model.showData(searchManufacturer, searchModel, searchItem, active);
+            List<ModelName> list = model.showData(searchManufacturer, searchModel, searchItemCode, active);
             request.setAttribute("list", list);
             request.setAttribute("searchManufacturer", searchManufacturer);
             request.setAttribute("searchModel", searchModel);
-            request.setAttribute("searchItem", searchItem);
+            request.setAttribute("searchItemCode", searchItemCode);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
 

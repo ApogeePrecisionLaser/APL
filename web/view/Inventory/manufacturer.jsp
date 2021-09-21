@@ -186,8 +186,8 @@
         </div>
         <div class="row mt-3 myTable">
             <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%">
+                <div class="table-responsive verticleScroll">
+                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
                         <thead>
                             <tr>
                                 <th>S.No.</th>
@@ -253,7 +253,7 @@
                         </div>
                     </c:if>
                 </div>
-                 <input type="hidden" id="clickedButton" name="clickedButton">
+                <input type="hidden" id="clickedButton" name="clickedButton">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>

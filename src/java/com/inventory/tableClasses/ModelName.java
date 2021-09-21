@@ -20,6 +20,7 @@ public class ModelName {
     private int min_qty;
     private int lead_time;
     private String item_name;
+    private String item_code;
     private int item_id;
     private int manufacturer_item_map_id;
     private String manufacturer_name;
@@ -28,6 +29,8 @@ public class ModelName {
     private String image_path;
     private String image_name;
     private String destination_path;
+    private String model_no;
+    private String part_no;
     
     /**
      * @return the model_id
@@ -279,6 +282,48 @@ public class ModelName {
      */
     public void setDestination_path(String destination_path) {
         this.destination_path = destination_path;
+    }
+
+    /**
+     * @return the model_no
+     */
+    public String getModel_no() {
+        return model_no;
+    }
+
+    /**
+     * @param model_no the model_no to set
+     */
+    public void setModel_no(String model_no) {
+        this.model_no = model_no;
+    }
+
+    /**
+     * @return the part_no
+     */
+    public String getPart_no() {
+        return part_no;
+    }
+
+    /**
+     * @param part_no the part_no to set
+     */
+    public void setPart_no(String part_no) {
+        this.part_no = part_no;
+    }
+
+    /**
+     * @return the item_code
+     */
+    public String getItem_code() {
+        return item_code;
+    }
+
+    /**
+     * @param item_code the item_code to set
+     */
+    public void setItem_code(String item_code) {
+        this.item_code = item_code;
     }
 
    
