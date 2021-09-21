@@ -102,7 +102,7 @@ public class KeypersonModel {
                     + " where (d.active='Y' or d2.active='Y') and k.active='Y' ";
 
             if (!office_code.equals("") && office_code != null) {
-                query1 += " and org.organisation_name='" + office_code + "' or org2.organisation_name='" + office_code + "'";
+                query1 += " and (org.organisation_name='" + office_code + "' or org2.organisation_name='" + office_code + "') ";
             }
             if (!mobile.equals("") && mobile != null) {
                 query1 += " and k.mobile_no1='" + mobile + "' ";
@@ -111,10 +111,12 @@ public class KeypersonModel {
                 query1 += " and k.key_person_name='" + person + "' ";
             }
             if (!familysearch.equals("") && familysearch != null) {
-                query1 += " and ot2.org_office_code='" + familysearch + "' or  ot.org_office_code='" + familysearch + "' ";
+                query1 += " and (ot2.org_office_code='" + familysearch + "' or  ot.org_office_code='" + familysearch + "') ";
             }
 
             query1 += " GROUP BY k.key_person_id ORDER BY key_person_name ";
+
+            System.err.println("query1=--------------------" + query1);
 
 //            +" AND (if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? ) "
 //                    + " OR if('" + office_code + "' = '' , org2.organisation_name like '%%' , org2.organisation_name = ? ) ) "
@@ -514,6 +516,10 @@ public class KeypersonModel {
 
                         String[] image_name = {key.getImage_path(), key.getId_proof()};
                         String revision_no = getRevisionnoForImage(key, key_id);
+                       if (revision_no == null) {
+                            revision_no = "0";
+
+                        }
                         for (int i = 0; i < image_name.length; i++) {
                             String tempExt = image_name[i];
                             String image_uploaded_for = "";
@@ -557,7 +563,6 @@ public class KeypersonModel {
                                     if (rowsAffectedImage >= 1) {
                                         revision_no = revision_no + 1;
                                     }
-
                                 }
 
                                 int index = tempExt.lastIndexOf(".");
@@ -571,7 +576,9 @@ public class KeypersonModel {
                                     WirteImage(key, itr, destination, imageName, fieldName);
                                 }
                             }
-
+                            if(revision_no==null){
+                                revision_no="";
+                            }
                             pstmt = connection.prepareStatement(query5);
                             pstmt.setString(1, key.getImage_name());
                             pstmt.setInt(2, getimage_destination_id(image_uploaded_for));
@@ -1031,7 +1038,13 @@ public class KeypersonModel {
 //        String query = "SELECT k.key_person_name FROM key_person  As k, org_office AS oft  WHERE k.org_office_id = oft.org_office_id and k.active='Y' "
 //                         + " AND if('"+ code +"' = '' , oft.org_office_code like '%%' , oft.org_office_code = ? ) ";
         //  + " GROUP BY key_person_name ";
-        String query = "SELECT k.key_person_name FROM key_person  As k where k.active='Y'";
+        String query = " SELECT k.key_person_name FROM key_person  As k, org_office AS oft  WHERE"
+                + " k.org_office_id = oft.org_office_id and k.active='Y'  ";
+        if (!code.equals("") && code != null) {
+            query += " and oft.org_office_code='" + code + "' ";
+        }
+        query += " group by k.key_person_name ";
+
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
@@ -1222,12 +1235,16 @@ public class KeypersonModel {
         return list;
     }
 
-    public List<String> getsearchMobile(String q) {
+    public List<String> getsearchMobile(String q, String person) {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
         String AdvertiseName = "";
-        String query = "SELECT mobile_no1 FROM key_person where key_person.active='Y'";
+        String query = "SELECT mobile_no1 FROM key_person where key_person.active='Y' ";
+        if (!person.equals("") && person != null) {
+            query += " and key_person_name='" + person + "' ";
+        }
+        System.err.println("query-----------" + query);
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -2021,9 +2038,13 @@ public class KeypersonModel {
         return list;
     }
 
-    public List<String> searchfamilyOfficeCode(String q) {
+    public List<String> searchfamilyOfficeCode(String q, String org_name) {
         List<String> list = new ArrayList<String>();
-        String query = "select distinct org.org_office_code from org_office as org where  org.active='Y'";
+        String query = "select distinct org.org_office_code from org_office as org ,organisation_name onn where org.active='Y'"
+                + " and onn.active='Y' and org.organisation_id=onn.organisation_id ";
+        if (!org_name.equals("") && org_name != null) {
+            query += " and onn.organisation_name='" + org_name + "' ";
+        }
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -2152,8 +2173,9 @@ public class KeypersonModel {
         }
         return image_name;
     }
-
+    
     public String getImagePath(String key_person_id, String uploadedFor) {
+        
         String img_name = "";
         if (uploadedFor.equals("ph")) {
             uploadedFor = "key_person_photo";
@@ -2168,8 +2190,9 @@ public class KeypersonModel {
         String query = "SELECT general_image_details_id,image_name, destination_path "
                 + " FROM general_image_details gid, image_destination dp, image_uploaded_for iuf "
                 + " WHERE dp.image_destination_id=gid.image_destination_id AND iuf.image_uploaded_for_id=dp.image_uploaded_for_id "
-                + " AND iuf.image_uploaded_for='" + uploadedFor + "' AND gid.key_person_id=" + key_person_id + " ORDER BY general_image_details_id DESC";
-
+                + " AND iuf.image_uploaded_for='" + uploadedFor + "' AND gid.key_person_id=" + key_person_id + " "
+                + " and gid.active='Y' and dp.active='Y' and iuf.active='Y' "
+                + " ORDER BY general_image_details_id DESC";
         try {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
             if (rs.next()) {
