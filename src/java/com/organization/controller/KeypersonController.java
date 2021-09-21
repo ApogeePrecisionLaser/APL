@@ -114,7 +114,7 @@ public class KeypersonController extends HttpServlet {
                     } else if (JQstring.equals("mobile_number")) {
                         list = keyModel.getMobilevalidty(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getMobile")) {
-                        list = keyModel.getsearchMobile(q);//, request.getParameter("action2")
+                        list = keyModel.getsearchMobile(q, request.getParameter("action2"));//, request.getParameter("action2")
                     } else if (JQstring.equals("getCityName")) {
                         list = keyModel.getCityName(q);//, request.getParameter("action2")
                     } else if (JQstring.equals("getOfficeType")) {
@@ -156,11 +156,10 @@ public class KeypersonController extends HttpServlet {
                     } else if (JQstring.equals("searchOrgOfficeCode")) {
                         list = keyModel.searchOrgOfficeCode(q);
                     } else if (JQstring.equals("getfamilycode")) {
-                        list = keyModel.searchfamilyOfficeCode(q);
-                    }else if (JQstring.equals("getImagePath")) {
+                        list = keyModel.searchfamilyOfficeCode(q, request.getParameter("action2"));
+                    } else if (JQstring.equals("getImagePath")) {
                         list = keyModel.getImagePath(q);
                     }
-                    
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
@@ -204,6 +203,7 @@ public class KeypersonController extends HttpServlet {
             } catch (Exception ex) {
                 System.out.println("Error encountered while uploading file" + ex);
             }
+            
             String task1 = request.getParameter("task1");
             if (task1 == null) {
                 task1 = "";
@@ -413,8 +413,8 @@ public class KeypersonController extends HttpServlet {
                 if (map.get("gender") == null) {
                     gender = "";
                 }
-                key.setGender(gender.trim());
-                
+                key.setGender(gender.trim());                            
+
                 key.setPassword(map.get("password").trim());
                 key.setBlood(map.get("blood").trim());
                 key.setEmergency_number(map.get("emergency_number"));
@@ -468,7 +468,6 @@ public class KeypersonController extends HttpServlet {
 
                 } else {
                     // update existing record.
-                    keyModel.updateRecord(key, itr,key_person_id,photo_destination, iD_destination);
                     keyModel.insertemergency(List, List1, key_person_id, k, mobile_no1);
                     //  keyModel.updateRecord(key, itr, photo_destination, iD_destination);
                 }
@@ -521,6 +520,10 @@ public class KeypersonController extends HttpServlet {
                 request.setAttribute("emerList", emerList);
                 request.getRequestDispatcher("Emergency").forward(request, response);
             } else {
+                request.setAttribute("searchOrg", office_code);
+                request.setAttribute("searchKeyPerson", person);
+                request.setAttribute("searchmobile", mobile);
+                request.setAttribute("searchfamily", searchfamily);
                 request.setAttribute("keyList", keyList);
                 request.setAttribute("message", keyModel.getMessage());
                 request.setAttribute("msgBgColor", keyModel.getMsgBgColor());
