@@ -119,7 +119,6 @@ public class AttendanceBean {
     public void setDistance_between(String distance_between) {
         this.distance_between = distance_between;
     }
-<<<<<<< HEAD
 
     /**
      * @return the date
@@ -148,9 +147,6 @@ public class AttendanceBean {
     public void setContact(String contact) {
         this.contact = contact;
     }
-=======
-
->>>>>>> d792bdb02bcc7357ad7b6efb4db16fe8772f9657
     
     
     
