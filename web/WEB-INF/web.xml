@@ -27,12 +27,11 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-        <!--<param-value>CXKyE2ZpT%HjbP!4c$</param-value>-->
+<!--        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>-->
         <param-value>root</param-value>
     </context-param>
-    
-    
-    <!-- start webservices-->
+   
+   <!-- start webservices-->
     <servlet>
         <servlet-name>ServletAdaptor</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -46,7 +45,6 @@
         <url-pattern>/webAPI/*</url-pattern>
     </servlet-mapping>
     <!--end webservices-->
-   
     
     <servlet>
         <servlet-name>OrganizationNameController</servlet-name>
@@ -264,6 +262,49 @@
     </servlet-mapping>
     <!--end generate spreadsheet-->
     
+    <!--Start Item type-->
+    
+    <servlet>
+        <servlet-name>ItemTypeController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemTypeController</servlet-name>
+        <url-pattern>/ItemTypeController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_type</servlet-name>
+        <jsp-file>/view/Inventory/item_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_type</servlet-name>
+        <url-pattern>/item_type</url-pattern>
+    </servlet-mapping>
+    <!--End Item Type-->
+    
+    
+      <!--Start Item name-->
+    
+    <servlet>
+        <servlet-name>ItemNameController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemNameController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemNameController</servlet-name>
+        <url-pattern>/ItemNameController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_name</servlet-name>
+        <jsp-file>/view/Inventory/item_name.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_name</servlet-name>
+        <url-pattern>/item_name</url-pattern>
+    </servlet-mapping>
+    <!--End Item name-->
+    
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>
         <jsp-file>/view/organization/organizationDesignation.jsp</jsp-file>
@@ -328,7 +369,7 @@
     
     <servlet>
         <servlet-name>LoginController</servlet-name>
-        <servlet-class>LoginController</servlet-class>
+        <servlet-class>com.general.controller.LoginController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -428,6 +469,19 @@
         <url-pattern>/video_gallery</url-pattern>
     </servlet-mapping>
     
+    
+    
+    <!--Start contact us page-->
+    
+    <servlet>
+        <servlet-name>ContactUsController</servlet-name>
+        <servlet-class>com.website.controller.ContactUsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContactUsController</servlet-name>
+        <url-pattern>/ContactUsController</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>contact</servlet-name>
         <jsp-file>/view/frontend/contact.jsp</jsp-file>
@@ -436,6 +490,8 @@
         <servlet-name>contact</servlet-name>
         <url-pattern>/contact</url-pattern>
     </servlet-mapping>
+    
+    <!--End contact us page-->
     
     
     <servlet>
@@ -474,7 +530,39 @@
         <url-pattern>/city_view</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>AttendanceController</servlet-name>
+        <servlet-class>com.apogee.admin.AttendanceController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AttendanceController</servlet-name>
+        <url-pattern>/AttendanceController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>view_attendance</servlet-name>
+        <jsp-file>/view/admin/view_attendance.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>view_attendance</servlet-name>
+        <url-pattern>/view_attendance</url-pattern>
+    </servlet-mapping>
     
+    <servlet>
+        <servlet-name>CalendarController</servlet-name>
+        <servlet-class>com.apogee.admin.CalendarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CalendarController</servlet-name>
+        <url-pattern>/CalendarController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>view_calendar</servlet-name>
+        <jsp-file>/view/admin/view_calendar.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>view_calendar</servlet-name>
+        <url-pattern>/view_calendar</url-pattern>
+    </servlet-mapping>
     
     
 </web-app>
