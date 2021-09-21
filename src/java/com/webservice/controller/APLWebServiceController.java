@@ -219,6 +219,7 @@ public class APLWebServiceController {
             String current_time = jObj.get("current_time").toString();
             String latitude = jObj.get("latitude").toString();
             String longitude = jObj.get("longitude").toString();
+            
 
             int count = model.saveAttendance(type, number, current_time, latitude, longitude);
             if(count==60){

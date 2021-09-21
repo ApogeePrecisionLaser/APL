@@ -87,6 +87,10 @@ public class AttendanceModel {
                 String vall = df.format(obj);
                 bean.setDistance_between(vall);
 
+                double obj = Double.valueOf(rset.getString(6));
+                String vall = df.format(obj);
+                bean.setDistance_between(vall);
+
                 list.add(bean);
             }
         } catch (Exception e) {

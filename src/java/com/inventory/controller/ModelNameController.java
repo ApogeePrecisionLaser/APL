@@ -64,7 +64,7 @@ public class ModelNameController extends HttpServlet {
         } catch (Exception e) {
             System.out.println("error in ModelNameController setConnection() calling try block" + e);
         }
-
+        
         try {
             String searchModel = "";
 //            String searchItem = "";
