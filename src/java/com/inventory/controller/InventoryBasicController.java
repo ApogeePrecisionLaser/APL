@@ -86,13 +86,20 @@ public class InventoryBasicController extends HttpServlet {
                     if (JQstring.equals("getItemName")) {
                         list = model.getItemName(q);
                     }
-                     if (JQstring.equals("getItemCode")) {
-                        list = model.getItemCode(q);
+
+//                    if (JQstring.equals("getItemCodeForSearch")) {
+//                        String org_office=request.getParameter("org_office");
+//                        list = model.getItemCodeForSearch(q,org_office);
+//                    }
+                    
+                    if (JQstring.equals("getItemCode")) {
+                        String org_office=request.getParameter("org_office");
+                        list = model.getItemCode(q,org_office);
                     }
                     if (JQstring.equals("getOrgOffice")) {
                         list = model.getOrgOffice(q);
                     }
-
+                    
                     if (json != null) {
 
                         out.println(json);
@@ -129,7 +136,7 @@ public class InventoryBasicController extends HttpServlet {
 
                 InventoryBasic bean = new InventoryBasic();
                 bean.setInventory_basic_id(inventory_basic_id);
-               // bean.setItem_name(request.getParameter("item_name").trim());
+                // bean.setItem_name(request.getParameter("item_name").trim());
                 bean.setItem_code(request.getParameter("item_code").trim());
                 bean.setOrg_office(request.getParameter("org_office").trim());
                 bean.setDescription(request.getParameter("description").trim());
@@ -144,7 +151,7 @@ public class InventoryBasicController extends HttpServlet {
                 }
             }
 
-            List<InventoryBasic> list = model.showData(search_item_name, search_org_office,search_item_code);
+            List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_item_code);
             request.setAttribute("list", list);
             request.setAttribute("search_item_name", search_item_name);
             request.setAttribute("search_item_code", search_item_code);

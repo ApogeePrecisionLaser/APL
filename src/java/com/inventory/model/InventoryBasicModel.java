@@ -335,7 +335,7 @@ public class InventoryBasicModel {
         return list;
     }
 
-    public List<String> getItemCode(String q) {
+    public List<String> getItemCode(String q,String org_office) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT itn.item_code FROM item_names itn where"
                 + " itn.active='Y' and itn.is_super_child='Y'  ";
@@ -360,6 +360,51 @@ public class InventoryBasicModel {
         }
         return list;
     }
+
+//    public List<String> getItemCode(String q, String org_office) {
+//        List<String> list = new ArrayList<String>();
+//        String query = "";
+//        String query2 = " select itn.item_names_id from item_names itn,org_office oo,inventory_basic ib where"
+//                + "  ib.org_office_id=oo.org_office_id"
+//                + "  and itn.item_names_id=ib.item_names_id and oo.active='Y' and ib.active='Y' and itn.active='Y' ";
+//        if (!org_office.equals("") && org_office != null) {
+//            query2 += " and oo.org_office_name='" + org_office + "' ";
+//        }
+//
+//        try {
+//            ResultSet rset2 = connection.prepareStatement(query2).executeQuery();
+//            List<Integer> list2 = new ArrayList<Integer>();
+//            while (rset2.next()) {
+//                int item_names_id = rset2.getInt("item_names_id");
+//                list2.add(item_names_id);
+//            }
+//
+//            query = " SELECT inn.item_code FROM item_names inn "
+//                    + " where inn.active='Y' and inn.is_super_child='Y' ";
+//            if (list2.size() > 0) {
+//                query += " and inn.item_names_id  not in(" + list2.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+//            }
+//
+//            query += " ORDER BY inn.item_code  ";
+//
+//            ResultSet rset = connection.prepareStatement(query).executeQuery();
+//            int count = 0;
+//            q = q.trim();
+//            while (rset.next()) {    // move cursor from BOR to valid record.
+//                String item_code = (rset.getString("item_code"));
+//                if (item_code.toUpperCase().startsWith(q.toUpperCase())) {
+//                    list.add(item_code);
+//                    count++;
+//                }
+//            }
+//            if (count == 0) {
+//                list.add("No such item_code exists.");
+//            }
+//        } catch (Exception e) {
+//            System.out.println("ModelNameModel getItem ERROR - " + e);
+//        }
+//        return list;
+//    }
 
     public List<String> getOrgOffice(String q) {
         List<String> list = new ArrayList<String>();

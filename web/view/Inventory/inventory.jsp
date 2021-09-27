@@ -2,6 +2,7 @@
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
 <style>
     .selected_row {
         font-weight: bolder;
@@ -535,7 +536,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">

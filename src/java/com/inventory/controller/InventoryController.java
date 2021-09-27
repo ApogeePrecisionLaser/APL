@@ -47,7 +47,7 @@ public class InventoryController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryModel model = new InventoryModel();
-
+        
         String search_item_name = "";
         String search_item_code = "";
         String search_org_office = "";

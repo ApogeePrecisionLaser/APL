@@ -91,6 +91,7 @@ public class ManufacturerController extends HttpServlet {
                 active = "";
                 ac = "ALL RECORDS";
             }
+            
 
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(request.getParameter("manufacturer_id")));  // Pretty sure that office_type_id will be available.

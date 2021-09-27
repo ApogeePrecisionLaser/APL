@@ -49,7 +49,7 @@ public class ItemImagesController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ModelNameModel model = new ModelNameModel();
-
+        
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {

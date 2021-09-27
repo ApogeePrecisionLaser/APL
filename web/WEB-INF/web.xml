@@ -497,6 +497,51 @@
     </servlet-mapping>
     
     
+    <!--Start Approve Indent -->
+    
+    <servlet>
+        <servlet-name>ApproveIndentController</servlet-name>
+        <servlet-class>com.inventory.controller.ApproveIndentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApproveIndentController</servlet-name>
+        <url-pattern>/ApproveIndentController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>approve_indent</servlet-name>
+        <jsp-file>/view/Inventory/approve_indent.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approve_indent</servlet-name>
+        <url-pattern>/approve_indent</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Approve Indent -->
+    
+    <!--Start Deliver Item -->
+    
+    <servlet>
+        <servlet-name>DeliverItemController</servlet-name>
+        <servlet-class>com.inventory.controller.DeliverItemController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliverItemController</servlet-name>
+        <url-pattern>/DeliverItemController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>deliver_item</servlet-name>
+        <jsp-file>/view/Inventory/deliver_item.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deliver_item</servlet-name>
+        <url-pattern>/deliver_item</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Deliver Item -->
+    
+    
     
     
     <servlet>

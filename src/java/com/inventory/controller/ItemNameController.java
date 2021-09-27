@@ -40,7 +40,7 @@ import org.json.simple.JSONObject;
  * @author Komal
  */
 public class ItemNameController extends HttpServlet {
-    
+
     private File tmpDir;
 
     @Override
@@ -71,7 +71,7 @@ public class ItemNameController extends HttpServlet {
         String search_item_code = "";
         String search_generation = "";
         String search_super_child = "";
-
+        
         search_item_name = request.getParameter("search_item_name");
         search_item_type = request.getParameter("search_item_type");
         search_item_code = request.getParameter("search_item_code");

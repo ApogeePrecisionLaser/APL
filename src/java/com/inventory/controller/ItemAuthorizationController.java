@@ -47,7 +47,7 @@ public class ItemAuthorizationController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemAuthorizationModel model = new ItemAuthorizationModel();
-
+        
         String search_item_name = "";
         String search_designation = "";
        

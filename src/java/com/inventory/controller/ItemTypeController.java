@@ -79,6 +79,7 @@ public class ItemTypeController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
+           
             
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";

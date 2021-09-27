@@ -253,7 +253,7 @@
                         </div>
                     </c:if>
                 </div>
-                <input type="hidden" id="clickedButton" name="clickedButton">
+                 <input type="hidden" id="clickedButton" name="clickedButton">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>

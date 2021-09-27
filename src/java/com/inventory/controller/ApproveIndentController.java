@@ -5,11 +5,8 @@
 package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
-import com.inventory.model.IndentModel;
-import com.inventory.model.InventoryModel;
-import com.inventory.tableClasses.Indent;
-import com.inventory.tableClasses.Inventory;
-import com.inventory.tableClasses.ItemName;
+import com.inventory.model.ApproveIndentModel;
+import com.inventory.tableClasses.ApproveIndent;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,20 +38,19 @@ import org.json.JSONObject;
  *
  * @author Komal
  */
-public class IndentController extends HttpServlet {
+public class ApproveIndentController extends HttpServlet {
 
     private File tmpDir;
-    List<String> import_item_name_arr = new ArrayList<String>();
+    // List<String> import_item_name_arr = new ArrayList<String>();
 
-    List<String> import_purpose_arr = new ArrayList<String>();
-    List<String> import_expected_date_time_arr = new ArrayList<String>();
-    List<Integer> import_req_qty_arr = new ArrayList<Integer>();
-    List<Indent> imported_list = new ArrayList<Indent>();
-    String import_item_name = "";
-    String import_purpose = "";
-    String import_expected_date_time = "";
-    int import_req_qty = 0;
-
+//    List<String> import_purpose_arr = new ArrayList<String>();
+//    List<String> import_expected_date_time_arr = new ArrayList<String>();
+//    List<Integer> import_req_qty_arr = new ArrayList<Integer>();
+//    List<ApproveIndent> imported_list = new ArrayList<Indent>();
+//    String import_item_name = "";
+//    String import_purpose = "";
+//    String import_expected_date_time = "";
+//    int import_req_qty = 0;
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -74,7 +70,7 @@ public class IndentController extends HttpServlet {
         String requested_by = "";
         String requested_to = "";
         String description = "";
-
+        
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
@@ -89,18 +85,17 @@ public class IndentController extends HttpServlet {
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
             office_admin = session.getAttribute("office_admin").toString();
         }
-        
-        IndentModel model = new IndentModel();
+
+        ApproveIndentModel model = new ApproveIndentModel();
 
         String search_item_name = "";
-        if (search_item_name == null) {
-            search_item_name = "";
-        }
+
+        search_item_name = request.getParameter("search_item_name");
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in IndentController setConnection() calling try block" + e);
+            System.out.println("error in ApproveIndentController setConnection() calling try block" + e);
         }
 
         try {
@@ -115,12 +110,11 @@ public class IndentController extends HttpServlet {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
                     JSONObject json = null;
+
                     if (JQstring.equals("getParameter")) {
                         String type = request.getParameter("type");
                         if (type.equals("Status")) {
                             list = model.getStatus(q);
-                        } else if (type.equals("Purpose")) {
-                            list = model.getPurpose(q);
                         }
                     }
                     if (JQstring.equals("getStatus")) {
@@ -147,7 +141,7 @@ public class IndentController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ApproveIndentController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -155,95 +149,30 @@ public class IndentController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-            String encodedStringBtoA = request.getParameter("encodedStringBtoA");
-            if (encodedStringBtoA == null) {
-                encodedStringBtoA = "";
-            }
-            byte[] decodedBytes = Base64.getDecoder().decode(encodedStringBtoA);
-            String decodedString = new String(decodedBytes);
-            String checkedValue = "";
-            int req_qty = 0;
-            String purpose = "";
-            String item_name = "";
-            String expected_date_time = "";
-            if (task.equals("GetItems")) {
-                List<ItemName> list = null;
-                if (!decodedString.equals("[]")) {
-                    JSONArray jsonArr = new JSONArray(decodedString);
 
-                    for (int i = 0; i < jsonArr.length(); i++) {
-                        JSONObject jsonObj = jsonArr.getJSONObject(i);
+            if (task.equals("Delete")) {
+                // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
+            } else if (task.equals("approveIndent")) {
+                PrintWriter out = response.getWriter();
+                int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
+                int indent_item_id = Integer.parseInt(request.getParameter("indent_item_id").trim());
+                String status = request.getParameter("status");
+                int approved_qty = Integer.parseInt(request.getParameter("approved_qty").trim());
 
-                        Iterator<String> keys = jsonObj.keys();
-
-                        while (keys.hasNext()) {
-                            String key = keys.next();
-                            checkedValue = (String) jsonObj.get("checkedValue");
-                            req_qty = (int) jsonObj.get("req_qty");
-                            purpose = (String) jsonObj.get("purpose");
-                            item_name = (String) jsonObj.get("item_name");
-                            expected_date_time = (String) jsonObj.get("expected_date_time");
-                        }
-                        System.out.println(jsonObj);
-                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
-
-                    }
-
-                } else {
-                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
-                }
-
-                request.setAttribute("list", list);
-                request.getRequestDispatcher("items_list").forward(request, response);
+                ApproveIndent bean = new ApproveIndent();
+                bean.setStatus(status);
+                bean.setApproved_qty(approved_qty);
+                String message = model.updateRecord(bean, indent_table_id, indent_item_id);
+                JSONObject json = new JSONObject();
+                json.put("message", message);
+                out.println(json);
                 return;
             }
 
-            if (task.equals("Delete")) {
-               // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
-            } else if (task.equals("Send Indent") || task.equals("Save AS New") || task.equals("Save & Next")) {
-                int indent_table_id = 0;
-                int indent_item_id = 0;
-                try {
-                    indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
-                    indent_item_id = Integer.parseInt(request.getParameter("indent_item_id").trim());
-                } catch (Exception e) {
-                    indent_table_id = 0;
-                    indent_item_id = 0;
-                }
-
-                if (task.equals("Save AS New")) {
-                    indent_table_id = 0;
-                    indent_item_id = 0;
-                }
-
-                Indent bean = new Indent();
-                bean.setIndent_table_id(indent_table_id);
-                bean.setIndent_no(request.getParameter("indent_no"));
-                bean.setRequested_by(request.getParameter("requested_by"));
-                bean.setRequested_to(request.getParameter("requested_to"));
-                bean.setDescription(request.getParameter("description"));
-
-                String[] checked_id = request.getParameterValues("checked_id");
-                for (int i = 0; i < checked_id.length; i++) {
-                    String checked_item = checked_id[i];
-                    if (!checked_item.equals("")) {
-                        bean.setIndent_item_id(indent_item_id);
-                        bean.setItem_name(request.getParameter("item_name" + i + ""));
-                        bean.setPurpose(request.getParameter("purpose" + i + ""));
-                        bean.setRequired_qty(Integer.parseInt(request.getParameter("req_qty" + i + "")));
-                        bean.setExpected_date_time(request.getParameter("expected_date_time" + i + ""));
-                        if (indent_table_id == 0) {
-                            model.insertRecord(bean, logged_user_name, office_admin, i);
-                        }
-                    }
-                }
-
-            }
-
-            counting = model.getCounting();
+            //counting = model.getCounting();
             String autogenerate_indent_no = "Indent_" + counting;
 
-            List<Indent> list = model.showData(logged_user_name, office_admin);
+            List<ApproveIndent> list = model.showData(logged_user_name);
             request.setAttribute("list", list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
             request.setAttribute("requested_by", logged_user_name);
@@ -253,9 +182,10 @@ public class IndentController extends HttpServlet {
 
             model.closeConnection();
 
-            request.getRequestDispatcher("indent").forward(request, response);
+            request.getRequestDispatcher("approve_indent").forward(request, response);
+
         } catch (Exception ex) {
-            System.out.println("IndentController error: " + ex);
+            System.out.println("ApproveIndentController error: " + ex);
         }
     }
 

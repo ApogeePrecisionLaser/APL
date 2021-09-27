@@ -373,9 +373,9 @@
 
         $('#item_type').val($("#" + count + '5').html());
         $('#quantity').val($("#" + count + '6').html());
-       // alert($("#" + count + '9').text());
-        if (($("#" + count + '9').text())!="") {
-            $('#parent_item').val($("#" + count + '9').html() + " - " + $("#" + count + '4').html());
+        // alert($("#" + count + '9').text());
+        if (($("#" + count + '9').text()) != "") {
+            $('#parent_item').val($("#" + count + '9').html() + " - " + $("#" + count + '11').html());
         } else {
             $('#parent_item').val($("#" + count + '9').html());
 
@@ -468,6 +468,7 @@
             <th>Description</th>
             <th style="display:none"></th>
             <th style="display:none"></th>
+            <th style="display:none"></th>
 
 
             <c:forEach var="beanType" items="${requestScope['list']}"
@@ -483,6 +484,9 @@
                     <td id="${loopCounter.count }8">${beanType.description}</td> 
                     <td id="${loopCounter.count }9" style="display:none">${beanType.parent_item}</td>
                     <td id="${loopCounter.count }10" style="display:none">${beanType.superp}</td>
+                    <td id="${loopCounter.count }11" style="display:none">${beanType.parent_item_code}</td>
+
+                    
                     <!--                    <td>
                                             <a href="" class="btn btn-info">Edit</a>
                                             <a href="" class="btn btn-danger" style="margin-left:2px">Delete</a>

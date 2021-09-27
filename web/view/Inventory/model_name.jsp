@@ -89,7 +89,7 @@
                 $.ajax({
                     url: "ModelNameController",
                     dataType: "json",
-                    data: {action1: "getItemCode", str: random, str2: manufacturer_name},
+                    data: {action1: "getItemCodeForSearch", str: random, str2: manufacturer_name},
                     success: function (data) {
                         console.log(data);
                         response(data.list);

@@ -367,7 +367,7 @@ public class InventoryModel {
         List<String> list = new ArrayList<String>();
         String query = "SELECT itn.item_name FROM item_names itn,inventory_basic ib,org_office oo where"
                 + " itn.item_names_id=ib.item_names_id and oo.org_office_id=ib.org_office_id and itn.active='Y' and ib.active='Y' "
-                + " and is_super_child='Y' ";
+                + " and itn.is_super_child='Y' ";
 
         if (!org_office.equals("") && org_office != null) {
             query += " and oo.org_office_name='" + org_office + "' ";
@@ -398,7 +398,7 @@ public class InventoryModel {
         List<String> list = new ArrayList<String>();
         String query = "SELECT itn.item_code FROM item_names itn,inventory_basic ib,org_office oo where"
                 + " itn.item_names_id=ib.item_names_id and oo.org_office_id=ib.org_office_id and itn.active='Y' and ib.active='Y' "
-                + " and is_super_child='Y' ";
+                + " and itn.is_super_child='Y' ";
 
         if (!org_office.equals("") && org_office != null) {
             query += " and oo.org_office_name='" + org_office + "' ";

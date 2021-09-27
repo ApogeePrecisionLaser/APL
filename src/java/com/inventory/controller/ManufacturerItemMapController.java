@@ -55,7 +55,8 @@ public class ManufacturerItemMapController extends HttpServlet {
             } else {
                 searchItem = "";
             }
-
+            
+            
             String requester = request.getParameter("requester");
             try {
                 String JQstring = request.getParameter("action1");

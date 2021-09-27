@@ -65,8 +65,10 @@
                                         <a href="ModelNameController" class="dropdown-item">Manufacturer Item Model Map</a>
                                         <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
                                         <a href="InventoryController" class="dropdown-item">Inventory</a>
-                                        <a href="IndentController" class="dropdown-item">Indent</a>
                                         <a href="ItemAuthorizationController" class="dropdown-item">Item Authorization</a>
+                                        <a href="IndentController" class="dropdown-item">Request Indent</a>
+                                        <a href="ApproveIndentController" class="dropdown-item">Approve Indent</a>
+                                        <a href="DeliverItemController" class="dropdown-item">Deliver Item</a>
                                     </div> 
                                 </li>
 

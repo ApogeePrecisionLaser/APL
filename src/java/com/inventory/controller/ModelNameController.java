@@ -65,6 +65,7 @@ public class ModelNameController extends HttpServlet {
             System.out.println("error in ModelNameController setConnection() calling try block" + e);
         }
         
+        
         try {
             String searchModel = "";
 //            String searchItem = "";
@@ -79,10 +80,11 @@ public class ModelNameController extends HttpServlet {
                     if (JQstring.equals("getManufacturer")) {
                         list = model.getManufacturer(q);
                     }
-//                    if (JQstring.equals("getItem")) {
+//                    if (JQstring.equals("getItemCodeForSearch")) {
 //                        String str2 = request.getParameter("str2");
-//                        list = model.getItem(q, str2);
+//                        list = model.getItemCodeForSearch(q, str2);
 //                    }
+
                     if (JQstring.equals("getItemCode")) {
                         String str2 = request.getParameter("str2");
                         list = model.getItemCode(q, str2);
@@ -92,8 +94,7 @@ public class ModelNameController extends HttpServlet {
                         String str3 = request.getParameter("str3");
                         list = model.getModel(q, str2, str3);
                     }
-                   
-                    
+
                     if (JQstring.equals("getItemTypeForModelOrPart")) {
                         String item_code = request.getParameter("item_code");
                         list = model.getItemTypeForModelOrPart(item_code);
@@ -108,7 +109,7 @@ public class ModelNameController extends HttpServlet {
                 System.out.println("\n Error --ModelNameController get JQuery Parameters Part-" + e);
             }
             searchModel = request.getParameter("searchModel");
-           // searchItem = request.getParameter("searchItem");
+            // searchItem = request.getParameter("searchItem");
             searchItemCode = request.getParameter("searchItemCode");
             searchManufacturer = request.getParameter("searchManufacturer");
             try {
