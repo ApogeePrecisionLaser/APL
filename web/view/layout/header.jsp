@@ -60,7 +60,14 @@
                                     <div class="dropdown-menu">
                                         <a href="ItemTypeController" class="dropdown-item">Item Type</a>
                                         <a href="ItemNameController" class="dropdown-item">Item Name</a>
-                                    </div>
+                                        <a href="ManufacturerController" class="dropdown-item">Manufacturer</a>
+                                        <!--<a href="ManufacturerItemMapController" class="dropdown-item">Manufacturer Item Map</a>-->
+                                        <a href="ModelNameController" class="dropdown-item">Manufacturer Item Model Map</a>
+                                        <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
+                                        <a href="InventoryController" class="dropdown-item">Inventory</a>
+                                        <a href="IndentController" class="dropdown-item">Indent</a>
+                                        <a href="ItemAuthorizationController" class="dropdown-item">Item Authorization</a>
+                                    </div> 
                                 </li>
 
                                 <li class="nav-item dropdown">
@@ -69,27 +76,17 @@
                                     </a>
                                     <div class="dropdown-menu">
                                         <a href="CityController" class="dropdown-item">City</a>
-                                        <a href="orgTypeCont.do" class="dropdown-item">Org. Type</a>
-                                        <a href="orgOfficeTypeCont.do" class="dropdown-item">Org. Office Type</a>
-                                        <a href="organisationCont.do" class="dropdown-item">Org. Office</a>
-                                        <a href="DesignationController" class="dropdown-item">Designation</a>
-                                        <a href="personCount.do" class="dropdown-item">Org Person's Name</a>
-                                        <a href="OrganisationDesignationNewController" class="dropdown-item">Designation Organisation</a>
-                                        <a href="OrganisationTypeDesignationController" class="dropdown-item">Designation Organisation Type</a>
-                                        <a href="formdata" class="dropdown-item">FormData</a>
-                                        <a href="orgDetailEntryCont.do" class="dropdown-item">Org Detail Entry</a>
-                                        <a href="allinoneCont.do" class="dropdown-item">All in One</a>
-                                        <a href="keypersonnewCont.do" class="dropdown-item">KeyPerson New</a>
                                     </div>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Admin
                                     </a>
                                     <div class="dropdown-menu">
-                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>                                        
-                                        <a href="CalendarController" class="dropdown-item">View Calendar</a>                                        
+                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
+                                        <a href="CalendarController" class="dropdown-item">View Calendar</a>
+                                        <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
                                     </div>
                                 </li>
 
@@ -97,7 +94,7 @@
 
                             <div>
 
-                                <a href="#"> 
+                                <a href="LoginController?task=logout"> 
                                     <img src="assets/images/logout.png" width="27">
                                 </a>&nbsp 
                                 <a href="home" class="btn btn-info"> 

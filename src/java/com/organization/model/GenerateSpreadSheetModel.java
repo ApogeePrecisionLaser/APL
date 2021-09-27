@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -17,7 +16,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
@@ -47,7 +45,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author JPSS
+ * @author Komal
  */
 public class GenerateSpreadSheetModel {
 
@@ -100,9 +98,10 @@ public class GenerateSpreadSheetModel {
 
     public void setConnection(Connection con) {
         try {
+
             connection = con;
         } catch (Exception e) {
-            System.out.println("DesignationModel setConnection() Error: " + e);
+            System.out.println("GenerateSpreadSheetModel setConnection() Error: " + e);
         }
     }
 
@@ -119,7 +118,7 @@ public class GenerateSpreadSheetModel {
                 + " d.designation,d.designation_code ,oot.office_type"
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
                 + " org_office_designation_map oodm, org_office_type oot"
-                + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' "
+                + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
                 + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id ";
@@ -141,9 +140,10 @@ public class GenerateSpreadSheetModel {
         }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apl", "root", "CXKyE2ZpT%HjbP!4c$");
-            PreparedStatement pstmt = con.prepareStatement(query);
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/apl", "root", "root");
+
+            PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 GenerateSpreadSheet bean = new GenerateSpreadSheet();
@@ -326,7 +326,7 @@ public class GenerateSpreadSheetModel {
     }
 
     public String sentMail(String sheet_link, String mail_id) {
-        System.err.println("hello-----------");
+        //System.err.println("hello-----------");
         String to = mail_id;//change accordingly  
         String from = "smartmeter.apogee@gmail.com";
         String host = "smtp.gmail.com";//or IP address  
@@ -363,21 +363,21 @@ public class GenerateSpreadSheetModel {
         });
 
         session.setDebug(true);
-        
+
         try {
-                fh = new FileHandler("C:/Logs/apl.log");
-                logger.addHandler(fh);
-                SimpleFormatter formatter = new SimpleFormatter();
-                fh.setFormatter(formatter);
+            fh = new FileHandler("C:/Logs/apl.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
 
-                // the following statement is used to log any messages  
-                logger.info("APL log");
+            // the following statement is used to log any messages  
+            logger.info("APL log");
 
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             // Create a default MimeMessage object.
@@ -395,22 +395,20 @@ public class GenerateSpreadSheetModel {
             // Now set the actual message
             message.setText("https://docs.google.com/spreadsheets/d/1yIqtcD4jIMT9ytr610Rqv1E4lNPNc-Qde6D09RW3e6M/edit#gid=0");
 
-            System.out.println("sending...");
+            // System.out.println("sending...");
             // Send message
             Transport.send(message);
 
-            
-            
             success_message = "Mail sent successfully....";
             logger.info("sent mail");
 
-            System.out.println("Mail Sent successfully....");
+            //System.out.println("Mail Sent successfully....");
         } catch (MessagingException mex) {
             mex.printStackTrace();
-            String mes=mex.toString();
-            String mes2=mex.getMessage();
-            System.err.println("message ----"+mes);
-            System.err.println("message 222 ----"+mes2);
+            String mes = mex.toString();
+            String mes2 = mex.getMessage();
+            //System.err.println("message ----" + mes);
+            //System.err.println("message 222 ----" + mes2);
             logger.info(mex.getMessage());
         }
 
@@ -544,7 +542,7 @@ public class GenerateSpreadSheetModel {
         }
 
         String designation = "";
-        System.err.println("org_office_id---------" + org_office_id);
+        // System.err.println("org_office_id---------" + org_office_id);
         String query = " select distinct d.designation from org_office_designation_map map,designation d where "
                 + " d.designation_id=map.designation_id ";
         if (org_office_id != 0) {

@@ -9,14 +9,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Shobha
+ * @author komal
  */
 public class DBConnection {
 
     //private static BasicDataSource dataSource = null;
+    
+    public static synchronized Connection getConnection(ServletContext ctx, HttpSession session) throws SQLException {
+        Connection conn = null;
+        try {
+            Class.forName(ctx.getInitParameter("driverClass"));
+            conn = DriverManager.getConnection(ctx.getInitParameter("connectionString"), (String) session.getAttribute("myDbUserName"), (String) session.getAttribute("myDbUserPass"));
+        } catch (Exception e) {
+            System.out.println("DBConncetion getConnection() Error: " + e);
+        }
+        return conn;
+    }
 
     public static Connection getConnection(ServletContext ctx) throws SQLException
     {

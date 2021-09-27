@@ -8,7 +8,6 @@ import com.organization.model.OrganisationNameModel;
 import com.DBConnection.DBConnection;
 import com.organization.tableClasses.OrganisationName;
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -24,7 +23,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author Vikrant
+ * @author Komal
  */
 public class OrganisationNameController extends HttpServlet {
 
@@ -32,13 +31,35 @@ public class OrganisationNameController extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 10, noOfRowsInTable;
         ServletContext ctx = getServletContext();
-        /*     HttpSession session = request.getSession(false);
+        String logged_user_name = "";
+        String logged_designation = "";
+        String logged_org_name = "";
+        String logged_org_office = "";
+        int logged_org_office_id = 0;
+        int logged_org_name_id = 0;
+        int logged_key_person_id = 0;
+        HttpSession session = request.getSession();
         if (session == null || session.getAttribute("user_name") == null) {
-            response.sendRedirect("beforelogin.jsp");
-            return;
+//            response.sendRedirect("beforelogin.jsp");
+//            return;
+            System.err.println("If null");
+        } else {
+            logged_user_name = session.getAttribute("logged_user_name").toString();
+            logged_org_name = session.getAttribute("logged_org_name").toString();
+            logged_designation = session.getAttribute("logged_designation").toString();
+            logged_org_office = session.getAttribute("logged_org_office").toString();
+            logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
+            logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
+            logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
+
+            System.err.println("---" + logged_user_name);
+            System.err.println(logged_org_name);
+            System.err.println(logged_org_office);
+            System.err.println(logged_designation);
+            System.err.println(logged_key_person_id);
+            System.err.println(logged_org_name_id);
+            System.err.println(logged_org_office_id);
         }
-        String role = (String) session.getAttribute("user_role");   */
-        //((Integer)session.getAttribute("user_id")).intValue();
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         OrganisationNameModel organisationNameModel = new OrganisationNameModel();

@@ -7,7 +7,7 @@ package com.organization.tableClasses;
 
 /**
  *
- * @author JPSS
+ * @author komal
  */
 public class Designation {
 

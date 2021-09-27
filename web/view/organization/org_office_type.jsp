@@ -1,9 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@include file="../layout/header.jsp" %>
 
 <style>
-
     .selected_row {
         font-weight: bolder;
         color: blue;
@@ -12,35 +10,28 @@
     table.dataTable {      
         border-collapse: collapse;
     }
-
 </style>
 <script>
-
-    $(document).ready(
-            function () {
-                $('#mytable tbody').on(
-                        'click',
-                        'tr',
-                        function () {
-                            if ($(this).hasClass('selected_row')) {
-                                $(this).removeClass('selected_row');
-                            } else {
-                                $("#mytable").DataTable().$(
-                                        'tr.selected_row').removeClass(
-                                        'selected_row');
-                                $(this).addClass('selected_row');
-                            }
-                        });
-            });
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
 
     $(function () {
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
-        
-        
-        $("#searchOrgOfficeType").autocomplete({
 
+
+        $("#searchOrgOfficeType").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("searchOrgOfficeType").value;
                 $.ajax({
@@ -48,7 +39,6 @@
                     dataType: "json",
                     data: {action1: "getOrganisationOfficeType", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -64,12 +54,11 @@
             }
         });
     });
+
     function makeEditable(id) {
         document.getElementById("office_type").disabled = false;
-        //document.getElementById("office_code").disabled = false;
         document.getElementById("description").disabled = false;
         if (id == 'new') {
-            // document.getElementById("message").innerHTML = "";      // Remove message
             $("#message").html("");
             document.getElementById("office_type_id").value = "";
             document.getElementById("save").disabled = false;
@@ -85,50 +74,7 @@
         }
         document.getElementById("save").disabled = false;
     }
-    function setDefaultColor(noOfRowsTraversed, noOfColumns) {
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            for (var j = 1; j <= noOfColumns; j++) {
-                document.getElementById("t1c" + (i * noOfColumns + j)).bgColor = "";     // set the default color.
-            }
-        }
-    }
-    function fillColumns(id) {
-        var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-        var noOfColumns = 3;
-        var columnId = id;
-    <%-- holds the id of the column being clicked, excluding the prefix t1c e.g. t1c3 (column 3 of table 1). --%>
-        columnId = columnId.substring(3, id.length);
-    <%-- for e.g. suppose id is t1c3 we want characters after t1c i.e beginIndex = 3. --%>
-        var lowerLimit, higherLimit, rowNo = 0;
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            lowerLimit = i * noOfColumns + 1;       // e.g. 11 = (1 * 10 + 1)
-            higherLimit = (i + 1) * noOfColumns;    // e.g. 20 = ((1 + 1) * 10)
-            rowNo++;
-            if ((columnId >= lowerLimit) && (columnId <= higherLimit))
-                break;
-        }
-        setDefaultColor(noOfRowsTraversed, noOfColumns);        // set default color of rows (i.e. of multiple coloumns).
-        var t1id = "t1c";       // particular column id of table 1 e.g. t1c3.
-        for (var i = 0; i < noOfColumns; i++) {
-            // set the background color of clicked/selected row to yellow.
-            document.getElementById(t1id + (lowerLimit + i)).bgColor = "";
-        }
-        // Now get clicked row data, and set these into the below edit table.
-        document.getElementById("office_type_id").value = document.getElementById("office_type_id" + rowNo).value;
-        document.getElementById("office_type").value = document.getElementById(t1id + (lowerLimit + 1)).innerHTML;
-        document.getElementById("description").value = document.getElementById(t1id + (lowerLimit + 2)).innerHTML;
-        for (var i = 0; i < noOfColumns; i++) {
-            document.getElementById(t1id + (lowerLimit + i)).bgColor = "#d0dafd";        // set the background color of clicked row to yellow.
-        }
-        document.getElementById("edit").disabled = false;
-        if (!document.getElementById("save").disabled)   // if save button is already enabled, then make edit, and delete button enabled too.
-        {
-            document.getElementById("delete").disabled = false;
-            document.getElementById("save_As").disabled = true;
-        }
-        //  document.getElementById("message").innerHTML = "";      // Remove message
-        $("#message").html("");
-    }
+
     function setStatus(id) {
         if (id == 'save') {
             document.getElementById("clickedButton").value = "Save";
@@ -139,6 +85,7 @@
             ;
         }
     }
+
     function myLeftTrim(str) {
         var beginIndex = 0;
         for (var i = 0; i < str.length; i++) {
@@ -149,6 +96,7 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
@@ -156,7 +104,7 @@
 
             if (myLeftTrim(office_type).length == 0) {
                 //  document.getElementById("message").innerHTML = "<td colspan='5' bgcolor='coral'><b>Organisation Office Type is required...</b></td>";
-                $("#message").html("<td colspan='5' bgcolor='coral'><b>Organisation Office Type is required...</b></td>");
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office Type is required...</b></label></div>');
                 document.getElementById("office_type").focus();
                 return false; // code to stop from submitting the form2.
             }
@@ -259,8 +207,8 @@
         </div>
         <div class="row mt-3 myTable">
             <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%">
+                <div class="table-responsive verticleScroll">
+                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
                         <thead>
                             <tr>                                
                                 <th>S.No.</th>
@@ -287,9 +235,6 @@
     </div>
 </section>
 
-
-
-
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
@@ -309,7 +254,7 @@
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
-                            <label>Description<span class="text-danger">*</span></label>
+                            <label>Description<span class="text-danger"></span></label>
                             <textarea class="form-control myTextArea"  id="description" name="description" disabled></textarea>
                         </div>
                     </div>
@@ -324,6 +269,7 @@
                         </div>
                     </c:if>
                 </div>
+                <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
@@ -334,8 +280,6 @@
         </form>
     </div>
 </section>
-
-
 
 <%@include file="../layout/footer.jsp" %>
 

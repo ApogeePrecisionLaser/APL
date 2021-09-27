@@ -23,7 +23,7 @@ public class CityModel {
 
     static private Connection connection;
     private String driver, url, user, password;
-    private String message, messageBGColor;
+    private String message, messageBGColor = "#a2a220";
 
     public void setConnection(Connection con) {
         try {
@@ -34,95 +34,23 @@ public class CityModel {
         }
     }
 
-    public byte[] generateMapReport(String jrxmlFilePath, List<CityBean> listAll) {
-        byte[] reportInbytes = null;
-        try {
-
-            JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
-            JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
-        } catch (Exception e) {
-            System.out.println("Error: in CityModel generateMapReport() JRException: " + e);
-        }
-        return reportInbytes;
-    }
-
-    public ByteArrayOutputStream generateCityXlsRecordList(String jrxmlFilePath, List list) {
-        ByteArrayOutputStream bytArray = new ByteArrayOutputStream();
-        //  HashMap mymap = new HashMap();
-        try {
-            JRBeanCollectionDataSource jrBean = new JRBeanCollectionDataSource(list);
-            JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, null, jrBean);
-            JRXlsExporter exporter = new JRXlsExporter();
-            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
-            exporter.exportReport();
-        } catch (Exception e) {
-            System.out.println("CityStatusModel generatReport() JRException: " + e);
-        }
-        return bytArray;
-    }
-
-    public List<CityBean> showAllData(String cityName) {
-        cityName = cityName;
-        ArrayList<CityBean> list = new ArrayList<CityBean>();
-        String query = "select city_name,pin_code,std_code,city_description from city where "
-                + " if('" + cityName + "'='',city_name LIKE '%%',city_name='" + cityName + "')";
-
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            while (rset.next()) {
-                CityBean cityBean = new CityBean();
-                cityBean.setCityName(rset.getString("city_name"));
-                cityBean.setCityDescription(rset.getString("city_description"));
-                cityBean.setPin_code(rset.getInt("pin_code"));
-                cityBean.setStd_code(rset.getInt("std_code"));
-                list.add(cityBean);
-            }
-        } catch (Exception e) {
-            System.out.println("Error in ShowAllData --- CityModel : " + e);
-        }
-
-        return list;
-    }
-
-    public List<String> getDivision(String q) {
-        List<String> list = new ArrayList<String>();
-        String query = " SELECT division_name FROM division GROUP BY division_name ORDER BY division_name ";
-        try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            int count = 0;
-            q = q.trim();
-            while (rset.next()) {    // move cursor from BOR to valid record.
-                String division_type = rset.getString("division_name");
-                if (division_type.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(division_type);
-                    count++;
-                }
-            }
-            if (count == 0) {
-                list.add("No such city exists.......");
-            }
-        } catch (Exception e) {
-            System.out.println("getCity ERROR inside CityModel - " + e);
-        }
-        return list;
-    }
-
     public List<String> getCity(String q) {
         List<String> list = new ArrayList<String>();
         String query = " SELECT city_id, city_name FROM city GROUP BY city_name ORDER BY city_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
-
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String city_type = rset.getString("city_name");
 
-                list.add(city_type);
-                count++;
+                q = q.trim();
+                while (rset.next()) {
+                    String city_name = (rset.getString("city_name"));
+                    if (city_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(city_name);
+                        count++;
+                    }
+
+                }
 
             }
             if (count == 0) {
@@ -214,7 +142,7 @@ public class CityModel {
             int i = presta.executeUpdate();
             if (i > 0) {
                 message = "Record deleted successfully......";
-                messageBGColor = "yellow";
+                messageBGColor = "#a2a220";
             } else {
                 message = "Record not deleted successfully......";
                 messageBGColor = "red";
@@ -247,8 +175,12 @@ public class CityModel {
         searchCity = (searchCity);
         ArrayList<CityBean> list = new ArrayList<CityBean>();
         String query = "SELECT city_id,city_name,pin_code,std_code,city_description,tehsil_id FROM city "
-                + " WHERE  active='Y' "
-                + " order by city_id desc ";
+                + " WHERE  active='Y' ";
+
+        if (!searchCity.equals("") && searchCity != null) {
+            query += " and city_name='" + searchCity + "' ";
+        }
+        query += " order by city_id desc ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -268,26 +200,6 @@ public class CityModel {
             System.out.println("Error in getAllRecrod -- CityModel : " + e);
         }
         return list;
-    }
-
-    public int getTotalRowsInTable(String searchCity) {
-        searchCity = searchCity;
-        String query = " SELECT Count(*) "
-                + " FROM city "
-                + " WHERE IF('" + searchCity + "' = '', city_name LIKE '%%',city_name =?) "
-                + " ORDER BY city_name ";
-        int noOfRows = 0;
-        try {
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, searchCity);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            noOfRows = Integer.parseInt(rs.getString(1));
-        } catch (Exception e) {
-            System.out.println("Error inside getNoOfRows CityModel" + e);
-        }
-        System.out.println("No of Rows in Table for search is****....." + noOfRows);
-        return noOfRows;
     }
 
     public int getTehsilIdFromName(String name) {
@@ -345,7 +257,7 @@ public class CityModel {
         }
         if (rowAffected > 0) {
             message = rowAffected + " Record inserted successfully";
-            messageBGColor = "yellow";
+            messageBGColor = "#a2a220";
         }
     }
 

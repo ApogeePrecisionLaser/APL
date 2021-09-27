@@ -27,11 +27,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
  *
- * @author Dell
- */
-/**
- *
- * @author Soft_Tech
+ * @author komal
  */
 public class OrgOfficeDesignationMapModel {
 
@@ -145,7 +141,7 @@ public class OrgOfficeDesignationMapModel {
         } catch (Exception e) {
             System.out.println("Error:--organisation--- showData--" + e);
         }
-        System.err.println("list--------" + list.size());
+        // System.err.println("list--------" + list.size());
         return list;
     }
 
@@ -506,8 +502,7 @@ public class OrgOfficeDesignationMapModel {
             pstmt.setString(6, "Komal");
             pstmt.setString(7, bean.getSerialnumber());
 
-            System.out.println("insert query -" + pstmt);
-
+            // System.out.println("insert query -" + pstmt);
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error while inserting record in insertRecord...." + e);
@@ -522,9 +517,7 @@ public class OrgOfficeDesignationMapModel {
         return rowsAffected;
 
     }
-    
-   
-    
+
     public int updateRecord(OrganisationDesignationBean bean, int org_office_designation_map_id) throws SQLException {
         int revision = OrgOfficeDesignationMapModel.getRevisionno(bean, org_office_designation_map_id);
         int rowsAffected = 0;
@@ -543,7 +536,7 @@ public class OrgOfficeDesignationMapModel {
         String query3 = "insert into org_office_designation_map(org_office_id,designation_id,"
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
-        
+
         try {
             connection.setAutoCommit(false);
 
@@ -571,7 +564,7 @@ public class OrgOfficeDesignationMapModel {
                     psmt.setString(6, "Komal");
                     psmt.setString(7, bean.getSerialnumber());
 
-                    System.out.println("insert query -" + psmt);
+                    //   System.out.println("insert query -" + psmt);
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
@@ -600,7 +593,6 @@ public class OrgOfficeDesignationMapModel {
         return rowsAffected;
     }
 
-
     public static int getRevisionno(OrganisationDesignationBean orgOffice, int org_office_designation_map_id) {
         int revision = 0;
         try {
@@ -627,7 +619,7 @@ public class OrgOfficeDesignationMapModel {
         int rowsAffected = 0;
         PreparedStatement psmt;
         ResultSet rst;
-  
+
         String query = "DELETE FROM org_office_designation_map WHERE org_office_designation_map_id = '" + org_office_designation_map_id + "' "
                 + "and active='Y' ";
         try {
@@ -765,7 +757,7 @@ public class OrgOfficeDesignationMapModel {
             pstmt.setInt(1, org_id);
             pstmt.setInt(2, desig_id);
             pstmt.setString(3, "Y");
-            System.out.println("generation query --" + pstmt);
+            //    System.out.println("generation query --" + pstmt);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("generation");
@@ -1057,7 +1049,7 @@ public class OrgOfficeDesignationMapModel {
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
-            System.out.println("get paernt -" + query);
+            //  System.out.println("get paernt -" + query);
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.

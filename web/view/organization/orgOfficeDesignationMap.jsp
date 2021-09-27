@@ -191,15 +191,15 @@
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
-            var media_type = document.getElementById("designation").value;
+            var designation = document.getElementById("designation").value;
             var org_office = document.getElementById("org_office").value;
-            if (myLeftTrim(media_type).length == 0) {
-                $("#message").html("<td colspan='2' bgcolor='coral'><b>Designation is required...</b></td>");
+            if (myLeftTrim(designation).length == 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Designation is required...</b></label></div>');
                 document.getElementById("designation").focus();
                 return  false; // code to stop from submitting the form2.
             }
             if (myLeftTrim(org_office).length == 0) {
-                $("#message").html("<td colspan='2' bgcolor='coral'><b>Designation is required...</b></td>");
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office is required...</b></label></div>');
                 document.getElementById("org_office").focus();
                 return  false; // code to stop from submitting the form2.
             }
@@ -314,8 +314,8 @@
         </div>
         <div class="row mt-3 myTable">
             <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%">
+                <div class="table-responsive verticleScroll">
+                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
                         <thead>
                             <tr>                                
                                 <th>S.No.</th>
@@ -374,7 +374,7 @@
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
-                            <label>Description<span class="text-danger">*</span></label>
+                            <label>Description<span class="text-danger"></span></label>
                             <textarea class="form-control myTextArea"  id="description" name="description" name="description" disabled></textarea>
                         </div>
                     </div>
@@ -398,6 +398,7 @@
                         </div>
                     </c:if>
                 </div>
+                <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>

@@ -1,9 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@include file="../layout/header.jsp" %>
 
 <style>
-
     .selected_row {
         font-weight: bolder;
         color: blue;
@@ -12,37 +10,30 @@
     table.dataTable {      
         border-collapse: collapse;
     }
-
 </style>
+
 <script>
 
-    $(document).ready(
-            function () {
-                $('#mytable tbody').on(
-                        'click',
-                        'tr',
-                        function () {
-                            if ($(this).hasClass('selected_row')) {
-                                $(this).removeClass('selected_row');
-                            } else {
-                                $("#mytable").DataTable().$(
-                                        'tr.selected_row').removeClass(
-                                        'selected_row');
-                                $(this).addClass('selected_row');
-                            }
-                        });
-            });
-
+    $(document).ready(function () {
+        $('#mytable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected_row')) {
+                $(this).removeClass('selected_row');
+            } else {
+                $("#mytable").DataTable().$(
+                        'tr.selected_row').removeClass(
+                        'selected_row');
+                $(this).addClass('selected_row');
+            }
+        });
+    });
 
     $(function () {
-
-
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
 
-        $("#searchOrgType").autocomplete({
 
+        $("#searchOrgType").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("searchOrgType").value;
                 $.ajax({
@@ -50,7 +41,6 @@
                     dataType: "json",
                     data: {action1: "getOrganisationType", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -66,40 +56,31 @@
             }
         });
 
-
-        $("#hierarchysearch").autocomplete({
-
-            source: function (request, response) {
-                var random = document.getElementById("hierarchysearch").value;
-                $.ajax({
-                    url: "OrganisationTypeController",
-                    dataType: "json",
-                    data: {action1: "gethierarchysearch", str: random},
-                    success: function (data) {
-
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#hierarchysearch').val(ui.item.label); // display the selected text
-                return false;
-            }
-        });
-
-
-
-
-
+//        $("#hierarchysearch").autocomplete({
+//            source: function (request, response) {
+//                var random = document.getElementById("hierarchysearch").value;
+//                $.ajax({
+//                    url: "OrganisationTypeController",
+//                    dataType: "json",
+//                    data: {action1: "gethierarchysearch", str: random},
+//                    success: function (data) {
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#hierarchysearch').val(ui.item.label); // display the selected text
+//                return false;
+//            }
+//        });
 
 
         $("#searchgeneration").autocomplete({
-
             source: function (request, response) {
                 var random = document.getElementById("searchgeneration").value;
                 $.ajax({
@@ -107,7 +88,6 @@
                     dataType: "json",
                     data: {action1: "getgeneration", str: random},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -124,30 +104,24 @@
         });
 
 
-
         $("#p_ot").autocomplete({
-
             source: function (request, response) {
-
                 var random = document.getElementById("p_ot").value;
                 var o_t = document.getElementById("org_type_name").value;
                 var generation = document.getElementById("generation").value;
                 var edit = editable;
-
                 if (document.getElementById("supern").value == 'N')
                 {
                     var superr = "N";
                 } else
                 {
                     var superr = "Y";
-
                 }
                 $.ajax({
                     url: "OrganisationTypeController",
                     dataType: "json",
                     data: {action1: "getParentOrganisationType", str: random, action2: o_t, action3: superr, edit: edit, generation: generation},
                     success: function (data) {
-
                         console.log(data);
                         response(data.list);
                     }, error: function (error) {
@@ -162,7 +136,6 @@
                 return false;
             }
         });
-
     });
 
     var editable = false;
@@ -171,81 +144,26 @@
         document.getElementById("org_type_name").disabled = false;
         document.getElementById("description").disabled = false;
         document.getElementById("p_ot").disabled = false;
-
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             editable = "false";
-            //document.getElementById("message").innerHTML = "";      // Remove message
             $("#message").html("");
             document.getElementById("organisation_type_id").value = "";
             document.getElementById("edit").disabled = true;
             document.getElementById("delete").disabled = true;
-//            document.getElementById("save_As").disabled = true;
             document.getElementById("supern").disabled = false;
             document.getElementById("supery").disabled = false;
-            //  setDefaultColor(document.getElementById("noOfRowsTraversed").value, 3);
             document.getElementById("org_type_name").focus();
         }
         if (id == 'edit') {
             editable = "true";
-            //  document.getElementById("save_As").disabled = false;
             document.getElementById("delete").disabled = false;
             document.getElementById("supern").disabled = false;
             document.getElementById("supery").disabled = false;
         }
+    }
 
-    }
-    function setDefaultColor(noOfRowsTraversed, noOfColumns) {
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            for (var j = 1; j <= noOfColumns; j++) {
-                document.getElementById("t1c" + (i * noOfColumns + j)).bgColor = "";     // set the default color.
-            }
-        }
-    }
-    function fillColumns(id) {
-        var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-        var noOfColumns = 6;
-        var columnId = id;
-    <%-- holds the id of the column being clicked, excluding the prefix t1c e.g. t1c3 (column 3 of table 1). --%>
-        columnId = columnId.substring(3, id.length);
-    <%-- for e.g. suppose id is t1c3 we want characters after t1c i.e beginIndex = 3. --%>
-        var lowerLimit, higherLimit, rowNo = 0;
-        for (var i = 0; i < noOfRowsTraversed; i++) {
-            lowerLimit = i * noOfColumns + 1;       // e.g. 11 = (1 * 10 + 1)
-            higherLimit = (i + 1) * noOfColumns;    // e.g. 20 = ((1 + 1) * 10)
-            rowNo++;
-            if ((columnId >= lowerLimit) && (columnId <= higherLimit))
-                break;
-        }
-        setDefaultColor(noOfRowsTraversed, noOfColumns);        // set default color of rows (i.e. of multiple coloumns).
-        var t1id = "t1c";       // particular column id of table 1 e.g. t1c3.
 
-        document.getElementById("organisation_type_id").value = document.getElementById("organisation_type_id" + rowNo).value;
-        document.getElementById("org_type_name").value = document.getElementById(t1id + (lowerLimit + 1)).innerHTML;
-        document.getElementById("p_ot").value = document.getElementById(t1id + (lowerLimit + 2)).innerHTML;
-        if (document.getElementById(t1id + (lowerLimit + 3)).innerHTML == 'N')
-        {
-            document.getElementById("supern").checked = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
-            document.getElementById("supery").unchecked = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
-        } else
-        {
-            document.getElementById("supery").checked = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
-            document.getElementById("supern").unchecked = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
-        }
-        document.getElementById("description").value = document.getElementById(t1id + (lowerLimit + 4)).innerHTML;
-        document.getElementById("generation").value = document.getElementById(t1id + (lowerLimit + 5)).innerHTML;
-        for (var i = 0; i < noOfColumns; i++) {
-            document.getElementById(t1id + (lowerLimit + i)).bgColor = "#d0dafd";        // set the background color of clicked row to yellow.
-        }
-        document.getElementById("edit").disabled = false;
-        if (!document.getElementById("save").disabled)   // if save button is already enabled, then make edit, and delete button enabled too.
-        {
-            document.getElementById("save_As").disabled = true;
-            document.getElementById("delete").disabled = false;
-        }
-        //  document.getElementById("message").innerHTML = "";      // Remove message
-        $("#message").html("");
-    }
     function setStatus(id) {
         if (id == 'save') {
             document.getElementById("clickedButton").value = "Save";
@@ -253,7 +171,7 @@
             document.getElementById("clickedButton").value = "Save AS New";
         } else
             document.getElementById("clickedButton").value = "Delete";
-        ;
+
     }
     function myLeftTrim(str) {
         var beginIndex = 0;
@@ -265,13 +183,13 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
             var org_type_name = document.getElementById("org_type_name").value;
             if (myLeftTrim(org_type_name).length == 0) {
-                // document.getElementById("message").innerHTML = "<td colspan='5' bgcolor='coral'><b>Organisation Type Name is required...</b></td>";
-                $("#message").html("<td colspan='5' bgcolor='coral'><b>Organisation Type Name is required...</b></td>");
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Type is required...</b></label></div>');
                 document.getElementById("org_type_name").focus();
                 return false; // code to stop from submitting the form2.
             }
@@ -290,23 +208,7 @@
             result = confirm("Are you sure you want to delete this record?")
         return result;
     }
-    function displayOrgnList(id) {
-        var queryString;
-        var active = document.getElementById("activee").value;
-        var searchgeneration = document.getElementById("searchgeneration").value;
-        var searchOrgType = document.getElementById("searchOrgType").value;
-        var hierarchysearch = document.getElementById("hierarchysearch").value;
-        if (id == 'viewPdf')
-        {
-            queryString = "requester=PRINT&searchOrgType=" + searchOrgType + "&active=" + active + "&searchgeneration=" + searchgeneration + "&hierarchysearch=" + hierarchysearch;
 
-        } else
-        {
-            queryString = "requester=PRINTXls&searchOrgType=" + searchOrgType;
-        }
-        var url = "orgTypeCont.do?" + queryString;
-        popupwin = openPopUp(url, "Organisation Type Report", 600, 900);
-    }
 
     function openPopUp(url, window_name, popup_height, popup_width) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
@@ -323,7 +225,6 @@
         }
     }
 
-
     function fillColumn(id, count) {
         $('#organisation_type_id').val(id);
         $('#org_type_name').val($("#" + count + '2').html());
@@ -339,10 +240,7 @@
         $('#delete').attr('disabled', false);
     }
 
-
 </script>
-
-
 
 
 <section>
@@ -350,8 +248,6 @@
         <h1>Organisation Type</h1>
     </div>
 </section>
-
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -372,12 +268,12 @@
                         <input class="form-control myInput searchInput1 w-100" type="text" id="searchgeneration" name="searchgeneration" value="${searchgeneration}" size="30" >
                     </div>
                 </div>
-                <div class="col-md-4">
+<!--                <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Org Type Hierarchy</label>
                         <input class="form-control myInput searchInput1 w-100" type="text" id="hierarchysearch" name="hierarchysearch" value="${hierarchysearch}" size="30" >
                     </div>
-                </div>
+                </div>-->
 
             </div>
 
@@ -385,8 +281,7 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <input class="btn normalBtn" type="submit" name="task" id="searchIn" value="Search Records">
-                    <!--                <input type="button" class="btn normalBtn" id="viewPdf" name="viewPdf" value="PDF" onclick="displayOrgnList(id)">
-                                    <input type="button" class="btn normalBtn" id="viewXls" name="viewXls" value="Excel" onclick="displayOrgnList(id)">-->
+
                 </div>
             </div>
         </form>
@@ -413,8 +308,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
-
                             <c:forEach var="orgType" items="${requestScope['orgTypeList']}"
                                        varStatus="loopCounter">
                                 <tr
@@ -436,9 +329,6 @@
     </div>
 </section>
 
-
-
-
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
@@ -458,7 +348,7 @@
                 <div class="col-md-4">
                     <div class="">
                         <div class="form-group">
-                            <label>Parent Organization Type Name<span class="text-danger">*</span></label>
+                            <label>Parent Organization Type Name<span class="text-danger"></span></label>
                             <input  class="form-control myInput" type="text" id="p_ot" name="p_ot" value="" size="40" disabled>
                         </div>
                     </div>
@@ -466,7 +356,7 @@
                 <div class="col-md-2">
                     <div class="">
                         <div class="form-group mb-1">
-                            <label class="" for="email">Is super child<span class="text-danger">*</span></label>
+                            <label class="" for="email">Is super child<span class="text-danger"></span></label>
                         </div>
                         <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
                             <label class="form-check-label ">
@@ -483,7 +373,6 @@
                 <div class="col-md-2">
                     <div class="">
                         <div class="form-group">
-                            <!--<label>Generation<span class="text-danger">*</span></label>-->
                             <input  class="form-control myInput" type="hidden" id="generation" name="generation" value="" size="40" disabled>
                         </div>
                     </div>
@@ -506,6 +395,7 @@
                         </div>
                     </c:if>
                 </div>
+                <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                                           
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>

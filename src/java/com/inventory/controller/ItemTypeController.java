@@ -13,6 +13,7 @@ import com.website.model.ContactUsModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -25,61 +26,38 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author jpss
+ * @author Komal
  */
 public class ItemTypeController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ServletContext ctx = getServletContext();
+        HttpSession session = request.getSession();
+        System.err.println("----------------------- item controller -----------------------------");
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemTypeModel model = new ItemTypeModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
-        
-        HttpSession session = request.getSession();
-        String user_name = session.getAttribute("log_user").toString();
-        System.err.println("logged user --" + user_name);
-        
-//        try {
-//            model.setConnection(DBConnection.getConnectionForUtf(ctx));
-//        } catch (Exception e) {
-//            System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
-//        }
-
-        if (!user_name.equals("sagar")) {
-
-            try {
-                model.setConnection(DBConnection.getConnectionForUtf(ctx));
-            } catch (Exception e) {
-                System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
-            }
-
-        } else {
-            model.setDriver(ctx.getInitParameter("driverClass"));
-            model.setUrl(ctx.getInitParameter("connectionString"));
-            model.setUser("reader");
-            model.setPassword("reader");
-            model.setConnection2();
+                
+        try {
+            String driverClass = session.getAttribute("driverClass").toString();
+            String connectionString = session.getAttribute("connectionString").toString();
+            String myDbUserName = session.getAttribute("myDbUserName").toString();
+            String myDbUserpass = session.getAttribute("myDbUserPass").toString();
+            
+            Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserpass);            
+            model.setConnection(con);
+        } catch (Exception e) {
+            System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
         }
-
         try {
             String searchItemType = "";
             try {
-                //----- This is only for Vendor key Person JQuery
                 String JQstring = request.getParameter("action1");
-                String q = request.getParameter("str");   // field own input
+                String q = request.getParameter("str");  
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
@@ -111,7 +89,7 @@ public class ItemTypeController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-
+            
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";
                 ac = "ACTIVE RECORDS";
@@ -123,13 +101,11 @@ public class ItemTypeController extends HttpServlet {
                 active = "";
                 ac = "ALL RECORDS";
             }
-
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(request.getParameter("item_type_id")));  // Pretty sure that office_type_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New")) {
-                int item_type_id;
+                int item_type_id=0;
                 try {
-                    // office_type_id may or may NOT be available i.e. it can be update or new record.
                     item_type_id = Integer.parseInt(request.getParameter("item_type_id"));
                 } catch (Exception e) {
                     item_type_id = 0;
@@ -140,7 +116,13 @@ public class ItemTypeController extends HttpServlet {
                 ItemType itemType = new ItemType();
                 itemType.setItem_type_id(item_type_id);
                 itemType.setItem_type(request.getParameter("item_type_name").trim());
+//                String superp = request.getParameter("super");
+//                if (superp.equals(null)) {
+//                    superp = "";
+//                }
+//                itemType.setSuperp(superp);
                 itemType.setDescription(request.getParameter("description").trim());
+                
                 if (item_type_id == 0) {
                     // if office_type_id was not provided, that means insert new record.
                     model.insertRecord(itemType);

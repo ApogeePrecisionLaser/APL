@@ -22,13 +22,8 @@ import org.codehaus.jettison.json.JSONException;
 //import org.json.simple.JSONArray;
 //import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
-import java.time.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-
-
-
-
 
 /**
  *
@@ -53,21 +48,32 @@ public class APLWebServiceController {
         } catch (Exception e) {
             System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
         }
-        String tosend = "false";
-
+        String tosend = "Failure";
         String otp = model.random(4);
         System.out.println("OTP is :" + otp);
         if (otpMap.containsKey(number)) {
             otpMap.remove(number);
         }
+        org.codehaus.jettison.json.JSONObject json = new org.codehaus.jettison.json.JSONObject();
         otpMap.put(number, otp);
         System.err.println("otp map--------" + otpMap);
+        try{
+        
         String unknum = model.sendSmsToAssignedFor(number, otp);
         if (unknum.equals("OK")) {
             System.out.println("OTP HAS BEEN SENT");
-            tosend = "true";
+            tosend = "Success";
+            json.put("result", "Success");
+            json.put("otp",otp);
+        }else{
+            json.put("result", "failure");
+        }
+        
+        }catch(JSONException e){
+            System.out.println("com.webservice.controller.APLWebServiceController.sendOTP() -"+e);
         }
 
+        tosend=json.toString();
         System.out.println("Response on mobile number :" + tosend);
         return tosend;
     }
@@ -79,6 +85,7 @@ public class APLWebServiceController {
     public String verifyOTP(org.codehaus.jettison.json.JSONObject jsnobject) {
         APLWebServiceModel model = new APLWebServiceModel();
         try {
+            // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
             System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
@@ -89,7 +96,7 @@ public class APLWebServiceController {
         //System.out.println(body);
 
         //JSONObject jsnobject = new JSONObject(body);
-        org.codehaus.jettison.json.JSONObject tosend = new org.codehaus.jettison.json.JSONObject();
+        //org.codehaus.jettison.json.JSONObject tosend = new org.codehaus.jettison.json.JSONObject();
         try {
             String number = jsnobject.get("number").toString();
             String otp = jsnobject.get("otp").toString();
@@ -98,29 +105,27 @@ public class APLWebServiceController {
             System.err.println("otpMap.get(number)-------" + otpMap.get(number));
             if (otp.equals(otpMap.get(number))) {
                 otpMap.remove(number);
-                tosend.put("result", "success");
+                //tosend.put("result", "Success");
+                resp="Success";
 
-                KeyPerson man = model.checkExisting(number);
-                status = model.UpdateRecord(number, man.getKey_person_id());
-                if (status == true) {
-                    tosend.put("result", "success");
+                //tosend.put("result", "success");
+                //KeyPerson man = model.checkExisting(number);
+                //status = model.UpdateRecord(number, man.getKey_person_id());
+//                if (status == true) {
+//                    tosend.put("result", "success");
+//
+//                } else {
+//                    tosend.put("result", "failure");
+//
+//                }
 
-                } else {
-                    tosend.put("result", "failure");
-
-                }
-
+            } else {
+                //tosend.put("result", "Failure");
+                resp="Failure";
             }
         } catch (JSONException ex) {
             Logger.getLogger(APLWebServiceController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        System.out.println(
-                "REsponse json obj for opt verify" + tosend);
-        resp = tosend.toString();
-
-        System.out.println(
-                "REsponse string for opt verify" + resp);
         return resp;
     }
 
@@ -159,15 +164,12 @@ public class APLWebServiceController {
             obj.put("city", json);
             json = model.getKeyPerson(number);
             obj.put("key_person", json);
-
-            json = model.getImageData(number);
+            
+            json=model.getImageData(number);
             obj.put("image_data", json);
-
-            json = model.getAttendanceData(number);
+            
+            json=model.getAttendanceData(number);
             obj.put("attendance", json);
-
-            json = model.getHolidayData(number);
-            obj.put("holiday", json);
 //            json = model.getItemType(number);
 //            obj.put("item_type", json);
 //            json = model.getItemNames(number);
@@ -187,7 +189,7 @@ public class APLWebServiceController {
         }
         return obj;
     }
-
+    
     @POST
     @Path("/saveAttendanceInOut")
     @Produces(MediaType.APPLICATION_JSON)
@@ -217,6 +219,7 @@ public class APLWebServiceController {
             String current_time = jObj.get("current_time").toString();
             String latitude = jObj.get("latitude").toString();
             String longitude = jObj.get("longitude").toString();
+            
 
             int count = model.saveAttendance(type, number, current_time, latitude, longitude);
             if(count==60){
@@ -234,7 +237,7 @@ public class APLWebServiceController {
         }
         return result;
     }
-
+    
     @POST
     @Path("/getCalendarData")
     @Produces(MediaType.APPLICATION_JSON)
@@ -244,7 +247,7 @@ public class APLWebServiceController {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
-            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -"+e);
         }
         JSONObject obj = new JSONObject();
 
@@ -261,7 +264,7 @@ public class APLWebServiceController {
             obj.put("status_type", json);
 
         } catch (Exception e) {
-            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -"+e);
         }
         return obj;
     }

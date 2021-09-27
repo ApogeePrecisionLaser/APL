@@ -207,3 +207,13 @@ table.dataTable thead .sorting_asc {
     overflow-x: auto;
     }
 }*/
+
+
+.verticleScroll{
+    max-height: 400px;
+}
+.verticleScroll .table td {
+    vertical-align: middle!important;
+    padding: 3px 6px!important;
+    font-size: 13px;
+}

@@ -7,7 +7,7 @@ package com.organization.tableClasses;
 
 /**
  *
- * @author Soft_Tech
+ * @author komal
  */
 public class OrganisationType {
     private int organisation_type_id;
@@ -29,8 +29,7 @@ public class OrganisationType {
         this.p_ot = p_ot;
     }
 
-    
-    
+   
     
     public int getGeneration() {
         return generation;

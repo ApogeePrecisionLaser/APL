@@ -6,7 +6,7 @@ package com.inventory.tableClasses;
 
 /**
  *
- * @author SoftTech
+ * @author Komal
  */
 public class ItemType {
 
@@ -30,6 +30,7 @@ public class ItemType {
     private String remark;
     private String active;
     private int revision_no;
+    private String superp;
 
     public String getRemark() {
         return remark;
@@ -75,6 +76,20 @@ public class ItemType {
      */
     public void setItem_type_id(int item_type_id) {
         this.item_type_id = item_type_id;
+    }
+
+    /**
+     * @return the superp
+     */
+    public String getSuperp() {
+        return superp;
+    }
+
+    /**
+     * @param superp the superp to set
+     */
+    public void setSuperp(String superp) {
+        this.superp = superp;
     }
 
 

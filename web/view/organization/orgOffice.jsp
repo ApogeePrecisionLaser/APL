@@ -252,32 +252,42 @@
                 }
             });
         });
-        $("#searchhierarchy").autocomplete({
+//        $("#searchhierarchy").autocomplete({
+//
+//            source: function (request, response) {
+//                var org_name = document.getElementById("org_name").value;
+//                var office_code = document.getElementById("office_code_search").value;
+//                var random = document.getElementById("office_name_search").value;
+//                $.ajax({
+//                    url: "OrgOfficeController",
+//                    dataType: "json",
+//                    data: {action1: "getOfficeName",
+//                        action2: org_name,
+//                        action3: office_code, str: random},
+//                    success: function (data) {
+//
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#searchhierarchy').val(ui.item.label); // display the selected text
+//                return false;
+//            }
+//        });
 
-            source: function (request, response) {
-                var org_name = document.getElementById("org_name").value;
-                var office_code = document.getElementById("office_code_search").value;
-                var random = document.getElementById("office_name_search").value;
-                $.ajax({
-                    url: "OrgOfficeController",
-                    dataType: "json",
-                    data: {action1: "getOfficeName",
-                        action2: org_name,
-                        action3: office_code, str: random},
-                    success: function (data) {
+        $("#serialnumber").blur(function () {
+            var p_org_office = $('#serialnumber').val();
 
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#searchhierarchy').val(ui.item.label); // display the selected text
-                return false;
+            if (p_org_office == "") {
+                $('#gst_div').show();
+            } else {
+                $('#gst_div').hide();
             }
         });
     });
@@ -307,9 +317,16 @@
         } else {
             $('#supern').attr('checked', true);
         }
+        // alert($('#serialnumber').val());
+
+        if (($('#serialnumber').val() !== null) && ($('#serialnumber').val() !== "")) {
+            $('#gst_div').hide();
+        } else {
+            $('#gst_div').show();
+        }
 
         $('#generation').val($("#" + count + '21').html());
-
+        $('#gst_number').val($("#" + count + '22').html());
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
     }
@@ -336,6 +353,7 @@
         document.getElementById("landline_no1").disabled = false;
         document.getElementById("landline_no2").disabled = false;
         document.getElementById("landline_no3").disabled = false;
+        document.getElementById("gst_number").disabled = false;
         document.getElementById("latitude").disabled = false;
         document.getElementById("longitude").disabled = false;
         document.getElementById("save").disabled = false;
@@ -351,7 +369,7 @@
             document.getElementById("delete").disabled = true;
             // document.getElementById("save_As").disabled = true;
             document.getElementById("get_cordinate").disabled = false;
-            setDefaultColordOrgn(document.getElementById("noOfRowsTraversed").value, 17);
+           // setDefaultColordOrgn(document.getElementById("noOfRowsTraversed").value, 17);
             document.getElementById("organisation_name").focus();
         }
         if (id == 'edit') {
@@ -389,6 +407,7 @@
             document.getElementById("clickedButton").value = "Delete";
     }
     function myLeftTrim(str) {
+        //  alert("myLeftTrim"+str);
         var beginIndex = 0;
         for (var i = 0; i < str.length; i++) {
             if (str.charAt(i) == ' ')
@@ -398,80 +417,165 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
+
+
+
     function verify() {
         var result;
-        if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
+        //alert("verify");
+       // $('#message').remove();
+        if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
             var organisation_name = document.getElementById("organisation_name").value;
-            var org_office_name = document.getElementById("org_office_name").value;
             var office_type = document.getElementById("office_type").value;
-            var office_code = document.getElementById("org_office_code").value;
+            var org_office_code = document.getElementById("org_office_code").value;
+            var org_office_name = document.getElementById("org_office_name").value;
             var address_line1 = document.getElementById("address_line1").value;
             var city_name = document.getElementById("city_name").value;
             var email_id1 = document.getElementById("email_id1").value;
-            var email_id2 = document.getElementById("email_id2").value;
-            var landline_no1 = document.getElementById("landline_no1").value;
-            if (myLeftTrim(organisation_name).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Organisation Name is required...</b></td>");
+
+
+            if (myLeftTrim(organisation_name).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Name is required...</b></label></div>');
                 document.getElementById("organisation_name").focus();
                 return false;
             }
-            if (myLeftTrim(office_code).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Office Code is required...</b></td>");
-                document.getElementById("office_code").focus();
-                return false;
-            }
-            if (myLeftTrim(org_office_name).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Organisation Office Name is required...</b></td>");
-                document.getElementById("org_office_name").focus();
-                return false;
-            }
-            if (myLeftTrim(office_type).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Org Office Type is required...</b></td>");
+            if (myLeftTrim(office_type).length === 0) {
+               // alert(office_type);
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Type  is required...</b></label></div>');
                 document.getElementById("office_type").focus();
                 return false;
             }
 
-            if (myLeftTrim(city_name).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>City Name is required...</b></td>");
-                document.getElementById("city_name").focus();
+            if (myLeftTrim(org_office_code).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Code  is required...</b></label></div>');
+                document.getElementById("org_office_code").focus();
                 return false;
             }
-            if (myLeftTrim(address_line1).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Address Line 1 is required...</b></td>");
+
+            if (myLeftTrim(org_office_name).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Name  is required...</b></label></div>');
+                document.getElementById("org_office_name").focus();
+                return false;
+            }
+            if (myLeftTrim(address_line1).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Address Line 1  is required...</b></label></div>');
                 document.getElementById("address_line1").focus();
                 return false;
             }
+
+            if (myLeftTrim(city_name).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>City is required...</b></label></div>');
+                document.getElementById("city_name").focus();
+                return false;
+            }
+            if (myLeftTrim(email_id1).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Email Id1 is required...</b></label></div>');
+                document.getElementById("email_id1").focus();
+                return false;
+            }
+
             var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
             if (reg.test(email_id1) == false) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Please Enter Correct 1st Email ID...</b></td>");
+               // alert(email_id1);
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Please Enter Correct Email Id...</b></label></div>');
                 document.getElementById("email_id1").focus();
-                return false; // code to stop from submitting the form2.
+                return false;
             }
-            if (myLeftTrim(email_id2).length > 0) {
-                if (reg.test(email_id2) == false) {
-                    $("#message").html("<td colspan='8' bgcolor='coral'><b>Please Enter Correct 2nd Email ID...</b></td>");
-                    document.getElementById("email_id2").focus();
-                    return false; // code to stop from submitting the form2.
-                }
-            }
-            if (myLeftTrim(landline_no1).length == 0) {
-                $("#message").html("<td colspan='8' bgcolor='coral'><b>Landline No 1 is required...</b></td>");
-                document.getElementById("landline_no1").focus();
-                return false; // code to stop from submitting the form2.
-            }
-            if (result == false)
-            {// if result has value false do nothing, so result will remain contain value false.
+
+            if (result === false) {
             } else {
                 result = true;
             }
-            if (document.getElementById("clickedButton").value == 'Save AS New') {
+            if (document.getElementById("clickedButton").value === 'Save AS New') {
                 result = confirm("Are you sure you want to save it as New record?")
                 return result;
             }
-        } else
-            result = confirm("Are you sure you wantto delete this record?")
+        } else {
+            result = confirm("Are you sure you want to delete this record?");
+        }
         return result;
     }
+
+
+
+
+//    function verify() {
+//        //alert("insert------");
+//        var result;
+//        if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
+//            var organisation_name = document.getElementById("organisation_name").value;
+//            var org_office_name = document.getElementById("org_office_name").value;
+//            var office_type = document.getElementById("office_type").value;
+//            var office_code = document.getElementById("org_office_code").value;
+//            var address_line1 = document.getElementById("address_line1").value;
+//            var city_name = document.getElementById("city_name").value;
+//            var email_id1 = document.getElementById("email_id1").value;
+//            //  var email_id2 = document.getElementById("email_id2").value;
+//            //  var landline_no1 = document.getElementById("landline_no1").value;
+//
+//            alert("address_line1---" + address_line1);
+//
+//            if (myLeftTrim(organisation_name).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Name is required...</b></label></div>');
+//                document.getElementById("organisation_name").focus();
+//                return false;
+//            }
+//            if (myLeftTrim(office_code).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Code is required...</b></label></div>');
+//                document.getElementById("office_code").focus();
+//                return false;
+//            }
+//            if (myLeftTrim(org_office_name).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Name is required...</b></label></div>');
+//                document.getElementById("org_office_name").focus();
+//                return false;
+//            }
+//            if (myLeftTrim(office_type).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Type is required...</b></label></div>');
+//                document.getElementById("office_type").focus();
+//                return false;
+//            }
+//
+//            if (myLeftTrim(city_name).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>City Name is required...</b></label></div>');
+//                document.getElementById("city_name").focus();
+//                return false;
+//            }
+//            if (myLeftTrim(address_line1).length == 0) {
+//                alert(address_line1);
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Address is required...</b></label></div>');
+//                document.getElementById("address_line1").focus();
+//                return false;
+//            }
+//
+//            if (myLeftTrim(email_id1).length == 0) {
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Email Id1 required...</b></label></div>');
+//                document.getElementById("email_id1").focus();
+//                return false;
+//            }
+//            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+//            if (reg.test(email_id1) == false) {
+//                alert(email_id1);
+//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Please Enter Correct Email ID 1...</b></label></div>');
+//                document.getElementById("email_id1").focus();
+//                return false; // code to stop from submitting the form2.
+//            }
+//
+//
+//            if (result == false)
+//            {// if result has value false do nothing, so result will remain contain value false.
+//            } else {
+//                result = true;
+//            }
+//            if (document.getElementById("clickedButton").value == 'Save AS New') {
+//                result = confirm("Are you sure you want to save it as New record?")
+//                return result;
+//            }
+//        } else
+//            result = confirm("Are you sure you wantto delete this record?")
+//        return result;
+//    }
 
 
     function verifySearch() {
@@ -661,7 +765,7 @@
         <div class="headBox">
             <h5 class="">Search Engine</h5>
         </div>
-        <form name="form1" method="POST" action="OrgOfficeController" onsubmit="returnverifySearch();" >
+        <form name="form1" method="POST" action="OrgOfficeController" onsubmit="return verifySearch();" >
             <div class="row mt-3">
                 <div class="col-md-4 mb-md-2">
                     <div class="form-groupmb-md-0">
@@ -697,12 +801,12 @@
                                value="${searchgeneration}" size="20">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Org Office hierarchy</label>
-                        <input type="text"  class="form-control myInput" id="searchhierarchy" name="searchhierarchy" value="${searchhierarchy}" size="20">
-                    </div>
-                </div>
+                <!--                <div class="col-md-4">
+                                    <div class="form-group mb-md-0">
+                                        <label>Org Office hierarchy</label>
+                                        <input type="text"  class="form-control myInput" id="searchhierarchy" name="searchhierarchy" value="${searchhierarchy}" size="20">
+                                    </div>
+                                </div>-->
 
             </div>
 
@@ -723,8 +827,8 @@
         </div>
         <div class="row mt-3 myTable">
             <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%">
+                <div class="table-responsive verticleScroll">
+                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
                         <thead>
                             <tr>   
                                 <th>S.No.</th>
@@ -733,8 +837,8 @@
                                 <th>Office_Name</th>
                                 <th>Office_Type</th>
                                 <th>Address_1</th>
-                                <th style="display: none">Address_2</th>
-                                <th style="display: none">Address_3</th>
+                                <th >Address_2</th>
+                                <th >Address_3</th>
                                 <th>City Name</th>
                                 <th>First Email ID</th>
                                 <th style="display: none">Second Email ID</th>
@@ -748,6 +852,7 @@
                                 <th>Parent Org Office</th>
                                 <th>Is Super Child</th>
                                 <th>Generation</th>
+                                <th>GST Number</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -761,8 +866,8 @@
                                     <td id="${loopCounter.count }4">${organisation.org_office_name}</td>
                                     <td id="${loopCounter.count }5">${organisation.office_type}</td>
                                     <td id="${loopCounter.count }6">${organisation.address_line1}</td>
-                                    <td id="${loopCounter.count }7" style="display: none">${organisation.address_line2}</td>
-                                    <td id="${loopCounter.count }8" style="display: none">${organisation.address_line3}</td>
+                                    <td id="${loopCounter.count }7" >${organisation.address_line2}</td>
+                                    <td id="${loopCounter.count }8" >${organisation.address_line3}</td>
                                     <td id="${loopCounter.count }9">${organisation.city_name}</td>
                                     <%-- <td id="t1c${IDGenerator.uniqueID}" class="new_input" onclick="fillColumns(id)">${organisation.state_name}</td>--%>
                                     <td id="${loopCounter.count }10">${organisation.email_id1}</td>
@@ -777,6 +882,7 @@
                                     <td id="${loopCounter.count }19">${organisation.p_org}</td>
                                     <td id="${loopCounter.count }20">${organisation.superp}</td>
                                     <td id="${loopCounter.count }21">${organisation.generation}</td>
+                                    <td id="${loopCounter.count }22">${organisation.gst_number}</td>
 
                                     <td>
                                         <input type="button" class="btn normalBtn"  value ="View Map" id="map_container${loopCounter.count}" onclick="openMap('${organisation.org_office_id}');"/>
@@ -848,7 +954,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Address Line2<span class="text-danger">*</span></label>                            
+                            <label>Address Line2<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="address_line2" name="address_line2" value="" disabled>
                         </div>
                     </div>
@@ -856,7 +962,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Address Line3<span class="text-danger">*</span></label>                            
+                            <label>Address Line3<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="address_line3" name="address_line3" value="" disabled>
                         </div>
                     </div>
@@ -882,7 +988,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Second EmailID<span class="text-danger">*</span></label>                            
+                            <label>Second EmailID<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="email_id2" name="email_id2" value="" disabled>
                         </div>
                     </div>
@@ -900,7 +1006,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Mobile No2<span class="text-danger">*</span></label>                            
+                            <label>Mobile No2<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="mobile_no2" name="mobile_no2" value="" maxlength="10" disabled>
                         </div>
                     </div>
@@ -910,7 +1016,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Landline No1<span class="text-danger">*</span></label>                            
+                            <label>Landline No1<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="landline_no1" name="landline_no1" value="" disabled>
                         </div>
                     </div>
@@ -918,7 +1024,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Landline No2<span class="text-danger">*</span></label>                            
+                            <label>Landline No2<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="landline_no2" name="landline_no2" value="" disabled>
                         </div>
                     </div>
@@ -926,40 +1032,19 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Landline No3<span class="text-danger">*</span></label>                            
+                            <label>Landline No3<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="landline_no3" name="landline_no3"  value="" disabled>
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            <div class="row mt-3">
+            <div class="row">
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Latitude<span class="text-danger">*</span></label>                            
-                            <input class="form-control myInput" type="text" id="latitude" name="latitude" value="" size="20" disabled>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Longitude<span class="text-danger">*</span></label>   
-                            <div class="d-flex">
-                                <input class="form-control myInput rounded-0" type="text" id="longitude" name="longitude" value="" size="20" disabled>
-                                <input class="btn normalBtn rounded-0 px-2" type="button" id="get_cordinate" value="Get Cordinate" onclick="openMapForCord()" disabled>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Parent Org Office<span class="text-danger">*</span></label>                            
+                            <label>Parent Org Office<span class="text-danger"></span></label>                            
                             <input class="form-control myInput" type="text" id="serialnumber" name="serialnumber"  value="${serialnumber}" disabled>
                         </div>
                     </div>
@@ -967,7 +1052,7 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group mb-1">
-                            <label class="" for="email">Is super child<span class="text-danger">*</span></label>
+                            <label class="" for="email">Is super child<span class="text-danger"></span></label>
                         </div>
                         <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
                             <label class="form-check-label">
@@ -981,7 +1066,41 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3" id="gst_div">
+                    <div class="">
+                        <div class="form-group">
+                            <label>GST Number<span class="text-danger"></span></label>                            
+                            <input class="form-control myInput" type="text" id="gst_number" name="gst_number"  value="" disabled>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Latitude<span class="text-danger"></span></label>                            
+                            <input class="form-control myInput" type="text" id="latitude" name="latitude" value="" size="20" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Longitude<span class="text-danger"></span></label>   
+                            <div class="d-flex">
+                                <input class="form-control myInput rounded-0" type="text" id="longitude" name="longitude" value="" size="20" disabled>
+                                <input class="btn normalBtn rounded-0 px-2" type="button" id="get_cordinate" value="Get Cordinate" onclick="openMapForCord()" disabled>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="col-md-3">
                 <div class="">
                     <div class="form-group">
@@ -999,6 +1118,7 @@
                         </div>
                     </c:if>
                 </div>
+                <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center"> 
                     <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
@@ -1006,7 +1126,6 @@
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
                 </div>
             </div>
-
         </form>
     </div>
 </section>

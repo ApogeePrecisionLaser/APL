@@ -5,11 +5,10 @@
     var myData = "9758128792";
     var jsonData;
     var holi_date;
-    var holi_month = "0";
+    var holi_month;
     var holi_day;
     var holi_year;
-    var holiJSON = "";
-    var occassion = "";
+    var holiJSON;
 
     $.ajax({
         type: "POST",
@@ -20,23 +19,13 @@
         success: function (result) {
             console.log(result);
             jsonData = JSON.parse(result);
-            //alert("size --"+jsonData["holiday_data"].length);
-            //alert("holiday data --"+jsonData["holiday_data"]);
-            holiJSON = jsonData["holiday_data"];
-            //holi_date = jsonData["holiday_data"][0]["holiday_date"];            
-            //alert("holiJSON length --" + holiJSON.length);
-
-//            for (var hh = 0; hh < holiJSON.length; hh ++ ) {
-//
-//                holi_date = holiJSON[hh]["holiday_date"];
-//
-//                var split_holi_date = holi_date.split("-");
-//                holi_year = split_holi_date[0];
-//                holi_month = split_holi_date[1];
-//                holi_day = split_holi_date[2];
-//                alert("day -" + holi_day + " month -" + holi_month + " year -" + holi_year);
-//            }
-
+            //alert("holiday data --"+jsonData["holiday_data"][0]["holiday_name"]);
+            holi_date = jsonData["holiday_data"][0]["holiday_date"];
+            //alert("holi date --"+holi_date);
+            holi_date = holi_date.toString().substr(0, holi_date.indexOf(' '));
+            //alert("sunstring holi date --"+holi_date);
+            holi_year = holi_date.substr(0, holi_date.indexOf('-'));
+            //alert("holi year ----"+holi_year);
             //holi_month
             holi_day = "02";
             holi_month = "10";
@@ -105,7 +94,7 @@
 
         };
 
-        Calendar.prototype.drawOcassion = function (e, hol, hol_name) {//alert("holi name --"+hol_name);
+        Calendar.prototype.drawOcassion = function (e, hol) {
             var headDay = document.getElementsByClassName('head-day'),
                     headMonth = document.getElementsByClassName('head-month');
 
@@ -113,67 +102,37 @@
             headMonth[0].innerHTML = monthTag[month] + " - " + year;
 
 
-//            alert("val of e day ====" + e);
-//            alert("val of e month ====" + month);
-            var int_month = (parseInt(holi_month)) - 1;
-            var int_day = (parseInt(holi_day));
+//alert("val of e day ===="+e);
+//alert("val of e month ===="+month);
+//            var int_month = (parseInt(holi_month)) - 1;
+//            var int_day = (parseInt(holi_day));
 
-
-//            for (var hh = 0; hh < holiJSON.length; hh++) {
+//            if (hol.length > 0) {
 //                debugger;
-//                var holi_name = holiJSON[hh]["holiday_name"];                
-//                holi_date = holiJSON[hh]["holiday_date"];
-//                var split_holi_date = holi_date.split("-");
-//                holi_year = split_holi_date[0];
-//                holi_month = split_holi_date[1];
-//                holi_day = split_holi_date[2];
-//                //alert("day -" + holi_day + " month -" + holi_month + " year -" + holi_year);
 //
-//
-//                var int_month = (parseInt(holi_month)) - 1;
-//                //alert("int month ---- "+int_month);
-//                var int_day = (parseInt(holi_day));
-//                if (e == int_day && month == int_month) {//alert("holiday name -"+holi_name); 
-//                    var occassion=holi_name.toString();
-//                    //alert("holiday name -"+hho);                                       
+//                if (e == int_day && month == int_month) {
 //                    var headOccasion = document.getElementsByClassName('head-occasion');
-//                    headOccasion[0].innerHTML = occassion;
+//                    headOccasion[0].innerHTML = "Gandhi Jayanti";
 //
-//                } else {
+//                }else{
 //                    var headOccasion = document.getElementsByClassName('head-occasion');
 //                    headOccasion[0].innerHTML = "";
 //                }
-//
 //            }
 
-//alert("hol length -"+hol.length);
+
             if (hol.length > 0) {
-                debugger;
 
-                if (e == int_day && month == int_month) {//alert("holi name under --"+hol_name);
-                    var headOccasion = document.getElementsByClassName('head-occasion');
-                    //headOccasion[0].innerHTML = "Gandhi Jayanti";
-                    headOccasion[0].innerHTML = hol_name;
+                var day_arr;
 
-                } else {//alert("holi name else --"+hol_name);
-                    var headOccasion = document.getElementsByClassName('head-occasion');
-                    headOccasion[0].innerHTML = "";
-                }
+                for (var h = 0; h < holiJSON.length; h++)
+                    var datee = holiJSON[h]["holiday_date"];
+                    //datee = datee.toString().substr(0, datee.indexOf(' '));
+                    datee = datee;
+                    alert("deatee -- "+datee);
+
+
             }
-
-
-//            if (hol.length > 0) {
-//
-//                var day_arr;
-//
-//                for (var h = 0; h < holiJSON.length; h++)
-//                    var datee = holiJSON[h]["holiday_date"];
-//                    //datee = datee.toString().substr(0, datee.indexOf(' '));
-//                    datee = datee;
-//                    //alert("deatee -- "+datee);
-//
-//
-//            }
 
 
 
@@ -181,7 +140,7 @@
         };
 
         Calendar.prototype.drawDays = function () {
-            //debugger;
+            debugger;
             var startDay = new Date(year, month, 1).getDay(),
                     nDays = new Date(year, month + 1, 0).getDate(),
                     n = startDay;
@@ -197,7 +156,7 @@
             }
             //alert("month ---"+month);
             for (var j = 0; j < 42; j++) {
-                //debugger;
+                debugger;
                 if (days[j].innerHTML === "") {
 
                     days[j].id = "disabled";
@@ -211,9 +170,8 @@
                     }
 
                     // Start Edit 
-                    //debugger;
                     if (month == '9') {
-                        //days[11 + startDay - 1].id = "holiday";
+                        days[11 + startDay - 1].id = "holiday";
                         //days[14+startDay-1].id = "holiday";
 
                         //this.drawHeader(day,"holiday");
@@ -221,36 +179,12 @@
 //                        headOccasion[0].innerHTML = "hello its birthday";
 
                     }
-
-
-                    for (var hh = 0; hh < holiJSON.length; hh++) {
-                        holi_date = holiJSON[hh]["holiday_date"];
-                        var split_holi_date = holi_date.split("-");
-                        holi_year = split_holi_date[0];
-                        holi_month = split_holi_date[1];
-                        holi_day = split_holi_date[2];
-                        //alert("day -" + holi_day + " month -" + holi_month + " year -" + holi_year);
-
-
-                        var int_month = (parseInt(holi_month)) - 1;
-                        //alert("int month ---- "+int_month);
-                        var int_day = (parseInt(holi_day));
-                        if (month == int_month) {
-                            //debugger;//alert("day-"+int_day+" month-"+month+" int month-"+int_month);
-                            days[int_day + startDay - 1].id = "holiday";
-                        }
-
+                    var int_month = (parseInt(holi_month)) - 1;
+                    //alert("holi day ---- "+holi_day);
+                    var int_day = (parseInt(holi_day));
+                    if (month == int_month) {
+                        days[int_day + startDay - 1].id = "holiday";
                     }
-
-//                    for (var n = 0; n < 3; n++) {
-//                        var int_month = (parseInt(holi_month)) - 1;
-//                        //alert("int month ---- "+int_month);
-//                        var int_day = (parseInt(holi_day));
-//                        if (month == int_month) {
-//                            days[int_day + n + startDay - 1].id = "holiday";
-//                        }
-//
-//                    }
 
 
                     // End Edit
@@ -277,44 +211,8 @@
 //            alert("inner html ---"+o.innerHTML);
 //            alert("inner year ---"+year);
 //            alert("inner month ---"+month);
-//            alert("selectedDay ---"+selectedDay);
             //this.drawHeader(o.innerHTML, "hol");
-
-
-            for (var hh = 0; hh < holiJSON.length; hh++) {
-                //debugger;
-                var holi_name = holiJSON[hh]["holiday_name"];
-                holi_date = holiJSON[hh]["holiday_date"];
-                var split_holi_date = holi_date.split("-");
-                holi_year = split_holi_date[0];
-                holi_month = split_holi_date[1];
-                holi_day = split_holi_date[2];
-                //alert("day -" + holi_day + " month -" + holi_month + " year -" + holi_year);
-
-
-                var int_month = (parseInt(holi_month)) - 1;
-                //alert("int month ---- "+int_month);
-                var int_day = (parseInt(holi_day));
-                if (o.innerHTML == int_day && month == int_month) {//alert("holiday name -"+holi_name); 
-                    occassion = holi_name.toString();
-                    //alert("occasion --" + occassion);
-                    this.drawOcassion(o.innerHTML, "hol", occassion);
-                    hh=holiJSON.length;
-                } else {
-                    occassion = "";
-                    this.drawOcassion(o.innerHTML, "hol", occassion);
-                    
-                }
-
-            }
-            
-//            if(occassion==""){
-//                this.drawOcassion(o.innerHTML, "hol", occassion);
-//            }
-
-//            alert("occasion --"+occassion);            
-//            this.drawOcassion(o.innerHTML, "hol");
-            //alert("occassion -"+occassion);
+            this.drawOcassion(o.innerHTML, "hol");
             this.setCookie('selected_day', 1);
 
         };

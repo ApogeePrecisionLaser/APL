@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
  *
- * @author JPSS
+ * @author komal
  */
 public class DesignationModel {
 

@@ -19,7 +19,8 @@
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
-        <param-value>jdbc:mysql://localhost:3306/apl</param-value>
+        <param-value>jdbc:mysql://localhost:3306/apl_secure</param-value>
+<!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
@@ -27,11 +28,27 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-<!--        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>-->
+        <!--        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>-->
         <param-value>root</param-value>
     </context-param>
+    
+    
+    
+    <filter>
+        <filter-name>MyCustomLogFilter</filter-name>
+        <filter-class>com.apogee.util.MyCustomLogFilter</filter-class>
+        <init-param>
+            <param-name>avoid-urls</param-name>
+            <param-value>login.jsp</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>MyCustomLogFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
    
-   <!-- start webservices-->
+    <!-- start webservices-->
     <servlet>
         <servlet-name>ServletAdaptor</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -156,7 +173,7 @@
     
     
     
-    <!--Start org Key person-->keyPerson
+    <!--Start org Key person-->
     <servlet>
         <servlet-name>KeypersonController</servlet-name>
         <servlet-class>com.organization.controller.KeypersonController</servlet-class>
@@ -284,7 +301,7 @@
     <!--End Item Type-->
     
     
-      <!--Start Item name-->
+    <!--Start Item name-->
     
     <servlet>
         <servlet-name>ItemNameController</servlet-name>
@@ -305,6 +322,199 @@
     </servlet-mapping>
     <!--End Item name-->
     
+    
+    <servlet>
+        <servlet-name>ItemImagesController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemImagesController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemImagesController</servlet-name>
+        <url-pattern>/ItemImagesController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_images</servlet-name>
+        <jsp-file>/view/Inventory/item_images.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_images</servlet-name>
+        <url-pattern>/item_images</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Item name-->
+    
+    
+    
+     
+    <!--Start Manufacturer -->
+    
+    <servlet>
+        <servlet-name>ManufacturerController</servlet-name>
+        <servlet-class>com.inventory.controller.ManufacturerController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManufacturerController</servlet-name>
+        <url-pattern>/ManufacturerController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>manufacturer</servlet-name>
+        <jsp-file>/view/Inventory/manufacturer.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manufacturer</servlet-name>
+        <url-pattern>/manufacturer</url-pattern>
+    </servlet-mapping>
+    <!--End Manufacturer-->
+    
+    
+    <!--Start model_name -->
+    
+    <servlet>
+        <servlet-name>ModelNameController</servlet-name>
+        <servlet-class>com.inventory.controller.ModelNameController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ModelNameController</servlet-name>
+        <url-pattern>/ModelNameController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>model_name</servlet-name>
+        <jsp-file>/view/Inventory/model_name.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>model_name</servlet-name>
+        <url-pattern>/model_name</url-pattern>
+    </servlet-mapping>
+    <!--End model_name-->
+   
+    
+    <!--Start manufacturer item -->
+    
+    <servlet>
+        <servlet-name>ManufacturerItemMapController</servlet-name>
+        <servlet-class>com.inventory.controller.ManufacturerItemMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManufacturerItemMapController</servlet-name>
+        <url-pattern>/ManufacturerItemMapController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>manufacturer_item_map</servlet-name>
+        <jsp-file>/view/Inventory/manufacturer_item_map.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manufacturer_item_map</servlet-name>
+        <url-pattern>/manufacturer_item_map</url-pattern>
+    </servlet-mapping>
+    <!--End manufacturer item -->
+	
+	
+	
+	
+    <!--Start Basic Inventory -->
+    
+    <servlet>
+        <servlet-name>InventoryBasicController</servlet-name>
+        <servlet-class>com.inventory.controller.InventoryBasicController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InventoryBasicController</servlet-name>
+        <url-pattern>/InventoryBasicController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>inventory_basic</servlet-name>
+        <jsp-file>/view/Inventory/inventory_basic.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>inventory_basic</servlet-name>
+        <url-pattern>/inventory_basic</url-pattern>
+    </servlet-mapping>
+    <!--End Basic Inventory -->
+    
+    
+    <!--Start Inventory -->
+    
+    <servlet>
+        <servlet-name>InventoryController</servlet-name>
+        <servlet-class>com.inventory.controller.InventoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InventoryController</servlet-name>
+        <url-pattern>/InventoryController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>inventory</servlet-name>
+        <jsp-file>/view/Inventory/inventory.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>inventory</servlet-name>
+        <url-pattern>/inventory</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Inventory -->
+    
+    
+    <!--Start Indent -->
+    
+    <servlet>
+        <servlet-name>IndentController</servlet-name>
+        <servlet-class>com.inventory.controller.IndentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndentController</servlet-name>
+        <url-pattern>/IndentController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>indent</servlet-name>
+        <jsp-file>/view/Inventory/indent.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>indent</servlet-name>
+        <url-pattern>/indent</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Indent -->
+    
+    
+    <!--Start Item authorization -->
+    
+    <servlet>
+        <servlet-name>ItemAuthorizationController</servlet-name>
+        <servlet-class>com.inventory.controller.ItemAuthorizationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ItemAuthorizationController</servlet-name>
+        <url-pattern>/ItemAuthorizationController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>item_authorization</servlet-name>
+        <jsp-file>/view/Inventory/item_authorization.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_authorization</servlet-name>
+        <url-pattern>/item_authorization</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Item authorization -->
+    
+    
+    <servlet>
+        <servlet-name>items_list</servlet-name>
+        <jsp-file>/view/Inventory/items_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>items_list</servlet-name>
+        <url-pattern>/items_list</url-pattern>
+    </servlet-mapping>
+    
+        
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>
         <jsp-file>/view/organization/organizationDesignation.jsp</jsp-file>
@@ -562,6 +772,23 @@
     <servlet-mapping>
         <servlet-name>view_calendar</servlet-name>
         <url-pattern>/view_calendar</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>UserPrivilegeController</servlet-name>
+        <servlet-class>com.apogee.admin.UserPrivilegeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserPrivilegeController</servlet-name>
+        <url-pattern>/UserPrivilegeController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>user_privilege</servlet-name>
+        <jsp-file>/view/admin/user_privilege.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>user_privilege</servlet-name>
+        <url-pattern>/user_privilege</url-pattern>
     </servlet-mapping>
     
     

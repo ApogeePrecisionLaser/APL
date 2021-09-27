@@ -386,10 +386,10 @@
                 </form>
             </div>
 
-            <DIV class="container">        
+            <div class="table-responsive verticleScroll">     
                 <form name="form1" method="POST" action="orgTypeCont.do" class="boxeffext ">
 
-                    <table id="table1" width="600"  border="1"  align="center" class="table table-bordered table-striped">
+                    <table id="table1" width="600"  border="1"  align="center" class="table table-bordered table-striped" data-page-length='6'>
                         <tr>
                             <th class="heading">S.No.</th>
                             <th class="heading">Organization Type Name</th>

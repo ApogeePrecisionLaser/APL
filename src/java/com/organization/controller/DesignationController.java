@@ -23,7 +23,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author JPSS
+ * @author komal
  */
 public class DesignationController extends HttpServlet {
 

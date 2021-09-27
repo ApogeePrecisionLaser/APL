@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author SoftTech
+ * @author Komal
  */
 public class OrganisationName {
 

@@ -23,7 +23,7 @@ import org.json.simple.JSONObject;
 
 /**
  *
- * @author Soft_Tech
+ * @author komal
  */
 public class OrganisationTypeController extends HttpServlet {
 
@@ -66,9 +66,9 @@ public class OrganisationTypeController extends HttpServlet {
                         String generation = request.getParameter("generation");
                         list = orgTypeModel.getParentOrgType(q, organisation_type, supper, edit, generation);
                     }
-                    if (JQstring.equals("gethierarchysearch")) {
-                        list = orgTypeModel.getHierarchsearch(q);
-                    }
+//                    if (JQstring.equals("gethierarchysearch")) {
+//                        list = orgTypeModel.getHierarchsearch(q);
+//                    }
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
@@ -81,7 +81,7 @@ public class OrganisationTypeController extends HttpServlet {
             }
             String searchOrgType = request.getParameter("searchOrgType");
             String searchgeneration = request.getParameter("searchgeneration");
-            String searchhierarchy = request.getParameter("hierarchysearch");
+           // String searchhierarchy = request.getParameter("hierarchysearch");
 
             try {
                 if (searchOrgType == null) {
@@ -90,9 +90,9 @@ public class OrganisationTypeController extends HttpServlet {
                 if (searchgeneration == null) {
                     searchgeneration = "";
                 }
-                if (searchhierarchy == null) {
-                    searchhierarchy = "";
-                }
+//                if (searchhierarchy == null) {
+//                    searchhierarchy = "";
+//                }
             } catch (Exception e) {
             }
 
@@ -152,11 +152,11 @@ public class OrganisationTypeController extends HttpServlet {
 
             // Logic to show data in the table.
             
-            List<OrganisationType> orgTypeList = orgTypeModel.showData(searchOrgType, searchgeneration, active, searchhierarchy);
+            List<OrganisationType> orgTypeList = orgTypeModel.showData(searchOrgType, searchgeneration);
 
             request.setAttribute("searchOrgType", searchOrgType);
             request.setAttribute("searchgeneration", searchgeneration);
-            request.setAttribute("hierarchysearch", searchhierarchy);
+           // request.setAttribute("hierarchysearch", searchhierarchy);
             request.setAttribute("orgTypeList", orgTypeList);
             request.setAttribute("message", orgTypeModel.getMessage());
             request.setAttribute("msgBgColor", orgTypeModel.getMsgBgColor());

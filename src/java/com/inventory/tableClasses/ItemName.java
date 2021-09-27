@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  *
- * @author SoftTech
+ * @author Komal
  */
 public class ItemName {
 
@@ -26,6 +26,12 @@ public class ItemName {
     private int item_image_details_id;
     private String image_path;
     private String image_name;
+    private String destination_path;
+    private String parent_item;
+    private String parent_item_id;
+    private int generation;
+    private String superp;
+    private String prefix;
     /**
      * @return the item_names_id
      */
@@ -220,6 +226,90 @@ public class ItemName {
      */
     public void setImage_name(String image_name) {
         this.image_name = image_name;
+    }
+
+    /**
+     * @return the destination_path
+     */
+    public String getDestination_path() {
+        return destination_path;
+    }
+
+    /**
+     * @param destination_path the destination_path to set
+     */
+    public void setDestination_path(String destination_path) {
+        this.destination_path = destination_path;
+    }
+
+    /**
+     * @return the parent_item
+     */
+    public String getParent_item() {
+        return parent_item;
+    }
+
+    /**
+     * @param parent_item the parent_item to set
+     */
+    public void setParent_item(String parent_item) {
+        this.parent_item = parent_item;
+    }
+
+    /**
+     * @return the generation
+     */
+    public int getGeneration() {
+        return generation;
+    }
+
+    /**
+     * @param generation the generation to set
+     */
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+    
+    /**
+     * @return the superp
+     */
+    public String getSuperp() {
+        return superp;
+    }
+
+    /**
+     * @param superp the superp to set
+     */
+    public void setSuperp(String superp) {
+        this.superp = superp;
+    }
+
+    /**
+     * @return the parent_item_id
+     */
+    public String getParent_item_id() {
+        return parent_item_id;
+    }
+
+    /**
+     * @param parent_item_id the parent_item_id to set
+     */
+    public void setParent_item_id(String parent_item_id) {
+        this.parent_item_id = parent_item_id;
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
 }
