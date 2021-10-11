@@ -41,7 +41,7 @@ import org.json.simple.JSONArray;
  * @author Komal
  */
 public class IndentModel {
-    
+
     private static Connection connection;
     private String message;
     private String msgBgColor;
@@ -59,57 +59,44 @@ public class IndentModel {
         }
     }
 
-    public List<Inventory> showData(String searchItemName, String searchOrgOffice, String searchKeyPerson, String search_item_code) {
-        List<Inventory> list = new ArrayList<Inventory>();
+    public List<Indent> showData(String logged_key_person, String office_admin) {
+        List<Indent> list = new ArrayList<Indent>();
 
-        if (searchItemName == null) {
-            searchItemName = "";
-        }
-        if (searchOrgOffice == null) {
-            searchOrgOffice = "";
-        }
-        if (searchKeyPerson == null) {
-            searchKeyPerson = "";
-        }
-        if (search_item_code == null) {
-            search_item_code = "";
-        }
+        String query = " select indt.indent_no,indt.date_time,indt.description,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time "
+                + " ,s.status,kp2.key_person_name as requested_to,indt.indent_table_id,indi.indent_item_id,indi.approved_qty from indent_table indt,indent_item indi,key_person kp1,key_person kp2,"
+                + " item_names itn,purpose p,status s where indt.indent_table_id=indi.indent_table_id "
+                + " and indt.requested_by=kp1.key_person_id and indt.requested_to=kp2.key_person_id and indi.item_names_id=itn.item_names_id"
+                + " and indi.purpose_id=p.purpose_id "
+                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and kp1.active='Y' and kp2.active='Y' ";
 
-        String query = "select inv.inventory_id,inv.inventory_basic_id,inn.item_name,inn.item_code,oo.org_office_name,kp.key_person_name,"
-                + " inv.inward_quantity,inv.outward_quantity, "
-                + " inv.date_time,inv.reference_document_type,inv.reference_document_id,inv.description "
-                + " from item_names inn,org_office oo,inventory_basic ib,key_person kp,inventory inv where inn.item_names_id=ib.item_names_id and "
-                + " oo.org_office_id=ib.org_office_id and kp.key_person_id=inv.key_person_id and ib.inventory_basic_id=inv.inventory_basic_id and"
-                + " inn.active='Y' and oo.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' ";
-
-        if (!searchItemName.equals("") && searchItemName != null) {
-            query += " and inn.item_name='" + searchItemName + "' ";
+        if (!logged_key_person.equals("") && logged_key_person != null) {
+            query += " and kp1.key_person_name='" + logged_key_person + "' ";
         }
-        if (!search_item_code.equals("") && search_item_code != null) {
-            query += " and inn.item_code='" + search_item_code + "' ";
-        }
-        if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-            query += " and oo.org_office_name='" + searchOrgOffice + "' ";
-        }
-        if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-            query += " and kp.key_person_name='" + searchKeyPerson + "' ";
+        if (!office_admin.equals("") && office_admin != null) {
+            query += " and kp2.key_person_name='" + office_admin + "' ";
         }
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
-                Inventory bean = new Inventory();
-                bean.setInventory_id(rset.getInt("inventory_id"));
-                bean.setInventory_basic_id(rset.getInt("inventory_basic_id"));
-                bean.setItem_name((rset.getString("item_name")));
-                bean.setItem_code((rset.getString("item_code")));
-                bean.setOrg_office(rset.getString("org_office_name"));
-                bean.setKey_person(rset.getString("key_person_name"));
-                bean.setInward_quantity(rset.getInt("inward_quantity"));
-                bean.setOutward_quantity(rset.getInt("outward_quantity"));
+                Indent bean = new Indent();
+                bean.setIndent_no(rset.getString("indent_no"));
                 bean.setDate_time(rset.getString("date_time"));
-                bean.setReference_document_type(rset.getString("reference_document_type"));
-                bean.setReference_document_id(rset.getString("reference_document_id"));
+                bean.setItem_name((rset.getString("item_name")));
+                bean.setPurpose((rset.getString("purpose")));
+                bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setExpected_date_time(rset.getString("expected_date_time"));
+                String status = rset.getString("status");
+                if (status.equals("Request Sent")) {
+                    status = "Confirmation Awaited";
+                }
+                bean.setStatus(status);
+                bean.setRequested_to(rset.getString("requested_to"));
                 bean.setDescription(rset.getString("description"));
+                bean.setIndent_table_id(rset.getInt("indent_table_id"));
+                bean.setIndent_item_id(rset.getInt("indent_item_id"));
+
                 list.add(bean);
             }
         } catch (Exception e) {
@@ -122,11 +109,14 @@ public class IndentModel {
         String query = "INSERT INTO indent_table(indent_no,requested_by,requested_to,"
                 + " status_id,active,remark,date_time,description,revision_no) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
-
+        int rowsAffected2 = 0;
         int rowsAffected = 0;
         int requested_by_id = getRequestedKeyPersonId(logged_user_name);
         int requested_to_id = getRequestedKeyPersonId(office_admin);
         int count = 0;
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String date_time = sdf.format(date);
 
         try {
             if (i == 0) {
@@ -150,12 +140,12 @@ public class IndentModel {
                     pstmt.setInt(4, 5);
                     pstmt.setString(5, "Y");
                     pstmt.setString(6, "OK");
-                    pstmt.setString(7, now().toString());
+                    pstmt.setString(7, date_time);
                     pstmt.setString(8, bean.getDescription());
                     pstmt.setInt(9, bean.getRevision_no());
                     rowsAffected = pstmt.executeUpdate();
                     if (rowsAffected > 0) {
-                        rowsAffected = pstmt.executeUpdate();
+                        //rowsAffected = pstmt.executeUpdate();
                         ResultSet rs = pstmt.getGeneratedKeys();
                         while (rs.next()) {
                             indent_table_id = rs.getInt(1);
@@ -163,11 +153,11 @@ public class IndentModel {
                     }
                 }
             }
+            
             String query2 = "INSERT INTO indent_item(indent_table_id,item_names_id,purpose_id, required_qty,"
                     + " status_id,active,remark,expected_date_time,description,revision_no) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
-            int rowsAffected2 = 0;
             int item_name_id2 = getItemNameId(bean.getItem_name());
             int purpose_id2 = getPurposeId(bean.getPurpose());
             int count2 = 0;
@@ -188,7 +178,7 @@ public class IndentModel {
         } catch (Exception e) {
             System.out.println("IndentModel insertRecord() Error: " + e);
         }
-        if (rowsAffected > 0) {
+        if (rowsAffected2 > 0) {
             message = "Record saved successfully.";
             msgBgColor = COLOR_OK;
         } else {
@@ -200,161 +190,7 @@ public class IndentModel {
             msgBgColor = COLOR_ERROR;
         }
 
-        return rowsAffected;
-    }
-
-//    public int updateRecord(Indent bean, int inventory_id) {
-//        int revision = InventoryModel.getRevisionno(bean, inventory_id);
-//        int updateRowsAffected = 0;
-//        int item_name_id = getItemNamesId(bean.getItem_code());
-//        int org_office_id = getOrgOfficeId(bean.getOrg_office());
-//        int inventory_basic_id = getInventoryBasicId(org_office_id, item_name_id);
-//        int key_person_id = getKeyPersonId(bean.getKey_person());
-//
-//        String query1 = "SELECT max(revision_no) revision_no FROM inventory WHERE inventory_id = " + inventory_id + "  and active='Y' ";
-//        String query2 = "UPDATE inventory SET active=? WHERE inventory_id=? and revision_no=? ";
-//        String query3 = "INSERT INTO inventory(inventory_id,inventory_basic_id,key_person_id,description,"
-//                + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id) "
-//                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-//
-//        int rowsAffected = 0;
-//        int map_count = 0;
-//        try {
-//            String query4 = "SELECT count(*) as count FROM inventory WHERE "
-//                    + " inventory_basic_id='" + inventory_basic_id + "' and key_person_id='" + key_person_id + "'"
-//                    + " and active='Y'  ";
-//
-//            PreparedStatement pstmt1 = connection.prepareStatement(query4);
-//            ResultSet rs1 = pstmt1.executeQuery();
-//            while (rs1.next()) {
-//                map_count = rs1.getInt("count");
-//            }
-//            if (map_count > 0) {
-//                message = "Item has already assigned to this person!..";
-//                msgBgColor = COLOR_ERROR;
-//            } else {
-//                PreparedStatement pstmt = connection.prepareStatement(query1);
-//                ResultSet rs = pstmt.executeQuery();
-//                if (rs.next()) {
-//                    PreparedStatement pstm = connection.prepareStatement(query2);
-//                    pstm.setString(1, "n");
-//                    pstm.setInt(2, inventory_id);
-//                    pstm.setInt(3, revision);
-//                    updateRowsAffected = pstm.executeUpdate();
-//                    if (updateRowsAffected >= 1) {
-//                        revision = rs.getInt("revision_no") + 1;
-//                        PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
-//                        psmt.setInt(1, inventory_id);
-//                        psmt.setInt(2, inventory_basic_id);
-//                        psmt.setInt(3, key_person_id);
-//                        psmt.setString(4, (bean.getDescription()));
-//                        psmt.setInt(5, revision);
-//                        psmt.setString(6, "Y");
-//                        psmt.setString(7, "OK");
-//                        psmt.setInt(8, bean.getInward_quantity());
-//                        psmt.setInt(9, bean.getOutward_quantity());
-//                        psmt.setString(10, bean.getDate_time());
-//                        psmt.setString(11, bean.getReference_document_type());
-//                        psmt.setString(12, bean.getReference_document_id());
-//                        rowsAffected = psmt.executeUpdate();
-//
-//                    }
-//
-//                }
-//            }
-//        } catch (Exception e) {
-//            System.out.println("InventoryModel updateRecord() Error: " + e);
-//        }
-//        if (rowsAffected > 0) {
-//            message = "Record updated successfully.";
-//            msgBgColor = COLOR_OK;
-//        } else {
-//            message = "Cannot update the record, some error.";
-//            msgBgColor = COLOR_ERROR;
-//        }
-////        if (map_count > 0) {
-////            message = "Item has already assigned to this person!..";
-////            msgBgColor = COLOR_ERROR;
-////        }
-//        return rowsAffected;
-//    }
-    public static int getRevisionno(Inventory bean, int inventory_id) {
-        int revision = 0;
-        try {
-            String query = " SELECT max(revision_no) as revision_no FROM inventory "
-                    + " WHERE inventory_id =" + inventory_id + "  and active='Y' ";
-
-            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-
-            ResultSet rset = pstmt.executeQuery();
-
-            while (rset.next()) {
-                revision = rset.getInt("revision_no");
-
-            }
-        } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
-        }
-        return revision;
-    }
-
-    public int deleteRecord(int inventory_id) {
-        String query = "DELETE FROM inventory WHERE inventory_id = " + inventory_id;
-        int rowsAffected = 0;
-        try {
-
-            rowsAffected = connection.prepareStatement(query).executeUpdate();
-
-        } catch (Exception e) {
-            System.out.println("InventoryModel deleteRecord() Error: " + e);
-        }
-        if (rowsAffected > 0) {
-            message = "Record deleted successfully.";
-            msgBgColor = COLOR_OK;
-        } else {
-            message = "Cannot delete the record, some error.";
-            msgBgColor = COLOR_ERROR;
-        }
-
-        return rowsAffected;
-    }
-
-    public int insertItemRecord(Indent bean) throws SQLException {
-        String query = "INSERT INTO indent_item(indent_table_id,item_names_id,purpose_id, required_qty,"
-                + " status_id,active,remark,expected_date_time,description,revision_no) "
-                + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
-
-        int rowsAffected = 0;
-        int item_name_id = getItemNameId(bean.getItem_name());
-        int purpose_id = getPurposeId(bean.getPurpose());
-        int count = 0;
-        try {
-
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, bean.getIndent_table_id());
-            pstmt.setInt(2, item_name_id);
-            pstmt.setInt(3, purpose_id);
-            pstmt.setInt(4, bean.getRequired_qty());
-            pstmt.setInt(5, 5);
-            pstmt.setString(6, "Y");
-            pstmt.setString(7, "OK");
-            pstmt.setString(8, bean.getExpected_date_time());
-            pstmt.setString(9, bean.getDescription());
-            pstmt.setInt(10, bean.getRevision_no());
-            rowsAffected = pstmt.executeUpdate();
-
-        } catch (Exception e) {
-            System.out.println("IndentModel insertRecord() Error: " + e);
-        }
-        if (rowsAffected > 0) {
-            message = "Record saved successfully.";
-            msgBgColor = COLOR_OK;
-        } else {
-            message = "Cannot save the record, some error.";
-            msgBgColor = COLOR_ERROR;
-        }
-
-        return rowsAffected;
+        return rowsAffected2;
     }
 
     public int getRequestedKeyPersonId(String person_name) {
@@ -367,21 +203,6 @@ public class IndentModel {
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
             System.out.println("getRequestedByKeyPersonId Error: " + e);
-        }
-        return id;
-    }
-
-    public int getOrgOfficeId(String org_office) {
-
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
-        int id = 0;
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            rset.next();
-            id = rset.getInt("org_office_id");
-        } catch (Exception e) {
-            System.out.println("getOrgOfficeId Error: " + e);
         }
         return id;
     }
@@ -414,52 +235,6 @@ public class IndentModel {
             System.out.println("getPurposeId Error: " + e);
         }
         return id;
-    }
-
-    public int getKeyPersonId(String key_person_name) {
-
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
-        int id = 0;
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            rset.next();
-            id = rset.getInt("key_person_id");
-        } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
-        }
-        return id;
-    }
-
-    public int getInventoryBasicId(int org_office_id, int item_names_id) {
-
-        String query = "SELECT inventory_basic_id FROM inventory_basic WHERE org_office_id = '" + org_office_id + "' "
-                + " and item_names_id='" + item_names_id + "' and active='Y' ";
-        int id = 0;
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            rset.next();
-            id = rset.getInt("inventory_basic_id");
-        } catch (Exception e) {
-            System.out.println("getInventoryBasicId Error: " + e);
-        }
-        return id;
-    }
-
-    public String getItemName(int item_name_id) {
-        String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y'";
-        String name = "";
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, item_name_id);
-            ResultSet rset = pstmt.executeQuery();
-            rset.next();
-            name = rset.getString("item_name");
-        } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
-        }
-        return name;
     }
 
     public List<String> getStatus(String q) {
@@ -558,38 +333,205 @@ public class IndentModel {
         return list;
     }
 
-    public JSONArray getItemsList(String logged_designation) {
+    public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose, String checked_item_name, String checked_expected_date_time) {
+        List<ItemName> list = new ArrayList<ItemName>();
+
         JSONObject obj = new JSONObject();
         JSONArray arrayObj = new JSONArray();
         String data = "";
 
-        List list = new ArrayList();
+//        List list = new ArrayList();
         String item_name = "";
+        List<Integer> idList = new ArrayList<Integer>();
+        List<String> parentItemNameList = new ArrayList<String>();
         try {
-//            String query = " SELECT  item_name from item_names itn where itn.active='Y' "
-//                    + " and itn.is_super_child='Y' order by itn.item_name ";
-            String query = " SELECT  itn.item_name from item_names itn,designation d,item_authorization ia where itn.active='Y' "
-                    + " and d.active='Y' and ia.active='Y' and itn.item_names_id=ia.item_names_id and "
-                    + " d.designation_id=ia.designation_id and d.designation='Java Developer' "
-                    + " order by itn.item_name ";
+            parentItemNameList = getParentItemNameList();
+            for (int i = 0; i < parentItemNameList.size(); i++) {
+                String searchItemName = parentItemNameList.get(i);
+                idList = getAllParentChildList(searchItemName);
+                String query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+                        + "itn.generation,itn.is_super_child,itn.prefix "
+                        + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id "
+                        + " and itn.active='Y' and itt.active='y' ";
 
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
+                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                        + " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
-            while (rset.next()) {
-                JSONObject jsonObj = new JSONObject();
-                item_name = rset.getString("item_name");
+                PreparedStatement pstmt = connection.prepareStatement(query);
+                ResultSet rset = pstmt.executeQuery();
+                while (rset.next()) {
+                    ItemName bean = new ItemName();
+                    int checked_id = 0;
+                    int item_name_id = (rset.getInt("item_names_id"));
+                    if (checkedValue.equals("")) {
+                        checked_id = Integer.parseInt("0");
+                    } else {
+                        checked_id = Integer.parseInt(checkedValue);
+                    }
+                    String checked_qty = "";
+                    if (checked_req_qty == 0) {
+                        checked_qty = "";
+                    } else {
+                        checked_qty = String.valueOf(checked_req_qty);
+                    }
 
-                jsonObj.put("item_name", item_name);
-                arrayObj.add(jsonObj);
+                    if (item_name_id == checked_id) {
+                        bean.setChecked_item_name(checked_item_name);
+                        bean.setCheckedValue(checkedValue);
+                        bean.setChecked_purpose(checked_purpose);
+                        bean.setChecked_req_qty(checked_qty);
+                        bean.setChecked_expected_date_time(checked_expected_date_time);
+                    } else {
+                        bean.setChecked_item_name(checked_item_name);
+                        bean.setCheckedValue(checkedValue);
+                        bean.setChecked_purpose(checked_purpose);
+                        bean.setChecked_req_qty(checked_qty);
+                        bean.setChecked_expected_date_time(checked_expected_date_time);
+                    }
+
+                    bean.setItem_names_id(rset.getInt("item_names_id"));
+                    bean.setItem_name((rset.getString("item_name")));
+                    String parent_id = rset.getString("parent_id");
+                    int generation = rset.getInt("generation");
+                    if (parent_id == null) {
+                        parent_id = "";
+                    }
+                    bean.setParent_item_id(parent_id);
+                    bean.setGeneration(generation);
+                    bean.setSuperp(rset.getString("is_super_child"));
+                    list.add(bean);
+                }
             }
 
         } catch (Exception e) {
             System.err.println("Exception in getItemsList---------" + e);
         }
 
-        return arrayObj;
+        return list;
 
+    }
+
+    public int getCounting() {
+        int counting = 100;
+        int count = 0;
+        String query = " SELECT indent_no FROM indent_table order by indent_table_id desc limit 1 ";
+        try {
+            PreparedStatement psmt = connection.prepareStatement(query);
+            ResultSet rs = psmt.executeQuery();
+            while (rs.next()) {
+                String indent_no = rs.getString("indent_no");
+                String indent_no_arr[] = indent_no.split("_");
+                int length = (indent_no_arr.length) - 1;
+                count = Integer.parseInt(indent_no_arr[length]);
+
+                counting = count;
+            }
+        } catch (Exception ex) {
+            System.out.println("ERROR: in getCounting in IndentModel : " + ex);
+        }
+        return counting + 1;
+    }
+
+    public List<String> getParentItemNameList() {
+        PreparedStatement pstmt;
+        List<String> list = new ArrayList<String>();
+        String searchItemName = "";
+        try {
+            String query = " select item_name from item_names where (parent_id=0 or parent_id is null) and active='Y' ";
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                searchItemName = rst.getString("item_name");
+                list.add(searchItemName);
+            }
+        } catch (Exception e) {
+            System.out.println("Error:--ItemNameModel--- getParentItemNameList--" + e);
+        }
+
+        list.removeAll(Arrays.asList(0));
+
+        return list;
+    }
+
+    public List<Integer> getAllParentChildList(String searchItemName) {
+        PreparedStatement pstmt;
+        String query = "";
+        List<Integer> list = new ArrayList<Integer>();
+
+        if (searchItemName == null) {
+            searchItemName = "";
+        }
+        int item_names_id = 0, parent_id = 0;
+
+        String qry = "select item_names_id from item_names where active='Y' and item_name='" + searchItemName + "' ";
+        try {
+            PreparedStatement pst = connection.prepareStatement(qry);
+            ResultSet rstt = pst.executeQuery();
+            while (rstt.next()) {
+                item_names_id = rstt.getInt(1);
+                list.add(item_names_id);
+            }
+        } catch (Exception e) {
+            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+        }
+
+        String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
+        try {
+            PreparedStatement pst = connection.prepareStatement(qry1);
+            ResultSet rstt = pst.executeQuery();
+            while (rstt.next()) {
+                parent_id = rstt.getInt(1);
+                list.add(parent_id);
+            }
+        } catch (Exception e) {
+            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+        }
+
+        try {
+            query = " SELECT distinct t2.item_names_id as lev2, t3.item_names_id as lev3, "
+                    + " t4.item_names_id as lev4,t5.item_names_id as lev5,t6.item_names_id as lev6, "
+                    + " t7.item_names_id as lev7,t8.item_names_id as lev8,t9.item_names_id as lev9,t10.item_names_id as lev10 "
+                    + " FROM item_names AS t1 "
+                    + " LEFT JOIN item_names AS t2 ON t2.parent_id = t1.item_names_id and t2.active='Y' "
+                    + " LEFT JOIN item_names AS t3 ON t3.parent_id = t2.item_names_id and t3.active='Y' "
+                    + " LEFT JOIN item_names AS t4 ON t4.parent_id = t3.item_names_id and t4.active='Y' "
+                    + " LEFT JOIN item_names AS t5 ON t5.parent_id = t4.item_names_id and t5.active='Y' "
+                    + " LEFT JOIN item_names AS t6 ON t6.parent_id = t5.item_names_id and t6.active='Y' "
+                    + " LEFT JOIN item_names AS t7 ON t7.parent_id = t6.item_names_id and t7.active='Y' "
+                    + " LEFT JOIN item_names AS t8 ON t8.parent_id = t7.item_names_id and t8.active='Y' "
+                    + " LEFT JOIN item_names AS t9 ON t9.parent_id = t8.item_names_id and t9.active='Y' "
+                    + " LEFT JOIN item_names AS t10 ON t10.parent_id = t9.item_names_id and t10.active='Y' "
+                    + "  WHERE '" + item_names_id + "' in (t1.parent_id,t2.parent_id) ";
+
+            pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                list.add(rset.getInt(1));
+                list.add(rset.getInt(2));
+                list.add(rset.getInt(3));
+                list.add(rset.getInt(4));
+                list.add(rset.getInt(5));
+                list.add(rset.getInt(6));
+                list.add(rset.getInt(7));
+                list.add(rset.getInt(8));
+                list.add(rset.getInt(9));
+            }
+        } catch (Exception e) {
+            System.out.println("Error:--ItemNameModel--- showData--" + e);
+        }
+        String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
+        try {
+            PreparedStatement pst = connection.prepareStatement(qry2);
+            ResultSet rstt = pst.executeQuery();
+            while (rstt.next()) {
+                list.add(rstt.getInt(1));
+            }
+        } catch (Exception e) {
+            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+        }
+
+        list.removeAll(Arrays.asList(0));
+
+        return list;
     }
 
     public static int getLastIndentTableId() {

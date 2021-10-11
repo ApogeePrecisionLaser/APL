@@ -129,9 +129,12 @@ public class ItemNameModel {
                             parent_id = "";
                         }
                         String p_item = "";
+                        String p_item_code = "";
                         if (!parent_id.equals("")) {
                             p_item = getparentItemName(parent_id);
+                            p_item_code = getparentItemCode(parent_id);
                         }
+                        bean.setParent_item_code(p_item_code);
                         bean.setParent_item(p_item);
                         bean.setParent_item_id(parent_id);
                         bean.setGeneration(generation);
@@ -183,9 +186,12 @@ public class ItemNameModel {
                         parent_id = "";
                     }
                     String p_item = "";
+                    String p_item_code = "";
                     if (!parent_id.equals("")) {
                         p_item = getparentItemName(parent_id);
+                        p_item_code = getparentItemCode(parent_id);
                     }
+                    bean.setParent_item_code(p_item_code);
                     bean.setParent_item(p_item);
                     bean.setParent_item_id(parent_id);
                     bean.setGeneration(generation);
@@ -212,7 +218,7 @@ public class ItemNameModel {
                 list.add(searchItemName);
             }
         } catch (Exception e) {
-            System.out.println("Error:--ItemNameModel--- getParentItemNameList--" + e);
+            System.out.println("Error:--ItemNameModel--- getParentItemNameList Modified ****************--" + e);
         }
 
         list.removeAll(Arrays.asList(0));
@@ -322,6 +328,26 @@ public class ItemNameModel {
         return name;
     }
 
+    public static String getparentItemCode(String id) {
+        String item_code = "";
+        String query1 = " SELECT item_code FROM item_names WHERE  active='Y' ";
+
+        if (!id.equals("") && id != null) {
+            query1 += " and item_names_id='" + id + "' ";
+        }
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query1);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                item_code = rset.getString("item_code");
+            }
+        } catch (Exception ex) {
+            System.err.println("getparentItemCode error---------" + ex);
+        }
+
+        return item_code;
+    }
+
     public int insertRecord(ItemName item_name, Iterator itr) throws SQLException {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
                 + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -344,7 +370,7 @@ public class ItemNameModel {
             p_item_id_for_code = getParent_Item_id_for_code(p_item_name, item_code);
             p_item_id = getParent_Item_id(p_item_name);
         }
-        
+
         int generation = 0;
         if (p_item_id == 0) {
             generation = 1;

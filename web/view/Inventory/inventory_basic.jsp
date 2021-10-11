@@ -2,6 +2,7 @@
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
 <style>
     .selected_row {
         font-weight: bolder;
@@ -109,10 +110,11 @@
         $("#item_code").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("item_code").value;
+                var org_office = document.getElementById("org_office").value;
                 $.ajax({
                     url: "InventoryBasicController",
                     dataType: "json",
-                    data: {action1: "getItemCode", str: random},
+                    data: {action1: "getItemCode", str: random, org_office: org_office},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -132,10 +134,11 @@
         $("#search_item_code").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_code").value;
+                var org_office = document.getElementById("search_org_office").value;
                 $.ajax({
                     url: "InventoryBasicController",
                     dataType: "json",
-                    data: {action1: "getItemCode", str: random},
+                    data: {action1: "getItemCode", str: random, org_office: org_office},
                     success: function (data) {
                         console.log(data);
                         response(data.list);

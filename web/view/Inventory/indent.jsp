@@ -14,7 +14,7 @@
     }
 </style>
 <script>
-    
+
     $(document).ready(function () {
         $('#mytable tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected_row')) {
@@ -26,14 +26,8 @@
                 $(this).addClass('selected_row');
             }
         });
-
-//        if (($('#message_level').text()) == "Result: Record saved successfully.") {
-//            var last_indent_table_id=$('#last_indent_table_id').val();
-//            var url = "IndentController?task=GetItems&ind_tab_id="+last_indent_table_id;
-//            popupwin = openPopUp(url, "", 600, 1030);
-//        }
-
     });
+
     $(document).ready(function () {
         $(document).on('keydown', '.myAutocompleteClass', function () {
             var id = this.id;
@@ -157,12 +151,7 @@
         document.getElementById("requested_by").disabled = false;
         document.getElementById("requested_to").disabled = false;
         document.getElementById("description").disabled = false;
-//        document.getElementById("status").disabled = false;
-//        for (i = 0; document.getElementById("item_name" + i) !== null; i++) {
-//            document.getElementById("item_name" + i).disabled = false;
-//        }
-
-
+        document.getElementById("select").disabled = false;
         document.getElementById("save").disabled = false;
         if (id === 'new') {
             $("#message").html("");
@@ -206,8 +195,8 @@
             if (result === false) {
             } else {
                 result = true;
-                var url = "IndentController?task=GetItems";
-                popupwin = openPopUp(url, "", 600, 1030);
+                //  var url = "IndentController?task=GetItems";
+                //   popupwin = openPopUp(url, "", 600, 1030);
             }
             if (document.getElementById("clickedButton").value === 'Save AS New') {
                 result = confirm("Are you sure you want to save it as New record?")
@@ -232,15 +221,15 @@
 
 
     function openPopUpForItems() {
-        //  alert("ewed");
-        var indent_no = $('#indent_no').val();
-        var requested_by = $('#requested_by').val();
-        var requested_to = $('#requested_to').val();
-        var description = $('#description').val();
-        var url = "IndentController?task=GetItems&indent_no=" + indent_no + "&requested_by=" + requested_by + "&requested_to=" + requested_to + "&description=" + description;
-//        var url = "IndentController?task=GetItems";
-        popupwin = openPopUp(url, "", 600, 1030);
+        console.log(JSON.stringify(json));
+        var json_data_string = JSON.stringify(json);
+        var encodedStringBtoA = btoa(json_data_string);
+        // alert("deocde data -" + encodedStringBtoA);
+        console.log(encodedStringBtoA);
 
+        var url = "IndentController?task=GetItems&encodedStringBtoA=" + encodedStringBtoA;
+
+        popupwin = openPopUp(url, "", 600, 1030);
     }
 
     function openPopUp(url, window_name, popup_height, popup_width) {
@@ -249,27 +238,6 @@
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
         return window.open(url, window_name, window_features);
     }
-
-//    function getData() {
-//        var item_name = [];
-//        var items = "";
-//        $.ajax({
-//            url: "IndentController",
-//            dataType: "json",
-//            data: {action1: "getItemsList"},
-//            success: function (data) {
-//
-//                //  $('#items_div').show();
-//                $('#item_list').empty();
-//                console.log(data);
-//                items = data.item_name;
-//                for (var i = 0; i < items.length; i++) {
-//                    item_name[i] = items[i]["item_name"];
-//                    $('#item_list').append('<li class="mb-1" id="items"><div class="row"><div class="col-lg-2"><input type="checkbox" name="item_name" id="item_name' + i + '" disabled onclick=enableFields(' + i + ')> ' + item_name[i] + ' </div><div class="col-lg-1"><input style="width:50px;font-size:13px" type="text" name="required_qty" id="required_qty' + i + '" placeholder="Qty" disabled></div><div class="col-lg-2"><input style="font-size:13px" type="date" name="expected_date_time" id="expected_date_time' + i + '" placeholder="Expected Date Time" disabled></div><div class="col-lg-1"><input style="width:50px;font-size:13px" type="text" name="stock_qty" id="stock_qty' + i + '" placeholder="Qty" disabled></div><div class="col-lg-1"><input style="width:50px;font-size:13px" type="text" name="delivered_qty" id="delivered_qty' + i + '" placeholder="Qty" disabled></div><div class="col-lg-1"><input class="myAutocompleteClass" style="width:100px;font-size:13px" type="text" name="status' + i + '" id="status' + i + '" placeholder="Status" disabled ></div><div class="col-lg-1"><input style="font-size:13px" class="myAutocompleteClass" type="text" name="purpose' + i + '" id="purpose' + i + '" placeholder="Purpose" disabled></div></div></li>');
-//                }
-//            }
-//        });
-//    }
 
 
     if (!document.all) {
@@ -297,8 +265,73 @@
         document.getElementById("delete").disabled = false;
     }
 
+    var json;
+    $(function () {
+        var String_data = $('#String_data').val();
+        var last_ch = String_data.charAt(String_data.length - 1);
+        if (last_ch == ",") {
+            String_data = String_data.substring(0, String_data.length - 1);
+        }
+        String_data = '[' + String_data + ']';
+        json = $.parseJSON(String_data);
+        var col = [];
+
+        for (var i = 0; i < json.length; i++) {
+            for (var key in json[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        var table = document.createElement("table");
+        table.setAttribute("id", "tree-table");
+        table.setAttribute("class", "table table-hover table-bordered");
+
+        var tr = table.insertRow(-1);
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        for (var i = 0; i < json.length; i++) {
+
+            tr = table.insertRow(-1);
+            tr.setAttribute("id", i + 1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                if (j == 0) {
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '">';
+
+                }
+                if (j == 1) {
+                    tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '">';
+                }
+                if (j == 2) {
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '">';
+                }
+                if (j == 3) {
+                    tabCell.innerHTML = '<input type="text"  name="purpose' + i + '" id="purpose' + i + '"  value="' + json[i][col[j]] + '">';
+                }
+                if (j == 4) {
+                    tabCell.innerHTML = '<input type="text"  name="expected_date_time' + i + '" id="expected_date_time' + i + '"  value="' + json[i][col[j]] + '">';
 
 
+                }
+//                else {
+//                    tabCell.innerHTML = json[i][col[j]];
+//                }
+            }
+        }
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+
+        // alert(json.length);
+    });
 
 
 </script>
@@ -309,54 +342,13 @@
         <h1>Indent</h1>
     </div>
 </section>
+<!--<input type="button" onclick="CreateTableFromJSON()" value="Create Table From JSON" />
+<p id="showData"></p>-->
 
 
-<!--<section class="marginTop30">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search Engine</h5>
-        </div>
-        <form name="form1" method="POST" action="InventoryController" onsubmit="return verifySearch();" >
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Org Office</label>
-                        <input type="text" name="search_org_office" id="search_org_office" value="${search_org_office}" Placeholder="Org Office" class="form-control myInput searchInput1 w-100" >
-                    </div>
-                </div>
+<c:if test="${isSelectPriv eq 'Y'}">
 
-                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Item Name</label>
-                        <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Item Code</label>
-                        <input type="text" Placeholder="Item Code" name="search_item_code" id="search_item_code" value="${search_item_code}" class="form-control myInput searchInput1 w-100">
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Key Person</label>
-                        <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" class="form-control myInput searchInput1 w-100">
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <input type="submit" class="btn formBtn" id="hiera" name="search_item" value="SEARCH RECORDS" onclick="setStatus(id)">
-                </div>
-            </div>
-        </form>
-    </div>
-</section>-->
-
-<!--<section class="marginTop30 ">
+<section class="marginTop30 ">
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Search List</h5>
@@ -368,44 +360,79 @@
                         <thead>
                             <tr>
                                 <th>S.No.</th>
-                                <th>Org Office</th>
-                                <th>Item Name</th>
-                                <th>Item Code</th>
-                                <th>Key Person</th>
-                                <th>Inward Quantity</th>
-                                <th>Outward Quantity</th>
+                                <th>Indent No.</th>
+                                <th>Requested To</th>
                                 <th>Date Time</th>
-                                <th>Reference Document Type</th>
-                                <th>Reference Document Id</th>
+                                <th>Status</th>
+                                <th>Item Name</th>
+                                <th>Required Qty</th>
+                                <th>Approved Qty</th>
+                                <th>Purpose</th>
+                                <th>Expected Date</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>
-<c:forEach var="beanType" items="${requestScope['list']}"
-           varStatus="loopCounter">
-    <tr
-        onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count }');">
-        <td>${loopCounter.count }</td>               
-        <td id="${loopCounter.count }2">${beanType.org_office}</td>   
-        <td id="${loopCounter.count }3">${beanType.item_name}</td>
-        <td id="${loopCounter.count }4">${beanType.item_code}</td>
-        <td id="${loopCounter.count }5">${beanType.key_person}</td>                                               
-        <td id="${loopCounter.count }6">${beanType.inward_quantity}</td> 
-        <td id="${loopCounter.count }7">${beanType.outward_quantity}</td>
-        <td id="${loopCounter.count }8">${beanType.date_time}</td> 
-        <td id="${loopCounter.count }9">${beanType.reference_document_type}</td>
-        <td id="${loopCounter.count }10">${beanType.reference_document_id}</td>
-        <td id="${loopCounter.count }11">${beanType.description}</td>  
+                            <c:forEach var="beanType" items="${requestScope['list']}"
+                                       varStatus="loopCounter">
+                                <tr
+                                    onclick="fillColumn('${beanType.indent_table_id}', '${loopCounter.count }');">
+                                    <td>${loopCounter.count }</td>
+                                    <td id="${loopCounter.count }">${beanType.indent_no}</td>
+                                    <td id="${loopCounter.count }">${beanType.requested_to}</td>
+                                    <td id="${loopCounter.count }">${beanType.date_time}</td>
+                                    <c:choose>
+                                        <c:when test="${beanType.status =='Delivered'}">
+                                            <td id="${loopCounter.count }" style="background-color: #28a745;color:white"><b>${beanType.status}</b>
+                                            </td>
+                                        </c:when>
 
-    </tr>
-</c:forEach>
-</tbody>
-</table>    
-</div>
-</div>
-</div>
-</div>
-</section>-->
+                                        <c:when test="${beanType.status =='Not In Stock'}">
+                                            <td id="${loopCounter.count }" style="background-color: #d587c8;color:white"><b>${beanType.status}</b>
+                                            </td>
+                                        </c:when>
+                                        <c:when test="${beanType.status =='Confirmed'}">
+                                            <td id="${loopCounter.count }" style="background-color: #2e6da4;;color:white"><b>Approved</b>
+                                            </td>
+                                        </c:when>
+                                        <c:when test="${beanType.status =='Confirmation Awaited'}">
+                                            <td id="${loopCounter.count }" style="background-color: #ffc107;color:white"><b>${beanType.status}</b>
+                                            </td>
+                                        </c:when>
+                                        <c:when test="${beanType.status =='Denied'}">
+                                            <td id="${loopCounter.count }" style="background-color: #dc3545;color:white"><b>${beanType.status}</b>
+                                            </td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td id="${loopCounter.count }">${beanType.status}</td>
+                                        </c:otherwise>
+                                    </c:choose>
+
+
+
+
+
+                                    <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                    <td id="${loopCounter.count }">${beanType.required_qty}</td>
+                                    <td id="${loopCounter.count }">${beanType.approved_qty}</td>
+                                    <td id="${loopCounter.count }">${beanType.purpose}</td>
+                                    <td id="${loopCounter.count }">${beanType.expected_date_time}</td>
+                                    <td id="${loopCounter.count }">${beanType.description}</td>                                               
+                                </tr>
+
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</c:if>
+
+
+
 
 
 <section class="marginTop30">
@@ -420,8 +447,9 @@
                         <div class="form-group">
                             <label>Indent No.<span class="text-danger">*</span></label>
                             <input type="hidden" name="indent_table_id" id="indent_table_id" value="">
-                            <!--<input class="form-control myInput" type="hidden" id="indent_item_id" name="indent_item_id" value="" disabled >-->
-                            <input class="form-control myInput" type="text" id="indent_no" name="indent_no" value="" disabled >
+                            <input type="hidden" name="indent_item_id" id="indent_item_id" value="">
+                            <input type="hidden" name="String_data" id="String_data" value="">
+                            <input class="form-control myInput" type="text" id="indent_no" name="indent_no" value="${autogenerate_indent_no}" disabled onclick="alert('You cannot Change AutoGenerate Indent No!............')" >
                         </div>
                     </div>
                 </div>
@@ -444,11 +472,30 @@
                     </div>
                 </div>
 
+                <div class="col-md-12" id="showData">
+                    <!--                    <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Items</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                                <tr></tr>
+                    
+                    
+                                            </tbody>
+                                        </table>-->
+
+                </div>
+
+
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
+                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled>${description}</textarea>
                         </div>
                     </div>
                 </div>
@@ -466,7 +513,8 @@
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Select Items" onclick="setStatus(id);openPopUpForItems()">
+                    <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);openPopUpForItems()" disabled="">
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Send Indent" disabled="" onclick="setStatus(id);">
                 </div>
             </div>
         </form>

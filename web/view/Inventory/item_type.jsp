@@ -62,8 +62,8 @@
     function makeEditable(id) {
         document.getElementById("item_type_name").disabled = false;
         document.getElementById("description").disabled = false;
-        // document.getElementById("supern").disabled = false;
-        // document.getElementById("supery").disabled = false;
+       // document.getElementById("supern").disabled = false;
+       // document.getElementById("supery").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             editable = "false";
@@ -140,7 +140,7 @@
     }
 
     function fillColumn(id, count) {
-        //  alert(id);
+      //  alert(id);
         $('#item_type_id').val(id);
         $('#item_type_name').val($("#" + count + '2').html());
 //        var super_child = $("#" + count + '3').html();

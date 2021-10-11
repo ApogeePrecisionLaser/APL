@@ -35,7 +35,7 @@ import org.json.simple.JSONArray;
  * @author Komal
  */
 public class ItemAuthorizationModel {
-  
+
     private static Connection connection;
     private String message;
     private String msgBgColor;

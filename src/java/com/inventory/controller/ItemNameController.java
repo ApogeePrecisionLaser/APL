@@ -40,16 +40,18 @@ import org.json.simple.JSONObject;
  * @author Komal
  */
 public class ItemNameController extends HttpServlet {
-    
+
     private File tmpDir;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
+        HttpSession session = request.getSession();
         Map<String, String> map = new HashMap<String, String>();
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemNameModel model = new ItemNameModel();
+        String loggedUser = "";
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String item_name = "";
@@ -60,12 +62,12 @@ public class ItemNameController extends HttpServlet {
         int no_of_col = 1;
         int quantity = 0;
         int counting = 100;
+
 //        String auto_item_code = "";
 //        int auto_increment_key = 100;
 //        Random rnd = new Random();
 //        int number = rnd.nextInt(999999);
 //        auto_item_code = "APL_ITEM_" + number;
-
         String search_item_name = "";
         String search_item_type = "";
         String search_item_code = "";
@@ -94,6 +96,7 @@ public class ItemNameController extends HttpServlet {
             search_super_child = "";
         }
         try {
+            loggedUser = session.getAttribute("user_role").toString();
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in ItemNameController setConnection() calling try block" + e);
@@ -313,7 +316,7 @@ public class ItemNameController extends HttpServlet {
 
             //Auto increment count for item code
             //  counting = model.getCounting();
-            List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code,search_super_child,search_generation);
+            List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code, search_super_child, search_generation);
             String auto_item_code = "APL_ITEM_" + counting;
             request.setAttribute("list", list);
             // request.setAttribute("auto_item_code", auto_item_code);
@@ -322,6 +325,7 @@ public class ItemNameController extends HttpServlet {
             request.setAttribute("search_item_code", search_item_code);
             request.setAttribute("search_super_child", search_super_child);
             request.setAttribute("search_generation", search_generation);
+            request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             model.closeConnection();

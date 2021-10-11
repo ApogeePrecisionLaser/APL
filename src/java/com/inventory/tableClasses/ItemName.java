@@ -28,10 +28,17 @@ public class ItemName {
     private String image_name;
     private String destination_path;
     private String parent_item;
+    private String parent_item_code;
     private String parent_item_id;
     private int generation;
     private String superp;
     private String prefix;
+    private String checked_req_qty;
+    private String checked_purpose;
+    private String checked_item_name;
+    private String checked_expected_date_time;
+    private String checkedValue;
+    
     /**
      * @return the item_names_id
      */
@@ -310,6 +317,90 @@ public class ItemName {
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    /**
+     * @return the parent_item_code
+     */
+    public String getParent_item_code() {
+        return parent_item_code;
+    }
+
+    /**
+     * @param parent_item_code the parent_item_code to set
+     */
+    public void setParent_item_code(String parent_item_code) {
+        this.parent_item_code = parent_item_code;
+    }
+
+    /**
+     * @return the checked_req_qty
+     */
+    public String getChecked_req_qty() {
+        return checked_req_qty;
+    }
+
+    /**
+     * @param checked_req_qty the checked_req_qty to set
+     */
+    public void setChecked_req_qty(String checked_req_qty) {
+        this.checked_req_qty = checked_req_qty;
+    }
+
+    /**
+     * @return the checked_purpose
+     */
+    public String getChecked_purpose() {
+        return checked_purpose;
+    }
+
+    /**
+     * @param checked_purpose the checked_purpose to set
+     */
+    public void setChecked_purpose(String checked_purpose) {
+        this.checked_purpose = checked_purpose;
+    }
+
+    /**
+     * @return the checked_item_name
+     */
+    public String getChecked_item_name() {
+        return checked_item_name;
+    }
+
+    /**
+     * @param checked_item_name the checked_item_name to set
+     */
+    public void setChecked_item_name(String checked_item_name) {
+        this.checked_item_name = checked_item_name;
+    }
+
+    /**
+     * @return the checked_expected_date_time
+     */
+    public String getChecked_expected_date_time() {
+        return checked_expected_date_time;
+    }
+
+    /**
+     * @param checked_expected_date_time the checked_expected_date_time to set
+     */
+    public void setChecked_expected_date_time(String checked_expected_date_time) {
+        this.checked_expected_date_time = checked_expected_date_time;
+    }
+
+    /**
+     * @return the checkedValue
+     */
+    public String getCheckedValue() {
+        return checkedValue;
+    }
+
+    /**
+     * @param checkedValue the checkedValue to set
+     */
+    public void setCheckedValue(String checkedValue) {
+        this.checkedValue = checkedValue;
     }
 
 }

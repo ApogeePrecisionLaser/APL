@@ -57,6 +57,7 @@
             <param-value>com.webservice.controller</param-value>
         </init-param>
     </servlet>
+    
     <servlet-mapping>
         <servlet-name>ServletAdaptor</servlet-name>
         <url-pattern>/webAPI/*</url-pattern>
@@ -514,6 +515,54 @@
         <url-pattern>/items_list</url-pattern>
     </servlet-mapping>
     
+    
+    <!--Start Approve Indent -->
+    
+    <servlet>
+        <servlet-name>ApproveIndentController</servlet-name>
+        <servlet-class>com.inventory.controller.ApproveIndentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApproveIndentController</servlet-name>
+        <url-pattern>/ApproveIndentController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>approve_indent</servlet-name>
+        <jsp-file>/view/Inventory/approve_indent.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approve_indent</servlet-name>
+        <url-pattern>/approve_indent</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Approve Indent -->
+    
+    <!--Start Deliver Item -->
+    
+    <servlet>
+        <servlet-name>DeliverItemController</servlet-name>
+        <servlet-class>com.inventory.controller.DeliverItemController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliverItemController</servlet-name>
+        <url-pattern>/DeliverItemController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>deliver_item</servlet-name>
+        <jsp-file>/view/Inventory/deliver_item.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deliver_item</servlet-name>
+        <url-pattern>/deliver_item</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Deliver Item -->
+    
+    
+    
+    
         
     <servlet>
         <servlet-name>organizationDesignation</servlet-name>
@@ -789,6 +838,23 @@
     <servlet-mapping>
         <servlet-name>user_privilege</servlet-name>
         <url-pattern>/user_privilege</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>UserNoPrivilegeController</servlet-name>
+        <servlet-class>com.apogee.admin.UserNoPrivilegeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserNoPrivilegeController</servlet-name>
+        <url-pattern>/UserNoPrivilegeController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>user_no_privilege</servlet-name>
+        <jsp-file>/view/admin/user_no_privilege.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>user_no_privilege</servlet-name>
+        <url-pattern>/user_no_privilege</url-pattern>
     </servlet-mapping>
     
     

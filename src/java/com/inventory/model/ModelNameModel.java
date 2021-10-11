@@ -115,7 +115,7 @@ public class ModelNameModel {
             String query3 = "insert into manufacturer_item_map(manufacturer_id,item_names_id,"
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,now()) ";
-            
+
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query3, Statement.RETURN_GENERATED_KEYS);
             String query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
                     + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
@@ -329,7 +329,7 @@ public class ModelNameModel {
                         if (tempExt.equals(image_name)) {
                             String model = model_name.getModel().replaceAll("[^a-zA-Z0-9]", "_");
                             middleName = "img_Item_" + model + "_" + image_count;
-                            destination = "C:\\ssadvt_repository\\APL\\item\\" + model_name.getItem_code()+ "\\" + model + "\\";
+                            destination = "C:\\ssadvt_repository\\APL\\item\\" + model_name.getItem_code() + "\\" + model + "\\";
                             fieldName = "item_image";
                         }
 
@@ -672,16 +672,10 @@ public class ModelNameModel {
     public List<String> getItemCode(String q, String manufacturer_name) {
         List<String> list = new ArrayList<String>();
         String query = "";
-//        if (!manufacturer_name.equals("") && manufacturer_name != null) {
-//            query = " SELECT inn.item_name FROM item_names inn,manufacturer mr,manufacturer_item_map mim where inn.active='Y' and mr.active='Y' "
-//                    + " and mim.active='Y' and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and "
-//                    + " mr.manufacturer_name='" + manufacturer_name + "'"
-//                    + " ORDER BY inn.item_name ";
-//        } else {
+
         query = " SELECT inn.item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
                 + " ORDER BY inn.item_code ";
-        // }
-       
+
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -701,6 +695,51 @@ public class ModelNameModel {
         }
         return list;
     }
+
+//    public List<String> getItemCode(String q, String manufacturer_name) {
+//        List<String> list = new ArrayList<String>();
+//        String query = "";
+//        String query2 = " select itn.item_names_id from item_names itn,manufacturer mr,manufacturer_item_map mim where"
+//                + "  mim.manufacturer_id=mr.manufacturer_id"
+//                + "  and mim.item_names_id=itn.item_names_id and mim.active='Y' and mr.active='Y' and itn.active='Y' ";
+//        if (!manufacturer_name.equals("") && manufacturer_name != null) {
+//            query2 += " and mr.manufacturer_name='" + manufacturer_name + "' ";
+//        }
+//
+//        try {
+//            ResultSet rset2 = connection.prepareStatement(query2).executeQuery();
+//            List<Integer> list2 = new ArrayList<Integer>();
+//            while (rset2.next()) {
+//                int item_names_id = rset2.getInt("item_names_id");
+//                list2.add(item_names_id);
+//            }
+//            
+//            query = " SELECT inn.item_code FROM item_names inn "
+//                    + " where inn.active='Y' and inn.is_super_child='Y' ";
+//            if (list2.size() > 0) {
+//                query += " and inn.item_names_id  not in(" + list2.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+//            }
+//
+//            query += " ORDER BY inn.item_code  ";
+//
+//            ResultSet rset = connection.prepareStatement(query).executeQuery();
+//            int count = 0;
+//            q = q.trim();
+//            while (rset.next()) {    // move cursor from BOR to valid record.
+//                String item_code = (rset.getString("item_code"));
+//                if (item_code.toUpperCase().startsWith(q.toUpperCase())) {
+//                    list.add(item_code);
+//                    count++;
+//                }
+//            }
+//            if (count == 0) {
+//                list.add("No such item_code exists.");
+//            }
+//        } catch (Exception e) {
+//            System.out.println("ModelNameModel getItem ERROR - " + e);
+//        }
+//        return list;
+//    }
 
     public List<String> getModel(String q, String manufacturer_name, String item_code) {
         List<String> list = new ArrayList<String>();
