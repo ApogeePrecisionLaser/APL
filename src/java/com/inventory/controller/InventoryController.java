@@ -47,27 +47,45 @@ public class InventoryController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryModel model = new InventoryModel();
-        
-        String search_item_name = "";
-        String search_item_code = "";
-        String search_org_office = "";
+
         String search_key_person = "";
-        search_item_name = request.getParameter("search_item_name");
-        search_item_code = request.getParameter("search_item_code");
+        String search_item_name = "";
+        String search_org_office = "";
+        String search_item_code = "";
+        String search_manufacturer = "";
+        String search_model = "";
+        
+        
+        // search_item_name = request.getParameter("search_item_name");
         search_org_office = request.getParameter("search_org_office");
+        search_item_code = request.getParameter("search_item_code");
+        search_manufacturer = request.getParameter("search_manufacturer");
+        search_model = request.getParameter("search_model");
         search_key_person = request.getParameter("search_key_person");
 
+        if (search_key_person == null) {
+            search_key_person = "";
+        }
         if (search_item_name == null) {
             search_item_name = "";
-        }
-        if (search_item_code == null) {
-            search_item_code = "";
         }
         if (search_org_office == null) {
             search_org_office = "";
         }
-        if (search_key_person == null) {
-            search_key_person = "";
+        if (search_item_code == null) {
+            search_item_code = "";
+        }
+        if (search_manufacturer == null) {
+            search_manufacturer = "";
+        }
+        if (search_model == null) {
+            search_model = "";
+        }
+
+        if (!search_item_code.equals("")) {
+            String search_item_code_arr[] = search_item_code.split(" - ");
+            search_item_name = search_item_code_arr[0];
+            search_item_code = search_item_code_arr[1];
         }
 
         try {
@@ -88,11 +106,19 @@ public class InventoryController extends HttpServlet {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
                     JSONObject json = null;
-                    if (JQstring.equals("getItemName")) {
-                        list = model.getItemName(q, str2);
+                    if (JQstring.equals("getManufacturer")) {
+                        list = model.getManufacturer(q);
                     }
+
                     if (JQstring.equals("getItemCode")) {
-                        list = model.getItemCode(q, str2);
+                        String manufacturer = request.getParameter("manufacturer");
+                        list = model.getItemCode(q, manufacturer);
+                    }
+
+                    if (JQstring.equals("getModelName")) {
+                        String manufacturer_name = request.getParameter("manufacturer_name");
+                        String item_code = request.getParameter("item_code");
+                        list = model.getModelName(q, manufacturer_name, item_code);
                     }
                     if (JQstring.equals("getOrgOffice")) {
                         list = model.getOrgOffice(q);
@@ -136,17 +162,13 @@ public class InventoryController extends HttpServlet {
 
                 Inventory bean = new Inventory();
                 bean.setInventory_id(inventory_id);
-                // bean.setInventory_basic_id(Integer.parseInt(request.getParameter("inventory_basic_id").trim()));
-//                bean.setItem_name(request.getParameter("item_name").trim());
                 bean.setItem_code(request.getParameter("item_code").trim());
                 bean.setOrg_office(request.getParameter("org_office").trim());
                 bean.setKey_person(request.getParameter("key_person").trim());
                 bean.setDescription(request.getParameter("description").trim());
-                bean.setInward_quantity(Integer.parseInt(request.getParameter("inward_quantity").trim()));
-                bean.setOutward_quantity(Integer.parseInt(request.getParameter("outward_quantity").trim()));
                 bean.setDate_time(request.getParameter("date_time").trim());
-                bean.setReference_document_type(request.getParameter("reference_document_type").trim());
-                bean.setReference_document_id(request.getParameter("reference_document_id").trim());
+                bean.setReference_document_type("");
+                bean.setReference_document_id("");
 
                 if (inventory_id == 0) {
                     model.insertRecord(bean);
@@ -155,12 +177,15 @@ public class InventoryController extends HttpServlet {
                 }
             }
 
-            List<Inventory> list = model.showData(search_item_name, search_org_office, search_key_person, search_item_code);
+            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,search_key_person);
             request.setAttribute("list", list);
-            request.setAttribute("search_item_name", search_item_name);
+            if (!search_item_code.equals("")) {
+                request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
+            }
             request.setAttribute("search_org_office", search_org_office);
+            request.setAttribute("search_manufacturer", search_manufacturer);
+            request.setAttribute("search_model", search_model);
             request.setAttribute("search_key_person", search_key_person);
-            request.setAttribute("search_item_code", search_item_code);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             model.closeConnection();

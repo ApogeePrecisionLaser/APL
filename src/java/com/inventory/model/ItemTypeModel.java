@@ -12,14 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
+
 
 /**
  *
@@ -50,7 +43,8 @@ public class ItemTypeModel {
         if (!searchItemType.equals("") && searchItemType != null) {
             query += " and item_type='" + searchItemType + "' ";
         }
-
+        
+        
         try {
             System.err.println("--query ---"+query);
             PreparedStatement pstmt = connection.prepareStatement(query);

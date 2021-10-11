@@ -1,5 +1,4 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--<%@include file="../layout/header.jsp" %>--%>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -66,27 +65,6 @@
 </style>
 <script>
 
-//    $(document).ready(function () {
-//        var item_name = [];
-//        var items = "";
-//        $.ajax({
-//            url: "IndentController",
-//            dataType: "json",
-//            data: {action1: "getItemsList"},
-//            success: function (data) {
-//
-//                //  $('#items_div').show();
-//                $('#item_list').empty();
-//                console.log(data);
-//                items = data.item_name;
-//                for (var i = 0; i < items.length; i++) {
-//                    item_name[i] = items[i]["item_name"];
-//                    $('#item_list').append('<li class="mb-1" id="items"><div class="row"><div class="col-lg-2"><input type="checkbox" value="' + item_name[i] + '" name="item_name" id="item_name' + i + '" onclick=enableFields(' + i + ')> ' + item_name[i] + ' </div><div class="col-lg-2"><input style="width:100px;font-size:13px" type="text" name="required_qty' + i + '" id="required_qty' + i + '" placeholder="Qty" disabled></div><div class="col-lg-2"><input style="font-size:13px" type="date" name="expected_date_time' + i + '" id="expected_date_time' + i + '" placeholder="Expected Date Time" disabled></div><div class="col-lg-2"><input style="font-size:13px" class="myAutocompleteClass" type="text" name="purpose' + i + '" id="purpose' + i + '" placeholder="Purpose" disabled></div></div></li>');
-//                }
-//            }
-//        });
-//    });
-
     $(document).ready(function () {
         $(".datepicker").datepicker({minDate: new Date()});
 
@@ -133,7 +111,6 @@
         document.getElementById("required_qty" + i).disabled = false;
         document.getElementById("expected_date_time" + i).disabled = false;
         document.getElementById("purpose" + i).disabled = false;
-        //document.getElementById("status" + i).disabled = false;
     }
 
 
@@ -160,7 +137,6 @@
         if (prevVal != "") {
             data = prevVal + data;
         }
-        //  alert(data);
         opener.document.getElementById("String_data").value = data;
 
         opener.location.reload();
@@ -180,8 +156,7 @@
         </div>
         <form name="form2"  >
             <div class="row mt-3">
-                <!--<input type="hidden" name="indent_no" id="indent_no" value="${indent_no}">-->
-                <!--<input type="hidden" name="description" id="description" value="${description}">-->
+
                 <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
                     <tbody>
                     <th>Item Name</th>
@@ -195,7 +170,6 @@
                         <c:choose>
                             <c:when test="${beanType.superp =='Y'}">
                                 <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-
 
                                     <td id="${beanType.item_names_id}" data-column="name">${beanType.item_name}</td>
 
@@ -241,22 +215,12 @@
             </div>      
             <hr>
             <div class="row">
-                <!--                <div id="message">
-                <c:if test="${not empty message}">
-                    <div class="col-md-12 text-center">
-                        <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-                    </div>
-                </c:if>
-            </div>-->
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
                     <input type="button" class="btn normalBtn" onclick="closeSelf();" name="task" id="save" value="Import to Indent">
-                    <!--<input type="submit" class="btn normalBtn"  name="task" id="save" value="Import to Indent">-->
                 </div>
             </div>
         </form>
     </div>
 </section>
-
-<%--<%@include file="../layout/footer.jsp" %>--%>
 

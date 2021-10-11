@@ -63,30 +63,7 @@
                 return false;
             }
         });
-//        $("#searchModel").autocomplete({
-//            source: function (request, response) {
-//                var code = document.getElementById("searchManufacturer").value;
-//                var searchItem = document.getElementById("searchItem").value;
-//                var random = document.getElementById("searchModel").value;
-//                $.ajax({
-//                    url: "ManufacturerItemModelMapController",
-//                    dataType: "json",
-//                    data: {action1: "getModel", str: random, str2: code, str3: searchItem},
-//                    success: function (data) {
-//                        console.log(data);
-//                        response(data.list);
-//                    }, error: function (error) {
-//                        console.log(error.responseText);
-//                        response(error.responseText);
-//                    }
-//                });
-//            },
-//            select: function (events, ui) {
-//                console.log(ui);
-//                $('#searchModel').val(ui.item.label);
-//                return false;
-//            }
-//        });
+
         $("#manufacturer_name").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("manufacturer_name").value;
@@ -132,35 +109,12 @@
                 return false;
             }
         });
-//        $("#model_name").autocomplete({
-//            source: function (request, response) {
-//                var code = document.getElementById("manufacturer_name").value;
-//                var searchItem = document.getElementById("item_name").value;
-//                var random = document.getElementById("model_name").value;
-//                $.ajax({
-//                    url: "ManufacturerItemModelMapController",
-//                    dataType: "json",
-//                    data: {action1: "getModel", str: random, str2: code, str3: searchItem},
-//                    success: function (data) {
-//                        console.log(data);
-//                        response(data.list);
-//                    }, error: function (error) {
-//                        console.log(error.responseText);
-//                        response(error.responseText);
-//                    }
-//                });
-//            },
-//            select: function (events, ui) {
-//                console.log(ui);
-//                $('#model_name').val(ui.item.label);
-//                return false;
-//            }
-//        });
     });
+
+
     function makeEditable(id) {
         document.getElementById("manufacturer_name").disabled = false;
         document.getElementById("item_name").disabled = false;
-       // document.getElementById("model_name").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             $("#message").html("");
@@ -203,17 +157,11 @@
         if (document.getElementById("clickedButton").value == 'Save' || document.getElementById("clickedButton").value == 'Save AS New') {
             var manufacturer_name = document.getElementById("manufacturer_name").value;
             var item_name = document.getElementById("item_name").value;
-           // var model_name = document.getElementById("model_name").value;
             if (myLeftTrim(manufacturer_name).length == 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Manufacturer Name is required...</b></label></div>');
                 document.getElementById("manufacturer_name").focus();
                 return  false;
             }
-//            if (myLeftTrim(model_name).length == 0) {
-//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Model Name is required...</b></label></div>');
-//                document.getElementById("model_name").focus();
-//                return  false;
-//            }
             if (myLeftTrim(item_name).length == 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Name is required...</b></label></div>');
                 document.getElementById("item_name").focus();
@@ -243,7 +191,6 @@
         $('#manufacturer_item_map_id').val(id);
         $('#manufacturer_name').val($("#" + count + '2').html());
         $('#item_name').val($("#" + count + '3').html());
-       // $('#model_name').val($("#" + count + '4').html());
         $('#description').val($("#" + count + '4').html());
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
@@ -288,12 +235,6 @@
                         <input class="form-control myInput" type="text" id="searchItem" name="searchItem" value="${searchItem}" size="150" >
                     </div>
                 </div>
-<!--                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Model</label>
-                        <input class="form-control myInput" type="text" id="searchModel" name="searchModel" value="${searchModel}" size="150" >
-                    </div>
-                </div>-->
             </div>
 
             <hr>
@@ -321,7 +262,6 @@
                                 <th>S.No.</th>
                                 <th>Manufacturer</th>
                                 <th>Item</th>
-                                <!--<th>Model</th>-->
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -333,7 +273,6 @@
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.manufacturer_name}</td>
                                     <td id="${loopCounter.count }3">${beanType.item_name}</td>                                               
-                                    <!--<td id="${loopCounter.count }4">${beanType.model_name}</td>-->                                               
                                     <td id="${loopCounter.count }4">${beanType.description}</td>     
                                 </tr>
                             </c:forEach>
@@ -373,14 +312,7 @@
                         </div>
                     </div>
                 </div>
-                <!--                <div class="col-md-3">
-                                    <div class="">
-                                        <div class="form-group">
-                                            <label>Model Name<span class="text-danger">*</span></label>
-                                            <input class="form-control myInput" type="text" id="model_name" name="model_name" value=""  size="45" disabled>
-                                        </div>
-                                    </div>
-                                </div>-->
+
             </div>
 
             <div class="row mt-3">

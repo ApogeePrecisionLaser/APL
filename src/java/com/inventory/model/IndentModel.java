@@ -1,39 +1,18 @@
 package com.inventory.model;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONObject;
-import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.Indent;
-import com.inventory.tableClasses.Inventory;
-import com.inventory.tableClasses.InventoryBasic;
 import com.inventory.tableClasses.ItemName;
-import static com.organization.model.KeypersonModel.getRevisionnoForImage;
-import com.organization.tableClasses.KeyPerson;
-import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import static java.time.LocalDateTime.now;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
-import org.apache.commons.fileupload.FileItem;
 import org.json.simple.JSONArray;
 
 /**
@@ -49,26 +28,27 @@ public class IndentModel {
     private final String COLOR_ERROR = "red";
     int item_id = 0;
     int indent_table_id = 0;
+    List<Integer> allIdList = new ArrayList<Integer>();
 
     public void setConnection(Connection con) {
         try {
-
             connection = con;
         } catch (Exception e) {
             System.out.println("InventoryModel setConnection() Error: " + e);
         }
     }
 
-    public List<Indent> showData(String logged_key_person, String office_admin) {
+    public List<Indent> showData(String logged_key_person, String office_admin, String indent_status) {
         List<Indent> list = new ArrayList<Indent>();
-
-        String query = " select indt.indent_no,indt.date_time,indt.description,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time "
-                + " ,s.status,kp2.key_person_name as requested_to,indt.indent_table_id,indi.indent_item_id,indi.approved_qty from indent_table indt,indent_item indi,key_person kp1,key_person kp2,"
-                + " item_names itn,purpose p,status s where indt.indent_table_id=indi.indent_table_id "
-                + " and indt.requested_by=kp1.key_person_id and indt.requested_to=kp2.key_person_id and indi.item_names_id=itn.item_names_id"
-                + " and indi.purpose_id=p.purpose_id "
-                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and kp1.active='Y' and kp2.active='Y' ";
+        if (indent_status.equals("All")) {
+            indent_status = "";
+        }
+        String query = " select indt.indent_no,indt.date_time,indt.description "
+                + " ,s.status,kp2.key_person_name as requested_to,indt.indent_table_id  from "
+                + " indent_table indt,key_person kp1,key_person kp2, "
+                + " status s where indt.requested_to=kp2.key_person_id "
+                + " and indt.requested_by=kp1.key_person_id  "
+                + " and indt.status_id=s.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'  ";
 
         if (!logged_key_person.equals("") && logged_key_person != null) {
             query += " and kp1.key_person_name='" + logged_key_person + "' ";
@@ -76,31 +56,51 @@ public class IndentModel {
         if (!office_admin.equals("") && office_admin != null) {
             query += " and kp2.key_person_name='" + office_admin + "' ";
         }
+
+        if (!indent_status.equals("") && indent_status != null) {
+            query += " and s.status='" + indent_status + "' ";
+        }
+
+        query += " order by indt.indent_no desc ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
                 Indent bean = new Indent();
                 bean.setIndent_no(rset.getString("indent_no"));
                 bean.setDate_time(rset.getString("date_time"));
-                bean.setItem_name((rset.getString("item_name")));
-                bean.setPurpose((rset.getString("purpose")));
-                bean.setRequired_qty(rset.getInt("required_qty"));
-                bean.setApproved_qty(rset.getInt("approved_qty"));
-                bean.setExpected_date_time(rset.getString("expected_date_time"));
                 String status = rset.getString("status");
-                if (status.equals("Request Sent")) {
-                    status = "Confirmation Awaited";
-                }
                 bean.setStatus(status);
                 bean.setRequested_to(rset.getString("requested_to"));
                 bean.setDescription(rset.getString("description"));
                 bean.setIndent_table_id(rset.getInt("indent_table_id"));
-                bean.setIndent_item_id(rset.getInt("indent_item_id"));
-
                 list.add(bean);
             }
         } catch (Exception e) {
             System.out.println("Error: InventoryModel showdata-" + e);
+        }
+        return list;
+    }
+
+    public List<Indent> getStatus() {
+        List<Indent> list = new ArrayList<Indent>();
+
+        String query = " select status,status_id from status  order by status";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                Indent bean = new Indent();
+                String status = rset.getString("status");
+//                if (status.equals("Request Sent")) {
+//                    status = "Pending";
+//                }
+                bean.setStatus_id(rset.getInt("status_id"));
+                bean.setStatus(status);
+
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: InventoryModel getStatus-" + e);
         }
         return list;
     }
@@ -137,7 +137,7 @@ public class IndentModel {
                     pstmt.setString(1, bean.getIndent_no());
                     pstmt.setInt(2, requested_by_id);
                     pstmt.setInt(3, requested_to_id);
-                    pstmt.setInt(4, 5);
+                    pstmt.setInt(4, 2);
                     pstmt.setString(5, "Y");
                     pstmt.setString(6, "OK");
                     pstmt.setString(7, date_time);
@@ -153,7 +153,6 @@ public class IndentModel {
                     }
                 }
             }
-            
             String query2 = "INSERT INTO indent_item(indent_table_id,item_names_id,purpose_id, required_qty,"
                     + " status_id,active,remark,expected_date_time,description,revision_no) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
@@ -167,7 +166,7 @@ public class IndentModel {
             pstmt2.setInt(2, item_name_id2);
             pstmt2.setInt(3, purpose_id2);
             pstmt2.setInt(4, bean.getRequired_qty());
-            pstmt2.setInt(5, 5);
+            pstmt2.setInt(5, 2);
             pstmt2.setString(6, "Y");
             pstmt2.setString(7, "OK");
             pstmt2.setString(8, bean.getExpected_date_time());
@@ -333,30 +332,60 @@ public class IndentModel {
         return list;
     }
 
+    public List<Integer> getIdList(String logged_designation) {
+        List<Integer> list = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+        try {
+            String query = " select itn.item_names_id "
+                    + " from item_names itn, item_type itt,item_authorization ia,designation d where "
+                    + " ia.designation_id=d.designation_id and ia.item_names_id=itn.item_names_id and d.designation='" + logged_designation + "' "
+                    + " and itt.item_type_id=itn.item_type_id  and itn.active='Y' "
+                    + " and itt.active='y' and ia.active='Y' and d.active='Y' ";
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                list2.add(rst.getInt(1));
+            }
+            
+            for (int k = 0; k < list2.size(); k++) {
+                String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
+                        + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
+                        + " @l := @l + 1 AS lvl "
+                        + " FROM "
+                        + " (SELECT @r := '" + list2.get(k) + "', @l := 0) vars, "
+                        + " item_names h "
+                        + " WHERE @r <> 0) T1 "
+                        + " JOIN item_names T2 "
+                        + " ON T1._id = T2.item_names_id where T2.active='y'  "
+                        + " ORDER BY T1.lvl DESC";
+
+                ResultSet rst2 = connection.prepareStatement(qry).executeQuery();
+                while (rst2.next()) {
+                    list.add(rst2.getInt(1));
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+        }
+        return list;
+    }
+
     public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose, String checked_item_name, String checked_expected_date_time) {
         List<ItemName> list = new ArrayList<ItemName>();
+        List<Integer> desig_map_list = new ArrayList<Integer>();
 
-        JSONObject obj = new JSONObject();
-        JSONArray arrayObj = new JSONArray();
-        String data = "";
-
-//        List list = new ArrayList();
-        String item_name = "";
-        List<Integer> idList = new ArrayList<Integer>();
-        List<String> parentItemNameList = new ArrayList<String>();
         try {
-            parentItemNameList = getParentItemNameList();
-            for (int i = 0; i < parentItemNameList.size(); i++) {
-                String searchItemName = parentItemNameList.get(i);
-                idList = getAllParentChildList(searchItemName);
+            desig_map_list = getIdList(logged_designation);
                 String query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
                         + "itn.generation,itn.is_super_child,itn.prefix "
-                        + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id "
-                        + " and itn.active='Y' and itt.active='y' ";
+                        + " from item_names itn, item_type itt where "
+                        + " itt.item_type_id=itn.item_type_id "
+                        + " and itn.active='Y' and itt.active='y' and itn.item_names_id "
+                        + " in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                        + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
-                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-                        + " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
-
+            //    System.err.println("query------" + query);
                 PreparedStatement pstmt = connection.prepareStatement(query);
                 ResultSet rset = pstmt.executeQuery();
                 while (rset.next()) {
@@ -401,14 +430,51 @@ public class IndentModel {
                     bean.setSuperp(rset.getString("is_super_child"));
                     list.add(bean);
                 }
-            }
-
         } catch (Exception e) {
             System.err.println("Exception in getItemsList---------" + e);
         }
 
         return list;
 
+    }
+
+    public List<Indent> getIndentItems(int indent_table_id) {
+        List<Indent> list = new ArrayList<Indent>();
+
+        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty,indi.deliver_qty,"
+                + " itn.quantity as stock_qty "
+                + " ,s.status,indi.indent_item_id "
+                + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
+                + " status s where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                + " and indi.purpose_id=p.purpose_id "
+                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and indt.indent_table_id='" + indent_table_id + "' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                Indent bean = new Indent();
+                bean.setIndent_no(rset.getString("indent_no"));
+                bean.setItem_name((rset.getString("item_name")));
+                bean.setPurpose((rset.getString("purpose")));
+                bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setDelivered_qty(rset.getInt("deliver_qty"));
+                bean.setStock_qty(rset.getInt("stock_qty"));
+                bean.setExpected_date_time(rset.getString("expected_date_time"));
+                String status = rset.getString("status");
+//                if(status.equals("Request Sent")){
+//                    status="Pending";
+//                }
+                bean.setStatus(status);
+                bean.setIndent_item_id(rset.getInt("indent_item_id"));
+
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: InventoryModel showdata-" + e);
+        }
+        return list;
     }
 
     public int getCounting() {
@@ -430,108 +496,6 @@ public class IndentModel {
             System.out.println("ERROR: in getCounting in IndentModel : " + ex);
         }
         return counting + 1;
-    }
-
-    public List<String> getParentItemNameList() {
-        PreparedStatement pstmt;
-        List<String> list = new ArrayList<String>();
-        String searchItemName = "";
-        try {
-            String query = " select item_name from item_names where (parent_id=0 or parent_id is null) and active='Y' ";
-            ResultSet rst = connection.prepareStatement(query).executeQuery();
-            while (rst.next()) {
-                searchItemName = rst.getString("item_name");
-                list.add(searchItemName);
-            }
-        } catch (Exception e) {
-            System.out.println("Error:--ItemNameModel--- getParentItemNameList--" + e);
-        }
-
-        list.removeAll(Arrays.asList(0));
-
-        return list;
-    }
-
-    public List<Integer> getAllParentChildList(String searchItemName) {
-        PreparedStatement pstmt;
-        String query = "";
-        List<Integer> list = new ArrayList<Integer>();
-
-        if (searchItemName == null) {
-            searchItemName = "";
-        }
-        int item_names_id = 0, parent_id = 0;
-
-        String qry = "select item_names_id from item_names where active='Y' and item_name='" + searchItemName + "' ";
-        try {
-            PreparedStatement pst = connection.prepareStatement(qry);
-            ResultSet rstt = pst.executeQuery();
-            while (rstt.next()) {
-                item_names_id = rstt.getInt(1);
-                list.add(item_names_id);
-            }
-        } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
-        }
-
-        String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
-        try {
-            PreparedStatement pst = connection.prepareStatement(qry1);
-            ResultSet rstt = pst.executeQuery();
-            while (rstt.next()) {
-                parent_id = rstt.getInt(1);
-                list.add(parent_id);
-            }
-        } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
-        }
-
-        try {
-            query = " SELECT distinct t2.item_names_id as lev2, t3.item_names_id as lev3, "
-                    + " t4.item_names_id as lev4,t5.item_names_id as lev5,t6.item_names_id as lev6, "
-                    + " t7.item_names_id as lev7,t8.item_names_id as lev8,t9.item_names_id as lev9,t10.item_names_id as lev10 "
-                    + " FROM item_names AS t1 "
-                    + " LEFT JOIN item_names AS t2 ON t2.parent_id = t1.item_names_id and t2.active='Y' "
-                    + " LEFT JOIN item_names AS t3 ON t3.parent_id = t2.item_names_id and t3.active='Y' "
-                    + " LEFT JOIN item_names AS t4 ON t4.parent_id = t3.item_names_id and t4.active='Y' "
-                    + " LEFT JOIN item_names AS t5 ON t5.parent_id = t4.item_names_id and t5.active='Y' "
-                    + " LEFT JOIN item_names AS t6 ON t6.parent_id = t5.item_names_id and t6.active='Y' "
-                    + " LEFT JOIN item_names AS t7 ON t7.parent_id = t6.item_names_id and t7.active='Y' "
-                    + " LEFT JOIN item_names AS t8 ON t8.parent_id = t7.item_names_id and t8.active='Y' "
-                    + " LEFT JOIN item_names AS t9 ON t9.parent_id = t8.item_names_id and t9.active='Y' "
-                    + " LEFT JOIN item_names AS t10 ON t10.parent_id = t9.item_names_id and t10.active='Y' "
-                    + "  WHERE '" + item_names_id + "' in (t1.parent_id,t2.parent_id) ";
-
-            pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            while (rset.next()) {
-                list.add(rset.getInt(1));
-                list.add(rset.getInt(2));
-                list.add(rset.getInt(3));
-                list.add(rset.getInt(4));
-                list.add(rset.getInt(5));
-                list.add(rset.getInt(6));
-                list.add(rset.getInt(7));
-                list.add(rset.getInt(8));
-                list.add(rset.getInt(9));
-            }
-        } catch (Exception e) {
-            System.out.println("Error:--ItemNameModel--- showData--" + e);
-        }
-        String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
-        try {
-            PreparedStatement pst = connection.prepareStatement(qry2);
-            ResultSet rstt = pst.executeQuery();
-            while (rstt.next()) {
-                list.add(rstt.getInt(1));
-            }
-        } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
-        }
-
-        list.removeAll(Arrays.asList(0));
-
-        return list;
     }
 
     public static int getLastIndentTableId() {

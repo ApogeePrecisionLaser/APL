@@ -41,16 +41,7 @@ import org.json.JSONObject;
 public class ApproveIndentController extends HttpServlet {
 
     private File tmpDir;
-    // List<String> import_item_name_arr = new ArrayList<String>();
 
-//    List<String> import_purpose_arr = new ArrayList<String>();
-//    List<String> import_expected_date_time_arr = new ArrayList<String>();
-//    List<Integer> import_req_qty_arr = new ArrayList<Integer>();
-//    List<ApproveIndent> imported_list = new ArrayList<Indent>();
-//    String import_item_name = "";
-//    String import_purpose = "";
-//    String import_expected_date_time = "";
-//    int import_req_qty = 0;
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -64,13 +55,10 @@ public class ApproveIndentController extends HttpServlet {
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
         String office_admin = "";
-        int last_indent_table_id = 0;
         int counting = 100;
-        String indent_no = "";
-        String requested_by = "";
-        String requested_to = "";
-        String description = "";
-        
+        String message_split[] = null;
+        int final_indent_table_id = 0;
+
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
@@ -149,31 +137,68 @@ public class ApproveIndentController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-
+            if (task.equals("GetIndentItems")) {
+               // List<ItemName> list = null;
+                //  String indent_no = request.getParameter("indent_no");
+                int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
+                String indent_status = request.getParameter("indent_status");
+                List<ApproveIndent> indent_items_list = model.getIndentItems(indent_table_id);
+                request.setAttribute("indent_items_list", indent_items_list);
+                request.setAttribute("indent_status", indent_status);
+                request.getRequestDispatcher("approveIndentItemList").forward(request, response);
+                return;
+            }
             if (task.equals("Delete")) {
                 // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
-            } else if (task.equals("approveIndent")) {
+            } else if ((task.equals("Approve")) || (task.equals("Denied"))) {
                 PrintWriter out = response.getWriter();
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
-                int indent_item_id = Integer.parseInt(request.getParameter("indent_item_id").trim());
-                String status = request.getParameter("status");
-                int approved_qty = Integer.parseInt(request.getParameter("approved_qty").trim());
+                String indent_status = request.getParameter("status");
+                if (indent_status.equals("Pending")) {
+                    indent_status = task;
+                }
+                
+                // int indent_item_id = 0;
+                int approved_qty = 0;
+                String item_status = "";
+                String indent_item_id_arr[] = request.getParameterValues("indent_item_id");
 
-                ApproveIndent bean = new ApproveIndent();
-                bean.setStatus(status);
-                bean.setApproved_qty(approved_qty);
-                String message = model.updateRecord(bean, indent_table_id, indent_item_id);
-                JSONObject json = new JSONObject();
-                json.put("message", message);
-                out.println(json);
+                for (int i = 0; i < indent_item_id_arr.length; i++) {
+
+                    int indent_item_id = Integer.parseInt(indent_item_id_arr[i]);
+                    item_status = request.getParameter("item_status" + indent_item_id);
+                    approved_qty = Integer.parseInt(request.getParameter("approved_qty" + indent_item_id).trim());
+                    ApproveIndent bean = new ApproveIndent();
+                    bean.setStatus(indent_status);
+                    bean.setItem_status(item_status);
+                    bean.setApproved_qty(approved_qty);
+                    String message = model.updateRecord(bean, indent_item_id, indent_table_id);
+                    message_split = message.split("&");
+                    final_indent_table_id = indent_table_id;
+                }
+
+                request.setAttribute("final_message", message_split[0]);
+                request.setAttribute("final_status", message_split[1]);
+                request.setAttribute("final_indent_table_id", final_indent_table_id);
+                request.getRequestDispatcher("approveIndentItemList").forward(request, response);
                 return;
             }
 
             //counting = model.getCounting();
             String autogenerate_indent_no = "Indent_" + counting;
+            String status = "";
+            String searchIndentStatusWise = request.getParameter("action1");
+            if (searchIndentStatusWise == null) {
+                searchIndentStatusWise = "";
+            }
+            if (searchIndentStatusWise.equals("searchIndentStatusWise")) {
+                status = request.getParameter("status");
+            }
+            List<ApproveIndent> list = model.showIndents(logged_user_name, status);
+            List<ApproveIndent> status_list = model.getStatus();
 
-            List<ApproveIndent> list = model.showData(logged_user_name);
             request.setAttribute("list", list);
+            request.setAttribute("status_list", status_list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
             request.setAttribute("requested_by", logged_user_name);
             request.setAttribute("requested_to", office_admin);

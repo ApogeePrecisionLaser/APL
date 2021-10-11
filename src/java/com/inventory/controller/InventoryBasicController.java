@@ -51,9 +51,13 @@ public class InventoryBasicController extends HttpServlet {
         String search_item_name = "";
         String search_org_office = "";
         String search_item_code = "";
-        search_item_name = request.getParameter("search_item_name");
+        String search_manufacturer = "";
+        String search_model = "";
+                 
         search_org_office = request.getParameter("search_org_office");
         search_item_code = request.getParameter("search_item_code");
+        search_manufacturer = request.getParameter("search_manufacturer");
+        search_model = request.getParameter("search_model");
 
         if (search_item_name == null) {
             search_item_name = "";
@@ -64,7 +68,18 @@ public class InventoryBasicController extends HttpServlet {
         if (search_item_code == null) {
             search_item_code = "";
         }
+        if (search_manufacturer == null) {
+            search_manufacturer = "";
+        }
+        if (search_model == null) {
+            search_model = "";
+        }
 
+        if (!search_item_code.equals("")) {
+            String search_item_code_arr[] = search_item_code.split(" - ");
+            search_item_name = search_item_code_arr[0];
+            search_item_code = search_item_code_arr[1];
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -83,23 +98,25 @@ public class InventoryBasicController extends HttpServlet {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
                     JSONObject json = null;
-                    if (JQstring.equals("getItemName")) {
-                        list = model.getItemName(q);
+
+                    if (JQstring.equals("getManufacturer")) {
+                        list = model.getManufacturer(q);
                     }
 
-//                    if (JQstring.equals("getItemCodeForSearch")) {
-//                        String org_office=request.getParameter("org_office");
-//                        list = model.getItemCodeForSearch(q,org_office);
-//                    }
-                    
                     if (JQstring.equals("getItemCode")) {
-                        String org_office=request.getParameter("org_office");
-                        list = model.getItemCode(q,org_office);
+                        String manufacturer = request.getParameter("manufacturer");
+                        list = model.getItemCode(q, manufacturer);
+                    }
+
+                    if (JQstring.equals("getModelName")) {
+                        String manufacturer_name = request.getParameter("manufacturer_name");
+                        String item_code = request.getParameter("item_code");
+                        list = model.getModelName(q, manufacturer_name, item_code);
                     }
                     if (JQstring.equals("getOrgOffice")) {
                         list = model.getOrgOffice(q);
                     }
-                    
+
                     if (json != null) {
 
                         out.println(json);
@@ -136,13 +153,13 @@ public class InventoryBasicController extends HttpServlet {
 
                 InventoryBasic bean = new InventoryBasic();
                 bean.setInventory_basic_id(inventory_basic_id);
-                // bean.setItem_name(request.getParameter("item_name").trim());
                 bean.setItem_code(request.getParameter("item_code").trim());
                 bean.setOrg_office(request.getParameter("org_office").trim());
                 bean.setDescription(request.getParameter("description").trim());
                 bean.setMin_quantity(Integer.parseInt(request.getParameter("min_quantity").trim()));
                 bean.setDaily_req(Integer.parseInt(request.getParameter("daily_req").trim()));
                 bean.setOpening_balance(request.getParameter("opening_balance").trim());
+                bean.setModel(request.getParameter("model_name"));
 
                 if (inventory_basic_id == 0) {
                     model.insertRecord(bean);
@@ -151,11 +168,15 @@ public class InventoryBasicController extends HttpServlet {
                 }
             }
 
-            List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_item_code);
+            List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model);
             request.setAttribute("list", list);
-            request.setAttribute("search_item_name", search_item_name);
-            request.setAttribute("search_item_code", search_item_code);
+            if (!search_item_code.equals("")) {
+                request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
+            }
+
             request.setAttribute("search_org_office", search_org_office);
+            request.setAttribute("search_manufacturer", search_manufacturer);
+            request.setAttribute("search_model", search_model);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             model.closeConnection();

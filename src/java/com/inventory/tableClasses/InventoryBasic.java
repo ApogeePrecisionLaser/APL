@@ -14,8 +14,13 @@ public class InventoryBasic {
 
     private int inventory_basic_id;
     private String item_name;
+    private String manufacturer_name;
+    private String model;
     private String item_code;
     private int item_names_id;
+    private int manufacturer_id;
+    private int model_id;
+    private int manufacturer_item_map_id;
     private String description;
     private String org_office;
     private int org_office_id;
@@ -206,6 +211,76 @@ public class InventoryBasic {
      */
     public void setItem_code(String item_code) {
         this.item_code = item_code;
+    }
+
+    /**
+     * @return the manufacturer_name
+     */
+    public String getManufacturer_name() {
+        return manufacturer_name;
+    }
+
+    /**
+     * @param manufacturer_name the manufacturer_name to set
+     */
+    public void setManufacturer_name(String manufacturer_name) {
+        this.manufacturer_name = manufacturer_name;
+    }
+
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
+     * @return the manufacturer_id
+     */
+    public int getManufacturer_id() {
+        return manufacturer_id;
+    }
+
+    /**
+     * @param manufacturer_id the manufacturer_id to set
+     */
+    public void setManufacturer_id(int manufacturer_id) {
+        this.manufacturer_id = manufacturer_id;
+    }
+
+    /**
+     * @return the model_id
+     */
+    public int getModel_id() {
+        return model_id;
+    }
+
+    /**
+     * @param model_id the model_id to set
+     */
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
+    }
+
+    /**
+     * @return the manufacturer_item_map_id
+     */
+    public int getManufacturer_item_map_id() {
+        return manufacturer_item_map_id;
+    }
+
+    /**
+     * @param manufacturer_item_map_id the manufacturer_item_map_id to set
+     */
+    public void setManufacturer_item_map_id(int manufacturer_item_map_id) {
+        this.manufacturer_item_map_id = manufacturer_item_map_id;
     }
 
 }

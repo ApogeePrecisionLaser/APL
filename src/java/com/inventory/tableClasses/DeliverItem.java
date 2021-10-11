@@ -51,6 +51,10 @@ public class DeliverItem {
     private int stock_qty;
     private int delivered_qty;
     private String expected_date_time;
+    private String delivery_challan_no;
+    private String challan_date;
+    private String delivery_challan_id;
+    
 
     /**
      * @return the indent_table_id
@@ -386,6 +390,48 @@ public class DeliverItem {
      */
     public void setExpected_date_time(String expected_date_time) {
         this.expected_date_time = expected_date_time;
+    }
+
+    /**
+     * @return the delivery_challan_no
+     */
+    public String getDelivery_challan_no() {
+        return delivery_challan_no;
+    }
+
+    /**
+     * @param delivery_challan_no the delivery_challan_no to set
+     */
+    public void setDelivery_challan_no(String delivery_challan_no) {
+        this.delivery_challan_no = delivery_challan_no;
+    }
+
+    /**
+     * @return the challan_date
+     */
+    public String getChallan_date() {
+        return challan_date;
+    }
+
+    /**
+     * @param challan_date the challan_date to set
+     */
+    public void setChallan_date(String challan_date) {
+        this.challan_date = challan_date;
+    }
+
+    /**
+     * @return the delivery_challan_id
+     */
+    public String getDelivery_challan_id() {
+        return delivery_challan_id;
+    }
+
+    /**
+     * @param delivery_challan_id the delivery_challan_id to set
+     */
+    public void setDelivery_challan_id(String delivery_challan_id) {
+        this.delivery_challan_id = delivery_challan_id;
     }
 
     

@@ -68,7 +68,8 @@
                                         <a href="ItemAuthorizationController" class="dropdown-item">Item Authorization</a>
                                         <a href="IndentController" class="dropdown-item">Request Indent</a>
                                         <a href="ApproveIndentController" class="dropdown-item">Approve Indent</a>
-                                        <a href="DeliverItemController" class="dropdown-item">Deliver Item</a>
+                                        <a href="CheckInventoryController" class="dropdown-item">Check Inventory & Generate Delivery Challan</a>
+                                        <!--                                        <a href="DeliverItemController" class="dropdown-item">Delivery Chalan</a>-->
                                     </div> 
                                 </li>
 

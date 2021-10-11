@@ -5,14 +5,8 @@
 package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
-import com.general.model.GeneralModel;
-import com.inventory.model.ManufacturerModel;
 import com.inventory.model.ModelNameModel;
-import com.inventory.tableClasses.ItemType;
-import com.inventory.tableClasses.Manufacturer;
 import com.inventory.tableClasses.ModelName;
-import com.organization.tableClasses.Designation;
-import com.website.model.ContactUsModel;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -48,7 +42,6 @@ public class ModelNameController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.err.println("model name controller***********************");
         ServletContext ctx = getServletContext();
         Map<String, String> map = new HashMap<String, String>();
         request.setCharacterEncoding("UTF-8");
@@ -64,11 +57,9 @@ public class ModelNameController extends HttpServlet {
         } catch (Exception e) {
             System.out.println("error in ModelNameController setConnection() calling try block" + e);
         }
-        
-        
+
         try {
             String searchModel = "";
-//            String searchItem = "";
             String searchManufacturer = "";
             String searchItemCode = "";
             try {
@@ -80,10 +71,6 @@ public class ModelNameController extends HttpServlet {
                     if (JQstring.equals("getManufacturer")) {
                         list = model.getManufacturer(q);
                     }
-//                    if (JQstring.equals("getItemCodeForSearch")) {
-//                        String str2 = request.getParameter("str2");
-//                        list = model.getItemCodeForSearch(q, str2);
-//                    }
 
                     if (JQstring.equals("getItemCode")) {
                         String str2 = request.getParameter("str2");
@@ -109,7 +96,6 @@ public class ModelNameController extends HttpServlet {
                 System.out.println("\n Error --ModelNameController get JQuery Parameters Part-" + e);
             }
             searchModel = request.getParameter("searchModel");
-            // searchItem = request.getParameter("searchItem");
             searchItemCode = request.getParameter("searchItemCode");
             searchManufacturer = request.getParameter("searchManufacturer");
             try {
@@ -120,9 +106,6 @@ public class ModelNameController extends HttpServlet {
                 if (searchModel == null) {
                     searchModel = "";
                 }
-//                if (searchItem == null) {
-//                    searchItem = "";
-//                }
                 if (searchItemCode == null) {
                     searchItemCode = "";
                 }
@@ -291,7 +274,6 @@ public class ModelNameController extends HttpServlet {
                 bean.setModel(map.get("model").trim());
                 bean.setManufacturer_name(map.get("manufacturer_name"));
                 bean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id")));
-//                bean.setItem_name(map.get("item_name"));
                 bean.setItem_code(map.get("item_code"));
                 bean.setLead_time(Integer.parseInt("0" + map.get("lead_time").trim()));
                 if (map.get("model_no") == null) {
@@ -337,11 +319,6 @@ public class ModelNameController extends HttpServlet {
                     }
                 }
 
-//                if (model_id == 0) {
-//                    model.insertRecord(bean);
-//                } else {
-//                    model.updateRecord(bean, model_id);
-//                }
             }
 
             List<ModelName> list = model.showData(searchManufacturer, searchModel, searchItemCode, active);

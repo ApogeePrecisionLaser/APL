@@ -15,14 +15,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
  *
@@ -47,7 +39,8 @@ public class ManufacturerItemMapModel {
             System.out.println("ManufacturerItemModelMapModel setConnection() Error: " + e);
         }
     }
-
+    
+    
     public List<ManufacturerItemMap> showData(String searchManufacturer, String searchItem) {
         PreparedStatement pstmt = null;
         String query;

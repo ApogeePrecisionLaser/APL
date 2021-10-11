@@ -4,11 +4,9 @@
  */
 package com.inventory.controller;
 
-import com.organization.model.OrganisationNameModel;
 import com.DBConnection.DBConnection;
 import com.inventory.model.ModelNameModel;
 import com.inventory.tableClasses.ModelName;
-import com.organization.tableClasses.OrganisationName;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,7 +47,7 @@ public class ItemImagesController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ModelNameModel model = new ModelNameModel();
-        
+
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -82,7 +80,8 @@ public class ItemImagesController extends HttpServlet {
             System.out.println("ItemImagesController error: " + ex);
         }
     }
-
+    
+  
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doGet(request, response);

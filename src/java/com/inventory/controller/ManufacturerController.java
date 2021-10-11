@@ -5,12 +5,8 @@
 package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
-import com.general.model.GeneralModel;
 import com.inventory.model.ManufacturerModel;
-import com.inventory.tableClasses.ItemType;
 import com.inventory.tableClasses.Manufacturer;
-import com.organization.tableClasses.Designation;
-import com.website.model.ContactUsModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -79,7 +75,8 @@ public class ManufacturerController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-
+            
+            
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";
                 ac = "ACTIVE RECORDS";
@@ -91,7 +88,6 @@ public class ManufacturerController extends HttpServlet {
                 active = "";
                 ac = "ALL RECORDS";
             }
-            
 
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(request.getParameter("manufacturer_id")));  // Pretty sure that office_type_id will be available.
