@@ -4,11 +4,9 @@
  */
 package com.inventory.controller;
 
-import com.organization.model.OrganisationNameModel;
 import com.DBConnection.DBConnection;
 import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.ItemName;
-import com.organization.tableClasses.OrganisationName;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -132,6 +130,15 @@ public class ItemNameController extends HttpServlet {
                     }
                     if (JQstring.equals("getSuperChild")) {
                         list = model.getSuperChild(q);
+                    }
+                    if (JQstring.equals("getItems")) {
+                        JSONObject obj1 = new JSONObject();
+                        JSONArray arrayObj = new JSONArray();
+                        String item_names=request.getParameter("item_name");
+                        arrayObj = model.getItems(item_names);
+                        obj1.put("org_chart_data", arrayObj);
+                        out.print(obj1);
+                        return;
                     }
 
                     if (json != null) {
@@ -295,7 +302,14 @@ public class ItemNameController extends HttpServlet {
                 bean.setItem_names_id(item_name_id);
                 // bean.setItem_code(map.get("item_code").trim());
                 bean.setItem_type_id(model.getItemTypeID(map.get("item_type").trim()));
-                bean.setQuantity(Integer.parseInt(map.get("quantity").trim()));
+                String qty = map.get("quantity");
+                int int_qty = 0;
+                if (qty.equals("")) {
+                    int_qty = 0;
+                } else {
+                    int_qty = Integer.parseInt(map.get("quantity").trim());
+                }
+                bean.setQuantity(int_qty);
                 bean.setItem_name(map.get("item_name").trim());
                 bean.setPrefix(map.get("prefix").trim());
                 bean.setParent_item(map.get("parent_item").trim());
@@ -313,7 +327,16 @@ public class ItemNameController extends HttpServlet {
                     model.updateRecord(bean, itr, item_name_id);
                 }
             }
-
+            String org_chart = request.getParameter("org_chart");
+            if (org_chart == null) {
+                org_chart = "";
+            }
+            if (org_chart.equals("Org Chart")) {
+                String item_names=request.getParameter("item_name");
+                request.setAttribute("item_name", item_names);
+                request.getRequestDispatcher("orgChart.jsp").forward(request, response);
+            }
+            
             //Auto increment count for item code
             //  counting = model.getCounting();
             List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code, search_super_child, search_generation);

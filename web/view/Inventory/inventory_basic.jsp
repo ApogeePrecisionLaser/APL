@@ -59,30 +59,6 @@
             }
         });
 
-        $("#search_item_name").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("search_item_name").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getItemName", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#search_item_name').val(ui.item.label);
-                return false;
-            }
-        });
-
-
 
         $("#org_office").autocomplete({
             source: function (request, response) {
@@ -107,14 +83,64 @@
             }
         });
 
+
+        $("#search_manufacturer").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_manufacturer").value;
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getManufacturer", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_manufacturer').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+
+        $("#manufacturer_name").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("manufacturer_name").value;
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getManufacturer", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#manufacturer_name').val(ui.item.label);
+                return false;
+            }
+        });
+
         $("#item_code").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("item_code").value;
+                var manufacturer = document.getElementById("manufacturer_name").value;
                 var org_office = document.getElementById("org_office").value;
                 $.ajax({
                     url: "InventoryBasicController",
                     dataType: "json",
-                    data: {action1: "getItemCode", str: random, org_office: org_office},
+                    data: {action1: "getItemCode", str: random, manufacturer: manufacturer},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -131,14 +157,66 @@
             }
         });
 
-        $("#search_item_code").autocomplete({
+
+        $("#search_model").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("search_item_code").value;
-                var org_office = document.getElementById("search_org_office").value;
+                var random = document.getElementById("search_model").value;
+                var manufacturer_name = document.getElementById("search_manufacturer").value;
+                var item_code = document.getElementById("search_item_code").value;
                 $.ajax({
                     url: "InventoryBasicController",
                     dataType: "json",
-                    data: {action1: "getItemCode", str: random, org_office: org_office},
+                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_model').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+        $("#model_name").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("model_name").value;
+                var manufacturer_name = document.getElementById("manufacturer_name").value;
+                var item_code = document.getElementById("item_code").value;
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#model_name').val(ui.item.label);
+                return false;
+            }
+        });
+        
+        $("#search_item_code").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_item_code").value;
+                var manufacturer = document.getElementById("search_manufacturer").value;
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getItemCode", str: random, manufacturer: manufacturer},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -161,6 +239,8 @@
     function makeEditable(id) {
         document.getElementById("item_code").disabled = false;
         document.getElementById("org_office").disabled = false;
+        document.getElementById("manufacturer_name").disabled = false;
+        document.getElementById("model_name").disabled = false;
         document.getElementById("min_quantity").disabled = false;
         document.getElementById("description").disabled = false;
         document.getElementById("daily_req").disabled = false;
@@ -203,10 +283,22 @@
             var daily_req = document.getElementById("daily_req").value;
             var opening_balance = document.getElementById("opening_balance").value;
             var org_office = document.getElementById("org_office").value;
+            var manufacturer_name = document.getElementById("manufacturer_name").value;
+            var model_name = document.getElementById("model_name").value;
 
             if (myLeftTrim(org_office).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office is required...</b></label></div>');
                 document.getElementById("org_office").focus();
+                return false;
+            }
+            if (myLeftTrim(manufacturer_name).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Manufacturer Name is required...</b></label></div>');
+                document.getElementById("manufacturer_name").focus();
+                return false;
+            }
+            if (myLeftTrim(model_name).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Model Name is required...</b></label></div>');
+                document.getElementById("model_name").focus();
                 return false;
             }
             if (myLeftTrim(item_code).length === 0) {
@@ -275,12 +367,14 @@
     function fillColumn(id, count) {
         $('#inventory_basic_id').val(id);
         $('#org_office').val($("#" + count + '2').html());
-        $('#item_name').val($("#" + count + '3').html());
-        $('#item_code').val($("#" + count + '4').html());
-        $('#min_quantity').val($("#" + count + '5').html());
-        $('#daily_req').val($("#" + count + '6').html());
-        $('#opening_balance').val($("#" + count + '7').html());
-        $('#description').val($("#" + count + '8').html());
+        $('#manufacturer_name').val($("#" + count + '3').html());
+//        $('#item_name').val($("#" + count + '4').html());
+        $('#item_code').val($("#" + count + '4').html()+ " - " + $("#" + count + '5').html());
+        $('#model_name').val($("#" + count + '6').html());
+        $('#min_quantity').val($("#" + count + '7').html());
+        $('#daily_req').val($("#" + count + '8').html());
+        $('#opening_balance').val($("#" + count + '9').html());
+        $('#description').val($("#" + count + '10').html());
         document.getElementById("edit").disabled = false;
         document.getElementById("delete").disabled = false;
     }
@@ -310,14 +404,29 @@
 
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
-                        <label>Item Name</label>
-                        <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
+                        <label>Manufacturer</label>
+                        <input type="text" name="search_manufacturer" id="search_manufacturer" value="${search_manufacturer}" Placeholder="Manufacturer" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
+
+<!--                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Item Name - Code</label>
+                        <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>-->
+
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
-                        <label>Item Code</label>
+                        <label>Item Name - Code</label>
                         <input type="text" Placeholder="Item Name" name="search_item_code" id="search_item_code" value="${search_item_code}" class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Model</label>
+                        <input type="text" name="search_model" id="search_model" value="${search_model}" Placeholder="Model" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
             </div>
@@ -344,8 +453,10 @@
                             <tr>
                                 <th>S.No.</th>
                                 <th>Org Office</th>
+                                <th>Manufacturer Name</th>
                                 <th>Item Name</th>
                                 <th>Item Code</th>
+                                <th>Model Name</th>
                                 <th>Minimum Quantity</th>
                                 <th>Daily Requirement</th>
                                 <th>Opening Balance</th>
@@ -359,12 +470,14 @@
                                     onclick="fillColumn('${beanType.inventory_basic_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>               
                                     <td id="${loopCounter.count }2">${beanType.org_office}</td>   
-                                    <td id="${loopCounter.count }3">${beanType.item_name}</td>
-                                    <td id="${loopCounter.count }4">${beanType.item_code}</td>
-                                    <td id="${loopCounter.count }5">${beanType.min_quantity}</td>                                               
-                                    <td id="${loopCounter.count }6">${beanType.daily_req}</td> 
-                                    <td id="${loopCounter.count }7">${beanType.opening_balance}</td>
-                                    <td id="${loopCounter.count }8">${beanType.description}</td>     
+                                    <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>   
+                                    <td id="${loopCounter.count }4">${beanType.item_name}</td>
+                                    <td id="${loopCounter.count }5">${beanType.item_code}</td>
+                                    <td id="${loopCounter.count }6">${beanType.model}</td>
+                                    <td id="${loopCounter.count }7">${beanType.min_quantity}</td>                                               
+                                    <td id="${loopCounter.count }8">${beanType.daily_req}</td> 
+                                    <td id="${loopCounter.count }9">${beanType.opening_balance}</td>
+                                    <td id="${loopCounter.count }10">${beanType.description}</td>     
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -394,22 +507,32 @@
                     </div>
                 </div>
 
-                <!--                <div class="col-md-3">
-                                    <div class="">
-                                        <div class="form-group">
-                                            <label>Item Name<span class="text-danger">*</span></label>
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Manufacturer<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" disabled >
+                        </div>
+                    </div>
+                </div>
                 
-                                            <input class="form-control myInput" type="text" id="item_name" name="item_name" value="" disabled >
-                                        </div>
-                                    </div>
-                                </div>-->
 
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Item Code<span class="text-danger">*</span></label>
+                            <label>Item Name - Code<span class="text-danger">*</span></label>
 
                             <input class="form-control myInput" type="text" id="item_code" name="item_code" value="" disabled >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Model<span class="text-danger">*</span></label>
+
+                            <input class="form-control myInput" type="text" id="model_name" name="model_name" value="" disabled >
                         </div>
                     </div>
                 </div>

@@ -104,10 +104,10 @@
         $("#searchDesignation").autocomplete({
 
             source: function (request, response) {
-                var code = document.getElementById("searchDesignationCode").value;
+                var code = document.getElementById("searchOrgOffice").value;
                 var random = document.getElementById("searchDesignation").value;
                 $.ajax({
-                    url: "organisationdesignationCont.do",
+                    url: "OrgOfficeDesignationMapController",
                     dataType: "json",
                     data: {action1: "searchDesignation",
                         action2: code, str: random},
@@ -132,27 +132,21 @@
 
 
     function makeEditable(id) {
-        //  document.getElementById("designation_id").disabled = false;
         document.getElementById("designation").disabled = false;
         document.getElementById("org_office").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             $("#message").html("");
-            // document.getElementById("designation_id").value = "";
             document.getElementById("edit").disabled = true;
             document.getElementById("delete").disabled = true;
-            // document.getElementById("save_As").disabled = true;
             document.getElementById("description").disabled = false;
-            // document.getElementById("super").disabled = false;
             document.getElementById("org_office").focus();
             setDefaultColor(document.getElementById("noOfRowsTraversed").value, 4);
         }
         if (id == 'edit') {
-            //  document.getElementById("save_As").disabled = false;
             document.getElementById("delete").disabled = false;
             document.getElementById("org_office").focus();
             document.getElementById("description").disabled = false;
-//            document.getElementById("super").disabled = false;
         }
     }
 
@@ -287,20 +281,26 @@
         </div>
         <form name="form1" method="POST" action="OrgOfficeDesignationMapController" onsubmit="return verifySearch();" >
             <div class="row mt-3">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-group mb-md-0">
                         <label>Org. Office</label>
                         <input class="form-control myInput" type="text" id="searchOrgOffice" name="searchOrgOffice" value="${searchOrgOffice}" size="150" >
                     </div>
                 </div>
-            </div>
 
+
+                <div class="col-md-6">
+                    <div class="form-group mb-md-0">
+                        <label>Designation</label>
+                        <input class="form-control myInput" type="text" id="searchDesignation" name="searchDesignation" value="${searchDesignation}" size="150" >
+                    </div>
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-12 text-center">
                     <input class="btn normalBtn" type="submit" name="task" id="searchInDesignation" value="SEARCH RECORDS">
-                    <!--                <input type="button" class="btn normalBtn" id="viewPdf" name="viewPdf" value="PDF" onclick="displayOrgnList(id)">
-                                    <input type="button" class="btn normalBtn" id="viewXls" name="viewXls" value="Excel" onclick="displayOrgnList(id)">-->
+
                 </div>
             </div>
         </form>
@@ -380,14 +380,6 @@
                     </div>
                 </div>
             </div>
-            <!--                <div class="col-md-3">
-                                <div class="">
-                                    <div class="form-group">
-                                        <label>Super<span class="text-danger">*</span></label>
-                                        <input class="form-control myInput" type="text" id="super" name="super" value="" size="45" disabled>
-                                    </div>
-                                </div>
-                            </div>-->
 
 
             <div class="row">

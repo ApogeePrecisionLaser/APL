@@ -12,6 +12,30 @@
     table.dataTable {      
         border-collapse: collapse;
     }
+    .not_in_stock{
+        background-color: #d587c8;
+        color:white;
+    }
+    .approved{
+        background-color: #2e6da4;
+        color:white; 
+    }
+    .delivered{
+        background-color: #5cb85c;
+        color:white; 
+    }
+    .denied{
+        background-color: #dc3545;
+        color:white; 
+    }
+    .pending{
+        background-color: #ffc107;
+        color:white; 
+    }
+    .delivery_challan_generated{
+        background-color: #df7d35;
+        color:white; 
+    }
 </style>
 <script>
 
@@ -27,8 +51,9 @@
             }
         });
     });
-
     $(document).ready(function () {
+
+        $(".datepicker").datepicker({minDate: new Date()});
         $(document).on('keydown', '.myAutocompleteClass', function () {
             var id = this.id;
             var type;
@@ -65,87 +90,10 @@
                     return false;
                 }
             });
-        });
+        }
+        );
     });
-    function enableFields(i) {
-        document.getElementById("required_qty" + i).disabled = false;
-        document.getElementById("expected_date_time" + i).disabled = false;
-        document.getElementById("purpose" + i).disabled = false;
-        //document.getElementById("status" + i).disabled = false;
-    }
-
-    $(function () {
-        setTimeout(function () {
-            $('#message').fadeOut('fast');
-        }, 10000);
-        $("#requested_by").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("requested_by").value;
-                $.ajax({
-                    url: "IndentController",
-                    dataType: "json",
-                    data: {action1: "getRequestedByKeyPerson", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#requested_by').val(ui.item.label);
-                return false;
-            }
-        });
-        $("#requested_to").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("requested_to").value;
-                var requested_by = document.getElementById("requested_by").value;
-                $.ajax({
-                    url: "IndentController",
-                    dataType: "json",
-                    data: {action1: "getRequestedToKeyPerson", str: random, requested_by: requested_by},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#requested_to').val(ui.item.label);
-                return false;
-            }
-        });
-        $("#status").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("status").value;
-                $.ajax({
-                    url: "IndentController",
-                    dataType: "json",
-                    data: {action1: "getStatus", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#status').val(ui.item.label);
-                return false;
-            }
-        });
-    });
+   
     function makeEditable(id) {
         document.getElementById("indent_no").disabled = false;
         document.getElementById("requested_by").disabled = false;
@@ -207,28 +155,14 @@
         }
         return result;
     }
-    function verifySearch() {
-        var result;
-        if (document.getElementById("clickedButton").value === 'SEARCH') {
-            var org_name = document.getElementById("org_name").value;
-            if (myLeftTrim(org_name).length === 0) {
-                document.getElementById("org_msg").innerHTML = "<b>Organization Name is required...</b>";
-                document.getElementById("org_name").focus();
-                return false; // code to stop from submitting the form2.
-            }
-        }
-    }
 
 
     function openPopUpForItems() {
         console.log(JSON.stringify(json));
         var json_data_string = JSON.stringify(json);
         var encodedStringBtoA = btoa(json_data_string);
-        // alert("deocde data -" + encodedStringBtoA);
         console.log(encodedStringBtoA);
-
         var url = "IndentController?task=GetItems&encodedStringBtoA=" + encodedStringBtoA;
-
         popupwin = openPopUp(url, "", 600, 1030);
     }
 
@@ -237,6 +171,13 @@
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
         return window.open(url, window_name, window_features);
+    }
+
+
+
+    function openPopUpForIndentItems(indent_table_id) {
+        var url = "IndentController?task=GetIndentItems&indent_table_id=" + indent_table_id;
+        popupwin = openPopUp(url, "", 600, 1030);
     }
 
 
@@ -249,22 +190,6 @@
         }
     }
 
-    function fillColumn(id, count) {
-        $('#inventory_id').val(id);
-        $('#org_office').val($("#" + count + '2').html());
-        $('#item_name').val($("#" + count + '3').html());
-        $('#item_code').val($("#" + count + '4').html());
-        $('#key_person').val($("#" + count + '5').html());
-        $('#inward_quantity').val($("#" + count + '6').html());
-        $('#outward_quantity').val($("#" + count + '7').html());
-        $('#date_time').val($("#" + count + '8').html());
-        $('#reference_document_type').val($("#" + count + '9').html());
-        $('#reference_document_id').val($("#" + count + '10').html());
-        $('#description').val($("#" + count + '11').html());
-        document.getElementById("edit").disabled = false;
-        document.getElementById("delete").disabled = false;
-    }
-
     var json;
     $(function () {
         var String_data = $('#String_data').val();
@@ -275,7 +200,6 @@
         String_data = '[' + String_data + ']';
         json = $.parseJSON(String_data);
         var col = [];
-
         for (var i = 0; i < json.length; i++) {
             for (var key in json[i]) {
                 if (col.indexOf(key) === -1) {
@@ -287,9 +211,7 @@
         var table = document.createElement("table");
         table.setAttribute("id", "tree-table");
         table.setAttribute("class", "table table-hover table-bordered");
-
         var tr = table.insertRow(-1);
-
         for (var i = 0; i < col.length; i++) {
             var th = document.createElement("th");
             th.innerHTML = col[i];
@@ -300,12 +222,10 @@
 
             tr = table.insertRow(-1);
             tr.setAttribute("id", i + 1);
-
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
                     tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '">';
-
                 }
                 if (j == 1) {
                     tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '">';
@@ -314,12 +234,10 @@
                     tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '">';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  name="purpose' + i + '" id="purpose' + i + '"  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '"  value="' + json[i][col[j]] + '">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text"  name="expected_date_time' + i + '" id="expected_date_time' + i + '"  value="' + json[i][col[j]] + '">';
-
-
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '"  value="' + json[i][col[j]] + '">';
                 }
 //                else {
 //                    tabCell.innerHTML = json[i][col[j]];
@@ -329,10 +247,12 @@
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
         divContainer.appendChild(table);
-
-        // alert(json.length);
     });
 
+    function searchIndentStatusWise(status) {
+        var url = "IndentController?action1=searchIndentStatusWise&status=" + status;
+        window.open(url, "_self");
+    }
 
 </script>
 
@@ -342,9 +262,24 @@
         <h1>Indent</h1>
     </div>
 </section>
-<!--<input type="button" onclick="CreateTableFromJSON()" value="Create Table From JSON" />
-<p id="showData"></p>-->
 
+
+<section>
+    <div class="container organizationBox">
+        <div class="headBox" style="background-color: #6D9FBD">
+            <c:forEach var="beanType" items="${requestScope['status_list']}"
+                       varStatus="loopCounter">
+                <label style="color:white;margin-left: 20px">${beanType.status}</label>
+                <input type="checkbox" name="search_status" id="search_status" value="${beanType.status}" 
+                       onclick="searchIndentStatusWise('${beanType.status}')"> 
+
+            </c:forEach>
+            <label style="color:white;margin-left: 20px">All</label>
+            <input type="checkbox" name="search_status" id="search_status" value="All" 
+                   onclick="searchIndentStatusWise('All')"> 
+        </div>
+    </div>
+</section>
 
 <c:if test="${isSelectPriv eq 'Y'}">
 
@@ -364,11 +299,6 @@
                                 <th>Requested To</th>
                                 <th>Date Time</th>
                                 <th>Status</th>
-                                <th>Item Name</th>
-                                <th>Required Qty</th>
-                                <th>Approved Qty</th>
-                                <th>Purpose</th>
-                                <th>Expected Date</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -376,31 +306,36 @@
                             <c:forEach var="beanType" items="${requestScope['list']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn('${beanType.indent_table_id}', '${loopCounter.count }');">
+                                    onclick="openPopUpForIndentItems('${beanType.indent_table_id}');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }">${beanType.indent_no}</td>
                                     <td id="${loopCounter.count }">${beanType.requested_to}</td>
                                     <td id="${loopCounter.count }">${beanType.date_time}</td>
                                     <c:choose>
                                         <c:when test="${beanType.status =='Delivered'}">
-                                            <td id="${loopCounter.count }" style="background-color: #28a745;color:white"><b>${beanType.status}</b>
+                                            <td id="${loopCounter.count }" class="delivered"><b>${beanType.status}</b>
                                             </td>
                                         </c:when>
 
-                                        <c:when test="${beanType.status =='Not In Stock'}">
-                                            <td id="${loopCounter.count }" style="background-color: #d587c8;color:white"><b>${beanType.status}</b>
+                                        <c:when test="${beanType.status =='Delivery Challan Generated'}">
+                                            <td id="${loopCounter.count }" class="delivery_challan_generated"><b>${beanType.status}</b>
                                             </td>
                                         </c:when>
-                                        <c:when test="${beanType.status =='Confirmed'}">
-                                            <td id="${loopCounter.count }" style="background-color: #2e6da4;;color:white"><b>Approved</b>
+
+                                        <c:when test="${beanType.status =='Less Stock'}">
+                                            <td id="${loopCounter.count }" class="not_in_stock"><b>${beanType.status}</b>
                                             </td>
                                         </c:when>
-                                        <c:when test="${beanType.status =='Confirmation Awaited'}">
-                                            <td id="${loopCounter.count }" style="background-color: #ffc107;color:white"><b>${beanType.status}</b>
+                                        <c:when test="${beanType.status =='Approved'}">
+                                            <td id="${loopCounter.count }" class="approved"><b>Approved</b>
+                                            </td>
+                                        </c:when>
+                                        <c:when test="${beanType.status =='Pending'}">
+                                            <td id="${loopCounter.count }" class="pending"><b>${beanType.status}</b>
                                             </td>
                                         </c:when>
                                         <c:when test="${beanType.status =='Denied'}">
-                                            <td id="${loopCounter.count }" style="background-color: #dc3545;color:white"><b>${beanType.status}</b>
+                                            <td id="${loopCounter.count }" class="denied"><b>${beanType.status}</b>
                                             </td>
                                         </c:when>
                                         <c:otherwise>
@@ -409,14 +344,6 @@
                                     </c:choose>
 
 
-
-
-
-                                    <td id="${loopCounter.count }">${beanType.item_name}</td>
-                                    <td id="${loopCounter.count }">${beanType.required_qty}</td>
-                                    <td id="${loopCounter.count }">${beanType.approved_qty}</td>
-                                    <td id="${loopCounter.count }">${beanType.purpose}</td>
-                                    <td id="${loopCounter.count }">${beanType.expected_date_time}</td>
                                     <td id="${loopCounter.count }">${beanType.description}</td>                                               
                                 </tr>
 
@@ -473,20 +400,6 @@
                 </div>
 
                 <div class="col-md-12" id="showData">
-                    <!--                    <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
-                                            <tbody>
-                                                <tr>
-                                                    <th>Items</th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
-                                                <tr></tr>
-                    
-                    
-                                            </tbody>
-                                        </table>-->
 
                 </div>
 
@@ -513,7 +426,8 @@
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);openPopUpForItems()" disabled="">
+                    <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);
+                            openPopUpForItems()" disabled="">
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Send Indent" disabled="" onclick="setStatus(id);">
                 </div>
             </div>

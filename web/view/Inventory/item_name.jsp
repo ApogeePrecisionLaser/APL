@@ -17,15 +17,12 @@
     table.dataTable {      
         border-collapse: collapse;
     }
-
-
     .treegrid-indent {
         width: 0px;
         height: 16px;
         display: inline-block;
         position: relative;
     }
-
     .treegrid-expander {
         width: 0px;
         height: 16px;
@@ -45,7 +42,6 @@
     }
 </style>
 <script>
-
     $(document).ready(function () {
         $('#mytable tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected_row')) {
@@ -58,14 +54,10 @@
             }
         });
     });
-
-
     $(function () {
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
-
-
         $("#item_type").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("item_type").value;
@@ -88,7 +80,6 @@
                 return false;
             }
         });
-
         $("#search_item_type").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_type").value;
@@ -111,7 +102,6 @@
                 return false;
             }
         });
-
         $("#search_item_code").autocomplete({
             source: function (request, response) {
                 var item_type = document.getElementById("search_item_type").value;
@@ -136,7 +126,6 @@
                 return false;
             }
         });
-
         $("#search_item_name").autocomplete({
             source: function (request, response) {
                 var item_type = document.getElementById("search_item_type").value;
@@ -160,7 +149,6 @@
                 return false;
             }
         });
-
         $("#parent_item").autocomplete({
             source: function (request, response) {
                 //var item_type = document.getElementById("item_type").value;
@@ -184,7 +172,6 @@
                 return false;
             }
         });
-
         $("#search_generation").autocomplete({
             source: function (request, response) {
                 //var item_type = document.getElementById("item_type").value;
@@ -208,7 +195,6 @@
                 return false;
             }
         });
-
         $("#search_super_child").autocomplete({
             source: function (request, response) {
                 //var item_type = document.getElementById("item_type").value;
@@ -232,11 +218,6 @@
                 return false;
             }
         });
-
-
-
-
-
 //        $('#item_name').blur(function () {
 //            var min = 10000;
 //            var max = 900000;
@@ -246,10 +227,7 @@
 //            $('#item_code').val(auto_item_code);
 //        });
     });
-
-
     function makeEditable(id) {
-        //  $('#item_name_id').val("");
         document.getElementById("item_type").disabled = false;
         document.getElementById("item_name").disabled = false;
         //  document.getElementById("item_code").disabled = false;
@@ -270,8 +248,6 @@
             document.getElementById("delete").disabled = false;
         }
     }
-
-
     function setStatus(id) {
         if (id === 'save') {
             document.getElementById("clickedButton").value = "Save";
@@ -296,7 +272,6 @@
             var item_name = document.getElementById("item_name").value;
             var quantity = document.getElementById("quantity").value;
             var prefix = document.getElementById("prefix").value;
-
             if (myLeftTrim(item_type).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Type is required...</b></label></div>');
                 document.getElementById("item_type").focus();
@@ -312,11 +287,6 @@
                 document.getElementById("prefix").focus();
                 return false;
             }
-//            if (myLeftTrim(quantity).length === 0) {
-//                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Quantity is required...</b></label></div>');
-//                document.getElementById("quantity").focus();
-//                return false;
-//            }
             if (result === false) {
             } else {
                 result = true;
@@ -341,11 +311,9 @@
             }
         }
     }
-
 //    function viewImages(id, img) {
 //        popupwin = openPopUp("Show Image List", 1000, 1000, id);
 //    }
-
     function openPopUp(window_name, popup_height, popup_width, id) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
@@ -362,26 +330,17 @@
             popupwin.focus();
         }
     }
-
     function fillColumn(id, count) {
-        // alert(id);
         $('#item_name_id').val(id);
-        //alert($("#" + count + '2').text());
         $('#item_name').val($("#" + count + '2').text());
         $('#prefix').val($("#" + count + '3').html());
-        // $('#item_code').val($("#" + count + '4').html());
-
-
         $('#item_type').val($("#" + count + '5').html());
         $('#quantity').val($("#" + count + '6').html());
-        // alert($("#" + count + '9').text());
         if (($("#" + count + '9').text()) != "") {
             $('#parent_item').val($("#" + count + '9').html() + " - " + $("#" + count + '11').html());
         } else {
             $('#parent_item').val($("#" + count + '9').html());
-
         }
-        // $('#is_super_child').val($("#" + count + '7').html());
         var super_child = $("#" + count + '10').html();
         if (super_child == 'Y') {
             $('#supery').attr('checked', true);
@@ -389,9 +348,19 @@
             $('#supern').attr('checked', true);
         }
         $('#description').val($("#" + count + '8').html());
-        //$('#item_image_details_id').val($("#" + count + '10').html());
         document.getElementById("edit").disabled = false;
         document.getElementById("delete").disabled = false;
+    }
+    function showQuantity() {
+        var is_super_child = $("input[name='super']:checked").val();
+        if (is_super_child == 'Y') {
+            $('#quantity_div').show();
+        } else {
+            $('#quantity_div').hide();
+        }
+    }
+    function getOrgChartData(item_name) {
+        window.open("ItemNameController?org_chart=Org Chart&item_name=" + item_name);
     }
 </script>
 
@@ -448,15 +417,16 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <input type="submit" class="btn formBtn" id="hiera" name="search_item" value="SEARCH RECORDS" onclick="setStatus(id)">
+                    <!--<input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart">-->
                 </div>
             </div>
         </form>
     </div>
 </section>
 
-<c:if test="${isSelectPriv eq 'Y'}">                
 
-    <section class="marginTop30">
+<c:if test="${isSelectPriv eq 'Y'}">  
+    <section class="marginTop30 ">
         <div class="container organizationBox">
             <div class="headBox">
                 <h5 class="">Search List</h5>
@@ -470,6 +440,7 @@
                 <th>Quantity</th>
                 <th>Generation</th>
                 <th>Description</th>
+                <th style="display:none"></th>
                 <th style="display:none"></th>
                 <th style="display:none"></th>
                 <th style="display:none"></th>
@@ -489,15 +460,19 @@
                         <td id="${loopCounter.count }9" style="display:none">${beanType.parent_item}</td>
                         <td id="${loopCounter.count }10" style="display:none">${beanType.superp}</td>
                         <td id="${loopCounter.count }11" style="display:none">${beanType.parent_item_code}</td>
+                        <td id="${loopCounter.count }12">
+                            <input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart" onclick="getOrgChartData('${beanType.item_name}')">
+                        </td>
+
                     </tr>
                 </c:forEach>
+
+
                 </tbody>
             </table>
         </div>          
     </section>
-
 </c:if>
-
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -533,16 +508,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Quantity<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
-                        </div>
-                    </div>
-                </div>
 
+            <div class="row mt-3">
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
@@ -559,13 +528,22 @@
                     </div>
                     <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
                         <label class="form-check-label">
-                            <input type="radio" id="supery" name="super" value="Y" disabled> Yes
+                            <input type="radio" id="supery" name="super" value="Y" disabled onclick="showQuantity()"> Yes
                         </label>
                     </div>
                     <div class="form-group form-check d-inline pl-0">
                         <label class="form-check-label">
-                            <input type="radio" id="supern" name="super" value="N" disabled> No
+                            <input type="radio" id="supern" name="super" value="N" disabled onclick="showQuantity()"> No
                         </label>
+                    </div>
+                </div>
+
+                <div class="col-md-3" style="display:none" id="quantity_div">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Quantity<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
+                        </div>
                     </div>
                 </div>
 
@@ -589,8 +567,7 @@
                     </c:if>
                 </div>
                 <input type="hidden" id="clickedButton" value="">
-                <div class="col-md-12 text-center">      
-                    
+                <div class="col-md-12 text-center">                       
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','update') eq 'True'}">
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
                     </c:if>
@@ -606,7 +583,6 @@
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','delete') eq 'True'}">
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
                     </c:if>
-                    
                 </div>
             </div>
         </form>
@@ -614,4 +590,3 @@
 </section>
 
 <%@include file="../layout/footer.jsp" %>
-

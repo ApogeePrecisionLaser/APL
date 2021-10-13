@@ -5,8 +5,8 @@
 package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
-import com.inventory.model.DeliverItemModel;
-import com.inventory.tableClasses.DeliverItem;
+import com.inventory.model.CheckInventoryModel;
+import com.inventory.tableClasses.CheckInventory;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,8 +14,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,10 +40,10 @@ import org.json.JSONObject;
  *
  * @author Komal
  */
-public class DeliverItemController extends HttpServlet {
+public class CheckInventoryController extends HttpServlet {
 
     private File tmpDir;
-
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -62,8 +64,10 @@ public class DeliverItemController extends HttpServlet {
         String requested_to = "";
         String description = "";
         String message_split[] = null;
-        int delivery_indent_table_id = 0;
-
+        
+        
+        
+        int final_indent_table_id = 0;
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
@@ -79,7 +83,7 @@ public class DeliverItemController extends HttpServlet {
             office_admin = session.getAttribute("office_admin").toString();
         }
 
-        DeliverItemModel model = new DeliverItemModel();
+        CheckInventoryModel model = new CheckInventoryModel();
 
         String search_item_name = "";
 
@@ -88,7 +92,7 @@ public class DeliverItemController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ApproveIndentController setConnection() calling try block" + e);
+            System.out.println("error in CheckInventoryController setConnection() calling try block" + e);
         }
 
         try {
@@ -134,7 +138,7 @@ public class DeliverItemController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ApproveIndentController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --CheckInventoryController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -146,63 +150,80 @@ public class DeliverItemController extends HttpServlet {
                 // List<ItemName> list = null;
                 //  String indent_no = request.getParameter("indent_no");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
-
-                List<DeliverItem> indent_items_list = model.getIndentItems(indent_table_id);
+                String indent_status = request.getParameter("indent_status");
+                List<CheckInventory> indent_items_list = model.getIndentItems(indent_table_id,logged_key_person_id);
                 request.setAttribute("indent_items_list", indent_items_list);
-                request.getRequestDispatcher("deliveredIndentItemList").forward(request, response);
+                request.setAttribute("indent_status", indent_status);
+                request.getRequestDispatcher("checkInventoryItemList").forward(request, response);
                 return;
             }
 
             if (task.equals("Delete")) {
                 // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
-            } else if ((task.equals("Deliver Items"))) {
+            } else if ((task.equals("Generate Delivery Challan")) || (task.equals("Less Stock")) || (task.equals("Denied"))) {
+                PrintWriter out = response.getWriter();
+
                 String indent_item_id_arr[] = request.getParameterValues("indent_item_id");
-                int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
-                String delivery_challan_no = request.getParameter("delivery_challan_no");
-                String delivery_challan_date = request.getParameter("delivery_challan_date");
-                String decsription = request.getParameter("description");
-                
-                String message = "";
                 for (int i = 0; i < indent_item_id_arr.length; i++) {
                     int indent_item_id = Integer.parseInt(indent_item_id_arr[i]);
                     String status_item = request.getParameter("item_status" + indent_item_id);
                     String item_name = request.getParameter("item_name" + indent_item_id);
-
+                    int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                     String requested_by_id = request.getParameter("requested_by");
                     String requsted_to = request.getParameter("requested_to");
-                    int delivered_qty = Integer.parseInt(request.getParameter("delivered_qty" + indent_item_id).trim());
+                    int delivered_qty = Integer.parseInt(request.getParameter("deliver_qty" + indent_item_id).trim());
 
-                    DeliverItem bean = new DeliverItem();
-                    bean.setDelivery_challan_no(delivery_challan_no);
-                    bean.setChallan_date(delivery_challan_date);
+                  //  System.err.println("delivered_qty----"+delivered_qty);
+                    CheckInventory bean = new CheckInventory();
                     bean.setItem_status(status_item);
                     bean.setDelivered_qty(delivered_qty);
                     bean.setItem_name(item_name);
                     bean.setRequested_by_id(Integer.parseInt(requested_by_id));
-                    bean.setDescription(description);
-                    bean.setIndent_table_id(indent_table_id);
-                    bean.setIndent_item_id(indent_item_id);
-                    if (!status_item.equals("Denied")) {
-                        message = model.updateRecord(bean, indent_item_id, indent_table_id, task, logged_org_office, logged_user_name);
-                    }
-                }
-                message_split = message.split("&");
-                delivery_indent_table_id = indent_table_id;
+                    String message = model.updateRecord(bean, indent_item_id, indent_table_id, task, logged_org_office, logged_user_name);
+                    message_split = message.split("&");
+                    final_indent_table_id = indent_table_id;
 
-                request.setAttribute("delivery_message", message_split[0]);
-                request.setAttribute("delivery_status", message_split[1]);
-                request.setAttribute("delivery_indent_table_id", delivery_indent_table_id);
+                    request.setAttribute("final_message", message_split[0]);
+                    request.setAttribute("final_status", message_split[1]);
+                    request.setAttribute("final_indent_table_id", final_indent_table_id);
+                    request.setAttribute("task", task);
+                    request.getRequestDispatcher("checkInventoryItemList").forward(request, response);
+                    return;
+                }
+            } else if (task.equals("GenerateDeliveryChallan")) {
+                int indent_table_id = Integer.parseInt(request.getParameter("final_indent_table_id").trim());
+
+                String indent_nos = model.getIndentNo(indent_table_id);
+                counting = model.getCounting();
+                String autogenerate_delivery_challan_no = "DC_" + counting;
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+                String delivery_challan_date = sdf.format(date);
+                List<CheckInventory> deliverey_challan_items_list = model.getIndentItemsForDeliveryChallan(indent_table_id);
+                request.setAttribute("deliverey_challan_items_list", deliverey_challan_items_list);
+
+                request.setAttribute("delivery_challan_date", delivery_challan_date);
+                request.setAttribute("indent_nos", indent_nos);
+                request.setAttribute("autogenerate_delivery_challan_no", autogenerate_delivery_challan_no);
                 request.getRequestDispatcher("deliveryChallan").forward(request, response);
                 return;
             }
 
-            //counting = model.getCounting();
-            String autogenerate_indent_no = "Indent_" + counting;
+            String status = "";
+            String searchIndentStatusWise = request.getParameter("action1");
+            if (searchIndentStatusWise == null) {
+                searchIndentStatusWise = "";
+            }
+            if (searchIndentStatusWise.equals("searchIndentStatusWise")) {
+                status = request.getParameter("status");
+            }
 
-//            List<DeliverItem> list = model.showData(logged_designation);
-            List<DeliverItem> list = model.showIndents(logged_designation);
+            List<CheckInventory> list = model.showIndents(logged_designation,status);
+
+            List<CheckInventory> status_list = model.getStatus();
+
             request.setAttribute("list", list);
-            request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
+            request.setAttribute("status_list", status_list);
             request.setAttribute("requested_by", logged_user_name);
             request.setAttribute("requested_to", office_admin);
             request.setAttribute("message", model.getMessage());
@@ -210,10 +231,10 @@ public class DeliverItemController extends HttpServlet {
 
             model.closeConnection();
 
-            request.getRequestDispatcher("deliver_item").forward(request, response);
+            request.getRequestDispatcher("check_inventory").forward(request, response);
 
         } catch (Exception ex) {
-            System.out.println("ApproveIndentController error: " + ex);
+            System.out.println("CheckInventoryController error: " + ex);
         }
     }
 

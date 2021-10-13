@@ -1,6 +1,5 @@
 package com.inventory.model;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,27 +7,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.ItemAuthorization;
-import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import org.apache.commons.fileupload.FileItem;
-import org.json.simple.JSONArray;
+
 
 /**
  *
@@ -51,6 +36,8 @@ public class ItemAuthorizationModel {
             System.out.println("ItemAuthorizationModel setConnection() Error: " + e);
         }
     }
+    
+  
 
     public List<ItemAuthorization> showData(String searchItemName, String search_designation) {
         List<ItemAuthorization> list = new ArrayList<ItemAuthorization>();
@@ -62,7 +49,7 @@ public class ItemAuthorizationModel {
             search_designation = "";
         }
 
-        String query = "select d.designation,itn.item_name,ia.item_authorization_id,ia.qty,ia.description from item_names itn,item_authorization ia, "
+        String query = "select d.designation,itn.item_name,ia.item_authorization_id,ia.qty,ia.description,ia.monthly_limit from item_names itn,item_authorization ia, "
                 + " designation d where itn.active='Y' and ia.active='Y' and d.active='Y' and ia.item_names_id=itn.item_names_id"
                 + "  and ia.designation_id=d.designation_id ";
 
@@ -82,6 +69,7 @@ public class ItemAuthorizationModel {
                 bean.setItem_name((rset.getString("item_name")));
                 bean.setDesignation((rset.getString("designation")));
                 bean.setQuantity(rset.getInt("qty"));
+                bean.setMonthly_limit(rset.getInt("monthly_limit"));
                 bean.setDescription(rset.getString("description"));
                 list.add(bean);
             }
@@ -93,8 +81,8 @@ public class ItemAuthorizationModel {
 
     public int insertRecord(ItemAuthorization bean) throws SQLException {
         String query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
-                + " revision_no,active,remark,qty) "
-                + " VALUES(?,?,?,?,?,?,?) ";
+                + " revision_no,active,remark,qty,monthly_limit) "
+                + " VALUES(?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         int item_name_id = getItemNamesId(bean.getItem_name());
@@ -123,6 +111,7 @@ public class ItemAuthorizationModel {
                 pstmt.setString(5, "Y");
                 pstmt.setString(6, "OK");
                 pstmt.setInt(7, bean.getQuantity());
+                pstmt.setInt(8, bean.getMonthly_limit());
                 rowsAffected = pstmt.executeUpdate();
             }
         } catch (Exception e) {
@@ -152,8 +141,8 @@ public class ItemAuthorizationModel {
                 + " and active='Y' ";
         String query2 = "UPDATE item_authorization SET active=? WHERE item_authorization_id=? and revision_no=? ";
         String query3 = "INSERT INTO item_authorization(item_authorization_id,item_names_id,designation_id,description,"
-                + " revision_no,active,remark,qty) "
-                + " VALUES(?,?,?,?,?,?,?,?)";
+                + " revision_no,active,remark,qty,monthly_limit) "
+                + " VALUES(?,?,?,?,?,?,?,?,?)";
 
         int rowsAffected = 0;
         int map_count = 0;
@@ -190,6 +179,7 @@ public class ItemAuthorizationModel {
                         psmt.setString(6, "Y");
                         psmt.setString(7, "OK");
                         psmt.setInt(8, bean.getQuantity());
+                        psmt.setInt(9, bean.getMonthly_limit());
                         rowsAffected = psmt.executeUpdate();
 
                     }

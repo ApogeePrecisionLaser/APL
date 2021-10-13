@@ -22,6 +22,7 @@ public class ItemAuthorization {
     private String remark;
     private int revision_no;
     private int quantity;
+    private int monthly_limit;
 
     /**
      * @return the item_authorization_id
@@ -161,6 +162,20 @@ public class ItemAuthorization {
      */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    /**
+     * @return the monthly_limit
+     */
+    public int getMonthly_limit() {
+        return monthly_limit;
+    }
+
+    /**
+     * @param monthly_limit the monthly_limit to set
+     */
+    public void setMonthly_limit(int monthly_limit) {
+        this.monthly_limit = monthly_limit;
     }
 
    

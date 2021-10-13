@@ -62,8 +62,6 @@
     function makeEditable(id) {
         document.getElementById("item_type_name").disabled = false;
         document.getElementById("description").disabled = false;
-       // document.getElementById("supern").disabled = false;
-       // document.getElementById("supery").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             editable = "false";
@@ -140,15 +138,8 @@
     }
 
     function fillColumn(id, count) {
-      //  alert(id);
         $('#item_type_id').val(id);
         $('#item_type_name').val($("#" + count + '2').html());
-//        var super_child = $("#" + count + '3').html();
-//        if (super_child == 'Y') {
-//            $('#supery').attr('checked', true);
-//        } else {
-//            $('#supern').attr('checked', true);
-//        }
         $('#description').val($("#" + count + '3').html());
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
@@ -201,7 +192,6 @@
                             <tr>
                                 <th>S.No.</th>
                                 <th>Item Type Name</th>
-                                <!--<th>Is Super Child</th>-->
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -212,7 +202,6 @@
                                     onclick="fillColumn('${beanType.item_type_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>
                                     <td id="${loopCounter.count }2">${beanType.item_type}</td>
-                                    <!--<td id="${loopCounter.count }3">${beanType.superp}</td>-->
                                     <td id="${loopCounter.count }3">${beanType.description}</td>                                               
                                 </tr>
                             </c:forEach>
@@ -240,21 +229,7 @@
                         </div>
                     </div>
                 </div>
-                <!--                <div class="col-md-3">
-                                    <div class="form-group mb-1">
-                                        <label class="" for="email">Is super child<span class="text-danger">*</span></label>
-                                    </div>
-                                    <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
-                                        <label class="form-check-label">
-                                            <input type="radio" id="supery" name="super" value="Y" disabled> Yes
-                                        </label>
-                                    </div>
-                                    <div class="form-group form-check d-inline pl-0">
-                                        <label class="form-check-label">
-                                            <input type="radio" id="supern" name="super" value="N" disabled> No
-                                        </label>
-                                    </div>
-                                </div>-->
+
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">

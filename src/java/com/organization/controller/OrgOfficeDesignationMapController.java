@@ -41,7 +41,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
         OrgOfficeDesignationMapModel organisationModel = new OrgOfficeDesignationMapModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
-
+        
         try {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -51,7 +51,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
             String searchOrgOffice = request.getParameter("searchOrgOffice");
-            String designation = request.getParameter("searchDesignation");
+            String searchDesignation = request.getParameter("searchDesignation");
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
                 isOrgBasicStep = isOrgBasicStep.trim();
             } else {
@@ -62,10 +62,10 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             } else {
                 searchOrgOffice = "";
             }
-            if (designation != null && !designation.isEmpty()) {
-                designation = designation.trim();
+            if (searchDesignation != null && !searchDesignation.isEmpty()) {
+                searchDesignation = searchDesignation.trim();
             } else {
-                designation = "";
+                searchDesignation = "";
             }
            
 
@@ -181,7 +181,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             office_code_search = request.getParameter("office_code_search");
             office_name_search = request.getParameter("office_name_search");
             searchOrgOffice = request.getParameter("searchOrgOffice");
-            designation = request.getParameter("searchDesignation");
+            searchDesignation = request.getParameter("searchDesignation");
             try {
 
                 if (org_name == null) {
@@ -196,8 +196,8 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                 if (searchOrgOffice == null) {
                     searchOrgOffice = "";
                 }
-                if (designation == null) {
-                    designation = "";
+                if (searchDesignation == null) {
+                    searchDesignation = "";
                 }
                
 
@@ -240,9 +240,10 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             }
           
             // Logic to show data in the table.
-            List<OrganisationDesignationBean> organisationList = organisationModel.showData(searchOrgOffice, designation);
+            List<OrganisationDesignationBean> organisationList = organisationModel.showData(searchOrgOffice, searchDesignation);
        
             request.setAttribute("searchOrgOffice", searchOrgOffice);
+            request.setAttribute("searchDesignation", searchDesignation);
             request.setAttribute("message", organisationModel.getMessage());
             request.setAttribute("msgBgColor", organisationModel.getMsgBgColor());
 

@@ -4,10 +4,7 @@
  */
 package com.inventory.model;
 
-import com.inventory.tableClasses.ItemName;
-import com.inventory.tableClasses.Manufacturer;
 import com.inventory.tableClasses.ModelName;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,14 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
+
 import org.apache.commons.fileupload.FileItem;
 
 /**
@@ -52,12 +42,19 @@ public class ModelNameModel {
             System.out.println("ModelNameModel setConnection() Error: " + e);
         }
     }
-
+    
+    
     public List<ModelName> showData(String searchManufacturer, String searchModel, String searchItemCode, String active) {
         List<ModelName> list = new ArrayList<ModelName>();
+        String searchItemName = "";
+        if (!searchItemCode.equals("")) {
+            String searchItemCodearr[] = searchItemCode.split(" - ");
+            searchItemCode = searchItemCodearr[0];
+            searchItemName = searchItemCodearr[1];
+        }
 
         String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_code,mim.manufacturer_item_map_id,m.lead_time"
-                + " ,m.model_no,m.part_no "
+                + " ,m.model_no,m.part_no,inn.item_name "
                 + "  FROM model m,manufacturer_item_map mim,item_names inn,manufacturer mr where m.active='Y' "
                 + " and mim.active='Y' and mr.active='Y' and inn.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=inn.item_names_id and"
                 + " mim.manufacturer_id=mr.manufacturer_id ";
@@ -67,6 +64,9 @@ public class ModelNameModel {
         }
         if (!searchItemCode.equals("") && searchItemCode != null) {
             query += " and inn.item_code='" + searchItemCode + "' ";
+        }
+        if (!searchItemName.equals("") && searchItemName != null) {
+            query += " and inn.item_name='" + searchItemName + "' ";
         }
         if (!searchManufacturer.equals("") && searchManufacturer != null) {
             query += " and mr.manufacturer_name='" + searchManufacturer + "' ";
@@ -80,7 +80,7 @@ public class ModelNameModel {
                 bean.setModel_id(rset.getInt("model_id"));
                 bean.setModel((rset.getString("model")));
                 bean.setManufacturer_name(rset.getString("manufacturer_name"));
-//                bean.setItem_name(rset.getString("item_name"));
+                bean.setItem_name(rset.getString("item_name"));
                 bean.setItem_code(rset.getString("item_code"));
                 bean.setManufacturer_item_map_id(rset.getInt("manufacturer_item_map_id"));
                 bean.setLead_time(rset.getInt("lead_time"));
@@ -103,7 +103,16 @@ public class ModelNameModel {
         int rowsAffected = 0;
         int manufacturer_item_map_id = 0;
         int map_count = 0;
-        int item_id = getItemId(model_name.getItem_code());
+        String item_name = "";
+
+        String item_code = model_name.getItem_code();
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" - ");
+            item_code = item_code_arr[0];
+            item_name = item_code_arr[1];
+        }
+
+        int item_id = getItemId(item_code);
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
         //  int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
 
@@ -117,14 +126,22 @@ public class ModelNameModel {
                     + " values (?,?,?,?,?,?,?,now()) ";
 
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query3, Statement.RETURN_GENERATED_KEYS);
-            String query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
-                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
-                    + " and active='Y'  ";
-
+            String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
+            int manufacturer_item_map_ids = 0;
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
             ResultSet rs1 = pstmt1.executeQuery();
             while (rs1.next()) {
-                map_count = rs1.getInt("count");
+                manufacturer_item_map_ids = rs1.getInt("manufacturer_item_map_id");
+            }
+            String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
+                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' ";
+
+            PreparedStatement pstmt2 = connection.prepareStatement(query5);
+            ResultSet rs2 = pstmt2.executeQuery();
+            while (rs2.next()) {
+                map_count = rs2.getInt("count");
             }
             if (map_count > 0) {
                 message = "Item has already mapped with this manufacturer!..";
@@ -138,9 +155,9 @@ public class ModelNameModel {
                 pstmt.setString(6, "Komal");
                 pstmt.setString(7, model_name.getDescription());
                 rowsAffected = pstmt.executeUpdate();
-                ResultSet rs2 = pstmt.getGeneratedKeys();
-                while (rs2.next()) {
-                    manufacturer_item_map_id = rs2.getInt(1);
+                ResultSet rs3 = pstmt.getGeneratedKeys();
+                while (rs3.next()) {
+                    manufacturer_item_map_id = rs3.getInt(1);
                 }
             }
 
@@ -192,7 +209,16 @@ public class ModelNameModel {
         int revision = ModelNameModel.getRevisionno(model_name, model_id);
         int updateRowsAffected = 0;
         int map_count = 0;
-        int item_id = getItemId(model_name.getItem_code());
+        String item_name = "";
+
+        String item_code = model_name.getItem_code();
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" - ");
+            item_code = item_code_arr[0];
+            item_name = item_code_arr[1];
+        }
+
+        int item_id = getItemId(item_code);
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
         int manufacturer_item_map_id = model_name.getManufacturer_item_map_id();
         //  int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
@@ -218,14 +244,22 @@ public class ModelNameModel {
             String map_query3 = "insert into manufacturer_item_map(manufacturer_item_map_id,manufacturer_id,item_names_id, "
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,?,now()) ";
-            String map_query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
-                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
-                    + " and active='Y'  ";
+            String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
+            int manufacturer_item_map_ids = 0;
+            PreparedStatement pstmt1 = connection.prepareStatement(query4);
+            ResultSet rs1 = pstmt1.executeQuery();
+            while (rs1.next()) {
+                manufacturer_item_map_ids = rs1.getInt("manufacturer_item_map_id");
+            }
+            String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
+                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' ";
 
-            PreparedStatement pstmt1_map = connection.prepareStatement(map_query4);
-            ResultSet rs1_map = pstmt1_map.executeQuery();
-            while (rs1_map.next()) {
-                map_count = rs1_map.getInt("count");
+            PreparedStatement pstmt2 = connection.prepareStatement(query5);
+            ResultSet rs2 = pstmt2.executeQuery();
+            while (rs2.next()) {
+                map_count = rs2.getInt("count");
             }
             if (map_count > 0) {
                 status = false;
@@ -673,7 +707,7 @@ public class ModelNameModel {
         List<String> list = new ArrayList<String>();
         String query = "";
 
-        query = " SELECT inn.item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
+        query = " SELECT CONCAT(inn.item_code, ' - ', inn.item_name) as item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
                 + " ORDER BY inn.item_code ";
 
         try {
@@ -740,7 +774,6 @@ public class ModelNameModel {
 //        }
 //        return list;
 //    }
-
     public List<String> getModel(String q, String manufacturer_name, String item_code) {
         List<String> list = new ArrayList<String>();
         String query = " select m.model from model m,manufacturer mr,item_names inn,manufacturer_item_map mim "

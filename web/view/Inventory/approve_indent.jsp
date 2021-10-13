@@ -12,23 +12,39 @@
     table.dataTable {      
         border-collapse: collapse;
     }
+    .not_in_stock{
+        background-color: #d587c8;
+        color:white;
+    }
+    .approved{
+        background-color: #2e6da4;
+        color:white; 
+    }
+    .delivered{
+        background-color: #5cb85c;
+        color:white; 
+    }
+    .denied{
+        background-color: #dc3545;
+        color:white; 
+    }
+    .pending{
+        background-color: #ffc107;
+        color:white; 
+    }
+    .delivery_challan_generated{
+        background-color: #df7d35;
+        color:white; 
+    }
 </style>
 <script>
 
-//    $(document).ready(function () {
-//        $('#mytable tbody').on('click', 'tr', function () {
-//            if ($(this).hasClass('selected_row')) {
-//                $(this).removeClass('selected_row');
-//            } else {
-//                $("#mytable").DataTable().$(
-//                        'tr.selected_row').removeClass(
-//                        'selected_row');
-//                $(this).addClass('selected_row');
-//            }
-//        });
-//    });
-
     $(document).ready(function () {
+        var final_indent_table_id = $('#indent_final_indent_table_id').val();
+        var final_status = $('#indent_final_status').val();
+        var final_message = $('#indent_final_message').val();
+
+
         $(document).on('keydown', '.myAutocompleteClass', function () {
             var id = this.id;
             var type;
@@ -67,95 +83,23 @@
             });
         });
     });
-    function makeEditable(id) {
-        document.getElementById("indent_no").disabled = false;
-        document.getElementById("requested_by").disabled = false;
-        document.getElementById("requested_to").disabled = false;
-        document.getElementById("description").disabled = false;
-        document.getElementById("select").disabled = false;
-        document.getElementById("save").disabled = false;
-        if (id === 'new') {
-            $("#message").html("");
-            document.getElementById("indent_table_id").value = "";
-            // document.getElementById("indent_item_id").value = "";
-            document.getElementById("indent_no").focus();
-        }
-        if (id == 'edit') {
-            document.getElementById("save_As").disabled = true;
-            document.getElementById("delete").disabled = false;
-        }
+
+    function openPopUpForItems(indent_table_id, indent_status) {
+        var url = "ApproveIndentController?task=GetIndentItems&indent_table_id=" + indent_table_id + "&indent_status=" + indent_status;
+        popupwin = openPopUp(url, "", 600, 1030);
     }
 
-
-    function setStatus(id) {
-        if (id === 'save') {
-            document.getElementById("clickedButton").value = "Save";
-        } else {
-            document.getElementById("clickedButton").value = "Delete";
-        }
-    }
-    function myLeftTrim(str) {
-        var beginIndex = 0;
-        for (var i = 0; i < str.length; i++) {
-            if (str.charAt(i) === ' ')
-                beginIndex++;
-            else
-                break;
-        }
-        return str.substring(beginIndex, str.length);
-    }
-    function verify() {
-        var result;
-        if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
-            var indent_no = document.getElementById("indent_no").value;
-            if (myLeftTrim(indent_no).length === 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Indent No. is required...</b></label></div>');
-                document.getElementById("indent_no").focus();
-                return false;
-            }
-            if (result === false) {
-            } else {
-                result = true;
-                //  var url = "IndentController?task=GetItems";
-                //   popupwin = openPopUp(url, "", 600, 1030);
-            }
-            if (document.getElementById("clickedButton").value === 'Save AS New') {
-                result = confirm("Are you sure you want to save it as New record?")
-                return result;
-            }
-        } else {
-            result = confirm("Are you sure you want to delete this record?");
-        }
-        return result;
+    function openPopUp(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+        return window.open(url, window_name, window_features);
     }
 
-    function approveIndent(indent_table_id, indent_item_id) {
-        var status = $('#status' + indent_item_id).val();
-        if (status == "") {
-            alert("Please Select status");
-            $('#status' + indent_item_id).focus();
-            return false;
-        }
-        var approved_qty = $('#approved_qty' + indent_item_id).val();
-        // alert(status);
-        $.ajax({
-            url: "ApproveIndentController",
-            dataType: "json",
-            data: {
-                task: "approveIndent",
-                indent_table_id: indent_table_id,
-                indent_item_id: indent_item_id,
-                status: status,
-                approved_qty: approved_qty
-            },
-            success: function (response) {
-                console.log(response.message);
-                window.location.reload();
-            }
-        });
+    function searchIndentStatusWise(status) {
+        var url = "ApproveIndentController?action1=searchIndentStatusWise&status=" + status;
+        window.open(url, "_self");
     }
-
-
 </script>
 
 
@@ -164,13 +108,27 @@
         <h1>Approve Indent</h1>
     </div>
 </section>
-<!--<input type="button" onclick="CreateTableFromJSON()" value="Create Table From JSON" />
-<p id="showData"></p>-->
 
+<section>
+    <div class="container organizationBox">
+        <div class="headBox" style="background-color: #6D9FBD">
+            <c:forEach var="beanType" items="${requestScope['status_list']}"
+                       varStatus="loopCounter">
+                <label style="color:white;margin-left: 20px">${beanType.status}</label>
+                <input type="checkbox" name="search_status" id="search_status" value="${beanType.status}" 
+                       onclick="searchIndentStatusWise('${beanType.status}')"> 
 
-
+            </c:forEach>
+            <label style="color:white;margin-left: 20px">All</label>
+            <input type="checkbox" name="search_status" id="search_status" value="All" 
+                   onclick="searchIndentStatusWise('All')"> 
+        </div>
+    </div>
+</section>
 
 <section class="marginTop30 ">
+
+
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Search List</h5>
@@ -178,94 +136,90 @@
         <div class="row mt-3 myTable">
             <div class="col-md-12">
                 <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <td style="display:none"></td>
-                                <td style="display:none"></td>
-                                <th>Indent No.</th>
-                                <th>Requested By</th>
-                                <th>Date Time</th>
-                                <th>Item Name</th>
-                                <th>Required Qty</th>
-                                <th>Approved Qty</th>
-                                <th>Status</th>
-                                <th>Purpose</th>
-                                <th>Expected Date</th>
-                                <th>Description</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
+                    <form>
+                        <input type="hidden" name="final_status" id="indent_final_status" value="${final_status}">
+                        <input type="hidden" name="final_indent_table_id" id="indent_final_indent_table_id" value="${final_indent_table_id}">
+                        <input type="hidden" name="final_message" id="indent_final_message" value="${final_message}">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
+                            <thead>
                                 <tr>
-                                    <td>${loopCounter.count }</td>
-                                    <td style="display:none"><input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}"></td>
-                                    <td style="display:none"><input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}"></td>
-                                    <td id="${loopCounter.count }">${beanType.indent_no}</td>
-                                    <td id="${loopCounter.count }">${beanType.requested_by}</td>
-                                    <td id="${loopCounter.count }">${beanType.date_time}</td>
-                                    <td id="${loopCounter.count }">${beanType.item_name}</td>
-                                    <td id="${loopCounter.count }">${beanType.required_qty}</td>
-                                    <c:choose>
-                                        <c:when test="${beanType.status =='Confirmed'}">
-                                            <td id="${loopCounter.count }"><input type="text" disabled="" name="approved_qty" id="approved_qty${beanType.indent_item_id}" value="${beanType.required_qty}"></td>
-                                            <td id="${loopCounter.count }"><input type="text"  disabled="" name="status" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.status}"></td>
+                                    <th>S.No.</th>
+                                    <td style="display:none"></td>
+                                    <th>Indent No.</th>
+                                    <th>Requested By</th>
+                                    <th>Date Time</th>
+                                    <!--<th>Status</th>-->
+                                    <th>Description</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['list']}"
+                                           varStatus="loopCounter">
+                                    <tr onclick="openPopUpForItems(${beanType.indent_table_id}, '${beanType.status}')">
+
+                                        <td>${loopCounter.count }</td>
+                                        <td style="display:none"><input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}"></td>
+                                        <td id="${loopCounter.count }">${beanType.indent_no}</td>
+                                        <td id="${loopCounter.count }">${beanType.requested_by}</td>
+                                        <td id="${loopCounter.count }">${beanType.date_time}</td>
+                                        <!--  <c:choose>
+                                            <c:when test="${beanType.status =='Approved'}">
+                                                <td id="${loopCounter.count }"><input type="text"  disabled="" name="status" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.status}"></td>
                                             </c:when>
                                             <c:when test="${beanType.status =='Denied'}">
-                                            <td id="${loopCounter.count }"><input type="text" disabled="" name="approved_qty" id="approved_qty${beanType.indent_item_id}" value="${beanType.required_qty}"></td>
-                                            <td id="${loopCounter.count }"><input type="text"  disabled="" name="status" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.status}"></td>
-                                            </c:when>
-                                            <c:when test="${beanType.status =='Delivered'}">
-                                            <td id="${loopCounter.count }"><input type="text" disabled="" name="approved_qty" id="approved_qty${beanType.indent_item_id}" value="${beanType.required_qty}"></td>
-                                            <td id="${loopCounter.count }"><input type="text"  disabled="" name="status" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.status}"></td>
-                                            </c:when>
-                                            <c:when test="${beanType.status =='Not In Stock'}">
-                                            <td id="${loopCounter.count }"><input type="text" disabled="" name="approved_qty" id="approved_qty${beanType.indent_item_id}" value="${beanType.required_qty}"></td>
                                             <td id="${loopCounter.count }"><input type="text"  disabled="" name="status" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.status}"></td>
                                             </c:when>
                                             <c:otherwise>
-                                            <td id="${loopCounter.count }"><input type="text" name="approved_qty" id="approved_qty${beanType.indent_item_id}" value="${beanType.required_qty}"></td>
                                             <td id="${loopCounter.count }"><input type="text" name="status" class="myAutocompleteClass" placeholder="select status" id="status${beanType.indent_item_id}" value=""></td>
                                             </c:otherwise>
-                                        </c:choose>
+                                        </c:choose>-->
 
-                                    <td id="${loopCounter.count }">${beanType.purpose}</td>
-                                    <td id="${loopCounter.count }">${beanType.expected_date_time}</td>
-                                    <td id="${loopCounter.count }">${beanType.description}</td>  
+                                        <td id="${loopCounter.count }">${beanType.description}</td>  
 
-                                    <c:choose>
-                                        <c:when test="${beanType.status =='Request Sent'}">
-                                            <td id="${loopCounter.count }">
-                                                <input type="button" class="btn btn-info" value="Approve/Denied Indent" 
-                                                       onclick="approveIndent(${beanType.indent_table_id},${beanType.indent_item_id})">
-                                            </td>  
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Delivered'}">
-                                            <td id="${loopCounter.count }"><a primary href="" style="pointer-events: none;background-color: #28a745;color:white" class="btn">${beanType.status}</a></td>
+                                        <c:choose>
+                                            <c:when test="${beanType.status =='Pending'}">
+                                                <td id="${loopCounter.count }" class="pending" ><b>Pending</b>
+                                                </td> 
+
                                             </c:when>
+                                            <c:when test="${beanType.status =='Approved'}">
+                                                <td id="${loopCounter.count }" class="approved" ><b>${beanType.status}</b>
+                                                </td> 
+                                            </c:when> 
 
-                                        <c:when test="${beanType.status =='Not In Stock'}">
-                                            <td id="${loopCounter.count }"><a style="pointer-events: none;background-color: #d587c8;color:white" href="" class="btn">${beanType.status}</a>
+                                            <c:when test="${beanType.status =='Delivered'}">
+                                                <td id="${loopCounter.count }" class="delivered" ><b>${beanType.status}</b>
+                                                </td> 
+                                            </c:when> 
+
+                                            <c:when test="${beanType.status =='Denied'}">
+                                                <!--<td id="${loopCounter.count }"><a style="pointer-events: none;background-color: #dc3545;color:white" href="" class="btn">Denied</a></td>-->  
+                                                <td id="${loopCounter.count }" class="denied" ><b>${beanType.status}</b>
+                                                </td> 
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Delivery Challan Generated'}">
+                                                <td id="${loopCounter.count }" class="delivery_challan_generated"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>  
+                                            <c:when test="${beanType.status =='Less Stock'}">
+                                                <td id="${loopCounter.count }" class="not_in_stock"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td id="${loopCounter.count }"></td>  
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:if test="${beanType.indent_table_id == final_indent_table_id}">
+                                            <td id="${loopCounter.count }" class="delivery_challan_generated"><b>${final_status}</b>
                                             </td>
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Confirmed'}">
-                                            <td id="${loopCounter.count }"><a style="pointer-events: none;background-color: #2e6da4;color:white" href="" class="btn">Approved</a></td>  
-                                        </c:when> 
-                                        <c:when test="${beanType.status =='Denied'}">
-                                            <td id="${loopCounter.count }"><a style="pointer-events: none;background-color: #dc3545;color:white" href="" class="btn">Denied</a></td>  
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td id="${loopCounter.count }"></td>  
-                                        </c:otherwise>
-                                    </c:choose>
-                                </tr>
+                                        </c:if>
+                                    </tr>
 
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>

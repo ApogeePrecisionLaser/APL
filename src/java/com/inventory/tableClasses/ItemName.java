@@ -14,6 +14,7 @@ public class ItemName {
 
     private int item_names_id;
     private String item_name;
+    private String model;
     private String description;
     private String item_type;
     private int item_type_id;
@@ -401,6 +402,20 @@ public class ItemName {
      */
     public void setCheckedValue(String checkedValue) {
         this.checkedValue = checkedValue;
+    }
+
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(String model) {
+        this.model = model;
     }
 
 }

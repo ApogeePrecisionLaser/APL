@@ -47,7 +47,7 @@ public class ItemAuthorizationController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemAuthorizationModel model = new ItemAuthorizationModel();
-        
+
         String search_item_name = "";
         String search_designation = "";
        
@@ -61,7 +61,7 @@ public class ItemAuthorizationController extends HttpServlet {
         if (search_designation == null) {
             search_designation = "";
         }
-     
+        
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -130,6 +130,7 @@ public class ItemAuthorizationController extends HttpServlet {
                 bean.setDesignation(request.getParameter("designation").trim());
                 bean.setDescription(request.getParameter("description").trim());
                 bean.setQuantity(Integer.parseInt(request.getParameter("quantity").trim()));
+                bean.setMonthly_limit(Integer.parseInt(request.getParameter("monthly_limit").trim()));
 
                 if (item_authorization_id == 0) {
                     model.insertRecord(bean);

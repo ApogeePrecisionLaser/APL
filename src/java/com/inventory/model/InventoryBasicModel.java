@@ -8,30 +8,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.InventoryBasic;
-import com.inventory.tableClasses.ItemName;
-import static com.organization.model.KeypersonModel.getRevisionnoForImage;
-import com.organization.tableClasses.KeyPerson;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import org.apache.commons.fileupload.FileItem;
-import org.json.simple.JSONArray;
 
 /**
  *
@@ -54,8 +38,9 @@ public class InventoryBasicModel {
             System.out.println("InventoryBasicModel setConnection() Error: " + e);
         }
     }
-
-    public List<InventoryBasic> showData(String searchItemName, String searchOrgOffice, String search_item_code) {
+    
+    
+    public List<InventoryBasic> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model) {
         List<InventoryBasic> list = new ArrayList<InventoryBasic>();
 
         if (searchItemName == null) {
@@ -64,9 +49,12 @@ public class InventoryBasicModel {
         if (searchOrgOffice == null) {
             searchOrgOffice = "";
         }
-        String query = "select ib.inventory_basic_id,inn.item_name,inn.item_code,oo.org_office_name,ib.min_quantity,ib.daily_req,ib.opening_balance,ib.description "
-                + " from item_names inn,org_office oo,inventory_basic ib where inn.item_names_id=ib.item_names_id and "
-                + " oo.org_office_id=ib.org_office_id and inn.active='Y' and oo.active='Y' and ib.active='Y' ";
+        String query = "select ib.inventory_basic_id,inn.item_name,inn.item_code,oo.org_office_name,ib.min_quantity,ib.daily_req,"
+                + " ib.opening_balance,ib.description,m.model,mr.manufacturer_name "
+                + " from item_names inn,org_office oo,inventory_basic ib,manufacturer mr,model m,manufacturer_item_map mim where inn.item_names_id=ib.item_names_id and "
+                + " oo.org_office_id=ib.org_office_id and inn.active='Y' and oo.active='Y' and ib.active='Y' and mr.active='Y' and m.active='Y' "
+                + " and mim.active='Y' and mr.manufacturer_id=mim.manufacturer_id and inn.item_names_id=mim.item_names_id and "
+                + " m.manufacturer_item_map_id=mim.manufacturer_item_map_id  ";
 
         if (!searchItemName.equals("") && searchItemName != null) {
             query += " and inn.item_name='" + searchItemName + "' ";
@@ -76,6 +64,12 @@ public class InventoryBasicModel {
         }
         if (!search_item_code.equals("") && search_item_code != null) {
             query += " and inn.item_code='" + search_item_code + "' ";
+        }
+        if (!search_manufacturer.equals("") && search_manufacturer != null) {
+            query += " and mr.manufacturer_name='" + search_manufacturer + "' ";
+        }
+        if (!search_model.equals("") && search_model != null) {
+            query += " and m.model='" + search_model + "' ";
         }
 
         try {
@@ -90,6 +84,9 @@ public class InventoryBasicModel {
                 bean.setDaily_req(rset.getInt("daily_req"));
                 bean.setOpening_balance(rset.getString("opening_balance"));
                 bean.setDescription(rset.getString("description"));
+                bean.setManufacturer_name(rset.getString("manufacturer_name"));
+                bean.setModel(rset.getString("model"));
+                bean.setDescription(rset.getString("description"));
                 list.add(bean);
             }
         } catch (Exception e) {
@@ -100,11 +97,19 @@ public class InventoryBasicModel {
 
     public int insertRecord(InventoryBasic bean) throws SQLException {
         String query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
-                + " revision_no,active,remark,min_quantity,daily_req,opening_balance) VALUES(?,?,?,?,?,?,?,?,?) ";
+                + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
-        int item_name_id = getItemNamesId(bean.getItem_code());
+        String item_code = bean.getItem_code();
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" - ");
+            item_code = item_code_arr[1];
+        }
+
+        int item_name_id = getItemNamesId(item_code);
         int org_office_id = getOrgOfficeId(bean.getOrg_office());
+        int model_id = getModelId(bean.getModel());
+        
         int map_count = 0;
         try {
             String query4 = "SELECT count(*) as count FROM inventory_basic WHERE "
@@ -130,6 +135,7 @@ public class InventoryBasicModel {
                 pstmt.setInt(7, bean.getMin_quantity());
                 pstmt.setInt(8, bean.getDaily_req());
                 pstmt.setString(9, bean.getOpening_balance());
+                pstmt.setInt(10, model_id);
                 rowsAffected = pstmt.executeUpdate();
             }
 
@@ -153,18 +159,26 @@ public class InventoryBasicModel {
     public int updateRecord(InventoryBasic bean, int inventory_basic_id) {
         int revision = InventoryBasicModel.getRevisionno(bean, inventory_basic_id);
         int updateRowsAffected = 0;
-        int item_name_id = getItemNamesId(bean.getItem_code());
+        String item_code = bean.getItem_code();
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" - ");
+            item_code = item_code_arr[1];
+        }
+
+        int item_name_id = getItemNamesId(item_code);
         int org_office_id = getOrgOfficeId(bean.getOrg_office());
+         int model_id = getModelId(bean.getModel());
+         
         int map_count = 0;
         String query1 = "SELECT max(revision_no) revision_no FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id + "  && active='Y' ";
         String query2 = "UPDATE inventory_basic SET active=? WHERE inventory_basic_id=? and revision_no=? ";
         String query3 = "INSERT INTO inventory_basic(inventory_basic_id,item_names_id,org_office_id,description,"
-                + " revision_no,active,remark,min_quantity,daily_req,opening_balance) VALUES(?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
         int rowsAffected = 0;
         try {
             String query4 = "SELECT count(*) as count FROM inventory_basic WHERE "
-                    + " item_names_id='" + item_name_id + "' and org_office_id='" + org_office_id + "'"
+                    + " item_names_id='" + item_name_id + "' and org_office_id='" + org_office_id + "' and model_id='"+model_id+"' "
                     + " and active='Y'  ";
 
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
@@ -198,6 +212,7 @@ public class InventoryBasicModel {
                         psmt.setInt(8, bean.getMin_quantity());
                         psmt.setInt(9, bean.getDaily_req());
                         psmt.setString(10, bean.getOpening_balance());
+                        psmt.setInt(11, model_id);
 
                         rowsAffected = psmt.executeUpdate();
 
@@ -215,10 +230,7 @@ public class InventoryBasicModel {
             message = "Cannot update the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-        if (map_count > 0) {
-            message = "Item has already mapped with this Office!..";
-            msgBgColor = COLOR_ERROR;
-        }
+       
         return rowsAffected;
     }
 
@@ -293,6 +305,20 @@ public class InventoryBasicModel {
         }
         return id;
     }
+    
+    public int getModelId(String model_name) {
+        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("model_id");
+        } catch (Exception e) {
+            System.out.println("getModelId Error: " + e);
+        }
+        return id;
+    }
 
     public String getItemName(int item_name_id) {
         String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
@@ -309,11 +335,15 @@ public class InventoryBasicModel {
         return name;
     }
 
-    public List<String> getItemName(String q) {
+    public List<String> getItemName(String q, String manufacturer) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_name FROM item_names itn where"
-                + " itn.active='Y' and itn.is_super_child='Y'  ";
+        String query = "SELECT itn.item_name FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+                + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
+                + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
 
+        if (!manufacturer.equals("") && manufacturer != null) {
+            query += " and mr.manufacturer_name='" + manufacturer + "' ";
+        }
         query += " group by itn.item_name ORDER BY itn.item_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -335,11 +365,15 @@ public class InventoryBasicModel {
         return list;
     }
 
-    public List<String> getItemCode(String q,String org_office) {
+    public List<String> getItemCode(String q, String manufacturer) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_code FROM item_names itn where"
-                + " itn.active='Y' and itn.is_super_child='Y'  ";
+        String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+                + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
+                + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
 
+        if (!manufacturer.equals("") && manufacturer != null) {
+            query += " and mr.manufacturer_name='" + manufacturer + "' ";
+        }
         query += " group by itn.item_code ORDER BY itn.item_code ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -405,7 +439,6 @@ public class InventoryBasicModel {
 //        }
 //        return list;
 //    }
-
     public List<String> getOrgOffice(String q) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT oo.org_office_name FROM org_office oo where"
@@ -428,6 +461,77 @@ public class InventoryBasicModel {
             }
         } catch (Exception e) {
             System.out.println("Error:InventoryBasicModel--getOrgOffice()-- " + e);
+        }
+        return list;
+    }
+
+    public List<String> getManufacturer(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = "SELECT manufacturer_name FROM manufacturer where"
+                + " active='Y' ";
+
+        query += " group by manufacturer_name ORDER BY manufacturer_name ";
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String manufacturer_name = (rset.getString("manufacturer_name"));
+                if (manufacturer_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(manufacturer_name);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such manufacturer_name  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:InventoryBasicModel--getManufacturer()-- " + e);
+        }
+        return list;
+    }
+
+    public List<String> getModelName(String q, String manufacturer_name, String item_code) {
+        List<String> list = new ArrayList<String>();
+        String item_name = "";
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" - ");
+            item_name = item_code_arr[0];
+            item_code = item_code_arr[1];
+        }
+
+        String query = " select m.model from manufacturer_item_map mim,model m,manufacturer mr,item_names itn "
+                + " where mim.manufacturer_item_map_id=m.manufacturer_item_map_id and "
+                + "mr.manufacturer_id=mim.manufacturer_id and mim.item_names_id=itn.item_names_id and mim.active='Y' and mr.active='Y' "
+                + " and m.active='Y' and itn.active='Y' ";
+
+        if (!manufacturer_name.equals("") && manufacturer_name != null) {
+            query += " and mr.manufacturer_name='" + manufacturer_name + "' ";
+        }
+
+        if (!item_name.equals("") && item_name != null) {
+            query += " and itn.item_name='" + item_name + "' ";
+        }
+        if (!item_code.equals("") && item_code != null) {
+            query += " and itn.item_code='" + item_code + "' ";
+        }
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String model = (rset.getString("model"));
+                if (model.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(model);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such model  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:InventoryBasicModel--getModelName()-- " + e);
         }
         return list;
     }

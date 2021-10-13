@@ -19,7 +19,7 @@
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
-        <param-value>jdbc:mysql://localhost:3306/apl_secure</param-value>
+        <param-value>jdbc:mysql://localhost:3306/apl</param-value>
 <!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
     </context-param>
     <context-param>
@@ -506,6 +506,29 @@
     <!--End Item authorization -->
     
     
+    <!--Start check inventory -->
+    
+    <servlet>
+        <servlet-name>CheckInventoryController</servlet-name>
+        <servlet-class>com.inventory.controller.CheckInventoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckInventoryController</servlet-name>
+        <url-pattern>/CheckInventoryController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>check_inventory</servlet-name>
+        <jsp-file>/view/Inventory/check_inventory.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>check_inventory</servlet-name>
+        <url-pattern>/check_inventory</url-pattern>
+    </servlet-mapping>
+    
+    <!--End check inventory -->
+    
+    
     <servlet>
         <servlet-name>items_list</servlet-name>
         <jsp-file>/view/Inventory/items_list.jsp</jsp-file>
@@ -514,6 +537,56 @@
         <servlet-name>items_list</servlet-name>
         <url-pattern>/items_list</url-pattern>
     </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>approveIndentItemList</servlet-name>
+        <jsp-file>/view/Inventory/approveIndentItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approveIndentItemList</servlet-name>
+        <url-pattern>/approveIndentItemList</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>showIndentItemList</servlet-name>
+        <jsp-file>/view/Inventory/showIndentItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>showIndentItemList</servlet-name>
+        <url-pattern>/showIndentItemList</url-pattern>
+    </servlet-mapping>  
+    
+    
+    <servlet>
+        <servlet-name>deliveredIndentItemList</servlet-name>
+        <jsp-file>/view/Inventory/deliveredIndentItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deliveredIndentItemList</servlet-name>
+        <url-pattern>/deliveredIndentItemList</url-pattern>
+    </servlet-mapping>  
+    
+    
+    <servlet>
+        <servlet-name>checkInventoryItemList</servlet-name>
+        <jsp-file>/view/Inventory/checkInventoryItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkInventoryItemList</servlet-name>
+        <url-pattern>/checkInventoryItemList</url-pattern>
+    </servlet-mapping> 
+    
+    
+
+    <servlet>
+        <servlet-name>deliveryChallan</servlet-name>
+        <jsp-file>/view/Inventory/deliveryChallan.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deliveryChallan</servlet-name>
+        <url-pattern>/deliveryChallan</url-pattern>
+    </servlet-mapping>   
     
     
     <!--Start Approve Indent -->

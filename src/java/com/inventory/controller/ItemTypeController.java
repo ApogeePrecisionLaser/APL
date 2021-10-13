@@ -5,11 +5,8 @@
 package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
-import com.general.model.GeneralModel;
 import com.inventory.model.ItemTypeModel;
 import com.inventory.tableClasses.ItemType;
-import com.organization.tableClasses.Designation;
-import com.website.model.ContactUsModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -57,7 +54,7 @@ public class ItemTypeController extends HttpServlet {
             String searchItemType = "";
             try {
                 String JQstring = request.getParameter("action1");
-                String q = request.getParameter("str");  
+                String q = request.getParameter("str");
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
@@ -89,8 +86,7 @@ public class ItemTypeController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-           
-            
+
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";
                 ac = "ACTIVE RECORDS";
@@ -105,7 +101,7 @@ public class ItemTypeController extends HttpServlet {
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(request.getParameter("item_type_id")));  // Pretty sure that office_type_id will be available.
             } else if (task.equals("Save") || task.equals("Save AS New")) {
-                int item_type_id=0;
+                int item_type_id = 0;
                 try {
                     item_type_id = Integer.parseInt(request.getParameter("item_type_id"));
                 } catch (Exception e) {
@@ -117,18 +113,11 @@ public class ItemTypeController extends HttpServlet {
                 ItemType itemType = new ItemType();
                 itemType.setItem_type_id(item_type_id);
                 itemType.setItem_type(request.getParameter("item_type_name").trim());
-//                String superp = request.getParameter("super");
-//                if (superp.equals(null)) {
-//                    superp = "";
-//                }
-//                itemType.setSuperp(superp);
                 itemType.setDescription(request.getParameter("description").trim());
-                
+
                 if (item_type_id == 0) {
-                    // if office_type_id was not provided, that means insert new record.
                     model.insertRecord(itemType);
                 } else {
-                    // update existing record.
                     model.updateRecord(itemType, item_type_id);
                 }
             }

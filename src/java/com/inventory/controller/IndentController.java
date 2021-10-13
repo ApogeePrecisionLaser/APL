@@ -6,9 +6,7 @@ package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
 import com.inventory.model.IndentModel;
-import com.inventory.model.InventoryModel;
 import com.inventory.tableClasses.Indent;
-import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.ItemName;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -42,7 +40,7 @@ import org.json.JSONObject;
  * @author Komal
  */
 public class IndentController extends HttpServlet {
-
+    
     private File tmpDir;
     List<String> import_item_name_arr = new ArrayList<String>();
 
@@ -54,7 +52,7 @@ public class IndentController extends HttpServlet {
     String import_purpose = "";
     String import_expected_date_time = "";
     int import_req_qty = 0;
-
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -89,7 +87,7 @@ public class IndentController extends HttpServlet {
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
             office_admin = session.getAttribute("office_admin").toString();
         }
-        
+
         IndentModel model = new IndentModel();
 
         String search_item_name = "";
@@ -198,8 +196,19 @@ public class IndentController extends HttpServlet {
                 return;
             }
 
+            if (task.equals("GetIndentItems")) {
+                List<ItemName> list = null;
+                //  String indent_no = request.getParameter("indent_no");
+                int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
+
+                List<Indent> indent_items_list = model.getIndentItems(indent_table_id);
+                request.setAttribute("indent_items_list", indent_items_list);
+                request.getRequestDispatcher("showIndentItemList").forward(request, response);
+                return;
+            }
+
             if (task.equals("Delete")) {
-               // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
+                // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
             } else if (task.equals("Send Indent") || task.equals("Save AS New") || task.equals("Save & Next")) {
                 int indent_table_id = 0;
                 int indent_item_id = 0;
@@ -242,9 +251,22 @@ public class IndentController extends HttpServlet {
 
             counting = model.getCounting();
             String autogenerate_indent_no = "Indent_" + counting;
+            String status = "";
+            String searchIndentStatusWise = request.getParameter("action1");
+            if (searchIndentStatusWise == null) {
+                searchIndentStatusWise = "";
+            }
+            if (searchIndentStatusWise.equals("searchIndentStatusWise")) {
+                status = request.getParameter("status");
+            }
 
-            List<Indent> list = model.showData(logged_user_name, office_admin);
+//            List<Indent> list = model.showData(logged_user_name, office_admin);
+            List<Indent> list = model.showData(logged_user_name, office_admin, status);
+            List<Indent> status_list = model.getStatus();
+            
+           
             request.setAttribute("list", list);
+            request.setAttribute("status_list", status_list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
             request.setAttribute("requested_by", logged_user_name);
             request.setAttribute("requested_to", office_admin);

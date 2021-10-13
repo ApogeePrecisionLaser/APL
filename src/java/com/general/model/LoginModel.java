@@ -47,7 +47,6 @@ public class LoginModel {
 //    return designation;
 //
 //}
-    
     public void setUserFullDetail(String myUserName, String myUserPass) {
         String query = " SELECT u.user_id, user_name, user_password, ur.user_role_id, role_name, db_user_name, db_user_pass "
                 + "  FROM `user` AS u, user_roles AS ur, user_role_map AS urm "
@@ -56,8 +55,8 @@ public class LoginModel {
         try {
             Class.forName(driverClass);
             //Connection con = DriverManager.getConnection(connectionString, "guest", "guest");
-            Connection con = DriverManager.getConnection(connectionString, "jpss", "jpss");
-            PreparedStatement pst = con.prepareStatement(query);
+            connection = DriverManager.getConnection(connectionString, "jpss", "jpss");
+            PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, myUserName);
             pst.setString(2, myUserPass);
             ResultSet rst = pst.executeQuery();
@@ -66,13 +65,12 @@ public class LoginModel {
                 myDbUserName = rst.getString("db_user_name");
                 myDbUserPass = rst.getString("db_user_pass");
             }
-            con.close();
+            //connection.close();
         } catch (Exception e) {
             System.out.println("LoginModel getUseName() Error: " + e);
         }
     }
-    
-    
+
     public int checkLogin(String user_name, String password) {
         int login_id = 0;
         String designation = "";
@@ -101,8 +99,12 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select d.designation from designation d, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+//        String query = "select d.designation from designation d, key_person kp, login l "
+//                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+//                + " and l.key_person_id=kp.key_person_id and kp.designation_id=d.designation_id and d.active='Y' ";
+
+        String query = " select  d.designation from designation d, key_person kp, user l "
+                + " where l.user_name='"+user_name+"' and l.user_password='"+password+"' and kp.active='y' "
                 + " and l.key_person_id=kp.key_person_id and kp.designation_id=d.designation_id and d.active='Y' ";
         try {
             connection.setAutoCommit(false);
@@ -176,13 +178,13 @@ public class LoginModel {
         }
         return str;
     }
-    
+
     public String getOfficeAdmin(String user_name, String password, int logged_org_office_id) {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
         String query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
-                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='"+logged_org_office_id+"' and kp.designation_id=d.designation_id "
+                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
                 + " and d.designation='Owner' and  oo.active='Y' and kp.active='Y' ";
         try {
             connection.setAutoCommit(false);
@@ -278,7 +280,7 @@ public class LoginModel {
     public void setConnectionString(String connectionString) {
         this.connectionString = connectionString;
     }
-    
+
     public String getMyDbUserName() {
         return myDbUserName;
     }
@@ -302,5 +304,5 @@ public class LoginModel {
     public void setMyRoleName(String myRoleName) {
         this.myRoleName = myRoleName;
     }
-    
+
 }

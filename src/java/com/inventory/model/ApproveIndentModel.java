@@ -47,27 +47,32 @@ public class ApproveIndentModel {
 
     public void setConnection(Connection con) {
         try {
-
             connection = con;
         } catch (Exception e) {
             System.out.println("InventoryModel setConnection() Error: " + e);
         }
     }
 
-    public List<ApproveIndent> showData(String logged_key_person) {
+    public List<ApproveIndent> showIndents(String logged_key_person, String indent_status) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
-
-        String query = " select indt.indent_no,indt.date_time,indt.description,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time "
-                + " ,s.status,kp1.key_person_name as requested_by,indt.indent_table_id,indi.indent_item_id "
-                + " from indent_table indt,indent_item indi,key_person kp1,key_person kp2, item_names itn,purpose p, "
-                + " status s where indt.indent_table_id=indi.indent_table_id  and indt.requested_to=kp2.key_person_id "
-                + " and indt.requested_by=kp1.key_person_id and indi.item_names_id=itn.item_names_id and indi.purpose_id=p.purpose_id "
-                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and kp1.active='Y' and kp2.active='Y' ";
+        if (indent_status.equals("All")) {
+            indent_status = "";
+        }
+        String query = " select indt.indent_no,indt.date_time,indt.description "
+                + " ,s.status,kp1.key_person_name as requested_by,indt.indent_table_id  from "
+                + " indent_table indt,key_person kp1,key_person kp2, "
+                + " status s where indt.requested_to=kp2.key_person_id "
+                + " and indt.requested_by=kp1.key_person_id  "
+                + " and indt.status_id=s.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'  ";
 
         if (!logged_key_person.equals("") && logged_key_person != null) {
             query += " and kp2.key_person_name='" + logged_key_person + "' ";
         }
+        if (!indent_status.equals("") && indent_status != null) {
+            query += " and s.status='" + indent_status + "' ";
+        }
+
+        query += " order by indt.indent_no desc ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -75,19 +80,13 @@ public class ApproveIndentModel {
                 ApproveIndent bean = new ApproveIndent();
                 bean.setIndent_no(rset.getString("indent_no"));
                 bean.setDate_time(rset.getString("date_time"));
-                bean.setItem_name((rset.getString("item_name")));
-                bean.setPurpose((rset.getString("purpose")));
-                bean.setRequired_qty(rset.getInt("required_qty"));
-                bean.setExpected_date_time(rset.getString("expected_date_time"));
+
                 String status = rset.getString("status");
-//                if (status.equals("Request Sent")) {
-//                    status = "Request Received";
-//                }
+
                 bean.setStatus(status);
                 bean.setRequested_by(rset.getString("requested_by"));
                 bean.setDescription(rset.getString("description"));
                 bean.setIndent_table_id(rset.getInt("indent_table_id"));
-                bean.setIndent_item_id(rset.getInt("indent_item_id"));
 
                 list.add(bean);
             }
@@ -97,19 +96,87 @@ public class ApproveIndentModel {
         return list;
     }
 
-    public String updateRecord(ApproveIndent bean, int indent_table_id, int indent_item_id) {
+    public List<ApproveIndent> getStatus() {
+        List<ApproveIndent> list = new ArrayList<ApproveIndent>();
+
+        String query = " select status,status_id from status  order by status";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                ApproveIndent bean = new ApproveIndent();
+                String status = rset.getString("status");
+
+                bean.setStatus_id(rset.getInt("status_id"));
+                bean.setStatus(status);
+
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: InventoryModel getStatus-" + e);
+        }
+        return list;
+    }
+
+    public List<ApproveIndent> getIndentItems(int indent_table_id) {
+        List<ApproveIndent> list = new ArrayList<ApproveIndent>();
+
+        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id "
+                + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
+                + " status s1,status s2 where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                + " and indi.purpose_id=p.purpose_id and indt.status_id=s1.status_id "
+                + " and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and indt.indent_table_id='" + indent_table_id + "' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                ApproveIndent bean = new ApproveIndent();
+                bean.setIndent_no(rset.getString("indent_no"));
+                bean.setItem_name((rset.getString("item_name")));
+                bean.setPurpose((rset.getString("purpose")));
+                bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setExpected_date_time(rset.getString("expected_date_time"));
+                String indent_status = rset.getString("indent_status");
+                bean.setStatus(indent_status);
+                String item_status = rset.getString("item_status");
+                bean.setItem_status(item_status);
+                bean.setIndent_item_id(rset.getInt("indent_item_id"));
+                bean.setIndent_table_id(rset.getInt("indent_table_id"));
+
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: InventoryModel showdata-" + e);
+        }
+        return list;
+    }
+
+    public String updateRecord(ApproveIndent bean, int indent_item_id, int indent_table_id) {
         int updateRowsAffected = 0;
-        int status_id = getStatusId(bean.getStatus());
+        System.err.println("indent_item_id------------" + indent_item_id);
+        System.err.println("indent_table_id------------" + indent_table_id);
+        String status = bean.getStatus();
+        if (status.equals("Approve")) {
+            status = "Approved";
+        }
+        String item_status = bean.getItem_status();
+
+        int status_id = getStatusId(status);
+        int item_status_id = getStatusId(item_status);
 
         String query2 = " UPDATE indent_item SET status_id=?,approved_qty=? WHERE indent_item_id=? ";
 
         int rowsAffected = 0;
+        int updateRowsAffected2 = 0;
         int map_count = 0;
         try {
 
             PreparedStatement pstm = connection.prepareStatement(query2);
-            pstm.setInt(1, status_id);
-            if (bean.getStatus().equals("Confirmed")) {
+            pstm.setInt(1, item_status_id);
+            if (item_status.equals("Approved")) {
                 pstm.setInt(2, bean.getApproved_qty());
             } else {
                 pstm.setInt(2, 0);
@@ -118,17 +185,23 @@ public class ApproveIndentModel {
             pstm.setInt(3, indent_item_id);
             updateRowsAffected = pstm.executeUpdate();
 
+            String query = " update indent_table set status_id=? where indent_table_id=? ";
+            PreparedStatement pstm2 = connection.prepareStatement(query);
+            pstm2.setInt(1, status_id);
+            pstm2.setInt(2, indent_table_id);
+            updateRowsAffected2 = pstm2.executeUpdate();
+
         } catch (Exception e) {
             System.out.println("ApproveIndentModel updateRecord() Error: " + e);
         }
-        if (updateRowsAffected > 0) {
-            message = "Record updated successfully.";
+        if (updateRowsAffected2 > 0) {
+            message = "Your Indent is '" + status + "'!.";
             msgBgColor = COLOR_OK;
         } else {
             message = "Cannot update the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-        return message;
+        return message + "&" + status;
     }
 
     public int getRequestedKeyPersonId(String person_name) {

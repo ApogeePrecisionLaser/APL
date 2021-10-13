@@ -10,7 +10,21 @@ import java.util.List;
  *
  * @author Komal
  */
-public class Indent {
+public class CheckInventory {
+
+    /**
+     * @return the approved_qty
+     */
+    public int getApproved_qty() {
+        return approved_qty;
+    }
+
+    /**
+     * @param approved_qty the approved_qty to set
+     */
+    public void setApproved_qty(int approved_qty) {
+        this.approved_qty = approved_qty;
+    }
 
     private int indent_table_id;
     private int indent_item_id;
@@ -33,8 +47,8 @@ public class Indent {
     private String purpose;
     private int purpose_id;
     private int required_qty;
-    private int stock_qty;
     private int approved_qty;
+    private int stock_qty;
     private int delivered_qty;
     private String expected_date_time;
 
@@ -347,34 +361,6 @@ public class Indent {
     }
 
     /**
-     * @return the expected_date_time
-     */
-    public String getExpected_date_time() {
-        return expected_date_time;
-    }
-
-    /**
-     * @param expected_date_time the expected_date_time to set
-     */
-    public void setExpected_date_time(String expected_date_time) {
-        this.expected_date_time = expected_date_time;
-    }
-
-    /**
-     * @return the approved_qty
-     */
-    public int getApproved_qty() {
-        return approved_qty;
-    }
-
-    /**
-     * @param approved_qty the approved_qty to set
-     */
-    public void setApproved_qty(int approved_qty) {
-        this.approved_qty = approved_qty;
-    }
-
-    /**
      * @return the delivered_qty
      */
     public int getDelivered_qty() {
@@ -388,4 +374,19 @@ public class Indent {
         this.delivered_qty = delivered_qty;
     }
 
+    /**
+     * @return the expected_date_time
+     */
+    public String getExpected_date_time() {
+        return expected_date_time;
+    }
+
+    /**
+     * @param expected_date_time the expected_date_time to set
+     */
+    public void setExpected_date_time(String expected_date_time) {
+        this.expected_date_time = expected_date_time;
+    }
+
+    
 }

@@ -1,11 +1,5 @@
 package com.inventory.model;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-//import com.organization.tableClasses.AllinOne;
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,20 +7,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.ItemName;
-import com.lowagie.text.pdf.ArabicLigaturizer;
-import static com.organization.model.KeypersonModel.getRevisionnoForImage;
-import com.organization.tableClasses.KeyPerson;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -206,6 +189,69 @@ public class ItemNameModel {
         return list;
     }
 
+    public JSONArray getItems(String searchItemName) {
+        JSONObject obj = new JSONObject();
+        JSONArray arrayObj = new JSONArray();
+        List<Integer> idList = new ArrayList<Integer>();
+        List<String> parentItemNameList = new ArrayList<String>();
+        String query = "";
+        try {
+
+            // parentItemNameList = getParentItemNameList();
+            // for (int i = 0; i < parentItemNameList.size(); i++) {
+            //  searchItemName = parentItemNameList.get(i);
+            //  idList = getAllParentChildList(searchItemName);
+//            query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+//                    + "itn.generation,itn.is_super_child,itn.prefix "
+//                    + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
+//
+//            if (!searchItemName.equals("")) {
+//                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+//
+//            }
+//            if (!searchItemName.equals("")) {
+//                query += " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+//            } else {
+//                query += "order by generation ";
+//            }
+//            query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+//                    + " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+            idList = getAllParentChildList(searchItemName);
+            query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+                    + "itn.generation,itn.is_super_child,itn.prefix "
+                    + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
+
+            if (!searchItemName.equals("")) {
+                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+
+            }
+            if (!searchItemName.equals("")) {
+                query += " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+            } else {
+                query += "order by generation ";
+            }
+
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                String item_name = rset.getString("item_name");
+                item_name = item_name.replaceAll("\\\\", "/");
+                int item_name_id = rset.getInt("item_names_id");
+                String parent_id = rset.getString("parent_id");
+                int generation = rset.getInt("generation");
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("item_name", item_name);
+                jsonObj.put("item_name_id", item_name_id);
+                jsonObj.put("parent_id", parent_id);
+                jsonObj.put("generation", generation);
+                arrayObj.add(jsonObj);
+            }
+            //  }
+        } catch (Exception e) {
+            System.err.println("exception---" + e);
+        }
+        return arrayObj;
+    }
+
     public List<String> getParentItemNameList() {
         PreparedStatement pstmt;
         List<String> list = new ArrayList<String>();
@@ -355,6 +401,7 @@ public class ItemNameModel {
         int rowsAffected = 0;
         int p_item_id = 0;
         int p_item_id_for_code = 0;
+        int count = 0;
         String is_child = item_name.getSuperp();
         if (is_child != null) {
             if (is_child.equals("yes") || is_child.equals("Yes") || is_child.equals("YES") || is_child.equals("Y") || is_child.equals("y")) {
@@ -368,16 +415,17 @@ public class ItemNameModel {
             String p_item_name = parent_item_name_arr[0];
             String item_code = parent_item_name_arr[1];
             p_item_id_for_code = getParent_Item_id_for_code(p_item_name, item_code);
-            p_item_id = getParent_Item_id(p_item_name);
+            //  p_item_id = getParent_Item_id(p_item_name);
         }
 
         int generation = 0;
-        if (p_item_id == 0) {
+        if (p_item_id_for_code == 0) {
             generation = 1;
         } else {
-            generation = getParentGeneration(p_item_id) + 1;
+            generation = getParentGeneration(p_item_id_for_code) + 1;
         }
-        String query2 = " select count(*) as count from item_names where item_code='" + item_name.getItem_code() + "' ";
+        String query2 = " select count(*) as count from item_names where "
+                + " prefix='" + item_name.getPrefix() + "' and parent_id='" + p_item_id_for_code + "' ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -395,7 +443,7 @@ public class ItemNameModel {
             StringBuilder item_code_builder = new StringBuilder();
             item_code_builder.delete(0, item_code_builder.length());
 
-            if (p_item_id != 0) {
+            if (p_item_id_for_code != 0) {
                 list = getParentPrefix(p_item_id_for_code);
 
                 if (list != null) {
@@ -411,10 +459,10 @@ public class ItemNameModel {
 
             pstmt.setString(7, item_code);
             pstmt.setInt(8, item_name.getQuantity());
-            if (p_item_id == 0) {
+            if (p_item_id_for_code == 0) {
                 pstmt.setString(9, null);
             } else {
-                pstmt.setInt(9, p_item_id);
+                pstmt.setInt(9, p_item_id_for_code);
             }
 
             pstmt.setInt(10, generation);
@@ -422,12 +470,12 @@ public class ItemNameModel {
             pstmt.setString(12, item_name.getPrefix());
 
             ResultSet rset = connection.prepareStatement(query2).executeQuery();
-            int count = 0;
+
             while (rset.next()) {
                 count = rset.getInt("count");
             }
             if (count > 0) {
-                message = "Item Code Already Exists.";
+                message = "This Prefix Already Exists for another item for this parent ";
                 msgBgColor = COLOR_ERROR;
             } else {
                 rowsAffected = pstmt.executeUpdate();
@@ -442,6 +490,10 @@ public class ItemNameModel {
             msgBgColor = COLOR_OK;
         } else {
             message = "Cannot save the record, some error.";
+            msgBgColor = COLOR_ERROR;
+        }
+        if (count > 0) {
+            message = "This Prefix Already Exists for another item for this parent ";
             msgBgColor = COLOR_ERROR;
         }
         return rowsAffected;
@@ -655,10 +707,10 @@ public class ItemNameModel {
 
         int generation = 0;
 
-        if (p_item_id == 0) {
+        if (p_item_id_for_code == 0) {
             generation = 1;
         } else {
-            generation = getParentGeneration(p_item_id) + 1;
+            generation = getParentGeneration(p_item_id_for_code) + 1;
         }
 
         String query1 = "SELECT max(revision_no) revision_no FROM item_names WHERE item_names_id = " + item_names_id + "  && active='Y' ";
@@ -714,7 +766,7 @@ public class ItemNameModel {
 
                     psmt.setString(8, item_code);
                     psmt.setInt(9, item_name.getQuantity());
-                    psmt.setInt(10, p_item_id);
+                    psmt.setInt(10, p_item_id_for_code);
                     psmt.setInt(11, generation);
                     psmt.setString(12, is_child);
                     psmt.setString(13, item_name.getPrefix());

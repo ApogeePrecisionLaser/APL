@@ -124,12 +124,8 @@
                 $('#search_designation').val(ui.item.label);
                 return false;
             }
-        });
-
-       
+        });   
     });
-
-
 
 
 
@@ -138,6 +134,7 @@
         document.getElementById("designation").disabled = false;
         document.getElementById("quantity").disabled = false;
         document.getElementById("description").disabled = false;      
+        document.getElementById("monthly_limit").disabled = false;      
 
         document.getElementById("save").disabled = false;
         if (id === 'new') {
@@ -175,6 +172,7 @@
             var item_name = document.getElementById("item_name").value;
             var designation = document.getElementById("designation").value;
             var quantity = document.getElementById("quantity").value;
+            var monthly_limit = document.getElementById("monthly_limit").value;
             if (myLeftTrim(item_name).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Name is required...</b></label></div>');
                 document.getElementById("item_name").focus();
@@ -188,6 +186,11 @@
             if (myLeftTrim(quantity).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Quantity is required...</b></label></div>');
                 document.getElementById("quantity").focus();
+                return false;
+            }
+             if (myLeftTrim(monthly_limit).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Monthly limit is required...</b></label></div>');
+                document.getElementById("monthly_limit").focus();
                 return false;
             }
             
@@ -236,7 +239,8 @@
         $('#item_name').val($("#" + count + '2').html());
         $('#designation').val($("#" + count + '3').html());
         $('#quantity').val($("#" + count + '4').html());
-        $('#description').val($("#" + count + '5').html());
+        $('#monthly_limit').val($("#" + count + '5').html());
+        $('#description').val($("#" + count + '6').html());
         document.getElementById("edit").disabled = false;
         document.getElementById("delete").disabled = false;
     }
@@ -298,6 +302,7 @@
                                 <th>Item Name</th>
                                 <th>Designation</th>
                                 <th>Quantity</th>
+                                <th>Monthly Limit</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -310,7 +315,8 @@
                                     <td id="${loopCounter.count }2">${beanType.item_name}</td>   
                                     <td id="${loopCounter.count }3">${beanType.designation}</td>
                                     <td id="${loopCounter.count }4">${beanType.quantity}</td> 
-                                    <td id="${loopCounter.count }5">${beanType.description}</td>  
+                                    <td id="${loopCounter.count }5">${beanType.monthly_limit}</td> 
+                                    <td id="${loopCounter.count }6">${beanType.description}</td>  
 
                                 </tr>
                             </c:forEach>
@@ -357,6 +363,15 @@
                         <div class="form-group">
                             <label>Quantity<span class="text-danger">*</span></label>
                             <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Monthly Limit<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="monthly_limit" name="monthly_limit" value="" disabled>
                         </div>
                     </div>
                 </div>
