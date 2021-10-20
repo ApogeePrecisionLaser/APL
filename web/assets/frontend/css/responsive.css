@@ -1,0 +1,227 @@
+
+@media only screen and (max-width: 600px) {
+
+.width700{
+	width: 100%;
+}
+.marginTopMob15{
+	margin-top: 15px;
+}
+.sectionPadding {
+    padding: 40px 0;
+}
+.orderTow{
+	order: 2;
+}
+.orderOne{
+	order: 1;
+}
+.border25{
+    border:10px solid #255946;
+}
+
+
+.leftSide ul{
+    display: flex;
+    justify-content: space-between;
+}
+.mainMenu .container{
+    margin: 0;
+}
+  .mainMenu::after{
+	display: none;
+  }
+  /*.mainMenu::after{
+
+  }*/
+  .SliderBotSec::before {
+    top: -14px;
+}
+.SliderBotSec::after {
+    bottom: -14px;
+    }
+
+.SliderBotSec h2{
+    font-size: 18px;
+}
+.SliderBotSec p{
+    font-size: 13.5px;
+}
+.downloadBtnWrap{
+	text-align: center!important;
+	margin-top: 33px;
+}
+  .sliderTimeline .timelineBoxWrap .imgWrap {
+    height: 215px;
+  }
+  .sliderTimeline .timelineBoxWrap .imgWrap .circleImg {
+    width: 160px;
+}
+  .sliderTimeline .timelineBoxWrap .imgWrap .iconImg {
+    margin: -166px 141px;
+    z-index: 99;
+    width: 45px;
+  }
+.aboutSection .experienceBox {
+    width: 120px;
+    padding: 17px 15px;
+    text-align: center;
+    margin-top: -81px;
+    position: absolute;
+    right: -10%;
+}
+.aboutSection .experienceBox h2 {
+    font-size: 30px;
+    font-weight: 800;
+}
+.aboutSection .experienceBox h3 {
+    font-size: 13px;
+}
+.sectionHeadAbout {
+	margin-top: 20px;
+}
+.aboutSection .sectionHeadAbout h2 {
+    font-size: 27px;
+    margin-bottom: 30px;
+}
+.aboutSection .sectionHeadAbout h3 {
+    font-size: 22px;
+    margin-top: 33px;
+}
+.aboutSection .aboutDesc{
+    margin-top: 13px;
+}
+.sectionHead h2{
+	font-size: 35px;
+}
+.sectionHead h2 {
+    margin-bottom: 30px;
+}
+.productBoxWrap {
+    padding: 23px 5px;
+}
+.productContent h2 {
+    font-size: 24px;
+}
+.productContent .prodDesc {
+    font-size: 13px;
+}
+.productSection .sectionHead{
+    margin-bottom: 5px!important;
+}
+
+.whyChooseSection .width700 {
+    width: 100%;
+}
+.contactSection .sectionHead p{
+	width: 100%;
+}
+
+
+
+
+
+
+.blogDetail.blogCard .blogCardImage img {
+    height: 210px;
+}
+.recentBlogSingle h3 {
+    font-size: 16px;
+}
+.recentBlogSingle img {
+    width: 60px;
+    height: 60px;
+}
+
+
+
+
+
+.callWhatsapp .contact-whatsapp {
+    width: 55px;
+    position: fixed;
+    bottom: 10%;
+    right: 15px;
+    z-index: 9999;
+    display: inline-block;
+    animation: up-down 1s infinite;
+}
+
+
+
+
+
+
+
+footer .footerSocialIcon ul li a i {
+    color: #fff;
+    padding: 10px;
+    background-color: #059862;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+}
+footer .footerSocialIcon{
+	display: flex;
+}
+footer .footerSocialIcon ul{
+	display: inline-block;
+	margin: 0 auto!important;
+}
+footer .footerBottomSec p {
+	font-size: 12.5px;
+    margin-top: 17px;
+    text-align: center;
+}
+footer .footDesc li a {
+    font-weight: 300;
+}
+footer {
+    padding: 50px 0 0px;
+}
+
+
+.aboutBox .text_side {
+     transform: translateY(0)!important; 
+}
+
+.page_header ul li {
+    font-size: 14px;
+}
+.page_header {
+    padding: 40px 0;
+    background-position: center;
+}
+.page_header h2 {
+    font-size: 40px;
+    margin-top: 8px;
+}
+.aboutBox .text_side {
+    margin-top: 16px;
+}
+.aboutBox .text_side h2{
+	margin-bottom: 0;
+}
+.aboutBox .text_side p {
+    font-size: 15px;
+}
+
+
+.productSectionTop h2{
+	font-size: 28px;
+}
+.productSectionTop .thumbnailTop img {
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+}
+
+.squareArrowBox {
+   width: 25px;
+    height: 25px;
+    margin: -13px auto 30px;
+}
+
+}
+

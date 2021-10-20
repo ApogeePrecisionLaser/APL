@@ -1,0 +1,158 @@
+
+@media only screen and (max-width: 991px) {
+
+.container {
+    max-width: calc(100% - 25px) !important;
+}
+
+.SliderBotSec h2 {
+    font-size: 20px;
+}
+.myButtonEffect {
+    padding: 10px 18px;
+}
+.SliderBotSec {
+    padding: 24px 0;
+}
+.SliderBotSec h2 {
+    margin-bottom: 4px;
+}
+.downloadBtnWrap {
+    margin-top: 11px;
+}
+.aboutSection .sectionHeadAbout h2 {
+    margin-bottom: 0px;
+    font-size: 27px;
+}
+.aboutSection .sectionHeadAbout h2::after, .aboutSection .sectionHeadAbout h2::before{
+    display: none;
+}
+
+.aboutSection .experienceBox {
+    width: 102px;
+    padding: 7px 0px;
+    margin-top: -47px;
+}
+.aboutSection .experienceBox h2 {
+    font-size: 30px;
+}
+.aboutSection .experienceBox h3 {
+    font-size: 12px;
+}
+.aboutSection .sectionHeadAbout h3 {
+    font-size: 18px;
+    margin-top: 6px;
+}
+.aboutSection .aboutDesc {
+    margin-top: 0px;
+}
+.sectionHead h2 {
+    text-align: center;
+    position: relative;
+    margin-bottom: 28px;
+    font-size: 38px;
+}
+.productContent h2 {
+    font-size: 28px;
+    font-weight: 500;
+}
+.productBoxWrap {
+    background-color: #fffbfb;
+    padding: 12px 2px;
+    border-radius: 4px;
+    border: 1.5px dashed #059862;
+}
+.productContent .prodDesc {
+    font-size: 13px;
+     font-weight: 400;
+}
+.productSection img{
+    margin-top: 56px;
+}
+.productSection .sectionHead {
+    margin-bottom: 8px!important;
+}
+.whyChooseSection .card {
+    padding: 18px 0px;
+    border: 1px solid #255946;
+    transition: all .3s ease;
+}
+.productSection .marginBottom {
+     margin-bottom: 30px; 
+}
+
+
+
+
+
+
+.contactSection .contactLeft h3{
+    font-size: 30px;
+}
+.contactSection .contactLeft h4 {
+    font-size: 22px;
+}
+
+.sliderTimeline .timelineBoxWrap .imgWrap .iconImg {
+    margin: -141px 67px;
+    z-index: 99;
+    width: 40px;
+}
+.paddingBottom10{
+    padding-bottom: 10px;
+}
+.aboutBox .text_side {
+    transform: translateY(0%);
+}
+.aboutBox .text_side p {
+    font-size: 15px;
+}
+.aboutBox .border25 {
+    border: 10px solid #255946;
+}
+
+
+
+.productSectionTop h2{
+    font-size: 25px;
+}
+.productSectionTop p{
+    font-size: 15px;
+}
+.productSectionTop .thumbnailTop img {
+    width: 100%;
+    height: 359px;
+    object-fit: cover;
+}
+.productSectionTop .productTable td {
+    font-size: 12px;
+    padding: 8px 0px;
+}
+.tabSection .specificationList .headList {
+    padding: 15px 15px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.tabSection .tab-content.card {
+    padding: 30px 10px;
+}
+.tabSection .specificationList .headList {
+    padding: 5px 9px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.tabSection .specificationList li {
+    padding: 2px 8px;
+    font-size: 13px;
+    border-top: 1px solid #255946;
+}
+
+
+
+
+
+
+
+
+}
+
