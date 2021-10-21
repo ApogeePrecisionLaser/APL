@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 /**
@@ -32,6 +33,11 @@ public class AttendanceController extends HttpServlet {
         String task = request.getParameter("search_record");
         String key_person = request.getParameter("key_person");
         String date = request.getParameter("date");
+
+        HttpSession session = request.getSession();
+        String user_name = session.getAttribute("log_user").toString();
+        System.err.println("logged user --" + user_name);
+
         if (task == null) {
             task = "";
         }
@@ -41,11 +47,27 @@ public class AttendanceController extends HttpServlet {
         if (date == null) {
             date = "";
         }
-        try {
-            model.setConnection(DBConnection.getConnectionForUtf(ctx));
-        } catch (Exception e) {
-            System.out.println("com.apogee.admin.AttendanceController.doGet() -"+e);
+        
+        
+
+        if (!user_name.equals("sagar")) {
+
+            try {
+                model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            } catch (Exception e) {
+                System.out.println("com.apogee.admin.AttendanceController.doGet() -" + e);
+            }
+
+        } else {
+            model.setDriver(ctx.getInitParameter("driverClass"));
+            model.setUrl(ctx.getInitParameter("connectionString"));
+            model.setUser(ctx.getInitParameter("reader"));
+            model.setPassword(ctx.getInitParameter("reader"));
+            model.setConnection2();
         }
+        
+        
+
         try {
             try {
                 String JQstring = request.getParameter("action1");
@@ -78,7 +100,7 @@ public class AttendanceController extends HttpServlet {
 
             }
 
-            List<AttendanceBean> list = model.showData(key_person,date);
+            List<AttendanceBean> list = model.showData(key_person, date);
 
             request.setAttribute("list", list);
             request.setAttribute("message", model.getMessage());

@@ -10,12 +10,14 @@ import com.inventory.tableClasses.ItemType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -28,6 +30,7 @@ public class ItemTypeController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ServletContext ctx = getServletContext();
+        HttpSession session = request.getSession();
         System.err.println("----------------------- item controller -----------------------------");
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
@@ -35,8 +38,15 @@ public class ItemTypeController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
+                
         try {
-            model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            String driverClass = session.getAttribute("driverClass").toString();
+            String connectionString = session.getAttribute("connectionString").toString();
+            String myDbUserName = session.getAttribute("myDbUserName").toString();
+            String myDbUserpass = session.getAttribute("myDbUserPass").toString();
+            
+            Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserpass);            
+            model.setConnection(con);
         } catch (Exception e) {
             System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
         }

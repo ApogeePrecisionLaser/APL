@@ -116,6 +116,8 @@ public class KeypersonModel {
 
             query1 += " GROUP BY k.key_person_id ORDER BY key_person_name ";
 
+            System.err.println("query1=--------------------" + query1);
+
             //   System.err.println("query1=--------------------" + query1);
 //            +" AND (if('" + office_code + "' = '' , org.organisation_name like '%%' , org.organisation_name = ? ) "
 //                    + " OR if('" + office_code + "' = '' , org2.organisation_name like '%%' , org2.organisation_name = ? ) ) "
@@ -922,7 +924,7 @@ public class KeypersonModel {
         }
         return revision_no;
     }
-    
+
     public int deleteRecord(int key_person_id) {
         // String query = "DELETE FROM key_person WHERE key_person_id=" + key_person_id;
         int revision_no = getRevisionNo(key_person_id);
@@ -1122,6 +1124,7 @@ public class KeypersonModel {
                 + "WHERE oft.office_type_id = ot.office_type_id  AND o.organisation_id=ot.organisation_id AND ot.org_office_code ='" + office_code + "' and ot.active='Y' and oft.active='Y' and o.active='Y'"
                 //                + " AND if('"+ office_code +"' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) "
                 + " GROUP BY org_office_name ";
+        System.err.println("org office query----------------" + query);
         //    System.err.println("org office query----------------" + query);
         try {
             int count = 0;
@@ -1265,6 +1268,7 @@ public class KeypersonModel {
         if (!person.equals("") && person != null) {
             query += " and key_person_name='" + person + "' ";
         }
+        System.err.println("query-----------" + query);
         // System.err.println("query-----------" + query);
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -2194,7 +2198,6 @@ public class KeypersonModel {
     }
 
     public String getImagePath(String key_person_id, String uploadedFor) {
-
         String img_name = "";
         if (uploadedFor.equals("ph")) {
             uploadedFor = "key_person_photo";
@@ -2212,7 +2215,6 @@ public class KeypersonModel {
                 + " AND iuf.image_uploaded_for='" + uploadedFor + "' AND gid.key_person_id=" + key_person_id + " "
                 + " and gid.active='Y' and dp.active='Y' and iuf.active='Y' "
                 + " ORDER BY general_image_details_id DESC";
-
         try {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
             if (rs.next()) {

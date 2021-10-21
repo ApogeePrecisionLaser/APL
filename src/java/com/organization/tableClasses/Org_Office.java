@@ -25,6 +25,33 @@ public class Org_Office {
     private String office_type;
     private int organisation_id;
     private String organisation_name;
+     private int map_id;
+
+    public int getMap_id() {
+        return map_id;
+    }
+
+    public void setMap_id(int map_id) {
+        this.map_id = map_id;
+    }
+     private String dealername;
+    private String salesmanname;
+
+    public String getDealername() {
+        return dealername;
+    }
+
+    public void setDealername(String dealername) {
+        this.dealername = dealername;
+    }
+
+    public String getSalesmanname() {
+        return salesmanname;
+    }
+
+    public void setSalesmanname(String salesmanname) {
+        this.salesmanname = salesmanname;
+    }
     private int organisation_sub_type_id;
     private String address_line1;
     private String address_line2;

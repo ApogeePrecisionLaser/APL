@@ -57,6 +57,10 @@
         background-color: #ffc107;
         color:white; 
     }
+    .Payment Pending{
+        background-color: #d587c8;
+        color:white; 
+    }
     .delivery_challan_generated{
         background-color: #df7d35;
         color:white; 

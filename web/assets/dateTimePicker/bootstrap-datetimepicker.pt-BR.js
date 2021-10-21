@@ -4,10 +4,10 @@
  */
 ;(function($){
 	$.fn.datetimepicker.dates['pt-BR'] = {
-		days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
-		daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+		days: ["Domingo", "Segunda", "Terï¿½a", "Quarta", "Quinta", "Sexta", "Sï¿½bado", "Domingo"],
+		daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sï¿½b", "Dom"],
 		daysMin: ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa", "Do"],
-		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+		months: ["Janeiro", "Fevereiro", "Marï¿½o", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
 		monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
 		today: "Hoje"
 	};

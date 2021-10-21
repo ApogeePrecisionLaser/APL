@@ -89,6 +89,20 @@
                                     <div class="dropdown-menu">
                                         <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
                                         <a href="CalendarController" class="dropdown-item">View Calendar</a>
+                                         <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                        Order
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a href="DealerSalemanMapController" class="dropdown-item">Dealer-Salesman-Mapping</a>     
+                                        <a href="OrderController" class="dropdown-item">OrderForm</a>     
+                                        <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>     
+                                        <a href="CheckOrderInventoryController" class="dropdown-item">Check Order Inventory</a>     
+                                      
+                                       
                                     </div>
                                 </li>
 

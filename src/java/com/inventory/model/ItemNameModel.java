@@ -264,7 +264,7 @@ public class ItemNameModel {
                 list.add(searchItemName);
             }
         } catch (Exception e) {
-            System.out.println("Error:--ItemNameModel--- getParentItemNameList--" + e);
+            System.out.println("Error:--ItemNameModel--- getParentItemNameList Modified ****************--" + e);
         }
 
         list.removeAll(Arrays.asList(0));
