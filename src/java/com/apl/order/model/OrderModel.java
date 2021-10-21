@@ -38,17 +38,17 @@ public class OrderModel {
             System.out.println("InventoryModel setConnection() Error: " + e);
         }
     }
- public  String getRequestedToKeyPersonorder(String q, String requested_by) {
+ public  String getRequestedToKeyPersonorder(String q, String requested_by) {    
         int loc_of_dealer=getRequestedKeyPersondegId(requested_by);
       String key_person_name="";
-        String query = "Select * from key_person as kp ,city as c , designation as d  where kp.city_id=c.city_id and\n" +
-" kp.designation_id=d.designation_id and d.designation='sales' and c.city_id='"+loc_of_dealer+"' \n" +
-" and c.active='Y' and kp.active='y'";
+        String query = "Select kp2.key_person_name from dealer_salesmanager_mapping as dsm,key_person as kp1,key_person as kp2 where kp1.key_person_id=dsm.dealer_id\n" +
+" and  kp2.key_person_id=dsm.salesman_id and dsm.dealer_id='"+loc_of_dealer+"' and  kp1.active='y' and dsm.active='Y' and kp2.active='Y'";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             
             while (rset.next()) {
+              
                   key_person_name = (rset.getString("key_person_name"));
                
             }
@@ -236,13 +236,13 @@ public class OrderModel {
         return id;
     }
     public int getRequestedKeyPersondegId(String person_name) {
-        String query = "SELECT city_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             rset.next();
-            id = rset.getInt("city_id");
+            id = rset.getInt("key_person_id");
         } catch (Exception e) {
             System.out.println("getRequestedByKeyPersonId Error: " + e);
         }

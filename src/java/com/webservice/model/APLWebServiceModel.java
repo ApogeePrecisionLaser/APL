@@ -18,6 +18,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -384,18 +386,25 @@ public class APLWebServiceModel {
         String key_person_id = "", key_person_name = "", image_name = "", person_photo = "", person_id_photo = "";
         try {
             query = " select distinct kp.key_person_name,gid.image_name,idd.destination_path,idd.image_uploaded_for_id, "
-                    + " kp.key_person_id,concat(idd.destination_path,gid.image_name) as image_path "
+                    + " iuf.image_uploaded_for,kp.key_person_id,concat(idd.destination_path,gid.image_name) as image_path "
                     + " from key_person kp,general_image_details gid,image_destination idd,image_uploaded_for iuf "
                     + " where kp.active='y' and gid.active='y' and idd.active='y' and iuf.active='y' and "
                     + " kp.key_person_id=gid.key_person_id and gid.image_destination_id=idd.image_destination_id "
                     //+ " and iuf.image_uploaded_for_id=idd.image_uploaded_for_id "
-                    + " and "+number+" in(kp.mobile_no1,kp.mobile_no2) ";
+                    + " and 9758128792 in(kp.mobile_no1,kp.mobile_no2) ";
             PreparedStatement psmt = connection.prepareStatement(query);
             ResultSet rst = psmt.executeQuery();
             while (rst.next()) {
+//                obj.put("key_person_id", rst.getString("key_person_id"));
+//                obj.put("key_person_name", rst.getString("key_person_name"));
+//                obj.put("image_name", rst.getString("image_name"));
                 key_person_id = rst.getString("key_person_id");
                 key_person_name = rst.getString("key_person_name");
                 image_name = rst.getString("image_name");
+                //obj.put("destination_path", rst.getString("destination_path"));
+                //obj.put("image_uploaded_for", rst.getString("image_uploaded_for"));
+                //obj.put("image_uploaded_for_id", rst.getString("image_uploaded_for_id"));
+                //obj.put("image_path", rst.getString("image_path"));
 
                 // for image
                 String encodedString = "";
@@ -437,12 +446,23 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getItemType() {
+    public JSONArray getItemType(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
-        query = "select item_type_id,item_type,description,remark "
-                + " from item_type itemt "
-                + " where itemt.active='Y'";
+//        query = "select item_type_id,item_type,description,remark "
+//                + " from item_type itemt "
+//                + " where itemt.active='Y'";
+
+        query = " select onn.organisation_id,onn.organisation_name,onn.organisation_type_id,onn.organisation_code,onn.description,onn.remark "
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " org_office_designation_map oodm,designation d "
+                + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
+                + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id "
+                + " and oo.office_type_id=oot.office_type_id and oo.organisation_id=onn.organisation_id "
+                + " and ot.organisation_type_id=onn.organisation_type_id and kp.org_office_id=oo.org_office_id "
+                + " and " + number + " in(kp.mobile_no1,kp.mobile_no2) ";
+
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -460,12 +480,23 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getItemNames() {
+    public JSONArray getItemNames(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
-        query = "select item_names_id,item_name,item_type_id,item_code,quantity,description,remark "
-                + " from item_names itemn "
-                + " where itemn.active='Y'";
+//        query = "select item_names_id,item_name,item_type_id,item_code,quantity,description,remark "
+//                + " from item_names itemn "
+//                + " where itemn.active='Y'";
+
+        query = " select onn.organisation_id,onn.organisation_name,onn.organisation_type_id,onn.organisation_code,onn.description,onn.remark "
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " org_office_designation_map oodm,designation d "
+                + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
+                + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id "
+                + " and oo.office_type_id=oot.office_type_id and oo.organisation_id=onn.organisation_id "
+                + " and ot.organisation_type_id=onn.organisation_type_id and kp.org_office_id=oo.org_office_id "
+                + " and " + number + " in(kp.mobile_no1,kp.mobile_no2) ";
+
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -486,12 +517,25 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getGeneralImageDetails() {
+    public JSONArray getGeneralImageDetails(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
-        query = "select general_image_details_id,image_name,image_destination_id,key_person_id,description,date_time,remark "
-                + " from general_image_details gid "
-                + " where gid.active='Y' ";
+//        query = "select general_image_details_id,image_name,image_destination_id,key_person_id,description,date_time,remark "
+//                + " from general_image_details gid "
+//                + " where gid.active='Y' ";
+
+        query = " select gid.general_image_details_id,gid.image_name,gid.image_destination_id,gid.key_person_id, "
+                + " gid.description,gid.date_time,gid.remark "
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " org_office_designation_map oodm,designation d,general_image_details gid "
+                + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
+                + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id "
+                + " and oo.office_type_id=oot.office_type_id and oo.organisation_id=onn.organisation_id "
+                + " and ot.organisation_type_id=onn.organisation_type_id and kp.org_office_id=oo.org_office_id"
+                + " and gid.key_person_id=kp.key_person_id "
+                + " and " + number + " in(kp.mobile_no1,kp.mobile_no2) ";
+
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -512,7 +556,7 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getImageDestination() {
+    public JSONArray getImageDestination(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
         query = "select image_destination_id,destination_path,image_uploaded_for_id,remark"
@@ -535,7 +579,7 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getImageUploadedFor() {
+    public JSONArray getImageUploadedFor(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
         query = "select Image_uploaded_for_id,uploaded_table,image_uploaded_for,view_label,remark "
@@ -560,7 +604,7 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getItemImageDetails() {
+    public JSONArray getItemImageDetails(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
         query = " select item_image_details_id,image_name,image_path,date_time,description,item_names_id,remark "
@@ -587,7 +631,7 @@ public class APLWebServiceModel {
         return rowData;
     }
 
-    public JSONArray getIdType() {
+    public JSONArray getIdType(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
         query = " select id_type_id,id_type,remark "
@@ -847,42 +891,12 @@ public class APLWebServiceModel {
         }
         return count;
     }
-    
-    public JSONArray getAttendanceData(String number) {
-        JSONArray rowData = new JSONArray();
-        String query = null;
-        query = " Select a.attendance_id,a.coming_time,a.going_time,a.latitude,a.longitude,st.status_type,st.status_type_id "
-                + " from attendance a, key_person kp, status_type st "
-                + " where a.active='y' and kp.active='y' and st.active='y' and st.status_type_id=a.status_type_id "
-                + " and kp.key_person_id=a.key_person_id and "+number+" in(kp.mobile_no1,kp.mobile_no2) "
-                + " and date(a.created_at)=curdate() ";
 
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            while (rset.next()) {
-                JSONObject obj = new JSONObject();
-                obj.put("attendance_id", rset.getInt(1));
-                obj.put("coming_time", rset.getString(2));
-                obj.put("going_time", rset.getString(3));
-                obj.put("latitude", rset.getString(4));
-                obj.put("longitude", rset.getString(5));
-                obj.put("status_type_id", rset.getString(6));
-                obj.put("status_type", rset.getString(7));
-                rowData.put(obj);
-            }
-        } catch (Exception e) {
-            System.out.println("Error inside getCity of survey: " + e);
-        }
-        return rowData;
-    }
-    
-    
     public JSONArray getHolidayData(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
 
-        query = " select * from holiday where active='y' ";
+        query = " select holiday_id,holiday_name,date(holiday_date)as holiday_date,remark from holiday where active='y' ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -972,6 +986,35 @@ public class APLWebServiceModel {
             }
         } catch (Exception e) {
             System.out.println("com.webservice.model.APLWebServiceModel.getStatusTypeData()-" + e);
+        }
+        return rowData;
+    }
+
+    public JSONArray getAttendanceData(String number) {
+        JSONArray rowData = new JSONArray();
+        String query = null;
+        query = " Select a.attendance_id,a.coming_time,a.going_time,a.latitude,a.longitude,st.status_type,st.status_type_id "
+                + " from attendance a, key_person kp, status_type st "
+                + " where a.active='y' and kp.active='y' and st.active='y' and st.status_type_id=a.status_type_id "
+                + " and kp.key_person_id=a.key_person_id and " + number + " in(kp.mobile_no1,kp.mobile_no2) "
+                + " and date(a.created_at)=curdate() ";
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                JSONObject obj = new JSONObject();
+                obj.put("attendance_id", rset.getInt(1));
+                obj.put("coming_time", rset.getString(2));
+                obj.put("going_time", rset.getString(3));
+                obj.put("latitude", rset.getString(4));
+                obj.put("longitude", rset.getString(5));
+                obj.put("status_type_id", rset.getString(6));
+                obj.put("status_type", rset.getString(7));
+                rowData.put(obj);
+            }
+        } catch (Exception e) {
+            System.out.println("Error inside getCity of survey: " + e);
         }
         return rowData;
     }

@@ -35,42 +35,57 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ServletContext ctx = getServletContext();
-        LoginModel am = new LoginModel();
+        LoginModel model = new LoginModel();
+        model.setDriverClass(ctx.getInitParameter("driverClass"));
+        model.setConnectionString(ctx.getInitParameter("connectionString"));
         HttpSession session = request.getSession();
         String task = request.getParameter("task");
         if (task == null || task.isEmpty()) {
             task = "";
         }
+        
+        
+//        try {
+//            model.setConnection((Connection) DBConnection.getConnectionForUtf(ctx));
+//        } catch (Exception e) {
+//            System.out.print(e);
+//        }     
+
         try {
-            am.setConnection((Connection) DBConnection.getConnectionForUtf(ctx));
-        } catch (Exception e) {
-            System.out.print(e);
-        }
-        try {
-            System.out.println("conn -" + am);
+            System.out.println("conn -" + model);
 
             if (task.equals("login")) {
                 String user_name = request.getParameter("user_name");
                 String password = request.getParameter("password");
-                int count = am.checkLogin(user_name, password);
+                
+              model.setUserFullDetail(user_name, password);
+                
+                int count = model.checkLogin(user_name, password);
+
+                session.setAttribute("log_user", user_name);
+                session.setAttribute("driverClass", ctx.getInitParameter("driverClass"));
+                session.setAttribute("connectionString", ctx.getInitParameter("connectionString"));
+                session.setAttribute("myDbUserName", model.getMyDbUserName());
+                session.setAttribute("myDbUserPass", model.getMyDbUserPass());
+                session.setAttribute("user_role", model.getMyRoleName());
 
                 String designation = "";
 
                 session.setAttribute("user_name", user_name);
                 session.setAttribute("password", password);
 
-                designation = am.getDesignation(user_name, password);
+                designation = model.getDesignation(user_name, password);
                 if (designation.equals("")) {
                     designation = "normal_user";
                 }
 
-                int logged_key_person_id = am.getKeyPersonId(user_name, password);
-                int logged_org_name_id = am.getOrgNameId(user_name, password);
-                int logged_org_office_id = am.getOrgOfficeId(user_name, password);
-                String logged_org_name = am.getOrgName(user_name, password);
-                String logged_org_office = am.getOrgOffice(user_name, password);
-                String office_admin=am.getOfficeAdmin(user_name, password,logged_org_office_id);
-                
+                int logged_key_person_id = model.getKeyPersonId(user_name, password);
+                int logged_org_name_id = model.getOrgNameId(user_name, password);
+                int logged_org_office_id = model.getOrgOfficeId(user_name, password);
+                String logged_org_name = model.getOrgName(user_name, password);
+                String logged_org_office = model.getOrgOffice(user_name, password);
+                String office_admin = model.getOfficeAdmin(user_name, password, logged_org_office_id);
+
                 if (count > 0) {
                     session.setAttribute("logged_user_name", user_name);
                     session.setAttribute("logged_designation", designation);

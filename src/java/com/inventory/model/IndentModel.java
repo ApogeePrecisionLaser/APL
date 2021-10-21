@@ -345,7 +345,7 @@ public class IndentModel {
             while (rst.next()) {
                 list2.add(rst.getInt(1));
             }
-            
+
             for (int k = 0; k < list2.size(); k++) {
                 String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
                         + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
@@ -377,6 +377,7 @@ public class IndentModel {
 
         try {
             desig_map_list = getIdList(logged_designation);
+            if (desig_map_list.size() > 0) {
                 String query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
                         + "itn.generation,itn.is_super_child,itn.prefix "
                         + " from item_names itn, item_type itt where "
@@ -385,7 +386,7 @@ public class IndentModel {
                         + " in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
                         + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
-            //    System.err.println("query------" + query);
+                //    System.err.println("query------" + query);
                 PreparedStatement pstmt = connection.prepareStatement(query);
                 ResultSet rset = pstmt.executeQuery();
                 while (rset.next()) {
@@ -430,6 +431,7 @@ public class IndentModel {
                     bean.setSuperp(rset.getString("is_super_child"));
                     list.add(bean);
                 }
+            }
         } catch (Exception e) {
             System.err.println("Exception in getItemsList---------" + e);
         }

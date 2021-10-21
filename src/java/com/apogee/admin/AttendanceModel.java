@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.apogee.admin;
 
 import com.organization.tableClasses.OrganisationName;
@@ -34,7 +29,9 @@ import java.text.NumberFormat;
  */
 public class AttendanceModel {
 
-    private static Connection connection;
+    private static Connection connection;     
+    private Connection connection2;     
+    private String driver, url, user, password;
 
     private String message;
     private String msgBgColor;
@@ -45,9 +42,10 @@ public class AttendanceModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("QtOohDefaultsModel setConnection() Error: " + e);
+            System.out.println("com.apogee.admin.AttendanceModel.setConnection()-"+e);
         }
     }
+    
 
     public List<AttendanceBean> showData(String key_person, String date) {
         List<AttendanceBean> list = new ArrayList<AttendanceBean>();
@@ -133,5 +131,74 @@ public class AttendanceModel {
         } catch (Exception e) {
             System.out.println("com.apogee.admin.AttendanceModel.closeConnection() -" + e);
         }
+    }
+
+    /**
+     * @return the driver
+     */
+    public String getDriver() {
+        return driver;
+    }
+
+    /**
+     * @param driver the driver to set
+     */
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * @return the user
+     */
+    public String getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+   public void setConnection2() {
+        try {
+            Class.forName(driver);
+            connection2 = DriverManager.getConnection(url, user, password);
+        } catch (Exception e) {
+            System.out.println("CityModel setConnection error: " + e);
+        }
+    }
+
+    public Connection getConnection2() {
+        return connection2;
     }
 }

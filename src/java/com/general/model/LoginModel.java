@@ -5,6 +5,7 @@
 package com.general.model;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,9 @@ public class LoginModel {
     private String msgBgColor;
     private final String COLOR_OK = "yellow";
     private final String COLOR_ERROR = "red";
+    private String driverClass;
+    private String connectionString;
+    private String myRoleName, myDbUserName, myDbUserPass;
     // HttpSession session = request.getSession();
 
 //public String checkLogin(String user_name,String password){
@@ -43,17 +47,43 @@ public class LoginModel {
 //    return designation;
 //
 //}
+    public void setUserFullDetail(String myUserName, String myUserPass) {
+        String query = " SELECT u.user_id, user_name, user_password, ur.user_role_id, role_name, db_user_name, db_user_pass "
+                + "  FROM `user` AS u, user_roles AS ur, user_role_map AS urm "
+                + "  WHERE u.user_id = urm.user_id AND ur.user_role_id = urm.user_role_id "
+                + "  AND user_name = ? AND user_password = ? ";
+        try {
+            Class.forName(driverClass);
+            //Connection con = DriverManager.getConnection(connectionString, "guest", "guest");
+            connection = DriverManager.getConnection(connectionString, "root", "root");
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, myUserName);
+            pst.setString(2, myUserPass);
+            ResultSet rst = pst.executeQuery();
+            while (rst.next()) {
+                myRoleName = rst.getString("role_name");
+                myDbUserName = rst.getString("db_user_name");
+                myDbUserPass = rst.getString("db_user_pass");
+            }
+            //connection.close();
+        } catch (Exception e) {
+            System.out.println("LoginModel getUseName() Error: " + e);
+        }
+    }
+
     public int checkLogin(String user_name, String password) {
         int login_id = 0;
         String designation = "";
         int count = 0;
 //     String query = " select login_id,d.designation,l.key_person_id from login l,key_person kp,designation as d where l.user_name='"+user_name+"' and l.password='"+password+"' "
 //             + " AND kp.key_person_id=l.key_person_id and kp.designation_id=d.designation_id ";
-        String query = " select user_name,password from login where user_name='" + user_name + "' and password='" + password + "' ";
+        //String query = " select user_name,password from login where user_name='" + user_name + "' and password='" + password + "' ";
+        String query = " select user_name,user_password from user where user_name='" + user_name + "' and user_password='" + password + "' ";
         try {
-            ResultSet rs = connection.prepareStatement(query).executeQuery();
+            Connection con = DriverManager.getConnection(connectionString, "root", "root");
+            ResultSet rs = con.prepareStatement(query).executeQuery();
             if (rs.next()) {
-                designation = rs.getString("password");
+                designation = rs.getString(2);
                 count++;
                 //   session.setAttribute("key_person_id", key_person_id);
             }
@@ -69,8 +99,12 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select d.designation from designation d, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+//        String query = "select d.designation from designation d, key_person kp, login l "
+//                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+//                + " and l.key_person_id=kp.key_person_id and kp.designation_id=d.designation_id and d.active='Y' ";
+
+        String query = " select  d.designation from designation d, key_person kp, user l "
+                + " where l.user_name='"+user_name+"' and l.user_password='"+password+"' and kp.active='y' "
                 + " and l.key_person_id=kp.key_person_id and kp.designation_id=d.designation_id and d.active='Y' ";
         try {
             connection.setAutoCommit(false);
@@ -89,8 +123,8 @@ public class LoginModel {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select distinct kp.key_person_id from designation d, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+        String query = "select distinct kp.key_person_id from designation d, key_person kp, user l "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and d.active='Y' ";
         try {
             connection.setAutoCommit(false);
@@ -144,13 +178,13 @@ public class LoginModel {
         }
         return str;
     }
-    
+
     public String getOfficeAdmin(String user_name, String password, int logged_org_office_id) {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
         String query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
-                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='"+logged_org_office_id+"' and kp.designation_id=d.designation_id "
+                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
                 + " and d.designation='Owner' and  oo.active='Y' and kp.active='Y' ";
         try {
             connection.setAutoCommit(false);
@@ -238,4 +272,37 @@ public class LoginModel {
             System.out.println(" closeConnection() Error: " + e);
         }
     }
+
+    public void setDriverClass(String driverClass) {
+        this.driverClass = driverClass;
+    }
+
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
+    }
+
+    public String getMyDbUserName() {
+        return myDbUserName;
+    }
+
+    public void setMyDbUserName(String myDbUserName) {
+        this.myDbUserName = myDbUserName;
+    }
+
+    public String getMyDbUserPass() {
+        return myDbUserPass;
+    }
+
+    public void setMyDbUserPass(String myDbUserPass) {
+        this.myDbUserPass = myDbUserPass;
+    }
+
+    public String getMyRoleName() {
+        return myRoleName;
+    }
+
+    public void setMyRoleName(String myRoleName) {
+        this.myRoleName = myRoleName;
+    }
+
 }

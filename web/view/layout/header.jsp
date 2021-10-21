@@ -89,6 +89,7 @@
                                     <div class="dropdown-menu">
                                         <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
                                         <a href="CalendarController" class="dropdown-item">View Calendar</a>
+                                         <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -101,6 +102,7 @@
                                         <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>     
                                         <a href="CheckOrderInventoryController" class="dropdown-item">Check Order Inventory</a>     
                                       
+                                       
                                     </div>
                                 </li>
 

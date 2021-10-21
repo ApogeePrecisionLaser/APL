@@ -1,3 +1,10 @@
+<%-- 
+    Document   : organisation_type
+    Created on : Sep 23, 2021, 3:46:00 PM
+    Author     : Vikrant
+--%>
+
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 
@@ -352,63 +359,64 @@
     </div>
 </section>
 
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <div class="row mt-3 myTable">
-            <div class="col-md-12">
-                <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Manufacturer Name</th>
-                                <th>Item Code</th>
-                                <th>Model Name</th>
-                                <th>Model No.</th>
-                                <th>Part No.</th>
-                                <th>Lead Time in Days</th>
-                                <th>Description</th>
-                                <th style="display:none"></th>
-                                <th style="display: none"></th>
-                                <th></th>
-                                <th style="display: none"></th>
+<c:if test="${isSelectPriv eq 'Y'}">
+    <section class="marginTop30 ">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Search List</h5>
+            </div>
+            <div class="row mt-3 myTable">
+                <div class="col-md-12">
+                    <div class="table-responsive verticleScroll">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Manufacturer Name</th>
+                                    <th>Item Code</th>
+                                    <th>Model Name</th>
+                                    <th>Model No.</th>
+                                    <th>Part No.</th>
+                                    <th>Lead Time in Days</th>
+                                    <th>Description</th>
+                                    <th style="display:none"></th>
+                                    <th style="display: none"></th>
+                                    <th></th>
+                                    <th style="display: none"></th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
-                                <tr
-                                    onclick="fillColumn('${beanType.model_id}', '${loopCounter.count }');">
-                                    <td>${loopCounter.count }</td>
-                                    <td id="${loopCounter.count }2">${beanType.manufacturer_name}</td>
-                                    <td id="${loopCounter.count }3">${beanType.item_code}</td>
-                                    <td id="${loopCounter.count }4">${beanType.model}</td>
-                                    <td id="${loopCounter.count }5">${beanType.model_no}</td>
-                                    <td id="${loopCounter.count }6">${beanType.part_no}</td>
-                                    <td id="${loopCounter.count }7">${beanType.lead_time}</td>
-                                    <td id="${loopCounter.count }8">${beanType.description}</td>    
-                                    <td id="${loopCounter.count }9" style="display:none">${beanType.manufacturer_item_map_id}</td>
-                                    <td id="${loopCounter.count }10" style="display: none">${beanType.item_image_details_id}</td>
-                                    <td id="${loopCounter.count }11" >
-                                        <input type="button" class="btn btn-info" id="${loopCounter.count}" name="item_photo"
-                                               value="View Images" onclick="viewImages(${beanType.model_id}, 'ph')">
-                                    </td>
-                                    <td style="display:none" id="${loopCounter.count }12">${beanType.item_name}</td>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['list']}"
+                                           varStatus="loopCounter">
+                                    <tr
+                                        onclick="fillColumn('${beanType.model_id}', '${loopCounter.count }');">
+                                        <td>${loopCounter.count }</td>
+                                        <td id="${loopCounter.count }2">${beanType.manufacturer_name}</td>
+                                        <td id="${loopCounter.count }3">${beanType.item_code}</td>
+                                        <td id="${loopCounter.count }4">${beanType.model}</td>
+                                        <td id="${loopCounter.count }5">${beanType.model_no}</td>
+                                        <td id="${loopCounter.count }6">${beanType.part_no}</td>
+                                        <td id="${loopCounter.count }7">${beanType.lead_time}</td>
+                                        <td id="${loopCounter.count }8">${beanType.description}</td>    
+                                        <td id="${loopCounter.count }9" style="display:none">${beanType.manufacturer_item_map_id}</td>
+                                        <td id="${loopCounter.count }10" style="display: none">${beanType.item_image_details_id}</td>
+                                        <td id="${loopCounter.count }11" >
+                                            <input type="button" class="btn btn-info" id="${loopCounter.count}" name="item_photo"
+                                                   value="View Images" onclick="viewImages(${beanType.model_id}, 'ph')">
+                                        </td>
+                                        <td style="display:none" id="${loopCounter.count }12">${beanType.item_name}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
         </div>
-
-    </div>
-</section>
-
+    </section>
+</c:if>
 
 
 
@@ -514,10 +522,10 @@
                     </c:if>
                 </div>
                 <div class="col-md-12 text-center">                                           
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                    <input type="reset" class=" btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'update') ? '' : 'none'}" disabled>
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'insert') ? '' : 'none'}" disabled>
+                    <input type="reset" class=" btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'insert') ? '' : 'none'}" >
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'delete') ? '' : 'none'}" disabled>
                 </div>
             </div>
         </form>

@@ -928,8 +928,7 @@ function setDefaultValues(id){
 
     <body>
          <div class="container-fluid">
-              <!--DWLayoutDefaultTable-->
-            <%@include file="/layout/header.jsp" %>
+            <%@include file="../layout/header.jsp" %>
                            
                                
                                  
@@ -1407,7 +1406,7 @@ function setDefaultValues(id){
 
                    
                 
-                 <%@include file="/layout/footer.jsp" %>
+                 <%@include file="../layout/footer.jsp" %>
          </DIV>
     </body>
 </html>

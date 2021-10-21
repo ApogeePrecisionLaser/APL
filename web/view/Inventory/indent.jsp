@@ -281,6 +281,7 @@
     </div>
 </section>
 
+<c:if test="${isSelectPriv eq 'Y'}">
 
 <section class="marginTop30 ">
     <div class="container organizationBox">
@@ -355,7 +356,7 @@
     </div>
 </section>
 
-
+</c:if>
 
 
 

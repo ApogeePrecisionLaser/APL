@@ -25,12 +25,7 @@ public class Org_Office {
     private String office_type;
     private int organisation_id;
     private String organisation_name;
-    private int organisation_sub_type_id;
-    private String address_line1;
-    private String address_line2;
-    private String address_line3;
-    private int city_id;
-    private int map_id;
+     private int map_id;
 
     public int getMap_id() {
         return map_id;
@@ -39,13 +34,7 @@ public class Org_Office {
     public void setMap_id(int map_id) {
         this.map_id = map_id;
     }
-    private String state_name;
-    private String email_id1;
-    private String email_id2;
-    private String mobile_no1;
-    private String mobile_no2;
-    private String landline_no1;
-    private String dealername;
+     private String dealername;
     private String salesmanname;
 
     public String getDealername() {
@@ -63,6 +52,17 @@ public class Org_Office {
     public void setSalesmanname(String salesmanname) {
         this.salesmanname = salesmanname;
     }
+    private int organisation_sub_type_id;
+    private String address_line1;
+    private String address_line2;
+    private String address_line3;
+    private int city_id;
+    private String state_name;
+    private String email_id1;
+    private String email_id2;
+    private String mobile_no1;
+    private String mobile_no2;
+    private String landline_no1;
     private String landline_no2;
     private String landline_no3;
     private String language_type;

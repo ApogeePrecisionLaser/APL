@@ -272,7 +272,7 @@ public class OrderController extends HttpServlet {
             request.setAttribute("status_list", status_list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
             request.setAttribute("requested_by", logged_user_name);
-            request.setAttribute("requested_to", req);
+            request.setAttribute("requested_to", req);    
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
 

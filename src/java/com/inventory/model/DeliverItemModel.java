@@ -120,7 +120,7 @@ public class DeliverItemModel {
         }
         int indent_status_id = getStatusId(task);
         String item_status=bean.getItem_status();
-        if(item_status.equals("Delivery Challan Generated")){ 
+        if(item_status.equals("Delivery Challan Generated")){
             item_status="Delivered";
         }
         int status_id = getStatusId(item_status);

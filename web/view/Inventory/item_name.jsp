@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -16,15 +17,12 @@
     table.dataTable {      
         border-collapse: collapse;
     }
-
-
     .treegrid-indent {
         width: 0px;
         height: 16px;
         display: inline-block;
         position: relative;
     }
-
     .treegrid-expander {
         width: 0px;
         height: 16px;
@@ -44,7 +42,6 @@
     }
 </style>
 <script>
-
     $(document).ready(function () {
         $('#mytable tbody').on('click', 'tr', function () {
             if ($(this).hasClass('selected_row')) {
@@ -57,14 +54,10 @@
             }
         });
     });
-
-
     $(function () {
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
-
-
         $("#item_type").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("item_type").value;
@@ -87,7 +80,6 @@
                 return false;
             }
         });
-
         $("#search_item_type").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_type").value;
@@ -110,7 +102,6 @@
                 return false;
             }
         });
-
         $("#search_item_code").autocomplete({
             source: function (request, response) {
                 var item_type = document.getElementById("search_item_type").value;
@@ -135,7 +126,6 @@
                 return false;
             }
         });
-
         $("#search_item_name").autocomplete({
             source: function (request, response) {
                 var item_type = document.getElementById("search_item_type").value;
@@ -159,7 +149,6 @@
                 return false;
             }
         });
-
         $("#parent_item").autocomplete({
             source: function (request, response) {
                 //var item_type = document.getElementById("item_type").value;
@@ -183,7 +172,6 @@
                 return false;
             }
         });
-
         $("#search_generation").autocomplete({
             source: function (request, response) {
                 //var item_type = document.getElementById("item_type").value;
@@ -207,7 +195,6 @@
                 return false;
             }
         });
-
         $("#search_super_child").autocomplete({
             source: function (request, response) {
                 //var item_type = document.getElementById("item_type").value;
@@ -231,11 +218,6 @@
                 return false;
             }
         });
-
-
-
-
-
 //        $('#item_name').blur(function () {
 //            var min = 10000;
 //            var max = 900000;
@@ -245,8 +227,6 @@
 //            $('#item_code').val(auto_item_code);
 //        });
     });
-
-
     function makeEditable(id) {
         document.getElementById("item_type").disabled = false;
         document.getElementById("item_name").disabled = false;
@@ -268,8 +248,6 @@
             document.getElementById("delete").disabled = false;
         }
     }
-
-
     function setStatus(id) {
         if (id === 'save') {
             document.getElementById("clickedButton").value = "Save";
@@ -294,7 +272,6 @@
             var item_name = document.getElementById("item_name").value;
             var quantity = document.getElementById("quantity").value;
             var prefix = document.getElementById("prefix").value;
-
             if (myLeftTrim(item_type).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Type is required...</b></label></div>');
                 document.getElementById("item_type").focus();
@@ -310,7 +287,6 @@
                 document.getElementById("prefix").focus();
                 return false;
             }
-
             if (result === false) {
             } else {
                 result = true;
@@ -335,11 +311,9 @@
             }
         }
     }
-
 //    function viewImages(id, img) {
 //        popupwin = openPopUp("Show Image List", 1000, 1000, id);
 //    }
-
     function openPopUp(window_name, popup_height, popup_width, id) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
@@ -356,7 +330,6 @@
             popupwin.focus();
         }
     }
-
     function fillColumn(id, count) {
         $('#item_name_id').val(id);
         $('#item_name').val($("#" + count + '2').text());
@@ -367,7 +340,6 @@
             $('#parent_item').val($("#" + count + '9').html() + " - " + $("#" + count + '11').html());
         } else {
             $('#parent_item').val($("#" + count + '9').html());
-
         }
         var super_child = $("#" + count + '10').html();
         if (super_child == 'Y') {
@@ -379,7 +351,6 @@
         document.getElementById("edit").disabled = false;
         document.getElementById("delete").disabled = false;
     }
-
     function showQuantity() {
         var is_super_child = $("input[name='super']:checked").val();
         if (is_super_child == 'Y') {
@@ -388,7 +359,6 @@
             $('#quantity_div').hide();
         }
     }
-
     function getOrgChartData(item_name) {
         window.open("ItemNameController?org_chart=Org Chart&item_name=" + item_name);
     }
@@ -455,53 +425,54 @@
 </section>
 
 
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
-            <tbody>
-            <th>Item Name</th>
-            <th>Prefix</th>
-            <th>Item Code</th>
-            <th>Item Type</th>
-            <th>Quantity</th>
-            <th>Generation</th>
-            <th>Description</th>
-            <th style="display:none"></th>
-            <th style="display:none"></th>
-            <th style="display:none"></th>
-            <th style="display:none"></th>
+<c:if test="${isSelectPriv eq 'Y'}">  
+    <section class="marginTop30 ">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Search List</h5>
+            </div>
+            <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
+                <tbody>
+                <th>Item Name</th>
+                <th>Prefix</th>
+                <th>Item Code</th>
+                <th>Item Type</th>
+                <th>Quantity</th>
+                <th>Generation</th>
+                <th>Description</th>
+                <th style="display:none"></th>
+                <th style="display:none"></th>
+                <th style="display:none"></th>
+                <th style="display:none"></th>
 
 
-            <c:forEach var="beanType" items="${requestScope['list']}"
-                       varStatus="loopCounter">
-                <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}"
-                    onclick="fillColumn('${beanType.item_names_id}', '${loopCounter.count }');">
-                    <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
-                    <td id="${loopCounter.count }3">${beanType.prefix}</td>
-                    <td id="${loopCounter.count }4">${beanType.item_code}</td>                                               
-                    <td id="${loopCounter.count }5">${beanType.item_type}</td>                                               
-                    <td id="${loopCounter.count }6">${beanType.quantity}</td> 
-                    <td id="${loopCounter.count }7">${beanType.generation}</td>
-                    <td id="${loopCounter.count }8">${beanType.description}</td> 
-                    <td id="${loopCounter.count }9" style="display:none">${beanType.parent_item}</td>
-                    <td id="${loopCounter.count }10" style="display:none">${beanType.superp}</td>
-                    <td id="${loopCounter.count }11" style="display:none">${beanType.parent_item_code}</td>
-                    <td id="${loopCounter.count }12">
-                        <input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart" onclick="getOrgChartData('${beanType.item_name}')">
-                    </td>
+                <c:forEach var="beanType" items="${requestScope['list']}"
+                           varStatus="loopCounter">
+                    <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}"
+                        onclick="fillColumn('${beanType.item_names_id}', '${loopCounter.count }');">
+                        <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
+                        <td id="${loopCounter.count }3">${beanType.prefix}</td>
+                        <td id="${loopCounter.count }4">${beanType.item_code}</td>                                               
+                        <td id="${loopCounter.count }5">${beanType.item_type}</td>                                               
+                        <td id="${loopCounter.count }6">${beanType.quantity}</td> 
+                        <td id="${loopCounter.count }7">${beanType.generation}</td>
+                        <td id="${loopCounter.count }8">${beanType.description}</td> 
+                        <td id="${loopCounter.count }9" style="display:none">${beanType.parent_item}</td>
+                        <td id="${loopCounter.count }10" style="display:none">${beanType.superp}</td>
+                        <td id="${loopCounter.count }11" style="display:none">${beanType.parent_item_code}</td>
+                        <td id="${loopCounter.count }12">
+                            <input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart" onclick="getOrgChartData('${beanType.item_name}')">
+                        </td>
 
-                </tr>
-            </c:forEach>
+                    </tr>
+                </c:forEach>
 
 
-            </tbody>
-        </table>
-    </div>          
-</section>
-
+                </tbody>
+            </table>
+        </div>          
+    </section>
+</c:if>
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -597,10 +568,21 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','update') eq 'True'}">
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','insert') eq 'True'}">
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','insert') eq 'True'}">
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','delete') eq 'True'}">
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    </c:if>
                 </div>
             </div>
         </form>
@@ -608,4 +590,3 @@
 </section>
 
 <%@include file="../layout/footer.jsp" %>
-

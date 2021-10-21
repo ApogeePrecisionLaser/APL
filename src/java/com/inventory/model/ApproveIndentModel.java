@@ -53,7 +53,7 @@ public class ApproveIndentModel {
         }
     }
 
-   public List<ApproveIndent> showIndents(String logged_key_person, String indent_status) {
+    public List<ApproveIndent> showIndents(String logged_key_person, String indent_status) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
         if (indent_status.equals("All")) {
             indent_status = "";
