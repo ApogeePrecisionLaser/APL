@@ -521,6 +521,15 @@
     
     
     <servlet>
+        <servlet-name>itemAllDetails</servlet-name>
+        <jsp-file>/view/Inventory/itemAllDetails.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>itemAllDetails</servlet-name>
+        <url-pattern>/itemAllDetails</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>approveIndentItemList</servlet-name>
         <jsp-file>/view/Inventory/approveIndentItemList.jsp</jsp-file>
     </servlet>

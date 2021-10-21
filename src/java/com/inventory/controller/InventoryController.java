@@ -54,8 +54,7 @@ public class InventoryController extends HttpServlet {
         String search_item_code = "";
         String search_manufacturer = "";
         String search_model = "";
-        
-        
+
         // search_item_name = request.getParameter("search_item_name");
         search_org_office = request.getParameter("search_org_office");
         search_item_code = request.getParameter("search_item_code");
@@ -146,6 +145,17 @@ public class InventoryController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
+
+            if (task.equals("GetDetails")) {
+                List<Inventory> list = null;
+
+                int item_names_id = Integer.parseInt(request.getParameter("item_names_id").trim());
+                list = model.getAllDetails(item_names_id);
+
+                request.setAttribute("list", list);
+                request.getRequestDispatcher("itemAllDetails").forward(request, response);
+                return;
+            }
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(request.getParameter("inventory_id")));
             } else if (task.equals("Save") || task.equals("Save AS New") || task.equals("Save & Next")) {
@@ -177,7 +187,8 @@ public class InventoryController extends HttpServlet {
                 }
             }
 
-            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,search_key_person);
+
+            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person);
             request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);

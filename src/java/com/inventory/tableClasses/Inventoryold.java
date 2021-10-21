@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Komal
  */
-public class Inventory {
+public class Inventoryold {
 
     private int inventory_id;
     private int inventory_basic_id;
@@ -36,11 +36,6 @@ public class Inventory {
     private int manufacturer_item_map_id;
     private String manufacturer_name;
     private String model;
-    private String parent_item;
-    private String parent_item_code;
-    private String parent_item_id;
-    private int generation;
-    private String popupval;
 
     /**
      * @return the inventory_id
@@ -376,76 +371,6 @@ public class Inventory {
      */
     public void setModel(String model) {
         this.model = model;
-    }
-
-    /**
-     * @return the parent_item
-     */
-    public String getParent_item() {
-        return parent_item;
-    }
-
-    /**
-     * @param parent_item the parent_item to set
-     */
-    public void setParent_item(String parent_item) {
-        this.parent_item = parent_item;
-    }
-
-    /**
-     * @return the parent_item_code
-     */
-    public String getParent_item_code() {
-        return parent_item_code;
-    }
-
-    /**
-     * @param parent_item_code the parent_item_code to set
-     */
-    public void setParent_item_code(String parent_item_code) {
-        this.parent_item_code = parent_item_code;
-    }
-
-    /**
-     * @return the parent_item_id
-     */
-    public String getParent_item_id() {
-        return parent_item_id;
-    }
-
-    /**
-     * @param parent_item_id the parent_item_id to set
-     */
-    public void setParent_item_id(String parent_item_id) {
-        this.parent_item_id = parent_item_id;
-    }
-
-    /**
-     * @return the generation
-     */
-    public int getGeneration() {
-        return generation;
-    }
-
-    /**
-     * @param generation the generation to set
-     */
-    public void setGeneration(int generation) {
-        this.generation = generation;
-    }
-
-    /**
-     * @return the popupval
-     */
-    public String getPopupval() {
-        return popupval;
-    }
-
-    /**
-     * @param popupval the popupval to set
-     */
-    public void setPopupval(String popupval) {
-        this.popupval = popupval;
     }
 
 }

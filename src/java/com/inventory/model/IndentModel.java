@@ -12,8 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import org.json.simple.JSONArray;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 
 /**
  *
@@ -345,13 +348,66 @@ public class IndentModel {
             while (rst.next()) {
                 list2.add(rst.getInt(1));
             }
-            
+
+            // Start Sorted Array for Parent Child Hierarchy
+            List<Integer> list3_value = new ArrayList<>();
+            List<Integer> list3_key = new ArrayList<>();
+            List<Integer> list4 = new ArrayList<>();
+            List<Integer> sorted_list = new ArrayList<>();
+            List<Integer> sorted_list_noDuplicacy = new ArrayList<>();
+
+            MultiMap map = new MultiValueMap();
+
             for (int k = 0; k < list2.size(); k++) {
-                String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
+                String qry_order = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
                         + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
                         + " @l := @l + 1 AS lvl "
                         + " FROM "
                         + " (SELECT @r := '" + list2.get(k) + "', @l := 0) vars, "
+                        + " item_names h "
+                        + " WHERE @r <> 0) T1 "
+                        + " JOIN item_names T2 "
+                        + " ON T1._id = T2.item_names_id where T2.active='y'  "
+                        + " ORDER BY T1.lvl DESC limit 1 ";
+
+                ResultSet rst3 = connection.prepareStatement(qry_order).executeQuery();
+                while (rst3.next()) {
+                    map.put(rst3.getInt("item_names_id"), list2.get(k));
+                    list3_key.add(list2.get(k));
+                    list3_value.add(rst3.getInt("item_names_id"));
+                }
+            }
+
+            Collections.sort(list3_value);
+
+            for (int k = 0; k < list3_value.size(); k++) {
+                if (sorted_list.contains(list3_value.get(k))) {
+                } else {
+                    sorted_list.add(list3_value.get(k));
+                }
+            }
+
+            List<Integer> intArr = new ArrayList<Integer>();
+
+            for (int k = 0; k < sorted_list.size(); k++) {
+
+                map.values();
+                List<ArrayList> ee = new ArrayList<>();
+                ee.add((ArrayList) map.get(sorted_list.get(k)));
+               // System.err.println("eee " + ee.size());
+
+                for (int v = 0; v < ee.get(0).size(); v++) {
+                    list4.add((Integer) ee.get(0).get(v));
+                }
+            }
+
+            // END Sorted Array for Parent Child Hierarchy
+            for (int k = 0; k < list4.size(); k++) {
+                String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
+                        + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
+                        + " @l := @l + 1 AS lvl "
+                        + " FROM "
+                        + " (SELECT @r := '" + list4.get(k) + "', @l := 0) vars, "
                         + " item_names h "
                         + " WHERE @r <> 0) T1 "
                         + " JOIN item_names T2 "
@@ -377,59 +433,59 @@ public class IndentModel {
 
         try {
             desig_map_list = getIdList(logged_designation);
-                String query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                        + "itn.generation,itn.is_super_child,itn.prefix "
-                        + " from item_names itn, item_type itt where "
-                        + " itt.item_type_id=itn.item_type_id "
-                        + " and itn.active='Y' and itt.active='y' and itn.item_names_id "
-                        + " in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-                        + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+            String query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+                    + "itn.generation,itn.is_super_child,itn.prefix "
+                    + " from item_names itn, item_type itt where "
+                    + " itt.item_type_id=itn.item_type_id "
+                    + " and itn.active='Y' and itt.active='y' and itn.item_names_id "
+                    + " in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                    + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
             //    System.err.println("query------" + query);
-                PreparedStatement pstmt = connection.prepareStatement(query);
-                ResultSet rset = pstmt.executeQuery();
-                while (rset.next()) {
-                    ItemName bean = new ItemName();
-                    int checked_id = 0;
-                    int item_name_id = (rset.getInt("item_names_id"));
-                    if (checkedValue.equals("")) {
-                        checked_id = Integer.parseInt("0");
-                    } else {
-                        checked_id = Integer.parseInt(checkedValue);
-                    }
-                    String checked_qty = "";
-                    if (checked_req_qty == 0) {
-                        checked_qty = "";
-                    } else {
-                        checked_qty = String.valueOf(checked_req_qty);
-                    }
-
-                    if (item_name_id == checked_id) {
-                        bean.setChecked_item_name(checked_item_name);
-                        bean.setCheckedValue(checkedValue);
-                        bean.setChecked_purpose(checked_purpose);
-                        bean.setChecked_req_qty(checked_qty);
-                        bean.setChecked_expected_date_time(checked_expected_date_time);
-                    } else {
-                        bean.setChecked_item_name(checked_item_name);
-                        bean.setCheckedValue(checkedValue);
-                        bean.setChecked_purpose(checked_purpose);
-                        bean.setChecked_req_qty(checked_qty);
-                        bean.setChecked_expected_date_time(checked_expected_date_time);
-                    }
-
-                    bean.setItem_names_id(rset.getInt("item_names_id"));
-                    bean.setItem_name((rset.getString("item_name")));
-                    String parent_id = rset.getString("parent_id");
-                    int generation = rset.getInt("generation");
-                    if (parent_id == null) {
-                        parent_id = "";
-                    }
-                    bean.setParent_item_id(parent_id);
-                    bean.setGeneration(generation);
-                    bean.setSuperp(rset.getString("is_super_child"));
-                    list.add(bean);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                ItemName bean = new ItemName();
+                int checked_id = 0;
+                int item_name_id = (rset.getInt("item_names_id"));
+                if (checkedValue.equals("")) {
+                    checked_id = Integer.parseInt("0");
+                } else {
+                    checked_id = Integer.parseInt(checkedValue);
                 }
+                String checked_qty = "";
+                if (checked_req_qty == 0) {
+                    checked_qty = "";
+                } else {
+                    checked_qty = String.valueOf(checked_req_qty);
+                }
+
+                if (item_name_id == checked_id) {
+                    bean.setChecked_item_name(checked_item_name);
+                    bean.setCheckedValue(checkedValue);
+                    bean.setChecked_purpose(checked_purpose);
+                    bean.setChecked_req_qty(checked_qty);
+                    bean.setChecked_expected_date_time(checked_expected_date_time);
+                } else {
+                    bean.setChecked_item_name(checked_item_name);
+                    bean.setCheckedValue(checkedValue);
+                    bean.setChecked_purpose(checked_purpose);
+                    bean.setChecked_req_qty(checked_qty);
+                    bean.setChecked_expected_date_time(checked_expected_date_time);
+                }
+
+                bean.setItem_names_id(rset.getInt("item_names_id"));
+                bean.setItem_name((rset.getString("item_name")));
+                String parent_id = rset.getString("parent_id");
+                int generation = rset.getInt("generation");
+                if (parent_id == null) {
+                    parent_id = "";
+                }
+                bean.setParent_item_id(parent_id);
+                bean.setGeneration(generation);
+                bean.setSuperp(rset.getString("is_super_child"));
+                list.add(bean);
+            }
         } catch (Exception e) {
             System.err.println("Exception in getItemsList---------" + e);
         }

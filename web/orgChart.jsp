@@ -143,7 +143,8 @@
     </head>
     <body>
 
-        <script src="https://balkan.app/js/OrgChart.js"></script>
+<!--        <script src="https://balkan.app/js/OrgChart.js"></script>-->
+        <script src="js/OrgChart.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
         <div id="tree"></div>
 
@@ -355,6 +356,7 @@
                     url: "ItemNameController",
                     dataType: "json",
                     data: {action1: "getItems", item_name: item_names},
+                    crossDomain:true,
                     success: function (data) {
                         org_chart_data = data.org_chart_data;
                         console.log(org_chart_data);
@@ -366,7 +368,7 @@
                             parent_id[i] = parseInt(parent_id[i]);
                             generation[i] = org_chart_data[i]["generation"];
                             json +=
-                                    '{"id": ' + item_name_id[i] + ', "pid": ' + parent_id[i] + ', "name":"' + item_name[i] + '","tags":["generation' + generation[i] + '"], "title": "generation' + generation[i] + '","img": "https://static1.bigstockphoto.com/7/4/8/large1500/84712196.jpg"},';
+                                    '{"id": ' + item_name_id[i] + ', "pid": ' + parent_id[i] + ', "name":"' + item_name[i] + '","tags":["generation' + generation[i] + '"], "title": "generation' + generation[i] + '"},';
                         }
                         json = json.slice(0, -1);
 

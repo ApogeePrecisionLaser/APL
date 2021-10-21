@@ -11,25 +11,18 @@ import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.Inventory;
-import com.inventory.tableClasses.ItemName;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.commons.collections.MultiMap;
-import org.apache.commons.collections.map.MultiValueMap;
+
 
 /**
  *
  * @author Komal
  */
-public class InventoryModel {
+public class InventoryModelold {
 
     private static Connection connection;
     private String message;
@@ -47,354 +40,83 @@ public class InventoryModel {
         }
     }
 
-    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) throws SQLException {
-        List<Integer> list = new ArrayList<>();
-        List<Integer> list2 = new ArrayList<>();
-
-        try {
-            String query = " select itn.item_names_id "
-                    + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv, "
-                    + " key_person kp,org_office oo,manufacturer mr "
-                    + " where itt.item_type_id=itn.item_type_id and mim.item_names_id=itn.item_names_id"
-                    + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-                    + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-                    + " and oo.org_office_id=ib.org_office_id "
-                    + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id "
-                    + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' and itn.active='Y' "
-                    + " and itt.active='y' and mim.active='Y' and mr.active='Y' ";
-
-            if (!search_item_code.equals("") && search_item_code != null) {
-                query += " and itn.item_code='" + search_item_code + "' ";
-            }
-            if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-                query += " and oo.org_office_name='" + searchOrgOffice + "' ";
-            }
-            if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-                query += " and kp.key_person_name='" + searchKeyPerson + "' ";
-            }
-
-            if (!search_manufacturer.equals("") && search_manufacturer != null) {
-                query += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-            }
-            if (!search_model.equals("") && search_model != null) {
-                query += " and m.model='" + search_model + "' ";
-            }
-            ResultSet rst = connection.prepareStatement(query).executeQuery();
-            while (rst.next()) {
-                list2.add(rst.getInt(1));
-            }
-
-            // Start Sorted Array for Parent Child Hierarchy
-            List<Integer> list3_value = new ArrayList<>();
-            List<Integer> list3_key = new ArrayList<>();
-            List<Integer> list4 = new ArrayList<>();
-            List<Integer> sorted_list = new ArrayList<>();
-            List<Integer> sorted_list_noDuplicacy = new ArrayList<>();
-
-            MultiMap map = new MultiValueMap();
-
-            for (int k = 0; k < list2.size(); k++) {
-                String qry_order = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
-                        + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
-                        + " @l := @l + 1 AS lvl "
-                        + " FROM "
-                        + " (SELECT @r := '" + list2.get(k) + "', @l := 0) vars, "
-                        + " item_names h "
-                        + " WHERE @r <> 0) T1 "
-                        + " JOIN item_names T2 "
-                        + " ON T1._id = T2.item_names_id where T2.active='y'  "
-                        + " ORDER BY T1.lvl DESC limit 1 ";
-
-                ResultSet rst3 = connection.prepareStatement(qry_order).executeQuery();
-                while (rst3.next()) {
-                    map.put(rst3.getInt("item_names_id"), list2.get(k));
-                    list3_key.add(list2.get(k));
-                    list3_value.add(rst3.getInt("item_names_id"));
-                }
-            }
-
-            Collections.sort(list3_value);
-
-            for (int k = 0; k < list3_value.size(); k++) {
-                if (sorted_list.contains(list3_value.get(k))) {
-                } else {
-                    sorted_list.add(list3_value.get(k));
-                }
-            }
-
-            List<Integer> intArr = new ArrayList<Integer>();
-
-            for (int k = 0; k < sorted_list.size(); k++) {
-
-                map.values();
-                List<ArrayList> ee = new ArrayList<>();
-                ee.add((ArrayList) map.get(sorted_list.get(k)));
-
-                for (int v = 0; v < ee.get(0).size(); v++) {
-                    list4.add((Integer) ee.get(0).get(v));
-                }
-            }
-
-
-            // END Sorted Array for Parent Child Hierarchy
-            
-            for (int k = 0; k < list4.size(); k++) {
-                String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
-                        + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
-                        + " @l := @l + 1 AS lvl "
-                        + " FROM "
-                        + " (SELECT @r := '" + list4.get(k) + "', @l := 0) vars, "
-                        + " item_names h "
-                        + " WHERE @r <> 0) T1 "
-                        + " JOIN item_names T2 "
-                        + " ON T1._id = T2.item_names_id where T2.active='y'  "
-                        + " ORDER BY T1.lvl DESC ";
-
-                ResultSet rst2 = connection.prepareStatement(qry).executeQuery();
-                while (rst2.next()) {
-                    list.add(rst2.getInt(1));
-                }
-
-            }
-
-        } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
-        }
-        return list;
-    }
-
     public List<Inventory> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) {
         List<Inventory> list = new ArrayList<Inventory>();
-        List<Integer> desig_map_list = new ArrayList<Integer>();
 
-        try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson);
-//            String query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-//                    + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
-//                    + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-//                    + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
-//                    + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
-//                    + " org_office oo,manufacturer mr "
-//                    + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
-//                    + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-//                    + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-//                    + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
-//                    + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-//                    + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id ";
-//
-//            if (!search_item_code.equals("") && search_item_code != null) {
-//                query += " and inn.item_code='" + search_item_code + "' ";
-//            }
-//            if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-//                query += " and oo.org_office_name='" + searchOrgOffice + "' ";
-//            }
-//            if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-//                query += " and kp.key_person_name='" + searchKeyPerson + "' ";
-//            }
-//
-//            if (!search_manufacturer.equals("") && search_manufacturer != null) {
-//                query += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-//            }
-//            if (!search_model.equals("") && search_model != null) {
-//                query += " and m.model='" + search_model + "' ";
-//            }
-//
-//            query += "  and itn.item_names_id in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-//                    + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
-
-            String query = "  select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
-                    + " itn.generation,itn.is_super_child,itn.prefix "
-                    + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
-
-            query += "  and itn.item_names_id in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-                    + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
-
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            while (rset.next()) {
-                Inventory bean = new Inventory();
-
-                bean.setItem_name((rset.getString("item_name")));
-                bean.setItem_names_id((rset.getInt("item_names_id")));
-                bean.setParent_item_id((rset.getString("parent_id")));
-                bean.setGeneration((rset.getInt("generation")));
-                bean.setItem_code((rset.getString("item_code")));
-                String is_super_child = rset.getString("is_super_child");
-
-                if (is_super_child.equals("Y")) {
-                    int item_id = rset.getInt("item_names_id");
-                    int multiple_count = 0;
-                    String query2_count = " select count(*) as count "
-                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
-                            + " org_office oo,manufacturer mr "
-                            + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
-                            + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-                            + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-                            + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
-                            + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and"
-                            + " itn.item_names_id='" + item_id + "'";
-
-                    if (!search_item_code.equals("") && search_item_code != null) {
-                        query2_count += " and itn.item_code='" + search_item_code + "' ";
-                    }
-                    if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-                        query2_count += " and oo.org_office_name='" + searchOrgOffice + "' ";
-                    }
-                    if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-                        query2_count += " and kp.key_person_name='" + searchKeyPerson + "' ";
-                    }
-
-                    if (!search_manufacturer.equals("") && search_manufacturer != null) {
-                        query2_count += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-                    }
-                    if (!search_model.equals("") && search_model != null) {
-                        query2_count += " and m.model='" + search_model + "' ";
-                    }
-
-                    PreparedStatement pstmt_count = connection.prepareStatement(query2_count);
-                    ResultSet rset_count = pstmt_count.executeQuery();
-                    while (rset_count.next()) {
-                        multiple_count = rset_count.getInt("count");
-                    }
-
-                    String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                            + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
-                            + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                            + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
-                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
-                            + " org_office oo,manufacturer mr "
-                            + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
-                            + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-                            + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-                            + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
-                            + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and"
-                            + " itn.item_names_id='" + item_id + "'";
-
-                    if (!search_item_code.equals("") && search_item_code != null) {
-                        query2 += " and itn.item_code='" + search_item_code + "' ";
-                    }
-                    if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-                        query2 += " and oo.org_office_name='" + searchOrgOffice + "' ";
-                    }
-                    if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-                        query2 += " and kp.key_person_name='" + searchKeyPerson + "' ";
-                    }
-
-                    if (!search_manufacturer.equals("") && search_manufacturer != null) {
-                        query2 += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-                    }
-                    if (!search_model.equals("") && search_model != null) {
-                        query2 += " and m.model='" + search_model + "' ";
-                    }
-
-                    PreparedStatement pstmt2 = connection.prepareStatement(query2);
-                    ResultSet rset2 = pstmt2.executeQuery();
-                    while (rset2.next()) {
-
-                        if (multiple_count > 1) {
-                            bean.setInventory_id(0);
-                            bean.setInventory_basic_id(0);
-                            bean.setOrg_office("");
-                            bean.setKey_person("");
-                            bean.setInward_quantity(0);
-                            bean.setOutward_quantity(0);
-                            bean.setStock_quantity(0);
-                            bean.setDate_time("");
-                            bean.setDescription("");
-                            bean.setManufacturer_name("");
-                            bean.setModel("");
-                            bean.setPopupval("openpopup");
-                        } else {
-                            bean.setInventory_id(rset2.getInt("inventory_id"));
-                            bean.setInventory_basic_id(rset2.getInt("inventory_basic_id"));
-                            bean.setOrg_office(rset2.getString("org_office_name"));
-                            bean.setKey_person(rset2.getString("key_person_name"));
-                            bean.setInward_quantity(rset2.getInt("inward_quantity"));
-                            bean.setOutward_quantity(rset2.getInt("outward_quantity"));
-                            int stock_quantity = (rset2.getInt("stock_quantity"));
-                            bean.setStock_quantity(stock_quantity);
-                            bean.setDate_time(rset2.getString("date_time"));
-                            bean.setDescription(rset2.getString("description"));
-                            bean.setManufacturer_name(rset2.getString("manufacturer_name"));
-                            bean.setModel(rset2.getString("model"));
-                            bean.setPopupval("");
-                        }
-                    }
-                } else {
-                    bean.setInventory_id(0);
-                    bean.setInventory_basic_id(0);
-                    bean.setOrg_office("");
-                    bean.setKey_person("");
-                    bean.setInward_quantity(0);
-                    bean.setOutward_quantity(0);
-                    bean.setStock_quantity(0);
-                    bean.setDate_time("");
-                    bean.setDescription("");
-                    bean.setManufacturer_name("");
-                    bean.setModel("");
-                    bean.setPopupval("");
-                }
-                list.add(bean);
-            }
-        } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+        if (searchItemName == null) {
+            searchItemName = "";
+        }
+        if (searchOrgOffice == null) {
+            searchOrgOffice = "";
+        }
+        if (searchKeyPerson == null) {
+            searchKeyPerson = "";
+        }
+        if (search_item_code == null) {
+            search_item_code = "";
         }
 
-        return list;
-    }
+        String query = "select inv.inventory_id,inv.inventory_basic_id,inn.item_name,inn.item_code,oo.org_office_name,kp.key_person_name,"
+                + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity, "
+                + " inv.date_time,inv.reference_document_type,inv.reference_document_id,inv.description,m.model,mr.manufacturer_name "
+                + " from item_names inn,org_office oo,inventory_basic ib,key_person kp,inventory inv,"
+                + " manufacturer mr,model m,manufacturer_item_map mim where inn.item_names_id=ib.item_names_id and "
+                + " oo.org_office_id=ib.org_office_id and kp.key_person_id=inv.key_person_id and ib.inventory_basic_id=inv.inventory_basic_id and"
+                + " inn.active='Y' and oo.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' "
+                + " and mim.active='Y' and mr.manufacturer_id=mim.manufacturer_id and inn.item_names_id=mim.item_names_id and "
+                + " m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mr.active='Y' and m.active='Y' ";
 
-    public List<Inventory> getAllDetails(int item_names_id) {
-        List<Inventory> list = new ArrayList<Inventory>();
+        if (!searchItemName.equals("") && searchItemName != null) {
+            query += " and inn.item_name='" + searchItemName + "' ";
+        }
+        if (!search_item_code.equals("") && search_item_code != null) {
+            query += " and inn.item_code='" + search_item_code + "' ";
+        }
+        if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
+            query += " and oo.org_office_name='" + searchOrgOffice + "' ";
+        }
+        if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
+            query += " and kp.key_person_name='" + searchKeyPerson + "' ";
+        }
+
+        if (!search_manufacturer.equals("") && search_manufacturer != null) {
+            query += " and mr.manufacturer_name='" + search_manufacturer + "' ";
+        }
+        if (!search_model.equals("") && search_model != null) {
+            query += " and m.model='" + search_model + "' ";
+        }
 
         try {
-            String query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                    + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
-                    + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                    + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
-                    + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
-                    + " org_office oo,manufacturer mr "
-                    + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
-                    + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-                    + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-                    + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
-                    + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                    + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and"
-                    + " itn.item_names_id='" + item_names_id + "'";
-
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
                 Inventory bean = new Inventory();
-                bean.setItem_name((rset.getString("item_name")));
-                bean.setItem_code((rset.getString("item_code")));
                 bean.setInventory_id(rset.getInt("inventory_id"));
                 bean.setInventory_basic_id(rset.getInt("inventory_basic_id"));
+                bean.setItem_name((rset.getString("item_name")));
+                bean.setItem_code((rset.getString("item_code")));
                 bean.setOrg_office(rset.getString("org_office_name"));
                 bean.setKey_person(rset.getString("key_person_name"));
                 bean.setInward_quantity(rset.getInt("inward_quantity"));
                 bean.setOutward_quantity(rset.getInt("outward_quantity"));
+
                 int stock_quantity = (rset.getInt("stock_quantity"));
                 bean.setStock_quantity(stock_quantity);
                 bean.setDate_time(rset.getString("date_time"));
+                bean.setReference_document_type(rset.getString("reference_document_type"));
+                bean.setReference_document_id(rset.getString("reference_document_id"));
                 bean.setDescription(rset.getString("description"));
                 bean.setManufacturer_name(rset.getString("manufacturer_name"));
                 bean.setModel(rset.getString("model"));
-
                 list.add(bean);
-
             }
         } catch (Exception e) {
-            System.err.println("Exception in getAllDetails---------" + e);
+            System.out.println("Error: InventoryModel showdata-" + e);
         }
-
         return list;
-
     }
 
     public int insertRecord(Inventory bean) throws SQLException {
-        String query = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
+        String query = "INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
                 + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -458,7 +180,7 @@ public class InventoryModel {
     }
 
     public int updateRecord(Inventory bean, int inventory_id) {
-        int revision = InventoryModel.getRevisionno(bean, inventory_id);
+        int revision = InventoryModelold.getRevisionno(bean, inventory_id);
         int updateRowsAffected = 0;
         String item_code = bean.getItem_code();
         if (!item_code.equals("")) {
@@ -647,6 +369,7 @@ public class InventoryModel {
     }
 
     public int getInventoryBasicId(int org_office_id, int item_names_id) {
+
         String query = "SELECT inventory_basic_id FROM inventory_basic WHERE org_office_id = '" + org_office_id + "' "
                 + " and item_names_id='" + item_names_id + "' and active='Y' ";
         int id = 0;

@@ -2,6 +2,10 @@
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="collapsetable/css/bootstrap.min.css">
+<!--<script src="collapsetable/js/jquery-3.1.1.min.js"></script>-->
+<!--<script src="collapsetable/js/bootstrap.min.js"></script>-->
+<script src="collapsetable/js/javascript.js"></script>
 
 <style>
     .selected_row {
@@ -9,9 +13,43 @@
         color: blue;
         border: 3px solid black;
     }
-    table.dataTable {      
-        border-collapse: collapse;
+
+
+    .treegrid-indent {
+        width: 0px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
     }
+
+    .treegrid-expander {
+        width: 0px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
+        left:-17px;
+        cursor: pointer;
+    }
+    label{
+        font-size: 13px;
+    }
+    table{
+        font-size:13px
+    }
+    .ui-widget{
+        font-size: 1.4em;
+    }
+    .table_div{
+        height:300px;
+        overflow-y: scroll;
+        position:relative;
+    }
+    .table_div{
+        height:300px;
+        overflow-y: scroll;
+        position:relative;
+    }
+
 </style>
 <script>
 
@@ -295,8 +333,8 @@
         // document.getElementById("inward_quantity").disabled = false;
         //document.getElementById("outward_quantity").disabled = false;
         document.getElementById("date_time").disabled = false;
-        document.getElementById("reference_document_type").disabled = false;
-        document.getElementById("reference_document_id").disabled = false;
+        // document.getElementById("reference_document_type").disabled = false;
+        // document.getElementById("reference_document_id").disabled = false;
         document.getElementById("save").disabled = false;
         if (id === 'new') {
             $("#message").html("");
@@ -393,13 +431,15 @@
         }
     }
 
+    function openPopUpForDetails(item_names_id) {
+        popupwin = openPopUp("Item Details", 600, 1030, item_names_id);
+    }
 
-
-    function openPopUp(window_name, popup_height, popup_width, id) {
+    function openPopUp(window_name, popup_height, popup_width, item_names_id) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
-
+        var url = "InventoryController?task=GetDetails&item_names_id=" + item_names_id;
         return window.open(url, window_name, window_features);
     }
     if (!document.all) {
@@ -411,17 +451,21 @@
         }
     }
 
-    function fillColumn(id, count) {
-        $('#inventory_id').val(id);
-        $('#org_office').val($("#" + count + '2').html());
-        $('#manufacturer_name').val($("#" + count + '3').html());
-        $('#item_code').val($("#" + count + '4').html() + " - " + $("#" + count + '5').html());
-        $('#model_name').val($("#" + count + '6').html());
-        $('#key_person').val($("#" + count + '7').html());
-        $('#date_time').val($("#" + count + '11').html());
-        $('#description').val($("#" + count + '12').html());
-        document.getElementById("edit").disabled = false;
-        document.getElementById("delete").disabled = false;
+    function fillColumn(id, count, popupval) {
+        //  alert(popupval);
+        if (popupval == '') {
+            $('#inventory_id').val(id);
+            $('#item_code').val($("#" + count + '2').text() + " - " + $("#" + count + '3').html());
+            $('#org_office').val($("#" + count + '4').html());
+            $('#manufacturer_name').val($("#" + count + '5').html());
+            $('#model_name').val($("#" + count + '6').html());
+            $('#key_person').val($("#" + count + '7').html());
+            $('#date_time').val($("#" + count + '11').html());
+            $('#description').val($("#" + count + '12').html());
+            document.getElementById("edit").disabled = false;
+            document.getElementById("delete").disabled = false;
+        }
+
     }
 </script>
 
@@ -485,157 +529,167 @@
     </div>
 </section>
 
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <div class="row mt-3 myTable">
-            <div class="col-md-12">
-                <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Org Office</th>
-                                <th>Manufacturer Name</th>
-                                <th>Item Name</th>
-                                <th>Item Code</th>
-                                <th>Model Name</th>
-                                <th>Key Person</th>
-                                <th>Stock Quantity</th>
-                                <th>Inward Quantity</th>
-                                <th>Outward Quantity</th>
-                                <th>Date Time</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
-                                <tr
-                                    onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count }');">
-                                    <td>${loopCounter.count }</td>               
-                                    <td id="${loopCounter.count }2">${beanType.org_office}</td> 
-                                    <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>  
-                                    <td id="${loopCounter.count }4">${beanType.item_name}</td>
-                                    <td id="${loopCounter.count }5">${beanType.item_code}</td>
-                                    <td id="${loopCounter.count }6">${beanType.model}</td>
-                                    <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
-                                    <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
-                                    <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
-                                    <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
-                                    <td id="${loopCounter.count }11">${beanType.date_time}</td> 
-                                    <td id="${loopCounter.count }12">${beanType.description}</td>  
-
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>    
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 
 <section class="marginTop30">
     <div class="container organizationBox">
         <div class="headBox">
-            <h5 class="">Data Entry</h5>
+            <h5 class="">Items List</h5>
         </div>
-        <form name="form2" method="POST" action="InventoryController" onsubmit="return verify()" >
-            <div class="row mt-3">
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Org Office<span class="text-danger">*</span></label>
-                            <input type="hidden" name="inventory_id" id="inventory_id" value="">
-                            <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
-                            <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" disabled >
-                        </div>
-                    </div>
-                </div>
+        <div class="row mt-3 table_div">
 
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Manufacturer<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" disabled >
-                        </div>
-                    </div>
-                </div>
+            <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
 
+                <tr>
+                    <!--<th>S.No.</th>-->
 
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Item Name - Code<span class="text-danger">*</span></label>
+                    <th>Item Name</th>
+                    <th>Item Code</th>
+                    <th>Org Office</th>
+                    <th>Manufacturer Name</th>
+                    <th>Model Name</th>
+                    <th>Key Person</th>
+                    <th>Stock Quantity</th>
+                    <th>Inward Quantity</th>
+                    <th>Outward Quantity</th>
+                    <th>Date Time</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+                <tbody>
+                    <c:forEach var="beanType" items="${requestScope['list']}"
+                               varStatus="loopCounter">
+                        <!--openpopup-->
 
-                            <input class="form-control myInput" type="text" id="item_code" name="item_code" value="" disabled >
-                        </div>
-                    </div>
-                </div>
+                        <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                            data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                            <!--<td data-column="name">${loopCounter.count }</td>-->               
 
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Model<span class="text-danger">*</span></label>
+                            <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
+                            <td id="${loopCounter.count }3">${beanType.item_code}</td>
+                            <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
+                            <td id="${loopCounter.count }5">${beanType.manufacturer_name}</td> 
+                            <td id="${loopCounter.count }6">${beanType.model}</td>
+                            <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
+                            <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
+                            <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
+                            <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
+                            <td id="${loopCounter.count }11">${beanType.date_time}</td> 
+                            <td id="${loopCounter.count }12">${beanType.description}</td>  
 
-                            <input class="form-control myInput" type="text" id="model_name" name="model_name" value="" disabled >
-                        </div>
-                    </div>
-                </div>
+                            <c:if test="${beanType.popupval=='openpopup'}">
+                                <td>
+                                    <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
+                                </td>
+                            </c:if>
+                            <td></td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
 
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Key Person<span class="text-danger">*</span></label>
-
-                            <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Date Time<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="" disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <!--<input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >-->
-                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>      
-            <hr>
-            <div class="row">
-                <div id="message">
-                    <c:if test="${not empty message}">
-                        <div class="col-md-12 text-center">
-                            <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-                        </div>
-                    </c:if>
-                </div>
-                <input type="hidden" id="clickedButton" value="">
-                <div class="col-md-12 text-center">                       
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
-                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
-                </div>
-            </div>
-        </form>
+        </div>      
     </div>
 </section>
 
-<%@include file="../layout/footer.jsp" %>
 
+                        <!--<section class="marginTop30">
+                            <div class="container organizationBox">
+                                <div class="headBox">
+                                    <h5 class="">Data Entry</h5>
+                                </div>
+                                <form name="form2" method="POST" action="InventoryController" onsubmit="return verify()" >
+                                    <div class="row mt-3">
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Org Office<span class="text-danger">*</span></label>
+                                                    <input type="hidden" name="inventory_id" id="inventory_id" value="">
+                                                    <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
+                                                    <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" disabled >
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Manufacturer<span class="text-danger">*</span></label>
+                                                    <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" disabled >
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                        
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Item Name - Code<span class="text-danger">*</span></label>
+                        
+                                                    <input class="form-control myInput" type="text" id="item_code" name="item_code" value="" disabled >
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Model<span class="text-danger">*</span></label>
+                        
+                                                    <input class="form-control myInput" type="text" id="model_name" name="model_name" value="" disabled >
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Key Person<span class="text-danger">*</span></label>
+                        
+                                                    <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-3">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Date Time<span class="text-danger">*</span></label>
+                                                    <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <div class="form-group">
+                                                    <label>Description</label>
+                                                    <input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >
+                                                    <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>      
+                                    <hr>
+                                    <div class="row">
+                                        <div id="message">
+                        <c:if test="${not empty message}">
+                            <div class="col-md-12 text-center">
+                                <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
+                            </div>
+                        </c:if>
+                    </div>
+                    <input type="hidden" id="clickedButton" value="">
+                    <div class="col-md-12 text-center">                       
+                        <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                        <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                        <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                        <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>-->
+
+
+<%@include file="../layout/footer.jsp" %>

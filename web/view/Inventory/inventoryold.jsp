@@ -40,7 +40,7 @@
             source: function (request, response) {
                 var random = document.getElementById("search_org_office").value;
                 $.ajax({
-                    url: "InventoryBasicController",
+                    url: "InventoryController",
                     dataType: "json",
                     data: {action1: "getOrgOffice", str: random},
                     success: function (data) {
@@ -55,206 +55,6 @@
             select: function (events, ui) {
                 console.log(ui);
                 $('#search_org_office').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-        $("#org_office").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("org_office").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getOrgOffice", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#org_office').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-        $("#search_manufacturer").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("search_manufacturer").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getManufacturer", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#search_manufacturer').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-
-        $("#manufacturer_name").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("manufacturer_name").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getManufacturer", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#manufacturer_name').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $("#item_code").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("item_code").value;
-                var manufacturer = document.getElementById("manufacturer_name").value;
-                var org_office = document.getElementById("org_office").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getItemCode", str: random, manufacturer: manufacturer},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#item_code').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-        $("#search_model").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("search_model").value;
-                var manufacturer_name = document.getElementById("search_manufacturer").value;
-                var item_code = document.getElementById("search_item_code").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#search_model').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-        $("#model_name").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("model_name").value;
-                var manufacturer_name = document.getElementById("manufacturer_name").value;
-                var item_code = document.getElementById("item_code").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#model_name').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $("#search_item_code").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("search_item_code").value;
-                var manufacturer = document.getElementById("search_manufacturer").value;
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getItemCode", str: random, manufacturer: manufacturer},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#search_item_code').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-        $("#key_person").autocomplete({
-            source: function (request, response) {
-                var random = document.getElementById("key_person").value;
-                var org_office = document.getElementById("org_office").value;
-
-                $.ajax({
-                    url: "InventoryBasicController",
-                    dataType: "json",
-                    data: {action1: "getKeyPerson", str: random, str2: org_office},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#key_person').val(ui.item.label);
                 return false;
             }
         });
@@ -283,26 +83,224 @@
             }
         });
 
+        $("#key_person").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("key_person").value;
+                var org_office = document.getElementById("org_office").value;
 
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getKeyPerson", str: random, str2: org_office},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#key_person').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+
+        $("#org_office").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("org_office").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getOrgOffice", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#org_office').val(ui.item.label);
+                return false;
+            }
+        });
+
+        $("#search_manufacturer").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_manufacturer").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getManufacturer", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_manufacturer').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+
+        $("#manufacturer_name").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("manufacturer_name").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getManufacturer", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#manufacturer_name').val(ui.item.label);
+                return false;
+            }
+        });
+
+        $("#item_code").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("item_code").value;
+                var manufacturer = document.getElementById("manufacturer_name").value;
+                var org_office = document.getElementById("org_office").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getItemCode", str: random, manufacturer: manufacturer},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#item_code').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+        $("#search_model").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_model").value;
+                var manufacturer_name = document.getElementById("search_manufacturer").value;
+                var item_code = document.getElementById("search_item_code").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_model').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+        $("#model_name").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("model_name").value;
+                var manufacturer_name = document.getElementById("manufacturer_name").value;
+                var item_code = document.getElementById("item_code").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#model_name').val(ui.item.label);
+                return false;
+            }
+        });
+
+        $("#search_item_code").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_item_code").value;
+                var manufacturer = document.getElementById("search_manufacturer").value;
+                // var org_office = document.getElementById("search_org_office").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getItemCode", str: random, manufacturer: manufacturer},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_item_code').val(ui.item.label);
+                return false;
+            }
+        });
     });
 
 
     function makeEditable(id) {
-        //alert("ewfc");
-        document.getElementById("item_code").disabled = false;
         document.getElementById("org_office").disabled = false;
+        document.getElementById("item_code").disabled = false;
+        document.getElementById("key_person").disabled = false;
+        document.getElementById("description").disabled = false;
         document.getElementById("manufacturer_name").disabled = false;
         document.getElementById("model_name").disabled = false;
-        document.getElementById("key_person").disabled = false;
-        document.getElementById("min_quantity").disabled = false;
-        document.getElementById("description").disabled = false;
-        document.getElementById("daily_req").disabled = false;
-        document.getElementById("opening_balance").disabled = false;
+        // document.getElementById("inward_quantity").disabled = false;
+        //document.getElementById("outward_quantity").disabled = false;
         document.getElementById("date_time").disabled = false;
+       // document.getElementById("reference_document_type").disabled = false;
+       // document.getElementById("reference_document_id").disabled = false;
         document.getElementById("save").disabled = false;
         if (id === 'new') {
             $("#message").html("");
-            document.getElementById("inventory_basic_id").value = "";
+            document.getElementById("inventory_id").value = "";
             document.getElementById("org_office").focus();
         }
         if (id == 'edit') {
@@ -332,14 +330,13 @@
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
-            var item_code = document.getElementById("item_code").value;
-            var min_quantity = document.getElementById("min_quantity").value;
-            var daily_req = document.getElementById("daily_req").value;
-            var opening_balance = document.getElementById("opening_balance").value;
             var org_office = document.getElementById("org_office").value;
+            var item_code = document.getElementById("item_code").value;
+            var key_person = document.getElementById("key_person").value;
             var manufacturer_name = document.getElementById("manufacturer_name").value;
             var model_name = document.getElementById("model_name").value;
-            var key_person = document.getElementById("key_person").value;
+            var date_time = document.getElementById("date_time").value;
+            //var reference_document = document.getElementById("reference_document").value;
 
             if (myLeftTrim(org_office).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office is required...</b></label></div>');
@@ -356,32 +353,21 @@
                 document.getElementById("model_name").focus();
                 return false;
             }
-            if (myLeftTrim(key_person).length === 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Key Person is required...</b></label></div>');
-                document.getElementById("key_person").focus();
-                return false;
-            }
             if (myLeftTrim(item_code).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Code is required...</b></label></div>');
                 document.getElementById("item_code").focus();
                 return false;
             }
-            if (myLeftTrim(min_quantity).length === 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Minimum Quantity is required...</b></label></div>');
-                document.getElementById("min_quantity").focus();
+            if (myLeftTrim(key_person).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Key Person is required...</b></label></div>');
+                document.getElementById("key_person").focus();
                 return false;
             }
-            if (myLeftTrim(daily_req).length === 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Daily Requirement is required...</b></label></div>');
-                document.getElementById("daily_req").focus();
+            if (myLeftTrim(date_time).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Date Time is required...</b></label></div>');
+                document.getElementById("date_time").focus();
                 return false;
             }
-            if (myLeftTrim(opening_balance).length === 0) {
-                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Opening Balance is required...</b></label></div>');
-                document.getElementById("opening_balance").focus();
-                return false;
-            }
-
             if (result === false) {
             } else {
                 result = true;
@@ -425,48 +411,24 @@
         }
     }
 
-    function fillColumn(id, inventory_id, count) {
-        $('#inventory_basic_id').val(id);
-        $('#inventory_id').val(inventory_id);
+    function fillColumn(id, count) {
+        $('#inventory_id').val(id);
         $('#org_office').val($("#" + count + '2').html());
         $('#manufacturer_name').val($("#" + count + '3').html());
-//        $('#item_name').val($("#" + count + '4').html());
         $('#item_code').val($("#" + count + '4').html() + " - " + $("#" + count + '5').html());
         $('#model_name').val($("#" + count + '6').html());
         $('#key_person').val($("#" + count + '7').html());
-        $('#min_quantity').val($("#" + count + '8').html());
-        $('#daily_req').val($("#" + count + '9').html());
-        $('#opening_balance').val($("#" + count + '10').html());
         $('#date_time').val($("#" + count + '11').html());
         $('#description').val($("#" + count + '12').html());
-        // document.getElementById("edit").disabled = false;
-        //document.getElementById("delete").disabled = false;
-    }
-
-
-
-    function calculateMinQty() {
-        var model_name = $('#model_name').val();
-        $.ajax({
-            url: "InventoryBasicController",
-            dataType: "json",
-            data: {action1: "getLeadTime", model_name: model_name},
-            success: function (data) {
-                console.log(data.list[0]);
-                var lead_time = data.list[0];
-                var daily_req = $('#daily_req').val();
-                if (lead_time != 0) {
-                    $('#min_quantity').val(lead_time * daily_req);
-                }
-            }
-        });
+        document.getElementById("edit").disabled = false;
+        document.getElementById("delete").disabled = false;
     }
 </script>
 
 
 <section>
     <div class="container-fluid page_heading sectionPadding35">
-        <h1>Inventory Basic</h1>
+        <h1>Inventory</h1>
     </div>
 </section>
 
@@ -476,7 +438,7 @@
         <div class="headBox">
             <h5 class="">Search Engine</h5>
         </div>
-        <form name="form1" method="POST" action="InventoryBasicController" onsubmit="return verifySearch();" >
+        <form name="form1" method="POST" action="InventoryController" onsubmit="return verifySearch();" >
             <div class="row mt-3">
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
@@ -491,13 +453,6 @@
                         <input type="text" name="search_manufacturer" id="search_manufacturer" value="${search_manufacturer}" Placeholder="Manufacturer" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
-
-                <!--                <div class="col-md-4">
-                                    <div class="form-group mb-md-0">
-                                        <label>Item Name - Code</label>
-                                        <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
-                                    </div>
-                                </div>-->
 
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
@@ -516,12 +471,9 @@
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Key Person</label>
-                        <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" 
-                               class="form-control myInput searchInput1 w-100">
+                        <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
-
-
             </div>
             <hr>
             <div class="row">
@@ -551,9 +503,9 @@
                                 <th>Item Code</th>
                                 <th>Model Name</th>
                                 <th>Key Person</th>
-                                <th>Minimum Quantity</th>
-                                <th>Daily Requirement</th>
-                                <th>Opening Balance</th>
+                                <th>Stock Quantity</th>
+                                <th>Inward Quantity</th>
+                                <th>Outward Quantity</th>
                                 <th>Date Time</th>
                                 <th>Description</th>
                             </tr>
@@ -562,19 +514,20 @@
                             <c:forEach var="beanType" items="${requestScope['list']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn('${beanType.inventory_basic_id}', '${beanType.inventory_id}', '${loopCounter.count }');">
+                                    onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>               
-                                    <td id="${loopCounter.count }2">${beanType.org_office}</td>   
-                                    <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>   
+                                    <td id="${loopCounter.count }2">${beanType.org_office}</td> 
+                                    <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>  
                                     <td id="${loopCounter.count }4">${beanType.item_name}</td>
                                     <td id="${loopCounter.count }5">${beanType.item_code}</td>
                                     <td id="${loopCounter.count }6">${beanType.model}</td>
-                                    <td id="${loopCounter.count }7">${beanType.key_person}</td>
-                                    <td id="${loopCounter.count }8">${beanType.min_quantity}</td>                                               
-                                    <td id="${loopCounter.count }9">${beanType.daily_req}</td> 
-                                    <td id="${loopCounter.count }10">${beanType.opening_balance}</td>
-                                    <td id="${loopCounter.count }11">${beanType.date_time}</td>
-                                    <td id="${loopCounter.count }12">${beanType.description}</td>     
+                                    <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
+                                    <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
+                                    <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
+                                    <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
+                                    <td id="${loopCounter.count }11">${beanType.date_time}</td> 
+                                    <td id="${loopCounter.count }12">${beanType.description}</td>  
+
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -591,16 +544,15 @@
         <div class="headBox">
             <h5 class="">Data Entry</h5>
         </div>
-        <form name="form2" method="POST" action="InventoryBasicController" onsubmit="return verify()" >
+        <form name="form2" method="POST" action="InventoryController" onsubmit="return verify()" >
             <div class="row mt-3">
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
                             <label>Org Office<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="hidden" id="inventory_basic_id" name="inventory_basic_id" value="" >
-                            <input class="form-control myInput" type="hidden" id="inventory_id" name="inventory_id" value="" >
+                            <input type="hidden" name="inventory_id" id="inventory_id" value="">
                             <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
-                            <input class="form-control myInput" type="text" id="org_office" name="org_office" size="60" value="" disabled >
+                            <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" disabled >
                         </div>
                     </div>
                 </div>
@@ -635,42 +587,12 @@
                     </div>
                 </div>
 
-
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
                             <label>Key Person<span class="text-danger">*</span></label>
 
                             <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Daily Requirement<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="daily_req" name="daily_req" value="" disabled onblur="calculateMinQty()">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Minimum Quantity<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="min_quantity" name="min_quantity" value="" disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Opening Balance<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="opening_balance" name="opening_balance" value="" disabled>
                         </div>
                     </div>
                 </div>
@@ -705,10 +627,10 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
-                    <!--<input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">-->
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    <!--<input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">-->
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
                 </div>
             </div>
         </form>
