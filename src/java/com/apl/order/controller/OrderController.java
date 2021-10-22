@@ -74,12 +74,14 @@ public class OrderController extends HttpServlet {
         String requested_by = "";
         String requested_to = "";
         String description = "";
+        String loggedUser = "";
 
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {
+            loggedUser = session.getAttribute("user_role").toString();
             logged_user_name = session.getAttribute("logged_user_name").toString();
             logged_org_name = session.getAttribute("logged_org_name").toString();
             logged_designation = session.getAttribute("logged_designation").toString();
@@ -275,6 +277,7 @@ public class OrderController extends HttpServlet {
             request.setAttribute("requested_to", req);    
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
 

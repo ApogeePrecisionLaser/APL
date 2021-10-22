@@ -97,6 +97,11 @@
                                          <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
                                     </div>
                                 </li>
+                                       
+
+                                <%}
+                                %>
+                                
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Order
@@ -110,9 +115,6 @@
                                        
                                     </div>
                                 </li>
-
-                                <%}
-                                %>
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">

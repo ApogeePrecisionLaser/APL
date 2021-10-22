@@ -292,102 +292,102 @@
 </section>-->
 
 <c:if test="${isSelectPriv eq 'Y'}">  
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <div class="row mt-3 myTable">
-            <div class="col-md-12">
-                <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Order No.</th>
-                                <th>Requested To</th>
-                                <th>Date Time</th>
+    <section class="marginTop30 ">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Search List</h5>
+            </div>
+            <div class="row mt-3 myTable">
+                <div class="col-md-12">
+                    <div class="table-responsive verticleScroll">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Order No.</th>
+                                    <th>Requested To</th>
+                                    <th>Date Time</th>
 
-                                <th>Description</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
-                                <tr
-                                    onclick="openPopUpForIndentItems('${beanType.indent_table_id}');">
-                                    <td>${loopCounter.count }</td>
-                                    <td id="${loopCounter.count }">${beanType.indent_no}</td>
-                                    <td id="${loopCounter.count }">${beanType.requested_to}</td>
-                                    <td id="${loopCounter.count }">${beanType.date_time}</td>
-                                    <td id="${loopCounter.count }">${beanType.description}</td>      
-                                    <c:choose>
-                                        <c:when test="${beanType.status =='Delivered'}">
-                                            <td id="${loopCounter.count }" class="delivered"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-
-                                        <c:when test="${beanType.status =='Delivery Challan Generated'}">
-                                            <td id="${loopCounter.count }" class="delivery_challan_generated"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-
-                                        <c:when test="${beanType.status =='Less Stock'}">
-                                            <td id="${loopCounter.count }" class="not_in_stock"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Approved'}">
-                                            <td id="${loopCounter.count }" class="approved"><b>Approved</b>
-                                            </td>
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Pending'}">   
-                                            <td id="${loopCounter.count }" class="pending"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Payment Pending'}">
-                                            <td id="${loopCounter.count }" class="PaymentPending"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Payment Success'}">
-                                            <td id="${loopCounter.count }" class="PaymentSuccess"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-                                        <c:when test="${beanType.status =='Denied'}">
-                                            <td id="${loopCounter.count }" class="denied"><b>${beanType.status}</b>
-                                            </td>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td id="${loopCounter.count }">${beanType.status}</td>
-                                        </c:otherwise>
-                                    </c:choose>
-                               <!--     <c:choose>
-                                        <c:when test="${(beanType.status == 'Payment Pending')}">
-
-                                            <td id="${loopCounter.count }"><input type="button" id="status${beanType.indent_item_id}" class="selected" name="item_status${beanType.indent_item_id}" value="MakePayment">
-                                            </td>
-                                        </c:when>
-
-                                    </c:choose>
-                                    <c:choose>
-                                        <c:when test="${(beanType.status == 'Payment Success')}">
-
-                                            <td id="${loopCounter.count }"><input type="button" class="selected"  id="status${beanType.indent_item_id}"   name="item_status${beanType.indent_item_id}" value="Track Order">
-                                            </td>
-                                        </c:when>
-
-                                    </c:choose>-->
-
+                                    <th>Description</th>
+                                    <th>Status</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['list']}"
+                                           varStatus="loopCounter">
+                                    <tr
+                                        onclick="openPopUpForIndentItems('${beanType.indent_table_id}');">
+                                        <td>${loopCounter.count }</td>
+                                        <td id="${loopCounter.count }">${beanType.indent_no}</td>
+                                        <td id="${loopCounter.count }">${beanType.requested_to}</td>
+                                        <td id="${loopCounter.count }">${beanType.date_time}</td>
+                                        <td id="${loopCounter.count }">${beanType.description}</td>      
+                                        <c:choose>
+                                            <c:when test="${beanType.status =='Delivered'}">
+                                                <td id="${loopCounter.count }" class="delivered"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
 
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                                            <c:when test="${beanType.status =='Delivery Challan Generated'}">
+                                                <td id="${loopCounter.count }" class="delivery_challan_generated"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+
+                                            <c:when test="${beanType.status =='Less Stock'}">
+                                                <td id="${loopCounter.count }" class="not_in_stock"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Approved'}">
+                                                <td id="${loopCounter.count }" class="approved"><b>Approved</b>
+                                                </td>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Pending'}">   
+                                                <td id="${loopCounter.count }" class="pending"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Payment Pending'}">
+                                                <td id="${loopCounter.count }" class="PaymentPending"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Payment Success'}">
+                                                <td id="${loopCounter.count }" class="PaymentSuccess"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Denied'}">
+                                                <td id="${loopCounter.count }" class="denied"><b>${beanType.status}</b>
+                                                </td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td id="${loopCounter.count }">${beanType.status}</td>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <!--     <c:choose>
+                                            <c:when test="${(beanType.status == 'Payment Pending')}">
+    
+                                                <td id="${loopCounter.count }"><input type="button" id="status${beanType.indent_item_id}" class="selected" name="item_status${beanType.indent_item_id}" value="MakePayment">
+                                                </td>
+                                            </c:when>
+    
+                                        </c:choose>
+                                        <c:choose>
+                                            <c:when test="${(beanType.status == 'Payment Success')}">
+    
+                                                <td id="${loopCounter.count }"><input type="button" class="selected"  id="status${beanType.indent_item_id}"   name="item_status${beanType.indent_item_id}" value="Track Order">
+                                                </td>
+                                            </c:when>
+    
+                                        </c:choose>-->
+
+                                    </tr>
+
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 </c:if>
 
 
@@ -441,14 +441,14 @@
                     <div class="">
                         <div class="form-group">
                             <label>Payment Status</label>
-                             <select id="payment" name="payment" >
-  <option value="">Select</option>
-  <option value="advancedpayment">Advanced Payment</option>
-  <option value="credit">Credit</option>
-  <option value="part">Parts</option>
-</select>
-<!--                            <input class="form-control myTextArea" id="payment" name="payment"  disabled>${description}</input>
-                      -->
+                            <select id="payment" name="payment" >
+                                <option value="">Select</option>
+                                <option value="advancedpayment">Advanced Payment</option>
+                                <option value="credit">Credit</option>
+                                <option value="part">Parts</option>
+                            </select>
+                            <!--                            <input class="form-control myTextArea" id="payment" name="payment"  disabled>${description}</input>
+                            -->
                         </div>
                     </div>
                 </div>
@@ -456,7 +456,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Description</label>
-                           
+
                             <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled>${description}</textarea>
                         </div>
                     </div>
@@ -474,16 +474,16 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">   
- <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','update') eq 'True'}">                    
-                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
- </c:if>
-                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','update') eq 'True'}">
-                    <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);
-                        openPopUpForItems()" disabled=""></c:if>
-                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','update') eq 'True'}">
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Send Order" disabled="" onclick="setStatus(id);">
-                     </c:if>
-                     </div>
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','insert') eq 'True'}">                    
+                        <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                    </c:if>
+                    <c:if test="${isSelectPriv eq 'Y'}">
+                        <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);
+                                openPopUpForItems()" disabled=""></c:if>
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','insert') eq 'True'}">
+                        <input type="submit" class="btn normalBtn" name="task" id="save" value="Send Order" disabled="" onclick="setStatus(id);">
+                    </c:if>
+                </div>
             </div>
         </form>
     </div>
