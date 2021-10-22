@@ -43,6 +43,8 @@ public class LoginController extends HttpServlet {
         if (task == null || task.isEmpty()) {
             task = "";
         }
+        
+        
 //        try {
 //            model.setConnection((Connection) DBConnection.getConnectionForUtf(ctx));
 //        } catch (Exception e) {
@@ -56,7 +58,7 @@ public class LoginController extends HttpServlet {
                 String user_name = request.getParameter("user_name");
                 String password = request.getParameter("password");
                 
-                model.setUserFullDetail(user_name, password);
+              model.setUserFullDetail(user_name, password);
                 
                 int count = model.checkLogin(user_name, password);
 

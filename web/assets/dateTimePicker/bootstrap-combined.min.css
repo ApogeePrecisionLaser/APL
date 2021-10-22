@@ -605,7 +605,7 @@ blockquote small {
     line-height: 20px;
 }
 blockquote small::before {
-    content: "— ";
+    content: "ï¿½ ";
 }
 blockquote.pull-right {
     border-left: 0 none;
@@ -621,7 +621,7 @@ blockquote.pull-right small::before {
     content: "";
 }
 blockquote.pull-right small::after {
-    content: " —";
+    content: " ï¿½";
 }
 q::before, q::after, blockquote::before, blockquote::after {
     content: "";

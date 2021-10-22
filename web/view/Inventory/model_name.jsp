@@ -298,7 +298,7 @@
     function fillColumn(id, count) {
         $('#model_id').val(id);
         $('#manufacturer_name').val($("#" + count + '2').html());
-        $('#item_code').val($("#" + count + '3').html() + " - " + $("#" + count + '12').html());
+        $('#item_code').val($("#" + count + '3').html() + " $ " + $("#" + count + '12').html());
         $('#model').val($("#" + count + '4').html());
         $('#model_no').val($("#" + count + '5').html());
         $('#part_no').val($("#" + count + '6').html());

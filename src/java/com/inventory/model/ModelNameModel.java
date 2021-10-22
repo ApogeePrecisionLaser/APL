@@ -107,10 +107,11 @@ public class ModelNameModel {
 
         String item_code = model_name.getItem_code();
         if (!item_code.equals("")) {
-            String item_code_arr[] = item_code.split(" - ");
+            String item_code_arr[] = item_code.split(" # ");
             item_code = item_code_arr[0];
             item_name = item_code_arr[1];
         }
+        
 
         int item_id = getItemId(item_code);
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
@@ -213,7 +214,7 @@ public class ModelNameModel {
 
         String item_code = model_name.getItem_code();
         if (!item_code.equals("")) {
-            String item_code_arr[] = item_code.split(" - ");
+            String item_code_arr[] = item_code.split(" $ ");
             item_code = item_code_arr[0];
             item_name = item_code_arr[1];
         }
@@ -707,7 +708,7 @@ public class ModelNameModel {
         List<String> list = new ArrayList<String>();
         String query = "";
 
-        query = " SELECT CONCAT(inn.item_code, ' - ', inn.item_name) as item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
+        query = " SELECT CONCAT(inn.item_code, ' # ', inn.item_name) as item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
                 + " ORDER BY inn.item_code ";
 
         try {

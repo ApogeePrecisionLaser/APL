@@ -153,7 +153,7 @@ public class DeliverItemModel {
             String query2 = " UPDATE indent_item SET status_id=?,deliver_qty=? WHERE indent_item_id=? ";
             PreparedStatement pstm = connection.prepareStatement(query2);
             pstm.setInt(1, status_id);
-            if (bean.getItem_status().equals("Delivered")) {
+            if (item_status.equals("Delivered")) {
                 pstm.setInt(2, bean.getDelivered_qty());
             } else {
                 pstm.setInt(2, 0);
@@ -195,7 +195,7 @@ public class DeliverItemModel {
                 pstm3.setInt(2, stock_quantity+bean.getDelivered_qty());
                 pstm3.setInt(3, inventory_id);
                 updateRowsAffected3 = pstm3.executeUpdate();
-
+                
             } else {
                 String inventory_inward_query2 = " select ib.inventory_basic_id from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
                         + " indent_item indi,org_office oo,indent_table indt "

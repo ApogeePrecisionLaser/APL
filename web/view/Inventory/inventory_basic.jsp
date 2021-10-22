@@ -208,7 +208,7 @@
                 return false;
             }
         });
-        
+
         $("#search_item_code").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_code").value;
@@ -233,18 +233,72 @@
             }
         });
 
+
+        $("#key_person").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("key_person").value;
+                var org_office = document.getElementById("org_office").value;
+
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getKeyPerson", str: random, str2: org_office},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#key_person').val(ui.item.label);
+                return false;
+            }
+        });
+
+        $("#search_key_person").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_key_person").value;
+                var org_office = document.getElementById("search_org_office").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getKeyPerson", str: random, str2: org_office},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_key_person').val(ui.item.label);
+                return false;
+            }
+        });
+
+
     });
 
 
     function makeEditable(id) {
+        //alert("ewfc");
         document.getElementById("item_code").disabled = false;
         document.getElementById("org_office").disabled = false;
         document.getElementById("manufacturer_name").disabled = false;
         document.getElementById("model_name").disabled = false;
+        document.getElementById("key_person").disabled = false;
         document.getElementById("min_quantity").disabled = false;
         document.getElementById("description").disabled = false;
         document.getElementById("daily_req").disabled = false;
         document.getElementById("opening_balance").disabled = false;
+        document.getElementById("date_time").disabled = false;
         document.getElementById("save").disabled = false;
         if (id === 'new') {
             $("#message").html("");
@@ -285,6 +339,7 @@
             var org_office = document.getElementById("org_office").value;
             var manufacturer_name = document.getElementById("manufacturer_name").value;
             var model_name = document.getElementById("model_name").value;
+            var key_person = document.getElementById("key_person").value;
 
             if (myLeftTrim(org_office).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Org Office is required...</b></label></div>');
@@ -299,6 +354,11 @@
             if (myLeftTrim(model_name).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Model Name is required...</b></label></div>');
                 document.getElementById("model_name").focus();
+                return false;
+            }
+            if (myLeftTrim(key_person).length === 0) {
+                $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Key Person is required...</b></label></div>');
+                document.getElementById("key_person").focus();
                 return false;
             }
             if (myLeftTrim(item_code).length === 0) {
@@ -321,6 +381,7 @@
                 document.getElementById("opening_balance").focus();
                 return false;
             }
+
             if (result === false) {
             } else {
                 result = true;
@@ -364,19 +425,41 @@
         }
     }
 
-    function fillColumn(id, count) {
+    function fillColumn(id, inventory_id, count) {
         $('#inventory_basic_id').val(id);
+        $('#inventory_id').val(inventory_id);
         $('#org_office').val($("#" + count + '2').html());
         $('#manufacturer_name').val($("#" + count + '3').html());
 //        $('#item_name').val($("#" + count + '4').html());
-        $('#item_code').val($("#" + count + '4').html()+ " - " + $("#" + count + '5').html());
+        $('#item_code').val($("#" + count + '4').html() + " - " + $("#" + count + '5').html());
         $('#model_name').val($("#" + count + '6').html());
-        $('#min_quantity').val($("#" + count + '7').html());
-        $('#daily_req').val($("#" + count + '8').html());
-        $('#opening_balance').val($("#" + count + '9').html());
-        $('#description').val($("#" + count + '10').html());
-        document.getElementById("edit").disabled = false;
-        document.getElementById("delete").disabled = false;
+        $('#key_person').val($("#" + count + '7').html());
+        $('#min_quantity').val($("#" + count + '8').html());
+        $('#daily_req').val($("#" + count + '9').html());
+        $('#opening_balance').val($("#" + count + '10').html());
+        $('#date_time').val($("#" + count + '11').html());
+        $('#description').val($("#" + count + '12').html());
+        // document.getElementById("edit").disabled = false;
+        //document.getElementById("delete").disabled = false;
+    }
+
+
+
+    function calculateMinQty() {
+        var model_name = $('#model_name').val();
+        $.ajax({
+            url: "InventoryBasicController",
+            dataType: "json",
+            data: {action1: "getLeadTime", model_name: model_name},
+            success: function (data) {
+                console.log(data.list[0]);
+                var lead_time = data.list[0];
+                var daily_req = $('#daily_req').val();
+                if (lead_time != 0) {
+                    $('#min_quantity').val(lead_time * daily_req);
+                }
+            }
+        });
     }
 </script>
 
@@ -409,12 +492,12 @@
                     </div>
                 </div>
 
-<!--                <div class="col-md-4">
-                    <div class="form-group mb-md-0">
-                        <label>Item Name - Code</label>
-                        <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
-                    </div>
-                </div>-->
+                <!--                <div class="col-md-4">
+                                    <div class="form-group mb-md-0">
+                                        <label>Item Name - Code</label>
+                                        <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
+                                    </div>
+                                </div>-->
 
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
@@ -429,6 +512,16 @@
                         <input type="text" name="search_model" id="search_model" value="${search_model}" Placeholder="Model" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
+
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Key Person</label>
+                        <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" 
+                               class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>
+
+
             </div>
             <hr>
             <div class="row">
@@ -457,9 +550,11 @@
                                 <th>Item Name</th>
                                 <th>Item Code</th>
                                 <th>Model Name</th>
+                                <th>Key Person</th>
                                 <th>Minimum Quantity</th>
                                 <th>Daily Requirement</th>
                                 <th>Opening Balance</th>
+                                <th>Date Time</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -467,17 +562,19 @@
                             <c:forEach var="beanType" items="${requestScope['list']}"
                                        varStatus="loopCounter">
                                 <tr
-                                    onclick="fillColumn('${beanType.inventory_basic_id}', '${loopCounter.count }');">
+                                    onclick="fillColumn('${beanType.inventory_basic_id}', '${beanType.inventory_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>               
                                     <td id="${loopCounter.count }2">${beanType.org_office}</td>   
                                     <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>   
                                     <td id="${loopCounter.count }4">${beanType.item_name}</td>
                                     <td id="${loopCounter.count }5">${beanType.item_code}</td>
                                     <td id="${loopCounter.count }6">${beanType.model}</td>
-                                    <td id="${loopCounter.count }7">${beanType.min_quantity}</td>                                               
-                                    <td id="${loopCounter.count }8">${beanType.daily_req}</td> 
-                                    <td id="${loopCounter.count }9">${beanType.opening_balance}</td>
-                                    <td id="${loopCounter.count }10">${beanType.description}</td>     
+                                    <td id="${loopCounter.count }7">${beanType.key_person}</td>
+                                    <td id="${loopCounter.count }8">${beanType.min_quantity}</td>                                               
+                                    <td id="${loopCounter.count }9">${beanType.daily_req}</td> 
+                                    <td id="${loopCounter.count }10">${beanType.opening_balance}</td>
+                                    <td id="${loopCounter.count }11">${beanType.date_time}</td>
+                                    <td id="${loopCounter.count }12">${beanType.description}</td>     
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -501,6 +598,7 @@
                         <div class="form-group">
                             <label>Org Office<span class="text-danger">*</span></label>
                             <input class="form-control myInput" type="hidden" id="inventory_basic_id" name="inventory_basic_id" value="" >
+                            <input class="form-control myInput" type="hidden" id="inventory_id" name="inventory_id" value="" >
                             <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
                             <input class="form-control myInput" type="text" id="org_office" name="org_office" size="60" value="" disabled >
                         </div>
@@ -515,7 +613,7 @@
                         </div>
                     </div>
                 </div>
-                
+
 
                 <div class="col-md-3">
                     <div class="">
@@ -537,11 +635,24 @@
                     </div>
                 </div>
 
+
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Minimum Quantity<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="min_quantity" name="min_quantity" value="" disabled>
+                            <label>Key Person<span class="text-danger">*</span></label>
+
+                            <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Daily Requirement<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="daily_req" name="daily_req" value="" disabled onblur="calculateMinQty()">
                         </div>
                     </div>
                 </div>
@@ -549,8 +660,8 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Daily Requirement<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="daily_req" name="daily_req" value="" disabled>
+                            <label>Minimum Quantity<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="min_quantity" name="min_quantity" value="" disabled>
                         </div>
                     </div>
                 </div>
@@ -564,6 +675,14 @@
                     </div>
                 </div>
 
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Date Time<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="" disabled>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-md-12">
                     <div class="">
@@ -586,10 +705,10 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                    <!--<input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">-->
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    <!--<input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">-->
                 </div>
             </div>
         </form>

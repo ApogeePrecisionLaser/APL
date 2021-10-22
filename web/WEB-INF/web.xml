@@ -28,8 +28,8 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-        <!--        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>-->
-        <param-value>root</param-value>
+               <param-value>CXKyE2ZpT%HjbP!4c$</param-value> 
+<!--        <param-value>root</param-value>-->
     </context-param>
     
     
@@ -540,6 +540,15 @@
     
     
     <servlet>
+        <servlet-name>itemAllDetails</servlet-name>
+        <jsp-file>/view/Inventory/itemAllDetails.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>itemAllDetails</servlet-name>
+        <url-pattern>/itemAllDetails</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>approveIndentItemList</servlet-name>
         <jsp-file>/view/Inventory/approveIndentItemList.jsp</jsp-file>
     </servlet>
@@ -929,6 +938,125 @@
         <servlet-name>user_no_privilege</servlet-name>
         <url-pattern>/user_no_privilege</url-pattern>
     </servlet-mapping>
+    
+<!-- Order Mapping   -->
+   
+    
+      <servlet>
+        <servlet-name>OrderController</servlet-name>
+        <servlet-class>com.apl.order.controller.OrderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderController</servlet-name>
+        <url-pattern>/OrderController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DealerSalemanMapController</servlet-name>
+        <servlet-class>com.apl.order.controller.DealerSalemanMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealerSalemanMapController</servlet-name>
+        <url-pattern>/DealerSalemanMapController</url-pattern>
+    </servlet-mapping>
+        
+         <servlet>
+        <servlet-name>dealersalesmap</servlet-name>
+        <jsp-file>/view/Inventory/dealersalesmap.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealersalesmap</servlet-name>
+        <url-pattern>/dealersalesmap</url-pattern>
+    </servlet-mapping>
+        
+         <servlet>
+        <servlet-name>order</servlet-name>
+        <jsp-file>/view/Inventory/order.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>order</servlet-name>
+        <url-pattern>/order</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!--Start Approve Indent -->
+    
+    <servlet>
+        <servlet-name>ApproveOrderController</servlet-name>
+        <servlet-class>com.apl.order.controller.AproveOrderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApproveOrderController</servlet-name>
+        <url-pattern>/ApproveOrderController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>approve_order</servlet-name>
+        <jsp-file>/view/Inventory/approve_order.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approve_order</servlet-name>
+        <url-pattern>/approve_order</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>approveOrderItemList</servlet-name>
+        <jsp-file>/view/Inventory/approveOrderItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approveOrderItemList</servlet-name>
+        <url-pattern>/approveOrderItemList</url-pattern>
+    </servlet-mapping>
+    
+    <!--End Approve Indent -->
+    
+     <servlet>
+        <servlet-name>CheckOrderInventoryController</servlet-name>
+        <servlet-class>com.apl.order.controller.CheckOrderInventoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckOrderInventoryController</servlet-name>
+        <url-pattern>/CheckOrderInventoryController</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <servlet-name>DeliverOrderItemController</servlet-name>
+        <servlet-class>com.apl.order.controller.DeliverOrderItemController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeliverOrderItemController</servlet-name>
+        <url-pattern>/DeliverOrderItemController</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>checkorderInventoryItemList</servlet-name>
+        <jsp-file>/view/Inventory/checkOrderInventoryItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkorderInventoryItemList</servlet-name>
+        <url-pattern>/checkorderInventoryItemList</url-pattern>
+    </servlet-mapping> 
+     <servlet>
+        <servlet-name>checkorderInventory</servlet-name>
+        <jsp-file>/view/Inventory/check_order_inventory.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkorderInventory</servlet-name>
+        <url-pattern>/checkorderInventory</url-pattern>
+    </servlet-mapping> 
+     <servlet>
+        <servlet-name>orderdeliveryChallan</servlet-name>
+        <jsp-file>/view/Inventory/orderdeliveryChallan.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>orderdeliveryChallan</servlet-name>
+        <url-pattern>/orderdeliveryChallan</url-pattern>
+    </servlet-mapping> 
+     <servlet>
+        <servlet-name>deliveritemslist</servlet-name>
+        <jsp-file>/view/Inventory/deliveritemslist.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deliveritemslist</servlet-name>
+        <url-pattern>/deliveritemslist</url-pattern>
+    </servlet-mapping> 
     
     
     <servlet>

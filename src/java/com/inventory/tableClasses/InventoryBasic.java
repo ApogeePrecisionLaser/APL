@@ -13,6 +13,7 @@ import java.util.List;
 public class InventoryBasic {
 
     private int inventory_basic_id;
+    private int inventory_id;
     private String item_name;
     private String manufacturer_name;
     private String model;
@@ -28,8 +29,11 @@ public class InventoryBasic {
     private String remark;
     private int revision_no;
     private int min_quantity;
-    private int daily_req;  
+    private int daily_req;
     private String opening_balance;
+    private String key_person;
+    private int key_person_id;
+    private String date_time;
 
     /**
      * @return the inventory_basic_id
@@ -281,6 +285,62 @@ public class InventoryBasic {
      */
     public void setManufacturer_item_map_id(int manufacturer_item_map_id) {
         this.manufacturer_item_map_id = manufacturer_item_map_id;
+    }
+
+    /**
+     * @return the key_person
+     */
+    public String getKey_person() {
+        return key_person;
+    }
+
+    /**
+     * @param key_person the key_person to set
+     */
+    public void setKey_person(String key_person) {
+        this.key_person = key_person;
+    }
+
+    /**
+     * @return the key_person_id
+     */
+    public int getKey_person_id() {
+        return key_person_id;
+    }
+
+    /**
+     * @param key_person_id the key_person_id to set
+     */
+    public void setKey_person_id(int key_person_id) {
+        this.key_person_id = key_person_id;
+    }
+
+    /**
+     * @return the date_time
+     */
+    public String getDate_time() {
+        return date_time;
+    }
+
+    /**
+     * @param date_time the date_time to set
+     */
+    public void setDate_time(String date_time) {
+        this.date_time = date_time;
+    }
+
+    /**
+     * @return the inventory_id
+     */
+    public int getInventory_id() {
+        return inventory_id;
+    }
+
+    /**
+     * @param inventory_id the inventory_id to set
+     */
+    public void setInventory_id(int inventory_id) {
+        this.inventory_id = inventory_id;
     }
 
 }

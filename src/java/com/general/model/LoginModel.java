@@ -123,8 +123,8 @@ public class LoginModel {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select distinct kp.key_person_id from designation d, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+        String query = "select distinct kp.key_person_id from designation d, key_person kp, user l "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and d.active='Y' ";
         try {
             connection.setAutoCommit(false);

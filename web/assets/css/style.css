@@ -218,6 +218,7 @@ table.dataTable thead .sorting_asc {
     font-size: 13px;
 }
 
+<<<<<<< HEAD
 
 .prevNextWrap{
     padding-top:13.5px;
@@ -237,4 +238,9 @@ table.dataTable thead .sorting_asc {
 .mainMenuDataEntry .prevNextWrap .dropdown-item:hover {
     background-color: #fff;
     color:#000;
+=======
+.customImpWidthAppOrd{
+    width: 70px!important;
+    max-width: 70px!important;
+>>>>>>> 5b9b213d58c1886b18ce7fe34b5bad00574c0506
 }
