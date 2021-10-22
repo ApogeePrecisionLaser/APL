@@ -64,6 +64,7 @@ public class CheckInventoryController extends HttpServlet {
         String requested_to = "";
         String description = "";
         String message_split[] = null;
+        String user_role = "";
         
         
         
@@ -81,6 +82,7 @@ public class CheckInventoryController extends HttpServlet {
             logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
             office_admin = session.getAttribute("office_admin").toString();
+            user_role = session.getAttribute("user_role").toString();
         }
 
         CheckInventoryModel model = new CheckInventoryModel();
@@ -218,7 +220,7 @@ public class CheckInventoryController extends HttpServlet {
                 status = request.getParameter("status");
             }
 
-            List<CheckInventory> list = model.showIndents(logged_designation,status);
+            List<CheckInventory> list = model.showIndents(logged_designation,status,user_role);
 
             List<CheckInventory> status_list = model.getStatus();
 

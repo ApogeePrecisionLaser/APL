@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 /**
  *
@@ -36,6 +37,12 @@ public class UserPrivilegeController extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
+        
+        if (!session.getAttribute("myDbUserName").equals("super_admin")) {
+            response.sendRedirect("UserNoPrivilegeController");
+            return;
+        }
+        
         UserPrivilegeModel model = new UserPrivilegeModel();
         UserPrivilegeBean bean = new UserPrivilegeBean();
         try {
@@ -75,33 +82,21 @@ public class UserPrivilegeController extends HttpServlet {
         try {
             //----- This is only for Vendor key Person JQuery
             String JQstring = request.getParameter("action1");
-            String q = request.getParameter("q");   // field own input
+            String q = request.getParameter("str");   // field own input
             if (JQstring != null) {
                 PrintWriter out = response.getWriter();
                 List<String> list = null;
-                if (JQstring.equals("getSearchRole_Name")) {
-                    list = model.getRoleName_Parent(q);
+                if (JQstring.equals("getRoleName")) {
+                    list = model.getRoleName(q);
                 }
-                if (JQstring.equals("getSearchU_Url")) {
+                if (JQstring.equals("getUrl")) {
                     list = model.getU_Url(q);
-                }
-                if (JQstring.equals("getU_Url_Parent")) {
+                }                
 
-                    list = model.getU_Url(q);
-                }
-                if (JQstring.equals("getPrivilegeType")) {
-                    String url = request.getParameter("action2");
-                    list = model.getPrivilegeType(q, url);
-                }
-
-                Iterator<String> iter = list.iterator();
-                while (iter.hasNext()) {
-                    String data = iter.next();
-
-                    out.println(data);
-
-                }
-                model.closeConnection();
+                JSONObject gson = new JSONObject();
+                gson.put("list", list);
+                //System.out.println("gson -" + gson);
+                out.println(gson);
                 return;
             }
         } catch (Exception e) {
@@ -140,6 +135,7 @@ public class UserPrivilegeController extends HttpServlet {
         }
 
         // Logic to show data in the table.
+        //model.insertData();
         List<UserPrivilegeBean> url_privilegeList = model.showData(u_urlSearch, role_nameSearch);
         request.setAttribute("url_privilegeList", url_privilegeList);
 

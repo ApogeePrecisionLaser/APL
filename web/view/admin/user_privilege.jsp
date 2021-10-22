@@ -41,13 +41,13 @@
 
 
 
-        $("#search_org_office").autocomplete({
+        $("#role_nameSearch").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("search_org_office").value;
+                var random = document.getElementById("role_nameSearch").value;
                 $.ajax({
-                    url: "InventoryController",
+                    url: "UserPrivilegeController",
                     dataType: "json",
-                    data: {action1: "getOrgOffice", str: random},
+                    data: {action1: "getRoleName", str: random},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -59,7 +59,30 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#search_org_office').val(ui.item.label);
+                $('#role_nameSearch').val(ui.item.label);
+                return false;
+            }
+        });
+                
+        $("#u_urlSearch").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("u_urlSearch").value;
+                $.ajax({
+                    url: "UserPrivilegeController",
+                    dataType: "json",
+                    data: {action1: "getUrl", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#u_urlSearch').val(ui.item.label);
                 return false;
             }
         });

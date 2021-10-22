@@ -73,9 +73,10 @@ public class UserPrivilegeModel {
                 + " where ud.url_detail_id=uup.url_detail_id and uu.u_url_id=ud.url_id and urup.u_url_id=ud.url_id "
                 + " and ur.user_role_id=urup.user_role_id and p.privilege_id=ud.privilege_id "
                 + " and urup.u_role_url_privilege_id=uup.u_role_url_privilege_id "
-                + " AND IF('" + role_nameSearch + "'='', ur.role_name LIKE '%%', ur.role_name='') "
-                + " AND IF('" + u_urlSearch + "'='', uu.u_url LIKE '%%', uu.u_url='') "
-                + " order by ur.priority ";
+                + " AND IF('" + role_nameSearch + "'='', ur.role_name LIKE '%%', ur.role_name='" + role_nameSearch + "') "
+                + " AND IF('" + u_urlSearch + "'='', uu.u_url LIKE '%%', uu.u_url='" + u_urlSearch + "') "
+                + " order by uup.u_url_privilege_id ";
+                //+ " order by ur.priority ";
         try {
             System.err.println("user privilege query -" + query);
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -306,7 +307,7 @@ public class UserPrivilegeModel {
         return rowsAffected;
     }
 
-    public List<String> getRoleName_Parent(String q) {
+    public List<String> getRoleName(String q) {
         List<String> list = new ArrayList<String>();
         String query = "SELECT role_name FROM user_roles GROUP BY role_name ORDER BY role_name ";
         try {
@@ -485,4 +486,38 @@ public class UserPrivilegeModel {
             System.out.println("UserRoleModel closeConnection() Error: " + e);
         }
     }
+    
+    
+    
+    
+    public void insertData(){
+        PreparedStatement psmt;
+        ResultSet rst;
+        int count=0;
+        String query="";
+        try{
+            connection.setAutoCommit(false);
+            for(int k=1;k<=96;k++){
+                for(int l=1;l<=120;l++){
+                    query=" insert into apl_test.u_url_privilege(url_detail_id,u_role_url_privilege_id) values(?,?) ";
+                    psmt=connection.prepareStatement(query);
+                    psmt.setInt(1, l);
+                    psmt.setInt(2, k);
+                    count=psmt.executeUpdate();
+                    if(count>0){
+                        connection.commit();
+                    }
+                }
+            }
+        }catch(Exception e){
+            System.out.println("com.apogee.admin.UserPrivilegeModel.insertData() -"+e);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
 }

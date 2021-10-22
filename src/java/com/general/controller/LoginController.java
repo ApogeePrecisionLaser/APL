@@ -71,6 +71,8 @@ public class LoginController extends HttpServlet {
 
                 session.setAttribute("user_name", user_name);
                 session.setAttribute("password", password);
+                
+                session.setAttribute("mode", "data");
 
                 designation = model.getDesignation(user_name, password);
                 if (designation.equals("")) {
