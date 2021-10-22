@@ -55,7 +55,7 @@ public class LoginModel {
         try {
             Class.forName(driverClass);
             //Connection con = DriverManager.getConnection(connectionString, "guest", "guest");
-            connection = DriverManager.getConnection(connectionString, "root", "root");
+            connection = DriverManager.getConnection(connectionString, "jpss", "jpss");
             PreparedStatement pst = connection.prepareStatement(query);
             pst.setString(1, myUserName);
             pst.setString(2, myUserPass);
@@ -80,7 +80,7 @@ public class LoginModel {
         //String query = " select user_name,password from login where user_name='" + user_name + "' and password='" + password + "' ";
         String query = " select user_name,user_password from user where user_name='" + user_name + "' and user_password='" + password + "' ";
         try {
-            Connection con = DriverManager.getConnection(connectionString, "root", "root");
+            Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserPass);
             ResultSet rs = con.prepareStatement(query).executeQuery();
             if (rs.next()) {
                 designation = rs.getString(2);

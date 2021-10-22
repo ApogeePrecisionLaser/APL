@@ -19,7 +19,7 @@
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
-        <param-value>jdbc:mysql://localhost:3306/apl_2</param-value>
+        <param-value>jdbc:mysql://localhost:3306/apl</param-value>
 <!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
     </context-param>
     <context-param>
@@ -28,8 +28,8 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-        <!--        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>-->
-        <param-value>root</param-value>
+               <param-value>CXKyE2ZpT%HjbP!4c$</param-value> 
+<!--        <param-value>root</param-value>-->
     </context-param>
     
     
