@@ -340,7 +340,7 @@
         }
     }
 
-    function fillColumn(id, count) {
+    function fillColumn(id, count) {//alert("idd --"+id+" count -"+count);
         document.getElementById("Admin").checked = false;
         document.getElementById("Clerk").checked = false;
         document.getElementById("Manager").checked = false;
@@ -351,6 +351,7 @@
         if (role_name === 'Super Admin') {
             role_name = 'Super_Admin';
         }
+        //alert(role_name);
         document.getElementById(role_name).checked = true;
 
         //alert($("#privilege" + count).val());
@@ -480,6 +481,7 @@
                                 <input type="checkbox" id="Manager" name="role" value="Manager" checked >Manager<br>
                                 <input type="checkbox" id="Guest" name="role" value="Guest" checked >Guest<br>
                                 <input type="checkbox" id="Super_Admin" name="role" value="Super Admin" checked >Super Admin<br>
+                                <input type="checkbox" id="Dealer" name="role" value="Dealer" checked >Dealer<br>
 
                             </td>
                         </div>

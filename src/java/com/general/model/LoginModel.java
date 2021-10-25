@@ -80,7 +80,8 @@ public class LoginModel {
         //String query = " select user_name,password from login where user_name='" + user_name + "' and password='" + password + "' ";
         String query = " select user_name,user_password from user where user_name='" + user_name + "' and user_password='" + password + "' ";
         try {
-            Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserPass);
+            //Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserPass);
+            Connection con = DriverManager.getConnection(connectionString, "jpss", "jpss");
             ResultSet rs = con.prepareStatement(query).executeQuery();
             if (rs.next()) {
                 designation = rs.getString(2);
@@ -143,8 +144,8 @@ public class LoginModel {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.org_office_id from org_office oo, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+        String query = "select oo.org_office_id from org_office oo, key_person kp, user l "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
         try {
             connection.setAutoCommit(false);
@@ -163,8 +164,8 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.org_office_name from org_office oo, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+        String query = "select oo.org_office_name from org_office oo, key_person kp, user l "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
         try {
             connection.setAutoCommit(false);
@@ -203,8 +204,8 @@ public class LoginModel {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.organisation_id from org_office oo, key_person kp, login l "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+        String query = "select oo.organisation_id from org_office oo, key_person kp, user l "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
         try {
             connection.setAutoCommit(false);
@@ -223,8 +224,8 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select orgn.organisation_name from org_office oo, key_person kp, login l,organisation_name orgn "
-                + " where l.user_name='" + user_name + "' and l.password='" + password + "' "
+        String query = "select orgn.organisation_name from org_office oo, key_person kp, user l,organisation_name orgn "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and orgn.organisation_id=oo.organisation_id "
                 + " and oo.active='Y' and orgn.active='Y' ";
         System.err.println("query" + query);

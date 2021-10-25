@@ -37,6 +37,11 @@
                                 <!--                                <li class="nav-item">
                                                                     <a class="nav-link" href="dashboard">Home</a>
                                                                 </li>-->
+
+                                <%
+                                    if (!session.getAttribute("user_role").equals("Dealer")) {
+                                %>
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Organization
@@ -82,6 +87,9 @@
                                     </div>
                                 </li>
 
+                                <%}
+                                %>
+
 
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin")) {
@@ -94,14 +102,14 @@
                                     <div class="dropdown-menu">
                                         <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
                                         <a href="CalendarController" class="dropdown-item">View Calendar</a>
-                                         <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
+                                        <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
                                     </div>
                                 </li>
-                                       
+
 
                                 <%}
                                 %>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Order
@@ -111,10 +119,14 @@
                                         <a href="OrderController" class="dropdown-item">OrderForm</a>     
                                         <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>     
                                         <a href="CheckOrderInventoryController" class="dropdown-item">Check Order Inventory</a>     
-                                      
-                                       
+
+
                                     </div>
                                 </li>
+
+                                <%
+                                    if (!session.getAttribute("user_role").equals("Dealer")) {
+                                %>
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -125,16 +137,19 @@
                                     </div>
                                 </li>
 
+                                <%}
+                                %>
+
                                 <c:if test="${mode eq 'screens'}">
 
-                                <div class="prevNextWrap">
-                                    <a class="dropdown-item" href="Flow?nxt=${iddd}">
-                                        <i class="fa fa-angle-left"></i> &nbsp Prev
-                                    </a>
-                                    <a class="dropdown-item" href="Flow?nxt=${idd}">
-                                        Next &nbsp <i class="fa fa-angle-right"></i>
-                                    </a>                                   
-                                </div>
+                                    <div class="prevNextWrap">
+                                        <a class="dropdown-item" href="Flow?nxt=${iddd}">
+                                            <i class="fa fa-angle-left"></i> &nbsp Prev
+                                        </a>
+                                        <a class="dropdown-item" href="Flow?nxt=${idd}">
+                                            Next &nbsp <i class="fa fa-angle-right"></i>
+                                        </a>                                   
+                                    </div>
 
                                 </c:if>
 
