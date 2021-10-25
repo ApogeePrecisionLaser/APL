@@ -1,4 +1,4 @@
-<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
+  
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -290,8 +290,7 @@
 </div>
 </div>
 </section>-->
-
-<c:if test="${isSelectPriv eq 'Y'}">  
+ 
 <section class="marginTop30 ">
     <div class="container organizationBox">
         <div class="headBox">
@@ -388,7 +387,7 @@
         </div>
     </div>
 </section>
-</c:if>
+ 
 
 
 
@@ -474,15 +473,12 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">   
- <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','update') eq 'True'}">                    
+                  
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
- </c:if>
-                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','update') eq 'True'}">
-                    <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);
-                        openPopUpForItems()" disabled=""></c:if>
-                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'OrderController','update') eq 'True'}">
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Send Order" disabled="" onclick="setStatus(id);">
-                     </c:if>
+   <input type="button" class="btn normalBtn" name="task" id="select" value="Select Items" onclick="setStatus(id);
+                        openPopUpForItems()" disabled=""> 
+                       <input type="submit" class="btn normalBtn" name="task" id="save" value="Send Order" disabled="" onclick="setStatus(id);">
+                     
                      </div>
             </div>
         </form>
