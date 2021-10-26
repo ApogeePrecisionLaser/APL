@@ -237,7 +237,7 @@ public class OrderModel {
     }
     public int getRequestedKeyPersondegId(String person_name) {
         String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
-       int id = 0;
+        int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();

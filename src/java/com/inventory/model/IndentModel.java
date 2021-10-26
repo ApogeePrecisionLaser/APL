@@ -53,7 +53,7 @@ public class IndentModel {
                 + " and indt.requested_by=kp1.key_person_id  "
                 + " and indt.status_id=s.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'  ";
 
-        if (!logged_key_person.equals("") && logged_key_person != null) {
+        if (!logged_key_person.equals("") && logged_key_person != null && !logged_key_person.equals("jpss") ) {
             query += " and kp1.key_person_name='" + logged_key_person + "' ";
         }
         if (!office_admin.equals("") && office_admin != null) {

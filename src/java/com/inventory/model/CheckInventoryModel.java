@@ -44,7 +44,7 @@ public class CheckInventoryModel {
         }
     }
 
-    public List<CheckInventory> showIndents(String logged_designation, String indent_status) {
+    public List<CheckInventory> showIndents(String logged_designation, String indent_status, String user_role) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -62,6 +62,21 @@ public class CheckInventoryModel {
                 query += " and s.status='" + indent_status + "' ";
             }
         }
+        
+        if (user_role.equals("Super Admin")) {
+            query = " select distinct indt.indent_no,indt.date_time,indt.description "
+                    + " ,s.status,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to,indt.indent_table_id "
+                    + " from indent_table indt,key_person kp1,key_person kp2,"
+                    + " status s,designation d where indt.requested_to=kp2.key_person_id "
+                    + " and indt.requested_by=kp1.key_person_id "
+                    + " and indt.status_id=s.status_id and indt.active='Y' "
+                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3,11) ";
+            if (!indent_status.equals("") && indent_status != null) {
+                query += " and s.status='" + indent_status + "' ";
+            }
+        }
+        
+        
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

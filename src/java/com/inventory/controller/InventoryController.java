@@ -4,6 +4,7 @@
  */
 package com.inventory.controller;
 
+import com.inventory.model.ItemNameModel;
 import com.DBConnection.DBConnection;
 import com.inventory.model.InventoryModel;
 import com.inventory.tableClasses.Inventory;
@@ -47,6 +48,7 @@ public class InventoryController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryModel model = new InventoryModel();
+        ItemNameModel model2=new ItemNameModel();
 
         String search_key_person = "";
         String search_item_name = "";
@@ -89,6 +91,7 @@ public class InventoryController extends HttpServlet {
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in InventoryController setConnection() calling try block" + e);
         }

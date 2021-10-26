@@ -43,7 +43,7 @@ public class MyCustomTagFunctions {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/apl", "root", "root");
+                    "jdbc:mysql://localhost:3306/apl", "root", "CXKyE2ZpT%HjbP!4c$");
 
             String query = " select p.privilege_id,p.privilege_type,p.privilege_type_id,p.privilege_type_value,  "
                     + " uu.u_url_id,uu.u_url,uup.privilege  \n"

@@ -1,5 +1,6 @@
 package com.inventory.model;
 
+import com.inventory.model.ItemNameModel;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -78,6 +79,7 @@ public class InventoryModel {
             }
             if (!search_model.equals("") && search_model != null) {
                 query += " and m.model='" + search_model + "' ";
+
             }
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
@@ -135,9 +137,10 @@ public class InventoryModel {
                 }
             }
 
+            System.err.println("list 4 size-" + list4.size());
+            System.err.println("list 4 sttring-" + list4);
 
             // END Sorted Array for Parent Child Hierarchy
-            
             for (int k = 0; k < list4.size(); k++) {
                 String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
                         + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
@@ -154,7 +157,6 @@ public class InventoryModel {
                 while (rst2.next()) {
                     list.add(rst2.getInt(1));
                 }
-
             }
 
         } catch (Exception e) {
@@ -165,49 +167,46 @@ public class InventoryModel {
 
     public List<Inventory> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) {
         List<Inventory> list = new ArrayList<Inventory>();
-        List<Integer> desig_map_list = new ArrayList<Integer>();
+        List<Integer> desig_map_list = new ArrayList<>();
+        List<Integer> desig_map_listAll = new ArrayList<>();
+        List<Integer> desig_map_listAllFinal = new ArrayList<>();
+        List<Integer> desig_map_listUnmatched = new ArrayList<>();
+
+        String search_item_name = "";
+        String search_item_type = "";
+        String search_item_codee = "";
+        String search_super_child = "";
+        String search_generation = "";
 
         try {
             desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson);
-//            String query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-//                    + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
-//                    + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-//                    + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
-//                    + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
-//                    + " org_office oo,manufacturer mr "
-//                    + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
-//                    + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-//                    + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-//                    + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
-//                    + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-//                    + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id ";
-//
-//            if (!search_item_code.equals("") && search_item_code != null) {
-//                query += " and inn.item_code='" + search_item_code + "' ";
-//            }
-//            if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-//                query += " and oo.org_office_name='" + searchOrgOffice + "' ";
-//            }
-//            if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-//                query += " and kp.key_person_name='" + searchKeyPerson + "' ";
-//            }
-//
-//            if (!search_manufacturer.equals("") && search_manufacturer != null) {
-//                query += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-//            }
-//            if (!search_model.equals("") && search_model != null) {
-//                query += " and m.model='" + search_model + "' ";
-//            }
-//
-//            query += "  and itn.item_names_id in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-//                    + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
+            //  System.err.println("desig list --" + desig_map_list.size());
+            //  System.err.println("desig list ele--" + desig_map_list);
+            ItemNameModel model = new ItemNameModel();
+            List<ItemName> allIdList = model.showData(search_item_name, search_item_type, search_item_codee, search_super_child, search_generation);
+            //  System.err.println("all item id --" + allIdList);
+            for (int k = 0; k < allIdList.size(); k++) {
+                desig_map_listAll.add(allIdList.get(k).getItem_names_id());
+            }
+            // System.err.println("id lissst  -----" + desig_map_listAll.size());
+            //  System.err.println("id lissst  -----" + desig_map_listAll);
 
+            desig_map_listAllFinal.addAll(desig_map_listAll);
+            desig_map_listAll.removeAll(desig_map_list);
+            desig_map_listUnmatched.addAll(desig_map_listAll);
+
+            desig_map_listAllFinal.removeAll(desig_map_listUnmatched);
+
+            //   System.err.println("final list --" + desig_map_listUnmatched.size());
+            //  System.err.println("final string --- " + desig_map_listUnmatched.toString());
             String query = "  select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
                     + " itn.generation,itn.is_super_child,itn.prefix "
                     + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
 
-            query += "  and itn.item_names_id in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-                    + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
+//            query += "  and itn.item_names_id in(" + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+//                    + " order by field(itn.item_names_id," + desig_map_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
+            query += "  and itn.item_names_id in(" + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                    + " order by field(itn.item_names_id," + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
 
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -305,6 +304,8 @@ public class InventoryModel {
                             bean.setDescription("");
                             bean.setManufacturer_name("");
                             bean.setModel("");
+                            bean.setReference_document_type("");
+                            bean.setReference_document_id("");
                             bean.setPopupval("openpopup");
                         } else {
                             bean.setInventory_id(rset2.getInt("inventory_id"));
@@ -319,6 +320,8 @@ public class InventoryModel {
                             bean.setDescription(rset2.getString("description"));
                             bean.setManufacturer_name(rset2.getString("manufacturer_name"));
                             bean.setModel(rset2.getString("model"));
+                            bean.setReference_document_type(rset2.getString("reference_document_type"));
+                            bean.setReference_document_id(rset2.getString("reference_document_id"));
                             bean.setPopupval("");
                         }
                     }
@@ -334,6 +337,8 @@ public class InventoryModel {
                     bean.setDescription("");
                     bean.setManufacturer_name("");
                     bean.setModel("");
+                    bean.setReference_document_type("");
+                    bean.setReference_document_id("");
                     bean.setPopupval("");
                 }
                 list.add(bean);
@@ -381,6 +386,8 @@ public class InventoryModel {
                 bean.setDescription(rset.getString("description"));
                 bean.setManufacturer_name(rset.getString("manufacturer_name"));
                 bean.setModel(rset.getString("model"));
+                bean.setReference_document_type(rset.getString("reference_document_type"));
+                bean.setReference_document_id(rset.getString("reference_document_id"));
 
                 list.add(bean);
 

@@ -1059,4 +1059,13 @@
     </servlet-mapping> 
     
     
+    <servlet>
+        <servlet-name>Flow</servlet-name>
+        <servlet-class>com.apogee.flow.FlowController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Flow</servlet-name>
+        <url-pattern>/Flow</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

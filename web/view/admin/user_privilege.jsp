@@ -41,13 +41,13 @@
 
 
 
-        $("#search_org_office").autocomplete({
+        $("#role_nameSearch").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("search_org_office").value;
+                var random = document.getElementById("role_nameSearch").value;
                 $.ajax({
-                    url: "InventoryController",
+                    url: "UserPrivilegeController",
                     dataType: "json",
-                    data: {action1: "getOrgOffice", str: random},
+                    data: {action1: "getRoleName", str: random},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -59,7 +59,30 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#search_org_office').val(ui.item.label);
+                $('#role_nameSearch').val(ui.item.label);
+                return false;
+            }
+        });
+                
+        $("#u_urlSearch").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("u_urlSearch").value;
+                $.ajax({
+                    url: "UserPrivilegeController",
+                    dataType: "json",
+                    data: {action1: "getUrl", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#u_urlSearch').val(ui.item.label);
                 return false;
             }
         });
@@ -317,17 +340,21 @@
         }
     }
 
-    function fillColumn(id, count) {
+    function fillColumn(id, count) {//alert("idd --"+id+" count -"+count);
         document.getElementById("Admin").checked = false;
         document.getElementById("Clerk").checked = false;
         document.getElementById("Manager").checked = false;
         document.getElementById("Guest").checked = false;
         document.getElementById("Super_Admin").checked = false;
+        document.getElementById("Dealer").checked = false;
+        document.getElementById("Employee").checked = false;
+        document.getElementById("Sales").checked = false;
 
         var role_name = $("#" + count + '2').html();
         if (role_name === 'Super Admin') {
             role_name = 'Super_Admin';
         }
+        //alert(role_name);
         document.getElementById(role_name).checked = true;
 
         //alert($("#privilege" + count).val());
@@ -457,6 +484,9 @@
                                 <input type="checkbox" id="Manager" name="role" value="Manager" checked >Manager<br>
                                 <input type="checkbox" id="Guest" name="role" value="Guest" checked >Guest<br>
                                 <input type="checkbox" id="Super_Admin" name="role" value="Super Admin" checked >Super Admin<br>
+                                <input type="checkbox" id="Dealer" name="role" value="Dealer" checked >Dealer<br>
+                                <input type="checkbox" id="Employee" name="role" value="Employee" checked >Employee<br>
+                                <input type="checkbox" id="Sales" name="role" value="Sales" checked >Sales<br>
 
                             </td>
                         </div>
