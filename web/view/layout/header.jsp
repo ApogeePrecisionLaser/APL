@@ -110,7 +110,6 @@
                                     </div>
                                 </li>
 
-
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin")) {
                                 %>
@@ -194,17 +193,6 @@
                                     </div>
 
                                 </c:if>
-
-                                <!--                                <li class="nav-item dropdown">
-                                                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                                                        Admin
-                                                                    </a>
-                                                                    <div class="dropdown-menu">
-                                                                        <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
-                                                                        <a href="CalendarController" class="dropdown-item">View Calendar</a>
-                                                                        <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
-                                                                    </div>
-                                                                </li>-->
 
                             </ul>
 

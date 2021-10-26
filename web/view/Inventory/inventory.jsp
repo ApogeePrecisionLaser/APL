@@ -597,103 +597,103 @@
 </section>
 
 
-                        <!--<section class="marginTop30">
-                            <div class="container organizationBox">
-                                <div class="headBox">
-                                    <h5 class="">Data Entry</h5>
-                                </div>
-                                <form name="form2" method="POST" action="InventoryController" onsubmit="return verify()" >
-                                    <div class="row mt-3">
-                                        <div class="col-md-3">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Org Office<span class="text-danger">*</span></label>
-                                                    <input type="hidden" name="inventory_id" id="inventory_id" value="">
-                                                    <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
-                                                    <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" disabled >
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                        <div class="col-md-3">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Manufacturer<span class="text-danger">*</span></label>
-                                                    <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" disabled >
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                        
-                                        <div class="col-md-3">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Item Name - Code<span class="text-danger">*</span></label>
-                        
-                                                    <input class="form-control myInput" type="text" id="item_code" name="item_code" value="" disabled >
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                        <div class="col-md-3">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Model<span class="text-danger">*</span></label>
-                        
-                                                    <input class="form-control myInput" type="text" id="model_name" name="model_name" value="" disabled >
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                        <div class="col-md-3">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Key Person<span class="text-danger">*</span></label>
-                        
-                                                    <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                        <div class="col-md-3">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Date Time<span class="text-danger">*</span></label>
-                                                    <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                        <div class="col-md-12">
-                                            <div class="">
-                                                <div class="form-group">
-                                                    <label>Description</label>
-                                                    <input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >
-                                                    <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>      
-                                    <hr>
-                                    <div class="row">
-                                        <div id="message">
-                        <c:if test="${not empty message}">
-                            <div class="col-md-12 text-center">
-                                <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-                            </div>
-                        </c:if>
-                    </div>
-                    <input type="hidden" id="clickedButton" value="">
-                    <div class="col-md-12 text-center">                       
-                        <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
-                        <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
-                        <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                        <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+<!--<section class="marginTop30">
+    <div class="container organizationBox">
+        <div class="headBox">
+            <h5 class="">Data Entry</h5>
+        </div>
+        <form name="form2" method="POST" action="InventoryController" onsubmit="return verify()" >
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Org Office<span class="text-danger">*</span></label>
+                            <input type="hidden" name="inventory_id" id="inventory_id" value="">
+                            <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
+                            <input class="form-control myInput" type="text" id="org_office" name="org_office" value="" disabled >
+                        </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </section>-->
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Manufacturer<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" disabled >
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Item Name - Code<span class="text-danger">*</span></label>
+
+                            <input class="form-control myInput" type="text" id="item_code" name="item_code" value="" disabled >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Model<span class="text-danger">*</span></label>
+
+                            <input class="form-control myInput" type="text" id="model_name" name="model_name" value="" disabled >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Key Person<span class="text-danger">*</span></label>
+
+                            <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Date Time<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >
+                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>      
+            <hr>
+            <div class="row">
+                <div id="message">
+<c:if test="${not empty message}">
+    <div class="col-md-12 text-center">
+        <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
+    </div>
+</c:if>
+</div>
+<input type="hidden" id="clickedButton" value="">
+<div class="col-md-12 text-center">                       
+<input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+<input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+<input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+<input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+</div>
+</div>
+</form>
+</div>
+</section>-->
 
 
 <%@include file="../layout/footer.jsp" %>
