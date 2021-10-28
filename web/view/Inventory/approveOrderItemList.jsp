@@ -45,7 +45,10 @@
         display: inline-block;
         position: relative;
     }
-
+    .customImpWidthAppOrd{
+        width: 70px!important;
+        max-width: 70px!important;
+    }
     .treegrid-expander {
         width: 0px;
         height: 16px;
@@ -161,14 +164,16 @@
                                     <th style="display:none"></th>
                                     <th>Item Name</th>
                                     <th>Required Qty</th>
-                                    <th>Approved Qty</th>
+                                  
+                                    <th>Stock Qty</th>
+                                      <th>Approved Qty</th>
                                     <th>Status</th>
                                     <th>Delivered Qty</th>
-                                   
+
                                     <th>Expected Date</th>
                                     <th>Add Price</th>
                                     <th>Payment Status</th>
-                                     <th>Purpose</th>
+                                    <th>Purpose</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -185,6 +190,7 @@
 
                                         <td id="${loopCounter.count }">${beanType.item_name}</td>
                                         <td id="${loopCounter.count }">${beanType.required_qty}</td>
+                                         <td id="${loopCounter.count }">${beanType.stock_qty}</td>
                                         <c:choose>
                                             <c:when test="${(beanType.approved_qty == 0)  && (beanType.status == 'Pending')}">
                                                 <td id="${loopCounter.count }"><input type="text" name="approved_qty${beanType.indent_item_id}" class="customImpWidthAppOrd" value="${beanType.required_qty}">
@@ -233,12 +239,12 @@
                                         </c:choose>
 
                                         <td id="${loopCounter.count }">${beanType.delivered_qty}</td>
-                                       
+
                                         <td id="${loopCounter.count }">${beanType.expected_date_time}</td>
                                         <td id="${loopCounter.count }"><input type="text" id="price${beanType.indent_item_id}" class="myAutocompleteClass" name="price${beanType.indent_item_id}" value="">
-                                                </td>
-                                          <td id="${loopCounter.count }">${beanType.paymentmode}</td>
-                                           <td id="${loopCounter.count }">${beanType.purpose}</td>
+                                        </td>
+                                        <td id="${loopCounter.count }">${beanType.paymentmode}</td>
+                                        <td id="${loopCounter.count }">${beanType.purpose}</td>
                                     </tr>
 
                                 </c:forEach>

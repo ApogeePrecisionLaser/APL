@@ -43,7 +43,7 @@ public class MyCustomTagFunctions {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/apl", "root", "CXKyE2ZpT%HjbP!4c$");
+                    "jdbc:mysql://localhost:3306/apl_2", "root", "root");
 
             String query = " select p.privilege_id,p.privilege_type,p.privilege_type_id,p.privilege_type_value,  "
                     + " uu.u_url_id,uu.u_url,uup.privilege  \n"
@@ -56,7 +56,7 @@ public class MyCustomTagFunctions {
             ResultSet rst = con.prepareStatement(query).executeQuery();
             while (rst.next()) {
                 id = rst.getInt(1);
-            }
+            } 
             if(id>0){
                 isFound=true;
             }

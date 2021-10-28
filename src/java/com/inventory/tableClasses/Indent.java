@@ -23,6 +23,45 @@ public class Indent {
     private String requested_by;
     private String requested_to;
     private String active;
+    private String dealer;
+    private String salesperson;
+    private String delivery_challan_no;
+    private String delivery_challan_date;
+    private String orderno;
+    private String itemname;
+
+    public String getItemname() {
+        return itemname;
+    }
+
+    public void setItemname(String itemname) {
+        this.itemname = itemname;
+    }
+
+    public String getDelivery_challan_no() {
+        return delivery_challan_no;
+    }
+
+    public void setDelivery_challan_no(String delivery_challan_no) {
+        this.delivery_challan_no = delivery_challan_no;
+    }
+
+    public String getDelivery_challan_date() {
+        return delivery_challan_date;
+    }
+
+    public void setDelivery_challan_date(String delivery_challan_date) {
+        this.delivery_challan_date = delivery_challan_date;
+    }
+
+    public String getOrderno() {
+        return orderno;
+    }
+
+    public void setOrderno(String orderno) {
+        this.orderno = orderno;
+    }
+    
     private String remark;
     private int revision_no;
     private String date_time;
@@ -36,6 +75,31 @@ public class Indent {
     private int stock_qty;
     private int approved_qty;
     private int delivered_qty;
+    private int balance_qty;
+
+    public String getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(String dealer) {
+        this.dealer = dealer;
+    }
+
+    public String getSalesperson() {
+        return salesperson;
+    }
+
+    public void setSalesperson(String salesperson) {
+        this.salesperson = salesperson;
+    }
+
+    public int getBalance_qty() {
+        return balance_qty;
+    }
+
+    public void setBalance_qty(int balance_qty) {
+        this.balance_qty = balance_qty;
+    }
     private String expected_date_time;
 
     /**

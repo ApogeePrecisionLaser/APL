@@ -121,12 +121,28 @@ public class AproveOrderModel {
     public List<ApproveIndent> getIndentItems(int indent_table_id) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
 
-        String query = "select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  ,s1.status as indent_status,\n"
-                + " s2.status as item_status,indi.order_item_id,indt.order_table_id,pm.payment_mode  from order_table indt,order_item indi, item_names itn, \n"
-                + " status s1,status s2,payment_mode as pm where indt.order_table_id=indi.order_table_id and "
-                + " pm.order_id=indt.order_table_id and indi.item_names_id=itn.item_names_id  "
-                + " and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n"
-                + " and indt.order_table_id='" + indent_table_id + "' ";
+//        String query = "select inv.stock_quantity,indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  ,s1.status as indent_status,\n" +
+//" s2.status as item_status,indi.order_item_id,indt.order_table_id,pm.payment_mode \n" +
+//" from order_table indt,order_item indi, item_names itn,inventory inv,inventory_basic invbs,\n" +
+//"  status s1,status s2,payment_mode as pm \n" +
+//"  where indt.order_table_id=indi.order_table_id and  pm.order_id=indt.order_table_id and indi.item_names_id=itn.item_names_id   \n" +
+//"  and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n" +
+//"  and invbs.item_names_id=itn.item_names_id and inv.inventory_basic_id=invbs.inventory_basic_id and inv.active='Y'and invbs.active='Y'"
+//                + " and indt.order_table_id='" + indent_table_id + "' ";
+//        String query = "select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  ,s1.status as indent_status,\n"
+//                + " s2.status as item_status,indi.order_item_id,indt.order_table_id,pm.payment_mode  from order_table indt,order_item indi, item_names itn, \n"
+//                + " status s1,status s2,payment_mode as pm where indt.order_table_id=indi.order_table_id and "
+//                + " pm.order_id=indt.order_table_id and indi.item_names_id=itn.item_names_id  "
+//                + " and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n"
+//                + " and indt.order_table_id='" + indent_table_id + "' ";
+String query ="select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to,pm.payment_mode "
+                + " from order_table indt,order_item indi, item_names itn,payment_mode as pm, "
+                + " status s1,status s2,inventory inv,inventory_basic ib where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
+                + " and ib.inventory_basic_id=inv.inventory_basic_id and  pm.order_id=indt.order_table_id  and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+                + " and inv.active='Y' "
+                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='115'  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -135,6 +151,7 @@ public class AproveOrderModel {
                 bean.setIndent_no(rset.getString("order_no"));
                 bean.setItem_name((rset.getString("item_name")));
                 bean.setPurpose("Test");
+                bean.setStock_qty(rset.getInt("stock_quantity"));
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
                 bean.setExpected_date_time(rset.getString("expected_date_time"));

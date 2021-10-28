@@ -32,6 +32,15 @@ public class DeliverItem {
     private int item_names_id;
     private String description;
     private String indent_no;
+    private String image_path;
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
     private int requested_by_id;
     private int requested_to_id;
     private String requested_by;

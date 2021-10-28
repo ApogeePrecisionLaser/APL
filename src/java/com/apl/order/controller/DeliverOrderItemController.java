@@ -26,10 +26,12 @@ import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -40,10 +42,23 @@ import org.json.JSONObject;
  *
  * @author Komal
  */
+@MultipartConfig
 public class DeliverOrderItemController extends HttpServlet {
 
     private File tmpDir;
+  private String extractfileName(Part part) {
+        String content = part.getHeader("content-disposition");
+        String[] items = content.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
 
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+
+        }
+
+        return null;
+    }
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -154,10 +169,21 @@ public class DeliverOrderItemController extends HttpServlet {
                 request.getRequestDispatcher("deliveredIndentItemList").forward(request, response);
                 return;
             }
+            
+            
 
-            if (task.equals("Delete")) {
+            if (task.equals("Delete")) {   
                 // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
-            } else if ((task.equals("Deliver Items"))) {  
+            } else if ((task.equals("Upload Challan & Deliver Items"))) {  
+                
+                   String savepath = "E:\\img" + File.separator;
+            File file = new File(savepath);
+                Part part = request.getPart("up");     
+            String filename = extractfileName(part);
+            part.write(savepath + File.separator + filename);
+                String image_path=savepath.concat(filename);
+                
+                
                 String indent_item_id_arr[] = request.getParameterValues("indent_item_id");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String delivery_challan_no = request.getParameter("delivery_challan_no");
@@ -184,6 +210,7 @@ public class DeliverOrderItemController extends HttpServlet {
                     bean.setDescription(description);
                     bean.setIndent_table_id(indent_table_id);
                     bean.setIndent_item_id(indent_item_id);
+                    bean.setImage_path(image_path);
                     if (!status_item.equals("Denied")) {
                         message = model.updateRecord(bean, indent_item_id, indent_table_id, task, logged_org_office, logged_user_name);
                     }
