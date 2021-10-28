@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -25,7 +26,7 @@
                         'selected_row');
                 $(this).addClass('selected_row');
             }
-        });   
+        });
     });
 
 
@@ -78,9 +79,9 @@
                 return false;
             }
         });
-        
-        
-         $("#search_item_name").autocomplete({
+
+
+        $("#search_item_name").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_name").value;
                 $.ajax({
@@ -124,7 +125,7 @@
                 $('#search_designation').val(ui.item.label);
                 return false;
             }
-        });   
+        });
     });
 
 
@@ -133,8 +134,8 @@
         document.getElementById("item_name").disabled = false;
         document.getElementById("designation").disabled = false;
         document.getElementById("quantity").disabled = false;
-        document.getElementById("description").disabled = false;      
-        document.getElementById("monthly_limit").disabled = false;      
+        document.getElementById("description").disabled = false;
+        document.getElementById("monthly_limit").disabled = false;
 
         document.getElementById("save").disabled = false;
         if (id === 'new') {
@@ -188,12 +189,12 @@
                 document.getElementById("quantity").focus();
                 return false;
             }
-             if (myLeftTrim(monthly_limit).length === 0) {
+            if (myLeftTrim(monthly_limit).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Monthly limit is required...</b></label></div>');
                 document.getElementById("monthly_limit").focus();
                 return false;
             }
-            
+
             if (result === false) {
             } else {
                 result = true;
@@ -287,47 +288,48 @@
     </div>
 </section>
 
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <div class="row mt-3 myTable">
-            <div class="col-md-12">
-                <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Item Name</th>
-                                <th>Designation</th>
-                                <th>Quantity</th>
-                                <th>Monthly Limit</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
-                                <tr
-                                    onclick="fillColumn('${beanType.item_authorization_id}', '${loopCounter.count }');">
-                                    <td>${loopCounter.count }</td>               
-                                    <td id="${loopCounter.count }2">${beanType.item_name}</td>   
-                                    <td id="${loopCounter.count }3">${beanType.designation}</td>
-                                    <td id="${loopCounter.count }4">${beanType.quantity}</td> 
-                                    <td id="${loopCounter.count }5">${beanType.monthly_limit}</td> 
-                                    <td id="${loopCounter.count }6">${beanType.description}</td>  
-
+<c:if test="${isSelectPriv eq 'Y'}">
+    <section class="marginTop30 ">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Search List</h5>
+            </div>
+            <div class="row mt-3 myTable">
+                <div class="col-md-12">
+                    <div class="table-responsive verticleScroll">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Item Name</th>
+                                    <th>Designation</th>
+                                    <th>Quantity</th>
+                                    <th>Monthly Limit</th>
+                                    <th>Description</th>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>    
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['list']}"
+                                           varStatus="loopCounter">
+                                    <tr
+                                        onclick="fillColumn('${beanType.item_authorization_id}', '${loopCounter.count }');">
+                                        <td>${loopCounter.count }</td>               
+                                        <td id="${loopCounter.count }2">${beanType.item_name}</td>   
+                                        <td id="${loopCounter.count }3">${beanType.designation}</td>
+                                        <td id="${loopCounter.count }4">${beanType.quantity}</td> 
+                                        <td id="${loopCounter.count }5">${beanType.monthly_limit}</td> 
+                                        <td id="${loopCounter.count }6">${beanType.description}</td>  
+
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>    
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
+</c:if>
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -366,7 +368,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
@@ -397,10 +399,21 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','update') eq 'True'}">
                     <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','insert') eq 'True'}">
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','insert') eq 'True'}">
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','delete') eq 'True'}">
                     <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    </c:if>
                 </div>
             </div>
         </form>

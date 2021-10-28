@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 
@@ -179,39 +180,41 @@
     </div>
 </section>
 
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <div class="row mt-3 myTable">
-            <div class="col-md-12">
-                <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Item Type Name</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
-                                <tr
-                                    onclick="fillColumn('${beanType.item_type_id}', '${loopCounter.count }');">
-                                    <td>${loopCounter.count }</td>
-                                    <td id="${loopCounter.count }2">${beanType.item_type}</td>
-                                    <td id="${loopCounter.count }3">${beanType.description}</td>                                               
+<c:if test="${isSelectPriv eq 'Y'}">
+    <section class="marginTop30 ">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Search List</h5>
+            </div>
+            <div class="row mt-3 myTable">
+                <div class="col-md-12">
+                    <div class="table-responsive verticleScroll">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Item Type Name</th>
+                                    <th>Description</th>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['list']}"
+                                           varStatus="loopCounter">
+                                    <tr
+                                        onclick="fillColumn('${beanType.item_type_id}', '${loopCounter.count }');">
+                                        <td>${loopCounter.count }</td>
+                                        <td id="${loopCounter.count }2">${beanType.item_type}</td>
+                                        <td id="${loopCounter.count }3">${beanType.description}</td>                                               
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</c:if>
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -251,10 +254,21 @@
                 </div>
                 <input type="hidden" id="clickedButton" name="clickedButton">
                 <div class="col-md-12 text-center">                                           
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                    <input type="reset" class=" btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemTypeController','update') eq 'True'}">
+                        <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                    </c:if>
+
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemTypeController','insert') eq 'True'}">
+                        <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                    </c:if>
+
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemTypeController','insert') eq 'True'}">
+                        <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                    </c:if>
+
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemTypeController','delete') eq 'True'}">
+                        <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    </c:if>
                 </div>
             </div>
         </form>

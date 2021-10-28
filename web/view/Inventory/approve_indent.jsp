@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -127,8 +128,6 @@
 </section>
 
 <section class="marginTop30 ">
-
-
     <div class="container organizationBox">
         <div class="headBox">
             <h5 class="">Search List</h5>

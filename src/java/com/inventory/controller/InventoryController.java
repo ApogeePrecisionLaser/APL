@@ -56,6 +56,11 @@ public class InventoryController extends HttpServlet {
         String search_item_code = "";
         String search_manufacturer = "";
         String search_model = "";
+        
+        HttpSession session = request.getSession();
+        String loggedUser="";
+        loggedUser = session.getAttribute("user_role").toString();
+		
 
         // search_item_name = request.getParameter("search_item_name");
         search_org_office = request.getParameter("search_org_office");
@@ -202,6 +207,7 @@ public class InventoryController extends HttpServlet {
             request.setAttribute("search_key_person", search_key_person);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
             model.closeConnection();
 
             request.getRequestDispatcher("inventory").forward(request, response);

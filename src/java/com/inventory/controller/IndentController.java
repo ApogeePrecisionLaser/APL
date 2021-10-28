@@ -40,7 +40,7 @@ import org.json.JSONObject;
  * @author Komal
  */
 public class IndentController extends HttpServlet {
-    
+
     private File tmpDir;
     List<String> import_item_name_arr = new ArrayList<String>();
 
@@ -52,7 +52,7 @@ public class IndentController extends HttpServlet {
     String import_purpose = "";
     String import_expected_date_time = "";
     int import_req_qty = 0;
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -74,6 +74,9 @@ public class IndentController extends HttpServlet {
         String description = "";
 
         HttpSession session = request.getSession();
+        String loggedUser = "";
+        loggedUser = session.getAttribute("user_role").toString();        
+
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
@@ -263,8 +266,7 @@ public class IndentController extends HttpServlet {
 //            List<Indent> list = model.showData(logged_user_name, office_admin);
             List<Indent> list = model.showData(logged_user_name, office_admin, status);
             List<Indent> status_list = model.getStatus();
-            
-           
+
             request.setAttribute("list", list);
             request.setAttribute("status_list", status_list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
@@ -272,6 +274,7 @@ public class IndentController extends HttpServlet {
             request.setAttribute("requested_to", office_admin);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
 

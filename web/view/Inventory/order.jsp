@@ -202,7 +202,9 @@
 
     var json;
     $(function () {
+        //alert("fe");
         var String_data = $('#String_data').val();
+        //alert("string_data --" + String_data);
         var last_ch = String_data.charAt(String_data.length - 1);
         if (last_ch == ",") {
             String_data = String_data.substring(0, String_data.length - 1);
@@ -235,19 +237,20 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 1) {
-                    tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '"  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '"  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+
                 }
 //                else {
 //                    tabCell.innerHTML = json[i][col[j]];
@@ -257,6 +260,82 @@
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
         divContainer.appendChild(table);
+    });
+
+
+    function showData() {
+        //alert("fe");
+        var String_data = $('#String_data').val();
+        //alert("string_data --" + String_data);
+        var last_ch = String_data.charAt(String_data.length - 1);
+        if (last_ch == ",") {
+            String_data = String_data.substring(0, String_data.length - 1);
+        }
+        String_data = '[' + String_data + ']';
+        json = $.parseJSON(String_data);
+        var col = [];
+        for (var i = 0; i < json.length; i++) {
+            for (var key in json[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        var table = document.createElement("table");
+        table.setAttribute("id", "tree-table");
+        table.setAttribute("class", "table table-hover table-bordered");
+        var tr = table.insertRow(-1);
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        for (var i = 0; i < json.length; i++) {
+
+            tr = table.insertRow(-1);
+            tr.setAttribute("id", i + 1);
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                if (j == 0) {
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                }
+                if (j == 1) {
+                    tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
+                }
+                if (j == 2) {
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                }
+                if (j == 3) {
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 4) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+
+                }
+            }
+        }
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+    }
+
+    $(function () {
+        var dataLength = "";
+        setInterval(function () {
+            var String_data = $('#String_data').val();
+            //alert("string_data --" + String_data);
+            var dataLength2 = "";
+            var dataLength2 = String_data.length;
+            dataLength = String_data.length;
+            //alert("data leng -"+dataLength+" data len 22 --"+dataLength2);
+            if (dataLength > dataLength2 || dataLength > 0) {//alert(121);
+                showData();
+            } else {
+                //alert(2321);
+            }
+        }, 2000);
     });
 
     function searchIndentStatusWise(status) {

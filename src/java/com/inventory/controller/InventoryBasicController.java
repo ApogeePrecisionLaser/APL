@@ -47,6 +47,11 @@ public class InventoryBasicController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryBasicModel model = new InventoryBasicModel();
+        
+        HttpSession session = request.getSession();
+        String loggedUser="";
+        loggedUser = session.getAttribute("user_role").toString();
+		
 
         String search_item_name = "";
         String search_org_office = "";
@@ -198,6 +203,7 @@ public class InventoryBasicController extends HttpServlet {
             request.setAttribute("search_key_person", search_key_person);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
             model.closeConnection();
 
             request.getRequestDispatcher("inventory_basic").forward(request, response);

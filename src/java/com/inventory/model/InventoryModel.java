@@ -231,7 +231,7 @@ public class InventoryModel {
                             + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                             + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
                             + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and"
+                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and "
                             + " itn.item_names_id='" + item_id + "'";
 
                     if (!search_item_code.equals("") && search_item_code != null) {
@@ -268,7 +268,7 @@ public class InventoryModel {
                             + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                             + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
                             + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and"
+                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and"
                             + " itn.item_names_id='" + item_id + "'";
 
                     if (!search_item_code.equals("") && search_item_code != null) {
@@ -365,7 +365,7 @@ public class InventoryModel {
                     + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                     + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
                     + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                    + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and"
+                    + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and "
                     + " itn.item_names_id='" + item_names_id + "'";
 
             PreparedStatement pstmt = connection.prepareStatement(query);
