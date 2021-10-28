@@ -343,7 +343,8 @@
                 //alert(2321);
             }
         }, 2000);
-    })
+    });
+
     function searchIndentStatusWise(status) {
         var url = "OrderController?action1=searchIndentStatusWise&status=" + status;
         window.open(url, "_self");
