@@ -30,6 +30,7 @@ import org.json.simple.JSONObject;
 import java.util.Map;
 import java.util.HashMap;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -45,14 +46,19 @@ public class ModelNameController extends HttpServlet {
         ServletContext ctx = getServletContext();
         Map<String, String> map = new HashMap<String, String>();
         request.setCharacterEncoding("UTF-8");
+        
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ModelNameModel model = new ModelNameModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String image_folder = "";
+        HttpSession session = request.getSession();
+        String loggedUser="";
+        loggedUser = session.getAttribute("user_role").toString();
         String image_name = "";
         String active1 = request.getParameter("active");
         try {
+            
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in ModelNameController setConnection() calling try block" + e);
@@ -328,6 +334,7 @@ public class ModelNameController extends HttpServlet {
             request.setAttribute("searchItemCode", searchItemCode);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
             request.getRequestDispatcher("model_name").forward(request, response);

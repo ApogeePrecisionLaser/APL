@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -533,58 +534,59 @@
     </div>
 </section>
 
-<section class="marginTop30 ">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Search List</h5>
-        </div>
-        <div class="row mt-3 myTable">
-            <div class="col-md-12">
-                <div class="table-responsive verticleScroll">
-                    <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Org Office</th>
-                                <th>Manufacturer Name</th>
-                                <th>Item Name</th>
-                                <th>Item Code</th>
-                                <th>Model Name</th>
-                                <th>Key Person</th>
-                                <th>Minimum Quantity</th>
-                                <th>Daily Requirement</th>
-                                <th>Opening Balance</th>
-                                <th>Date Time</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                       varStatus="loopCounter">
-                                <tr
-                                    onclick="fillColumn('${beanType.inventory_basic_id}', '${beanType.inventory_id}', '${loopCounter.count }');">
-                                    <td>${loopCounter.count }</td>               
-                                    <td id="${loopCounter.count }2">${beanType.org_office}</td>   
-                                    <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>   
-                                    <td id="${loopCounter.count }4">${beanType.item_name}</td>
-                                    <td id="${loopCounter.count }5">${beanType.item_code}</td>
-                                    <td id="${loopCounter.count }6">${beanType.model}</td>
-                                    <td id="${loopCounter.count }7">${beanType.key_person}</td>
-                                    <td id="${loopCounter.count }8">${beanType.min_quantity}</td>                                               
-                                    <td id="${loopCounter.count }9">${beanType.daily_req}</td> 
-                                    <td id="${loopCounter.count }10">${beanType.opening_balance}</td>
-                                    <td id="${loopCounter.count }11">${beanType.date_time}</td>
-                                    <td id="${loopCounter.count }12">${beanType.description}</td>     
+<c:if test="${isSelectPriv eq 'Y'}">
+    <section class="marginTop30 ">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Search List</h5>
+            </div>
+            <div class="row mt-3 myTable">
+                <div class="col-md-12">
+                    <div class="table-responsive verticleScroll">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Org Office</th>
+                                    <th>Manufacturer Name</th>
+                                    <th>Item Name</th>
+                                    <th>Item Code</th>
+                                    <th>Model Name</th>
+                                    <th>Key Person</th>
+                                    <th>Minimum Quantity</th>
+                                    <th>Daily Requirement</th>
+                                    <th>Opening Balance</th>
+                                    <th>Date Time</th>
+                                    <th>Description</th>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>    
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['list']}"
+                                           varStatus="loopCounter">
+                                    <tr
+                                        onclick="fillColumn('${beanType.inventory_basic_id}', '${beanType.inventory_id}', '${loopCounter.count }');">
+                                        <td>${loopCounter.count }</td>               
+                                        <td id="${loopCounter.count }2">${beanType.org_office}</td>   
+                                        <td id="${loopCounter.count }3">${beanType.manufacturer_name}</td>   
+                                        <td id="${loopCounter.count }4">${beanType.item_name}</td>
+                                        <td id="${loopCounter.count }5">${beanType.item_code}</td>
+                                        <td id="${loopCounter.count }6">${beanType.model}</td>
+                                        <td id="${loopCounter.count }7">${beanType.key_person}</td>
+                                        <td id="${loopCounter.count }8">${beanType.min_quantity}</td>                                               
+                                        <td id="${loopCounter.count }9">${beanType.daily_req}</td> 
+                                        <td id="${loopCounter.count }10">${beanType.opening_balance}</td>
+                                        <td id="${loopCounter.count }11">${beanType.date_time}</td>
+                                        <td id="${loopCounter.count }12">${beanType.description}</td>     
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>    
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
+</c:if>
 
 <section class="marginTop30">
     <div class="container organizationBox">
@@ -705,10 +707,21 @@
                 </div>
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
-                    <!--<input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">-->
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'InventoryBasicController','update') eq 'True'}">
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'InventoryBasicController','insert') eq 'True'}">
                     <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'InventoryBasicController','insert') eq 'True'}">
                     <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    <!--<input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">-->
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'InventoryBasicController','delete') eq 'True'}">
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    </c:if>
                 </div>
             </div>
         </form>

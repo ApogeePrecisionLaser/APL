@@ -60,6 +60,9 @@ public class ApproveIndentController extends HttpServlet {
         int final_indent_table_id = 0;
 
         HttpSession session = request.getSession();
+        String loggedUser = "";
+        loggedUser = session.getAttribute("user_role").toString();
+
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
@@ -138,7 +141,7 @@ public class ApproveIndentController extends HttpServlet {
                 task = "";
             }
             if (task.equals("GetIndentItems")) {
-               // List<ItemName> list = null;
+                // List<ItemName> list = null;
                 //  String indent_no = request.getParameter("indent_no");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String indent_status = request.getParameter("indent_status");
@@ -157,7 +160,7 @@ public class ApproveIndentController extends HttpServlet {
                 if (indent_status.equals("Pending")) {
                     indent_status = task;
                 }
-                
+
                 // int indent_item_id = 0;
                 int approved_qty = 0;
                 String item_status = "";
@@ -204,6 +207,7 @@ public class ApproveIndentController extends HttpServlet {
             request.setAttribute("requested_to", office_admin);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
 

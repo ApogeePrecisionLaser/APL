@@ -53,6 +53,10 @@ public class ItemAuthorizationController extends HttpServlet {
        
         search_item_name = request.getParameter("search_item_name");
         search_designation = request.getParameter("search_designation");
+        
+        HttpSession session = request.getSession();
+        String loggedUser="";
+        loggedUser = session.getAttribute("user_role").toString();	
 
 
         if (search_item_name == null) {
@@ -145,6 +149,7 @@ public class ItemAuthorizationController extends HttpServlet {
             request.setAttribute("search_designation", search_designation);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
             model.closeConnection();
 
             request.getRequestDispatcher("item_authorization").forward(request, response);

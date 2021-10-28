@@ -67,8 +67,8 @@
 
 
 
-<section class="marginTop30">
-    <div class="container organizationBox">
+<section class="marginTop30" >
+    <div class="container organizationBox" style="max-width:1100px">
         <div class="headBox">
             <h5 class="">Items Details</h5>
         </div>
@@ -88,6 +88,8 @@
                     <th>Stock Quantity</th>
                     <th>Inward Quantity</th>
                     <th>Outward Quantity</th>
+                    <th>Reference Document Type</th>
+                    <th>Reference Document Id</th>
                     <th>Date Time</th>
                     <th>Description</th>
                 </tr>
@@ -107,8 +109,10 @@
                             <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
                             <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
                             <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
-                            <td id="${loopCounter.count }11">${beanType.date_time}</td> 
-                            <td id="${loopCounter.count }12">${beanType.description}</td>  
+                            <td id="${loopCounter.count }11">${beanType.reference_document_type}</td>
+                            <td id="${loopCounter.count }12">${beanType.reference_document_id}</td> 
+                            <td id="${loopCounter.count }13">${beanType.date_time}</td> 
+                            <td id="${loopCounter.count }14">${beanType.description}</td>  
 
 
                         </tr>

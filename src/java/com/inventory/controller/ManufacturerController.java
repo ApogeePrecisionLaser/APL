@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -34,6 +35,9 @@ public class ManufacturerController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
+        HttpSession session = request.getSession();
+        String loggedUser="";
+        loggedUser = session.getAttribute("user_role").toString();
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -119,6 +123,7 @@ public class ManufacturerController extends HttpServlet {
             request.setAttribute("searchManufacturer", searchManufacturer);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
             request.getRequestDispatcher("manufacturer").forward(request, response);
