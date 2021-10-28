@@ -142,7 +142,7 @@ String query ="select indt.order_no,itn.item_name,indi.required_qty,indi.expecte
                 + " and ib.inventory_basic_id=inv.inventory_basic_id and  pm.order_id=indt.order_table_id  and ib.item_names_id=itn.item_names_id and ib.active='Y' "
                 + " and inv.active='Y' "
                 + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='115'  ";
+                + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='115'";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
