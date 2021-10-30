@@ -128,13 +128,33 @@
         document.getElementById("save").disabled = false;
     }
     function updatestatus(id) {
-         
-   var orderno=document.getElementById("indent_no").value;
-        var url = "CheckOrderInventoryController?task=GetOrderUpdatestatus&orderno=" + orderno ;
+
+        var orderno = document.getElementById("indent_no").value;
+        var url = "CheckOrderInventoryController?task=GetOrderUpdatestatus&orderno=" + orderno;
         window.open(url, "_self");
         window.close();
     }
+    function openPopUp(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+        return window.open(url, window_name, window_features);
+    }
 
+    function displayReportPrint() {
+
+        var counter = document.getElementById("counter").value;
+        var delivered_qty = document.getElementById("delivered_qty").value;
+        var delivery_challan_date = document.getElementById("delivery_challan_date").value;
+        var order_no = document.getElementById("indent_no").value;
+        var delivery_challan_no = document.getElementById("delivery_challan_no").value;
+        var item_name = document.getElementById("item_name").value;
+        
+        var queryString = "task=generateDeliveryReport&counter=" + counter + "&delivered_qty=" + delivered_qty+ "&delivery_challan_date=" + delivery_challan_date+ "&order_no=" + order_no+ "&delivery_challan_no=" + delivery_challan_no+ "&item_name=" + item_name;
+        var url = "OrderController?" + queryString;
+        popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
+
+    }
 
 </script>
 
@@ -152,7 +172,7 @@
         <div class="headBox">
             <h5 class="">Data Entry</h5>
         </div>
-        <form name="form2" method="POST" action="DeliverOrderItemController" onsubmit="return verify()" >
+        <form name="form2" method="POST" action="DeliverOrderItemController" onsubmit="return verify()" enctype="multipart/form-data" >
             <input type="hidden" name="delivery_status" id="delivery_status" value="${delivery_status}">
             <input type="hidden" name="delivery_indent_table_id" id="delivery_indent_table_id"  value="${delivery_indent_table_id}">
             <input type="hidden" name="delivery_message" id="delivery_message" value="${delivery_message}">
@@ -210,6 +230,7 @@
                                         <tr >
 
                                             <td>${loopCounter.count }
+                                                <input type="hidden" name="counter" id="counter" value="${loopCounter.count }">
                                                 <input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}">
                                                 <input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}">
                                                 <input type="hidden" name="item_name${beanType.indent_item_id}" id="item_name" value="${beanType.item_name}">
@@ -254,14 +275,16 @@
                     </c:if>
                 </div>
                 <input type="hidden" id="clickedButton" value="">
-                <div class="col-md-12 text-center">                       
+                <div class="col-md-12 text-center">    
+                    <input type="file" value="Upload" name="up" id="up">
 <!--                     <input type="button" class="btn normalBtn" name="task" id="sendtodealer" value="Send Challan To Dealer" onclick="updatestatus('${last_indent_table_id}');">-->
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Deliver Items" onclick="makeEditable(id);">
+                    <input type="button" class="btn normalBtn" name="task" id="save" value="Print Challan" onclick="displayReportPrint(id);">
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Upload Challan & Deliver Items" onclick="makeEditable(id);">
                 </div>
             </div>
-        
+
     </div>
-                    </form>
+</form>
 </section>
 
 

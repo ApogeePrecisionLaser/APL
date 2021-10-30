@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -530,71 +531,72 @@
 </section>
 
 
+<c:if test="${isSelectPriv eq 'Y'}">
+    <section class="marginTop30">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Items List</h5>
+            </div>
+            <div class="row mt-3 table_div">
 
-<section class="marginTop30">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Items List</h5>
+                <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
+
+                    <tr>
+                        <!--<th>S.No.</th>-->
+
+                        <th>Item Name</th>
+                        <th>Item Code</th>
+                        <th>Org Office</th>
+                        <th>Manufacturer Name</th>
+                        <th>Model Name</th>
+                        <th>Key Person</th>
+                        <th>Stock Quantity</th>
+                        <th>Inward Quantity</th>
+                        <th>Outward Quantity</th>
+                        <th>Reference Document Type</th>
+                        <th>Reference Document Id</th>
+                        <th>Date Time</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    <tbody>
+                        <c:forEach var="beanType" items="${requestScope['list']}"
+                                   varStatus="loopCounter">
+                            <!--openpopup-->
+
+                            <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                <!--<td data-column="name">${loopCounter.count }</td>-->               
+
+                                <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
+                                <td id="${loopCounter.count }3">${beanType.item_code}</td>
+                                <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
+                                <td id="${loopCounter.count }5">${beanType.manufacturer_name}</td> 
+                                <td id="${loopCounter.count }6">${beanType.model}</td>
+                                <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
+                                <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
+                                <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
+                                <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
+                                <td id="${loopCounter.count }11">${beanType.reference_document_type}</td>
+                                <td id="${loopCounter.count }12">${beanType.reference_document_id}</td>
+                                <td id="${loopCounter.count }13">${beanType.date_time}</td> 
+                                <td id="${loopCounter.count }14">${beanType.description}</td>  
+
+                                <c:if test="${beanType.popupval=='openpopup'}">
+                                    <td>
+                                        <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
+                                    </td>
+                                </c:if>
+                                <td></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+            </div>      
         </div>
-        <div class="row mt-3 table_div">
-
-            <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
-
-                <tr>
-                    <!--<th>S.No.</th>-->
-
-                    <th>Item Name</th>
-                    <th>Item Code</th>
-                    <th>Org Office</th>
-                    <th>Manufacturer Name</th>
-                    <th>Model Name</th>
-                    <th>Key Person</th>
-                    <th>Stock Quantity</th>
-                    <th>Inward Quantity</th>
-                    <th>Outward Quantity</th>
-                    <th>Reference Document Type</th>
-                    <th>Reference Document Id</th>
-                    <th>Date Time</th>
-                    <th>Description</th>
-                    <th></th>
-                </tr>
-                <tbody>
-                    <c:forEach var="beanType" items="${requestScope['list']}"
-                               varStatus="loopCounter">
-                        <!--openpopup-->
-
-                        <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
-                            data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-                            <!--<td data-column="name">${loopCounter.count }</td>-->               
-
-                            <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
-                            <td id="${loopCounter.count }3">${beanType.item_code}</td>
-                            <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
-                            <td id="${loopCounter.count }5">${beanType.manufacturer_name}</td> 
-                            <td id="${loopCounter.count }6">${beanType.model}</td>
-                            <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
-                            <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
-                            <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
-                            <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
-                            <td id="${loopCounter.count }11">${beanType.reference_document_type}</td>
-                            <td id="${loopCounter.count }12">${beanType.reference_document_id}</td>
-                            <td id="${loopCounter.count }13">${beanType.date_time}</td> 
-                            <td id="${loopCounter.count }14">${beanType.description}</td>  
-
-                            <c:if test="${beanType.popupval=='openpopup'}">
-                                <td>
-                                    <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
-                                </td>
-                            </c:if>
-                            <td></td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-
-        </div>      
-    </div>
-</section>
+    </section>
+</c:if>
 
 
 <!--<section class="marginTop30">

@@ -6,7 +6,7 @@
          version="3.1">
     <session-config>
         <session-timeout>
-            30
+            30    
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -28,8 +28,8 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-        <!--<param-value>CXKyE2ZpT%HjbP!4c$</param-value>--> 
-        <param-value>root</param-value>
+               <param-value>root</param-value> 
+<!--        <param-value>root</param-value>-->
     </context-param>
     
     
@@ -1077,6 +1077,14 @@
     <servlet-mapping>
         <servlet-name>deliveritemslist</servlet-name>
         <url-pattern>/deliveritemslist</url-pattern>
+    </servlet-mapping> 
+     <servlet>
+        <servlet-name>showorderitemlist</servlet-name>
+        <jsp-file>/view/Inventory/showorderItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>showorderitemlist</servlet-name>
+        <url-pattern>/showorderitemlist</url-pattern>
     </servlet-mapping> 
     
     

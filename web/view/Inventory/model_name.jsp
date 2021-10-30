@@ -522,10 +522,21 @@
                     </c:if>
                 </div>
                 <div class="col-md-12 text-center">                                           
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'update') ? '' : 'none'}" disabled>
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'insert') ? '' : 'none'}" disabled>
-                    <input type="reset" class=" btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'insert') ? '' : 'none'}" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" style="display:${myfn:isContainPrivileges(privilegeList, 'delete') ? '' : 'none'}" disabled>
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ModelNameController','update') eq 'True'}">
+                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ModelNameController','insert') eq 'True'}">
+                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ModelNameController','insert') eq 'True'}">
+                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                    </c:if>
+                    
+                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ModelNameController','delete') eq 'True'}">
+                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                    </c:if>
                 </div>
             </div>
         </form>

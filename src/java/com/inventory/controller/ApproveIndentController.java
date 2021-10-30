@@ -61,6 +61,9 @@ public class ApproveIndentController extends HttpServlet {
         String search_by_date = "";
 
         HttpSession session = request.getSession();
+        String loggedUser = "";
+        loggedUser = session.getAttribute("user_role").toString();
+
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
@@ -210,6 +213,7 @@ public class ApproveIndentController extends HttpServlet {
             request.setAttribute("requested_to", office_admin);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
 

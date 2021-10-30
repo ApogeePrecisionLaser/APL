@@ -155,7 +155,7 @@ public class CheckOrderInventoryModel {
                 + " from order_table indt,order_item indi, item_names itn, "
                 + " status s where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
                 + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.order_table_id='" + indent_table_id + "' and indt.status_id=6 ";
+                + " and indt.order_table_id='" + indent_table_id + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -165,7 +165,7 @@ public class CheckOrderInventoryModel {
                 bean.setItem_name((rset.getString("item_name")));
                 bean.setPurpose("Test");
                 bean.setRequired_qty(rset.getInt("required_qty"));
-                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));   
                 bean.setStock_qty(rset.getInt("stock_qty"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
                 bean.setExpected_date_time(rset.getString("expected_date_time"));
@@ -224,7 +224,7 @@ public class CheckOrderInventoryModel {
             String logged_user_name) {
         int updateRowsAffected = 0;
         if (task.equals("Generate Delivery Challan")) {
-            task = "Delivery Challan Generated";
+            task = "Approved";
         }
 
         int indent_status_id = getStatusId(task);
@@ -235,11 +235,11 @@ public class CheckOrderInventoryModel {
         if (task.equals("Denied")) {
             item_status = "Denied";
         } else {
-            item_status = "Delivery Challan Generated";
+            item_status = "Approved";
         }
         int status_id = getStatusId(item_status);
 
-        String query = " UPDATE indent_item SET status_id=?,deliver_qty=? WHERE indent_item_id=? ";
+        String query = " UPDATE order_item SET status_id=?,deliver_qty=? WHERE order_item_id=? ";
 
         int rowsAffected = 0;
         int updateRowsAffected2 = 0;
@@ -249,16 +249,16 @@ public class CheckOrderInventoryModel {
         try {
             PreparedStatement pstm = connection.prepareStatement(query);
             pstm.setInt(1, status_id);
-            if (item_status.equals("Delivery Challan Generated")) {
+          //  if (item_status.equals("Delivery Challan Generated")) {
                 pstm.setInt(2, bean.getDelivered_qty());
-            } else {
-                pstm.setInt(2, 0);
-            }
+          //  } else {
+              //  pstm.setInt(2, 0);
+          //  }
 
-            pstm.setInt(3, indent_item_id);
+            pstm.setInt(3, indent_item_id);    
             updateRowsAffected = pstm.executeUpdate();
 
-            String query2 = " update indent_table set status_id=? where indent_table_id=? ";
+            String query2 = " update order_table set status_id=? where order_table_id=? ";
             PreparedStatement pstm2 = connection.prepareStatement(query2);
             pstm2.setInt(1, indent_status_id);
             pstm2.setInt(2, indent_table_id);
@@ -446,7 +446,7 @@ String status="fail";
             PreparedStatement psmt = connection.prepareStatement(query);
             ResultSet rs = psmt.executeQuery();
             while (rs.next()) {
-                String delivery_challan_no = rs.getString("delivery_challan_no");
+                String delivery_challan_no = rs.getString("order_delivery_challan_no");
                 String delivery_challan_no_arr[] = delivery_challan_no.split("_");
                 int length = (delivery_challan_no_arr.length) - 1;
                 count = Integer.parseInt(delivery_challan_no_arr[length]);

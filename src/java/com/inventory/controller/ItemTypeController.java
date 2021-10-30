@@ -38,6 +38,8 @@ public class ItemTypeController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
+        String loggedUser="";
+        loggedUser = session.getAttribute("user_role").toString();
                 
         try {
             String driverClass = session.getAttribute("driverClass").toString();
@@ -128,6 +130,7 @@ public class ItemTypeController extends HttpServlet {
             request.setAttribute("searchItemType", searchItemType);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("loggedUser", loggedUser);
 
             model.closeConnection();
             request.getRequestDispatcher("item_type").forward(request, response);

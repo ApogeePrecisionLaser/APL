@@ -144,7 +144,7 @@ public class AproveOrderController extends HttpServlet {
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String indent_status = request.getParameter("indent_status");
                 List<ApproveIndent> indent_items_list = model.getIndentItems(indent_table_id);
-                request.setAttribute("indent_items_list", indent_items_list);
+                request.setAttribute("indent_items_list", indent_items_list);    
                 request.setAttribute("indent_status", indent_status);
                 request.getRequestDispatcher("approveOrderItemList").forward(request, response);
                 return;

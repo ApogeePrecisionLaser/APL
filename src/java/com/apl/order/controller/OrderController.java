@@ -42,7 +42,7 @@ import org.json.JSONObject;
  * @author Komal
  */
 public class OrderController extends HttpServlet {
-    
+
     private File tmpDir;
     List<String> import_item_name_arr = new ArrayList<String>();
 
@@ -54,7 +54,7 @@ public class OrderController extends HttpServlet {
     String import_purpose = "";
     String import_expected_date_time = "";
     int import_req_qty = 0;
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -89,7 +89,7 @@ public class OrderController extends HttpServlet {
             logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
             logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
-          //  office_admin = session.getAttribute("office_admin").toString();
+            //  office_admin = session.getAttribute("office_admin").toString();
         }
 
         OrderModel model = new OrderModel();
@@ -199,7 +199,32 @@ public class OrderController extends HttpServlet {
                 request.getRequestDispatcher("items_list").forward(request, response);
                 return;
             }
+            if (task.equals("generateDeliveryReport")) {
+                String counter = request.getParameter("counter");
+                String delivered_qty = request.getParameter("delivered_qty");
+                String delivery_challan_date = request.getParameter("delivery_challan_date");
+                String order_no = request.getParameter("order_no");
+                String delivery_challan_no = request.getParameter("delivery_challan_no");
+                String item_name_report = request.getParameter("item_name");
 
+                List listAll = null;
+                String jrxmlFilePath;
+                response.setContentType("application/pdf");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+
+                jrxmlFilePath = ctx.getRealPath("/Invoice1.jrxml");
+
+                listAll = model.showReportData(logged_user_name, office_admin, order_no, delivery_challan_date, delivery_challan_no, item_name_report);
+                // listAll = tubeWellSurveyModel.showData(-1, -1,Pole,IvrsNo,"",FileNo,PageNo,Date,"",meterFunctional,feeder,typeOfConnection,dateTo,searchStatus,feeder_ivrs_search);
+                byte[] reportInbytes = model.generateMapReport(jrxmlFilePath, listAll);
+                response.setContentLength(reportInbytes.length);
+                response.addHeader("Content-disposition", "attachment; filename=" + order_no);
+
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                return;
+            }
             if (task.equals("GetIndentItems")) {
                 List<ItemName> list = null;
                 //  String indent_no = request.getParameter("indent_no");
@@ -207,7 +232,17 @@ public class OrderController extends HttpServlet {
 
                 List<Indent> indent_items_list = model.getIndentItems(indent_table_id);
                 request.setAttribute("indent_items_list", indent_items_list);
-                request.getRequestDispatcher("showIndentItemList").forward(request, response);
+                request.getRequestDispatcher("showorderitemlist").forward(request, response);
+                return;
+            }
+            if (task.equals("GetIndentItemsnew")) {
+                List<ItemName> list = null;
+                //  String indent_no = request.getParameter("indent_no");
+                int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
+
+                List<Indent> indent_items_list = model.getIndentItems(indent_table_id);
+                request.setAttribute("indent_items_list", indent_items_list);
+                request.getRequestDispatcher("showorderitemlist").forward(request, response);
                 return;
             }
 
@@ -235,7 +270,7 @@ public class OrderController extends HttpServlet {
                 bean.setRequested_by(request.getParameter("requested_by"));
                 bean.setRequested_to(request.getParameter("requested_to"));
                 bean.setDescription(request.getParameter("description"));
-                String payment_mode=request.getParameter("payment");
+                String payment_mode = request.getParameter("payment");
 
                 String[] checked_id = request.getParameterValues("checked_id");
                 for (int i = 0; i < checked_id.length; i++) {
@@ -247,7 +282,7 @@ public class OrderController extends HttpServlet {
                         bean.setRequired_qty(Integer.parseInt(request.getParameter("req_qty" + i + "")));
                         bean.setExpected_date_time(request.getParameter("expected_date_time" + i + ""));
                         if (indent_table_id == 0) {
-                            model.insertRecord(bean, logged_user_name, office_admin, i,payment_mode);
+                            model.insertRecord(bean, logged_user_name, office_admin, i, payment_mode);
                         }
                     }
                 }
@@ -256,7 +291,7 @@ public class OrderController extends HttpServlet {
 
             counting = model.getCounting();
             String autogenerate_indent_no = "Order_" + counting;
-            String status = "";   
+            String status = "";
             String searchIndentStatusWise = request.getParameter("action1");
             if (searchIndentStatusWise == null) {
                 searchIndentStatusWise = "";
@@ -268,13 +303,13 @@ public class OrderController extends HttpServlet {
 //            List<Indent> list = model.showData(logged_user_name, office_admin);
             List<Indent> list = model.showData(logged_user_name, office_admin, status);
             List<Indent> status_list = model.getStatus();
-            
-             String req=model.getRequestedToKeyPersonorder("",logged_user_name);
+
+            String req = model.getRequestedToKeyPersonorder("", logged_user_name);
             request.setAttribute("list", list);
             request.setAttribute("status_list", status_list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);
             request.setAttribute("requested_by", logged_user_name);
-            request.setAttribute("requested_to", req);    
+            request.setAttribute("requested_to", req);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);

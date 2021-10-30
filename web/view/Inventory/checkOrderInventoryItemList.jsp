@@ -157,7 +157,7 @@
                 select: function (events, ui) {
                     console.log(ui);
                     $(this).val(ui.item.label);
-                    return false;
+                    return false;     
                 }
             });
         });
@@ -193,7 +193,7 @@ function deliveritem(){
         <div class="row mt-3 myTable">
             <div class="col-md-12">
                 <div class="table-responsive verticleScroll">
-                    <form action="CheckInventoryController" method="POST">
+                    <form action="CheckOrderInventoryController" method="POST">
                         <input type="hidden" name="indent_status" id="indent_status" value="${indent_status}">
                         <input type="hidden" name="final_status" id="final_status" value="${final_status}">
                         <input type="hidden" name="final_indent_table_id" id="final_indent_table_id"  value="${final_indent_table_id}">
@@ -212,7 +212,7 @@ function deliveritem(){
                                     <th>Approved Qty</th>
                                     <th>Stock Qty</th>
                                     <th>Deliver Qty</th>
-                                    <th>Status</th>
+                                    <th>Status</th>   
                                     <th>Purpose</th>
                                     <th>Expected Date</th>
                                     <!--<th></th>-->
