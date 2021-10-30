@@ -41,7 +41,7 @@ public class IndentModel {
         }
     }
 
-    public List<Indent> showData(String logged_key_person, String office_admin, String indent_status) {
+    public List<Indent> showData(String logged_key_person, String office_admin, String indent_status, String search_by_date) {
         List<Indent> list = new ArrayList<Indent>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -53,7 +53,7 @@ public class IndentModel {
                 + " and indt.requested_by=kp1.key_person_id  "
                 + " and indt.status_id=s.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'  ";
 
-        if (!logged_key_person.equals("") && logged_key_person != null && !logged_key_person.equals("jpss") ) {
+        if (!logged_key_person.equals("") && logged_key_person != null && !logged_key_person.equals("jpss")) {
             query += " and kp1.key_person_name='" + logged_key_person + "' ";
         }
         if (!office_admin.equals("") && office_admin != null) {
@@ -64,6 +64,9 @@ public class IndentModel {
             query += " and s.status='" + indent_status + "' ";
         }
 
+        if (!search_by_date.equals("") && search_by_date != null) {
+            query += " and indt.date_time like '"+search_by_date+"%' ";
+        }
         query += " order by indt.indent_no desc ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -394,7 +397,7 @@ public class IndentModel {
                 map.values();
                 List<ArrayList> ee = new ArrayList<>();
                 ee.add((ArrayList) map.get(sorted_list.get(k)));
-               // System.err.println("eee " + ee.size());
+                // System.err.println("eee " + ee.size());
 
                 for (int v = 0; v < ee.get(0).size(); v++) {
                     list4.add((Integer) ee.get(0).get(v));

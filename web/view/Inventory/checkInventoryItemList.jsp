@@ -98,32 +98,32 @@
         }
 
 
-        var disable_denied_btn = $('#disable_denied_btn').val();
-        if (disable_denied_btn == "disable")
-        {
-            $('.btn-danger').show();
-        }
-
-        var disable_less_stock_btn = $('#disable_less_stock_btn').val();
-        if (disable_less_stock_btn == "disable")
-        {
-            $('.btn-warning').show();
-        }
+//        var disable_denied_btn = $('#disable_denied_btn').val();
+//        if (disable_denied_btn == "disable")
+//        {
+//            $('.btn-danger').show();
+//        }
+//
+//        var disable_less_stock_btn = $('#disable_less_stock_btn').val();
+//        if (disable_less_stock_btn == "disable")
+//        {
+//            $('.btn-warning').show();
+//        }
 
         var final_indent_table_id = $('#final_indent_table_id').val();
         var final_message = $('#final_message').val();
         var final_status = $('#final_status').val();
-        var final_task = $('#final_task').val();        
-           
-            if (final_status != "") {
-                opener.document.getElementById("stock_indent_final_indent_table_id").value = final_indent_table_id;
-                opener.document.getElementById("stock_indent_final_status").value = final_status;
-                opener.document.getElementById("stock_indent_final_message").value = final_message;
-                opener.document.getElementById("final_task").value = final_task;
-                opener.location.reload();
-                window.close();
-            }
-       
+        var final_task = $('#final_task').val();
+
+        if (final_status != "") {
+            opener.document.getElementById("stock_indent_final_indent_table_id").value = final_indent_table_id;
+            opener.document.getElementById("stock_indent_final_status").value = final_status;
+            opener.document.getElementById("stock_indent_final_message").value = final_message;
+            opener.document.getElementById("final_task").value = final_task;
+            opener.location.reload();
+            window.close();
+        }
+
         $(document).on('keydown', '.myAutocompleteClass', function () {
             var id = this.id;
             var type;
@@ -287,8 +287,8 @@
                             </tbody>
                         </table>
                         <input type="submit" class="btn btn-success" id="approve_denied" name="task" value="Generate Delivery Challan" style="margin-left:40%">
-                        <input type="submit" style="display: none" class="btn btn-danger" value="Denied" id="approve_denied" name="task">
-                        <input type="submit" style="display: none" class="btn btn-warning" value="Less Stock" id="approve_denied" name="task">
+                        <!--<input type="submit" style="display: none" class="btn btn-danger" value="Denied" id="approve_denied" name="task">-->
+                        <!--<input type="submit" style="display: none" class="btn btn-warning" value="Less Stock" id="approve_denied" name="task">-->
                     </form>
                 </div>
             </div>

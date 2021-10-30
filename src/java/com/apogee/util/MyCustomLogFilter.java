@@ -40,7 +40,7 @@ public class MyCustomLogFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
         try {
             
-            System.err.println("---------------------------------- Log Filter ---------------------------------------------");
+          //  System.err.println("---------------------------------- Log Filter ---------------------------------------------");
             
             HttpServletRequest request = (HttpServletRequest) req;
             HttpServletResponse response = (HttpServletResponse) res;

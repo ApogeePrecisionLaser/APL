@@ -40,7 +40,7 @@ import org.json.JSONObject;
  * @author Komal
  */
 public class IndentController extends HttpServlet {
-    
+
     private File tmpDir;
     List<String> import_item_name_arr = new ArrayList<String>();
 
@@ -52,7 +52,7 @@ public class IndentController extends HttpServlet {
     String import_purpose = "";
     String import_expected_date_time = "";
     int import_req_qty = 0;
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -72,6 +72,7 @@ public class IndentController extends HttpServlet {
         String requested_by = "";
         String requested_to = "";
         String description = "";
+        String search_by_date = "";
 
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("logged_user_name") == null) {
@@ -91,10 +92,15 @@ public class IndentController extends HttpServlet {
         IndentModel model = new IndentModel();
 
         String search_item_name = "";
+        search_by_date = request.getParameter("search_by_date");
+
         if (search_item_name == null) {
             search_item_name = "";
         }
 
+        if (search_by_date == null) {
+            search_by_date = "";
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -261,10 +267,9 @@ public class IndentController extends HttpServlet {
             }
 
 //            List<Indent> list = model.showData(logged_user_name, office_admin);
-            List<Indent> list = model.showData(logged_user_name, office_admin, status);
+            List<Indent> list = model.showData(logged_user_name, office_admin, status, search_by_date);
             List<Indent> status_list = model.getStatus();
-            
-           
+
             request.setAttribute("list", list);
             request.setAttribute("status_list", status_list);
             request.setAttribute("autogenerate_indent_no", autogenerate_indent_no);

@@ -165,6 +165,23 @@
                                 <%}%>
 
 
+
+                                <%
+                                    if (session.getAttribute("user_role").equals("Super Admin")) {
+                                %>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                        Report
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="OfficeItemMapReportController">Office and Item Map Report</a>
+                                    </div>
+                                </li>  
+                                <%}%>
+
+
+
                                 <%
                                     if (!session.getAttribute("user_role").equals("Dealer") && !session.getAttribute("user_role").equals("Sales")) {
                                 %>

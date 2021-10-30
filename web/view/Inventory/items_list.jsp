@@ -71,6 +71,8 @@
         $(document).on('keydown', '.myAutocompleteClass', function () {
             var id = this.id;
             var type;
+            //  alert(id);
+            //alert(type);
             if (id.match("^status")) {
                 type = "Status";
             } else if (id.match("^purpose")) {
@@ -115,7 +117,7 @@
 
 
 
-    function closeSelf() {
+    function closeSelf() {//alert("import btn clicked");
         var prevVal = opener.document.getElementById("String_data").value;
         var checkedValue = null;
         var inputElements = document.getElementsByClassName('messageCheckbox');
@@ -137,9 +139,12 @@
         if (prevVal != "") {
             data = prevVal + data;
         }
-        opener.document.getElementById("String_data").value = data;
+        
+        window.opener.document.getElementById("String_data").value = data;
+        
 
-        opener.location.reload();
+        //opener.location.reload();
+        //window.opener.location.reload();
         window.close();
     }
 
@@ -180,7 +185,7 @@
                                         <td> <input type="checkbox" class="Checkbox" value="${beanType.item_names_id}" name="checkbox${beanType.item_names_id}" id="checkbox${beanType.item_names_id}" 
                                                     onclick="enableFields(${beanType.item_names_id})" checked="" disabled=""></td>
                                         <td><input style="width:100px;font-size:13px" type="text" value="${beanType.checked_req_qty}" name="required_qty${beanType.item_names_id}" id="required_qty${beanType.item_names_id}" placeholder="Qty" disabled></td>
-                                        <td><input style="width:100px;font-size:13px" type="date" value="${beanType.checked_expected_date_time}" name="expected_date_time${beanType.item_names_id}" id="expected_date_time${beanType.item_names_id}" placeholder="Qty" disabled></td>
+                                        <td><input style="width:100px;font-size:13px" type="text" class="datepicker" value="${beanType.checked_expected_date_time}" name="expected_date_time${beanType.item_names_id}" id="expected_date_time${beanType.item_names_id}" placeholder="Qty" disabled></td>
                                         <td><input style="width:100px;font-size:13px" value="${beanType.checked_purpose}" class="myAutocompleteClass" type="text" name="purpose${beanType.item_names_id}" id="purpose${beanType.item_names_id}" placeholder="Purpose" disabled></td>
                                         </c:when>
                                         <c:otherwise>

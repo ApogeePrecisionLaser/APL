@@ -53,7 +53,7 @@ public class ApproveIndentModel {
         }
     }
 
-    public List<ApproveIndent> showIndents(String logged_key_person, String indent_status) {
+    public List<ApproveIndent> showIndents(String logged_key_person, String indent_status, String search_by_date) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -70,6 +70,9 @@ public class ApproveIndentModel {
         }
         if (!indent_status.equals("") && indent_status != null) {
             query += " and s.status='" + indent_status + "' ";
+        }
+        if (!search_by_date.equals("") && search_by_date != null) {
+            query += " and indt.date_time like '" + search_by_date + "%' ";
         }
 
         query += " order by indt.indent_no desc ";
@@ -121,13 +124,22 @@ public class ApproveIndentModel {
     public List<ApproveIndent> getIndentItems(int indent_table_id) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
 
+//        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+//                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id "
+//                + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
+//                + " status s1,status s2 where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+//                + " and indi.purpose_id=p.purpose_id and indt.status_id=s1.status_id "
+//                + " and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+//                + " and indt.indent_table_id='" + indent_table_id + "' ";
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id "
+                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
+                + " indi.deliver_qty,indt.requested_by ,indt.requested_to "
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
-                + " status s1,status s2 where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
-                + " and indi.purpose_id=p.purpose_id and indt.status_id=s1.status_id "
-                + " and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.indent_table_id='" + indent_table_id + "' ";
+                + " status s1,status s2,inventory inv,inventory_basic ib where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+                + " and inv.active='Y' "
+                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='115' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -137,6 +149,7 @@ public class ApproveIndentModel {
                 bean.setItem_name((rset.getString("item_name")));
                 bean.setPurpose((rset.getString("purpose")));
                 bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setStock_qty(rset.getInt("stock_quantity"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
                 bean.setExpected_date_time(rset.getString("expected_date_time"));
                 String indent_status = rset.getString("indent_status");

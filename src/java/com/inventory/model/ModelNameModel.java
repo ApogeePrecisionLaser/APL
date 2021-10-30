@@ -48,7 +48,7 @@ public class ModelNameModel {
         List<ModelName> list = new ArrayList<ModelName>();
         String searchItemName = "";
         if (!searchItemCode.equals("")) {
-            String searchItemCodearr[] = searchItemCode.split(" - ");
+            String searchItemCodearr[] = searchItemCode.split(" # ");
             searchItemCode = searchItemCodearr[0];
             searchItemName = searchItemCodearr[1];
         }
