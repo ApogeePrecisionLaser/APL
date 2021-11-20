@@ -1,3 +1,13 @@
 Change Note of APL----
 
 1. Inventory Item,manufacture,model,Attendnace Part
+
+
+2. (20-11-2021) I have completed Indent & inventory part with all changes.
+   ->  Blank indent form pdf for making indent on hard copy.
+   ->  Indent form pdf for every indent on software.
+   ->  Delivery Challan.
+   ->  Inventory & Inventory Basic hierarchy
+   ->  UI provision for mapping Inventory same Items to another office.
+   ->  Map all items to designation in item_authorization at any level.
+   ->  Office item report & Inventory Report with hierarichal S.No. and dynamic colors.
