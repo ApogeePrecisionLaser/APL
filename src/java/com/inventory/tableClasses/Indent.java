@@ -29,10 +29,8 @@ public class Indent {
     private String delivery_challan_date;
     private String orderno;
     private String itemname;
- 
     private String model;
     private int model_id;
- 
 
     public String getItemname() {
         return itemname;
@@ -65,7 +63,7 @@ public class Indent {
     public void setOrderno(String orderno) {
         this.orderno = orderno;
     }
- 
+
     private String remark;
     private int revision_no;
     private String date_time;

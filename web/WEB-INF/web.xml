@@ -19,8 +19,13 @@
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
+<<<<<<< HEAD
         <param-value>jdbc:mysql://localhost:3306/apl</param-value>
         <!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
+=======
+        <param-value>jdbc:mysql://localhost:3306/apl_2</param-value>
+<!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
+>>>>>>> 06992cf0d1fe169bb948a9d4ce812c09b8186bc7
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
@@ -28,8 +33,13 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
+<<<<<<< HEAD
         <!--<param-value>root</param-value>--> 
         <param-value>CXKyE2ZpT%HjbP!4c$</param-value>
+=======
+               <param-value>root</param-value> 
+<!--        <param-value>root</param-value>-->
+>>>>>>> 06992cf0d1fe169bb948a9d4ce812c09b8186bc7
     </context-param>
     
     
@@ -1095,7 +1105,11 @@
         <servlet-name>deliveritemslist</servlet-name>
         <url-pattern>/deliveritemslist</url-pattern>
     </servlet-mapping> 
+<<<<<<< HEAD
     <servlet>
+=======
+     <servlet>
+>>>>>>> 06992cf0d1fe169bb948a9d4ce812c09b8186bc7
         <servlet-name>showorderitemlist</servlet-name>
         <jsp-file>/view/Inventory/showorderItemList.jsp</jsp-file>
     </servlet>

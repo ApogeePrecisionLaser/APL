@@ -139,7 +139,7 @@
                                 <th>Purpose</th>
                                 <th>Expected Date</th>
                             </tr>
-                        </thead> 
+                        </thead>
                         <tbody>
                             <c:forEach var="beanType" items="${requestScope['indent_items_list']}"
                                        varStatus="loopCounter">
