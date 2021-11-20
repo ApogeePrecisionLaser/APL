@@ -6,7 +6,7 @@
          version="3.1">
     <session-config>
         <session-timeout>
-            30
+            30    
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -20,7 +20,7 @@
     <context-param>
         <param-name>connectionString</param-name>
         <param-value>jdbc:mysql://localhost:3306/apl</param-value>
-<!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
+        <!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
@@ -28,8 +28,8 @@
     </context-param>
     <context-param>
         <param-name>db_password</param-name>                
-               <param-value>CXKyE2ZpT%HjbP!4c$</param-value> 
-<!--        <param-value>root</param-value>-->
+        <!--<param-value>root</param-value>--> 
+        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>
     </context-param>
     
     
@@ -644,6 +644,44 @@
     
     
     
+    <!--Start Office and item map report-->
+    <servlet>
+        <servlet-name>OfficeItemMapReportController</servlet-name>
+        <servlet-class>com.report.controller.OfficeItemMapReportController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OfficeItemMapReportController</servlet-name>
+        <url-pattern>/OfficeItemMapReportController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>officeItemMapReport</servlet-name>
+        <jsp-file>/view/report/officeItemMapReport.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>officeItemMapReport</servlet-name>
+        <url-pattern>/officeItemMapReport</url-pattern>
+    </servlet-mapping>
+    <!--end Office and item map report-->
+    
+    
+    <!--Start Inventory report-->
+    <servlet>
+        <servlet-name>InventoryReportController</servlet-name>
+        <servlet-class>com.report.controller.InventoryReportController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InventoryReportController</servlet-name>
+        <url-pattern>/InventoryReportController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>inventory_report</servlet-name>
+        <jsp-file>/view/report/inventory_report.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>inventory_report</servlet-name>
+        <url-pattern>/inventory_report</url-pattern>
+    </servlet-mapping>
+    <!--end Inventory report-->
     
         
     <servlet>
@@ -939,10 +977,10 @@
         <url-pattern>/user_no_privilege</url-pattern>
     </servlet-mapping>
     
-<!-- Order Mapping   -->
+    <!-- Order Mapping   -->
    
     
-      <servlet>
+    <servlet>
         <servlet-name>OrderController</servlet-name>
         <servlet-class>com.apl.order.controller.OrderController</servlet-class>
     </servlet>
@@ -959,7 +997,7 @@
         <url-pattern>/DealerSalemanMapController</url-pattern>
     </servlet-mapping>
         
-         <servlet>
+    <servlet>
         <servlet-name>dealersalesmap</servlet-name>
         <jsp-file>/view/Inventory/dealersalesmap.jsp</jsp-file>
     </servlet>
@@ -968,7 +1006,7 @@
         <url-pattern>/dealersalesmap</url-pattern>
     </servlet-mapping>
         
-         <servlet>
+    <servlet>
         <servlet-name>order</servlet-name>
         <jsp-file>/view/Inventory/order.jsp</jsp-file>
     </servlet>
@@ -1008,7 +1046,7 @@
     
     <!--End Approve Indent -->
     
-     <servlet>
+    <servlet>
         <servlet-name>CheckOrderInventoryController</servlet-name>
         <servlet-class>com.apl.order.controller.CheckOrderInventoryController</servlet-class>
     </servlet>
@@ -1016,7 +1054,7 @@
         <servlet-name>CheckOrderInventoryController</servlet-name>
         <url-pattern>/CheckOrderInventoryController</url-pattern>
     </servlet-mapping>
-     <servlet>
+    <servlet>
         <servlet-name>DeliverOrderItemController</servlet-name>
         <servlet-class>com.apl.order.controller.DeliverOrderItemController</servlet-class>
     </servlet>
@@ -1025,7 +1063,7 @@
         <url-pattern>/DeliverOrderItemController</url-pattern>
     </servlet-mapping>
     
-     <servlet>
+    <servlet>
         <servlet-name>checkorderInventoryItemList</servlet-name>
         <jsp-file>/view/Inventory/checkOrderInventoryItemList.jsp</jsp-file>
     </servlet>
@@ -1033,7 +1071,7 @@
         <servlet-name>checkorderInventoryItemList</servlet-name>
         <url-pattern>/checkorderInventoryItemList</url-pattern>
     </servlet-mapping> 
-     <servlet>
+    <servlet>
         <servlet-name>checkorderInventory</servlet-name>
         <jsp-file>/view/Inventory/check_order_inventory.jsp</jsp-file>
     </servlet>
@@ -1041,7 +1079,7 @@
         <servlet-name>checkorderInventory</servlet-name>
         <url-pattern>/checkorderInventory</url-pattern>
     </servlet-mapping> 
-     <servlet>
+    <servlet>
         <servlet-name>orderdeliveryChallan</servlet-name>
         <jsp-file>/view/Inventory/orderdeliveryChallan.jsp</jsp-file>
     </servlet>
@@ -1049,13 +1087,21 @@
         <servlet-name>orderdeliveryChallan</servlet-name>
         <url-pattern>/orderdeliveryChallan</url-pattern>
     </servlet-mapping> 
-     <servlet>
+    <servlet>
         <servlet-name>deliveritemslist</servlet-name>
         <jsp-file>/view/Inventory/deliveritemslist.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>deliveritemslist</servlet-name>
         <url-pattern>/deliveritemslist</url-pattern>
+    </servlet-mapping> 
+    <servlet>
+        <servlet-name>showorderitemlist</servlet-name>
+        <jsp-file>/view/Inventory/showorderItemList.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>showorderitemlist</servlet-name>
+        <url-pattern>/showorderitemlist</url-pattern>
     </servlet-mapping> 
     
     
@@ -1067,5 +1113,27 @@
         <servlet-name>Flow</servlet-name>
         <url-pattern>/Flow</url-pattern>
     </servlet-mapping>
+    
+    
+    <!--Start Office and item map report-->
+    <servlet>
+        <servlet-name>TestController</servlet-name>
+        <servlet-class>com.report.controller.TestController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestController</servlet-name>
+        <url-pattern>/TestController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>testreport</servlet-name>
+        <jsp-file>/view/report/testreport.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>testreport</servlet-name>
+        <url-pattern>/testreport</url-pattern>
+    </servlet-mapping>
+    <!--end Office and item map report-->
+    
+    
     
 </web-app>

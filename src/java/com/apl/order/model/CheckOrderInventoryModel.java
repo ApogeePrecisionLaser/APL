@@ -89,7 +89,7 @@ public class CheckOrderInventoryModel {
     public List<CheckInventory> getStatus() {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status order by status";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -107,17 +107,25 @@ public class CheckOrderInventoryModel {
         return list;
     }
 
-    public List<CheckInventory> getIndentItems(int indent_table_id, int logged_key_person_id) {
+     public List<CheckInventory> getIndentItems(int indent_table_id, int logged_key_person_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to "
-                + " from order_table indt,order_item indi, item_names itn, "
-                + " status s1,status s2,inventory inv,inventory_basic ib where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
-                + " and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
-                + " and inv.active='Y' "
-                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  , m.model,  s1.status as indent_status,s2.status as item_status,\n"
+                + "  indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to  \n"
+                + "  from order_table indt,order_item indi, item_names itn, manufacturer_item_map mim ,model m , status s1,status s2,inventory inv,inventory_basic ib\n"
+                + "  where indt.order_table_id=indi.order_table_id and mim.active='Y' \n"
+                + " and m.active='Y' and m.model_id=ib.model_id  and mim.item_names_id=itn.item_names_id  and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and \n"
+                + " indi.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' \n"
+                + " and inv.active='Y'  and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n"
                 + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
+//        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+//                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+//                + " from order_table indt,order_item indi, item_names itn, "
+//                + " status s1,status s2,inventory inv,inventory_basic ib where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
+//                + " and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+//                + " and inv.active='Y' "
+//                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+//                + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -125,6 +133,7 @@ public class CheckOrderInventoryModel {
                 CheckInventory bean = new CheckInventory();
                 bean.setIndent_no(rset.getString("order_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose("Test");
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
@@ -150,12 +159,12 @@ public class CheckOrderInventoryModel {
     public List<CheckInventory> getIndentItemsForDeliveryChallan(int indent_table_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty , m.model"
                 + " ,s.status,indi.order_item_id,indt.order_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by ,indt.requested_to "
-                + " from order_table indt,order_item indi, item_names itn, "
-                + " status s where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
-                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.order_table_id='" + indent_table_id + "' and indt.status_id=6 ";
+                + " from order_table indt,order_item indi, item_names itn,manufacturer_item_map mim ,model m , "
+                + " status s where indt.order_table_id=indi.order_table_id   and indi.model_id=m.model_id "
+                + " and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and indt.order_table_id='" + indent_table_id + "' ";  
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -163,9 +172,10 @@ public class CheckOrderInventoryModel {
                 CheckInventory bean = new CheckInventory();
                 bean.setIndent_no(rset.getString("order_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose("Test");
                 bean.setRequired_qty(rset.getInt("required_qty"));
-                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));   
                 bean.setStock_qty(rset.getInt("stock_qty"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
                 bean.setExpected_date_time(rset.getString("expected_date_time"));
@@ -183,6 +193,8 @@ public class CheckOrderInventoryModel {
         }
         return list;
     }
+    
+    
     public List<CheckInventory> getIndentItemsForDeliveryChallanAfterPayment(int indent_table_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
@@ -224,7 +236,7 @@ public class CheckOrderInventoryModel {
             String logged_user_name) {
         int updateRowsAffected = 0;
         if (task.equals("Generate Delivery Challan")) {
-            task = "Delivery Challan Generated";
+            task = "Approved";
         }
 
         int indent_status_id = getStatusId(task);
@@ -235,11 +247,11 @@ public class CheckOrderInventoryModel {
         if (task.equals("Denied")) {
             item_status = "Denied";
         } else {
-            item_status = "Delivery Challan Generated";
+            item_status = "Approved";
         }
         int status_id = getStatusId(item_status);
 
-        String query = " UPDATE indent_item SET status_id=?,deliver_qty=? WHERE indent_item_id=? ";
+        String query = " UPDATE order_item SET status_id=?,deliver_qty=? WHERE order_item_id=? ";
 
         int rowsAffected = 0;
         int updateRowsAffected2 = 0;
@@ -249,16 +261,16 @@ public class CheckOrderInventoryModel {
         try {
             PreparedStatement pstm = connection.prepareStatement(query);
             pstm.setInt(1, status_id);
-            if (item_status.equals("Delivery Challan Generated")) {
+          //  if (item_status.equals("Delivery Challan Generated")) {
                 pstm.setInt(2, bean.getDelivered_qty());
-            } else {
-                pstm.setInt(2, 0);
-            }
+          //  } else {
+              //  pstm.setInt(2, 0);
+          //  }
 
-            pstm.setInt(3, indent_item_id);
+            pstm.setInt(3, indent_item_id);    
             updateRowsAffected = pstm.executeUpdate();
 
-            String query2 = " update indent_table set status_id=? where indent_table_id=? ";
+            String query2 = " update order_table set status_id=? where order_table_id=? ";
             PreparedStatement pstm2 = connection.prepareStatement(query2);
             pstm2.setInt(1, indent_status_id);
             pstm2.setInt(2, indent_table_id);
@@ -446,7 +458,7 @@ String status="fail";
             PreparedStatement psmt = connection.prepareStatement(query);
             ResultSet rs = psmt.executeQuery();
             while (rs.next()) {
-                String delivery_challan_no = rs.getString("delivery_challan_no");
+                String delivery_challan_no = rs.getString("order_delivery_challan_no");
                 String delivery_challan_no_arr[] = delivery_challan_no.split("_");
                 int length = (delivery_challan_no_arr.length) - 1;
                 count = Integer.parseInt(delivery_challan_no_arr[length]);

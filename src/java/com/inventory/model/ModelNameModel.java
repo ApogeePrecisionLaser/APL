@@ -214,7 +214,7 @@ public class ModelNameModel {
 
         String item_code = model_name.getItem_code();
         if (!item_code.equals("")) {
-            String item_code_arr[] = item_code.split(" $ ");
+            String item_code_arr[] = item_code.split(" # ");
             item_code = item_code_arr[0];
             item_name = item_code_arr[1];
         }

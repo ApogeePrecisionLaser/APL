@@ -130,7 +130,7 @@
                 var purpose = $('#purpose' + checkedValue + '').val();
                 var expected_date_time = $('#expected_date_time' + checkedValue + '').val();
 
-                data += '{"checkedValue":"' + checkedValue + '","item_name":"' + item_name + '", "req_qty":' + req_qty + ', "purpose":"' + purpose + '","expected_date_time":"' + expected_date_time + '"},';
+                data += '{"checkedValue":"' + checkedValue + '","model":"' + item_name + '", "req_qty":' + req_qty + ', "purpose":"' + purpose + '","expected_date_time":"' + expected_date_time + '"},';
 
             } else {
                 opener.document.getElementById("String_data").value = "";
@@ -207,7 +207,6 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-
 
                                 </tr>
                             </c:otherwise>

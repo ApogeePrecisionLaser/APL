@@ -251,7 +251,7 @@ public class ItemNameModel {
         }
         return arrayObj;
     }
-
+    
     public List<String> getParentItemNameList() {
         PreparedStatement pstmt;
         List<String> list = new ArrayList<String>();

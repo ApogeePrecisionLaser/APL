@@ -6,6 +6,7 @@ package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
 import com.inventory.model.InventoryBasicModel;
+import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.InventoryBasic;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -47,11 +48,11 @@ public class InventoryBasicController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryBasicModel model = new InventoryBasicModel();
-        
+        ItemNameModel model2 = new ItemNameModel();
+
         HttpSession session = request.getSession();
-        String loggedUser="";
+        String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
-		
 
         String search_item_name = "";
         String search_org_office = "";
@@ -91,6 +92,7 @@ public class InventoryBasicController extends HttpServlet {
         }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in ItemNameController setConnection() calling try block" + e);
         }
@@ -123,7 +125,8 @@ public class InventoryBasicController extends HttpServlet {
                         list = model.getModelName(q, manufacturer_name, item_code);
                     }
                     if (JQstring.equals("getOrgOffice")) {
-                        list = model.getOrgOffice(q);
+                        search_org_office = request.getParameter("search_org_office");
+                        list = model.getOrgOffice(q, search_org_office);
                     }
                     if (JQstring.equals("getLeadTime")) {
                         String model_name = request.getParameter("model_name");
@@ -163,12 +166,12 @@ public class InventoryBasicController extends HttpServlet {
                     inventory_id = Integer.parseInt(request.getParameter("inventory_id").trim());
                 } catch (Exception e) {
                     inventory_basic_id = 0;
-                    inventory_id=0;
+                    inventory_id = 0;
                 }
 
                 if (task.equals("Save AS New")) {
                     inventory_basic_id = 0;
-                    inventory_id=0;
+                    inventory_id = 0;
                 }
 
                 InventoryBasic bean = new InventoryBasic();
@@ -183,12 +186,43 @@ public class InventoryBasicController extends HttpServlet {
                 bean.setOpening_balance(request.getParameter("opening_balance").trim());
                 bean.setDate_time(request.getParameter("date_time").trim());
                 bean.setModel(request.getParameter("model_name"));
+                bean.setStock_quantity(Integer.parseInt(request.getParameter("quantity").trim()));
 
                 if (inventory_basic_id == 0) {
                     model.insertRecord(bean);
                 } else {
-                    model.updateRecord(bean, inventory_basic_id,inventory_id);
+                    model.updateRecord(bean, inventory_basic_id, inventory_id);
                 }
+            } else if (task.equals("Map To Another Office")) {
+                int inventory_basic_id = 0;
+                int inventory_id = 0;
+                try {
+                    inventory_basic_id = Integer.parseInt(request.getParameter("inventory_basic_id").trim());
+                    inventory_id = Integer.parseInt(request.getParameter("inventory_id").trim());
+                } catch (Exception e) {
+                    inventory_basic_id = 0;
+                    inventory_id = 0;
+                }
+
+                if (task.equals("Save AS New")) {
+                    inventory_basic_id = 0;
+                    inventory_id = 0;
+                }
+
+                InventoryBasic bean = new InventoryBasic();
+                String allCheckBoxes[] = request.getParameterValues("checkboxes");
+                String org_office_map = request.getParameter("org_office").trim();
+                String key_person_map = request.getParameter("key_person").trim();
+                String search_org_office_old = request.getParameter("search_org_office_old").trim();
+                for (int j = 0; j < allCheckBoxes.length; j++) {
+                    System.err.println("-------------------------------------" + allCheckBoxes[j]);
+                    String item_name_map = allCheckBoxes[j];
+                    bean.setItem_name(item_name_map);
+                    bean.setOrg_office(org_office_map);
+                    bean.setKey_person(key_person_map);
+                    model.insertMapRecord(bean,search_org_office_old);
+                }
+
             }
 
             List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person);

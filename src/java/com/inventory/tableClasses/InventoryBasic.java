@@ -12,28 +12,55 @@ import java.util.List;
  */
 public class InventoryBasic {
 
-    private int inventory_basic_id;
     private int inventory_id;
+    private int inventory_basic_id;
     private String item_name;
-    private String manufacturer_name;
-    private String model;
     private String item_code;
     private int item_names_id;
-    private int manufacturer_id;
-    private int model_id;
-    private int manufacturer_item_map_id;
     private String description;
     private String org_office;
     private int org_office_id;
+    private int key_person_id;
+    private String key_person;
     private String active;
     private String remark;
     private int revision_no;
-    private int min_quantity;
+    private int inward_quantity;
+    private int outward_quantity;
+    private int stock_quantity;
+    private String date_time;
+    private String reference_document_type;
+    private String reference_document_id;
+    private int manufacturer_id;
+    private int model_id;
+    private int manufacturer_item_map_id;
+    private String manufacturer_name;
+    private String model;
+    private String model_no;
+    private String part_no;
+    private String parent_item;
+    private String parent_item_code;
+    private String parent_item_id;
+    private int generation;
+    private String popupval;
+    private String delivery_challan_img;
+     private int min_quantity;
     private int daily_req;
     private String opening_balance;
-    private String key_person;
-    private int key_person_id;
-    private String date_time;
+
+    /**
+     * @return the inventory_id
+     */
+    public int getInventory_id() {
+        return inventory_id;
+    }
+
+    /**
+     * @param inventory_id the inventory_id to set
+     */
+    public void setInventory_id(int inventory_id) {
+        this.inventory_id = inventory_id;
+    }
 
     /**
      * @return the inventory_basic_id
@@ -120,6 +147,34 @@ public class InventoryBasic {
     }
 
     /**
+     * @return the key_person_id
+     */
+    public int getKey_person_id() {
+        return key_person_id;
+    }
+
+    /**
+     * @param key_person_id the key_person_id to set
+     */
+    public void setKey_person_id(int key_person_id) {
+        this.key_person_id = key_person_id;
+    }
+
+    /**
+     * @return the key_person
+     */
+    public String getKey_person() {
+        return key_person;
+    }
+
+    /**
+     * @param key_person the key_person to set
+     */
+    public void setKey_person(String key_person) {
+        this.key_person = key_person;
+    }
+
+    /**
      * @return the active
      */
     public String getActive() {
@@ -162,45 +217,45 @@ public class InventoryBasic {
     }
 
     /**
-     * @return the min_quantity
+     * @return the inward_quantity
      */
-    public int getMin_quantity() {
-        return min_quantity;
+    public int getInward_quantity() {
+        return inward_quantity;
     }
 
     /**
-     * @param min_quantity the min_quantity to set
+     * @param inward_quantity the inward_quantity to set
      */
-    public void setMin_quantity(int min_quantity) {
-        this.min_quantity = min_quantity;
+    public void setInward_quantity(int inward_quantity) {
+        this.inward_quantity = inward_quantity;
     }
 
     /**
-     * @return the daily_req
+     * @return the outward_quantity
      */
-    public int getDaily_req() {
-        return daily_req;
+    public int getOutward_quantity() {
+        return outward_quantity;
     }
 
     /**
-     * @param daily_req the daily_req to set
+     * @param outward_quantity the outward_quantity to set
      */
-    public void setDaily_req(int daily_req) {
-        this.daily_req = daily_req;
+    public void setOutward_quantity(int outward_quantity) {
+        this.outward_quantity = outward_quantity;
     }
 
     /**
-     * @return the opening_balance
+     * @return the date_time
      */
-    public String getOpening_balance() {
-        return opening_balance;
+    public String getDate_time() {
+        return date_time;
     }
 
     /**
-     * @param opening_balance the opening_balance to set
+     * @param date_time the date_time to set
      */
-    public void setOpening_balance(String opening_balance) {
-        this.opening_balance = opening_balance;
+    public void setDate_time(String date_time) {
+        this.date_time = date_time;
     }
 
     /**
@@ -218,31 +273,45 @@ public class InventoryBasic {
     }
 
     /**
-     * @return the manufacturer_name
+     * @return the reference_document_type
      */
-    public String getManufacturer_name() {
-        return manufacturer_name;
+    public String getReference_document_type() {
+        return reference_document_type;
     }
 
     /**
-     * @param manufacturer_name the manufacturer_name to set
+     * @param reference_document_type the reference_document_type to set
      */
-    public void setManufacturer_name(String manufacturer_name) {
-        this.manufacturer_name = manufacturer_name;
+    public void setReference_document_type(String reference_document_type) {
+        this.reference_document_type = reference_document_type;
     }
 
     /**
-     * @return the model
+     * @return the reference_document_id
      */
-    public String getModel() {
-        return model;
+    public String getReference_document_id() {
+        return reference_document_id;
     }
 
     /**
-     * @param model the model to set
+     * @param reference_document_id the reference_document_id to set
      */
-    public void setModel(String model) {
-        this.model = model;
+    public void setReference_document_id(String reference_document_id) {
+        this.reference_document_id = reference_document_id;
+    }
+
+    /**
+     * @return the stock_quantity
+     */
+    public int getStock_quantity() {
+        return stock_quantity;
+    }
+
+    /**
+     * @param stock_quantity the stock_quantity to set
+     */
+    public void setStock_quantity(int stock_quantity) {
+        this.stock_quantity = stock_quantity;
     }
 
     /**
@@ -288,59 +357,185 @@ public class InventoryBasic {
     }
 
     /**
-     * @return the key_person
+     * @return the manufacturer_name
      */
-    public String getKey_person() {
-        return key_person;
+    public String getManufacturer_name() {
+        return manufacturer_name;
     }
 
     /**
-     * @param key_person the key_person to set
+     * @param manufacturer_name the manufacturer_name to set
      */
-    public void setKey_person(String key_person) {
-        this.key_person = key_person;
+    public void setManufacturer_name(String manufacturer_name) {
+        this.manufacturer_name = manufacturer_name;
     }
 
     /**
-     * @return the key_person_id
+     * @return the model
      */
-    public int getKey_person_id() {
-        return key_person_id;
+    public String getModel() {
+        return model;
     }
 
     /**
-     * @param key_person_id the key_person_id to set
+     * @param model the model to set
      */
-    public void setKey_person_id(int key_person_id) {
-        this.key_person_id = key_person_id;
+    public void setModel(String model) {
+        this.model = model;
     }
 
     /**
-     * @return the date_time
+     * @return the parent_item
      */
-    public String getDate_time() {
-        return date_time;
+    public String getParent_item() {
+        return parent_item;
     }
 
     /**
-     * @param date_time the date_time to set
+     * @param parent_item the parent_item to set
      */
-    public void setDate_time(String date_time) {
-        this.date_time = date_time;
+    public void setParent_item(String parent_item) {
+        this.parent_item = parent_item;
     }
 
     /**
-     * @return the inventory_id
+     * @return the parent_item_code
      */
-    public int getInventory_id() {
-        return inventory_id;
+    public String getParent_item_code() {
+        return parent_item_code;
     }
 
     /**
-     * @param inventory_id the inventory_id to set
+     * @param parent_item_code the parent_item_code to set
      */
-    public void setInventory_id(int inventory_id) {
-        this.inventory_id = inventory_id;
+    public void setParent_item_code(String parent_item_code) {
+        this.parent_item_code = parent_item_code;
+    }
+
+    /**
+     * @return the parent_item_id
+     */
+    public String getParent_item_id() {
+        return parent_item_id;
+    }
+
+    /**
+     * @param parent_item_id the parent_item_id to set
+     */
+    public void setParent_item_id(String parent_item_id) {
+        this.parent_item_id = parent_item_id;
+    }
+
+    /**
+     * @return the generation
+     */
+    public int getGeneration() {
+        return generation;
+    }
+
+    /**
+     * @param generation the generation to set
+     */
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+
+    /**
+     * @return the popupval
+     */
+    public String getPopupval() {
+        return popupval;
+    }
+
+    /**
+     * @param popupval the popupval to set
+     */
+    public void setPopupval(String popupval) {
+        this.popupval = popupval;
+    }
+
+    /**
+     * @return the model_no
+     */
+    public String getModel_no() {
+        return model_no;
+    }
+
+    /**
+     * @param model_no the model_no to set
+     */
+    public void setModel_no(String model_no) {
+        this.model_no = model_no;
+    }
+
+    /**
+     * @return the part_no
+     */
+    public String getPart_no() {
+        return part_no;
+    }
+
+    /**
+     * @param part_no the part_no to set
+     */
+    public void setPart_no(String part_no) {
+        this.part_no = part_no;
+    }
+
+    /**
+     * @return the delivery_challan_img
+     */
+    public String getDelivery_challan_img() {
+        return delivery_challan_img;
+    }
+
+    /**
+     * @param delivery_challan_img the delivery_challan_img to set
+     */
+    public void setDelivery_challan_img(String delivery_challan_img) {
+        this.delivery_challan_img = delivery_challan_img;
+    }
+
+    /**
+     * @return the min_quantity
+     */
+    public int getMin_quantity() {
+        return min_quantity;
+    }
+
+    /**
+     * @param min_quantity the min_quantity to set
+     */
+    public void setMin_quantity(int min_quantity) {
+        this.min_quantity = min_quantity;
+    }
+
+    /**
+     * @return the daily_req
+     */
+    public int getDaily_req() {
+        return daily_req;
+    }
+
+    /**
+     * @param daily_req the daily_req to set
+     */
+    public void setDaily_req(int daily_req) {
+        this.daily_req = daily_req;
+    }
+
+    /**
+     * @return the opening_balance
+     */
+    public String getOpening_balance() {
+        return opening_balance;
+    }
+
+    /**
+     * @param opening_balance the opening_balance to set
+     */
+    public void setOpening_balance(String opening_balance) {
+        this.opening_balance = opening_balance;
     }
 
 }

@@ -292,7 +292,7 @@
                     tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 1) {
-                    tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
                     tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
@@ -312,17 +312,17 @@
     }
 
     $(function () {
-        var dataLength="";        
+        var dataLength = "";
         setInterval(function () {
             var String_data = $('#String_data').val();
             //alert("string_data --" + String_data);
-            var dataLength2="";
-            var dataLength2=String_data.length;
-            dataLength=String_data.length;
+            var dataLength2 = "";
+            var dataLength2 = String_data.length;
+            dataLength = String_data.length;
             //alert("data leng -"+dataLength+" data len 22 --"+dataLength2);
-            if(dataLength>dataLength2 || dataLength>0){//alert(121);
+            if (dataLength > dataLength2 || dataLength > 0) {//alert(121);
                 showData();
-            }else{
+            } else {
                 //alert(2321);
             }
         }, 2000);
@@ -332,6 +332,28 @@
     function searchIndentStatusWise(status) {
         var url = "IndentController?action1=searchIndentStatusWise&status=" + status;
         window.open(url, "_self");
+    }
+
+    function displayIndentForm(indent_table_id) {
+        var queryString;
+        queryString = "task=viewPdf&indent_table_id=" + indent_table_id;
+        var url = "IndentController?" + queryString;
+        popupwin = openPopUp1(url, "Indent Form", 600, 1000);
+    }
+
+    function openPopUp1(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+
+        return window.open(url, window_name, window_features);
+    }
+    
+     function printIndentForm() {       
+        var queryString = "task=printIndentForm";
+        var url = "IndentController?"+queryString;
+        popupwin = openPopUp(url, "Blank Indent Form",500, 1000);
+
     }
 
 </script>
@@ -357,9 +379,23 @@
             <label style="color:white;margin-left: 20px">All</label>
             <input type="checkbox" name="search_status" id="search_status" value="All" 
                    onclick="searchIndentStatusWise('All')"> 
+
+
         </div>
+        <form name="form3" method="POST" action="IndentController" >
+            <div class="row mt-3 myTable">
+                <input type="date" style="height:38px" placeholder="Search.." name="search_by_date">
+                <button type="submit" class="btn normalBtn" name="submit_search">Search</button>
+
+                <input style="margin-left:25px" type="button" class="btn normalBtn"
+                       name="task" id="" value="Print Blank Indent Form" onclick="printIndentForm();">
+
+            </div>
+
+        </form>
     </div>
 </section>
+
 
 
 <c:if test="${isSelectPriv eq 'Y'}">
@@ -381,6 +417,7 @@
                                     <th>Date Time</th>
                                     <th>Status</th>
                                     <th>Description</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -426,6 +463,9 @@
 
 
                                         <td id="${loopCounter.count }">${beanType.description}</td>                                               
+                                        <td id="${loopCounter.count }">
+                                            <input type="button" name="indentform" id="indentform" value="Indent Form" onclick="displayIndentForm('${beanType.indent_table_id}')">
+                                        </td>                                               
                                     </tr>
 
                                 </c:forEach>
@@ -438,9 +478,6 @@
     </section>
 
 </c:if>
-
-
-
 
 
 <section class="marginTop30">
@@ -457,7 +494,10 @@
                             <input type="hidden" name="indent_table_id" id="indent_table_id" value="">
                             <input type="hidden" name="indent_item_id" id="indent_item_id" value="">
                             <input type="hidden" name="String_data" id="String_data" value="">
-                            <input class="form-control myInput" type="text" id="indent_no" name="indent_no" required value="${autogenerate_indent_no}" disabled onclick="alert('You cannot Change AutoGenerate Indent No!............')" >
+                            <input type="hidden" name="indent_no" id="indent_no" value="${autogenerate_indent_no}">
+                            <input type="hidden" name="requested_by" id="requested_by" value="${requested_by}">
+                            <input type="hidden" name="requested_to" id="requested_to" value="${requested_to}">
+                            <input class="form-control myInput" type="text" id="indent_no_disabled" name="indent_no_disabled" required value="${autogenerate_indent_no}" disabled onclick="alert('You cannot Change AutoGenerate Indent No!............')" >
                         </div>
                     </div>
                 </div>
@@ -466,7 +506,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Requested By<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="requested_by" name="requested_by" required value="${requested_by}" disabled onclick="alert('You cannot Change this person!............')">
+                            <input class="form-control myInput" type="text" id="requested_by_disabled" name="requested_by_disabled" required value="${requested_by}" disabled onclick="alert('You cannot Change this person!............')">
                         </div>
                     </div>
                 </div>
@@ -475,7 +515,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Requested To<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="requested_to" name="requested_to" required value="${requested_to}" disabled onclick="alert('You cannot Change this person!............')">
+                            <input class="form-control myInput" type="text" id="requested_to_disabled" name="requested_to_disabled" required value="${requested_to}" disabled onclick="alert('You cannot Change this person!............')">
                         </div>
                     </div>
                 </div>
@@ -500,7 +540,7 @@
                     <c:if test="${not empty message}">
                         <div class="col-md-12 text-center">
                             <label id="message_level" style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-                            <input type="text" name="last_indent_table_id" id="last_indent_table_id" value="${last_indent_table_id}">
+                            <input type="hidden" name="last_indent_table_id" id="last_indent_table_id" value="${last_indent_table_id}">
                         </div>
                     </c:if>
                 </div>

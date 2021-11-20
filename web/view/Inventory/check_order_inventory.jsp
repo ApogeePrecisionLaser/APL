@@ -113,7 +113,7 @@
 //}
     function openPopUpForItems(indent_table_id, status) {
       //  var st=document.getElementById('status').value;
-     alert("hi-----"+status);
+    
         if(status==='Payment Success'){
             
              var url = "CheckOrderInventoryController?task=GetIndentItemsnew&indent_table_id=" + indent_table_id + "&indent_status=" + status;
@@ -195,7 +195,8 @@
                                 <th>Requested By</th>
                                 <th>Requested To</th>
                                 <th>Date Time</th>
-                                <th>Description</th>
+<!--                               <th>Description</th>-->
+                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -210,7 +211,7 @@
                                     <td id="${loopCounter.count }">${beanType.requested_by}</td>
                                     <td id="${loopCounter.count }">${beanType.requested_to}</td>
                                     <td id="${loopCounter.count }">${beanType.date_time}</td>
-                                    <td id="${loopCounter.count }">${beanType.description}</td>  
+<!--                                    <td id="${loopCounter.count }">${beanType.description}</td>  -->
 
                                     <c:choose>
                                         <c:when test="${beanType.status =='Approved'}">
@@ -258,6 +259,7 @@
                                         <td id="${loopCounter.count }" class="delivered"><b>${final_status}</b>
                                         </td>
                                     </c:if>
+                                      
                                 </tr>
 
                             </c:forEach>

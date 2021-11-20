@@ -62,7 +62,7 @@
 
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Employee")
-                                            || session.getAttribute("user_role").equals("Incharge")) {
+                                            || session.getAttribute("user_role").equals("Incharge")|| session.getAttribute("user_role").equals("Guest")) {
                                 %>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -87,7 +87,7 @@
                                         <a href="IndentController" class="dropdown-item">Request Indent</a>
                                         <%}%>
                                         <%
-                                            if (session.getAttribute("user_role").equals("Super Admin")) {
+                                            if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Guest")) {
                                         %>
                                         <a href="ApproveIndentController" class="dropdown-item">Approve Indent</a>
                                         <%}%>
@@ -164,6 +164,24 @@
                                 </li>
                                 <%}%>
 
+
+
+                                <%
+                                    if (session.getAttribute("user_role").equals("Super Admin")) {
+                                %>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                        Report
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="OfficeItemMapReportController">Office and Item Map Report</a>
+                                        <a class="dropdown-item" href="InventoryReportController">Inventory Report</a>
+                                        <!--<a class="dropdown-item" href="TestController">Test Report</a>-->
+                                    </div>
+                                </li>  
+
+                                <%}%>
 
                                 <%
                                     if (!session.getAttribute("user_role").equals("Dealer") && !session.getAttribute("user_role").equals("Sales")) {

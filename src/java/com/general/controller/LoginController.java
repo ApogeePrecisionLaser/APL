@@ -86,7 +86,8 @@ public class LoginController extends HttpServlet {
                 int logged_org_office_id = model.getOrgOfficeId(user_name, password);
                 String logged_org_name = model.getOrgName(user_name, password);
                 String logged_org_office = model.getOrgOffice(user_name, password);
-                String office_admin = model.getOfficeAdmin(user_name, password, logged_org_office_id);
+                String office_admin = model.getOfficeAdmin(user_name, password, logged_org_office_id,designation);
+              //  String office_embedded_dev = model.getOfficeEmbeddedDeveloper(user_name, password, logged_org_office_id);
 
                 if (count > 0) {
                     session.setAttribute("logged_user_name", user_name);
@@ -97,6 +98,7 @@ public class LoginController extends HttpServlet {
                     session.setAttribute("logged_org_office", logged_org_office);
                     session.setAttribute("logged_key_person_id", logged_key_person_id);
                     session.setAttribute("office_admin", office_admin);
+                   // session.setAttribute("office_embedded_dev", office_embedded_dev);
                     request.getRequestDispatcher("dashboard").forward(request, response);
                 } else {
                     request.setAttribute("message", "Credentials mis-match!");

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["E:\\Komal Backup\\Projects\\APL project\\APL\\web\\view\\report\\"]]></defaultValueExpression>
+    </parameter>
+    <field name="org_office" class="java.lang.String"/>
+    <field name="item_name" class="java.lang.String"/>
+    <field name="manufacturer_name" class="java.lang.String"/>
+    <field name="item_code" class="java.lang.String"/>
+    <field name="model" class="java.lang.String"/>
+    <field name="searchOrgOffice" class="java.lang.String"/>
+    <field name="counting" class="java.lang.String"/>
+    <field name="list" class="java.lang.String"/>
+    <field name="color" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="83" splitType="Stretch">
+            <textField>
+                <reportElement mode="Opaque" x="31" y="0" width="494" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+                <box>
+                    <pen lineWidth="0.0" lineColor="#000000"/>
+                    <topPen lineWidth="0.0" lineColor="#000000"/>
+                    <leftPen lineWidth="0.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="0.0" lineColor="#000000"/>
+                    <rightPen lineWidth="0.0" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font fontName="Times New Roman" size="16" isBold="true" isItalic="false" isUnderline="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["("+$F{searchOrgOffice}+") Items Report"]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement mode="Opaque" x="106" y="26" width="39" height="20" backcolor="#FFFF00"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G1]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="227" y="26" width="39" height="20" backcolor="#FFAFAF"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G4]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="145" y="26" width="39" height="20" backcolor="#FF0000"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G2]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="266" y="26" width="39" height="20" backcolor="#CCCCFF"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G5]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="303" y="26" width="39" height="20" backcolor="#FFC800"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G6]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="342" y="26" width="39" height="20" backcolor="#99FFCC"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G7]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="381" y="26" width="39" height="20" backcolor="#CCCCCC"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G8]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="420" y="26" width="39" height="20" backcolor="#33B444"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G9]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="184" y="26" width="43" height="20" backcolor="#00FF00"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[G3]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="22" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Opaque" x="168" y="0" width="146" height="22" forecolor="#000000" backcolor="#FFFFFF"/>
+                <box>
+                    <pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="SansSerif" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Manufacturer Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="411" y="0" width="128" height="22" forecolor="#000000" backcolor="#FFFFFF"/>
+                <box>
+                    <pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="SansSerif" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Model Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="314" y="0" width="97" height="22" forecolor="#000000" backcolor="#FFFFFF"/>
+                <box>
+                    <pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="SansSerif" size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Item Code]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="68" y="0" width="100" height="22" forecolor="#000000" backcolor="#FFFFFF"/>
+                <box>
+                    <pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="SansSerif" size="14" isBold="true" isUnderline="false"/>
+                    <paragraph lineSpacing="Single"/>
+                </textElement>
+                <text><![CDATA[Item Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="14" y="0" width="54" height="22"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[S.No.]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="19" splitType="Stretch">
+            <textField>
+                <reportElement mode="Opaque" x="68" y="0" width="100" height="19">
+                    <propertyExpression name="net.sf.jasperreports.style.backcolor">
+        <![CDATA[!$F{counting}.equals("") ? $F{color} : ""]]>
+                    </propertyExpression>
+                </reportElement>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{item_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement mode="Opaque" x="314" y="0" width="97" height="19">
+                    <propertyExpression name="net.sf.jasperreports.style.backcolor">
+        <![CDATA[!$F{counting}.equals("") ? $F{color} : ""]]>
+                    </propertyExpression>
+                </reportElement>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{item_code}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement mode="Opaque" x="411" y="0" width="128" height="19">
+                    <propertyExpression name="net.sf.jasperreports.style.backcolor">
+        <![CDATA[!$F{counting}.equals("") ? $F{color} : ""]]>
+                    </propertyExpression>
+                </reportElement>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement mode="Opaque" x="168" y="0" width="146" height="19">
+                    <propertyExpression name="net.sf.jasperreports.style.backcolor">
+        <![CDATA[!$F{counting}.equals("") ? $F{color} : ""]]>
+                    </propertyExpression>
+                </reportElement>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{manufacturer_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement mode="Opaque" x="14" y="0" width="54" height="19">
+                    <propertyExpression name="net.sf.jasperreports.style.backcolor">
+        <![CDATA[!$F{counting}.equals("") ? $F{color} : ""]]>
+                    </propertyExpression>
+                </reportElement>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{counting}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>

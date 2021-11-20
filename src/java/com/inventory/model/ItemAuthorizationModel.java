@@ -14,7 +14,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-
 /**
  *
  * @author Komal
@@ -36,8 +35,6 @@ public class ItemAuthorizationModel {
             System.out.println("ItemAuthorizationModel setConnection() Error: " + e);
         }
     }
-    
-  
 
     public List<ItemAuthorization> showData(String searchItemName, String search_designation) {
         List<ItemAuthorization> list = new ArrayList<ItemAuthorization>();
@@ -60,7 +57,7 @@ public class ItemAuthorizationModel {
             query += " and d.designation='" + search_designation + "' ";
         }
 
-      //  System.err.println("query----"+query);
+        //  System.err.println("query----"+query);
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -87,33 +84,92 @@ public class ItemAuthorizationModel {
         int rowsAffected = 0;
         int item_name_id = getItemNamesId(bean.getItem_name());
         int designation_id = getDesignationId(bean.getDesignation());
-       
+
+        String query2 = " select  item_names_id, "
+                + " item_name, "
+                + " parent_id "
+                + "from (select * from item_names where active='Y' "
+                + " order by parent_id, item_names_id ) item_names, "
+                + " (select @pv := '" + item_name_id + "') initialisation "
+                + " where   find_in_set(parent_id, @pv) > 0 "
+                + " and  @pv := concat(@pv, ',', item_names_id) ";
+
         int map_count = 0;
         try {
-            String query4 = "SELECT count(*) as count FROM item_authorization WHERE "
-                    + " item_names_id='" + item_name_id + "' and designation_id='" + designation_id + "'"
-                    + " and active='Y'  ";
+            PreparedStatement pstmt2 = connection.prepareStatement(query2);
+            ResultSet rs2 = pstmt2.executeQuery();
+            int item_names_id = 0;
+            List<Integer> item_names_id_list = new ArrayList<>();
+            while (rs2.next()) {
+                item_names_id = rs2.getInt("item_names_id");
+                item_names_id_list.add(item_names_id);
+            }
+            if (item_names_id_list.size() == 0) {
+                String query4 = "SELECT count(*) as count FROM item_authorization WHERE "
+                        + " item_names_id='" + item_name_id + "' and designation_id='" + designation_id + "'"
+                        + " and active='Y'  ";
 
-            PreparedStatement pstmt1 = connection.prepareStatement(query4);
-            ResultSet rs1 = pstmt1.executeQuery();
-            while (rs1.next()) {
-                map_count = rs1.getInt("count");
+                PreparedStatement pstmt1 = connection.prepareStatement(query4);
+                ResultSet rs1 = pstmt1.executeQuery();
+                while (rs1.next()) {
+                    map_count = rs1.getInt("count");
+                }
+                if (map_count > 0) {
+                    message = "Designation has already mapped to this item!..";
+                    msgBgColor = COLOR_ERROR;
+                } else {
+                    PreparedStatement pstmt = connection.prepareStatement(query);
+                    pstmt.setInt(1, item_name_id);
+                    pstmt.setInt(2, designation_id);
+                    pstmt.setString(3, bean.getDescription());
+                    pstmt.setInt(4, bean.getRevision_no());
+                    pstmt.setString(5, "Y");
+                    pstmt.setString(6, "OK");
+                    pstmt.setInt(7, bean.getQuantity());
+                    pstmt.setInt(8, bean.getMonthly_limit());
+                    rowsAffected = pstmt.executeUpdate();
+                }
             }
-            if (map_count > 0) {
-                message = "Designation has already mapped to this item!..";
-                msgBgColor = COLOR_ERROR;
-            } else {
-                PreparedStatement pstmt = connection.prepareStatement(query);
-                pstmt.setInt(1, item_name_id);
-                pstmt.setInt(2, designation_id);
-                pstmt.setString(3, bean.getDescription());
-                pstmt.setInt(4, bean.getRevision_no());
-                pstmt.setString(5, "Y");
-                pstmt.setString(6, "OK");
-                pstmt.setInt(7, bean.getQuantity());
-                pstmt.setInt(8, bean.getMonthly_limit());
-                rowsAffected = pstmt.executeUpdate();
+
+            String query5 = " select item_names_id from item_names where item_names_id"
+                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
+                    + "  and active='Y' ";
+
+            PreparedStatement pstmt5 = connection.prepareStatement(query5);
+            ResultSet rs5 = pstmt5.executeQuery();
+            item_names_id_list.clear();
+            while (rs5.next()) {
+                item_name_id = rs5.getInt("item_names_id");
+                item_names_id_list.add(item_name_id);
             }
+
+            for (int j = 0; j < item_names_id_list.size(); j++) {
+                item_name_id = item_names_id_list.get(j);
+                String query4 = " SELECT count(*) as count FROM item_authorization WHERE "
+                        + " item_names_id='" + item_name_id + "' and designation_id='" + designation_id + "' "
+                        + " and active='Y'  ";
+                PreparedStatement pstmt1 = connection.prepareStatement(query4);
+                ResultSet rs1 = pstmt1.executeQuery();
+                while (rs1.next()) {
+                    map_count = rs1.getInt("count");
+                }
+                if (map_count > 0) {
+                    message = "Designation has already mapped to this item!..";
+                    msgBgColor = COLOR_ERROR;
+                } else {
+                    PreparedStatement pstmt = connection.prepareStatement(query);
+                    pstmt.setInt(1, item_name_id);
+                    pstmt.setInt(2, designation_id);
+                    pstmt.setString(3, bean.getDescription());
+                    pstmt.setInt(4, bean.getRevision_no());
+                    pstmt.setString(5, "Y");
+                    pstmt.setString(6, "OK");
+                    pstmt.setInt(7, bean.getQuantity());
+                    pstmt.setInt(8, bean.getMonthly_limit());
+                    rowsAffected = pstmt.executeUpdate();
+                }
+            }
+
         } catch (Exception e) {
             System.out.println("ItemAuthorizationModel insertRecord() Error: " + e);
         }
@@ -273,7 +329,6 @@ public class ItemAuthorizationModel {
         return id;
     }
 
-   
     public String getItemName(int item_name_id) {
         String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y'";
         String name = "";
@@ -312,9 +367,10 @@ public class ItemAuthorizationModel {
         }
         return list;
     }
-    
+
     public List<String> getItemName(String q) {
         List<String> list = new ArrayList<String>();
+//        String query = "SELECT item_name from item_names where active='Y' and is_super_child='Y' ";
         String query = "SELECT item_name from item_names where active='Y' ";
 
         try {
@@ -336,7 +392,6 @@ public class ItemAuthorizationModel {
         }
         return list;
     }
-   
 
     public String getMessage() {
         return message;

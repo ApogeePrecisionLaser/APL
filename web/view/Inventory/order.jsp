@@ -1,11 +1,11 @@
-<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
+ <%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
 <style>
-    .selected_row {
+    .selected_row {   
         font-weight: bolder;
         color: blue;
         border: 3px solid black;
@@ -122,7 +122,14 @@
             document.getElementById("delete").disabled = false;
         }
     }
+  function displayReading(){
+ 
+                            
+                            var queryString = "task=generateDeliveryReport&survey_id="+1;
+                            var url = "OrderController?"+queryString;
+                            popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
 
+                        }
 
     function setStatus(id) {
         if (id === 'save') {
@@ -186,7 +193,7 @@
 
 
     function openPopUpForIndentItems(indent_table_id) {
-        var url = "OrderController?task=GetIndentItems&indent_table_id=" + indent_table_id;
+        var url = "OrderController?task=GetIndentItemsnew&indent_table_id=" + indent_table_id;
         popupwin = openPopUp(url, "", 600, 1030);
     }
 
@@ -485,6 +492,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Order No.<span class="text-danger">*</span></label>
+                            
                             <input type="hidden" name="indent_table_id" id="indent_table_id" value="">
                             <input type="hidden" name="indent_item_id" id="indent_item_id" value="">
                             <input type="hidden" name="String_data" id="String_data" value="">
@@ -492,7 +500,7 @@
                         </div>
                     </div>
                 </div>
-
+                     
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">

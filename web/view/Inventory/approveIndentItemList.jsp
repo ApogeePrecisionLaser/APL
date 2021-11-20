@@ -159,7 +159,9 @@
                                     <th>S.No.</th>
                                     <th style="display:none"></th>
                                     <th>Item Name</th>
+                                    <th>Model</th>
                                     <th>Required Qty</th>
+                                    <th>Stock Qty</th>
                                     <th>Approved Qty</th>
                                     <th>Status</th>
                                     <th>Delivered Qty</th>
@@ -180,7 +182,9 @@
                                         </td>
 
                                         <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                        <td id="${loopCounter.count }">${beanType.model}</td>
                                         <td id="${loopCounter.count }">${beanType.required_qty}</td>
+                                        <td id="${loopCounter.count }">${beanType.stock_qty}</td>
                                         <c:choose>
                                             <c:when test="${(beanType.approved_qty == 0)  && (beanType.status == 'Pending')}">
                                                 <td id="${loopCounter.count }"><input type="text" name="approved_qty${beanType.indent_item_id}" value="${beanType.required_qty}">

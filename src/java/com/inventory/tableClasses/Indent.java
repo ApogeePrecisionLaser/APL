@@ -23,12 +23,54 @@ public class Indent {
     private String requested_by;
     private String requested_to;
     private String active;
+    private String dealer;
+    private String salesperson;
+    private String delivery_challan_no;
+    private String delivery_challan_date;
+    private String orderno;
+    private String itemname;
+    private String model;
+    private int model_id;
+
+    public String getItemname() {
+        return itemname;
+    }
+
+    public void setItemname(String itemname) {
+        this.itemname = itemname;
+    }
+
+    public String getDelivery_challan_no() {
+        return delivery_challan_no;
+    }
+
+    public void setDelivery_challan_no(String delivery_challan_no) {
+        this.delivery_challan_no = delivery_challan_no;
+    }
+
+    public String getDelivery_challan_date() {
+        return delivery_challan_date;
+    }
+
+    public void setDelivery_challan_date(String delivery_challan_date) {
+        this.delivery_challan_date = delivery_challan_date;
+    }
+
+    public String getOrderno() {
+        return orderno;
+    }
+
+    public void setOrderno(String orderno) {
+        this.orderno = orderno;
+    }
+
     private String remark;
     private int revision_no;
     private String date_time;
     private String status;
     private int status_id;
     private String item_status;
+    private String indent_status;
     private int item_status_id;
     private String purpose;
     private int purpose_id;
@@ -36,6 +78,31 @@ public class Indent {
     private int stock_qty;
     private int approved_qty;
     private int delivered_qty;
+    private int balance_qty;
+
+    public String getDealer() {
+        return dealer;
+    }
+
+    public void setDealer(String dealer) {
+        this.dealer = dealer;
+    }
+
+    public String getSalesperson() {
+        return salesperson;
+    }
+
+    public void setSalesperson(String salesperson) {
+        this.salesperson = salesperson;
+    }
+
+    public int getBalance_qty() {
+        return balance_qty;
+    }
+
+    public void setBalance_qty(int balance_qty) {
+        this.balance_qty = balance_qty;
+    }
     private String expected_date_time;
 
     /**
@@ -386,6 +453,48 @@ public class Indent {
      */
     public void setDelivered_qty(int delivered_qty) {
         this.delivered_qty = delivered_qty;
+    }
+
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
+     * @return the model_id
+     */
+    public int getModel_id() {
+        return model_id;
+    }
+
+    /**
+     * @param model_id the model_id to set
+     */
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
+    }
+
+    /**
+     * @return the indent_status
+     */
+    public String getIndent_status() {
+        return indent_status;
+    }
+
+    /**
+     * @param indent_status the indent_status to set
+     */
+    public void setIndent_status(String indent_status) {
+        this.indent_status = indent_status;
     }
 
 }

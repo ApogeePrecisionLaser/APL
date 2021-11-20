@@ -131,6 +131,7 @@
                                 <th>S.No.</th>
                                 <th style="display:none"></th>
                                 <th>Item Name</th>
+                                <th>Model</th>
                                 <th>Required Qty</th>
                                 <th>Approved Qty</th>
                                 <th>Delivered Qty</th>
@@ -147,6 +148,7 @@
                                     <td>${loopCounter.count }</td>
                                     <td style="display:none"><input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}"></td>
                                     <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                    <td id="${loopCounter.count }">${beanType.model}</td>
                                     <td id="${loopCounter.count }">${beanType.required_qty}</td>
 
 

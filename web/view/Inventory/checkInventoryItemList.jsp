@@ -98,32 +98,32 @@
         }
 
 
-        var disable_denied_btn = $('#disable_denied_btn').val();
-        if (disable_denied_btn == "disable")
-        {
-            $('.btn-danger').show();
-        }
-
-        var disable_less_stock_btn = $('#disable_less_stock_btn').val();
-        if (disable_less_stock_btn == "disable")
-        {
-            $('.btn-warning').show();
-        }
+//        var disable_denied_btn = $('#disable_denied_btn').val();
+//        if (disable_denied_btn == "disable")
+//        {
+//            $('.btn-danger').show();
+//        }
+//
+//        var disable_less_stock_btn = $('#disable_less_stock_btn').val();
+//        if (disable_less_stock_btn == "disable")
+//        {
+//            $('.btn-warning').show();
+//        }
 
         var final_indent_table_id = $('#final_indent_table_id').val();
         var final_message = $('#final_message').val();
         var final_status = $('#final_status').val();
-        var final_task = $('#final_task').val();        
-           
-            if (final_status != "") {
-                opener.document.getElementById("stock_indent_final_indent_table_id").value = final_indent_table_id;
-                opener.document.getElementById("stock_indent_final_status").value = final_status;
-                opener.document.getElementById("stock_indent_final_message").value = final_message;
-                opener.document.getElementById("final_task").value = final_task;
-                opener.location.reload();
-                window.close();
-            }
-       
+        var final_task = $('#final_task').val();
+
+        if (final_status != "") {
+            opener.document.getElementById("stock_indent_final_indent_table_id").value = final_indent_table_id;
+            opener.document.getElementById("stock_indent_final_status").value = final_status;
+            opener.document.getElementById("stock_indent_final_message").value = final_message;
+            opener.document.getElementById("final_task").value = final_task;
+            opener.location.reload();
+            window.close();
+        }
+
         $(document).on('keydown', '.myAutocompleteClass', function () {
             var id = this.id;
             var type;
@@ -195,6 +195,7 @@
                                     <th style="display:none"></th>
                                     <!--<th>Indent No.</th>-->
                                     <th>Item Name</th>
+                                    <th>Model</th>
                                     <th>Required Qty</th>
                                     <th>Approved Qty</th>
                                     <th>Stock Qty</th>
@@ -222,6 +223,7 @@
                                         <td style="display:none"><input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}"></td>
 
                                         <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                        <td id="${loopCounter.count }">${beanType.model}</td>
                                         <td id="${loopCounter.count }">${beanType.required_qty}</td>
 
                                         <td id="${loopCounter.count }">${beanType.approved_qty}</td>
@@ -238,43 +240,45 @@
                                 <c:choose>
 
                                     <c:when test="${beanType.item_status =='Delivered'}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.delivered_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.delivered_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
                                         </td>
                                     </c:when>
                                     <c:when test="${(beanType.item_status == 'Approved')  && (beanType.stock_qty <= beanType.required_qty)}" >
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.stock_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.stock_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="Less Stock">
                                         </td>
                                     </c:when>
 
                                     <c:when test="${(beanType.item_status == 'Approved')  && (beanType.approved_qty !=0)}" >
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.approved_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.approved_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="">
                                         </td>
                                     </c:when>
                                     <c:when test="${beanType.item_status =='Denied'}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="0"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="0" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
                                         </td>
                                     </c:when>
                                     <c:when test="${beanType.item_status =='Delivery Challan Generated'}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" disabled="" value="${beanType.delivered_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" disabled="" value="${beanType.delivered_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" disabled="" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
                                         </td>
                                     </c:when>
 
 
                                     <c:when test="${(beanType.item_status == 'Approved')  && (beanType.approved_qty ==0)}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="${beanType.approved_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="${beanType.approved_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="Denied">
                                         </td>
                                     </c:when>
 
 
                                     <c:otherwise>
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="0"></td>
-                                        <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="0" style="width:100px"></td>
+                                        <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" 
+                                                                              class="myAutocompleteClass" id="status${beanType.indent_item_id}" 
+                                                                              value="${beanType.item_status}" >
                                         </td>
                                     </c:otherwise>
                                 </c:choose>
@@ -287,8 +291,8 @@
                             </tbody>
                         </table>
                         <input type="submit" class="btn btn-success" id="approve_denied" name="task" value="Generate Delivery Challan" style="margin-left:40%">
-                        <input type="submit" style="display: none" class="btn btn-danger" value="Denied" id="approve_denied" name="task">
-                        <input type="submit" style="display: none" class="btn btn-warning" value="Less Stock" id="approve_denied" name="task">
+                        <!--<input type="submit" style="display: none" class="btn btn-danger" value="Denied" id="approve_denied" name="task">-->
+                        <!--<input type="submit" style="display: none" class="btn btn-warning" value="Less Stock" id="approve_denied" name="task">-->
                     </form>
                 </div>
             </div>

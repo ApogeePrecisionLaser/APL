@@ -30,8 +30,19 @@ public class DeliverItem {
     private int indent_item_id;
     private String item_name;
     private int item_names_id;
+     private String model;
+    private int model_id;
     private String description;
     private String indent_no;
+    private String image_path;
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
     private int requested_by_id;
     private int requested_to_id;
     private String requested_by;
@@ -432,6 +443,34 @@ public class DeliverItem {
      */
     public void setDelivery_challan_id(String delivery_challan_id) {
         this.delivery_challan_id = delivery_challan_id;
+    }
+
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
+     * @return the model_id
+     */
+    public int getModel_id() {
+        return model_id;
+    }
+
+    /**
+     * @param model_id the model_id to set
+     */
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
     }
 
     

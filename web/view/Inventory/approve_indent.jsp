@@ -124,6 +124,14 @@
             <input type="checkbox" name="search_status" id="search_status" value="All" 
                    onclick="searchIndentStatusWise('All')"> 
         </div>
+
+
+        <form name="form3" method="POST" action="ApproveIndentController" >
+            <div class="row mt-3 myTable">
+                <input type="date" style="height:38px" placeholder="Search.." name="search_by_date">
+                <button type="submit" class="btn normalBtn" name="submit_search">Search</button>
+            </div>
+        </form>
     </div>
 </section>
 

@@ -44,7 +44,7 @@ public class CheckInventoryModel {
         }
     }
 
-    public List<CheckInventory> showIndents(String logged_designation, String indent_status, String user_role) {
+    public List<CheckInventory> showIndents(String logged_designation, String indent_status, String user_role, String search_by_date) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -61,8 +61,12 @@ public class CheckInventoryModel {
             if (!indent_status.equals("") && indent_status != null) {
                 query += " and s.status='" + indent_status + "' ";
             }
+            if (!search_by_date.equals("") && search_by_date != null) {
+                query += " and indt.date_time like '" + search_by_date + "%' ";
+            }
+            query += " order by indt.indent_table_id desc ";
         }
-        
+
         if (user_role.equals("Super Admin")) {
             query = " select distinct indt.indent_no,indt.date_time,indt.description "
                     + " ,s.status,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to,indt.indent_table_id "
@@ -74,9 +78,8 @@ public class CheckInventoryModel {
             if (!indent_status.equals("") && indent_status != null) {
                 query += " and s.status='" + indent_status + "' ";
             }
+            query += " order by indt.indent_table_id desc ";
         }
-        
-        
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -125,12 +128,16 @@ public class CheckInventoryModel {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
+                + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
-                + " status s1,status s2,inventory inv,inventory_basic ib where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
+                + " where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
                 + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
                 + " and inv.active='Y' "
-                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'"
+                + " and m.active='Y' and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and ib.model_id=m.model_id "
+                + "  and mim.item_names_id=itn.item_names_id  "
                 + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
 
         try {
@@ -139,6 +146,7 @@ public class CheckInventoryModel {
                 CheckInventory bean = new CheckInventory();
                 bean.setIndent_no(rset.getString("indent_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose((rset.getString("purpose")));
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
@@ -161,16 +169,28 @@ public class CheckInventoryModel {
         return list;
     }
 
-    public List<CheckInventory> getIndentItemsForDeliveryChallan(int indent_table_id) {
+    public List<CheckInventory> getIndentItemsForDeliveryChallan(int indent_table_id, int logged_key_person_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
+//        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+//                + " ,s.status,indi.indent_item_id,indt.indent_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+//                + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
+//                + " status s where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+//                + " and indi.purpose_id=p.purpose_id "
+//                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+//                + " and indt.indent_table_id='" + indent_table_id + "' and indt.status_id=11 ";
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s.status,indi.indent_item_id,indt.indent_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
+                + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
-                + " status s where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
-                + " and indi.purpose_id=p.purpose_id "
-                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.indent_table_id='" + indent_table_id + "' and indt.status_id=11 ";
+                + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
+                + " where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+                + " and inv.active='Y' "
+                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and m.active='Y' and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and ib.model_id=m.model_id "
+                + " and mim.item_names_id=itn.item_names_id "
+                + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -178,13 +198,14 @@ public class CheckInventoryModel {
                 CheckInventory bean = new CheckInventory();
                 bean.setIndent_no(rset.getString("indent_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose((rset.getString("purpose")));
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
-                bean.setStock_qty(rset.getInt("stock_qty"));
+                bean.setStock_qty(rset.getInt("stock_quantity"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
                 bean.setExpected_date_time(rset.getString("expected_date_time"));
-                String status = rset.getString("status");
+                String status = rset.getString("item_status");
                 bean.setStatus(status);
                 bean.setIndent_item_id(rset.getInt("indent_item_id"));
                 bean.setIndent_table_id(rset.getInt("indent_table_id"));
@@ -203,22 +224,23 @@ public class CheckInventoryModel {
             String logged_user_name) {
         int updateRowsAffected = 0;
         if (task.equals("Generate Delivery Challan")) {
-            task = "Delivery Challan Generated";
+            task = "Approved";
         }
 
         int indent_status_id = getStatusId(task);
         String item_status = bean.getItem_status();
-        if (task.equals("Less Stock")) {
-            item_status = "Less Stock";
-        }
-        if (task.equals("Denied")) {
-            item_status = "Denied";
-        } else {
-            item_status = "Delivery Challan Generated";
-        }
+//        if (task.equals("Less Stock")) {
+//            item_status = "Less Stock";
+//        }
+//        if (task.equals("Denied")) {
+//            item_status = "Denied";
+//        } else {
+//            item_status = "Approved";
+//        }
         int status_id = getStatusId(item_status);
 
-        String query = " UPDATE indent_item SET status_id=?,deliver_qty=? WHERE indent_item_id=? ";
+//        String query = " UPDATE indent_item SET status_id=?,deliver_qty=? WHERE indent_item_id=? ";
+        String query = " UPDATE indent_item SET deliver_qty=? WHERE indent_item_id=? ";
 
         int rowsAffected = 0;
         int updateRowsAffected2 = 0;
@@ -226,23 +248,24 @@ public class CheckInventoryModel {
         int updateRowsAffected4 = 0;
         int map_count = 0;
         try {
+
             PreparedStatement pstm = connection.prepareStatement(query);
-            pstm.setInt(1, status_id);
+            //   pstm.setInt(1, status_id);
             if (item_status.equals("Delivery Challan Generated")) {
-                pstm.setInt(2, bean.getDelivered_qty());
+                pstm.setInt(1, bean.getDelivered_qty());
             } else {
-                pstm.setInt(2, 0);
+                pstm.setInt(1, 0);
             }
 
-            pstm.setInt(3, indent_item_id);
+            pstm.setInt(2, indent_item_id);
             updateRowsAffected = pstm.executeUpdate();
 
-            String query2 = " update indent_table set status_id=? where indent_table_id=? ";
-            PreparedStatement pstm2 = connection.prepareStatement(query2);
-            pstm2.setInt(1, indent_status_id);
-            pstm2.setInt(2, indent_table_id);
-            updateRowsAffected2 = pstm2.executeUpdate();
-
+//            String query2 = " update indent_table set status_id=? where indent_table_id=? ";
+//            String query2 = " update indent_table set status_id=? where indent_table_id=? ";
+//            PreparedStatement pstm2 = connection.prepareStatement(query2);
+//            pstm2.setInt(1, indent_status_id);
+//            pstm2.setInt(2, indent_table_id);
+//            updateRowsAffected2 = pstm2.executeUpdate();
         } catch (Exception e) {
             System.out.println("CheckInventoryModel updateRecord() Error: " + e);
         }

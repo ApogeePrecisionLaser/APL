@@ -121,17 +121,25 @@ public class AproveOrderModel {
     public List<ApproveIndent> getIndentItems(int indent_table_id) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
 
-        String query = "select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  ,s1.status as indent_status,\n"
-                + " s2.status as item_status,indi.order_item_id,indt.order_table_id,pm.payment_mode  from order_table indt,order_item indi, item_names itn, \n"
-                + " status s1,status s2,payment_mode as pm where indt.order_table_id=indi.order_table_id and "
-                + " pm.order_id=indt.order_table_id and indi.item_names_id=itn.item_names_id  "
-                + " and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n"
+//        String query = "select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  ,s1.status as indent_status,\n"
+//                + " s2.status as item_status,indi.order_item_id,indt.order_table_id,pm.payment_mode  from order_table indt,order_item indi, item_names itn, \n"
+//                + " status s1,status s2,payment_mode as pm where indt.order_table_id=indi.order_table_id and "
+//                + " pm.order_id=indt.order_table_id and indi.item_names_id=itn.item_names_id  "
+//                + " and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n"
+//                + " and indt.order_table_id='" + indent_table_id + "' ";
+        String query = "  select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,  indi.approved_qty,  \n"
+                + " indi.deliver_qty, itn.quantity as stock_qty ,indi.order_item_id,m.model  ,s1.status as indent_status,s2.status as item_status,pm.payment_mode,\n"
+                + " indt.order_table_id from order_table indt,order_item indi, item_names itn  , status s1,status s2,manufacturer_item_map mim ,model m ,\n"
+                + " payment_mode pm  where indt.order_table_id=indi.order_table_id   and mim.item_names_id=itn.item_names_id \n"
+//                + " and p.order_id=indt.order_table_id \n"
+                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and indi.model_id=m.model_id and pm.order_id=indt.order_table_id and mim.active='Y' \n"
+                + " and m.active='Y'  and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y'  and indi.active='Y' and itn.active='Y' \n"
                 + " and indt.order_table_id='" + indent_table_id + "' ";
 
-        try {
+        try {          
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
-                ApproveIndent bean = new ApproveIndent();
+                ApproveIndent bean = new ApproveIndent();    
                 bean.setIndent_no(rset.getString("order_no"));
                 bean.setItem_name((rset.getString("item_name")));
                 bean.setPurpose("Test");
@@ -144,9 +152,10 @@ public class AproveOrderModel {
                 bean.setItem_status(item_status);
                 bean.setIndent_item_id(rset.getInt("order_item_id"));
                 bean.setIndent_table_id(rset.getInt("order_table_id"));
-                bean.setPaymentmode(rset.getString("payment_mode"));
-
-                list.add(bean);
+                bean.setPaymentmode(rset.getString("payment_mode"));    
+                bean.setModel(rset.getString("model"));
+//                bean.setPrice(rset.getString("prices"));
+               list.add(bean);
             }
         } catch (Exception e) {
             System.out.println("Error: InventoryModel showdata-" + e);

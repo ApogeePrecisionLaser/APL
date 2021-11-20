@@ -76,7 +76,7 @@ public class GeneralModel {
     static List<String> printerList ;
     List<String> list = new ArrayList<String>();
     
-    public byte[] generateRecordList(String jrxmlFilePath, List list) {
+    public static byte[] generateRecordList(String jrxmlFilePath, List list) {
         byte[] reportInbytes = null;
         HashMap mymap = new HashMap();
         try {
