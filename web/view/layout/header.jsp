@@ -54,7 +54,7 @@
                                         <a class="dropdown-item" href="DesignationController" class="dropdown-item">Designation</a>
                                         <a class="dropdown-item" href="OrgOfficeDesignationMapController" class="dropdown-item">Org. Office Designation Map</a>
                                         <a class="dropdown-item" href="KeypersonController" class="dropdown-item">Org Person's Name</a>
-                                        <a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Report</a>
+                                        <!--<a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Report</a>-->
 
                                     </div>
                                 </li>  
@@ -177,6 +177,7 @@
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="OfficeItemMapReportController">Office and Item Map Report</a>
                                         <a class="dropdown-item" href="InventoryReportController">Inventory Report</a>
+                                         <a class="dropdown-item" href="DealersReportController" class="dropdown-item">Dealer's Report</a>
                                         <!--<a class="dropdown-item" href="TestController">Test Report</a>-->
                                     </div>
                                 </li>  

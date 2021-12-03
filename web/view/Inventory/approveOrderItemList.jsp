@@ -163,6 +163,7 @@
                                     <th>S.No.</th>
                                     <th style="display:none"></th>
                                     <th>Item Name</th>
+                                    <th>Model</th>
                                     <th>Required Qty</th>
                                   
                                     <th>Stock Qty</th>
@@ -189,6 +190,7 @@
                                         </td>
 
                                         <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                        <td id="${loopCounter.count }">${beanType.model}</td>
                                         <td id="${loopCounter.count }">${beanType.required_qty}</td>
                                          <td id="${loopCounter.count }">${beanType.stock_qty}</td>
                                         <c:choose>

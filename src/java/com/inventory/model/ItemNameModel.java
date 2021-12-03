@@ -35,7 +35,8 @@ public class ItemNameModel {
     private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
     int item_id = 0;
-
+    
+    
     public void setConnection(Connection con) {
         try {
             connection = con;
@@ -77,7 +78,7 @@ public class ItemNameModel {
                     searchItemName = parentItemNameList.get(i);
                     idList = getAllParentChildList(searchItemName);
                     query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                            + "itn.generation,itn.is_super_child,itn.prefix "
+                            + "itn.generation,itn.is_super_child,itn.prefix ,itn.HSNCode "
                             + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
 
                     if (!searchItemType.equals("") && searchItemType != null) {
@@ -106,6 +107,7 @@ public class ItemNameModel {
                         bean.setItem_code(rset.getString("item_code"));
                         bean.setItem_type(rset.getString("item_type"));
                         bean.setQuantity(rset.getInt("quantity"));
+                        bean.setHSNCode(rset.getString("HSNCode"));
                         String parent_id = rset.getString("parent_id");
                         int generation = rset.getInt("generation");
                         if (parent_id == null) {
@@ -129,7 +131,7 @@ public class ItemNameModel {
             } else {
                 idList = getAllParentChildList(searchItemName);
                 query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                        + "itn.generation,itn.is_super_child,itn.prefix "
+                        + "itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
                         + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
 
                 if (!searchItemType.equals("") && searchItemType != null) {
@@ -163,6 +165,7 @@ public class ItemNameModel {
                     bean.setItem_code(rset.getString("item_code"));
                     bean.setItem_type(rset.getString("item_type"));
                     bean.setQuantity(rset.getInt("quantity"));
+                    bean.setHSNCode(rset.getString("HSNCode"));
                     String parent_id = rset.getString("parent_id");
                     int generation = rset.getInt("generation");
                     if (parent_id == null) {
@@ -251,7 +254,7 @@ public class ItemNameModel {
         }
         return arrayObj;
     }
-    
+
     public List<String> getParentItemNameList() {
         PreparedStatement pstmt;
         List<String> list = new ArrayList<String>();
@@ -396,7 +399,8 @@ public class ItemNameModel {
 
     public int insertRecord(ItemName item_name, Iterator itr) throws SQLException {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
-                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
+                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
+                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         int p_item_id = 0;
@@ -468,6 +472,7 @@ public class ItemNameModel {
             pstmt.setInt(10, generation);
             pstmt.setString(11, is_child);
             pstmt.setString(12, item_name.getPrefix());
+            pstmt.setString(13, item_name.getHSNCode());
 
             ResultSet rset = connection.prepareStatement(query2).executeQuery();
 
@@ -716,7 +721,7 @@ public class ItemNameModel {
         String query1 = "SELECT max(revision_no) revision_no FROM item_names WHERE item_names_id = " + item_names_id + "  && active='Y' ";
         String query2 = "UPDATE item_names SET active=? WHERE item_names_id=? and revision_no=? ";
         String query3 = "INSERT INTO item_names(item_names_id,item_name,item_type_id,description,revision_no, "
-                + " active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         int rowsAffected = 0;
         try {
@@ -770,6 +775,7 @@ public class ItemNameModel {
                     psmt.setInt(11, generation);
                     psmt.setString(12, is_child);
                     psmt.setString(13, item_name.getPrefix());
+                    psmt.setString(14, item_name.getHSNCode());
                     rowsAffected = psmt.executeUpdate();
 
 //                    if (rowsAffected > 0) {

@@ -136,7 +136,7 @@ public class ApproveIndentModel {
 //                + " and inv.active='Y' and m.active='Y' and mim.active='Y' "
 //                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
 //                + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='115' and ib.model_id=m.model_id ";
-        String query = "select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
+        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
                 + " s1.status as indent_status,s2.status as "
                 + " item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, indi.deliver_qty,indt.requested_by, "
                 + " indt.requested_to,m.model "
@@ -153,7 +153,8 @@ public class ApproveIndentModel {
                 + " and d.designation_id=kp.designation_id "
                 + " and kp.org_office_id=oo.org_office_id and oo.org_office_name='" + logged_org_office + "' "
                 + " and kp.active='Y' and oo.active='Y' "
-                + " and d.active='Y' and oo.org_office_id=ib.org_office_id and kp.key_person_id=inv.key_person_id and d.designation='Store Incharge' ";
+                + " and d.active='Y' and oo.org_office_id=ib.org_office_id and kp.key_person_id=inv.key_person_id and d.designation='Store Incharge'"
+                + " and indi.model_id=m.model_id ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

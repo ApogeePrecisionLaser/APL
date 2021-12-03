@@ -6,7 +6,6 @@ package com.report.controller;
 
 import com.DBConnection.DBConnection;
 import com.general.model.GeneralModel;
-import com.inventory.model.InventoryBasicModel;
 import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.InventoryBasic;
 import com.report.bean.OfficeItemMapReport;

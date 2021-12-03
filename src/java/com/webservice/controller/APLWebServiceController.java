@@ -57,23 +57,23 @@ public class APLWebServiceController {
         org.codehaus.jettison.json.JSONObject json = new org.codehaus.jettison.json.JSONObject();
         otpMap.put(number, otp);
         System.err.println("otp map--------" + otpMap);
-        try{
-        
-        String unknum = model.sendSmsToAssignedFor(number, otp);
-        if (unknum.equals("OK")) {
-            System.out.println("OTP HAS BEEN SENT");
-            tosend = "Success";
-            json.put("result", "Success");
-            json.put("otp",otp);
-        }else{
-            json.put("result", "failure");
-        }
-        
-        }catch(JSONException e){
-            System.out.println("com.webservice.controller.APLWebServiceController.sendOTP() -"+e);
+        try {
+
+            String unknum = model.sendSmsToAssignedFor(number, otp);
+            if (unknum.equals("OK")) {
+                System.out.println("OTP HAS BEEN SENT");
+                tosend = "Success";
+                json.put("result", "Success");
+                json.put("otp", otp);
+            } else {
+                json.put("result", "failure");
+            }
+
+        } catch (JSONException e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.sendOTP() -" + e);
         }
 
-        tosend=json.toString();
+        tosend = json.toString();
         System.out.println("Response on mobile number :" + tosend);
         return tosend;
     }
@@ -106,7 +106,7 @@ public class APLWebServiceController {
             if (otp.equals(otpMap.get(number))) {
                 otpMap.remove(number);
                 //tosend.put("result", "Success");
-                resp="Success";
+                resp = "Success";
 
                 //tosend.put("result", "success");
                 //KeyPerson man = model.checkExisting(number);
@@ -118,10 +118,9 @@ public class APLWebServiceController {
 //                    tosend.put("result", "failure");
 //
 //                }
-
             } else {
                 //tosend.put("result", "Failure");
-                resp="Failure";
+                resp = "Failure";
             }
         } catch (JSONException ex) {
             Logger.getLogger(APLWebServiceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -164,11 +163,11 @@ public class APLWebServiceController {
             obj.put("city", json);
             json = model.getKeyPerson(number);
             obj.put("key_person", json);
-            
-            json=model.getImageData(number);
+
+            json = model.getImageData(number);
             obj.put("image_data", json);
-            
-            json=model.getAttendanceData(number);
+
+            json = model.getAttendanceData(number);
             obj.put("attendance", json);
 //            json = model.getItemType(number);
 //            obj.put("item_type", json);
@@ -189,7 +188,7 @@ public class APLWebServiceController {
         }
         return obj;
     }
-    
+
     @POST
     @Path("/saveAttendanceInOut")
     @Produces(MediaType.APPLICATION_JSON)
@@ -219,16 +218,15 @@ public class APLWebServiceController {
             String current_time = jObj.get("current_time").toString();
             String latitude = jObj.get("latitude").toString();
             String longitude = jObj.get("longitude").toString();
-            
 
             int count = model.saveAttendance(type, number, current_time, latitude, longitude);
-            if(count==60){
-                result="You are already IN";
+            if (count == 60) {
+                result = "You are already IN";
             }
-            if(count==50){
-                result="You are already OUT";
+            if (count == 50) {
+                result = "You are already OUT";
             }
-            if (count==111) {
+            if (count == 111) {
                 result = "Attendance Marked";
             }
         } catch (JSONException e) {
@@ -237,7 +235,7 @@ public class APLWebServiceController {
         }
         return result;
     }
-    
+
     @POST
     @Path("/getCalendarData")
     @Produces(MediaType.APPLICATION_JSON)
@@ -247,7 +245,7 @@ public class APLWebServiceController {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
-            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -"+e);
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
         }
         JSONObject obj = new JSONObject();
 
@@ -264,9 +262,31 @@ public class APLWebServiceController {
             obj.put("status_type", json);
 
         } catch (Exception e) {
-            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -"+e);
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
         }
         return obj;
     }
 
+    @POST
+    @Path("/sendMail")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String sendMail(String message) {
+        APLWebServiceModel model = new APLWebServiceModel();
+        String msg = "";
+        try {
+            model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
+        } catch (Exception e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
+        }
+
+        try {
+            msg = model.sentMail(message);
+        } catch (Exception e) {
+            System.err.println("exception-----" + e);
+        }
+
+        return msg;
+
+    }
 }

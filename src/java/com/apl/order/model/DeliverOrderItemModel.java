@@ -121,15 +121,14 @@ public class DeliverOrderItemModel {
         }
         int indent_status_id = getStatusId(task);
         String item_status = bean.getItem_status();
-        if (item_status.equals("Delivery Challan Generated")) {
-            item_status = "Delivered";
-        }
         if (item_status.equals("Approved")) {
             item_status = "Delivered";
         }
+
         int status_id = getStatusId(item_status);
 
         String orderNo = getOrderNo(bean.getIndent_table_id());
+        int model_id = getModelId(bean.getIndent_table_id(), bean.getItem_name());
 
         int rowsAffected = 0;
         int updateRowsAffected2 = 0;
@@ -202,13 +201,85 @@ public class DeliverOrderItemModel {
 //                updateRowsAffected3 = pstm3.executeUpdate();
 //
 //            } else {
+//            String inventory_inward_query2 = " select ib.inventory_basic_id from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
+//                    + " order_item indi,org_office oo,order_table indt "
+//                    + " where indi.item_names_id=itn.item_names_id  and indt.requested_by=kp.key_person_id "
+//                    + " and indt.order_table_id=indi.order_table_id and itn.item_names_id=indi.item_names_id and "
+//                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
+//                    + " and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
+//                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' and oo.org_office_name='" + logged_org_office + "' "
+//                    + " group by ib.inventory_basic_id ";
+//
+//            PreparedStatement psmt = connection.prepareStatement(inventory_inward_query2);
+//            ResultSet rs = psmt.executeQuery();
+//            int inventory_basic_id = 0;
+//            while (rs.next()) {
+//                inventory_basic_id = rs.getInt("inventory_basic_id");
+//            }
+//
+//            String query_insert = "INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
+//                    + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
+//                    + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
+//
+//            Date date = new Date();
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            String cur_date = sdf.format(date);
+//
+//            PreparedStatement pstmt_ins = connection.prepareStatement(query_insert);
+//            pstmt_ins.setInt(1, inventory_basic_id);
+//            pstmt_ins.setInt(2, bean.getRequested_by_id());
+//            pstmt_ins.setString(3, bean.getDescription());
+//            pstmt_ins.setInt(4, bean.getRevision_no());
+//            pstmt_ins.setString(5, "Y");
+//            pstmt_ins.setString(6, "OK");
+//            pstmt_ins.setInt(7, bean.getDelivered_qty());
+//            pstmt_ins.setInt(8, 0);
+//            pstmt_ins.setString(9, cur_date);
+//            pstmt_ins.setString(10, "order");
+//            pstmt_ins.setString(11, orderNo);
+//            pstmt_ins.setInt(12, bean.getDelivered_qty());
+//            rowsAffected = pstmt_ins.executeUpdate();
+//            //  }
+//
+//            String inventory_outward_query = " select inv.inventory_id,inv.stock_quantity,inv.outward_quantity from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
+//                    + " order_item indi,org_office oo,order_table indt "
+//                    + " where indi.item_names_id=itn.item_names_id "
+//                    + " and indt.order_table_id=indi.order_table_id and itn.item_names_id=indi.item_names_id and "
+//                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
+//                    + "and kp.key_person_id=inv.key_person_id  and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
+//                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' and oo.org_office_name='" + logged_org_office + "' "
+//                    + "and kp.key_person_name='" + logged_user_name + "' group by inv.inventory_id ";
+//
+//            PreparedStatement psmt2 = connection.prepareStatement(inventory_outward_query);
+//            ResultSet rs2 = psmt2.executeQuery();
+//            int inventory_id2 = 0;
+//            int outward_quantity = 0;
+//            int stock_quantity2 = 0;
+//            while (rs2.next()) {
+//                inventory_id2 = rs2.getInt("inventory_id");
+//                outward_quantity = rs2.getInt("outward_quantity");
+//                stock_quantity2 = rs2.getInt("stock_quantity");
+//            }
+//
+//            String query5 = " update inventory set outward_quantity=?,stock_quantity=? where inventory_id=? ";
+//            PreparedStatement pstm4 = connection.prepareStatement(query5);
+//            pstm4.setInt(1, outward_quantity + bean.getDelivered_qty());
+//            pstm4.setInt(2, stock_quantity2 - bean.getDelivered_qty());
+//            pstm4.setInt(3, inventory_id2);
+//            updateRowsAffected4 = pstm4.executeUpdate();
             String inventory_inward_query2 = " select ib.inventory_basic_id from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
-                    + " order_item indi,org_office oo,order_table indt "
+                    + " order_item indi,org_office oo,order_table indt,model m,manufacturer_item_map mim "
                     + " where indi.item_names_id=itn.item_names_id  and indt.requested_by=kp.key_person_id "
                     + " and indt.order_table_id=indi.order_table_id and itn.item_names_id=indi.item_names_id and "
-                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
-                    + " and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
-                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' and oo.org_office_name='" + logged_org_office + "' "
+                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id "
+                    + " and ib.inventory_basic_id=inv.inventory_basic_id "
+                    + " and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' and m.active='Y' and mim.active='Y' "
+                    + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
+                    + " and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
+                    //                    + " and oo.org_office_name='" + logged_org_office + "' "/ 
+
+                    + " and oo.org_office_name='" + logged_org_office + "' "
+                    + " and m.model_id='" + model_id + "' "
                     + " group by ib.inventory_basic_id ";
 
             PreparedStatement psmt = connection.prepareStatement(inventory_inward_query2);
@@ -217,7 +288,7 @@ public class DeliverOrderItemModel {
             while (rs.next()) {
                 inventory_basic_id = rs.getInt("inventory_basic_id");
             }
-
+            
             String query_insert = "INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
                     + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -240,16 +311,24 @@ public class DeliverOrderItemModel {
             pstmt_ins.setString(11, orderNo);
             pstmt_ins.setInt(12, bean.getDelivered_qty());
             rowsAffected = pstmt_ins.executeUpdate();
-            //  }
+            // }
 
-            String inventory_outward_query = " select inv.inventory_id,inv.stock_quantity,inv.outward_quantity from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
-                    + " order_item indi,org_office oo,order_table indt "
-                    + " where indi.item_names_id=itn.item_names_id "
-                    + " and indt.order_table_id=indi.order_table_id and itn.item_names_id=indi.item_names_id and "
-                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
-                    + "and kp.key_person_id=inv.key_person_id  and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
-                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' and oo.org_office_name='" + logged_org_office + "' "
-                    + "and kp.key_person_name='" + logged_user_name + "' group by inv.inventory_id ";
+//            String inventory_outward_query = " select inv.inventory_id,inv.stock_quantity,inv.outward_quantity from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
+//                    + " indent_item indi,org_office oo,indent_table indt,model m,manufacturer_item_map mim "
+//                    + " where indi.item_names_id=itn.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
+//                    + " and mim.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
+//                    + " and indt.indent_table_id=indi.indent_table_id and itn.item_names_id=indi.item_names_id and "
+//                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
+//                    + " and kp.key_person_id=inv.key_person_id  and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
+//                    + " and m.active='Y' and mim.active='Y' "
+//                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
+//                    + " and oo.org_office_name='APOGEE Agro' "
+//                    + " and m.model_id='" + model_id + "' "
+//                    + "and kp.key_person_name='" + logged_user_name + "' group by inv.inventory_id ";
+            String inventory_outward_query = "select inv.inventory_id,inv.stock_quantity,inv.outward_quantity"
+                    + " from inventory inv,key_person kp where inv.inventory_basic_id='" + inventory_basic_id + "' and  "
+                    + " kp.key_person_name='" + logged_user_name + "' "
+                    + " and kp.key_person_id=inv.key_person_id and kp.active='Y' and inv.active='Y' ";
 
             PreparedStatement psmt2 = connection.prepareStatement(inventory_outward_query);
             ResultSet rs2 = psmt2.executeQuery();
@@ -473,6 +552,26 @@ public class DeliverOrderItemModel {
             System.out.println("getRequestedByKeyPersonId Error: " + e);
         }
         return order_no;
+    }
+
+    public int getModelId(int order_table_id, String item_name) {
+//        String query = " SELECT odi.model_id FROM order_table odt,order_item odi"
+//                + " WHERE odt.order_table_id = '" + order_table_id + "'"
+//                + " and odt.active='Y' and odi.active='Y' and odt.order_table_id=odi.order_table_id ";
+
+        String query = " SELECT odi.model_id FROM order_table odt,order_item odi,item_names itn "
+                + " WHERE odt.order_table_id = '" + order_table_id + "' and odt.active='Y' and odi.active='Y' and odt.order_table_id=odi.order_table_id "
+                + "and itn.active='Y' and itn.item_names_id=odi.item_names_id and item_name='" + item_name + "' ";
+        int model_id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            model_id = rset.getInt("model_id");
+        } catch (Exception e) {
+            System.out.println("getRequestedByKeyPersonId Error: " + e);
+        }
+        return model_id;
     }
 
     public int getStatusId(String status) {

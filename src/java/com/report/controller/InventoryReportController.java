@@ -59,12 +59,14 @@ public class InventoryReportController extends HttpServlet {
         String search_manufacturer = "";
         String search_model = "";
         String search_key_person = "";
+        String search_by_date = "";
 
         search_org_office = request.getParameter("search_org_office");
         search_item_code = request.getParameter("search_item_code");
         search_manufacturer = request.getParameter("search_manufacturer");
         search_model = request.getParameter("search_model");
         search_key_person = request.getParameter("search_key_person");
+        search_by_date = request.getParameter("search_by_date");
 
         if (search_item_name == null) {
             search_item_name = "";
@@ -83,6 +85,9 @@ public class InventoryReportController extends HttpServlet {
         }
         if (search_key_person == null) {
             search_key_person = "";
+        }
+        if (search_by_date == null) {
+            search_by_date = "";
         }
         if (!search_item_code.equals("")) {
             String search_item_code_arr[] = search_item_code.split(" - ");
@@ -167,18 +172,16 @@ public class InventoryReportController extends HttpServlet {
                 String q = "";
 
                 jrxmlFilePath = ctx.getRealPath("/view/report/InventoryReport.jrxml");
-                list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person);
+                list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person,search_by_date);
                 byte[] reportInbytes = GeneralModel.generateRecordList(jrxmlFilePath, list);
                 response.setContentLength(reportInbytes.length);
                 servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
                 servletOutputStream.flush();
                 servletOutputStream.close();
-
                 return;
-
             }
             
-            List<InventoryReport> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person);
+            List<InventoryReport> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person,search_by_date);
             request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
@@ -188,6 +191,7 @@ public class InventoryReportController extends HttpServlet {
             request.setAttribute("search_manufacturer", search_manufacturer);
             request.setAttribute("search_model", search_model);
             request.setAttribute("search_key_person", search_key_person);
+            request.setAttribute("search_by_date", search_by_date);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("loggedUser", loggedUser);
 

@@ -227,19 +227,22 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 1) {
                     tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required  style="width:35px">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 5) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '" ">';
 
                 }
 //                else {
@@ -289,19 +292,22 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 1) {
-                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 5) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '"  >';
 
                 }
             }
@@ -348,11 +354,11 @@
 
         return window.open(url, window_name, window_features);
     }
-    
-     function printIndentForm() {       
+
+    function printIndentForm() {
         var queryString = "task=printIndentForm";
-        var url = "IndentController?"+queryString;
-        popupwin = openPopUp(url, "Blank Indent Form",500, 1000);
+        var url = "IndentController?" + queryString;
+        popupwin = openPopUp(url, "Blank Indent Form", 500, 1000);
 
     }
 
@@ -524,7 +530,6 @@
 
                 </div>
 
-
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
@@ -533,6 +538,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>      
             <hr>
             <div class="row">

@@ -40,7 +40,7 @@ public class MyCustomLogFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
         try {
             
-            System.err.println("---------------------------------- Log Filter ---------------------------------------------");
+          //  System.err.println("---------------------------------- Log Filter ---------------------------------------------");
             
             HttpServletRequest request = (HttpServletRequest) req;
             HttpServletResponse response = (HttpServletResponse) res;
@@ -49,7 +49,8 @@ public class MyCustomLogFilter implements Filter {
             String url = request.getServletPath().replace("/", "");
             request.getQueryString();
             request.getRequestURL();
-            HttpSession session = request.getSession(false);
+            //HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession();
             try {
                 try {//                    System.out.println("urlExtention-" + url);
                     //String urlExtention = url.substring((url.lastIndexOf('.') + 1), url.length());
@@ -65,8 +66,8 @@ public class MyCustomLogFilter implements Filter {
                                 DBConnection.closeConncetion(connection);
                             //}
                         } catch (Exception e) {
-                            session.invalidate();
-                            response.sendRedirect("/login.jsp");
+                            //session.invalidate();
+                            response.sendRedirect("/");
                             return;
                         }
                         if(isRedirection){
@@ -81,8 +82,8 @@ public class MyCustomLogFilter implements Filter {
                 // System.out.println("req---" + req);
                 chain.doFilter(req, res);
             } catch (Exception e) {
-                session.invalidate();
-                response.sendRedirect("/login.jsp");
+                //session.invalidate();
+                response.sendRedirect("/");
                 System.out.println("Error LogFiletr" + e);
                 return;
             }

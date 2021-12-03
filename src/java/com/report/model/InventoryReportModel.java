@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
-import com.inventory.model.InventoryBasicModel;
 import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.InventoryBasic;
@@ -59,7 +58,8 @@ public class InventoryReportModel {
         }
     }
 
-    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) throws SQLException {
+    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
 
@@ -91,6 +91,9 @@ public class InventoryReportModel {
             if (!search_model.equals("") && search_model != null) {
                 query += " and m.model='" + search_model + "' ";
 
+            }
+            if (!search_by_date.equals("") && search_by_date != null) {
+                query += " and inv.date_time='" + search_by_date + "' ";
             }
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
@@ -189,7 +192,8 @@ public class InventoryReportModel {
         return p_id;
     }
 
-    public List<InventoryReport> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) {
+    public List<InventoryReport> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) {
         List<InventoryReport> list = new ArrayList<InventoryReport>();
         List<Integer> desig_map_list = new ArrayList<>();
         List<Integer> desig_map_listAll = new ArrayList<>();
@@ -206,7 +210,7 @@ public class InventoryReportModel {
         int p_item_id = 0;
 
         try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson);
+            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
             ItemNameModel model = new ItemNameModel();
             List<ItemName> allIdList = model.showData(search_item_name, search_item_type, search_item_codee, search_super_child, search_generation);
             for (int k = 0; k < allIdList.size(); k++) {
@@ -300,6 +304,9 @@ public class InventoryReportModel {
                     if (!search_model.equals("") && search_model != null) {
                         query2 += " and m.model='" + search_model + "' ";
                     }
+                    if (!search_by_date.equals("") && search_by_date != null) {
+                        query2 += " and inv.date_time='" + search_by_date + "' ";
+                    }
                     query2 += " group by mr.manufacturer_name order by mr.manufacturer_name  ";
 
                     PreparedStatement pstmt2 = connection.prepareStatement(query2);
@@ -352,6 +359,9 @@ public class InventoryReportModel {
                         }
                         if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
                             query3 += " and kp.key_person_name='" + searchKeyPerson + "' ";
+                        }
+                        if (!search_by_date.equals("") && search_by_date != null) {
+                            query3 += " and inv.date_time='" + search_by_date + "' ";
                         }
                         // query3 += " group by m.model ";
 

@@ -52,6 +52,7 @@ public class AproveOrderController extends HttpServlet {
         String logged_designation = "";
         String logged_org_name = "";
         String logged_org_office = "";
+        String search_by_date = "";
         int logged_org_office_id = 0;
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
@@ -74,10 +75,15 @@ public class AproveOrderController extends HttpServlet {
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
             office_admin = session.getAttribute("office_admin").toString();
         }
-
+        
         AproveOrderModel model = new AproveOrderModel();
 
         String search_item_name = "";
+        search_by_date = request.getParameter("search_by_date");
+
+        if (search_by_date == null) {
+            search_by_date = "";
+        }
 
         search_item_name = request.getParameter("search_item_name");
 
@@ -138,12 +144,13 @@ public class AproveOrderController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
+            
             if (task.equals("GetIndentItems")) {
                // List<ItemName> list = null;
                 //  String indent_no = request.getParameter("indent_no");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String indent_status = request.getParameter("indent_status");
-                List<ApproveIndent> indent_items_list = model.getIndentItems(indent_table_id);
+                List<ApproveIndent> indent_items_list = model.getIndentItems(indent_table_id,logged_org_office);
                 request.setAttribute("indent_items_list", indent_items_list);    
                 request.setAttribute("indent_status", indent_status);
                 request.getRequestDispatcher("approveOrderItemList").forward(request, response);
@@ -197,7 +204,7 @@ public class AproveOrderController extends HttpServlet {
             if (searchIndentStatusWise.equals("searchIndentStatusWise")) {
                 status = request.getParameter("status");
             }
-            List<ApproveIndent> list = model.showIndents(logged_user_name, status);
+            List<ApproveIndent> list = model.showIndents(logged_user_name, status,search_by_date);
             List<ApproveIndent> status_list = model.getStatus();
 
             request.setAttribute("list", list);

@@ -58,7 +58,7 @@ public class DeliverItemModel {
                     + " and indt.status_id=s.status_id and indt.active='Y' "
                     + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3) and d.designation_id='5'";
         }
-
+        
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -131,7 +131,7 @@ public class DeliverItemModel {
         }
         return indent_no;
     }
-    
+
     public String updateRecord(DeliverItem bean, int indent_item_id, int indent_table_id, String task, String logged_org_office,
             String logged_user_name) {
         int updateRowsAffected = 0;
@@ -426,13 +426,22 @@ public class DeliverItemModel {
         List<Indent> list = new ArrayList<Indent>();
 
         String query = " select required_qty,deliver_qty,approved_qty,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to "
-                + ",item_name,m.model from model m,manufacturer_item_map mim,indent_table indt,indent_item indi,key_person  kp1,key_person kp2 ,"
-                + " item_names as itn "
-                + "where indi.indent_table_id=indt.indent_table_id and indi.model_id=m.model_id "
+                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2,"
+                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo,"
+                + " oo2.service_tax_reg_no as officeGSTNo,oo2.mobile_no1,oo2.mobile_no2, "
+                + " c1.city_name as key_person_city,oo1.org_office_name as requested_by_office, "
+                + " oo1.address_line1 as kp_address_line1,oo1.address_line2 as kp_address_line2,oo1.address_line3 as kp_address_line3 "
+                + " from model m,manufacturer_item_map mim,indent_table indt,indent_item indi,key_person kp1,key_person kp2 ,"
+                + " item_names as itn,org_office oo1,org_office oo2,city c1,city c2 "
+                + " where indi.indent_table_id=indt.indent_table_id and indi.model_id=m.model_id "
                 + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
                 + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
-                + "kp1.key_person_id=indt.requested_by  and kp2.key_person_id=indt.requested_to and kp1.active='y' "
-                + "and kp2.active='y' and itn.active='Y' and indt.indent_no='" + indent_no + "'";
+                + " kp1.key_person_id=indt.requested_by  and kp2.key_person_id=indt.requested_to and kp1.active='y' "
+                + " and kp2.active='y' and itn.active='Y' and indt.indent_no='" + indent_no + "' and oo1.active='Y' and oo2.active='Y'"
+                + " and c1.active='Y' "
+                + " and c2.active='Y' "
+                + " and kp1.org_office_id=oo1.org_office_id and kp2.org_office_id=oo2.org_office_id "
+                + " and oo1.city_id=c1.city_id  and oo2.city_id=c2.city_id  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -443,14 +452,49 @@ public class DeliverItemModel {
                 bean.setDelivery_challan_no(delivery_challan_no);
                 bean.setDelivery_challan_date(delivery_challan_date);
                 bean.setItemname(rset.getString("item_name"));
+                String hsn_code = "";
+                if (rset.getString("HSNCode") == null) {
+                    hsn_code = "";
+                } else {
+                    hsn_code = rset.getString("HSNCode");
+                }
+                bean.setHSNCode(hsn_code);
+                String oo_address_line1 = rset.getString("oo_address_line1");
+                String oo_address_line2 = rset.getString("oo_address_line2");
+                String oo_address_line3 = rset.getString("oo_address_line3");
+                String oo_city_name = rset.getString("org_office_city");
+                String pin_code = rset.getString("pin_code");
+
+                String kp_address_line1 = rset.getString("kp_address_line1");
+                String kp_address_line2 = rset.getString("kp_address_line2");
+                String kp_address_line3 = rset.getString("kp_address_line3");
+                String kp_city_name = rset.getString("key_person_city");
+
+                String office_address = oo_address_line1 + ", " + oo_address_line2 + ", " + oo_address_line3 + ", " + oo_city_name + "- "
+                        + pin_code;
+                String key_person_address = kp_address_line1 + ", " + kp_address_line2 + ", " + kp_address_line3 + ", " + kp_city_name;
+
+                bean.setOffice_address(office_address);
+                bean.setKey_person_address(key_person_address);
                 bean.setModel(rset.getString("model"));
                 bean.setIndent_no(indent_no);
 
                 bean.setRequested_by(rset.getString("requested_by"));
+                bean.setRequested_by_office(rset.getString("requested_by_office") + " (" + rset.getString("requested_by") + ")");
+                bean.setPartyGSTNo(rset.getString("partyGSTNo"));
+                bean.setOfficeGSTNo(rset.getString("officeGSTNo"));
                 // bean.setRequested_to(rset.getString("SalesPerson"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
                 bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setRate("");
+                bean.setValue("");
+                bean.setTotal_assessable_value("");
+                bean.setAmount_in_words("");
+                String officeMobNo = "";
+                officeMobNo = (rset.getString("mobile_no1")) + ", " + (rset.getString("mobile_no2"));
+                bean.setOfficeMobNo(officeMobNo);
+
                 if (rset.getInt("required_qty") == rset.getInt("deliver_qty")) {
                     bean.setBalance_qty(0);
                 } else {

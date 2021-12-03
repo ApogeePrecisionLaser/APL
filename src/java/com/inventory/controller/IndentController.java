@@ -179,6 +179,7 @@ public class IndentController extends HttpServlet {
             int req_qty = 0;
             String purpose = "";
             String item_name = "";
+            String models = "";
             String expected_date_time = "";
             if (task.equals("GetItems")) {
                 List<ItemName> list = null;
@@ -189,22 +190,23 @@ public class IndentController extends HttpServlet {
                         JSONObject jsonObj = jsonArr.getJSONObject(i);
 
                         Iterator<String> keys = jsonObj.keys();
-
+                        
                         while (keys.hasNext()) {
                             String key = keys.next();
                             checkedValue = (String) jsonObj.get("checkedValue");
                             req_qty = (int) jsonObj.get("req_qty");
                             purpose = (String) jsonObj.get("purpose");
-                            item_name = (String) jsonObj.get("model");
+                            item_name = (String) jsonObj.get("item");
+                            models = (String) jsonObj.get("model");
                             expected_date_time = (String) jsonObj.get("expected_date_time");
                         }
                         System.out.println(jsonObj);
-                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
+                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models);
 
                     }
 
                 } else {
-                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
+                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models);
                 }
 
                 request.setAttribute("list", list);
@@ -242,7 +244,7 @@ public class IndentController extends HttpServlet {
 
                 jrxmlFilePath = ctx.getRealPath("/BlankIndentForm.jrxml");
 
-                listAll = model.getIndentNo();
+                listAll = model.getBlankIndentData(logged_user_name);
                 autogenerate_indent_no = "Indent_" + counting;
                 byte[] reportInbytes = model.generateMapReport(jrxmlFilePath, listAll);
                 response.setContentLength(reportInbytes.length);

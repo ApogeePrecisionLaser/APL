@@ -54,6 +54,7 @@ public class ApproveIndent {
     private int stock_qty;
     private int delivered_qty;
     private String expected_date_time;
+    private String price;
 
     /**
      * @return the indent_table_id
@@ -288,5 +289,19 @@ public class ApproveIndent {
      */
     public void setModel_id(int model_id) {
         this.model_id = model_id;
+    }
+
+    /**
+     * @return the price
+     */
+    public String getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

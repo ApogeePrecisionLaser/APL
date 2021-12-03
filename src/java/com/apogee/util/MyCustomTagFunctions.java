@@ -18,7 +18,7 @@ public class MyCustomTagFunctions {
 
     public static boolean isContainPrivileges(Collection<?> coll, Object key) {
         boolean isFound = false;
-        System.err.println("---------------------------apl custom tag functions calling---------------------------");
+      //  System.err.println("---------------------------apl custom tag functions calling---------------------------");
         try {
             UrlPrivileges bean = null;
             Iterator<UrlPrivileges> iterator = (Iterator<UrlPrivileges>) coll.iterator();
@@ -39,11 +39,11 @@ public class MyCustomTagFunctions {
     public static boolean isContainPrivileges2(String user, String url, String qry) {
         boolean isFound = false;
         int id = 0;
-        System.err.println("---------------------------apl custom tag functions calling---------------------------");
+      //  System.err.println("---------------------------apl custom tag functions calling---------------------------");
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/apl_2", "root", "root");
+                    "jdbc:mysql://localhost:3306/apl", "root", "CXKyE2ZpT%HjbP!4c$");
 
             String query = " select p.privilege_id,p.privilege_type,p.privilege_type_id,p.privilege_type_value,  "
                     + " uu.u_url_id,uu.u_url,uup.privilege  \n"

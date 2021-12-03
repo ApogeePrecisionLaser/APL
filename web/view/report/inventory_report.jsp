@@ -235,13 +235,15 @@
         var search_org_office = document.getElementById("search_org_office").value;
         var search_manufacturer = document.getElementById("search_manufacturer").value;
         var search_item_code = document.getElementById("search_item_code").value;
+        var search_key_person = document.getElementById("search_key_person").value;
         var search_model = document.getElementById("search_model").value;
+        var search_by_date = document.getElementById("search_by_date").value;
         if (search_org_office == "") {
             alert("please select office name!...");
             return false;
         }
 
-        queryString = "task=viewPdf&search_org_office=" + search_org_office + "&search_manufacturer=" + search_manufacturer + "&search_item_code=" + search_item_code + "&search_model=" + search_model;
+        queryString = "task=viewPdf&search_org_office=" + search_org_office + "&search_manufacturer=" + search_manufacturer + "&search_item_code=" + search_item_code + "&search_model=" + search_model + "&search_key_person=" + search_key_person + "&search_by_date=" + search_by_date;
         //  queryString = "task=viewPdf";
         var url = "InventoryReportController?" + queryString;
         popupwin = openPopUp1(url, "Division List", 600, 1000);
@@ -311,6 +313,15 @@
                         <label>Key Person</label>
                         <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" 
                                class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Date</label>
+                        <input type="date" style="height:38px" placeholder="Search.." name="search_by_date" id="search_by_date" value="${search_by_date}"
+                               class="form-control myInput searchInput1 w-100">
+
                     </div>
                 </div>
 

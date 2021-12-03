@@ -55,7 +55,7 @@ public class OrderController extends HttpServlet {
     String import_purpose = "";
     String import_expected_date_time = "";
     int import_req_qty = 0;
-
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -69,6 +69,7 @@ public class OrderController extends HttpServlet {
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
         String office_admin = "";
+        String search_by_date = "";
         int last_indent_table_id = 0;
         int counting = 100;
         String indent_no = "";
@@ -100,7 +101,12 @@ public class OrderController extends HttpServlet {
         if (search_item_name == null) {
             search_item_name = "";
         }
+        search_item_name = request.getParameter("search_item_name");
+        search_by_date = request.getParameter("search_by_date");
 
+        if (search_by_date == null) {
+            search_by_date = "";
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
             model2.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -170,6 +176,7 @@ public class OrderController extends HttpServlet {
             int req_qty = 0;
             String purpose = "";
             String item_name = "";
+            String models = "";
             String expected_date_time = "";
             if (task.equals("GetItems")) {
                 List<ItemName> list = null;
@@ -186,16 +193,17 @@ public class OrderController extends HttpServlet {
                             checkedValue = (String) jsonObj.get("checkedValue");
                             req_qty = (int) jsonObj.get("req_qty");
                             purpose = (String) jsonObj.get("purpose");
-                            item_name = (String) jsonObj.get("item_name");
+                            item_name = (String) jsonObj.get("item");
+                            models = (String) jsonObj.get("model");
                             expected_date_time = (String) jsonObj.get("expected_date_time");
                         }
                         System.out.println(jsonObj);
-                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
+                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models);
 
                     }
 
                 } else {
-                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
+                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models);
                 }
 
                 request.setAttribute("list", list);
@@ -215,8 +223,8 @@ public class OrderController extends HttpServlet {
                 response.setContentType("application/pdf");
                 ServletOutputStream servletOutputStream = response.getOutputStream();
 
-                jrxmlFilePath = ctx.getRealPath("/Invoice1.jrxml");
-
+//                jrxmlFilePath = ctx.getRealPath("/Invoice1.jrxml");
+                jrxmlFilePath = ctx.getRealPath("/DeliveryChallan.jrxml");
                 listAll = model.showReportData(logged_user_name, office_admin, order_no, delivery_challan_date, delivery_challan_no, item_name_report);
                 // listAll = tubeWellSurveyModel.showData(-1, -1,Pole,IvrsNo,"",FileNo,PageNo,Date,"",meterFunctional,feeder,typeOfConnection,dateTo,searchStatus,feeder_ivrs_search);
                 byte[] reportInbytes = model.generateMapReport(jrxmlFilePath, listAll);
@@ -235,7 +243,7 @@ public class OrderController extends HttpServlet {
 
                 List<Indent> indent_items_list = model.getIndentItems(indent_table_id);
                 request.setAttribute("indent_items_list", indent_items_list);
-                request.getRequestDispatcher("showOrderItemList").forward(request, response);
+                request.getRequestDispatcher("showorderitemlist").forward(request, response);
                 return;
             }
 
@@ -270,7 +278,7 @@ public class OrderController extends HttpServlet {
                     String checked_item = checked_id[i];
                     if (!checked_item.equals("")) {
                         bean.setIndent_item_id(indent_item_id);
-                        bean.setItem_name(request.getParameter("item_name" + i + ""));
+                        bean.setModel(request.getParameter("model" + i + ""));
                         bean.setPurpose(request.getParameter("purpose" + i + ""));
                         bean.setRequired_qty(Integer.parseInt(request.getParameter("req_qty" + i + "")));
                         bean.setExpected_date_time(request.getParameter("expected_date_time" + i + ""));
@@ -294,7 +302,7 @@ public class OrderController extends HttpServlet {
             }
 
 //            List<Indent> list = model.showData(logged_user_name, office_admin);
-            List<Indent> list = model.showData(logged_user_name, office_admin, status);
+            List<Indent> list = model.showData(logged_user_name, office_admin, status, search_by_date);
             List<Indent> status_list = model.getStatus();
 
             String req = model.getRequestedToKeyPersonorder("", logged_user_name);

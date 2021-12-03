@@ -40,7 +40,7 @@ import org.json.simple.JSONObject;
 public class ItemNameController extends HttpServlet {
 
     private File tmpDir;
-
+    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -134,7 +134,7 @@ public class ItemNameController extends HttpServlet {
                     if (JQstring.equals("getItems")) {
                         JSONObject obj1 = new JSONObject();
                         JSONArray arrayObj = new JSONArray();
-                        String item_names=request.getParameter("item_name");
+                        String item_names = request.getParameter("item_name");
                         arrayObj = model.getItems(item_names);
                         obj1.put("org_chart_data", arrayObj);
                         out.print(obj1);
@@ -310,6 +310,7 @@ public class ItemNameController extends HttpServlet {
                     int_qty = Integer.parseInt(map.get("quantity").trim());
                 }
                 bean.setQuantity(int_qty);
+                bean.setHSNCode(map.get("HSNCode").trim());
                 bean.setItem_name(map.get("item_name").trim());
                 bean.setPrefix(map.get("prefix").trim());
                 bean.setParent_item(map.get("parent_item").trim());
@@ -332,11 +333,11 @@ public class ItemNameController extends HttpServlet {
                 org_chart = "";
             }
             if (org_chart.equals("Org Chart")) {
-                String item_names=request.getParameter("item_name");
+                String item_names = request.getParameter("item_name");
                 request.setAttribute("item_name", item_names);
                 request.getRequestDispatcher("orgChart.jsp").forward(request, response);
             }
-            
+
             //Auto increment count for item code
             //  counting = model.getCounting();
             List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code, search_super_child, search_generation);

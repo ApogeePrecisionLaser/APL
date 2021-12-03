@@ -46,6 +46,8 @@ public class OrderModel {
             System.out.println("InventoryModel setConnection() Error: " + e);
         }
     }
+    
+    
 
     public String getRequestedToKeyPersonorder(String q, String requested_by) {
         int loc_of_dealer = getRequestedKeyPersondegId(requested_by);
@@ -69,32 +71,127 @@ public class OrderModel {
         return key_person_name;
     }
 
+//    public List<Indent> showReportData(String logged_key_person, String office_admin, String orderno, String delivery_challan_date, String delivery_challan_no, String itemname) {
+//        List<Indent> list = new ArrayList<Indent>();
+//
+//        String query = "select required_qty,deliver_qty,approved_qty,kp1.key_person_name as dealer,kp2.key_person_name as SalesPerson "
+//                + ",item_name,m.model from model m,manufacturer_item_map mim,order_table ot,order_item indi,key_person  kp1,key_person kp2 ,item_names as itn "
+//                + "where indi.order_table_id=ot.order_table_id and indi.model_id=m.model_id \n"
+//                + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
+//                + "kp1.key_person_id=ot.requested_by  and kp2.key_person_id=ot.requested_to and kp1.active='y' "
+//                + "and kp2.active='y' and itn.active='Y' and ot.order_no='" + orderno + "'";
+//
+//        try {
+//            ResultSet rset = connection.prepareStatement(query).executeQuery();
+//            while (rset.next()) {
+//                Indent bean = new Indent();
+//
+//                bean.setSalesperson(rset.getString("SalesPerson"));
+//                bean.setDelivery_challan_no(delivery_challan_no);
+//                bean.setDelivery_challan_date(delivery_challan_date);
+//                bean.setItemname(rset.getString("item_name"));
+//                bean.setOrderno(orderno);
+//
+//                bean.setDealer(rset.getString("dealer"));
+//                bean.setRequested_to(rset.getString("SalesPerson"));
+//                bean.setApproved_qty(rset.getInt("approved_qty"));
+//                bean.setDelivered_qty(rset.getInt("deliver_qty"));
+//                bean.setRequired_qty(rset.getInt("required_qty"));
+//                if (rset.getInt("required_qty") == rset.getInt("deliver_qty")) {
+//                    bean.setBalance_qty(0);
+//                } else {
+//                    bean.setBalance_qty(rset.getInt("required_qty") - rset.getInt("deliver_qty"));
+//                }
+//
+//                list.add(bean);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error: InventoryModel showdata-" + e);
+//        }
+//        return list;
+//    }
     public List<Indent> showReportData(String logged_key_person, String office_admin, String orderno, String delivery_challan_date, String delivery_challan_no, String itemname) {
         List<Indent> list = new ArrayList<Indent>();
 
-        String query = "select required_qty,deliver_qty,approved_qty,kp1.key_person_name as dealer,kp2.key_person_name as SalesPerson "
-                + ",item_name,m.model from model m,manufacturer_item_map mim,order_table ot,order_item indi,key_person  kp1,key_person kp2 ,item_names as itn "
-                + "where indi.order_table_id=ot.order_table_id and indi.model_id=m.model_id \n"
-                + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
-                + "kp1.key_person_id=ot.requested_by  and kp2.key_person_id=ot.requested_to and kp1.active='y' "
-                + "and kp2.active='y' and itn.active='Y' and ot.order_no='" + orderno + "'";
+        String amount_in_words = numberToWords(234678);
+
+        String query = " select required_qty,deliver_qty,approved_qty,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to "
+                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2,"
+                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo,"
+                + " oo2.service_tax_reg_no as officeGSTNo,oo2.mobile_no1,oo2.mobile_no2,osp.prices, "
+                + " c1.city_name as key_person_city,oo1.org_office_name as requested_by_office, "
+                + " oo1.address_line1 as kp_address_line1,oo1.address_line2 as kp_address_line2,oo1.address_line3 as kp_address_line3 "
+                + " from model m,manufacturer_item_map mim,order_table indt,order_item indi,key_person kp1,key_person kp2 ,"
+                + " item_names as itn,org_office oo1,org_office oo2,city c1,city c2,orders_sales_pricing osp "
+                + " where indi.order_table_id=indt.order_table_id and indi.model_id=m.model_id "
+                + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
+                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
+                + " kp1.key_person_id=indt.requested_by  and kp2.key_person_id=indt.requested_to and kp1.active='y' "
+                + " and kp2.active='y' and itn.active='Y' and indt.order_no='" + orderno + "' and oo1.active='Y' and oo2.active='Y'"
+                + " and c1.active='Y' and osp.order_id=indt.order_table_id and osp.order_item_id=indi.order_item_id "
+                + " and c2.active='Y' "
+                + " and kp1.org_office_id=oo1.org_office_id and kp2.org_office_id=oo2.org_office_id "
+                + " and oo1.city_id=c1.city_id  and oo2.city_id=c2.city_id  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int sum_value = 0;
             while (rset.next()) {
                 Indent bean = new Indent();
 
-                bean.setSalesperson(rset.getString("SalesPerson"));
+                bean.setRequested_to(rset.getString("requested_to"));
                 bean.setDelivery_challan_no(delivery_challan_no);
                 bean.setDelivery_challan_date(delivery_challan_date);
                 bean.setItemname(rset.getString("item_name"));
-                bean.setOrderno(orderno);
+                String hsn_code = "";
+                if (rset.getString("HSNCode") == null) {
+                    hsn_code = "";
+                } else {
+                    hsn_code = rset.getString("HSNCode");
+                }
+                bean.setHSNCode(hsn_code);
+                String oo_address_line1 = rset.getString("oo_address_line1");
+                String oo_address_line2 = rset.getString("oo_address_line2");
+                String oo_address_line3 = rset.getString("oo_address_line3");
+                String oo_city_name = rset.getString("org_office_city");
+                String pin_code = rset.getString("pin_code");
 
-                bean.setDealer(rset.getString("dealer"));
-                bean.setRequested_to(rset.getString("SalesPerson"));
+                String kp_address_line1 = rset.getString("kp_address_line1");
+                String kp_address_line2 = rset.getString("kp_address_line2");
+                String kp_address_line3 = rset.getString("kp_address_line3");
+                String kp_city_name = rset.getString("key_person_city");
+
+                String office_address = oo_address_line1 + ", " + oo_address_line2 + ", " + oo_address_line3 + ", " + oo_city_name + "- "
+                        + pin_code;
+                String key_person_address = kp_address_line1 + ", " + kp_address_line2 + ", " + kp_address_line3 + ", " + kp_city_name;
+
+                bean.setOffice_address(office_address);
+                bean.setKey_person_address(key_person_address);
+                bean.setModel(rset.getString("model"));
+                bean.setIndent_no(orderno);
+
+                bean.setRequested_by(rset.getString("requested_by"));
+                bean.setRequested_by_office(rset.getString("requested_by_office") + " (" + rset.getString("requested_by") + ")");
+                bean.setPartyGSTNo(rset.getString("partyGSTNo"));
+                bean.setOfficeGSTNo(rset.getString("officeGSTNo"));
+                // bean.setRequested_to(rset.getString("SalesPerson"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
                 bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setRate(rset.getString("prices"));
+                String value = "";
+                value = String.valueOf(Integer.parseInt(rset.getString("prices")) * rset.getInt("deliver_qty"));
+                bean.setValue(value);
+                sum_value += Integer.valueOf(value);
+                bean.setTotal_assessable_value(String.valueOf(sum_value));
+
+                amount_in_words = numberToWords(sum_value);
+                bean.setAmount_in_words(amount_in_words);
+
+                String officeMobNo = "";
+                officeMobNo = (rset.getString("mobile_no1")) + ", " + (rset.getString("mobile_no2"));
+                bean.setOfficeMobNo(officeMobNo);
+
                 if (rset.getInt("required_qty") == rset.getInt("deliver_qty")) {
                     bean.setBalance_qty(0);
                 } else {
@@ -102,11 +199,65 @@ public class OrderModel {
                 }
 
                 list.add(bean);
+                // sum_value++;
             }
         } catch (Exception e) {
             System.out.println("Error: InventoryModel showdata-" + e);
         }
         return list;
+    }
+
+    static String numberToWords(int number) {
+        String words = "";
+        String unitsArray[] = {"Zero", "One", "Two", "Three", "Four", "Five", "Six",
+            "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+            "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+            "Eighteen", "Nineteen"};
+        String tensArray[] = {"Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty",
+            "Sixty", "Seventy", "Eighty", "Ninety"};
+
+        if (number == 0) {
+            return "Zero";
+        }
+        // add minus before conversion if the number is less than 0
+        if (number < 0) {
+            // convert the number to a string
+            String numberStr = "" + number;
+            // remove minus before the number 
+            numberStr = numberStr.substring(1);
+            // add minus before the number and convert the rest of number 
+            return "minus " + numberToWords(Integer.parseInt(numberStr));
+        }
+        // check if number is divisible by 1 million
+        if ((number / 1000000) > 0) {
+            words += numberToWords(number / 1000000) + " Million ";
+            number %= 1000000;
+        }
+        // check if number is divisible by 1 thousand
+        if ((number / 1000) > 0) {
+            words += numberToWords(number / 1000) + " Thousand ";
+            number %= 1000;
+        }
+        // check if number is divisible by 1 hundred
+        if ((number / 100) > 0) {
+            words += numberToWords(number / 100) + " Hundred ";
+            number %= 100;
+        }
+
+        if (number > 0) {
+            // check if number is within teens
+            if (number < 20) {
+                // fetch the appropriate value from unit array
+                words += unitsArray[number];
+            } else {
+                // fetch the appropriate value from tens array
+                words += tensArray[number / 10];
+                if ((number % 10) > 0) {
+                    words += "-" + unitsArray[number % 10];
+                }
+            }
+        }
+        return words;
     }
 
     public byte[] generateMapReport(String jrxmlFilePath, List<Indent> listAll) {
@@ -124,7 +275,7 @@ public class OrderModel {
         return reportInbytes;
     }
 
-    public List<Indent> showData(String logged_key_person, String office_admin, String indent_status) {
+    public List<Indent> showData(String logged_key_person, String office_admin, String indent_status, String search_by_date) {
         List<Indent> list = new ArrayList<Indent>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -141,6 +292,9 @@ public class OrderModel {
         }
         if (!office_admin.equals("") && office_admin != null) {
             query += " and kp2.key_person_name='" + office_admin + "' ";
+        }
+        if (!search_by_date.equals("") && search_by_date != null) {
+            query += " and indt.date_time like '" + search_by_date + "%' ";
         }
 
         if (!indent_status.equals("") && indent_status != null) {
@@ -249,13 +403,13 @@ public class OrderModel {
                     + " status_id,active,remark,expected_date_time,description,revision_no,delivered_date_time,model_id) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
 
-            int item_name_id2 = getItemNameId(bean.getItem_name());
-            int purpose_id2 = getPurposeId(bean.getPurpose());
+            int model_id = getModelId(bean.getModel());
+            int item_names_id2 = getItemNameId(model_id);
             int count2 = 0;
 
             PreparedStatement pstmt2 = connection.prepareStatement(query2);
             pstmt2.setInt(1, indent_table_id);
-            pstmt2.setInt(2, 0);
+            pstmt2.setInt(2, item_names_id2);
             //    pstmt2.setInt(3, purpose_id2);
             pstmt2.setInt(3, bean.getRequired_qty());
             pstmt2.setInt(4, 2);
@@ -265,7 +419,7 @@ public class OrderModel {
             pstmt2.setString(8, bean.getDescription());
             pstmt2.setInt(9, bean.getRevision_no());
             pstmt2.setString(10, "");
-            pstmt2.setInt(11, item_name_id2);
+            pstmt2.setInt(11, model_id);
             rowsAffected2 = pstmt2.executeUpdate();
 
         } catch (Exception e) {
@@ -314,16 +468,32 @@ public class OrderModel {
         return id;
     }
 
-    public int getItemNameId(String item_name) {
+    public int getModelId(String model) {
 
-        String query = "SELECT model_id FROM model WHERE model = '" + item_name + "' ";
-//        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' ";
+        String query = "SELECT model_id FROM model WHERE model = '" + model + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             rset.next();
             id = rset.getInt("model_id");
+        } catch (Exception e) {
+            System.out.println("getModelId Error: " + e);
+        }
+        return id;
+    }
+
+    public int getItemNameId(int model_id) {
+
+        String query = " SELECT itn.item_names_id FROM model m,manufacturer_item_map mim,item_names itn"
+                + "  WHERE m.model_id = '" + model_id + "'  and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  "
+                + " and itn.item_names_id=mim.item_names_id and m.active='Y' and mim.active='Y' and itn.active='Y' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("item_names_id");
         } catch (Exception e) {
             System.out.println("getItemNameId Error: " + e);
         }
@@ -537,7 +707,8 @@ public class OrderModel {
         return list;
     }
 
-    public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose, String checked_item_name, String checked_expected_date_time) {
+    public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose,
+            String checked_item_name, String checked_expected_date_time, String checked_model) {
         List<ItemName> list = new ArrayList<ItemName>();
         List<ItemName> list1 = new ArrayList<ItemName>();
         List<Integer> desig_map_list = new ArrayList<Integer>();
@@ -582,6 +753,7 @@ public class OrderModel {
                 ItemName bean1 = new ItemName();
                 int checked_id = 0;
                 int item_name_id = (rset.getInt("item_names_id"));
+                int model_id = getModelId(checked_model);
                 if (checkedValue.equals("")) {
                     checked_id = Integer.parseInt("0");
                 } else {
@@ -594,14 +766,16 @@ public class OrderModel {
                     checked_qty = String.valueOf(checked_req_qty);
                 }
 
-                if (item_name_id == checked_id) {
+                if (model_id == checked_id) {
                     bean1.setChecked_item_name(checked_item_name);
+                    bean1.setChecked_model(checked_model);
                     bean1.setCheckedValue(checkedValue);
                     bean1.setChecked_purpose(checked_purpose);
                     bean1.setChecked_req_qty(checked_qty);
                     bean1.setChecked_expected_date_time(checked_expected_date_time);
                 } else {
                     bean1.setChecked_item_name(checked_item_name);
+                    bean1.setChecked_model(checked_model);
                     bean1.setCheckedValue(checkedValue);
                     bean1.setChecked_purpose(checked_purpose);
                     bean1.setChecked_req_qty(checked_qty);
@@ -623,7 +797,7 @@ public class OrderModel {
                 }
                 list.add(bean1);
                 if (rset.getString("is_super_child").equals("Y")) {
-                    String query1 = " select m.model from item_names itn,manufacturer_item_map mim,model m "
+                    String query1 = " select m.model,m.model_id from item_names itn,manufacturer_item_map mim,model m "
                             + " where itn.item_names_id=mim.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id"
                             + " and mim.active='Y' and m.active='Y' and itn.active='Y' and itn.item_names_id='" + rset.getInt("item_names_id") + "' ";
 
@@ -635,9 +809,11 @@ public class OrderModel {
                         item_id1 += 1;
                         bean.setItem_names_id(item_id1);
                         bean.setItem_name(rset2.getString("model"));
+                        bean.setModel_id(rset2.getInt("model_id"));
                         bean.setParent_item_id(String.valueOf(rset.getInt("item_names_id")));
                         bean.setGeneration(rset.getInt("generation") + 1);
                         bean.setSuperp("Y");
+                        bean.setItem(rset.getString("item_name"));
                         list.add(bean);
 
                     }

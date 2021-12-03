@@ -519,6 +519,13 @@
                         <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
+                    
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Date</label>
+                        <input type="date" Placeholder="Date" name="search_by_date" id="search_by_date" value="${search_by_date}" class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>
             </div>
             <hr>
             <div class="row">
@@ -591,7 +598,7 @@
                                         <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
                                     </td>
                                 </c:if>
-                                    
+
                                 <td></td>
                             </tr>
                         </c:forEach>

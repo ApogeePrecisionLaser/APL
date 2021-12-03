@@ -111,7 +111,8 @@ public class InventoryBasicModel {
 //        }
 //        return list;
 //    }
-    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) throws SQLException {
+    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
 
@@ -142,7 +143,9 @@ public class InventoryBasicModel {
             }
             if (!search_model.equals("") && search_model != null) {
                 query += " and m.model='" + search_model + "' ";
-
+            }
+            if (!search_by_date.equals("") && search_by_date != null) {
+                query += " and inv.date_time='" + search_by_date + "' ";
             }
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
@@ -395,7 +398,8 @@ public class InventoryBasicModel {
 //
 //        return list;
 //    }
-    public List<InventoryBasic> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) {
+    public List<InventoryBasic> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) {
         List<InventoryBasic> list = new ArrayList<InventoryBasic>();
         List<Integer> desig_map_list = new ArrayList<>();
         List<Integer> desig_map_listAll = new ArrayList<>();
@@ -412,7 +416,7 @@ public class InventoryBasicModel {
         int p_item_id = 0;
 
         try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson);
+            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
             ItemNameModel model = new ItemNameModel();
             List<ItemName> allIdList = model.showData(search_item_name, search_item_type, search_item_codee, search_super_child, search_generation);
             for (int k = 0; k < allIdList.size(); k++) {
@@ -500,6 +504,9 @@ public class InventoryBasicModel {
                     if (!search_model.equals("") && search_model != null) {
                         query2 += " and m.model='" + search_model + "' ";
                     }
+                    if (!search_by_date.equals("") && search_by_date != null) {
+                        query2 += " and inv.date_time='" + search_by_date + "' ";
+                    }
                     query2 += " group by mr.manufacturer_name order by mr.manufacturer_name  ";
 
                     PreparedStatement pstmt2 = connection.prepareStatement(query2);
@@ -549,7 +556,7 @@ public class InventoryBasicModel {
                                 + " and mr.manufacturer_id=mim.manufacturer_id  and mr.active='Y' and itn.active='Y' "
                                 + " and itn.item_names_id=mim.item_names_id  and m.active='Y' and mim.active='Y' and kp.active='Y' and oo.active='Y' "
                                 + " and mr.manufacturer_name='" + manufacturer_name_list.get(j) + "' "
-                                + " and itn.item_names_id='" + rset.getString("item_names_id") + "' and kp.designation_id=5 ";
+                                + " and itn.item_names_id='" + rset.getString("item_names_id") + "' ";
                         if (!search_model.equals("") && search_model != null) {
                             query3 += " and m.model='" + search_model + "' ";
                         }
@@ -559,8 +566,14 @@ public class InventoryBasicModel {
                         if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
                             query3 += " and oo.org_office_name='" + searchOrgOffice + "' ";
                         }
-                        // query3 += " group by m.model ";
+                        if (search_by_date.equals("") && search_by_date == null) {
+                            query3 += " and kp.designation_id=5  ";
+                        }
+                        if (!search_by_date.equals("") && search_by_date != null) {
+                            query3 += " and inv.date_time='" + search_by_date + "' ";
+                        }
 
+                        // query3 += " group by m.model ";
                         PreparedStatement pstmt3 = connection.prepareStatement(query3);
                         ResultSet rset3 = pstmt3.executeQuery();
                         while (rset3.next()) {
@@ -610,7 +623,7 @@ public class InventoryBasicModel {
         String item_code = bean.getItem_code();
         if (!item_code.equals("")) {
             String item_code_arr[] = item_code.split(" - ");
-            item_code = item_code_arr[1];
+            item_code = item_code_arr[0];
         }
 
         int item_name_id = getItemNamesId(item_code);
@@ -888,7 +901,7 @@ public class InventoryBasicModel {
         String item_code = bean.getItem_code();
         if (!item_code.equals("")) {
             String item_code_arr[] = item_code.split(" - ");
-            item_code = item_code_arr[1];
+            item_code = item_code_arr[0];
         }
 
         int item_name_id = getItemNamesId(item_code);

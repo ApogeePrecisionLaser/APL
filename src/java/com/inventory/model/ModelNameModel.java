@@ -42,8 +42,7 @@ public class ModelNameModel {
             System.out.println("ModelNameModel setConnection() Error: " + e);
         }
     }
-    
-    
+
     public List<ModelName> showData(String searchManufacturer, String searchModel, String searchItemCode, String active) {
         List<ModelName> list = new ArrayList<ModelName>();
         String searchItemName = "";
@@ -111,7 +110,6 @@ public class ModelNameModel {
             item_code = item_code_arr[0];
             item_name = item_code_arr[1];
         }
-        
 
         int item_id = getItemId(item_code);
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
@@ -137,7 +135,8 @@ public class ModelNameModel {
             }
             String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
                     + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
-                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' ";
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y'"
+                    + " and m.model='" + model_name.getModel() + "' ";
 
             PreparedStatement pstmt2 = connection.prepareStatement(query5);
             ResultSet rs2 = pstmt2.executeQuery();
@@ -246,7 +245,7 @@ public class ModelNameModel {
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,?,now()) ";
             String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
-                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y'  ";
             int manufacturer_item_map_ids = 0;
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
             ResultSet rs1 = pstmt1.executeQuery();
@@ -255,7 +254,8 @@ public class ModelNameModel {
             }
             String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
                     + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
-                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' ";
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' "
+                    + " and m.model='" + model_name.getModel() + "' ";
 
             PreparedStatement pstmt2 = connection.prepareStatement(query5);
             ResultSet rs2 = pstmt2.executeQuery();

@@ -46,12 +46,13 @@
 	<subDataset name="Table Dataset 1"/>
 	<subDataset name="Table Dataset 2"/>
 	<field name="indent_no" class="java.lang.String"/>
+	<field name="office_address" class="java.lang.String"/>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="85" splitType="Stretch">
+		<band height="120" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="30" width="267" height="35" forecolor="#3399FF"/>
 				<textElement>
@@ -72,13 +73,6 @@
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[Request Date -]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="25" y="65" width="139" height="20"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
-				<text><![CDATA[B-53 Sector-64 Noida]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="292" y="4" width="201" height="40" forecolor="#3366FF"/>
@@ -117,6 +111,13 @@
 				<reportElement x="657" y="25" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{indent_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4" y="65" width="263" height="55"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -165,9 +166,9 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="25">
+		<band height="43">
 			<staticText>
-				<reportElement x="1" y="0" width="37" height="25"/>
+				<reportElement x="1" y="0" width="37" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -181,7 +182,7 @@
 				<text><![CDATA[S.No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="292" y="0" width="82" height="25"/>
+				<reportElement x="292" y="0" width="60" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -195,7 +196,7 @@
 				<text><![CDATA[Required Qty]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="670" y="0" width="90" height="25"/>
+				<reportElement x="538" y="0" width="221" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -209,7 +210,7 @@
 				<text><![CDATA[Purpose]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="548" y="0" width="122" height="25"/>
+				<reportElement x="470" y="0" width="68" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -223,7 +224,7 @@
 				<text><![CDATA[Expected Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="39" y="0" width="90" height="25"/>
+				<reportElement x="39" y="0" width="90" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -237,7 +238,7 @@
 				<text><![CDATA[Item Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="129" y="0" width="110" height="25"/>
+				<reportElement x="129" y="0" width="110" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -251,7 +252,7 @@
 				<text><![CDATA[Model]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="239" y="0" width="53" height="25"/>
+				<reportElement x="239" y="0" width="53" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -265,7 +266,7 @@
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="374" y="0" width="82" height="25"/>
+				<reportElement x="352" y="0" width="60" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -279,7 +280,7 @@
 				<text><![CDATA[Approved Qty]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="456" y="0" width="92" height="25"/>
+				<reportElement x="412" y="0" width="58" height="43"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -311,28 +312,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="20" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="20" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -346,28 +347,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="40" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="40" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -381,28 +382,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="60" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="60" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -416,28 +417,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="80" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="80" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -451,28 +452,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="100" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="100" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -486,28 +487,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="120" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="120" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -521,28 +522,28 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="1" y="140" width="759" height="20"/>
+				<reportElement key="table 1" style="table 1" x="1" y="140" width="758" height="20"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 2">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
@@ -556,22 +557,22 @@
 					<jr:column width="113">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
+					<jr:column width="55">
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+					</jr:column>
 					<jr:column width="56">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="77">
+					<jr:column width="61">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="87">
+					<jr:column width="57">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="81">
+					<jr:column width="69">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
-					<jr:column width="122">
-						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
-					</jr:column>
-					<jr:column width="97">
+					<jr:column width="220">
 						<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 					</jr:column>
 				</jr:table>

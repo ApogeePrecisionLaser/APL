@@ -6,6 +6,7 @@ package com.webservice.model;
 
 import com.organization.tableClasses.KeyPerson;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -18,8 +19,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -811,7 +829,7 @@ public class APLWebServiceModel {
             if (type.equals("coming")) {
 
                 String query1 = " select * from attendance a, key_person kp  where date(a.created_at)=curdate() "
-                        + " and '"+number+"' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
+                        + " and '" + number + "' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
                         + " and a.status_type_id=2 and a.going_time is null ";
 
                 psmt = connection.prepareStatement(query1);
@@ -843,7 +861,7 @@ public class APLWebServiceModel {
             } else {
 
                 String query1 = " select * from attendance a, key_person kp  where date(a.created_at)=curdate() "
-                        + " and '"+number+"' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
+                        + " and '" + number + "' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
                         + " and a.status_type_id=2 and a.going_time is null ";
 
                 psmt = connection.prepareStatement(query1);
@@ -1017,6 +1035,91 @@ public class APLWebServiceModel {
             System.out.println("Error inside getCity of survey: " + e);
         }
         return rowData;
+    }
+
+    public String sentMail(String message) {
+        String result = "";
+        String host = "smtp.gmail.com";
+        String port = "587";
+
+        String mailFrom = "vikrant.apogee@gmail.com";
+        String password = "apo@gee#1234";
+
+//        String mailFrom = "smartmeter.apogee@gmail.com";
+//        String password = "jpss1277";
+        String subject = "Daily Work Report";
+
+        APLWebServiceModel mailer = new APLWebServiceModel();
+
+        try {
+            mailer.sendPlainTextEmail(host, port, mailFrom, password,
+                    subject, message);
+            System.out.println("Email sent.");
+            result = "Email sent.";
+
+        } catch (Exception ex) {
+            System.out.println("Failed to sent email.");
+            result = "Failed to sent email.";
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public void sendPlainTextEmail(String host, String port,
+            final String userName, final String password,
+            String subject, String message) throws AddressException,
+            MessagingException,
+            UnsupportedEncodingException {
+
+        // sets SMTP server properties
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+//        String mailTo = "komal.apogee@gmail.com";
+//        String mailTo2 = "vikrant.apogee@gmail.com";
+//        String mailCC = "komal@apogeeprecision.com";
+//        String mailCC2 = "sainikomal1425@gmail.com";
+
+        String mailTo = "gurdave.apogee@gmail.com";
+        String mailTo2 = "jpss1277@gmail.com";
+        String mailCC = "hr@apogeeprecision.com";
+        Authenticator auth = new Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        };
+
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(userName));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo2));
+            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(mailCC));
+//            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(mailCC2));
+            msg.setSubject(subject);
+
+            BodyPart messageBodyPart1 = new MimeBodyPart();
+//            messageBodyPart1.setText("Hi Sir ,please find the link below regarding the same :" + message);
+            messageBodyPart1.setContent("Hi Sir, <br />Please find the link below regarding the same :<br />" + message + "<br/><br/><br/>"
+                    + "<b>Thanks & Regards</b><br/>"
+                    + "<b>Vikrant Saini</b>", "text/html");
+
+            Multipart multipart = new MimeMultipart();
+
+            multipart.addBodyPart(messageBodyPart1);
+            msg.setContent(multipart);
+
+            Transport.send(msg);
+
+            System.out.println("message sent....");
+        } catch (MessagingException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Connection getConnection() {

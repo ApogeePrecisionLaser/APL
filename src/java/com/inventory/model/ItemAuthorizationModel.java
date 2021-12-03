@@ -8,11 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import com.DBConnection.DBConnection;
+import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.ItemAuthorization;
+import com.inventory.tableClasses.ItemName;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 
 /**
  *
@@ -56,8 +61,8 @@ public class ItemAuthorizationModel {
         if (!search_designation.equals("") && search_designation != null) {
             query += " and d.designation='" + search_designation + "' ";
         }
+        query += " order by d.designation ";
 
-        //  System.err.println("query----"+query);
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -130,7 +135,7 @@ public class ItemAuthorizationModel {
                     rowsAffected = pstmt.executeUpdate();
                 }
             }
-
+            
             String query5 = " select item_names_id from item_names where item_names_id"
                     + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
                     + "  and active='Y' ";

@@ -14,7 +14,9 @@ public class ItemName {
 
     private int item_names_id;
     private String item_name;
+    private String item;
     private String model;
+    private int model_id;
     private String description;
     private String item_type;
     private int item_type_id;
@@ -37,8 +39,10 @@ public class ItemName {
     private String checked_req_qty;
     private String checked_purpose;
     private String checked_item_name;
+    private String checked_model;
     private String checked_expected_date_time;
     private String checkedValue;
+    private String HSNCode;
     
     /**
      * @return the item_names_id
@@ -416,6 +420,62 @@ public class ItemName {
      */
     public void setModel(String model) {
         this.model = model;
+    }
+
+    /**
+     * @return the item
+     */
+    public String getItem() {
+        return item;
+    }
+
+    /**
+     * @param item the item to set
+     */
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    /**
+     * @return the checked_model
+     */
+    public String getChecked_model() {
+        return checked_model;
+    }
+
+    /**
+     * @param checked_model the checked_model to set
+     */
+    public void setChecked_model(String checked_model) {
+        this.checked_model = checked_model;
+    }
+
+    /**
+     * @return the model_id
+     */
+    public int getModel_id() {
+        return model_id;
+    }
+
+    /**
+     * @param model_id the model_id to set
+     */
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
+    }
+
+    /**
+     * @return the HSNCode
+     */
+    public String getHSNCode() {
+        return HSNCode;
+    }
+
+    /**
+     * @param HSNCode the HSNCode to set
+     */
+    public void setHSNCode(String HSNCode) {
+        this.HSNCode = HSNCode;
     }
 
 }

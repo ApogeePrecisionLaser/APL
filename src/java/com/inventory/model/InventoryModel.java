@@ -48,7 +48,8 @@ public class InventoryModel {
         }
     }
 
-    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) throws SQLException {
+    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, 
+            String search_model, String searchKeyPerson,String search_by_date) throws SQLException {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
 
@@ -79,6 +80,10 @@ public class InventoryModel {
             }
             if (!search_model.equals("") && search_model != null) {
                 query += " and m.model='" + search_model + "' ";
+
+            }
+            if (!search_by_date.equals("") && search_by_date != null) {
+                query += " and inv.date_time='" + search_by_date + "' ";
 
             }
             ResultSet rst = connection.prepareStatement(query).executeQuery();
@@ -164,7 +169,8 @@ public class InventoryModel {
         return list;
     }
 
-    public List<Inventory> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) {
+    public List<Inventory> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) {
         List<Inventory> list = new ArrayList<Inventory>();
         List<Integer> desig_map_list = new ArrayList<>();
         List<Integer> desig_map_listAll = new ArrayList<>();
@@ -178,7 +184,7 @@ public class InventoryModel {
         String search_generation = "";
 
         try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson);
+            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson,search_by_date);
             //  System.err.println("desig list --" + desig_map_list.size());
             //  System.err.println("desig list ele--" + desig_map_list);
             ItemNameModel model = new ItemNameModel();
@@ -249,6 +255,9 @@ public class InventoryModel {
                     if (!search_model.equals("") && search_model != null) {
                         query2_count += " and m.model='" + search_model + "' ";
                     }
+                    if (!search_by_date.equals("") && search_by_date != null) {
+                        query2_count += " and inv.date_time='" + search_by_date + "' ";
+                    }
 
                     PreparedStatement pstmt_count = connection.prepareStatement(query2_count);
                     ResultSet rset_count = pstmt_count.executeQuery();
@@ -285,6 +294,9 @@ public class InventoryModel {
                     }
                     if (!search_model.equals("") && search_model != null) {
                         query2 += " and m.model='" + search_model + "' ";
+                    }
+                    if (!search_by_date.equals("") && search_by_date != null) {
+                        query2 += " and inv.date_time='" + search_by_date + "' ";
                     }
 
                     PreparedStatement pstmt2 = connection.prepareStatement(query2);

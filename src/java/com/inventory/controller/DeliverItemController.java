@@ -169,13 +169,14 @@ public class DeliverItemController extends HttpServlet {
                 String indent_num = request.getParameter("indent_no");
                 String delivery_challan_no = request.getParameter("delivery_challan_no");
                 String item_name_report = request.getParameter("item_name");
-
+                
                 List listAll = null;
                 String jrxmlFilePath;
                 response.setContentType("application/pdf");
                 ServletOutputStream servletOutputStream = response.getOutputStream();
 
-                jrxmlFilePath = ctx.getRealPath("/IndentChallan.jrxml");
+//                jrxmlFilePath = ctx.getRealPath("/IndentChallan.jrxml");
+                jrxmlFilePath = ctx.getRealPath("/DeliveryChallan.jrxml");
 
                 listAll = model.showReportData(logged_user_name, office_admin, indent_num, delivery_challan_date, delivery_challan_no, item_name_report);
                 // listAll = tubeWellSurveyModel.showData(-1, -1,Pole,IvrsNo,"",FileNo,PageNo,Date,"",meterFunctional,feeder,typeOfConnection,dateTo,searchStatus,feeder_ivrs_search);

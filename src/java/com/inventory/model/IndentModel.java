@@ -99,14 +99,17 @@ public class IndentModel {
                 + " ,s1.status as indent_status,s2.status as item_status,kp1.key_person_name as requested_by,"
                 + " kp2.key_person_name as requested_to, "
                 + " indt.indent_table_id,p.purpose,itn.item_name,m.model,indi.required_qty,indi.approved_qty,indi.deliver_qty"
-                + " ,indi.expected_date_time  from "
+                + " ,indi.expected_date_time,oo.address_line1,oo.address_line2,oo.address_line3,c.city_name,dc.challan_date  from "
                 + " indent_table indt,key_person kp1,key_person kp2,item_names itn,model m,manufacturer mr,manufacturer_item_map mim, "
-                + " status s1,status s2,indent_item indi,purpose p where indt.requested_to=kp2.key_person_id and mr.active='Y' and mim.active='Y' "
+                + " status s1,status s2,indent_item indi,purpose p,org_office oo,city c,delivery_challan dc "
+                + " where indt.requested_to=kp2.key_person_id and mr.active='Y' and mim.active='Y' and dc.active='Y' "
+                + " and dc.indent_table_id=indt.indent_table_id and dc.indent_item_id=indi.indent_item_id "
                 + " and indt.requested_by=kp1.key_person_id and indi.status_id=s2.status_id and itn.active='Y' and m.active='Y' "
                 + " and indi.item_names_id=itn.item_names_id and m.model_id=indi.model_id and mr.manufacturer_id=mim.manufacturer_id "
                 + " and mim.item_names_id=itn.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                 + " and indt.status_id=s1.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'and indi.active='Y'"
-                + " and indt.indent_table_id=indi.indent_table_id and p.purpose_id=indi.purpose_id ";
+                + " and indt.indent_table_id=indi.indent_table_id and p.purpose_id=indi.purpose_id and oo.active='Y' and c.active='Y' "
+                + " and kp1.org_office_id=oo.org_office_id and oo.city_id=c.city_id ";
 
         if (!indent_table_id.equals("") && indent_table_id != null) {
             query += " and indt.indent_table_id='" + indent_table_id + "' ";
@@ -120,6 +123,12 @@ public class IndentModel {
                 bean.setModel(rset.getString("model"));
                 String item_status = rset.getString("item_status");
                 bean.setItem_status(item_status);
+                if (item_status.equals("Delivered")) {
+                    bean.setDelivery_challan_date(rset.getString("challan_date"));
+                } else {
+                    bean.setDelivery_challan_date("");
+
+                }
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
@@ -129,7 +138,15 @@ public class IndentModel {
                 bean.setDate_time(rset.getString("date_time"));
                 bean.setRequested_by(rset.getString("requested_by"));
                 bean.setRequested_to(rset.getString("requested_to"));
+
                 bean.setIndent_status(rset.getString("indent_status"));
+                String address_line1 = rset.getString("address_line1");
+                String address_line2 = rset.getString("address_line2");
+                String address_line3 = rset.getString("address_line3");
+                String city_name = rset.getString("city_name");
+
+                String office_address = address_line1 + ", " + address_line2 + ", " + address_line3 + ", " + city_name;
+                bean.setOffice_address(office_address);
 
                 list.add(bean);
             }
@@ -503,7 +520,8 @@ public class IndentModel {
         return list;
     }
 
-    public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose, String checked_item_name, String checked_expected_date_time) {
+    public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose,
+            String checked_item_name, String checked_expected_date_time, String checked_model) {
         List<ItemName> list = new ArrayList<ItemName>();
         List<ItemName> list1 = new ArrayList<ItemName>();
         List<Integer> desig_map_list = new ArrayList<Integer>();
@@ -549,6 +567,7 @@ public class IndentModel {
                 ItemName bean1 = new ItemName();
                 int checked_id = 0;
                 int item_name_id = (rset.getInt("item_names_id"));
+                int model_id = getModelId(checked_model);
                 if (checkedValue.equals("")) {
                     checked_id = Integer.parseInt("0");
                 } else {
@@ -561,14 +580,16 @@ public class IndentModel {
                     checked_qty = String.valueOf(checked_req_qty);
                 }
 
-                if (item_name_id == checked_id) {
+                if (model_id == checked_id) {
                     bean1.setChecked_item_name(checked_item_name);
+                    bean1.setChecked_model(checked_model);
                     bean1.setCheckedValue(checkedValue);
                     bean1.setChecked_purpose(checked_purpose);
                     bean1.setChecked_req_qty(checked_qty);
                     bean1.setChecked_expected_date_time(checked_expected_date_time);
                 } else {
                     bean1.setChecked_item_name(checked_item_name);
+                    bean1.setChecked_model(checked_model);
                     bean1.setCheckedValue(checkedValue);
                     bean1.setChecked_purpose(checked_purpose);
                     bean1.setChecked_req_qty(checked_qty);
@@ -588,9 +609,10 @@ public class IndentModel {
                 if (rset.getString("is_super_child").equals("Y")) {
                     bean1.setSuperp("N");
                 }
+
                 list.add(bean1);
                 if (rset.getString("is_super_child").equals("Y")) {
-                    String query1 = " select m.model from item_names itn,manufacturer_item_map mim,model m "
+                    String query1 = " select m.model_id,m.model from item_names itn,manufacturer_item_map mim,model m "
                             + " where itn.item_names_id=mim.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id"
                             + " and mim.active='Y' and m.active='Y' and itn.active='Y' and "
                             + " itn.item_names_id='" + rset.getInt("item_names_id") + "' ";
@@ -603,9 +625,11 @@ public class IndentModel {
                         item_id1 += 1;
                         bean.setItem_names_id(item_id1);
                         bean.setItem_name(rset2.getString("model"));
+                        bean.setModel_id(rset2.getInt("model_id"));
                         bean.setParent_item_id(String.valueOf(rset.getInt("item_names_id")));
                         bean.setGeneration(rset.getInt("generation") + 1);
                         bean.setSuperp("Y");
+                        bean.setItem(rset.getString("item_name"));
                         list.add(bean);
 
                     }
@@ -643,7 +667,7 @@ public class IndentModel {
                     + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id   and mim.item_names_id=itn.item_names_id "
                     + " and indi.purpose_id=p.purpose_id "
                     + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' and m.active='Y' and mim.active='Y' "
-                    + " and indt.indent_table_id='" + indent_table_id + "' ";
+                    + " and indt.indent_table_id='" + indent_table_id + "' and indi.model_id=m.model_id ";
 //            } else {
 //                query = "   select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty,"
 //                        + " indi.deliver_qty,itn.quantity as stock_qty  ,s.status,indi.indent_item_id,m.model "
@@ -704,14 +728,20 @@ public class IndentModel {
         return counting + 1;
     }
 
-    public List<Indent> getIndentNo() {
+    public List<Indent> getBlankIndentData(String logged_user_name) {
         List<Indent> list = new ArrayList<Indent>();
         int counting = 100;
         int count = 0;
-        String query = " SELECT indent_no FROM indent_table order by indent_table_id desc limit 1  ";
+        String query = " SELECT oo.address_line1,oo.address_line2,oo.address_line3,c.city_name "
+                + " FROM key_person kp,org_office oo,city c where c.city_id=oo.city_id and c.active='Y' and oo.active='Y' "
+                + " and kp.active='Y' and kp.org_office_id=oo.org_office_id ";
+        if (!logged_user_name.equals("") && logged_user_name != null) {
+            query += " and kp.key_person_name='" + logged_user_name + "' ";
+        }
 
+        String query1 = " SELECT indt.indent_no from indent_table indt where indt.active='Y' order by indt.indent_table_id desc limit 1 ";
         try {
-            PreparedStatement psmt = connection.prepareStatement(query);
+            PreparedStatement psmt = connection.prepareStatement(query1);
             ResultSet rs = psmt.executeQuery();
             while (rs.next()) {
                 Indent bean = new Indent();
@@ -721,6 +751,19 @@ public class IndentModel {
                 count = Integer.parseInt(indent_no_arr[length]);
                 counting = count;
                 bean.setIndent_no("Indent_" + (counting + 1));
+
+                PreparedStatement psmt2 = connection.prepareStatement(query);
+                ResultSet rs2 = psmt2.executeQuery();
+                while (rs2.next()) {
+                    String address_line1 = rs2.getString("address_line1");
+                    String address_line2 = rs2.getString("address_line2");
+                    String address_line3 = rs2.getString("address_line3");
+                    String city_name = rs2.getString("city_name");
+
+                    String office_address = address_line1 + ", " + address_line2 + ", " + address_line3 + ", " + city_name;
+
+                    bean.setOffice_address(office_address);
+                }
                 list.add(bean);
             }
 

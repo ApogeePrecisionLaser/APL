@@ -644,6 +644,14 @@
                                class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
+                               
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Date</label>
+                        <input type="date" Placeholder="Date" name="search_by_date" id="search_by_date" value="${search_by_date}" 
+                               class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>
 
 
             </div>
