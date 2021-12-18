@@ -303,6 +303,7 @@
                 }
                 if (j == 5) {
                     tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '"  >';
+
                 }
             }
         }
@@ -315,10 +316,12 @@
         var dataLength = "";
         setInterval(function () {
             var String_data = $('#String_data').val();
+
             var dataLength2 = "";
             var dataLength2 = String_data.length;
             dataLength = String_data.length;
             if (dataLength > dataLength2 || dataLength > 0) {
+
                 showData();
             } else {
                 //alert(2321);

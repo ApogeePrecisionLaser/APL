@@ -1,3 +1,4 @@
+
 package com.inventory.model;
 
 import java.sql.Connection;

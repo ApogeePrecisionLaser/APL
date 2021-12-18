@@ -48,8 +48,10 @@ public class InventoryModel {
         }
     }
 
+
     public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
             String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
+
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
 
@@ -184,7 +186,9 @@ public class InventoryModel {
         String search_generation = "";
 
         try {
+
             desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
+
             //  System.err.println("desig list --" + desig_map_list.size());
             //  System.err.println("desig list ele--" + desig_map_list);
             ItemNameModel model = new ItemNameModel();
@@ -420,6 +424,7 @@ public class InventoryModel {
 
     }
 
+    
     public String getImagePath(String inventory_id, String uploadedFor) {
         String img_name = "";
         String destination_path = "";
@@ -454,7 +459,7 @@ public class InventoryModel {
                 destination_path = rs.getString("delivery_challan_img");
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getImagePath in InventoryModel : " + ex);
+            System.out.println("ERROR: in getImagePath in TrafficPoliceSearchModel : " + ex);
         }
         return destination_path;
     }

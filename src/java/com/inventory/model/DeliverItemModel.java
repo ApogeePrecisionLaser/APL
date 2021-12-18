@@ -58,7 +58,7 @@ public class DeliverItemModel {
                     + " and indt.status_id=s.status_id and indt.active='Y' "
                     + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3) and d.designation_id='5'";
         }
-
+        
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -522,6 +522,8 @@ public class DeliverItemModel {
         }
         return reportInbytes;
     }
+
+   
 
     public String getMessage() {
         return message;

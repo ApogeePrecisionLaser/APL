@@ -18,7 +18,7 @@ public class MyCustomTagFunctions {
 
     public static boolean isContainPrivileges(Collection<?> coll, Object key) {
         boolean isFound = false;
-      //  System.err.println("---------------------------apl custom tag functions calling---------------------------");
+        //  System.err.println("---------------------------apl custom tag functions calling---------------------------");
         try {
             UrlPrivileges bean = null;
             Iterator<UrlPrivileges> iterator = (Iterator<UrlPrivileges>) coll.iterator();
@@ -39,7 +39,7 @@ public class MyCustomTagFunctions {
     public static boolean isContainPrivileges2(String user, String url, String qry) {
         boolean isFound = false;
         int id = 0;
-      //  System.err.println("---------------------------apl custom tag functions calling---------------------------");
+        //  System.err.println("---------------------------apl custom tag functions calling---------------------------");
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -51,14 +51,14 @@ public class MyCustomTagFunctions {
                     + " where ud.url_detail_id=uup.url_detail_id and uu.u_url_id=ud.url_id and urup.u_url_id=ud.url_id  \n"
                     + " and ur.user_role_id=urup.user_role_id and p.privilege_id=ud.privilege_id   "
                     + " and urup.u_role_url_privilege_id=uup.u_role_url_privilege_id \n"
-                    + " and  uu.u_url='"+url+"' and ur.role_name = '"+user+"' and p.privilege_type_id='"+qry+"'"
+                    + " and  uu.u_url='" + url + "' and ur.role_name = '" + user + "' and p.privilege_type_id='" + qry + "'"
                     + " and uup.privilege='Y' ";
             ResultSet rst = con.prepareStatement(query).executeQuery();
             while (rst.next()) {
                 id = rst.getInt(1);
-            } 
-            if(id>0){
-                isFound=true;
+            }
+            if (id > 0) {
+                isFound = true;
             }
 
         } catch (Exception e) {
