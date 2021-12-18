@@ -33,7 +33,7 @@ public class CityController extends HttpServlet {
             //       organisationNameModel.setConnection(DBConnection.getConnection(ctx, session));
             cityModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrganisationNameController setConnection() calling try block" + e);
+            System.out.println("error in CityController setConnection() calling try block" + e);
         }
 
         request.setCharacterEncoding("UTF-8");
@@ -63,7 +63,7 @@ public class CityController extends HttpServlet {
                 return;
             }
         } catch (Exception e) {
-            System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+            System.out.println("\n Error --CityController get JQuery Parameters Part-" + e);
         }
 
         if (searchCity == null) {
@@ -79,11 +79,25 @@ public class CityController extends HttpServlet {
             } catch (Exception ex) {
                 city_id = 0;
             }
-            int pin_code = Integer.parseInt(request.getParameter("pin_code"));
-            int std_code = Integer.parseInt(request.getParameter("std_code"));
-            String cityDescription = request.getParameter("cityDescription");
-            String cityName = request.getParameter("cityName");
-            String tehsilName = request.getParameter("tehsil");
+            int pin_code = 0;
+            int std_code = 0;
+            String tehsilName = "";
+            String cityName = "";
+            String cityDescription = "";
+
+            if ((request.getParameter("pin_code").equals(""))) {
+                pin_code = Integer.parseInt("0" + request.getParameter("pin_code"));
+            } else {
+                pin_code = Integer.parseInt(request.getParameter("pin_code"));
+            }
+            if ((request.getParameter("std_code").equals(""))) {
+                std_code = Integer.parseInt("0" + request.getParameter("std_code"));
+            } else {
+                std_code = Integer.parseInt(request.getParameter("std_code"));
+            }
+            cityDescription = request.getParameter("cityDescription");
+            cityName = request.getParameter("cityName");
+            tehsilName = request.getParameter("tehsil");
             // city_id = CityModel.getCityId(request.getParameter("cityName"));
             CityBean b = new CityBean();
             b.setCityId(city_id);

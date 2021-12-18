@@ -42,8 +42,7 @@ public class ModelNameModel {
             System.out.println("ModelNameModel setConnection() Error: " + e);
         }
     }
-    
-    
+
     public List<ModelName> showData(String searchManufacturer, String searchModel, String searchItemCode, String active) {
         List<ModelName> list = new ArrayList<ModelName>();
         String searchItemName = "";
@@ -54,7 +53,7 @@ public class ModelNameModel {
         }
 
         String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_code,mim.manufacturer_item_map_id,m.lead_time"
-                + " ,m.model_no,m.part_no,inn.item_name "
+                + " ,m.model_no,m.part_no,inn.item_name ,m.basic_price"
                 + "  FROM model m,manufacturer_item_map mim,item_names inn,manufacturer mr where m.active='Y' "
                 + " and mim.active='Y' and mr.active='Y' and inn.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=inn.item_names_id and"
                 + " mim.manufacturer_id=mr.manufacturer_id ";
@@ -87,6 +86,7 @@ public class ModelNameModel {
                 bean.setDescription((rset.getString("description")));
                 bean.setModel_no(rset.getString("model_no"));
                 bean.setPart_no(rset.getString("part_no"));
+                bean.setBasic_price(rset.getString("basic_price"));
 
                 list.add(bean);
             }
@@ -99,7 +99,7 @@ public class ModelNameModel {
     public int insertRecord(ModelName model_name, Iterator itr, String image_name, String destination, int image_count) {
         String query2 = " select count(*) as count from model where model='" + model_name.getModel() + "' and active='Y' ";
         String query = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,"
-                + " description,revision_no,active,remark,model_no,part_no) VALUES(?,?,?,?,?,?,?,?,?) ";
+                + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         int manufacturer_item_map_id = 0;
         int map_count = 0;
@@ -111,7 +111,6 @@ public class ModelNameModel {
             item_code = item_code_arr[0];
             item_name = item_code_arr[1];
         }
-        
 
         int item_id = getItemId(item_code);
         int manufacturer_id = getManufacturerId(model_name.getManufacturer_name());
@@ -137,7 +136,8 @@ public class ModelNameModel {
             }
             String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
                     + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
-                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' ";
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y'"
+                    + " and m.model='" + model_name.getModel() + "' ";
 
             PreparedStatement pstmt2 = connection.prepareStatement(query5);
             ResultSet rs2 = pstmt2.executeQuery();
@@ -172,6 +172,7 @@ public class ModelNameModel {
             pstm.setString(7, "OK");
             pstm.setString(8, model_name.getModel_no());
             pstm.setString(9, model_name.getPart_no());
+            pstm.setString(10, model_name.getBasic_price());
             ResultSet rset = connection.prepareStatement(query2).executeQuery();
             int count = 0;
             while (rset.next()) {
@@ -214,7 +215,7 @@ public class ModelNameModel {
 
         String item_code = model_name.getItem_code();
         if (!item_code.equals("")) {
-            String item_code_arr[] = item_code.split(" $ ");
+            String item_code_arr[] = item_code.split(" # ");
             item_code = item_code_arr[0];
             item_name = item_code_arr[1];
         }
@@ -227,7 +228,7 @@ public class ModelNameModel {
         String query1 = "SELECT max(revision_no) revision_no FROM model WHERE model_id = " + model_id + "  && active='Y' ";
         String query2 = "UPDATE model SET active =? WHERE model_id =? and revision_no=? ";
         String query3 = "INSERT INTO model(model_id,model,manufacturer_item_map_id,lead_time,"
-                + " description,revision_no,active,remark,model_no,part_no) VALUES(?,?,?,?,?,?,?,?,?,?)";
+                + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
         try {
 
@@ -246,7 +247,7 @@ public class ModelNameModel {
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,?,now()) ";
             String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
-                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y'  ";
             int manufacturer_item_map_ids = 0;
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
             ResultSet rs1 = pstmt1.executeQuery();
@@ -316,6 +317,7 @@ public class ModelNameModel {
                     psmt.setString(8, "OK");
                     psmt.setString(9, model_name.getModel_no());
                     psmt.setString(10, model_name.getPart_no());
+                    psmt.setString(11, model_name.getBasic_price());
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
@@ -353,6 +355,13 @@ public class ModelNameModel {
         String query3 = "INSERT INTO item_image_details (image_name, image_path, date_time, description,model_id,revision_no,active,remark) "
                 + " VALUES(?,?,?,?,?,?,?,?)";
         String imageName = "";
+        String item_code = model_name.getItem_code();
+        String item_name = "";
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" # ");
+            item_code = item_code_arr[0];
+            item_name = item_code_arr[1];
+        }
         try {
 
             if ((!model_name.getImage_path().isEmpty())) {
@@ -364,7 +373,7 @@ public class ModelNameModel {
                         if (tempExt.equals(image_name)) {
                             String model = model_name.getModel().replaceAll("[^a-zA-Z0-9]", "_");
                             middleName = "img_Item_" + model + "_" + image_count;
-                            destination = "C:\\ssadvt_repository\\APL\\item\\" + model_name.getItem_code() + "\\" + model + "\\";
+                            destination = "C:\\ssadvt_repository\\APL\\item\\" + item_name + "\\" + model + "\\";
                             fieldName = "item_image";
                         }
 
@@ -392,7 +401,7 @@ public class ModelNameModel {
                 }
             }
         } catch (Exception e) {
-            System.err.println("insertImageRecord exception-----" + e);
+            System.err.println("ModelNameModel insertImageRecord exception-----" + e);
         }
         return rowsAffected;
     }
@@ -419,7 +428,7 @@ public class ModelNameModel {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("WirteImage error: " + e);
+                    System.out.println("ModelNameModel WirteImage error: " + e);
                 }
             }
             //}
@@ -434,7 +443,7 @@ public class ModelNameModel {
             try {
                 result = directory.mkdirs();
             } catch (Exception e) {
-                System.out.println("makeDirectory Error - " + e);
+                System.out.println("ModelNameModel makeDirectory Error - " + e);
             }
         }
         return result;
@@ -453,6 +462,8 @@ public class ModelNameModel {
                 revision = rset.getInt("revision_no");
             }
         } catch (Exception e) {
+            System.out.println("ModelNameModel getManufacturerItemMapRevisionno Error - " + e);
+
         }
         return revision;
     }
@@ -499,7 +510,7 @@ public class ModelNameModel {
             }
 
         } catch (Exception e) {
-            System.err.println("Exception in getImageList---------" + e);
+            System.err.println("ModelNameModel Exception in getImageList---------" + e);
         }
         return list;
     }
@@ -518,7 +529,7 @@ public class ModelNameModel {
             pstm.setString(2, item_image_detail_id);
             rowsAffected = pstm.executeUpdate();
         } catch (Exception e) {
-            System.out.println("deleteImageRecord Error: " + e);
+            System.out.println("ModelNameModel deleteImageRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -574,7 +585,7 @@ public class ModelNameModel {
                 image_count = Integer.parseInt(img_count_arr[3]);
             }
         } catch (Exception e) {
-            System.err.println("getImageCount Exception-----" + e);
+            System.err.println("ModelNameModel getImageCount Exception-----" + e);
         }
         return image_count;
     }
@@ -595,6 +606,8 @@ public class ModelNameModel {
 
             }
         } catch (Exception e) {
+            System.err.println("ModelNameModel getRevisionno Exception-----" + e);
+
         }
         return revision;
     }
@@ -614,6 +627,8 @@ public class ModelNameModel {
 
             }
         } catch (Exception e) {
+            System.err.println("ModelNameModel getManufacturerId Exception-----" + e);
+
         }
         return manufacturer_id;
     }
@@ -633,6 +648,8 @@ public class ModelNameModel {
 
             }
         } catch (Exception e) {
+            System.err.println("ModelNameModel getItemId Exception-----" + e);
+
         }
         return item_id;
     }
@@ -649,6 +666,8 @@ public class ModelNameModel {
 
             }
         } catch (Exception e) {
+            System.err.println("ModelNameModel getManufacturerItemMapId Exception-----" + e);
+
         }
         return manufacturer_item_map_id;
     }
@@ -726,7 +745,7 @@ public class ModelNameModel {
                 list.add("No such item_code exists.");
             }
         } catch (Exception e) {
-            System.out.println("ModelNameModel getItem ERROR - " + e);
+            System.out.println("ModelNameModel getItemCode ERROR - " + e);
         }
         return list;
     }

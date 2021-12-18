@@ -44,7 +44,7 @@ public class ContactUsController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in DesignationController setConnection() calling try block" + e);
+            System.out.println("error in ContactUsController setConnection() calling try block" + e);
         }
         try {
             String task = request.getParameter("task");
@@ -90,7 +90,7 @@ public class ContactUsController extends HttpServlet {
             model.closeConnection();
             request.getRequestDispatcher("contact").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("DesignationController error: " + ex);
+            System.out.println("ContactUsController error: " + ex);
 
         }
 

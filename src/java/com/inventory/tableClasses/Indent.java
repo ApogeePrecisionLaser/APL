@@ -12,6 +12,20 @@ import java.util.List;
  */
 public class Indent {
 
+    /**
+     * @return the office_address
+     */
+    public String getOffice_address() {
+        return office_address;
+    }
+
+    /**
+     * @param office_address the office_address to set
+     */
+    public void setOffice_address(String office_address) {
+        this.office_address = office_address;
+    }
+
     private int indent_table_id;
     private int indent_item_id;
     private String item_name;
@@ -21,6 +35,10 @@ public class Indent {
     private int requested_by_id;
     private int requested_to_id;
     private String requested_by;
+    private String requested_by_office;
+    private String officeGSTNo;
+    private String partyGSTNo;
+    private String officeMobNo;
     private String requested_to;
     private String active;
     private String dealer;
@@ -29,6 +47,13 @@ public class Indent {
     private String delivery_challan_date;
     private String orderno;
     private String itemname;
+    private String HSNCode;
+    private String rate;
+    private String value;
+    private String total_assessable_value;
+    private String amount_in_words;
+    private String model;
+    private int model_id;
 
     public String getItemname() {
         return itemname;
@@ -61,15 +86,18 @@ public class Indent {
     public void setOrderno(String orderno) {
         this.orderno = orderno;
     }
-    
+
     private String remark;
     private int revision_no;
     private String date_time;
     private String status;
     private int status_id;
     private String item_status;
+    private String indent_status;
     private int item_status_id;
     private String purpose;
+    private String office_address;
+    private String key_person_address;
     private int purpose_id;
     private int required_qty;
     private int stock_qty;
@@ -451,5 +479,189 @@ public class Indent {
     public void setDelivered_qty(int delivered_qty) {
         this.delivered_qty = delivered_qty;
     }
+
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
+     * @return the model_id
+     */
+    public int getModel_id() {
+        return model_id;
+    }
+
+    /**
+     * @param model_id the model_id to set
+     */
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
+    }
+
+    /**
+     * @return the indent_status
+     */
+    public String getIndent_status() {
+        return indent_status;
+    }
+
+    /**
+     * @param indent_status the indent_status to set
+     */
+    public void setIndent_status(String indent_status) {
+        this.indent_status = indent_status;
+    }
+
+    /**
+     * @return the HSNCode
+     */
+    public String getHSNCode() {
+        return HSNCode;
+    }
+
+    /**
+     * @param HSNCode the HSNCode to set
+     */
+    public void setHSNCode(String HSNCode) {
+        this.HSNCode = HSNCode;
+    }
+
+    /**
+     * @return the key_person_address
+     */
+    public String getKey_person_address() {
+        return key_person_address;
+    }
+
+    /**
+     * @param key_person_address the key_person_address to set
+     */
+    public void setKey_person_address(String key_person_address) {
+        this.key_person_address = key_person_address;
+    }
+
+    /**
+     * @return the requested_by_office
+     */
+    public String getRequested_by_office() {
+        return requested_by_office;
+    }
+
+    /**
+     * @param requested_by_office the requested_by_office to set
+     */
+    public void setRequested_by_office(String requested_by_office) {
+        this.requested_by_office = requested_by_office;
+    }
+
+    /**
+     * @return the officeGSTNo
+     */
+    public String getOfficeGSTNo() {
+        return officeGSTNo;
+    }
+
+    /**
+     * @param officeGSTNo the officeGSTNo to set
+     */
+    public void setOfficeGSTNo(String officeGSTNo) {
+        this.officeGSTNo = officeGSTNo;
+    }
+
+    /**
+     * @return the partyGSTNo
+     */
+    public String getPartyGSTNo() {
+        return partyGSTNo;
+    }
+
+    /**
+     * @param partyGSTNo the partyGSTNo to set
+     */
+    public void setPartyGSTNo(String partyGSTNo) {
+        this.partyGSTNo = partyGSTNo;
+    }
+
+    /**
+     * @return the officeMobNo
+     */
+    public String getOfficeMobNo() {
+        return officeMobNo;
+    }
+
+    /**
+     * @param officeMobNo the officeMobNo to set
+     */
+    public void setOfficeMobNo(String officeMobNo) {
+        this.officeMobNo = officeMobNo;
+    }
+
+    /**
+     * @return the rate
+     */
+    public String getRate() {
+        return rate;
+    }
+
+    /**
+     * @param rate the rate to set
+     */
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * @return the total_assessable_value
+     */
+    public String getTotal_assessable_value() {
+        return total_assessable_value;
+    }
+
+    /**
+     * @param total_assessable_value the total_assessable_value to set
+     */
+    public void setTotal_assessable_value(String total_assessable_value) {
+        this.total_assessable_value = total_assessable_value;
+    }
+
+    /**
+     * @return the amount_in_words
+     */
+    public String getAmount_in_words() {
+        return amount_in_words;
+    }
+
+    /**
+     * @param amount_in_words the amount_in_words to set
+     */
+    public void setAmount_in_words(String amount_in_words) {
+        this.amount_in_words = amount_in_words;
+    }
+
+   
 
 }

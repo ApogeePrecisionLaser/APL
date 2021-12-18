@@ -48,7 +48,7 @@ public class InventoryController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryModel model = new InventoryModel();
-        ItemNameModel model2=new ItemNameModel();
+        ItemNameModel model2 = new ItemNameModel();
 
         String search_key_person = "";
         String search_item_name = "";
@@ -56,11 +56,11 @@ public class InventoryController extends HttpServlet {
         String search_item_code = "";
         String search_manufacturer = "";
         String search_model = "";
-        
+        String search_by_date = "";
+
         HttpSession session = request.getSession();
-        String loggedUser="";
+        String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
-		
 
         // search_item_name = request.getParameter("search_item_name");
         search_org_office = request.getParameter("search_org_office");
@@ -68,6 +68,7 @@ public class InventoryController extends HttpServlet {
         search_manufacturer = request.getParameter("search_manufacturer");
         search_model = request.getParameter("search_model");
         search_key_person = request.getParameter("search_key_person");
+        search_by_date = request.getParameter("search_by_date");
 
         if (search_key_person == null) {
             search_key_person = "";
@@ -86,6 +87,9 @@ public class InventoryController extends HttpServlet {
         }
         if (search_model == null) {
             search_model = "";
+        }
+        if (search_by_date == null) {
+            search_by_date = "";
         }
 
         if (!search_item_code.equals("")) {
@@ -150,8 +154,68 @@ public class InventoryController extends HttpServlet {
             }
 
             String task = request.getParameter("task");
+            String task1 = request.getParameter("task1");
             if (task == null) {
                 task = "";
+            }
+            if (task1 == null) {
+                task1 = "";
+            }
+            if (task1.equals("viewImage")) {
+                try {
+
+                    String destinationPath = "";
+                    String inventory_id = request.getParameter("inventory_id");
+                    String type = request.getParameter("type");
+                    if (inventory_id != null && !inventory_id.isEmpty()) {
+                        destinationPath = model.getImagePath(inventory_id, type);
+                        if (destinationPath.isEmpty()) {
+                            destinationPath = "C:\\ssadvt_repository\\DeliveryChallanPdf\\no_image.png";
+                        }
+                    } else {
+                        // System.out.println("Image Not Found");
+                        destinationPath = "C:\\ssadvt_repository\\DeliveryChallanPdf\\no_image.png";
+                    }
+                    //destinationPath = keyModel.getImagePath(emp_code);
+
+                    //System.err.println("destinationPath=-------------" + destinationPath);
+                    File f = new File(destinationPath);
+                    FileInputStream fis = null;
+                    if (!f.exists()) {
+                        destinationPath = "C:\\ssadvt_repository\\DeliveryChallanPdf\\no_image.png";
+                        f = new File(destinationPath);
+                    }
+                    fis = new FileInputStream(f);
+                    if (destinationPath.contains("pdf")) {
+                        response.setContentType("pdf");
+                    } else {
+                        response.setContentType("image/jpeg");
+                    }
+
+                    //  response.addHeader("Content-Disposition", "attachment; filename=\"" + f.getName() + "\"");
+                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+                    // BufferedImage bi=ImageIO.read(f);
+                    response.setContentLength(fis.available());
+                    ServletOutputStream os = response.getOutputStream();
+                    BufferedOutputStream out = new BufferedOutputStream(os);
+                    int ch = 0;
+                    ;
+                    while ((ch = bis.read()) != -1) {
+                        out.write(ch);
+                    }
+
+                    bis.close();
+                    fis.close();
+                    out.close();
+                    os.close();
+                    response.flushBuffer();
+
+                    model.closeConnection();
+                    return;
+                } catch (Exception e) {
+                    System.out.println("InventoryController Demand Note Error :" + e);
+                    return;
+                }
             }
 
             if (task.equals("GetDetails")) {
@@ -195,8 +259,8 @@ public class InventoryController extends HttpServlet {
                 }
             }
 
-
-            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person);
+            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,
+                    search_key_person,search_by_date);
             request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
@@ -205,6 +269,7 @@ public class InventoryController extends HttpServlet {
             request.setAttribute("search_manufacturer", search_manufacturer);
             request.setAttribute("search_model", search_model);
             request.setAttribute("search_key_person", search_key_person);
+            request.setAttribute("search_by_date", search_by_date);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);

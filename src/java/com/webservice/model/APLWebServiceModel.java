@@ -4,8 +4,10 @@
  */
 package com.webservice.model;
 
+import com.dashboard.bean.Enquiry;
 import com.organization.tableClasses.KeyPerson;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -17,9 +19,27 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -67,7 +87,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getOrganisationType of survey: " + e);
+            System.out.println("Error inside getOrganisationType of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -102,7 +122,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getOrganisationName of survey: " + e);
+            System.out.println("Error inside getOrganisationName of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -135,7 +155,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getOrgOfficeType of survey: " + e);
+            System.out.println("Error inside getOrgOfficeType of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -196,7 +216,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getOrgOffice of survey: " + e);
+            System.out.println("Error inside getOrgOffice of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -232,7 +252,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getOrgOfficeDesignationMap of survey: " + e);
+            System.out.println("Error inside getOrgOfficeDesignationMap of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -267,7 +287,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getDesignation of survey: " + e);
+            System.out.println("Error inside getDesignation of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -304,7 +324,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getCity of survey: " + e);
+            System.out.println("Error inside getCity of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -374,7 +394,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getKeyPerson of survey: " + e);
+            System.out.println("Error inside getKeyPerson of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -475,7 +495,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getItemType of survey: " + e);
+            System.out.println("Error inside getItemType of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -512,7 +532,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getItemNames of survey: " + e);
+            System.out.println("Error inside getItemNames of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -551,7 +571,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getGeneralImageDetails of survey: " + e);
+            System.out.println("Error inside getGeneralImageDetails of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -574,7 +594,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getImageDestination of survey: " + e);
+            System.out.println("Error inside getImageDestination of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -599,7 +619,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getImageUploadedFor of survey: " + e);
+            System.out.println("Error inside getImageUploadedFor of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -626,7 +646,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getItemImageDetails of survey: " + e);
+            System.out.println("Error inside getItemImageDetails of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -649,7 +669,7 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getIdType of survey: " + e);
+            System.out.println("Error inside getIdType of APLWebServiceModel: " + e);
         }
         return rowData;
     }
@@ -690,7 +710,7 @@ public class APLWebServiceModel {
             System.out.println("SMS URL: " + url);
         } catch (Exception e) {
             result = e.toString();
-            System.out.println("SMSModel sendSMS() Error: " + e);
+            System.out.println("APLWebServiceModel sendSMS() Error: " + e);
         }
         return result;
     }
@@ -749,7 +769,7 @@ public class APLWebServiceModel {
         } catch (Exception e) {
             //  message = "Cannot save the record, some error.";
             // msgBgColor = COLOR_ERROR;
-            System.out.println("error in Check Existing - " + e);
+            System.out.println("APLWebServiceModel error in Check Existing - " + e);
         }
         return b2;
     }
@@ -772,7 +792,7 @@ public class APLWebServiceModel {
         } catch (Exception e) {
             message = "Cannot update the record, some error.";
 
-            System.out.println("UpdateRecord ERROR UpdateRecord - " + e);
+            System.out.println("UpdateRecord ERROR APLWebServiceModel - " + e);
         }
 
         return b;
@@ -811,7 +831,7 @@ public class APLWebServiceModel {
             if (type.equals("coming")) {
 
                 String query1 = " select * from attendance a, key_person kp  where date(a.created_at)=curdate() "
-                        + " and '"+number+"' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
+                        + " and '" + number + "' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
                         + " and a.status_type_id=2 and a.going_time is null ";
 
                 psmt = connection.prepareStatement(query1);
@@ -843,7 +863,7 @@ public class APLWebServiceModel {
             } else {
 
                 String query1 = " select * from attendance a, key_person kp  where date(a.created_at)=curdate() "
-                        + " and '"+number+"' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
+                        + " and '" + number + "' in(kp.mobile_no1,kp.mobile_no2)  and a.key_person_id=kp.key_person_id and kp.active='y' "
                         + " and a.status_type_id=2 and a.going_time is null ";
 
                 psmt = connection.prepareStatement(query1);
@@ -1014,9 +1034,194 @@ public class APLWebServiceModel {
                 rowData.put(obj);
             }
         } catch (Exception e) {
-            System.out.println("Error inside getCity of survey: " + e);
+            System.out.println("Error inside getAttendanceData of APLWebServiceModel: " + e);
         }
         return rowData;
+    }
+
+    public String sentMail(String message) {
+        String result = "";
+        String host = "smtp.gmail.com";
+        String port = "587";
+
+        String mailFrom = "vikrant.apogee@gmail.com";
+        String password = "apo@gee#1234";
+
+//        String mailFrom = "smartmeter.apogee@gmail.com";
+//        String password = "jpss1277";
+        String subject = "Daily Work Report";
+
+        APLWebServiceModel mailer = new APLWebServiceModel();
+
+        try {
+            mailer.sendPlainTextEmail(host, port, mailFrom, password,
+                    subject, message);
+            System.out.println("Email sent.");
+            result = "Email sent.";
+
+        } catch (Exception ex) {
+            System.out.println("Failed to sent email.");
+            result = "Failed to sent email.";
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public void sendPlainTextEmail(String host, String port,
+            final String userName, final String password,
+            String subject, String message) throws AddressException,
+            MessagingException,
+            UnsupportedEncodingException {
+
+        // sets SMTP server properties
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        String mailTo = "komal.apogee@gmail.com";
+        String mailTo2 = "vikrant.apogee@gmail.com";
+        String mailCC = "komal@apogeeprecision.com";
+        String mailCC2 = "sainikomal1425@gmail.com";
+
+//        String mailTo = "gurdave.apogee@gmail.com";
+//        String mailTo2 = "jpss1277@gmail.com";
+//        String mailCC = "hr@apogeeprecision.com";
+        Authenticator auth = new Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        };
+
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(userName));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo2));
+            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(mailCC));
+            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(mailCC2));
+            msg.setSubject(subject);
+
+            BodyPart messageBodyPart1 = new MimeBodyPart();
+//            messageBodyPart1.setText("Hi Sir ,please find the link below regarding the same :" + message);
+            messageBodyPart1.setContent("Hi Sir, <br />Please find the link below regarding the same :<br />" + message + "<br/><br/><br/>"
+                    + "<b>Thanks & Regards</b><br/>"
+                    + "<b>Vikrant Saini</b>", "text/html");
+
+            Multipart multipart = new MimeMultipart();
+
+            multipart.addBodyPart(messageBodyPart1);
+            msg.setContent(multipart);
+
+            Transport.send(msg);
+
+            System.out.println("message sent....");
+        } catch (MessagingException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public int insertEnquiries(Enquiry bean) {
+        String query = "INSERT INTO enquiry_table(enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
+                + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        int rowsAffected = 0;
+
+        java.util.Date date = new java.util.Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String date_time = sdf.format(date);
+
+        int enquiry_source_table_id = 1;
+        int marketing_vertical_id = getMarketingVerticalId(bean.getMarketing_vertical_name());
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, enquiry_source_table_id);
+            pstmt.setInt(2, marketing_vertical_id);
+            pstmt.setInt(3, 2);
+            pstmt.setString(4, bean.getEnquiry_no());
+            pstmt.setString(5, bean.getSender_name());
+            pstmt.setString(6, bean.getSender_email());
+            pstmt.setString(7, bean.getSender_mob());
+            pstmt.setString(8, bean.getSender_company_name());
+            pstmt.setString(9, bean.getEnquiry_address());
+            pstmt.setString(10, bean.getEnquiry_city());
+            pstmt.setString(11, bean.getEnquiry_state());
+            pstmt.setString(12, bean.getCountry());
+            pstmt.setString(13, bean.getEnquiry_message());
+            pstmt.setString(14, date_time);
+            String enquiry_call_duration = "";
+            enquiry_call_duration = bean.getEnquiry_call_duration();
+            if (enquiry_call_duration == null) {
+                enquiry_call_duration = "";
+            }
+            pstmt.setString(15, enquiry_call_duration);
+
+            String enquiry_reciever_mob = "";
+            enquiry_reciever_mob = bean.getEnquiry_reciever_mob();
+            if (enquiry_reciever_mob == null) {
+                enquiry_reciever_mob = "";
+            }
+            pstmt.setString(15, enquiry_call_duration);
+
+            pstmt.setString(16, enquiry_reciever_mob);
+            pstmt.setString(17, bean.getSender_alternate_email());
+            pstmt.setString(18, bean.getSender_alternate_mob());
+            pstmt.setInt(19, bean.getRevision_no());
+            pstmt.setString(20, "Y");
+            pstmt.setString(21, "OK");
+            pstmt.setInt(22, 117);
+            rowsAffected = pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("EnquiryModel insertEnquiries() Error: " + e);
+        }
+        if (rowsAffected > 0) {
+            message = "Record saved successfully.";
+            messageBGColor = "";
+        } else {
+            message = "Cannot save the record, some error.";
+            messageBGColor = "";
+        }
+        return rowsAffected;
+    }
+
+    public int getSourceTableId(String enquiry_source) {
+
+        String query = " SELECT enquiry_source_table_id from enquiry_source_table where active='Y' ";
+        if (!enquiry_source.equals("") && enquiry_source != null) {
+            query += " and enquiry_source='" + enquiry_source + "' ";
+        }
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("enquiry_source_table_id");
+        } catch (Exception e) {
+            System.out.println("EnquiryModel getSourceTableId Error: " + e);
+        }
+        return id;
+    }
+
+    public int getMarketingVerticalId(String marketing_vertical) {
+
+        String query = " SELECT marketing_vertical_id from marketing_vertical where active='Y' ";
+        if (!marketing_vertical.equals("") && marketing_vertical != null) {
+            query += " and marketing_vertical_name='" + marketing_vertical + "' ";
+        }
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("marketing_vertical_id");
+        } catch (Exception e) {
+            System.out.println("EnquiryModel getMarketingVerticalId Error: " + e);
+        }
+        return id;
     }
 
     public Connection getConnection() {
@@ -1036,7 +1241,7 @@ public class APLWebServiceModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel setConnection() Error: " + e);
+            System.out.println("APLWebServiceModel setConnection() Error: " + e);
         }
     }
 

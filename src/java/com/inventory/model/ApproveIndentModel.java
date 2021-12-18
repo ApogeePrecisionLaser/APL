@@ -49,7 +49,7 @@ public class ApproveIndentModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("ApproveIndentModel setConnection() Error: " + e);
         }
     }
 
@@ -94,7 +94,7 @@ public class ApproveIndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: ApproveIndentModel showIndents-" + e);
         }
         return list;
     }
@@ -116,30 +116,45 @@ public class ApproveIndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: ApproveIndentModel getStatus-" + e);
         }
         return list;
     }
 
-    public List<ApproveIndent> getIndentItems(int indent_table_id) {
+    public List<ApproveIndent> getIndentItems(int indent_table_id, String logged_org_office) {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
 
 //        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-//                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id "
+//                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
+//                + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
 //                + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
-//                + " status s1,status s2 where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
-//                + " and indi.purpose_id=p.purpose_id and indt.status_id=s1.status_id "
-//                + " and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-//                + " and indt.indent_table_id='" + indent_table_id + "' ";
-        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
-                + " indi.deliver_qty,indt.requested_by ,indt.requested_to "
-                + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
-                + " status s1,status s2,inventory inv,inventory_basic ib where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
-                + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
-                + " and inv.active='Y' "
-                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='115' ";
+//                + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim"
+//                + " where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+//                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
+//                + " and mim.item_names_id=itn.item_names_id  "
+//                + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+//                + " and inv.active='Y' and m.active='Y' and mim.active='Y' "
+//                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+//                + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='115' and ib.model_id=m.model_id ";
+        String query = "select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
+                + " s1.status as indent_status,s2.status as "
+                + " item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, indi.deliver_qty,indt.requested_by, "
+                + " indt.requested_to,m.model "
+                + " from indent_table indt,indent_item indi, item_names itn,purpose p,  status s1,status s2,inventory inv,inventory_basic ib,model m, "
+                + " manufacturer_item_map mim, "
+                + " key_person kp,designation d,org_office oo "
+                + " where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
+                + " and mim.item_names_id=itn.item_names_id   and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id "
+                + " and ib.item_names_id=itn.item_names_id "
+                + " and ib.active='Y'  and inv.active='Y' and m.active='Y' and mim.active='Y'  and indt.status_id=s1.status_id and "
+                + " indi.status_id=s2.status_id and indt.active='Y' "
+                + " and indi.active='Y' and itn.active='Y'  and indt.indent_table_id='" + indent_table_id + "' and ib.model_id=m.model_id "
+                + " and d.designation_id=kp.designation_id "
+                + " and kp.org_office_id=oo.org_office_id and oo.org_office_name='" + logged_org_office + "' "
+                + " and kp.active='Y' and oo.active='Y' "
+                + " and d.active='Y' and oo.org_office_id=ib.org_office_id and kp.key_person_id=inv.key_person_id and d.designation='Store Incharge'"
+                + " and indi.model_id=m.model_id ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -147,6 +162,7 @@ public class ApproveIndentModel {
                 ApproveIndent bean = new ApproveIndent();
                 bean.setIndent_no(rset.getString("indent_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose((rset.getString("purpose")));
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setStock_qty(rset.getInt("stock_quantity"));
@@ -162,7 +178,7 @@ public class ApproveIndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: ApproveIndentModel getIndentItems-" + e);
         }
         return list;
     }
@@ -226,7 +242,7 @@ public class ApproveIndentModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("ApproveIndentModel getRequestedByKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -241,7 +257,7 @@ public class ApproveIndentModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: " + e);
+            System.out.println("ApproveIndentModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -256,7 +272,7 @@ public class ApproveIndentModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("ApproveIndentModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -280,7 +296,7 @@ public class ApproveIndentModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:ApproveIndentModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -304,7 +320,7 @@ public class ApproveIndentModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:ApproveIndentModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -328,7 +344,7 @@ public class ApproveIndentModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:ApproveIndentModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -345,7 +361,7 @@ public class ApproveIndentModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("ApproveIndentModel closeConnection() Error: " + e);
         }
     }
 }

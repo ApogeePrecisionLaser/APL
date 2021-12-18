@@ -36,11 +36,14 @@ public class Inventory {
     private int manufacturer_item_map_id;
     private String manufacturer_name;
     private String model;
+    private String model_no;
+    private String part_no;
     private String parent_item;
     private String parent_item_code;
     private String parent_item_id;
     private int generation;
     private String popupval;
+    private String delivery_challan_img;
 
     /**
      * @return the inventory_id
@@ -446,6 +449,48 @@ public class Inventory {
      */
     public void setPopupval(String popupval) {
         this.popupval = popupval;
+    }
+
+    /**
+     * @return the model_no
+     */
+    public String getModel_no() {
+        return model_no;
+    }
+
+    /**
+     * @param model_no the model_no to set
+     */
+    public void setModel_no(String model_no) {
+        this.model_no = model_no;
+    }
+
+    /**
+     * @return the part_no
+     */
+    public String getPart_no() {
+        return part_no;
+    }
+
+    /**
+     * @param part_no the part_no to set
+     */
+    public void setPart_no(String part_no) {
+        this.part_no = part_no;
+    }
+
+    /**
+     * @return the delivery_challan_img
+     */
+    public String getDelivery_challan_img() {
+        return delivery_challan_img;
+    }
+
+    /**
+     * @param delivery_challan_img the delivery_challan_img to set
+     */
+    public void setDelivery_challan_img(String delivery_challan_img) {
+        this.delivery_challan_img = delivery_challan_img;
     }
 
 }

@@ -48,7 +48,8 @@ public class InventoryModel {
         }
     }
 
-    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) throws SQLException {
+    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
 
@@ -79,6 +80,10 @@ public class InventoryModel {
             }
             if (!search_model.equals("") && search_model != null) {
                 query += " and m.model='" + search_model + "' ";
+
+            }
+            if (!search_by_date.equals("") && search_by_date != null) {
+                query += " and inv.date_time='" + search_by_date + "' ";
 
             }
             ResultSet rst = connection.prepareStatement(query).executeQuery();
@@ -137,9 +142,8 @@ public class InventoryModel {
                 }
             }
 
-          //  System.err.println("list 4 size-" + list4.size());
-          //  System.err.println("list 4 sttring-" + list4);
-
+            //  System.err.println("list 4 size-" + list4.size());
+            //  System.err.println("list 4 sttring-" + list4);
             // END Sorted Array for Parent Child Hierarchy
             for (int k = 0; k < list4.size(); k++) {
                 String qry = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
@@ -160,12 +164,13 @@ public class InventoryModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("com.inventory.model.InventoryModel.getIdList() -" + e);
         }
         return list;
     }
 
-    public List<Inventory> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) {
+    public List<Inventory> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) {
         List<Inventory> list = new ArrayList<Inventory>();
         List<Integer> desig_map_list = new ArrayList<>();
         List<Integer> desig_map_listAll = new ArrayList<>();
@@ -179,7 +184,7 @@ public class InventoryModel {
         String search_generation = "";
 
         try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson);
+            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
             //  System.err.println("desig list --" + desig_map_list.size());
             //  System.err.println("desig list ele--" + desig_map_list);
             ItemNameModel model = new ItemNameModel();
@@ -250,6 +255,9 @@ public class InventoryModel {
                     if (!search_model.equals("") && search_model != null) {
                         query2_count += " and m.model='" + search_model + "' ";
                     }
+                    if (!search_by_date.equals("") && search_by_date != null) {
+                        query2_count += " and inv.date_time='" + search_by_date + "' ";
+                    }
 
                     PreparedStatement pstmt_count = connection.prepareStatement(query2_count);
                     ResultSet rset_count = pstmt_count.executeQuery();
@@ -260,7 +268,7 @@ public class InventoryModel {
                     String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
                             + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
                             + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                            + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
+                            + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name,m.model_no,m.part_no  "
                             + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
                             + " org_office oo,manufacturer mr "
                             + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
@@ -287,6 +295,9 @@ public class InventoryModel {
                     if (!search_model.equals("") && search_model != null) {
                         query2 += " and m.model='" + search_model + "' ";
                     }
+                    if (!search_by_date.equals("") && search_by_date != null) {
+                        query2 += " and inv.date_time='" + search_by_date + "' ";
+                    }
 
                     PreparedStatement pstmt2 = connection.prepareStatement(query2);
                     ResultSet rset2 = pstmt2.executeQuery();
@@ -304,6 +315,8 @@ public class InventoryModel {
                             bean.setDescription("");
                             bean.setManufacturer_name("");
                             bean.setModel("");
+                            bean.setModel_no("");
+                            bean.setPart_no("");
                             bean.setReference_document_type("");
                             bean.setReference_document_id("");
                             bean.setPopupval("openpopup");
@@ -320,6 +333,8 @@ public class InventoryModel {
                             bean.setDescription(rset2.getString("description"));
                             bean.setManufacturer_name(rset2.getString("manufacturer_name"));
                             bean.setModel(rset2.getString("model"));
+                            bean.setModel_no(rset2.getString("model_no"));
+                            bean.setPart_no(rset2.getString("part_no"));
                             bean.setReference_document_type(rset2.getString("reference_document_type"));
                             bean.setReference_document_id(rset2.getString("reference_document_id"));
                             bean.setPopupval("");
@@ -337,6 +352,8 @@ public class InventoryModel {
                     bean.setDescription("");
                     bean.setManufacturer_name("");
                     bean.setModel("");
+                    bean.setModel_no("");
+                    bean.setPart_no("");
                     bean.setReference_document_type("");
                     bean.setReference_document_id("");
                     bean.setPopupval("");
@@ -344,7 +361,7 @@ public class InventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("InventoryModel Exception in getItemsList---------" + e);
         }
 
         return list;
@@ -357,7 +374,7 @@ public class InventoryModel {
             String query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
                     + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
                     + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                    + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
+                    + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name,m.model_no,m.part_no "
                     + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
                     + " org_office oo,manufacturer mr "
                     + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
@@ -386,18 +403,60 @@ public class InventoryModel {
                 bean.setDescription(rset.getString("description"));
                 bean.setManufacturer_name(rset.getString("manufacturer_name"));
                 bean.setModel(rset.getString("model"));
+                bean.setModel_no(rset.getString("model_no"));
+                bean.setPart_no(rset.getString("part_no"));
                 bean.setReference_document_type(rset.getString("reference_document_type"));
                 bean.setReference_document_id(rset.getString("reference_document_id"));
+                //  bean.setDelivery_challan_img(rset.getString("delivery_challan_img"));
 
                 list.add(bean);
 
             }
         } catch (Exception e) {
-            System.err.println("Exception in getAllDetails---------" + e);
+            System.err.println("InventoryModel Exception in getAllDetails---------" + e);
         }
 
         return list;
 
+    }
+
+    public String getImagePath(String inventory_id, String uploadedFor) {
+        String img_name = "";
+        String destination_path = "";
+        String reference_document_type = "";
+
+        String query = "";
+
+        try {
+            String query2 = " select reference_document_type from inventory where inventory_id='" + inventory_id + "' and active='Y' ";
+
+            ResultSet rs2 = connection.prepareStatement(query2).executeQuery();
+            while (rs2.next()) {
+                reference_document_type = rs2.getString("reference_document_type");
+            }
+            if (!reference_document_type.equals("")) {
+                if (reference_document_type.equals("Indent")) {
+                    query = " SELECT dc.description as delivery_challan_img "
+                            + " FROM delivery_challan dc, inventory inv, indent_table indt "
+                            + " WHERE dc.indent_table_id=indt.indent_table_id AND inv.reference_document_id=indt.indent_no "
+                            + " and inv.inventory_id='" + inventory_id + "' "
+                            + " and dc.active='Y' and indt.active='Y' and inv.active='Y' and dc.description!='' ";
+                } else {
+                    query = " SELECT dc.description as delivery_challan_img "
+                            + " FROM order_delivery_challan dc, inventory inv, order_table odt "
+                            + " WHERE dc.order_table_id=odt.order_table_id AND inv.reference_document_id=odt.order_no "
+                            + " and inv.inventory_id='" + inventory_id + "' "
+                            + " and dc.active='Y' and odt.active='Y' and inv.active='Y' and dc.description!='' ";
+                }
+            }
+            ResultSet rs = connection.prepareStatement(query).executeQuery();
+            if (rs.next()) {
+                destination_path = rs.getString("delivery_challan_img");
+            }
+        } catch (Exception ex) {
+            System.out.println("ERROR: in getImagePath in InventoryModel : " + ex);
+        }
+        return destination_path;
     }
 
     public int insertRecord(Inventory bean) throws SQLException {
@@ -563,7 +622,7 @@ public class InventoryModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("InventoryModel getRevisionno error:" + e);
         }
         return revision;
     }
@@ -583,7 +642,7 @@ public class InventoryModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getStockQuantity error:" + e);
+            System.err.println("InventoryModel getStockQuantity error:" + e);
         }
         return quantity;
     }
@@ -618,7 +677,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNamesId Error: " + e);
+            System.out.println("InventoryModel getItemNamesId Error: " + e);
         }
         return id;
     }
@@ -633,7 +692,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("getOrgOfficeId Error: " + e);
+            System.out.println("InventoryModel getOrgOfficeId Error: " + e);
         }
         return id;
     }
@@ -648,7 +707,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("InventoryModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -663,7 +722,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("inventory_basic_id");
         } catch (Exception e) {
-            System.out.println("getInventoryBasicId Error: " + e);
+            System.out.println("InventoryModel getInventoryBasicId Error: " + e);
         }
         return id;
     }
@@ -678,7 +737,7 @@ public class InventoryModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("InventoryModel getItemName Error: " + e);
         }
         return name;
     }
@@ -883,7 +942,7 @@ public class InventoryModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("InventoryModel closeConnection() Error: " + e);
         }
     }
 }

@@ -310,6 +310,7 @@ public class ItemNameController extends HttpServlet {
                     int_qty = Integer.parseInt(map.get("quantity").trim());
                 }
                 bean.setQuantity(int_qty);
+                bean.setHSNCode(map.get("HSNCode").trim());
                 bean.setItem_name(map.get("item_name").trim());
                 bean.setPrefix(map.get("prefix").trim());
                 bean.setParent_item(map.get("parent_item").trim());

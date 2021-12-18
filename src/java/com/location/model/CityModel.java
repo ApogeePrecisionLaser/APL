@@ -30,7 +30,7 @@ public class CityModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("QtOohDefaultsModel setConnection() Error: " + e);
+            System.out.println("CityModel setConnection() Error: " + e);
         }
     }
 
@@ -81,7 +81,7 @@ public class CityModel {
                 list.add("No such tehsil exists.......");
             }
         } catch (Exception e) {
-            System.out.println("getTehsil ERROR inside TehsilModel - " + e);
+            System.out.println("getTehsil ERROR inside CityModel - " + e);
         }
         return list;
     }
@@ -148,7 +148,7 @@ public class CityModel {
                 messageBGColor = "red";
             }
         } catch (Exception e) {
-            System.out.println("Error in deleting recordl ---- CityModel : " + e);
+            System.out.println("Error in deleting record ---- CityModel : " + e);
         }
     }
 
@@ -233,7 +233,7 @@ public class CityModel {
                 division_id = 0;
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: " + ex);
+            System.out.println("Error in getCityId -- CityModel : " + ex);
         }
         return division_id;
     }
@@ -308,7 +308,7 @@ public class CityModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationSubTypeModel-" + e);
+            System.out.println("Error:CityModel updateRecord-" + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -334,6 +334,8 @@ public class CityModel {
 
             }
         } catch (Exception e) {
+            System.out.println("Error:CityModel getRevisionno-" + e);
+
         }
         return revision;
     }

@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * @author Komal
@@ -43,10 +42,9 @@ public class ItemTypeModel {
         if (!searchItemType.equals("") && searchItemType != null) {
             query += " and item_type='" + searchItemType + "' ";
         }
-        
-        
+
         try {
-            System.err.println("--query ---"+query);
+            System.err.println("--query ---" + query);
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
@@ -175,6 +173,7 @@ public class ItemTypeModel {
 
             }
         } catch (Exception e) {
+            System.out.println("ItemTypeModel getRevisionno() Error: " + e);
         }
         return revision;
     }

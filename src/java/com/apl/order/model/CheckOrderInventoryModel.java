@@ -41,11 +41,11 @@ public class CheckOrderInventoryModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("CheckInventoryModel setConnection() Error: " + e);
+            System.out.println("CheckOrderInventoryModel setConnection() Error: " + e);
         }
     }
 
-    public List<CheckInventory> showIndents(String logged_designation, String indent_status) {
+    public List<CheckInventory> showIndents(String logged_designation, String indent_status, String search_by_date) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -62,6 +62,10 @@ public class CheckOrderInventoryModel {
             if (!indent_status.equals("") && indent_status != null) {
                 query += " and s.status='" + indent_status + "' ";
             }
+            if (!search_by_date.equals("") && search_by_date != null) {
+                query += " and indt.date_time like '" + search_by_date + "%' ";
+            }
+            query += " order by indt.order_table_id desc ";
         }
 
         try {
@@ -81,7 +85,7 @@ public class CheckOrderInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: CheckInventoryModel showdata-" + e);
+            System.out.println("Error: CheckOrderInventoryModel showIndents-" + e);
         }
         return list;
     }
@@ -89,7 +93,7 @@ public class CheckOrderInventoryModel {
     public List<CheckInventory> getStatus() {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status order by status";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -102,7 +106,7 @@ public class CheckOrderInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: CheckOrderInventoryModel getStatus-" + e);
         }
         return list;
     }
@@ -110,14 +114,22 @@ public class CheckOrderInventoryModel {
     public List<CheckInventory> getIndentItems(int indent_table_id, int logged_key_person_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to "
-                + " from order_table indt,order_item indi, item_names itn, "
-                + " status s1,status s2,inventory inv,inventory_basic ib where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
-                + " and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
-                + " and inv.active='Y' "
-                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty  , m.model,  s1.status as indent_status,s2.status as item_status,\n"
+                + "  indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to  \n"
+                + "  from order_table indt,order_item indi, item_names itn, manufacturer_item_map mim ,model m , status s1,status s2,inventory inv,inventory_basic ib\n"
+                + "  where indt.order_table_id=indi.order_table_id and mim.active='Y' \n"
+                + " and m.active='Y' and m.model_id=ib.model_id  and mim.item_names_id=itn.item_names_id  and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and \n"
+                + " indi.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' \n"
+                + " and inv.active='Y'  and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y'  \n"
                 + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
+//        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
+//                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+//                + " from order_table indt,order_item indi, item_names itn, "
+//                + " status s1,status s2,inventory inv,inventory_basic ib where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
+//                + " and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+//                + " and inv.active='Y' "
+//                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+//                + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -125,6 +137,7 @@ public class CheckOrderInventoryModel {
                 CheckInventory bean = new CheckInventory();
                 bean.setIndent_no(rset.getString("order_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose("Test");
                 bean.setRequired_qty(rset.getInt("required_qty"));
                 bean.setApproved_qty(rset.getInt("approved_qty"));
@@ -142,20 +155,32 @@ public class CheckOrderInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: CheckInventoryModel showdata-" + e);
+            System.out.println("Error: CheckOrderInventoryModel getIndentItems-" + e);
         }
         return list;
     }
 
-    public List<CheckInventory> getIndentItemsForDeliveryChallan(int indent_table_id) {
+    public List<CheckInventory> getIndentItemsForDeliveryChallan(int indent_table_id, int logged_key_person_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
+//        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty , m.model"
+//                + " ,s.status,indi.order_item_id,indt.order_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+//                + " from order_table indt,order_item indi, item_names itn,manufacturer_item_map mim ,model m , "
+//                + " status s where indt.order_table_id=indi.order_table_id   and indi.model_id=m.model_id "
+//                + " and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+//                + " and indt.order_table_id='" + indent_table_id + "' ";
         String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s.status,indi.order_item_id,indt.order_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,"
+                + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
                 + " from order_table indt,order_item indi, item_names itn, "
-                + " status s where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
-                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
-                + " and indt.order_table_id='" + indent_table_id + "' ";
+                + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
+                + " where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id "
+                + " and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
+                + " and inv.active='Y' "
+                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
+                + " and m.active='Y' and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and ib.model_id=m.model_id "
+                + " and mim.item_names_id=itn.item_names_id and indi.model_id=m.model_id "
+                + " and indt.order_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -163,13 +188,14 @@ public class CheckOrderInventoryModel {
                 CheckInventory bean = new CheckInventory();
                 bean.setIndent_no(rset.getString("order_no"));
                 bean.setItem_name((rset.getString("item_name")));
+                bean.setModel((rset.getString("model")));
                 bean.setPurpose("Test");
                 bean.setRequired_qty(rset.getInt("required_qty"));
-                bean.setApproved_qty(rset.getInt("approved_qty"));   
-                bean.setStock_qty(rset.getInt("stock_qty"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setStock_qty(rset.getInt("stock_quantity"));
                 bean.setDelivered_qty(rset.getInt("deliver_qty"));
                 bean.setExpected_date_time(rset.getString("expected_date_time"));
-                String status = rset.getString("status");
+                String status = rset.getString("item_status");
                 bean.setStatus(status);
                 bean.setIndent_item_id(rset.getInt("order_item_id"));
                 bean.setIndent_table_id(rset.getInt("order_table_id"));
@@ -179,10 +205,11 @@ public class CheckOrderInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: CheckInventoryModel showdata-" + e);
+            System.out.println("Error: CheckOrderInventoryModel getIndentItemsForDeliveryChallan-" + e);
         }
         return list;
     }
+
     public List<CheckInventory> getIndentItemsForDeliveryChallanAfterPayment(int indent_table_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
@@ -215,7 +242,7 @@ public class CheckOrderInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: CheckInventoryModel showdata-" + e);
+            System.out.println("Error: CheckOrderInventoryModel getIndentItemsForDeliveryChallanAfterPayment-" + e);
         }
         return list;
     }
@@ -249,13 +276,13 @@ public class CheckOrderInventoryModel {
         try {
             PreparedStatement pstm = connection.prepareStatement(query);
             pstm.setInt(1, status_id);
-          //  if (item_status.equals("Delivery Challan Generated")) {
-                pstm.setInt(2, bean.getDelivered_qty());
-          //  } else {
-              //  pstm.setInt(2, 0);
-          //  }
+            //  if (item_status.equals("Delivery Challan Generated")) {
+            pstm.setInt(2, bean.getDelivered_qty());
+            //  } else {
+            //  pstm.setInt(2, 0);
+            //  }
 
-            pstm.setInt(3, indent_item_id);    
+            pstm.setInt(3, indent_item_id);
             updateRowsAffected = pstm.executeUpdate();
 
             String query2 = " update order_table set status_id=? where order_table_id=? ";
@@ -265,7 +292,7 @@ public class CheckOrderInventoryModel {
             updateRowsAffected2 = pstm2.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("CheckInventoryModel updateRecord() Error: " + e);
+            System.out.println("CheckOrderInventoryModel updateRecord() Error: " + e);
         }
         if (updateRowsAffected2 > 0) {
             message = "Record updated successfully.";
@@ -279,7 +306,7 @@ public class CheckOrderInventoryModel {
 
     public String updateStatus(String order_no) {
         int updateRowsAffected = 0;
-String status="fail";
+        String status = "fail";
         String query = " UPDATE order_table SET status_id='13' WHERE order_no='" + order_no + "' ";
 
         int updateRowsAffected2 = 0;
@@ -290,10 +317,10 @@ String status="fail";
             updateRowsAffected = pstm.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("CheckInventoryModel updateRecord() Error: " + e);
+            System.out.println("CheckOrderInventoryModel updateStatus() Error: " + e);
         }
         if (updateRowsAffected > 0) {
-            status="success";
+            status = "success";
             message = "Record updated successfully.";
             msgBgColor = COLOR_OK;
         } else {
@@ -315,7 +342,7 @@ String status="fail";
             indent_no = rset.getString("order_no");
 
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error CheckInventoryModel: " + e);
+            System.out.println("getIndentNo Error CheckOrderInventoryModel: " + e);
         }
 
         return indent_no;
@@ -331,7 +358,7 @@ String status="fail";
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error CheckInventoryModel: " + e);
+            System.out.println("getRequestedKeyPersonId Error CheckOrderInventoryModel: " + e);
         }
         return id;
     }
@@ -346,7 +373,7 @@ String status="fail";
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: CheckInventoryModel " + e);
+            System.out.println("getStatusId Error: CheckOrderInventoryModel " + e);
         }
         return id;
     }
@@ -361,7 +388,7 @@ String status="fail";
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: CheckInventoryModel" + e);
+            System.out.println("getKeyPersonId Error: CheckOrderInventoryModel" + e);
         }
         return id;
     }
@@ -385,7 +412,7 @@ String status="fail";
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:CheckInventoryModel--getStatus()-- " + e);
+            System.out.println("Error:CheckOrderInventoryModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -409,7 +436,7 @@ String status="fail";
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:CheckInventoryModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:CheckOrderInventoryModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -433,7 +460,7 @@ String status="fail";
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:CheckInventoryModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:CheckOrderInventoryModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -454,7 +481,7 @@ String status="fail";
                 counting = count;
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getCounting in CheckInventoryModel : " + ex);
+            System.out.println("ERROR: in getCounting in CheckOrderInventoryModel : " + ex);
         }
         return counting + 1;
     }
@@ -471,7 +498,7 @@ String status="fail";
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("CheckInventoryModel closeConnection() Error: " + e);
+            System.out.println("CheckOrderInventoryModel closeConnection() Error: " + e);
         }
     }
 }

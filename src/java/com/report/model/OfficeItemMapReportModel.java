@@ -37,80 +37,26 @@ public class OfficeItemMapReportModel {
     private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
     int item_id = 0;
+    int item_id1 = 0;
+    int prev_item_name_id1 = 0;
+    int prev_item_name_id2 = 0;
+    int prev_item_name_id3 = 0;
+    int prev_item_name_id4 = 0;
+    int prev_item_name_id5 = 0;
+    int prev_item_name_id6 = 0;
+    int prev_item_name_id7 = 0;
+    int prev_item_name_id8 = 0;
+    int prev_item_name_id9 = 0;
 
     public void setConnection(Connection con) {
         try {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryBasicModel setConnection() Error: " + e);
+            System.out.println("OfficeItemMapReportModel setConnection() Error: " + e);
         }
     }
 
-//    public List<InventoryBasic> showData(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
-//            String search_model, String search_key_person) {
-//        List<InventoryBasic> list = new ArrayList<InventoryBasic>();
-//
-//        if (searchItemName == null) {
-//            searchItemName = "";
-//        }
-//        if (searchOrgOffice == null) {
-//            searchOrgOffice = "";
-//        }
-//        String query = " select ib.inventory_basic_id,inn.item_name,inn.item_code,oo.org_office_name,ib.min_quantity,ib.daily_req, "
-//                + " ib.opening_balance,ib.description,m.model,mr.manufacturer_name,kp.key_person_name,inv.date_time,inv.inventory_id "
-//                + " from item_names inn,org_office oo,inventory_basic ib,manufacturer mr,model m,manufacturer_item_map mim,key_person kp,"
-//                + " inventory inv "
-//                + " where inn.item_names_id=ib.item_names_id and m.model_id=ib.model_id and kp.key_person_id=inv.key_person_id "
-//                + " and inv.inventory_basic_id=ib.inventory_basic_id and "
-//                + " oo.org_office_id=ib.org_office_id and inn.active='Y' and oo.active='Y' and ib.active='Y' and mr.active='Y' and m.active='Y' "
-//                + " and mim.active='Y' and mr.manufacturer_id=mim.manufacturer_id and inn.item_names_id=mim.item_names_id and "
-//                + " m.manufacturer_item_map_id=mim.manufacturer_item_map_id and kp.active='Y' and inv.active='Y' ";
-//
-//        if (!searchItemName.equals("") && searchItemName != null) {
-//            query += " and inn.item_name='" + searchItemName + "' ";
-//        }
-//        if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-//            query += " and oo.org_office_name='" + searchOrgOffice + "' ";
-//        }
-//        if (!search_item_code.equals("") && search_item_code != null) {
-//            query += " and inn.item_code='" + search_item_code + "' ";
-//        }
-//        if (!search_manufacturer.equals("") && search_manufacturer != null) {
-//            query += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-//        }
-//        if (!search_model.equals("") && search_model != null) {
-//            query += " and m.model='" + search_model + "' ";
-//        }
-//        if (!search_key_person.equals("") && search_key_person != null) {
-//            query += " and kp.key_person_name='" + search_key_person + "' ";
-//        }
-//
-//        try {
-//            ResultSet rset = connection.prepareStatement(query).executeQuery();
-//            while (rset.next()) {
-//                InventoryBasic bean = new InventoryBasic();
-//                bean.setInventory_basic_id(rset.getInt("inventory_basic_id"));
-//                bean.setItem_name((rset.getString("item_name")));
-//                bean.setItem_code((rset.getString("item_code")));
-//                bean.setOrg_office(rset.getString("org_office_name"));
-//                bean.setMin_quantity(rset.getInt("min_quantity"));
-//                bean.setDaily_req(rset.getInt("daily_req"));
-//                bean.setOpening_balance(rset.getString("opening_balance"));
-//                bean.setDescription(rset.getString("description"));
-//                bean.setManufacturer_name(rset.getString("manufacturer_name"));
-//                bean.setModel(rset.getString("model"));
-//                bean.setKey_person(rset.getString("key_person_name"));
-//                bean.setDate_time(rset.getString("date_time"));
-//                bean.setInventory_id(rset.getInt("inventory_id"));
-//                bean.setDescription(rset.getString("description"));
-//                list.add(bean);
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error: InventoryBasicModel showdata-" + e);
-//        }
-//        return list;
-//    }
     public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, String search_model, String searchKeyPerson) throws SQLException {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
@@ -222,7 +168,7 @@ public class OfficeItemMapReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("com.inventory.model.OfficeItemMapReportModel.getIdList() -" + e);
         }
         return list;
     }
@@ -261,6 +207,16 @@ public class OfficeItemMapReportModel {
 
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
+            int count = 1;
+            int count1 = 1;
+            int count2 = 1;
+            int count3 = 1;
+            int count4 = 1;
+            int count5 = 1;
+            int count6 = 1;
+            int count7 = 1;
+            int count8 = 1;
+            int count9 = 1;
             while (rset.next()) {
                 OfficeItemMapReport bean = new OfficeItemMapReport();
 
@@ -274,8 +230,11 @@ public class OfficeItemMapReportModel {
                 String item_name = "";
                 if (is_super_child.equals("Y")) {
                     int item_id = rset.getInt("item_names_id");
-                    int multiple_count = 0;
-                    String query2_count = " select count(*) as count "
+
+                    String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
+                            + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,"
+                            + " kp.key_person_name,mr.manufacturer_name,m.model,inv.reference_document_id, "
+                            + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type"
                             + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
                             + " org_office oo,manufacturer mr "
                             + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
@@ -284,44 +243,7 @@ public class OfficeItemMapReportModel {
                             + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
                             + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
                             + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and "
-                            + " itn.item_names_id='" + item_id + "'";
-
-                    if (!search_item_code.equals("") && search_item_code != null) {
-                        query2_count += " and itn.item_code='" + search_item_code + "' ";
-                    }
-                    if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
-                        query2_count += " and oo.org_office_name='" + searchOrgOffice + "' ";
-                    }
-                    if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
-                        query2_count += " and kp.key_person_name='" + searchKeyPerson + "' ";
-                    }
-
-                    if (!search_manufacturer.equals("") && search_manufacturer != null) {
-                        query2_count += " and mr.manufacturer_name='" + search_manufacturer + "' ";
-                    }
-                    if (!search_model.equals("") && search_model != null) {
-                        query2_count += " and m.model='" + search_model + "' ";
-                    }
-
-                    PreparedStatement pstmt_count = connection.prepareStatement(query2_count);
-                    ResultSet rset_count = pstmt_count.executeQuery();
-                    while (rset_count.next()) {
-                        multiple_count = rset_count.getInt("count");
-                    }
-
-                    String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                            + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
-                            + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                            + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
-                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
-                            + " org_office oo,manufacturer mr "
-                            + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
-                            + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-                            + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
-                            + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
-                            + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and"
-                            + " itn.item_names_id='" + item_id + "'";
+                            + " itn.item_names_id='" + item_id + "'  and kp.designation_id=5 ";
 
                     if (!search_item_code.equals("") && search_item_code != null) {
                         query2 += " and itn.item_code='" + search_item_code + "' ";
@@ -342,6 +264,7 @@ public class OfficeItemMapReportModel {
 
                     PreparedStatement pstmt2 = connection.prepareStatement(query2);
                     ResultSet rset2 = pstmt2.executeQuery();
+                    int i = 0;
                     while (rset2.next()) {
 
                         bean.setInventory_id(rset2.getInt("inventory_id"));
@@ -357,35 +280,60 @@ public class OfficeItemMapReportModel {
                         bean.setStock_quantity(stock_quantity);
                         bean.setDate_time(rset2.getString("date_time"));
                         bean.setDescription(rset2.getString("description"));
+                        //  bean.setCounting(Integer.toString(i));
 
-//                        String prev_manufacturer_name = bean.getManufacturer_name();
-//
-//                        if (prev_manufacturer_name == null) {
-//                            prev_manufacturer_name = "";
-//
-//                        }
-//                        if (!prev_manufacturer_name.equals("") && !prev_manufacturer_name.equals(rset2.getString("manufacturer_name "))) {
-//                            bean.setManufacturer_name(prev_manufacturer_name + "<br>" + rset2.getString("manufacturer_name"));
-//                        } else {
-                        bean.setManufacturer_name(rset2.getString("manufacturer_name"));
+                        String prev_manufacturer_name = bean.getManufacturer_name();
+                        String prev_manufacturer_name1 = "";
+                        String prev_manufacturer_name2 = "";
+                        if (prev_manufacturer_name == null) {
+                            prev_manufacturer_name = "";
+                        }
+                        if (!prev_manufacturer_name.equals("")) {
+                            String arr[] = prev_manufacturer_name.split(".  ");
+                            prev_manufacturer_name1 = arr[1];
+                            prev_manufacturer_name2 = arr[0];
+                        }
+                        if ((!prev_manufacturer_name.equals("")) && (!prev_manufacturer_name1.equals(rset2.getString("manufacturer_name")))) {
+                            if (i == 0) {
+                                bean.setManufacturer_name((i + 1) + ".  " + prev_manufacturer_name + "<br/>" + (i + 1) + ".  " + rset2.getString("manufacturer_name"));
 
-                        //   }
+                            } else {
+                                bean.setManufacturer_name(prev_manufacturer_name + "<br/>" + (i + 1) + ". " + rset2.getString("manufacturer_name"));
+                            }
+                        } else {
+                            bean.setManufacturer_name("1.  " + rset2.getString("manufacturer_name"));
+                        }
+
                         String prev_model = bean.getModel();
-
+                        String prev_model1 = "";
                         if (prev_model == null) {
                             prev_model = "";
-
                         }
-                        if (!prev_model.equals("") && !prev_model.equals(rset2.getString("model"))) {
-                            bean.setModel(prev_model + "<br>" + rset2.getString("model"));
-                            // System.err.println("-------" + (prev_model + "\n" + rset2.getString("model")));
+                        if (!prev_model.equals("")) {
+                            String arr[] = prev_model.split(".  ");
+                            prev_model1 = arr[1];
+                        }
+                        if ((!prev_model.equals("")) && (!prev_model1.equals(rset2.getString("model")))) {
+                            if (i == 0) {
+                                bean.setModel((i + 1) + ".  " + prev_model + "<br/>" + prev_manufacturer_name2 + ". " + (i + 1) + ".  " + rset2.getString("model"));
+
+                            } else {
+                                bean.setModel(prev_model + "<br/>" + prev_manufacturer_name2 + ". " + (i + 1) + ". " + rset2.getString("model"));
+                            }
                         } else {
-                            bean.setModel(rset2.getString("model"));
+                            bean.setModel("1. 1.  " + rset2.getString("model"));
 
                         }
+//                        OfficeItemMapReport bean1 = new OfficeItemMapReport();
+//                        bean1.setModel(rset2.getString("model"));
+//                        List<OfficeItemMapReport> list1 = new ArrayList<OfficeItemMapReport>();
+//                        list1.add(bean1);
+//                       
+//                        bean.setList(list1);
                         bean.setReference_document_type(rset2.getString("reference_document_type"));
                         bean.setReference_document_id(rset2.getString("reference_document_id"));
                         bean.setPopupval("");
+                        i++;
                     }
                 } else {
                     bean.setInventory_id(0);
@@ -402,16 +350,87 @@ public class OfficeItemMapReportModel {
                     bean.setReference_document_type("");
                     bean.setReference_document_id("");
                     bean.setPopupval("");
+                    // bean.setCounting(Integer.toString(0));
+
                 }
+
+                /*              Start  Generate Serial No.          */
+                if ((rset.getString("parent_id")).equals("0")) {
+                    bean.setCounting(Integer.toString(count));
+                    count++;
+                    prev_item_name_id1 = rset.getInt("item_names_id");
+                    count1 = 1;
+                    bean.setColor("yellow");
+                }
+                if ((rset.getInt("generation") == 2) && (prev_item_name_id1 == rset.getInt("parent_id"))) {
+
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1));
+                    count1++;
+                    prev_item_name_id2 = rset.getInt("item_names_id");
+                    count2 = 1;
+                    bean.setColor("red");
+                }
+                if ((rset.getInt("generation") == 3) && (prev_item_name_id2 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2));
+                    count2++;
+                    prev_item_name_id3 = rset.getInt("item_names_id");
+                    count3 = 1;
+                    bean.setColor("green");
+                }
+                if ((rset.getInt("generation") == 4) && (prev_item_name_id3 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2 - 1) + "." + Integer.toString(count3));
+                    count3++;
+                    prev_item_name_id4 = rset.getInt("item_names_id");
+                    count4 = 1;
+                    bean.setColor("pink");
+                }
+                if ((rset.getInt("generation") == 5) && (prev_item_name_id4 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2 - 1) + "." + Integer.toString(count3 - 1) + "." + Integer.toString(count4));
+                    count4++;
+                    prev_item_name_id5 = rset.getInt("item_names_id");
+                    count5 = 1;
+                    bean.setColor("#CCCCFF");
+                }
+                if ((rset.getInt("generation") == 6) && (prev_item_name_id5 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2 - 1) + "." + Integer.toString(count3 - 1) + "." + Integer.toString(count4 - 1) + "." + Integer.toString(count5));
+                    count5++;
+                    prev_item_name_id6 = rset.getInt("item_names_id");
+                    count6 = 1;
+                    bean.setColor("orange");
+                }
+                if ((rset.getInt("generation") == 7) && (prev_item_name_id6 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2 - 1) + "." + Integer.toString(count3 - 1) + "." + Integer.toString(count4 - 1) + "." + Integer.toString(count5 - 1) + "." + Integer.toString(count6));
+                    count6++;
+                    prev_item_name_id7 = rset.getInt("item_names_id");
+                    count7 = 1;
+                    bean.setColor("#99FFCC");
+                }
+                if ((rset.getInt("generation") == 8) && (prev_item_name_id7 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2 - 1) + "." + Integer.toString(count3 - 1) + "." + Integer.toString(count4 - 1) + "." + Integer.toString(count5 - 1) + "." + Integer.toString(count6 - 1) + "." + Integer.toString(count7));
+                    count7++;
+                    prev_item_name_id8 = rset.getInt("item_names_id");
+                    count8 = 1;
+                    bean.setColor("#CCCCCC");
+                }
+                if ((rset.getInt("generation") == 9) && (prev_item_name_id8 == rset.getInt("parent_id"))) {
+                    bean.setCounting((count - 1) + "." + Integer.toString(count1 - 1) + "." + Integer.toString(count2 - 1) + "." + Integer.toString(count3 - 1) + "." + Integer.toString(count4 - 1) + "." + Integer.toString(count5 - 1) + "." + Integer.toString(count6 - 1) + "." + Integer.toString(count7 - 1) + "." + Integer.toString(count8));
+                    count8++;
+                    prev_item_name_id9 = rset.getInt("item_names_id");
+                    count9 = 1;
+                    bean.setColor("#33B444");
+                }
+
+                /*              End  Generate Serial No.     */
                 if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
                     bean.setSearchOrgOffice(searchOrgOffice);
                 } else {
                     bean.setSearchOrgOffice("");
                 }
                 list.add(bean);
+
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("Exception in  OfficeItemMapReportModel getItemsList---------" + e);
         }
 
         return list;
@@ -497,7 +516,7 @@ public class OfficeItemMapReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("InventoryBasicModel insertRecord() Error: " + e);
+            System.out.println("OfficeItemMapReportModel insertRecord() Error: " + e);
         }
         if (rowsAffected2 > 0) {
             message = "Record saved successfully.";
@@ -523,7 +542,7 @@ public class OfficeItemMapReportModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("OfficeItemMapReportModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -543,7 +562,7 @@ public class OfficeItemMapReportModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getStockQuantity error:" + e);
+            System.err.println("OfficeItemMapReportModel getStockQuantity error:" + e);
         }
         return quantity;
     }
@@ -654,7 +673,7 @@ public class OfficeItemMapReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("InventoryBasicModel updateRecord() Error: " + e);
+            System.out.println("OfficeItemMapReportModel updateRecord() Error: " + e);
         }
         if (rowsAffected2 > 0) {
             message = "Record updated successfully.";
@@ -682,7 +701,7 @@ public class OfficeItemMapReportModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("OfficeItemMapReportModel getRevisionno error:" + e);
         }
         return revision;
     }
@@ -702,7 +721,7 @@ public class OfficeItemMapReportModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("OfficeItemMapReportModel getRevisionno2 error:" + e);
         }
         return revision;
     }
@@ -717,7 +736,7 @@ public class OfficeItemMapReportModel {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("InventoryBasicModel deleteRecord() Error: " + e);
+            System.out.println("OfficeItemMapReportModel deleteRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -739,7 +758,7 @@ public class OfficeItemMapReportModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNamesId Error: " + e);
+            System.out.println("OfficeItemMapReportModel getItemNamesId Error: " + e);
         }
         return id;
     }
@@ -754,7 +773,7 @@ public class OfficeItemMapReportModel {
             rset.next();
             id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("getOrgOfficeId Error: " + e);
+            System.out.println("OfficeItemMapReportModel getOrgOfficeId Error: " + e);
         }
         return id;
     }
@@ -768,7 +787,7 @@ public class OfficeItemMapReportModel {
             rset.next();
             id = rset.getInt("model_id");
         } catch (Exception e) {
-            System.out.println("getModelId Error: " + e);
+            System.out.println("OfficeItemMapReportModel getModelId Error: " + e);
         }
         return id;
     }
@@ -783,7 +802,7 @@ public class OfficeItemMapReportModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("OfficeItemMapReportModel getItemName Error: " + e);
         }
         return name;
     }
@@ -813,7 +832,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such item_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getItemName()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getItemName()-- " + e);
         }
         return list;
     }
@@ -845,7 +864,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such item_code  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getItemCode()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getItemCode()-- " + e);
         }
         return list;
     }
@@ -915,7 +934,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such org_office_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getOrgOffice()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getOrgOffice()-- " + e);
         }
         return list;
     }
@@ -941,7 +960,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such manufacturer_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getManufacturer()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getManufacturer()-- " + e);
         }
         return list;
     }
@@ -986,7 +1005,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such model  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getModelName()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getModelName()-- " + e);
         }
         return list;
     }
@@ -1016,7 +1035,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryModel--getKeyPerson()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getKeyPerson()-- " + e);
         }
         return list;
     }
@@ -1043,7 +1062,7 @@ public class OfficeItemMapReportModel {
                 list.add("No such model  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getModelName()-- " + e);
+            System.out.println("Error:OfficeItemMapReportModel--getLeadTime()-- " + e);
         }
         return list;
     }
@@ -1060,7 +1079,7 @@ public class OfficeItemMapReportModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("OfficeItemMapReportModel closeConnection() Error: " + e);
         }
     }
 }

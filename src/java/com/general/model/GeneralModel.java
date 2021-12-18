@@ -130,7 +130,7 @@ public class GeneralModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, path);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("GeneralModel generateExcelList() JRException: " + e);
+            System.out.println("GeneralModel SavePdf() JRException: " + e);
         }
         //return reportInbytes;
     }
@@ -151,7 +151,7 @@ public class GeneralModel {
             exporter.exportReport();
             print(jasperPrint, path);
         } catch (Exception e) {
-            System.out.println("GeneralModel generateExcelList() JRException: " + e);
+            System.out.println("GeneralModel generateANDSavePdf() JRException: " + e);
         }
         return reportInbytes;
     }

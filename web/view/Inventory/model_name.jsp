@@ -199,6 +199,7 @@
         document.getElementById("model_no").disabled = false;
         document.getElementById("part_no").disabled = false;
         document.getElementById("lead_time").disabled = false;
+        document.getElementById("basic_price").disabled = false;
         document.getElementById("item_image").disabled = false;
         document.getElementById("description").disabled = false;
         document.getElementById("save").disabled = false;
@@ -298,14 +299,15 @@
     function fillColumn(id, count) {
         $('#model_id').val(id);
         $('#manufacturer_name').val($("#" + count + '2').html());
-        $('#item_code').val($("#" + count + '3').html() + " $ " + $("#" + count + '12').html());
+        $('#item_code').val($("#" + count + '3').html() + " # " + $("#" + count + '13').html());
         $('#model').val($("#" + count + '4').html());
         $('#model_no').val($("#" + count + '5').html());
         $('#part_no').val($("#" + count + '6').html());
         $('#lead_time').val($("#" + count + '7').html());
-        $('#description').val($("#" + count + '8').html());
-        $('#manufacturer_item_map_id').val($("#" + count + '9').html());
-        $('#item_image_details_id').val($("#" + count + '10').html());
+        $('#basic_price').val($("#" + count + '8').html());
+        $('#description').val($("#" + count + '9').html());
+        $('#manufacturer_item_map_id').val($("#" + count + '10').html());
+        $('#item_image_details_id').val($("#" + count + '11').html());
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
     }
@@ -378,6 +380,7 @@
                                     <th>Model No.</th>
                                     <th>Part No.</th>
                                     <th>Lead Time in Days</th>
+                                    <th>Basic Price</th>
                                     <th>Description</th>
                                     <th style="display:none"></th>
                                     <th style="display: none"></th>
@@ -398,14 +401,15 @@
                                         <td id="${loopCounter.count }5">${beanType.model_no}</td>
                                         <td id="${loopCounter.count }6">${beanType.part_no}</td>
                                         <td id="${loopCounter.count }7">${beanType.lead_time}</td>
-                                        <td id="${loopCounter.count }8">${beanType.description}</td>    
-                                        <td id="${loopCounter.count }9" style="display:none">${beanType.manufacturer_item_map_id}</td>
-                                        <td id="${loopCounter.count }10" style="display: none">${beanType.item_image_details_id}</td>
-                                        <td id="${loopCounter.count }11" >
+                                        <td id="${loopCounter.count }8">${beanType.basic_price}</td>
+                                        <td id="${loopCounter.count }9">${beanType.description}</td>    
+                                        <td id="${loopCounter.count }10" style="display:none">${beanType.manufacturer_item_map_id}</td>
+                                        <td id="${loopCounter.count }11" style="display: none">${beanType.item_image_details_id}</td>
+                                        <td id="${loopCounter.count }12" >
                                             <input type="button" class="btn btn-info" id="${loopCounter.count}" name="item_photo"
                                                    value="View Images" onclick="viewImages(${beanType.model_id}, 'ph')">
                                         </td>
-                                        <td style="display:none" id="${loopCounter.count }12">${beanType.item_name}</td>
+                                        <td style="display:none" id="${loopCounter.count }13">${beanType.item_name}</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -479,12 +483,23 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
                             <label>Lead Time in Days<span class="text-danger">*</span></label>                            
                             <input class="form-control myInput" type="text" id="lead_time" name="lead_time" value=""
+                                   size="40" disabled>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="">
+                        <div class="form-group">
+                            <label>Basic Price<span class="text-danger">*</span></label>                            
+                            <input class="form-control myInput" type="text" id="basic_price" name="basic_price" value=""
                                    size="40" disabled>
                         </div>
                     </div>

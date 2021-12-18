@@ -64,6 +64,22 @@
     }
 </style>
 
+<script>
+    function viewDemandNote(id, img) {
+        var queryString = "task1=viewImage&inventory_id=" + id + "&type=" + img;
+        // alert(queryString);
+        var url = "InventoryController?" + queryString;
+        popupwin = openPopUp(url, "Show Image", 600, 900);
+    }
+    function openPopUp(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+        return window.open(url, window_name, window_features);
+    }
+
+
+</script>
 
 
 
@@ -80,18 +96,21 @@
                     <!--<th>S.No.</th>-->
 
                     <th>Item Name</th>
-                    <th>Item Code</th>
-                    <th>Org Office</th>
-                    <th>Manufacturer Name</th>
-                    <th>Model Name</th>
-                    <th>Key Person</th>
-                    <th>Stock Quantity</th>
-                    <th>Inward Quantity</th>
-                    <th>Outward Quantity</th>
-                    <th>Reference Document Type</th>
-                    <th>Reference Document Id</th>
-                    <th>Date Time</th>
-                    <th>Description</th>
+                    <!--<th style="width:40px">Item Code</th>-->
+                    <th style="width:80px">Org Office</th>
+                    <th style="width:80px">Manufacturer Name</th>
+                    <th style="width:40px">Model Name</th>
+                    <th style="width:80px">Model No.</th>
+                    <th style="width:80px">Part No.</th>
+                    <th style="width:80px">Key Person</th>
+                    <th style="width:80px">Stock Quantity</th>
+                    <th style="width:80px">Inward Quantity</th>
+                    <th style="width:80px">Outward Quantity</th>
+                    <!--<th style="width:80px">Reference Document Type</th>-->
+                    <!--<th style="width:80px">Reference Document Id</th>-->
+                    <th style="width:80px">Date Time</th>
+                    <th></th>
+                    <!--<th>Description</th>-->
                 </tr>
                 <tbody>
                     <c:forEach var="beanType" items="${requestScope['list']}"
@@ -101,18 +120,28 @@
                             <!--<td data-column="name">${loopCounter.count }</td>-->               
 
                             <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
-                            <td id="${loopCounter.count }3">${beanType.item_code}</td>
+                            <!--<td id="${loopCounter.count }3">${beanType.item_code}</td>-->
                             <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
                             <td id="${loopCounter.count }5">${beanType.manufacturer_name}</td> 
                             <td id="${loopCounter.count }6">${beanType.model}</td>
-                            <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
-                            <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
-                            <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
-                            <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
-                            <td id="${loopCounter.count }11">${beanType.reference_document_type}</td>
-                            <td id="${loopCounter.count }12">${beanType.reference_document_id}</td> 
-                            <td id="${loopCounter.count }13">${beanType.date_time}</td> 
-                            <td id="${loopCounter.count }14">${beanType.description}</td>  
+                            <td id="${loopCounter.count }7">${beanType.model_no}</td>
+                            <td id="${loopCounter.count }8">${beanType.part_no}</td>
+                            <td id="${loopCounter.count }9">${beanType.key_person}</td>                                               
+                            <td id="${loopCounter.count }10">${beanType.stock_quantity}</td>                                               
+                            <td id="${loopCounter.count }11">${beanType.inward_quantity}</td> 
+                            <td id="${loopCounter.count }12">${beanType.outward_quantity}</td>
+                            <!--<td id="${loopCounter.count }13">${beanType.reference_document_type}</td>-->
+                            <!--<td id="${loopCounter.count }14">${beanType.reference_document_id}</td>--> 
+                            <td id="${loopCounter.count }15">${beanType.date_time}</td> 
+
+                            <c:if test="${beanType.reference_document_type!=''}">
+                                <td id="${loopCounter.count }16" >
+                                    <input type="btn normalBtn" class="btn btn-info" id="${loopCounter.count}" name="delivery_challan_img"
+                                           value="DC" onclick="viewDemandNote(${beanType.inventory_id}, 'ph')" style="width:70px">
+                                </td>
+                            </c:if>
+
+<!--<td id="${loopCounter.count }16">${beanType.description}</td>-->  
 
 
                         </tr>

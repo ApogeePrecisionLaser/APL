@@ -215,7 +215,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("error: " + e);
+            System.out.println("KeypersonModel showEmergency error: " + e);
         }
 
         return list;
@@ -230,7 +230,7 @@ public class KeypersonModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, mymap, con);
         } catch (Exception e) {
-            System.out.println("Error: in KeypersonModel generatReport() JRException: " + e);
+            System.out.println("Error: in KeypersonModel generateKeyperSonList() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -248,7 +248,7 @@ public class KeypersonModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, byteArray);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("CityModel generatXlsReportList() JRException: " + e);
+            System.out.println("KeypersonModel generatXlsReportList() JRException: " + e);
         }
         return byteArray;
     }
@@ -263,7 +263,7 @@ public class KeypersonModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("Error: keypersonModel--" + e);
+            System.out.println("Error: KeypersonModel getOrganisation_id--" + e);
         }
         return organisation_id;
     }
@@ -605,7 +605,7 @@ public class KeypersonModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationSubTypeModel-" + e);
+            System.out.println("Error:KeypersonModel updateRecord-" + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -634,7 +634,7 @@ public class KeypersonModel {
             rowsAffected = pstmt.executeUpdate();
             pstmt.close();
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--insertRecord-- " + e);
+            System.out.println("Error:KeypersonModel--insertImageRecord-- " + e);
         }
         return rowsAffected;
     }
@@ -661,7 +661,7 @@ public class KeypersonModel {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("Image upload error: " + e);
+                    System.out.println("KeypersonModel WirteImage error: " + e);
                 }
             }
             //}
@@ -684,6 +684,8 @@ public class KeypersonModel {
 
             }
         } catch (Exception e) {
+            System.out.println("KeypersonModel getRevisionno error: " + e);
+
         }
         return revision;
     }
@@ -704,6 +706,8 @@ public class KeypersonModel {
 
             }
         } catch (Exception e) {
+            System.out.println("KeypersonModel getRevisionnoForImage error: " + e);
+
         }
         return revision;
     }
@@ -727,7 +731,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getimage_destination_id-" + ex);
+            System.out.println("Error: KeypersonModel- getimage_destination_id-" + ex);
         }
         return image_destination_id;
     }
@@ -747,7 +751,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getkey_person_id-" + ex);
+            System.out.println("Error: KeypersonModel-getkey_person_id-" + ex);
         }
         return key_person_id;
     }
@@ -767,7 +771,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getgeneral_image_details_id-" + ex);
+            System.out.println("Error: KeypersonModel-getgeneral_image_details_id-" + ex);
         }
         return key_person_id;
     }
@@ -781,7 +785,7 @@ public class KeypersonModel {
             try {
                 result = directory.mkdirs();
             } catch (Exception e) {
-                System.out.println("Error - " + e);
+                System.out.println("KeypersonModel makeDirectory Error - " + e);
             }
         }
         return result;
@@ -1006,7 +1010,7 @@ public class KeypersonModel {
                 list.add("No such office type Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:KeypersonModel--getOffice_type()-- " + e);
         }
         return list;
     }
@@ -1051,7 +1055,7 @@ public class KeypersonModel {
                 list.add("No such key person Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgPersonNameList()-- " + e);
+            System.out.println("Error:KeypersonModel--getOrgPersonNameListForAll()-- " + e);
         }
         return list;
     }
@@ -1086,7 +1090,7 @@ public class KeypersonModel {
                 list.add("No such key person Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgPersonNameList()-- " + e);
+            System.out.println("Error:KeypersonModel--getOrgPersonNameList()-- " + e);
         }
         return list;
     }
@@ -1113,7 +1117,7 @@ public class KeypersonModel {
                 list.add("No such key person Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgPersonNameList()-- " + e);
+            System.out.println("Error:KeypersonModel--getIdtypeList()-- " + e);
         }
         return list;
     }
@@ -1144,7 +1148,7 @@ public class KeypersonModel {
                 list.add("No such org office  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:KeypersonModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:KeypersonModel--getOrgOfficeName()-- " + e);
         }
         return list;
     }
@@ -1173,7 +1177,7 @@ public class KeypersonModel {
 //            pstmt.setString(5,"Y");
 //            pstmt.setString(6,"OK");
         } catch (Exception e) {
-            System.out.println("designationModel Error: " + e);
+            System.out.println("KeypersonModel insertemergency Error: " + e);
         }
 //        if (rowsAffected > 0) {
 //            message = "Record saved successfully.";
@@ -1223,7 +1227,7 @@ public class KeypersonModel {
                 organisation_id = rset.getInt("org_office_id");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel-- getOrganization_id--" + e);
+            System.out.println("Error:keypersonModel-- getOrgOfficeid--" + e);
         }
         return organisation_id;
     }
@@ -1254,7 +1258,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: KeypersonModel-" + e);
+            System.out.println("Error: KeypersonModel getMobilevalidty-" + e);
         }
         return list;
     }
@@ -1290,7 +1294,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: KeypersonModel-" + e);
+            System.out.println("Error: KeypersonModel getsearchMobile-" + e);
         }
         return list;
     }
@@ -1319,7 +1323,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: KeypersonModel-" + e);
+            System.out.println("Error: KeypersonModel getCityName" + e);
         }
         return list;
     }
@@ -1342,7 +1346,7 @@ public class KeypersonModel {
                 list.add("No such State Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:KeypersonModel- " + e);
+            System.out.println("Error:KeypersonModel getStateName- " + e);
         }
         return list;
     }
@@ -1364,7 +1368,7 @@ public class KeypersonModel {
 
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error:KeypersonModel getPointLatLong- " + e);
         }
 
         return lat + "," + longi;
@@ -1453,7 +1457,7 @@ public class KeypersonModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getDesignation()-- " + e);
         }
         return list;
     }
@@ -1487,7 +1491,7 @@ public class KeypersonModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getDesgn()-- " + e);
         }
         return list;
     }
@@ -1510,7 +1514,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: UploadBillImageModel-getOrgtype_id-" + ex);
+            System.out.println("Error: keypersonModel-getOrgtype_id-" + ex);
         }
         return key_person_id;
     }
@@ -1527,7 +1531,7 @@ public class KeypersonModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_type_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: keypersonModel getRealOrganisationType_id--" + e);
         }
         return organisation_id;
     }
@@ -1602,7 +1606,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getunDesgnation()-- " + e);
         }
 
         return list;
@@ -1629,7 +1633,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getDesgnation()-- " + e);
         }
 
         return list;
@@ -1645,7 +1649,7 @@ public class KeypersonModel {
             rset.next();    // move cursor from BOR to valid record.
             org_office_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: keypersonModel getOrgOfficeId--" + e);
         }
 
         return org_office_id;
@@ -1681,7 +1685,7 @@ public class KeypersonModel {
                 System.out.println("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getParentName()-- " + e);
         }
         return parent_org_id;
     }
@@ -1709,7 +1713,7 @@ public class KeypersonModel {
                 list.add("No Such Office code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:keypersonModel--searchOrg-- " + e);
         }
         return list;
     }
@@ -1726,7 +1730,7 @@ public class KeypersonModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: keypersonModel getOrganisationType_id --" + e);
         }
         return organisation_id;
     }
@@ -1754,7 +1758,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("OrganisationNameModel insertRecord() Error: " + e);
+            System.out.println("keypersonModel insertRecordOrganisation() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -1809,7 +1813,7 @@ public class KeypersonModel {
             }
 
         } catch (Exception e) {
-            System.out.println("OrganisationNameModel insertRecord() Error: " + e);
+            System.out.println("keypersonModel insertRecordOrgOffice() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -1916,7 +1920,7 @@ public class KeypersonModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("designation_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: keypersonModel getdesignationId--" + e);
         }
         return organisation_id;
     }
@@ -1988,7 +1992,7 @@ public class KeypersonModel {
                 kp_id = rs.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--insertRecord-- " + e);
+            System.out.println("Error:keypersonModel--insertFamily-- " + e);
         }
 
         if (rowsAffected > 0) {
@@ -2029,7 +2033,7 @@ public class KeypersonModel {
                 list.add("No Such Office code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:keypersonModel--getOrgOfficeCode()-- " + e);
         }
         return list;
     }
@@ -2056,7 +2060,7 @@ public class KeypersonModel {
                 list.add("No Such Office code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:keypersonModel--searchOrgOfficeCode()-- " + e);
         }
         return list;
     }
@@ -2087,7 +2091,7 @@ public class KeypersonModel {
                 list.add("No Such Office code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:keypersonModel--searchfamilyOfficeCode()-- " + e);
         }
         return list;
     }
@@ -2136,7 +2140,7 @@ public class KeypersonModel {
                 list.add("No Person of such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getsearchOrganisation()-- " + e);
         }
         return list;
     }
@@ -2162,7 +2166,7 @@ public class KeypersonModel {
                 list.add("No Person of such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:keypersonModel--getSearchEmpCode()-- " + e);
         }
         return list;
     }
@@ -2175,7 +2179,7 @@ public class KeypersonModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, jrBean);
         } catch (Exception e) {
-            System.out.println("OfficerBookModel generatReport() JRException: " + e);
+            System.out.println("keypersonModel generateKeyperSonList() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -2192,7 +2196,7 @@ public class KeypersonModel {
                 image_name = rst.getString("image_path");
             }
         } catch (Exception e) {
-            System.out.println("ERROR keyPerson Model exist_image" + e);
+            System.out.println("ERROR keypersonModel exist_image" + e);
         }
         return image_name;
     }
@@ -2224,7 +2228,7 @@ public class KeypersonModel {
             //String[] img_path = img_name.split("-");
             destination_path = destination_path + img_name;
         } catch (Exception ex) {
-            System.out.println("ERROR: in getImagePath in TrafficPoliceSearchModel : " + ex);
+            System.out.println("ERROR: in getImagePath in keypersonModel : " + ex);
         }
         return destination_path;
     }
@@ -2241,7 +2245,7 @@ public class KeypersonModel {
                 image_path = rst.getString("image_path");
             }
         } catch (Exception e) {
-            System.out.println("ERROR keyPerson Model exist_image" + e);
+            System.out.println("ERROR keypersonModel getDestinationPath" + e);
         }
         return image_path;
     }
@@ -2257,7 +2261,7 @@ public class KeypersonModel {
                 destination_path = rs.getString("destination_path");
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getDestination_Path in TraffiPoliceSearchModel : " + ex);
+            System.out.println("ERROR: in getDestination_Path in keypersonModel : " + ex);
         }
         return destination_path;
     }
@@ -2271,7 +2275,7 @@ public class KeypersonModel {
                 emp_code = rs.getInt("emp_code");
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getCounting in TraffiPoliceSearchModel : " + ex);
+            System.out.println("ERROR: in getCounting in keypersonModel : " + ex);
         }
         return emp_code + 1;
     }
@@ -2297,7 +2301,7 @@ public class KeypersonModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("OrganisationTypeModel setConnection() Error: " + e);
+            System.out.println("keypersonModel setConnection() Error: " + e);
         }
     }
 }

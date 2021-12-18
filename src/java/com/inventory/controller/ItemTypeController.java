@@ -50,7 +50,7 @@ public class ItemTypeController extends HttpServlet {
             Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserpass);            
             model.setConnection(con);
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
+            System.out.println("error in ItemTypeController setConnection() calling try block" + e);
         }
         try {
             String searchItemType = "";
@@ -70,7 +70,7 @@ public class ItemTypeController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ItemTypeController get JQuery Parameters Part-" + e);
             }
             searchItemType = request.getParameter("searchItemType");
             try {

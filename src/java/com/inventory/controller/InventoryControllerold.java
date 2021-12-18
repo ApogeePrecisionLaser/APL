@@ -91,7 +91,7 @@ public class InventoryControllerold extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in InventoryController setConnection() calling try block" + e);
+            System.out.println("error in InventoryControllerold setConnection() calling try block" + e);
         }
 
         try {
@@ -139,7 +139,7 @@ public class InventoryControllerold extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --InventoryControllerold get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -177,8 +177,8 @@ public class InventoryControllerold extends HttpServlet {
                 }
             }
 
-            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,search_key_person);
-            request.setAttribute("list", list);
+//            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,search_key_person);
+           // request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
             }
@@ -192,7 +192,7 @@ public class InventoryControllerold extends HttpServlet {
 
             request.getRequestDispatcher("inventory").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("InventoryController error: " + ex);
+            System.out.println("InventoryControllerold error: " + ex);
         }
     }
 

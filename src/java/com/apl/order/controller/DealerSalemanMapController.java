@@ -36,7 +36,7 @@ public class DealerSalemanMapController extends HttpServlet {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in DealerSalemanMapController setConnection() calling try block" + e);
         }
 
         try {
@@ -161,7 +161,7 @@ public class DealerSalemanMapController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --OrgOfficeController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --DealerSalemanMapController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -311,7 +311,7 @@ public class DealerSalemanMapController extends HttpServlet {
             organisationModel.closeConnection();
             request.getRequestDispatcher("dealersalesmap").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("OrgOfficeController error: " + ex);
+            System.out.println("DealerSalemanMapController error: " + ex);
         }
     }
 

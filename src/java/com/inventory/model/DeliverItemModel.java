@@ -11,6 +11,7 @@ import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.DeliverItem;
+import com.inventory.tableClasses.Indent;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +19,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
@@ -37,7 +42,7 @@ public class DeliverItemModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("DeliverItemModel setConnection() Error: " + e);
         }
     }
 
@@ -69,7 +74,7 @@ public class DeliverItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverItemModel showIndents-" + e);
         }
         return list;
     }
@@ -107,7 +112,7 @@ public class DeliverItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverItemModel getIndentItems-" + e);
         }
         return list;
     }
@@ -122,7 +127,7 @@ public class DeliverItemModel {
             rset.next();
             indent_no = rset.getString("indent_no");
         } catch (Exception e) {
-            System.out.println("getIndentNo Error: " + e);
+            System.out.println("DeliverItemModel getIndentNo Error: " + e);
         }
         return indent_no;
     }
@@ -130,12 +135,12 @@ public class DeliverItemModel {
     public String updateRecord(DeliverItem bean, int indent_item_id, int indent_table_id, String task, String logged_org_office,
             String logged_user_name) {
         int updateRowsAffected = 0;
-        if (task.equals("Deliver Items")) {
+        if (task.equals("Upload Challan & Deliver Items")) {
             task = "Delivered";
         }
         int indent_status_id = getStatusId(task);
         String item_status = bean.getItem_status();
-        if (item_status.equals("Delivery Challan Generated")) {
+        if (item_status.equals("Approved")) {
             item_status = "Delivered";
         }
         int status_id = getStatusId(item_status);
@@ -160,7 +165,7 @@ public class DeliverItemModel {
             pstmt.setString(5, "Y");
             pstmt.setString(6, "OK");
             pstmt.setString(7, "");
-            pstmt.setString(8, bean.getDescription());
+            pstmt.setString(8, bean.getImage_path());
             pstmt.setInt(9, bean.getRevision_no());
             pstmt.setInt(10, bean.getIndent_table_id());
             pstmt.setInt(11, bean.getIndent_item_id());
@@ -214,12 +219,16 @@ public class DeliverItemModel {
 //
 //            } else {
             String inventory_inward_query2 = " select ib.inventory_basic_id from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
-                    + " indent_item indi,org_office oo,indent_table indt "
+                    + " indent_item indi,org_office oo,indent_table indt,model m,manufacturer_item_map mim "
                     + " where indi.item_names_id=itn.item_names_id  and indt.requested_by=kp.key_person_id "
                     + " and indt.indent_table_id=indi.indent_table_id and itn.item_names_id=indi.item_names_id and "
-                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
-                    + " and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
-                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' and oo.org_office_name='" + logged_org_office + "' "
+                    + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id "
+                    + " and ib.inventory_basic_id=inv.inventory_basic_id "
+                    + " and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' and m.active='Y' and mim.active='Y' "
+                    + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
+                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
+                    + " and m.model='" + bean.getModel() + "' "
+                    + " and oo.org_office_name='" + logged_org_office + "' "
                     + " group by ib.inventory_basic_id ";
 
             PreparedStatement psmt = connection.prepareStatement(inventory_inward_query2);
@@ -254,12 +263,16 @@ public class DeliverItemModel {
             // }
 
             String inventory_outward_query = " select inv.inventory_id,inv.stock_quantity,inv.outward_quantity from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
-                    + " indent_item indi,org_office oo,indent_table indt "
-                    + " where indi.item_names_id=itn.item_names_id "
+                    + " indent_item indi,org_office oo,indent_table indt,model m,manufacturer_item_map mim "
+                    + " where indi.item_names_id=itn.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
+                    + " and mim.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
                     + " and indt.indent_table_id=indi.indent_table_id and itn.item_names_id=indi.item_names_id and "
                     + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
-                    + "and kp.key_person_id=inv.key_person_id  and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
-                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' and oo.org_office_name='" + logged_org_office + "' "
+                    + " and kp.key_person_id=inv.key_person_id  and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
+                    + " and m.active='Y' and mim.active='Y' "
+                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
+                    + " and oo.org_office_name='" + logged_org_office + "' "
+                    + " and m.model='" + bean.getModel() + "' "
                     + "and kp.key_person_name='" + logged_user_name + "' group by inv.inventory_id ";
 
             PreparedStatement psmt2 = connection.prepareStatement(inventory_outward_query);
@@ -302,7 +315,7 @@ public class DeliverItemModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("DeliverItemModel getRequestedByKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -317,7 +330,7 @@ public class DeliverItemModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: " + e);
+            System.out.println("DeliverItemModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -332,7 +345,7 @@ public class DeliverItemModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("DeliverItemModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -356,7 +369,7 @@ public class DeliverItemModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:DeliverItemModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -380,7 +393,7 @@ public class DeliverItemModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:DeliverItemModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -404,9 +417,110 @@ public class DeliverItemModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:DeliverItemModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
+    }
+
+    public List<Indent> showReportData(String logged_key_person, String office_admin, String indent_no, String delivery_challan_date, String delivery_challan_no, String itemname) {
+        List<Indent> list = new ArrayList<Indent>();
+
+        String query = " select required_qty,deliver_qty,approved_qty,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to "
+                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2,"
+                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo,"
+                + " oo2.service_tax_reg_no as officeGSTNo,oo2.mobile_no1,oo2.mobile_no2, "
+                + " c1.city_name as key_person_city,oo1.org_office_name as requested_by_office, "
+                + " oo1.address_line1 as kp_address_line1,oo1.address_line2 as kp_address_line2,oo1.address_line3 as kp_address_line3 "
+                + " from model m,manufacturer_item_map mim,indent_table indt,indent_item indi,key_person kp1,key_person kp2 ,"
+                + " item_names as itn,org_office oo1,org_office oo2,city c1,city c2 "
+                + " where indi.indent_table_id=indt.indent_table_id and indi.model_id=m.model_id "
+                + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
+                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
+                + " kp1.key_person_id=indt.requested_by  and kp2.key_person_id=indt.requested_to and kp1.active='y' "
+                + " and kp2.active='y' and itn.active='Y' and indt.indent_no='" + indent_no + "' and oo1.active='Y' and oo2.active='Y'"
+                + " and c1.active='Y' "
+                + " and c2.active='Y' "
+                + " and kp1.org_office_id=oo1.org_office_id and kp2.org_office_id=oo2.org_office_id "
+                + " and oo1.city_id=c1.city_id  and oo2.city_id=c2.city_id  ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                Indent bean = new Indent();
+
+                bean.setRequested_to(rset.getString("requested_to"));
+                bean.setDelivery_challan_no(delivery_challan_no);
+                bean.setDelivery_challan_date(delivery_challan_date);
+                bean.setItemname(rset.getString("item_name"));
+                String hsn_code = "";
+                if (rset.getString("HSNCode") == null) {
+                    hsn_code = "";
+                } else {
+                    hsn_code = rset.getString("HSNCode");
+                }
+                bean.setHSNCode(hsn_code);
+                String oo_address_line1 = rset.getString("oo_address_line1");
+                String oo_address_line2 = rset.getString("oo_address_line2");
+                String oo_address_line3 = rset.getString("oo_address_line3");
+                String oo_city_name = rset.getString("org_office_city");
+                String pin_code = rset.getString("pin_code");
+
+                String kp_address_line1 = rset.getString("kp_address_line1");
+                String kp_address_line2 = rset.getString("kp_address_line2");
+                String kp_address_line3 = rset.getString("kp_address_line3");
+                String kp_city_name = rset.getString("key_person_city");
+
+                String office_address = oo_address_line1 + ", " + oo_address_line2 + ", " + oo_address_line3 + ", " + oo_city_name + "- "
+                        + pin_code;
+                String key_person_address = kp_address_line1 + ", " + kp_address_line2 + ", " + kp_address_line3 + ", " + kp_city_name;
+
+                bean.setOffice_address(office_address);
+                bean.setKey_person_address(key_person_address);
+                bean.setModel(rset.getString("model"));
+                bean.setIndent_no(indent_no);
+
+                bean.setRequested_by(rset.getString("requested_by"));
+                bean.setRequested_by_office(rset.getString("requested_by_office") + " (" + rset.getString("requested_by") + ")");
+                bean.setPartyGSTNo(rset.getString("partyGSTNo"));
+                bean.setOfficeGSTNo(rset.getString("officeGSTNo"));
+                // bean.setRequested_to(rset.getString("SalesPerson"));
+                bean.setApproved_qty(rset.getInt("approved_qty"));
+                bean.setDelivered_qty(rset.getInt("deliver_qty"));
+                bean.setRequired_qty(rset.getInt("required_qty"));
+                bean.setRate("");
+                bean.setValue("");
+                bean.setTotal_assessable_value("");
+                bean.setAmount_in_words("");
+                String officeMobNo = "";
+                officeMobNo = (rset.getString("mobile_no1")) + ", " + (rset.getString("mobile_no2"));
+                bean.setOfficeMobNo(officeMobNo);
+
+                if (rset.getInt("required_qty") == rset.getInt("deliver_qty")) {
+                    bean.setBalance_qty(0);
+                } else {
+                    bean.setBalance_qty(rset.getInt("required_qty") - rset.getInt("deliver_qty"));
+                }
+
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: DeliverItemModel showReportData-" + e);
+        }
+        return list;
+    }
+
+    public byte[] generateMapReport(String jrxmlFilePath, List<Indent> listAll) {
+        byte[] reportInbytes = null;
+        Connection c;
+        //     HashMap mymap = new HashMap();
+        try {
+            JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
+            JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
+            reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
+        } catch (Exception e) {
+            System.out.println("Error: in DeliverItemModel generateMapReport() JRException: " + e);
+        }
+        return reportInbytes;
     }
 
     public String getMessage() {
@@ -421,7 +535,7 @@ public class DeliverItemModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("DeliverItemModel closeConnection() Error: " + e);
         }
     }
 }

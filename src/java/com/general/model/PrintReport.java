@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.healthDepartment.general.model;
+package com.general.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

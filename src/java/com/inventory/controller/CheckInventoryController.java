@@ -168,13 +168,14 @@ public class CheckInventoryController extends HttpServlet {
                 // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
             } else if (task.equals("Generate Delivery Challan")) {
                 PrintWriter out = response.getWriter();
-
+                String message = "";
+                int indent_table_id = 0;
                 String indent_item_id_arr[] = request.getParameterValues("indent_item_id");
                 for (int i = 0; i < indent_item_id_arr.length; i++) {
                     int indent_item_id = Integer.parseInt(indent_item_id_arr[i]);
                     String status_item = request.getParameter("item_status" + indent_item_id);
                     String item_name = request.getParameter("item_name" + indent_item_id);
-                    int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
+                    indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                     String requested_by_id = request.getParameter("requested_by");
                     String requsted_to = request.getParameter("requested_to");
                     int delivered_qty = Integer.parseInt(request.getParameter("deliver_qty" + indent_item_id).trim());
@@ -185,17 +186,18 @@ public class CheckInventoryController extends HttpServlet {
                     bean.setDelivered_qty(delivered_qty);
                     bean.setItem_name(item_name);
                     bean.setRequested_by_id(Integer.parseInt(requested_by_id));
-                    String message = model.updateRecord(bean, indent_item_id, indent_table_id, task, logged_org_office, logged_user_name);
-                    message_split = message.split("&");
-                    final_indent_table_id = indent_table_id;
+                    message = model.updateRecord(bean, indent_item_id, indent_table_id, task, logged_org_office, logged_user_name);
 
-                    request.setAttribute("final_message", message_split[0]);
-                    request.setAttribute("final_status", message_split[1]);
-                    request.setAttribute("final_indent_table_id", final_indent_table_id);
-                    request.setAttribute("task", task);
-                    request.getRequestDispatcher("checkInventoryItemList").forward(request, response);
-                    return;
                 }
+                message_split = message.split("&");
+                final_indent_table_id = indent_table_id;
+
+                request.setAttribute("final_message", message_split[0]);
+                request.setAttribute("final_status", message_split[1]);
+                request.setAttribute("final_indent_table_id", final_indent_table_id);
+                request.setAttribute("task", task);
+                request.getRequestDispatcher("checkInventoryItemList").forward(request, response);
+                return;
             } else if (task.equals("GenerateDeliveryChallan")) {
                 int indent_table_id = Integer.parseInt(request.getParameter("final_indent_table_id").trim());
 
@@ -205,7 +207,7 @@ public class CheckInventoryController extends HttpServlet {
                 Date date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
                 String delivery_challan_date = sdf.format(date);
-                List<CheckInventory> deliverey_challan_items_list = model.getIndentItemsForDeliveryChallan(indent_table_id);
+                List<CheckInventory> deliverey_challan_items_list = model.getIndentItemsForDeliveryChallan(indent_table_id, logged_key_person_id);
                 request.setAttribute("deliverey_challan_items_list", deliverey_challan_items_list);
 
                 request.setAttribute("delivery_challan_date", delivery_challan_date);

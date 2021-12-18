@@ -107,7 +107,7 @@ public class ItemAuthorizationController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ItemAuthorizationController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");

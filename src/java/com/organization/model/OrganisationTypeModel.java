@@ -160,7 +160,7 @@ public class OrganisationTypeModel {
 
             }
         } catch (Exception e) {
-            System.out.println(" showData Error: " + e);
+            System.out.println("OrganisationTypeModel showData Error: " + e);
         }
         return list;
     }
@@ -386,7 +386,7 @@ public class OrganisationTypeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getcheckorgid--" + e);
+            System.out.println("OrganisationTypeModel Error: getcheckorgid--" + e);
         }
         return organisation_id;
     }
@@ -408,7 +408,7 @@ public class OrganisationTypeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgid--" + e);
+            System.out.println("OrganisationTypeModel Error: getOrgid--" + e);
         }
         return organisation_id;
     }
@@ -425,7 +425,7 @@ public class OrganisationTypeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("parent_org_id");
         } catch (Exception e) {
-            System.out.println("Error: getParentOrgid--" + e);
+            System.out.println("OrganisationTypeModel Error: getParentOrgid--" + e);
         }
         return organisation_id;
     }
@@ -443,7 +443,7 @@ public class OrganisationTypeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getString("org_type_name");
         } catch (Exception e) {
-            System.out.println("Error: getParentOrgname--" + e);
+            System.out.println("OrganisationTypeModel Error: getParentOrgname--" + e);
         }
         return organisation_id;
     }
@@ -460,7 +460,7 @@ public class OrganisationTypeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("generation");
         } catch (Exception e) {
-            System.out.println("Error: getParentGeneration--" + e);
+            System.out.println("OrganisationTypeModel Error: getParentGeneration--" + e);
         }
         return organisation_id;
     }
@@ -506,7 +506,7 @@ public class OrganisationTypeModel {
                 count = rst1.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
+            System.out.println("error in insertRecord OrganisationTypeModel -" + e);
         }
         if (count > 0) {
             message = "Cannot save the record, already mapped!";
@@ -527,7 +527,7 @@ public class OrganisationTypeModel {
                 count = rst.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
+            System.out.println("error in insertRecord OrganisationTypeModel -" + e);
         }
         if (count > 0) {
             message = "Cannot save the record, already mapped!";
@@ -550,7 +550,7 @@ public class OrganisationTypeModel {
 
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("insertRecord Error: " + e);
+            System.out.println("OrganisationTypeModel insertRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -573,7 +573,7 @@ public class OrganisationTypeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgtype_id--" + e);
+            System.out.println("OrganisationTypeModel Error: getOrgtype_id--" + e);
         }
         return organisation_id;
     }
@@ -631,7 +631,7 @@ public class OrganisationTypeModel {
 
             }
         } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
+            System.out.println("error in insertRecord OrganisationTypeModel -" + e);
         }
         if (prev_mapId1 != org_type_id) {
             int c = 0;
@@ -649,7 +649,7 @@ public class OrganisationTypeModel {
 
                 }
             } catch (Exception e) {
-                System.out.println("error in insertRecord model -" + e);
+                System.out.println("error in insertRecord OrganisationTypeModel -" + e);
             }
 
             if (c > 0) {
@@ -670,7 +670,7 @@ public class OrganisationTypeModel {
                 count = rst1.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
+            System.out.println("error in insertRecord OrganisationTypeModel -" + e);
         }
         if (count > 1) {
             message = "Cannot save the record, already existed!";
@@ -696,7 +696,8 @@ public class OrganisationTypeModel {
 //        String query3 = "INSERT INTO "
 //                + "organisation_designation_map(organisation_designation_map_id,organisation_id,designation_id,serial_no, super,revision,active,parent_designation) "
 //                + "VALUES(?,?,?,?,?,?,?,?)";
-        String query3 = "INSERT INTO organisation_type(organisation_type_id,org_type_name,description,revision_no,active,remark,parent_org_id,super,generation) VALUES(?,?,?,?,?,?,?,?,?)";
+        String query3 = "INSERT INTO organisation_type(organisation_type_id,org_type_name,description,revision_no,active,remark,parent_org_id,"
+                + "super,generation) VALUES(?,?,?,?,?,?,?,?,?)";
 
         //int rowsAffected = 0;
         try {
@@ -775,7 +776,7 @@ public class OrganisationTypeModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: updateRecord---updateRecord" + e);
+            System.out.println("Error: OrganisationTypeModel---updateRecord" + e);
         } finally {
 
         }
@@ -864,7 +865,7 @@ public class OrganisationTypeModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationTypeModel Error deleteRecord: " + e);
         } finally {
             psmt = null;
             rst = null;
@@ -910,7 +911,7 @@ public class OrganisationTypeModel {
             rowsAffected = psmt.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationTypeModel Error: " + e);
         }
         if (rowsAffected > 0) {
 
@@ -944,7 +945,7 @@ public class OrganisationTypeModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error--------" + e);
+            System.err.println("OrganisationTypeModel getRevisionno error--------" + e);
         }
         return revision;
     }
@@ -967,7 +968,7 @@ public class OrganisationTypeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("getOrgType ERROR - " + e);
+            System.out.println("OrganisationTypeModel getOrgType ERROR - " + e);
         }
         return list;
     }
@@ -991,7 +992,7 @@ public class OrganisationTypeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("getHierarchsearch ERROR - " + e);
+            System.out.println("OrganisationTypeModel getHierarchsearch ERROR - " + e);
         }
         return list;
     }
@@ -1014,7 +1015,7 @@ public class OrganisationTypeModel {
                 list.add("No such Generation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:getGeneration-- " + e);
+            System.out.println("OrganisationTypeModel Error:getGeneration-- " + e);
         }
         return list;
     }
@@ -1032,7 +1033,7 @@ public class OrganisationTypeModel {
                 city_id = "";
             }
         } catch (Exception e) {
-            System.out.println("getDesgn_id Error: " + e);
+            System.out.println("OrganisationTypeModel getDesgn_id Error: " + e);
         }
         return city_id;
     }
@@ -1072,7 +1073,7 @@ public class OrganisationTypeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("getParentOrgType ERROR - " + e);
+            System.out.println("OrganisationTypeModel getParentOrgType ERROR - " + e);
         }
         return list;
     }
@@ -1096,7 +1097,7 @@ public class OrganisationTypeModel {
                 System.out.println("No parent org");
             }
         } catch (Exception e) {
-            System.out.println("getParentOrgTypeid ERROR - " + e);
+            System.out.println("OrganisationTypeModel getParentOrgTypeid ERROR - " + e);
         }
         return org_type_name;
     }
@@ -1126,7 +1127,7 @@ public class OrganisationTypeModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("OrginisationTypeStatusModel generateSiteList() JRException: " + e);
+            System.out.println("OrganisationTypeModel generateSiteList() JRException: " + e);
         }
         return bytArray;
     }

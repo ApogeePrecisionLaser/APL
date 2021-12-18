@@ -192,9 +192,7 @@
 
     var json;
     $(function () {
-        //alert("fe");
         var String_data = $('#String_data').val();
-        //alert("string_data --" + String_data);
         var last_ch = String_data.charAt(String_data.length - 1);
         if (last_ch == ",") {
             String_data = String_data.substring(0, String_data.length - 1);
@@ -227,19 +225,22 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 1) {
                     tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required  style="width:35px">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 5) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '" ">';
 
                 }
 //                else {
@@ -254,9 +255,7 @@
 
 
     function showData() {
-        //alert("fe");
         var String_data = $('#String_data').val();
-        //alert("string_data --" + String_data);
         var last_ch = String_data.charAt(String_data.length - 1);
         if (last_ch == ",") {
             String_data = String_data.substring(0, String_data.length - 1);
@@ -283,26 +282,27 @@
         }
 
         for (var i = 0; i < json.length; i++) {
-
             tr = table.insertRow(-1);
             tr.setAttribute("id", i + 1);
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 1) {
                     tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
-
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 5) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '"  >';
                 }
             }
         }
@@ -315,12 +315,10 @@
         var dataLength = "";
         setInterval(function () {
             var String_data = $('#String_data').val();
-            //alert("string_data --" + String_data);
             var dataLength2 = "";
             var dataLength2 = String_data.length;
             dataLength = String_data.length;
-            //alert("data leng -"+dataLength+" data len 22 --"+dataLength2);
-            if (dataLength > dataLength2 || dataLength > 0) {//alert(121);
+            if (dataLength > dataLength2 || dataLength > 0) {
                 showData();
             } else {
                 //alert(2321);
@@ -332,6 +330,28 @@
     function searchIndentStatusWise(status) {
         var url = "IndentController?action1=searchIndentStatusWise&status=" + status;
         window.open(url, "_self");
+    }
+
+    function displayIndentForm(indent_table_id) {
+        var queryString;
+        queryString = "task=viewPdf&indent_table_id=" + indent_table_id;
+        var url = "IndentController?" + queryString;
+        popupwin = openPopUp1(url, "Indent Form", 600, 1000);
+    }
+
+    function openPopUp1(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+
+        return window.open(url, window_name, window_features);
+    }
+
+    function printIndentForm() {
+        var queryString = "task=printIndentForm";
+        var url = "IndentController?" + queryString;
+        popupwin = openPopUp(url, "Blank Indent Form", 500, 1000);
+
     }
 
 </script>
@@ -364,7 +384,12 @@
             <div class="row mt-3 myTable">
                 <input type="date" style="height:38px" placeholder="Search.." name="search_by_date">
                 <button type="submit" class="btn normalBtn" name="submit_search">Search</button>
+
+                <input style="margin-left:25px" type="button" class="btn normalBtn"
+                       name="task" id="" value="Print Blank Indent Form" onclick="printIndentForm();">
+
             </div>
+
         </form>
     </div>
 </section>
@@ -390,6 +415,7 @@
                                     <th>Date Time</th>
                                     <th>Status</th>
                                     <th>Description</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -435,6 +461,9 @@
 
 
                                         <td id="${loopCounter.count }">${beanType.description}</td>                                               
+                                        <td id="${loopCounter.count }">
+                                            <input type="button" name="indentform" id="indentform" value="Indent Form" onclick="displayIndentForm('${beanType.indent_table_id}')">
+                                        </td>                                               
                                     </tr>
 
                                 </c:forEach>
@@ -447,9 +476,6 @@
     </section>
 
 </c:if>
-
-
-
 
 
 <section class="marginTop30">
@@ -496,7 +522,6 @@
 
                 </div>
 
-
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
@@ -505,6 +530,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>      
             <hr>
             <div class="row">

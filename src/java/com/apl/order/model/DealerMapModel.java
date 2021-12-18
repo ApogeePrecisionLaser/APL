@@ -4,8 +4,6 @@ package com.apl.order.model;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
- 
-
 import com.lowagie.text.pdf.PdfWriter;
 import com.organization.model.OrgOfficeModel;
 import com.organization.tableClasses.Org_Office;
@@ -59,7 +57,7 @@ public class DealerMapModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel setConnection() Error: " + e);
+            System.out.println("DealerMapModel setConnection() Error: " + e);
         }
     }
 
@@ -82,7 +80,7 @@ public class DealerMapModel {
             if (!org_name.equals("") && org_name != null) {
                 query += " and kp.key_person_name='" + org_name + "' ";
             }
-           
+
             if (!office_code_search.equals("") && office_code_search != null) {
                 query += " and kp1.key_person_name='" + office_code_search + "' ";
             }
@@ -109,16 +107,16 @@ public class DealerMapModel {
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 Org_Office organisation = new Org_Office();
-               
+
                 organisation.setDealername(rset.getString("d"));
                 organisation.setSalesmanname(rset.getString("s"));
                 organisation.setRemark(rset.getString("remark"));
                 organisation.setMap_id(rset.getInt("dealer_salesmanager_table_id"));
-                
+
                 list.add(organisation);
             }
         } catch (Exception e) {
-            System.out.println("Error:--OrgOfficeModel--- showData--" + e);
+            System.out.println("Error:--DealerMapModel--- showData--" + e);
         }
         return list;
     }
@@ -142,7 +140,7 @@ public class DealerMapModel {
                 list.add(org_office_id);
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel.getAllParentChild() -" + e);
+            System.out.println("DealerMapModel.getAllParentChildList() -" + e);
         }
 
         String qry1 = "select org_office_id from org_office where active='Y' and parent_org_office_id='" + org_office_id + "' limit 1 ";
@@ -154,7 +152,7 @@ public class DealerMapModel {
                 list.add(parent_id);
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel.getAllParentChild() -" + e);
+            System.out.println("DealerMapModel.getAllParentChildList() -" + e);
         }
 
         try {
@@ -188,7 +186,7 @@ public class DealerMapModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:--organisation--- showData--" + e);
+            System.out.println("Error:--DealerMapModel--- getAllParentChildList--" + e);
         }
         String qry2 = "select org_office_id from org_office where active='Y' and parent_org_office_id='" + org_office_id + "' ";
         try {
@@ -198,7 +196,7 @@ public class DealerMapModel {
                 list.add(rstt.getInt(1));
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel.getAllParentChild() -" + e);
+            System.out.println("DealerMapModel.getAllParentChildList() -" + e);
         }
 
         list.removeAll(Arrays.asList(0));
@@ -219,7 +217,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgid--" + e);
+            System.out.println("DealerMapModel Error: getOrgid--" + e);
         }
         return organisation_id;
     }
@@ -234,7 +232,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("parent_org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getParentOrgid--" + e);
+            System.out.println("DealerMapModel Error: getParentOrgid--" + e);
         }
         return organisation_id;
     }
@@ -251,7 +249,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getcheckorgid--" + e);
+            System.out.println("DealerMapModel Error: getcheckorgid--" + e);
         }
         return organisation_id;
     }
@@ -278,7 +276,7 @@ public class DealerMapModel {
             }
 
         } catch (Exception ex) {
-            System.err.println("Orgofficename error---------" + ex);
+            System.err.println("DealerMapModel Orgofficename error---------" + ex);
         }
 
         return id;
@@ -300,7 +298,7 @@ public class DealerMapModel {
             }
 
         } catch (Exception ex) {
-            System.err.println("getIdOfParent error---------" + ex);
+            System.err.println("DealerMapModel getIdOfParent error---------" + ex);
         }
 
         return id;
@@ -317,7 +315,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: v--" + e);
+            System.out.println("DealerMapModel Error: getOrg_Office_id--" + e);
         }
         return organisation_id;
     }
@@ -334,16 +332,16 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("generation");
         } catch (Exception e) {
-            System.out.println("Error: getParentGeneration--" + e);
+            System.out.println("DealerMapModel Error: getParentGeneration--" + e);
         }
         return organisation_id;
     }
 
-    public int insertRecord(int did,int sid,String remark) throws SQLException {
+    public int insertRecord(int did, int sid, String remark) throws SQLException {
         String is_child = "", active = "";
         int rowsAffected = 0;
         int count = 0;
-        
+
         String query = "insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
                 + "VALUES( ?, ?, ?)";
 //  int rowsAffected = 0;
@@ -351,17 +349,17 @@ public class DealerMapModel {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             //   pstmt.setInt(1, orgOffice.getOrganisation_id());
             pstmt.setInt(1, did);
-            pstmt.setInt(2,sid);
-            pstmt.setString(3,remark);
-     
+            pstmt.setInt(2, sid);
+            pstmt.setString(3, remark);
+
             rowsAffected = pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
-              int  key = rs.getInt(1);
+                int key = rs.getInt(1);
             }
 
         } catch (Exception e) {
-            System.out.println("Error: organisation---insertRecord" + e);
+            System.out.println("Error: DealerMapModel---insertRecord" + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -385,16 +383,16 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgofficeid--" + e);
+            System.out.println("DealerMapModel Error: getOrgofficeid--" + e);
         }
         return organisation_id;
     }
 
-    public int updateRecordd(int did,int sid,String remark, int org_office_id) throws SQLException {
-       
+    public int updateRecordd(int did, int sid, String remark, int org_office_id) throws SQLException {
+
         int updateRowsAffected = 0;
-     int revision=0;
-        boolean status ;
+        int revision = 0;
+        boolean status;
         String query1 = "SELECT max(revision_no) as revision_no FROM dealer_salesmanager_mapping WHERE dealer_salesmanager_table_id = " + org_office_id + "  && active='Y' ";
         String query2 = "UPDATE dealer_salesmanager_mapping SET active=? WHERE dealer_salesmanager_table_id=? ";
         String query3 = "insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
@@ -410,17 +408,15 @@ public class DealerMapModel {
 
                 pstm.setString(1, "n");
                 pstm.setInt(2, org_office_id);
-               
+
                 updateRowsAffected = pstm.executeUpdate();
                 if (updateRowsAffected >= 1) {
                     revision = rs.getInt("revision_no") + 1;
                     PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
 
-                   psmt.setInt(1, did);
-            psmt.setInt(2,sid);
-            psmt.setString(3,remark);
-     
-              
+                    psmt.setInt(1, did);
+                    psmt.setInt(2, sid);
+                    psmt.setString(3, remark);
 
                     rowsAffected = psmt.executeUpdate();
 
@@ -439,7 +435,7 @@ public class DealerMapModel {
 
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel updateRecord() Error: " + e);
+            System.out.println("DealerMapModel updateRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -477,7 +473,7 @@ public class DealerMapModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: getMobilevalidty-" + e);
+            System.out.println("DealerMapModel Error: getMobilevalidty-" + e);
         }
         return list;
     }
@@ -497,24 +493,24 @@ public class DealerMapModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error------------" + e);
+            System.err.println("DealerMapModel getRevisionno error------------" + e);
         }
         return revision;
     }
 
     public int deleteRecord(int org_office_id) throws SQLException {
-      
+
         String query = "DELETE FROM dealer_salesmanager_mapping WHERE dealer_salesmanager_table_id = " + org_office_id;
         int child_item_count = 0;
         int rowsAffected = 0;
         try {
-           
-                PreparedStatement pstmt1 = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=0");
-                pstmt1.executeUpdate();
-                rowsAffected = connection.prepareStatement(query).executeUpdate();
-           
+
+            PreparedStatement pstmt1 = connection.prepareStatement("SET FOREIGN_KEY_CHECKS=0");
+            pstmt1.executeUpdate();
+            rowsAffected = connection.prepareStatement(query).executeUpdate();
+
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel deleteRecord() Error: " + e);
+            System.out.println("DealerMapModel deleteRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -547,7 +543,7 @@ public class DealerMapModel {
 
             }
         } catch (Exception e) {
-            System.out.println("getPointLatLong error-------" + e);
+            System.out.println("DealerMapModel getPointLatLong error-------" + e);
         }
 
         return lat + "," + longi;
@@ -571,7 +567,7 @@ public class DealerMapModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--organisation_Name()-- " + e);
+            System.out.println("Error:DealerMapModel--organisation_Name()-- " + e);
         }
         return list;
     }
@@ -595,7 +591,7 @@ public class DealerMapModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("getHierarchsearch ERROR - " + e);
+            System.out.println("DealerMapModel getHierarchsearch ERROR - " + e);
         }
         return list;
     }
@@ -618,7 +614,7 @@ public class DealerMapModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--searchMobile()-- " + e);
+            System.out.println("Error:DealerMapModel--searchMobile()-- " + e);
         }
         return list;
     }
@@ -641,7 +637,7 @@ public class DealerMapModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganisation_Name()-- " + e);
+            System.out.println("Error:DealerMapModel--getOrganisation_Name()-- " + e);
         }
         return list;
     }
@@ -664,7 +660,7 @@ public class DealerMapModel {
                 list.add("No such Generation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getGeneration()-- " + e);
+            System.out.println("Error:DealerMapModel--getGeneration()-- " + e);
         }
         return list;
     }
@@ -681,7 +677,7 @@ public class DealerMapModel {
             organisation_id = rset.getInt("organisation_id");
 
         } catch (Exception e) {
-            System.out.println("Error: getOrganisation_id--" + e);
+            System.out.println("DealerMapModel Error: getOrganisation_id--" + e);
         }
         return organisation_id;
     }
@@ -697,7 +693,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getOfficetype_id--" + e);
+            System.out.println("DealerMapModel Error: getOfficetype_id--" + e);
         }
         return organisation_id;
     }
@@ -724,7 +720,7 @@ public class DealerMapModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOfficeType-- " + e);
+            System.out.println("Error:DealerMapModel--OrgOfficeType-- " + e);
         }
         return list;
     }
@@ -751,7 +747,7 @@ public class DealerMapModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOfficeType-- " + e);
+            System.out.println("Error:DealerMapModel--getMobile-- " + e);
         }
         return list;
     }
@@ -778,7 +774,7 @@ public class DealerMapModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOfficeType-- " + e);
+            System.out.println("Error:DealerMapModel--gethierarchysearch-- " + e);
         }
         return list;
     }
@@ -793,7 +789,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("getDesgn_id Error: " + e);
+            System.out.println("DealerMapModel getDesgn_id Error: " + e);
         }
         return city_id;
     }
@@ -839,7 +835,7 @@ public class DealerMapModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("getParentOrgOffice Error: " + e);
+            System.out.println("DealerMapModel getParentOrgOffice Error: " + e);
         }
         return list;
     }
@@ -869,7 +865,7 @@ public class DealerMapModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgOfficeNameSearch-- " + e);
+            System.out.println("Error:DealerMapModel--getOrgOfficeNameSearch-- " + e);
         }
         return list;
     }
@@ -897,10 +893,11 @@ public class DealerMapModel {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgOfficeCodeSearch-- " + e);
+            System.out.println("Error:DealerMapModel--getOrgOfficeCodeSearch-- " + e);
         }
         return list;
     }
+
     public List<String> getDealer() {
         List<String> list = new ArrayList<String>();
         String query = "SELECT distinct key_person_name FROM apl.key_person as kp ,designation as dg where kp.designation_id=dg.designation_id and dg.designation='Owner' and kp.active='Y'";
@@ -910,23 +907,24 @@ public class DealerMapModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
             int count = 0;
-           
+
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {    // move cursor from BOR to valid record.
                 String org_office_code = rset.getString("key_person_name");
-               
-                    list.add(org_office_code);
-                    count++;
-               
+
+                list.add(org_office_code);
+                count++;
+
             }
             if (count == 0) {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgOfficeCodeSearch-- " + e);
+            System.out.println("Error:DealerMapModel--getDealer-- " + e);
         }
         return list;
     }
+
     public List<String> getSalesDealer() {
         List<String> list = new ArrayList<String>();
         String query = "SELECT distinct key_person_name FROM apl.key_person as kp ,designation as dg where kp.designation_id=dg.designation_id and dg.designation='Sales' and kp.active='Y'";
@@ -936,20 +934,20 @@ public class DealerMapModel {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
             int count = 0;
-           
+
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {    // move cursor from BOR to valid record.
                 String org_office_code = rset.getString("key_person_name");
-               
-                    list.add(org_office_code);
-                    count++;
-               
+
+                list.add(org_office_code);
+                count++;
+
             }
             if (count == 0) {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgOfficeCodeSearch-- " + e);
+            System.out.println("Error:DealerMapModel--getSalesDealer-- " + e);
         }
         return list;
     }
@@ -966,7 +964,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgOfficeType_id--" + e);
+            System.out.println("DealerMapModel Error: getOrgOfficeType_id--" + e);
         }
         return organisation_id;
     }
@@ -981,10 +979,11 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("city_id");
         } catch (Exception e) {
-            System.out.println("getCity_id Error: " + e);
+            System.out.println("DealerMapModel getCity_id Error: " + e);
         }
         return city_id;
     }
+
     public int getKp_id(String city_name) {
         String query = "SELECT key_person_id FROM key_person WHERE key_person_name = ? and active='Y'";
         int city_id = 0;
@@ -995,7 +994,7 @@ public class DealerMapModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getCity_id Error: " + e);
+            System.out.println("DealerMapModel getKp_id Error: " + e);
         }
         return city_id;
     }
@@ -1023,7 +1022,7 @@ public class DealerMapModel {
                 list.add("No such City Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("getCityName Error: " + e);
+            System.out.println("DealerMapModel getCityName Error: " + e);
         }
         return list;
     }
@@ -1046,7 +1045,7 @@ public class DealerMapModel {
                 list.add("No such State Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("getStateName Error: " + e);
+            System.out.println("DealerMapModel getStateName Error: " + e);
         }
         return list;
     }
@@ -1063,7 +1062,7 @@ public class DealerMapModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel closeConnection() Error: " + e);
+            System.out.println("DealerMapModel closeConnection() Error: " + e);
         }
     }
 }

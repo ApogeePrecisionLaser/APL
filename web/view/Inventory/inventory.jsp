@@ -519,6 +519,13 @@
                         <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
+                    
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Date</label>
+                        <input type="date" Placeholder="Date" name="search_by_date" id="search_by_date" value="${search_by_date}" class="form-control myInput searchInput1 w-100">
+                    </div>
+                </div>
             </div>
             <hr>
             <div class="row">
@@ -545,18 +552,20 @@
                         <!--<th>S.No.</th>-->
 
                         <th>Item Name</th>
-                        <th>Item Code</th>
-                        <th>Org Office</th>
-                        <th>Manufacturer Name</th>
-                        <th>Model Name</th>
-                        <th>Key Person</th>
-                        <th>Stock Quantity</th>
-                        <th>Inward Quantity</th>
-                        <th>Outward Quantity</th>
-                        <th>Reference Document Type</th>
-                        <th>Reference Document Id</th>
-                        <th>Date Time</th>
-                        <th>Description</th>
+                        <th style="width:80px">Item Code</th>
+                        <th style="width:80px">Org Office</th>
+                        <th style="width:80px">Manufacturer Name</th>
+                        <th style="width:80px">Model Name</th>
+                        <th style="width:80px">Model No.</th>
+                        <th style="width:80px">Part No.</th>
+                        <th style="width:80px">Key Person</th>
+                        <th style="width:80px">Stock Quantity</th>
+                        <th style="width:80px">Inward Quantity</th>
+                        <th style="width:80px">Outward Quantity</th>
+                        <th style="width:80px">Reference Document Type</th>
+                        <th style="width:80px">Reference Document Id</th>
+                        <th style="width:80px">Date Time</th>
+                        <!--<th>Description</th>-->
                         <th></th>
                     </tr>
                     <tbody>
@@ -573,20 +582,23 @@
                                 <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
                                 <td id="${loopCounter.count }5">${beanType.manufacturer_name}</td> 
                                 <td id="${loopCounter.count }6">${beanType.model}</td>
-                                <td id="${loopCounter.count }7">${beanType.key_person}</td>                                               
-                                <td id="${loopCounter.count }8">${beanType.stock_quantity}</td>                                               
-                                <td id="${loopCounter.count }9">${beanType.inward_quantity}</td> 
-                                <td id="${loopCounter.count }10">${beanType.outward_quantity}</td>
-                                <td id="${loopCounter.count }11">${beanType.reference_document_type}</td>
-                                <td id="${loopCounter.count }12">${beanType.reference_document_id}</td>
-                                <td id="${loopCounter.count }13">${beanType.date_time}</td> 
-                                <td id="${loopCounter.count }14">${beanType.description}</td>  
+                                <td id="${loopCounter.count }7">${beanType.model_no}</td>
+                                <td id="${loopCounter.count }8">${beanType.part_no}</td>
+                                <td id="${loopCounter.count }9">${beanType.key_person}</td>                                               
+                                <td id="${loopCounter.count }10">${beanType.stock_quantity}</td>                                               
+                                <td id="${loopCounter.count }11">${beanType.inward_quantity}</td> 
+                                <td id="${loopCounter.count }12">${beanType.outward_quantity}</td>
+                                <td id="${loopCounter.count }13">${beanType.reference_document_type}</td>
+                                <td id="${loopCounter.count }14">${beanType.reference_document_id}</td>
+                                <td id="${loopCounter.count }15">${beanType.date_time}</td> 
+                                <!--<td id="${loopCounter.count }16">${beanType.description}</td>-->  
 
                                 <c:if test="${beanType.popupval=='openpopup'}">
                                     <td>
                                         <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
                                     </td>
                                 </c:if>
+
                                 <td></td>
                             </tr>
                         </c:forEach>

@@ -59,7 +59,7 @@ public class KeypersonController extends HttpServlet {
         try {
             keyModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrganisationTypeController setConnection() calling try block" + e);
+            System.out.println("error in KeypersonController setConnection() calling try block" + e);
         }
 
         try {
@@ -171,7 +171,7 @@ public class KeypersonController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --SiteListController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --KeypersonController get JQuery Parameters Part-" + e);
             }
 
             List id_list = keyModel.getIdtypeList();
@@ -321,7 +321,7 @@ public class KeypersonController extends HttpServlet {
                     keyModel.closeConnection();
                     return;
                 } catch (Exception e) {
-                    System.out.println("SelectSupplierController Demand Note Error :" + e);
+                    System.out.println("KeypersonController Demand Note Error :" + e);
                     return;
                 }
             }

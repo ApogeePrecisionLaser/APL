@@ -1,4 +1,4 @@
- <%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -122,14 +122,14 @@
             document.getElementById("delete").disabled = false;
         }
     }
-  function displayReading(){
- 
-                            
-                            var queryString = "task=generateDeliveryReport&survey_id="+1;
-                            var url = "OrderController?"+queryString;
-                            popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
+    function displayReading() {
 
-                        }
+
+        var queryString = "task=generateDeliveryReport&survey_id=" + 1;
+        var url = "OrderController?" + queryString;
+        popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
+
+    }
 
     function setStatus(id) {
         if (id === 'save') {
@@ -193,7 +193,8 @@
 
 
     function openPopUpForIndentItems(indent_table_id) {
-        var url = "OrderController?task=GetIndentItemsnew&indent_table_id=" + indent_table_id;
+      //  alert("resv"+indent_table_id);
+        var url = "OrderController?task=GetIndentItems&indent_table_id=" + indent_table_id;
         popupwin = openPopUp(url, "", 600, 1030);
     }
 
@@ -244,19 +245,22 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 1) {
                     tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 5) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '"  >';
 
                 }
 //                else {
@@ -306,19 +310,22 @@
             for (var j = 0; j < col.length; j++) {
                 var tabCell = tr.insertCell(-1);
                 if (j == 0) {
-                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="checked_id" id="checked_id' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 1) {
                     tabCell.innerHTML = '<input type="text"  name="item_name' + i + '" id="item_name' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 2) {
-                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required>';
+                    tabCell.innerHTML = '<input type="text"  name="model' + i + '" id="model' + i + '"  value="' + json[i][col[j]] + '" required>';
                 }
                 if (j == 3) {
-                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  name="req_qty' + i + '" id="req_qty' + i + '"  value="' + json[i][col[j]] + '" required style="width:35px">';
                 }
                 if (j == 4) {
-                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '">';
+                    tabCell.innerHTML = '<input type="text"  class="myAutocompleteClass" name="purpose' + i + '" id="purpose' + i + '" required value="' + json[i][col[j]] + '">';
+                }
+                if (j == 5) {
+                    tabCell.innerHTML = '<input type="text" class="datepicker"  name="expected_date_time' + i + '" id="expected_date_time' + i + '" required  value="' + json[i][col[j]] + '"  >';
 
                 }
             }
@@ -360,22 +367,28 @@
 </section>
 
 
-<!--<section>
+<section>
     <div class="container organizationBox">
         <div class="headBox" style="background-color: #6D9FBD">
-<c:forEach var="beanType" items="${requestScope['status_list']}"
-           varStatus="loopCounter">
-    <label style="color:white;margin-left: 20px">${beanType.status}</label>
-    <input type="checkbox" name="search_status" id="search_status" value="${beanType.status}" 
-           onclick="searchIndentStatusWise('${beanType.status}')"> 
+            <c:forEach var="beanType" items="${requestScope['status_list']}"
+                       varStatus="loopCounter">
+                <label style="color:white;margin-left: 20px">${beanType.status}</label>
+                <input type="checkbox" name="search_status" id="search_status" value="${beanType.status}" 
+                       onclick="searchIndentStatusWise('${beanType.status}')"> 
 
-</c:forEach>
-<label style="color:white;margin-left: 20px">All</label>
-<input type="checkbox" name="search_status" id="search_status" value="All" 
-       onclick="searchIndentStatusWise('All')"> 
-</div>
-</div>
-</section>-->
+            </c:forEach>
+            <label style="color:white;margin-left: 20px">All</label>
+            <input type="checkbox" name="search_status" id="search_status" value="All" 
+                   onclick="searchIndentStatusWise('All')"> 
+        </div>
+        <form name="form3" method="POST" action="OrderController" >
+            <div class="row mt-3 myTable">
+                <input type="date" style="height:38px" placeholder="Search.." name="search_by_date">
+                <button type="submit" class="btn normalBtn" name="submit_search">Search</button>
+            </div>
+        </form>
+    </div>
+</section>
 
 <c:if test="${isSelectPriv eq 'Y'}">  
     <section class="marginTop30 ">
@@ -492,7 +505,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Order No.<span class="text-danger">*</span></label>
-                            
+
                             <input type="hidden" name="indent_table_id" id="indent_table_id" value="">
                             <input type="hidden" name="indent_item_id" id="indent_item_id" value="">
                             <input type="hidden" name="String_data" id="String_data" value="">
@@ -500,7 +513,7 @@
                         </div>
                     </div>
                 </div>
-                     
+
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
@@ -528,7 +541,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Payment Status</label>
-                            <select id="payment" name="payment" >
+                            <select id="payment" name="payment" required>
                                 <option value="">Select</option>
                                 <option value="advancedpayment">Advanced Payment</option>
                                 <option value="credit">Credit</option>

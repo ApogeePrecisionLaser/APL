@@ -5,7 +5,9 @@
 package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
+import com.general.model.GeneralModel;
 import com.inventory.model.IndentModel;
+import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.Indent;
 import com.inventory.tableClasses.ItemName;
 import java.io.BufferedInputStream;
@@ -66,6 +68,7 @@ public class IndentController extends HttpServlet {
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
         String office_admin = "";
+        // String office_embedded_dev = "";
         int last_indent_table_id = 0;
         int counting = 100;
         String indent_no = "";
@@ -73,10 +76,11 @@ public class IndentController extends HttpServlet {
         String requested_to = "";
         String description = "";
         String search_by_date = "";
+        String autogenerate_indent_no = "";
 
         HttpSession session = request.getSession();
         String loggedUser = "";
-        loggedUser = session.getAttribute("user_role").toString();        
+        loggedUser = session.getAttribute("user_role").toString();
 
         if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
@@ -90,9 +94,11 @@ public class IndentController extends HttpServlet {
             logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
             office_admin = session.getAttribute("office_admin").toString();
+            // office_embedded_dev = session.getAttribute("office_embedded_dev").toString();
         }
 
         IndentModel model = new IndentModel();
+        ItemNameModel model2 = new ItemNameModel();
 
         String search_item_name = "";
         search_by_date = request.getParameter("search_by_date");
@@ -106,6 +112,7 @@ public class IndentController extends HttpServlet {
         }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in IndentController setConnection() calling try block" + e);
         }
@@ -154,7 +161,7 @@ public class IndentController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --IndentController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -172,6 +179,7 @@ public class IndentController extends HttpServlet {
             int req_qty = 0;
             String purpose = "";
             String item_name = "";
+            String models = "";
             String expected_date_time = "";
             if (task.equals("GetItems")) {
                 List<ItemName> list = null;
@@ -182,26 +190,67 @@ public class IndentController extends HttpServlet {
                         JSONObject jsonObj = jsonArr.getJSONObject(i);
 
                         Iterator<String> keys = jsonObj.keys();
-
+                        
                         while (keys.hasNext()) {
                             String key = keys.next();
                             checkedValue = (String) jsonObj.get("checkedValue");
                             req_qty = (int) jsonObj.get("req_qty");
                             purpose = (String) jsonObj.get("purpose");
-                            item_name = (String) jsonObj.get("item_name");
+                            item_name = (String) jsonObj.get("item");
+                            models = (String) jsonObj.get("model");
                             expected_date_time = (String) jsonObj.get("expected_date_time");
                         }
                         System.out.println(jsonObj);
-                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
+                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models);
 
                     }
 
                 } else {
-                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time);
+                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models);
                 }
 
                 request.setAttribute("list", list);
                 request.getRequestDispatcher("items_list").forward(request, response);
+                return;
+            }
+
+            if (task.equals("viewPdf")) {
+                String jrxmlFilePath;
+                List list = null;
+
+                response.setContentType("application/pdf");
+                response.setCharacterEncoding("UTF-8");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+
+                String indent_table_id = request.getParameter("indent_table_id");
+
+                jrxmlFilePath = ctx.getRealPath("/IndentForm.jrxml");
+                list = model.getIndentData(indent_table_id);
+                byte[] reportInbytes = GeneralModel.generateRecordList(jrxmlFilePath, list);
+                response.setContentLength(reportInbytes.length);
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+
+                return;
+
+            }
+
+            if (task.equals("printIndentForm")) {
+                List listAll = null;
+                String jrxmlFilePath;
+                response.setContentType("application/pdf");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+
+                jrxmlFilePath = ctx.getRealPath("/BlankIndentForm.jrxml");
+
+                listAll = model.getBlankIndentData(logged_user_name);
+                autogenerate_indent_no = "Indent_" + counting;
+                byte[] reportInbytes = model.generateMapReport(jrxmlFilePath, listAll);
+                response.setContentLength(reportInbytes.length);
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
                 return;
             }
 
@@ -246,7 +295,7 @@ public class IndentController extends HttpServlet {
                     String checked_item = checked_id[i];
                     if (!checked_item.equals("")) {
                         bean.setIndent_item_id(indent_item_id);
-                        bean.setItem_name(request.getParameter("item_name" + i + ""));
+                        bean.setModel(request.getParameter("model" + i + ""));
                         bean.setPurpose(request.getParameter("purpose" + i + ""));
                         bean.setRequired_qty(Integer.parseInt(request.getParameter("req_qty" + i + "")));
                         bean.setExpected_date_time(request.getParameter("expected_date_time" + i + ""));
@@ -255,11 +304,10 @@ public class IndentController extends HttpServlet {
                         }
                     }
                 }
-
             }
 
             counting = model.getCounting();
-            String autogenerate_indent_no = "Indent_" + counting;
+            autogenerate_indent_no = "Indent_" + counting;
             String status = "";
             String searchIndentStatusWise = request.getParameter("action1");
             if (searchIndentStatusWise == null) {

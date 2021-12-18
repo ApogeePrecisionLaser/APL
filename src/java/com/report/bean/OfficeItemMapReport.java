@@ -5,6 +5,8 @@
  */
 package com.report.bean;
 
+import java.util.List;
+
 /**
  *
  * @author Komal
@@ -41,6 +43,17 @@ public class OfficeItemMapReport {
     private int generation;
     private String popupval;
     private String searchOrgOffice;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+    private String counting;
+    private List list;
+    private String color;
 
     /**
      * @return the inventory_id
@@ -460,6 +473,38 @@ public class OfficeItemMapReport {
      */
     public void setSearchOrgOffice(String searchOrgOffice) {
         this.searchOrgOffice = searchOrgOffice;
+    }
+
+    /**
+     * @return the counting
+     */
+    public String getCounting() {
+        return counting;
+    }
+
+    /**
+     * @param counting the counting to set
+     */
+    public void setCounting(String counting) {
+        this.counting = counting;
+    }
+
+    /**
+     * @return the list
+     */
+    public List getList() {
+        return list;
+    }
+
+    /**
+     * @param list the list to set
+     */
+    public void setList(List list) {
+        this.list = list;
+    }
+
+    public void setList(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
    

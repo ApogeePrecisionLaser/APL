@@ -282,6 +282,7 @@ public class ModelNameController extends HttpServlet {
                 bean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id")));
                 bean.setItem_code(map.get("item_code"));
                 bean.setLead_time(Integer.parseInt("0" + map.get("lead_time").trim()));
+                bean.setBasic_price( map.get("basic_price").trim());
                 if (map.get("model_no") == null) {
                     model_no = "";
                 } else {

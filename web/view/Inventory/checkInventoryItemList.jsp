@@ -195,6 +195,7 @@
                                     <th style="display:none"></th>
                                     <!--<th>Indent No.</th>-->
                                     <th>Item Name</th>
+                                    <th>Model</th>
                                     <th>Required Qty</th>
                                     <th>Approved Qty</th>
                                     <th>Stock Qty</th>
@@ -222,6 +223,7 @@
                                         <td style="display:none"><input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}"></td>
 
                                         <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                        <td id="${loopCounter.count }">${beanType.model}</td>
                                         <td id="${loopCounter.count }">${beanType.required_qty}</td>
 
                                         <td id="${loopCounter.count }">${beanType.approved_qty}</td>
@@ -238,43 +240,45 @@
                                 <c:choose>
 
                                     <c:when test="${beanType.item_status =='Delivered'}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.delivered_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.delivered_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
                                         </td>
                                     </c:when>
                                     <c:when test="${(beanType.item_status == 'Approved')  && (beanType.stock_qty <= beanType.required_qty)}" >
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.stock_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.stock_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="Less Stock">
                                         </td>
                                     </c:when>
 
                                     <c:when test="${(beanType.item_status == 'Approved')  && (beanType.approved_qty !=0)}" >
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.approved_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="${beanType.approved_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="">
                                         </td>
                                     </c:when>
                                     <c:when test="${beanType.item_status =='Denied'}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="0"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty"  value="0" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
                                         </td>
                                     </c:when>
                                     <c:when test="${beanType.item_status =='Delivery Challan Generated'}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" disabled="" value="${beanType.delivered_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" disabled="" value="${beanType.delivered_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text" disabled="" name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
                                         </td>
                                     </c:when>
 
 
                                     <c:when test="${(beanType.item_status == 'Approved')  && (beanType.approved_qty ==0)}">
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="${beanType.approved_qty}"></td>
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="${beanType.approved_qty}" style="width:100px"></td>
                                         <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="Denied">
                                         </td>
                                     </c:when>
 
 
                                     <c:otherwise>
-                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="0"></td>
-                                        <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" class="myAutocompleteClass" id="status${beanType.indent_item_id}" value="${beanType.item_status}">
+                                        <td><input type="text" name="deliver_qty${beanType.indent_item_id}" id="deliver_qty" value="0" style="width:100px"></td>
+                                        <td id="${loopCounter.count }"><input type="text"  name="item_status${beanType.indent_item_id}" placeholder="select status" 
+                                                                              class="myAutocompleteClass" id="status${beanType.indent_item_id}" 
+                                                                              value="${beanType.item_status}" >
                                         </td>
                                     </c:otherwise>
                                 </c:choose>

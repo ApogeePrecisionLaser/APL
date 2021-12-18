@@ -46,7 +46,7 @@ public class OrgOfficeDesignationMapModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel setConnection() Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel setConnection() Error: " + e);
         }
     }
 
@@ -57,7 +57,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getNoOfRows Error: " + e);
         }
         return noOfRows;
     }
@@ -74,7 +74,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("designation_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel getDesgnid--" + e);
         }
         return organisation_id;
     }
@@ -91,7 +91,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_designation_map_id_2");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel  getParentOrgid--" + e);
         }
         return organisation_id;
     }
@@ -108,7 +108,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_designation_map_id_1");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel getcheckorgid--" + e);
         }
         return organisation_id;
     }
@@ -146,7 +146,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add(organisation);
             }
         } catch (Exception e) {
-            System.out.println("Error:--organisation--- showData--" + e);
+            System.out.println("Error:--OrgOfficeDesignationMapModel--- showData--" + e);
         }
         // System.err.println("list--------" + list.size());
         return list;
@@ -168,6 +168,7 @@ public class OrgOfficeDesignationMapModel {
             }
 
         } catch (Exception ex) {
+            System.out.println("Error:--OrgOfficeDesignationMapModel--- getIdOfParent--" + ex);
 
         }
 
@@ -190,6 +191,7 @@ public class OrgOfficeDesignationMapModel {
             }
 
         } catch (Exception ex) {
+            System.out.println("Error:--OrgOfficeDesignationMapModel--- getDesigNameFromId--" + ex);
 
         }
 
@@ -212,6 +214,7 @@ public class OrgOfficeDesignationMapModel {
             }
 
         } catch (Exception ex) {
+            System.out.println("Error:--OrgOfficeDesignationMapModel--- getOrgNameFromId--" + ex);
 
         }
 
@@ -245,7 +248,7 @@ public class OrgOfficeDesignationMapModel {
             // System.out.println("insert query -" + pstmt);
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("Error while inserting record in insertRecord...." + e);
+            System.out.println("OrgOfficeDesignationMapModel Error while inserting record in insertRecord...." + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -326,7 +329,7 @@ public class OrgOfficeDesignationMapModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: updateRecord---updateRecord" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel---updateRecord" + e);
         } finally {
 
         }
@@ -349,6 +352,8 @@ public class OrgOfficeDesignationMapModel {
 
             }
         } catch (Exception e) {
+            System.out.println("Error: OrgOfficeDesignationMapModel---getRevisionno" + e);
+
         }
         return revision;
     }
@@ -367,7 +372,7 @@ public class OrgOfficeDesignationMapModel {
             rowsAffected = psmt.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel  deleteRecord Error: " + e);
         }
         if (rowsAffected > 0) {
 
@@ -399,7 +404,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrgOfficeDesignationMapModel--getOrganisation_Name()-- " + e);
         }
         return list;
     }
@@ -422,7 +427,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrgOfficeDesignationMapModel--searchOrganisation_Name()-- " + e);
         }
         return list;
     }
@@ -456,7 +461,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel searchDesignation Error: " + e);
         }
         return list;
     }
@@ -472,7 +477,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel getOrganisation_id--" + e);
         }
         return organisation_id;
     }
@@ -488,7 +493,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             org_office_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrganisationOfficeId--" + e);
+            System.out.println("OrgOfficeDesignationMapModel Error: getOrganisationOfficeId--" + e);
         }
         return org_office_id;
     }
@@ -506,7 +511,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("generation");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("OrgOfficeDesignationMapModel Error: getParentGeneration--" + e);
         }
         return organisation_id;
     }
@@ -522,7 +527,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("designation_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel getDesignation_id--" + e);
         }
         return organisation_id;
     }
@@ -538,7 +543,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             designation_name = rset.getString("designation");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel getDesignation_name--" + e);
         }
         return designation_name;
     }
@@ -564,7 +569,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No Such Organisation Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOffice()-- " + e);
+            System.out.println("Error:OrgOfficeDesignationMapModel--OrgOffice()-- " + e);
         }
         return list;
     }
@@ -589,7 +594,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:OrgOfficeDesignationMapModel--getOrgOfficeNameSearch()-- " + e);
         }
         return list;
     }
@@ -612,7 +617,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:OrgOfficeDesignationMapModel--getOrgOfficeCodeSearch()-- " + e);
         }
         return list;
     }
@@ -635,7 +640,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Generation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrgOfficeDesignationMapModel--getGeneration()-- " + e);
         }
         return list;
     }
@@ -651,7 +656,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeDesignationMapModel getOrgOfficeType_id--" + e);
         }
         return organisation_id;
     }
@@ -666,7 +671,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("city_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getCity_id Error: " + e);
         }
         return city_id;
     }
@@ -681,7 +686,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getDesgn_id Error: " + e);
         }
         return city_id;
     }
@@ -696,7 +701,7 @@ public class OrgOfficeDesignationMapModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("designation_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getDesgn_idd Error: " + e);
         }
         return city_id;
     }
@@ -724,7 +729,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such City Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getCityName Error: " + e);
         }
         return list;
     }
@@ -752,7 +757,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Designation Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getHierarchy Error: " + e);
         }
         return list;
     }
@@ -777,7 +782,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getStateName Error: " + e);
         }
         return list;
     }
@@ -821,7 +826,7 @@ public class OrgOfficeDesignationMapModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel getParentdesignation Error: " + e);
         }
         return list;
     }
@@ -838,7 +843,7 @@ public class OrgOfficeDesignationMapModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel closeConnection() Error: " + e);
+            System.out.println("OrgOfficeDesignationMapModel closeConnection() Error: " + e);
         }
     }
 }

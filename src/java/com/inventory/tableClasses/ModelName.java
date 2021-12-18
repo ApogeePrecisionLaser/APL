@@ -9,6 +9,20 @@ package com.inventory.tableClasses;
  * @author Komal
  */
 public class ModelName {
+
+    /**
+     * @return the basic_price
+     */
+    public String getBasic_price() {
+        return basic_price;
+    }
+
+    /**
+     * @param basic_price the basic_price to set
+     */
+    public void setBasic_price(String basic_price) {
+        this.basic_price = basic_price;
+    }
     
     private int model_id;
     private String model;
@@ -31,6 +45,7 @@ public class ModelName {
     private String destination_path;
     private String model_no;
     private String part_no;
+    private String basic_price;
     
     /**
      * @return the model_id

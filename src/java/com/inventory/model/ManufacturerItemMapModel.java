@@ -36,11 +36,10 @@ public class ManufacturerItemMapModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("ManufacturerItemModelMapModel setConnection() Error: " + e);
+            System.out.println("ManufacturerItemMapModel setConnection() Error: " + e);
         }
     }
-    
-    
+
     public List<ManufacturerItemMap> showData(String searchManufacturer, String searchItem) {
         PreparedStatement pstmt = null;
         String query;
@@ -234,6 +233,7 @@ public class ManufacturerItemMapModel {
                 revision = rset.getInt("revision_no");
             }
         } catch (Exception e) {
+            System.out.println("Error: ManufacturerItemMapModel---getRevisionno" + e);
         }
         return revision;
     }
@@ -249,7 +249,7 @@ public class ManufacturerItemMapModel {
             psmt = connection.prepareStatement(query);
             rowsAffected = psmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("ManufacturerItemMapModel Error: " + e);
+            System.out.println("ManufacturerItemMapModel deleteRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -341,7 +341,7 @@ public class ManufacturerItemMapModel {
             rset.next();
             manufacturer_id = rset.getInt("manufacturer_id");
         } catch (Exception e) {
-            System.out.println("Error: ManufacturerItemMapModel--" + e);
+            System.out.println("Error: ManufacturerItemMapModel getManufacturerId--" + e);
         }
         return manufacturer_id;
     }
@@ -357,7 +357,7 @@ public class ManufacturerItemMapModel {
             rset.next();
             item_id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("Error: ManufacturerItemMapModel--" + e);
+            System.out.println("Error: ManufacturerItemMapModel getItemId--" + e);
         }
         return item_id;
     }
@@ -373,7 +373,7 @@ public class ManufacturerItemMapModel {
             rset.next();
             model_id = rset.getInt("model_id");
         } catch (Exception e) {
-            System.out.println("Error: ManufacturerItemMapModel--" + e);
+            System.out.println("Error: ManufacturerItemMapModel getModelId--" + e);
         }
         return model_id;
     }
@@ -390,7 +390,7 @@ public class ManufacturerItemMapModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel closeConnection() Error: " + e);
+            System.out.println("ManufacturerItemMapModel closeConnection() Error: " + e);
         }
     }
 }

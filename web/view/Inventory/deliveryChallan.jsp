@@ -132,6 +132,29 @@
         document.getElementById("save").disabled = false;
     }
 
+    function openPopUp(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+        return window.open(url, window_name, window_features);
+    }
+
+    function displayReportPrint() {
+        // alert("ef");
+        var counter = document.getElementById("counter").value;
+        var delivered_qty = document.getElementById("delivered_qty").value;
+        var delivery_challan_date = document.getElementById("delivery_challan_date").value;
+        var indent_no = document.getElementById("indent_no").value;
+        var delivery_challan_no = document.getElementById("delivery_challan_no").value;
+        var item_name = document.getElementById("item_name").value;
+        var model = document.getElementById("model").value;
+
+        var queryString = "task=generateDeliveryReport&counter=" + counter + "&delivered_qty=" + delivered_qty + "&delivery_challan_date=" + delivery_challan_date + "&indent_no=" + indent_no + "&delivery_challan_no=" + delivery_challan_no + "&item_name=" + item_name + "&model=" + model;
+        var url = "DeliverItemController?" + queryString;
+        popupwin = openPopUp(url, "Delivery Challan", 500, 1000);
+
+    }
+
 
 </script>
 
@@ -149,7 +172,8 @@
         <div class="headBox">
             <h5 class="">Data Entry</h5>
         </div>
-        <form name="form2" method="POST" action="DeliverItemController" onsubmit="return verify()" >
+        <form name="form2" method="POST" action="DeliverItemController" enctype="multipart/form-data" >
+        <!--<form name="form2" method="POST" action="DeliverItemController" >-->
             <input type="hidden" name="delivery_status" id="delivery_status" value="${delivery_status}">
             <input type="hidden" name="delivery_indent_table_id" id="delivery_indent_table_id"  value="${delivery_indent_table_id}">
             <input type="hidden" name="delivery_message" id="delivery_message" value="${delivery_message}">
@@ -182,52 +206,57 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="row mt-3 myTable">
-                    <div class="col-md-12">
-                        <div class="table-responsive verticleScroll">
-                            <table class="table table-striped table-bordered" id="mytable" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>S.No.</th>
-                                        <th>Item Name</th>
-                                        <th>Required Qty</th>
-                                        <th>Approved Qty</th>
-                                        <th>Stock Qty</th>
-                                        <th>Deliver Qty</th>
-                                        <th>Status</th>
-                                        <th>Purpose</th>
-                                        <th>Expected Date</th>
+            <div class="row mt-3 myTable">
+                <div class="col-md-12">
+                    <div class="table-responsive verticleScroll">
+                        <table class="table table-striped table-bordered" id="mytable" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Item Name</th>
+                                    <th>Model</th>
+                                    <th>Required Qty</th>
+                                    <th>Approved Qty</th>
+                                    <th>Stock Qty</th>
+                                    <th>Deliver Qty</th>
+                                    <th>Status</th>
+                                    <th>Purpose</th>
+                                    <th>Expected Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="beanType" items="${requestScope['deliverey_challan_items_list']}"
+                                           varStatus="loopCounter">
+
+                                    <tr >
+
+                                        <td>${loopCounter.count }
+                                            <input type="hidden" name="counter" id="counter" value="${loopCounter.count }">
+                                            <input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}">
+                                            <input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}">
+                                            <input type="hidden" name="item_name${beanType.indent_item_id}" id="item_name" value="${beanType.item_name}">
+                                            <input type="hidden" name="model${beanType.indent_item_id}" id="model" value="${beanType.model}">
+                                            <input type="hidden" name="requested_by" id="requested_by" value="${beanType.requested_by}">
+                                            <input type="hidden" name="requested_to" id="requested_to" value="${beanType.requested_to}">
+                                        </td>
+
+
+                                        <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                        <td id="${loopCounter.count }">${beanType.model}</td>
+                                        <td id="${loopCounter.count }">${beanType.required_qty}</td> 
+                                        <td id="${loopCounter.count }">${beanType.approved_qty}</td> 
+                                        <td id="${loopCounter.count }">${beanType.stock_qty}</td> 
+                                        <td id="${loopCounter.count }"><input type="text" name="delivered_qty${beanType.indent_item_id}" id="delivered_qty"
+                                                                              value="${beanType.delivered_qty}" style="width:70px"></td> 
+                                        <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" id="item_status" value="${beanType.status}"></td> 
+                                        <td id="${loopCounter.count }">${beanType.purpose}</td> 
+                                        <td id="${loopCounter.count }">${beanType.expected_date_time}</td> 
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="beanType" items="${requestScope['deliverey_challan_items_list']}"
-                                               varStatus="loopCounter">
-
-                                        <tr >
-
-                                            <td>${loopCounter.count }
-                                                <input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}">
-                                                <input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}">
-                                                <input type="hidden" name="item_name${beanType.indent_item_id}" id="item_name" value="${beanType.item_name}">
-                                                <input type="hidden" name="requested_by" id="requested_by" value="${beanType.requested_by}">
-                                                <input type="hidden" name="requested_to" id="requested_to" value="${beanType.requested_to}">
-                                            </td>
-
-
-                                            <td id="${loopCounter.count }">${beanType.item_name}</td>
-                                            <td id="${loopCounter.count }">${beanType.required_qty}</td> 
-                                            <td id="${loopCounter.count }">${beanType.approved_qty}</td> 
-                                            <td id="${loopCounter.count }">${beanType.stock_qty}</td> 
-                                            <td id="${loopCounter.count }"><input type="text" name="delivered_qty${beanType.indent_item_id}" id="delivered_qty" value="${beanType.delivered_qty}"></td> 
-                                            <td id="${loopCounter.count }"><input type="text" name="item_status${beanType.indent_item_id}" id="item_status" value="${beanType.status}"></td> 
-                                            <td id="${loopCounter.count }">${beanType.purpose}</td> 
-                                            <td id="${loopCounter.count }">${beanType.expected_date_time}</td> 
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div
+                                </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -239,8 +268,8 @@
                         </div>
                     </div>
                 </div>
-            </div>      
-            <hr>
+            </div>
+
             <div class="row">
                 <div id="message">
                     <c:if test="${not empty message}">
@@ -250,10 +279,13 @@
                         </div>
                     </c:if>
                 </div>
-                <input type="hidden" id="clickedButton" value="">
-                <div class="col-md-12 text-center">                       
 
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Deliver Items" onclick="makeEditable(id);">
+                <input type="hidden" id="clickedButton" value="">
+                <div class="col-md-12 text-center">    
+                    <input type="file" value="Upload" name="up" id="up">
+                    <input type="button" class="btn normalBtn" name="task" id="" value="Print Challan" onclick="displayReportPrint(id);">
+                    <input type="submit" class="btn normalBtn" name="task" id="save"  value="Upload Challan & Deliver Items" onclick="makeEditable(id);">
+                    <!--<input type="submit" class="btn normalBtn" name="task" id="save"  value="Deliver Items" onclick="makeEditable(id);">-->
                 </div>
             </div>
         </form>

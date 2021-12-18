@@ -102,7 +102,7 @@
                 },
                 select: function (events, ui) {
                     console.log(ui);
-                    $(this).val(ui.item.label); // display the selected text
+                    $(this).val(ui.item.label);
                     return false;
                 }
             });
@@ -110,6 +110,7 @@
         );
     });
     function enableFields(i) {
+       // alert(i);
         document.getElementById("required_qty" + i).disabled = false;
         document.getElementById("expected_date_time" + i).disabled = false;
         document.getElementById("purpose" + i).disabled = false;
@@ -117,7 +118,7 @@
 
 
 
-    function closeSelf() {//alert("import btn clicked");
+    function closeSelf() {
         var prevVal = opener.document.getElementById("String_data").value;
         var checkedValue = null;
         var inputElements = document.getElementsByClassName('messageCheckbox');
@@ -125,12 +126,13 @@
         for (var i = 0; i < inputElements.length; i++) {
             if (inputElements[i].checked) {
                 checkedValue = inputElements[i].value;
-                var item_name = $('#item_name' + checkedValue + '').val();
+                var model = $('#item_name' + checkedValue + '').val();
+                var item = $('#item' + checkedValue + '').val();
                 var req_qty = $('#required_qty' + checkedValue + '').val();
                 var purpose = $('#purpose' + checkedValue + '').val();
                 var expected_date_time = $('#expected_date_time' + checkedValue + '').val();
 
-                data += '{"checkedValue":"' + checkedValue + '","item_name":"' + item_name + '", "req_qty":' + req_qty + ', "purpose":"' + purpose + '","expected_date_time":"' + expected_date_time + '"},';
+                data += '{"checkedValue":"' + checkedValue + '","item":"' + item + '","model":"' + model + '", "req_qty":' + req_qty + ', "purpose":"' + purpose + '","expected_date_time":"' + expected_date_time + '"},';
 
             } else {
                 opener.document.getElementById("String_data").value = "";
@@ -139,10 +141,8 @@
         if (prevVal != "") {
             data = prevVal + data;
         }
-        
-        window.opener.document.getElementById("String_data").value = data;
-        
 
+        window.opener.document.getElementById("String_data").value = data;
         //opener.location.reload();
         //window.opener.location.reload();
         window.close();
@@ -175,31 +175,45 @@
                         <c:choose>
                             <c:when test="${beanType.superp =='Y'}">
                                 <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                    <td id="${beanType.item_names_id}" data-column="name">${beanType.item_name}
+                                        <input type="hidden" name="item_name${beanType.model_id}" id="item_name${beanType.model_id}" value="${beanType.item_name}" disabled>
+                                        <input type="hidden" name="item${beanType.model_id}" id="item${beanType.model_id}" value="${beanType.item}" disabled>
+                                    </td>
 
-                                    <td id="${beanType.item_names_id}" data-column="name">${beanType.item_name}</td>
-
-                                <input type="hidden" name="item_name${beanType.item_names_id}" id="item_name${beanType.item_names_id}" value="${beanType.item_name}" disabled>
-
-                                <c:choose>
-                                    <c:when test="${beanType.checkedValue ==beanType.item_names_id}">
-                                        <td> <input type="checkbox" class="Checkbox" value="${beanType.item_names_id}" name="checkbox${beanType.item_names_id}" id="checkbox${beanType.item_names_id}" 
-                                                    onclick="enableFields(${beanType.item_names_id})" checked="" disabled=""></td>
-                                        <td><input style="width:100px;font-size:13px" type="text" value="${beanType.checked_req_qty}" name="required_qty${beanType.item_names_id}" id="required_qty${beanType.item_names_id}" placeholder="Qty" disabled></td>
-                                        <td><input style="width:100px;font-size:13px" type="text" class="datepicker" value="${beanType.checked_expected_date_time}" name="expected_date_time${beanType.item_names_id}" id="expected_date_time${beanType.item_names_id}" placeholder="Qty" disabled></td>
-                                        <td><input style="width:100px;font-size:13px" value="${beanType.checked_purpose}" class="myAutocompleteClass" type="text" name="purpose${beanType.item_names_id}" id="purpose${beanType.item_names_id}" placeholder="Purpose" disabled></td>
+                                    <c:choose>
+                                        <c:when test="${beanType.checkedValue ==beanType.model_id}">
+                                            <td>
+                                                <input type="checkbox" class="Checkbox" value="${beanType.model_id}" name="checkbox${beanType.model_id}" id="checkbox${beanType.model_id}" 
+                                                       onclick="enableFields(${beanType.model_id})" checked="" disabled="">
+                                            </td>
+                                            <td>
+                                                <input style="width:100px;font-size:13px" type="text" value="${beanType.checked_req_qty}" name="required_qty${beanType.model_id}" id="required_qty${beanType.model_id}" placeholder="Qty" disabled>
+                                            </td>
+                                            <td>
+                                                <input style="width:100px;font-size:13px" type="text" class="datepicker" value="${beanType.checked_expected_date_time}" name="expected_date_time${beanType.model_id}" id="expected_date_time${beanType.model_id}" placeholder="Qty" disabled>
+                                            </td>
+                                            <td>
+                                                <input style="width:100px;font-size:13px" value="${beanType.checked_purpose}" class="myAutocompleteClass" type="text" name="purpose${beanType.model_id}" id="purpose${beanType.model_id}" placeholder="Purpose" disabled>
+                                            </td>
                                         </c:when>
                                         <c:otherwise>
-                                        <td> <input type="checkbox" class="messageCheckbox" value="${beanType.item_names_id}" name="checkbox${beanType.item_names_id}" id="checkbox${beanType.item_names_id}" 
-                                                    onclick="enableFields(${beanType.item_names_id})"></td>
-                                        <td><input style="width:100px;font-size:13px" type="text" value="" name="required_qty${beanType.item_names_id}" id="required_qty${beanType.item_names_id}" placeholder="Qty" disabled></td>
-                                        <td><input style="width:100px;font-size:13px" class="datepicker" type="text" value="" name="expected_date_time${beanType.item_names_id}" id="expected_date_time${beanType.item_names_id}" placeholder="Expected Date" disabled></td>
-                                        <td><input style="width:100px;font-size:13px" value="" class="myAutocompleteClass" type="text" name="purpose${beanType.item_names_id}" id="purpose${beanType.item_names_id}" placeholder="Purpose" disabled></td>
+                                            <td>
+                                                <input type="checkbox" class="messageCheckbox" value="${beanType.model_id}" name="checkbox${beanType.model_id}" id="checkbox${beanType.model_id}" 
+                                                       onclick="enableFields(${beanType.model_id})">
+                                            </td>
+                                            <td>
+                                                <input style="width:100px;font-size:13px" type="text" value="" name="required_qty${beanType.model_id}" id="required_qty${beanType.model_id}" placeholder="Qty" disabled>
+                                            </td>
+                                            <td>
+                                                <input style="width:100px;font-size:13px" class="datepicker" type="text" value="" name="expected_date_time${beanType.model_id}" id="expected_date_time${beanType.model_id}" placeholder="Expected Date" disabled>
+                                            </td>
+                                            <td>
+                                                <input style="width:100px;font-size:13px" value="" class="myAutocompleteClass" type="text" name="purpose${beanType.model_id}" id="purpose${beanType.model_id}" placeholder="Purpose" disabled>
+                                            </td>
                                         </c:otherwise>
                                     </c:choose>
-
                                 </tr>
                             </c:when>
-
                             <c:otherwise>
                                 <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
                                     <td id="${beanType.item_names_id }" data-column="name">${beanType.item_name}</td>
@@ -207,16 +221,12 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-
-
                                 </tr>
                             </c:otherwise>
                         </c:choose>
-
                     </c:forEach>
                     </tbody>
                 </table>
-
             </div>      
             <hr>
             <div class="row">

@@ -232,6 +232,7 @@
         document.getElementById("item_name").disabled = false;
         //  document.getElementById("item_code").disabled = false;
         document.getElementById("quantity").disabled = false;
+        document.getElementById("HSNCode").disabled = false;
         document.getElementById("prefix").disabled = false;
         document.getElementById("description").disabled = false;
         document.getElementById("parent_item").disabled = false;
@@ -336,18 +337,19 @@
         $('#prefix').val($("#" + count + '3').html());
         $('#item_type').val($("#" + count + '5').html());
         $('#quantity').val($("#" + count + '6').html());
-        if (($("#" + count + '9').text()) != "") {
-            $('#parent_item').val($("#" + count + '9').html() + " - " + $("#" + count + '11').html());
+        $('#HSNCode').val($("#" + count + '7').html());
+        if (($("#" + count + '10').text()) != "") {
+            $('#parent_item').val($("#" + count + '10').html() + " - " + $("#" + count + '12').html());
         } else {
-            $('#parent_item').val($("#" + count + '9').html());
+            $('#parent_item').val($("#" + count + '10').html());
         }
-        var super_child = $("#" + count + '10').html();
+        var super_child = $("#" + count + '11').html();
         if (super_child == 'Y') {
             $('#supery').attr('checked', true);
         } else {
             $('#supern').attr('checked', true);
         }
-        $('#description').val($("#" + count + '8').html());
+        $('#description').val($("#" + count + '9').html());
         document.getElementById("edit").disabled = false;
         document.getElementById("delete").disabled = false;
     }
@@ -355,8 +357,10 @@
         var is_super_child = $("input[name='super']:checked").val();
         if (is_super_child == 'Y') {
             $('#quantity_div').show();
+            $('#HSNCode_div').show();
         } else {
             $('#quantity_div').hide();
+            $('#HSNCode_div').hide();
         }
     }
     function getOrgChartData(item_name) {
@@ -438,6 +442,7 @@
                 <th>Item Code</th>
                 <th>Item Type</th>
                 <th>Quantity</th>
+                <th>HSN CODE</th>
                 <th>Generation</th>
                 <th>Description</th>
                 <th style="display:none"></th>
@@ -455,12 +460,13 @@
                         <td id="${loopCounter.count }4">${beanType.item_code}</td>                                               
                         <td id="${loopCounter.count }5">${beanType.item_type}</td>                                               
                         <td id="${loopCounter.count }6">${beanType.quantity}</td> 
-                        <td id="${loopCounter.count }7">${beanType.generation}</td>
-                        <td id="${loopCounter.count }8">${beanType.description}</td> 
-                        <td id="${loopCounter.count }9" style="display:none">${beanType.parent_item}</td>
-                        <td id="${loopCounter.count }10" style="display:none">${beanType.superp}</td>
-                        <td id="${loopCounter.count }11" style="display:none">${beanType.parent_item_code}</td>
-                        <td id="${loopCounter.count }12">
+                        <td id="${loopCounter.count }7">${beanType.HSNCode}</td> 
+                        <td id="${loopCounter.count }8">${beanType.generation}</td>
+                        <td id="${loopCounter.count }9">${beanType.description}</td> 
+                        <td id="${loopCounter.count }10" style="display:none">${beanType.parent_item}</td>
+                        <td id="${loopCounter.count }11" style="display:none">${beanType.superp}</td>
+                        <td id="${loopCounter.count }12" style="display:none">${beanType.parent_item_code}</td>
+                        <td id="${loopCounter.count }13">
                             <input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart" onclick="getOrgChartData('${beanType.item_name}')">
                         </td>
 
@@ -546,7 +552,19 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row mt-3">
 
+                <div class="col-md-3" style="display:none" id="HSNCode_div">
+                    <div class="">
+                        <div class="form-group">
+                            <label>HSN CODE<span class="text-danger">*</span></label>
+                            <input class="form-control myInput" type="text" id="HSNCode" name="HSNCode" value="" disabled>
+                        </div>
+                    </div>
+                </div>
+            </DIV>
+            <div class="row mt-12">
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
@@ -556,37 +574,38 @@
                         </div>
                     </div>
                 </div>
-            </div>      
-            <hr>
-            <div class="row">
-                <div id="message">
-                    <c:if test="${not empty message}">
-                        <div class="col-md-12 text-center">
-                            <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-                        </div>
-                    </c:if>
-                </div>
-                <input type="hidden" id="clickedButton" value="">
-                <div class="col-md-12 text-center">                       
-                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','update') eq 'True'}">
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
-                    </c:if>
-                    
-                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','insert') eq 'True'}">
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
-                    </c:if>
-                    
-                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','insert') eq 'True'}">
-                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
-                    </c:if>
-                    
-                    <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','delete') eq 'True'}">
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
-                    </c:if>
-                </div>
             </div>
-        </form>
+    </div>      
+    <hr>
+    <div class="row">
+        <div id="message">
+            <c:if test="${not empty message}">
+                <div class="col-md-12 text-center">
+                    <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
+                </div>
+            </c:if>
+        </div>
+        <input type="hidden" id="clickedButton" value="">
+        <div class="col-md-12 text-center">                       
+            <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','update') eq 'True'}">
+                <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+            </c:if>
+
+            <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','insert') eq 'True'}">
+                <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+            </c:if>
+
+            <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','insert') eq 'True'}">
+                <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+            </c:if>
+
+            <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemNameController','delete') eq 'True'}">
+                <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+            </c:if>
+        </div>
     </div>
+</form>
+</div>
 </section>
 
 <%@include file="../layout/footer.jsp" %>

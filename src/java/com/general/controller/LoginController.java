@@ -5,10 +5,21 @@
 package com.general.controller;
 
 import com.DBConnection.DBConnection;
+import com.dashboard.bean.DealersOrder;
+import com.dashboard.bean.Enquiry;
+import com.dashboard.bean.Profile;
+import com.dashboard.model.DealersOrderModel;
+import com.dashboard.model.EnquiryModel;
+import com.dashboard.model.ProfileModel;
 import com.general.model.LoginModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,34 +43,39 @@ public class LoginController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         ServletContext ctx = getServletContext();
         LoginModel model = new LoginModel();
+        DealersOrderModel dealersOrderModel = new DealersOrderModel();
+        ProfileModel profileModel = new ProfileModel();
+        EnquiryModel enquiryModel = new EnquiryModel();
         model.setDriverClass(ctx.getInitParameter("driverClass"));
         model.setConnectionString(ctx.getInitParameter("connectionString"));
+
+        profileModel.setConnection(DBConnection.getConnectionForUtf(ctx));
+        dealersOrderModel.setConnection(DBConnection.getConnectionForUtf(ctx));
+        enquiryModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         HttpSession session = request.getSession();
         String task = request.getParameter("task");
         if (task == null || task.isEmpty()) {
             task = "";
         }
-        
-        
+
 //        try {
 //            model.setConnection((Connection) DBConnection.getConnectionForUtf(ctx));
 //        } catch (Exception e) {
 //            System.out.print(e);
 //        }     
-
         try {
             System.out.println("conn -" + model);
 
             if (task.equals("login")) {
                 String user_name = request.getParameter("user_name");
                 String password = request.getParameter("password");
-                
-              model.setUserFullDetail(user_name, password);
-                
+
+                model.setUserFullDetail(user_name, password);
+
                 int count = model.checkLogin(user_name, password);
 
                 session.setAttribute("log_user", user_name);
@@ -73,7 +89,7 @@ public class LoginController extends HttpServlet {
 
                 session.setAttribute("user_name", user_name);
                 session.setAttribute("password", password);
-                
+
                 session.setAttribute("mode", "data");
 
                 designation = model.getDesignation(user_name, password);
@@ -86,7 +102,8 @@ public class LoginController extends HttpServlet {
                 int logged_org_office_id = model.getOrgOfficeId(user_name, password);
                 String logged_org_name = model.getOrgName(user_name, password);
                 String logged_org_office = model.getOrgOffice(user_name, password);
-                String office_admin = model.getOfficeAdmin(user_name, password, logged_org_office_id);
+                String office_admin = model.getOfficeAdmin(user_name, password, logged_org_office_id, designation);
+                //  String office_embedded_dev = model.getOfficeEmbeddedDeveloper(user_name, password, logged_org_office_id);
 
                 if (count > 0) {
                     session.setAttribute("logged_user_name", user_name);
@@ -97,7 +114,29 @@ public class LoginController extends HttpServlet {
                     session.setAttribute("logged_org_office", logged_org_office);
                     session.setAttribute("logged_key_person_id", logged_key_person_id);
                     session.setAttribute("office_admin", office_admin);
-                    request.getRequestDispatcher("dashboard").forward(request, response);
+                    // session.setAttribute("office_embedded_dev", office_embedded_dev);
+
+                    if (session.getAttribute("user_role").equals("Admin")) {
+                        ArrayList<DealersOrder> total_orders_list = dealersOrderModel.getAllHistoryOrders(user_name, session.getAttribute("user_role").toString());
+                        List<Profile> dealers_list = profileModel.getAllDealers();
+                        ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
+
+                        request.setAttribute("total_orders", total_orders_list.size());
+                        request.setAttribute("total_dealers", total_orders_list.size());
+                        request.setAttribute("total_enquiries", total_enquiries_list.size());
+
+                        request.getRequestDispatcher("admin_dashboard").forward(request, response);
+
+                    }
+                    if (session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales")) {
+                        ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllOrders(user_name,  session.getAttribute("user_role").toString());
+                        request.setAttribute("pending_orders", pending_orders_list.size());
+                        request.getRequestDispatcher("CRMDashboard").forward(request, response);
+
+                    } else {
+                        request.getRequestDispatcher("dashboard").forward(request, response);
+                    }
+//                    request.getRequestDispatcher("dashboard").forward(request, response);
                 } else {
                     request.setAttribute("message", "Credentials mis-match!");
                     request.getRequestDispatcher("/").forward(request, response);
@@ -144,7 +183,11 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -158,7 +201,11 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

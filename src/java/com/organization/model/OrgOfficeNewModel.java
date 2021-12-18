@@ -47,7 +47,7 @@ public class OrgOfficeNewModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel setConnection() Error: " + e);
+            System.out.println("OrgOfficeNewModel setConnection() Error: " + e);
         }
     }
 
@@ -58,7 +58,7 @@ public class OrgOfficeNewModel {
             rset.next();    // move cursor from BOR to valid record.
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeNewModel getNoOfRows Error: " + e);
         }
         return noOfRows;
     }
@@ -86,7 +86,7 @@ public class OrgOfficeNewModel {
             rset.next();    // move cursor from BOR to valid record.
             noOfRowNUM = Integer.parseInt(rset.getString("count"));
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeNewModel getNoOfRows Error: " + e);
         }
         return noOfRowNUM;
     }
@@ -138,7 +138,7 @@ public class OrgOfficeNewModel {
                 list.add(organisation);
             }
         } catch (Exception e) {
-            System.out.println("Error:--organisation--- showData--" + e);
+            System.out.println("Error:--OrgOfficeNewModel--- showData--" + e);
         }
         return list;
     }
@@ -159,6 +159,7 @@ public class OrgOfficeNewModel {
             }
 
         } catch (Exception ex) {
+            System.out.println("Error:--OrgOfficeNewModel--- getIdOfParent--" + ex);
 
         }
 
@@ -207,7 +208,7 @@ public class OrgOfficeNewModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: organisation---insertRecord" + e);
+            System.out.println("Error: OrgOfficeNewModel---insertRecord" + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -449,7 +450,7 @@ public class OrgOfficeNewModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error: updateRecord---updateRecord" + e);
+            System.out.println("Error: updateRecord---OrgOfficeNewModel" + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -476,6 +477,8 @@ public class OrgOfficeNewModel {
 
             }
         } catch (Exception e) {
+            System.out.println("Error: getRevisionno---OrgOfficeNewModel" + e);
+
         }
         return revision;
     }
@@ -486,7 +489,7 @@ public class OrgOfficeNewModel {
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeNewModel  deleteRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -516,7 +519,7 @@ public class OrgOfficeNewModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrgOfficeNewModel--organisation_Name()-- " + e);
         }
         return list;
     }
@@ -539,7 +542,7 @@ public class OrgOfficeNewModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrgOfficeNewModel--getOrganisation_Name()-- " + e);
         }
         return list;
     }
@@ -555,7 +558,7 @@ public class OrgOfficeNewModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeNewModel getOrganisation_id--" + e);
         }
         return organisation_id;
     }
@@ -582,7 +585,7 @@ public class OrgOfficeNewModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:OrgOfficeNewModel--OrgOfficeType()-- " + e);
         }
         return list;
     }
@@ -613,7 +616,7 @@ public class OrgOfficeNewModel {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:OrgOfficeNewModel--getOrgOfficeNameSearch()-- " + e);
         }
         return list;
     }
@@ -640,7 +643,7 @@ public class OrgOfficeNewModel {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--office code()-- " + e);
+            System.out.println("Error:OrgOfficeNewModel--getOrgOfficeCodeSearch()-- " + e);
         }
         return list;
     }
@@ -657,7 +660,7 @@ public class OrgOfficeNewModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: OrgOfficeNewModel getOrgOfficeType_id--" + e);
         }
         return organisation_id;
     }
@@ -672,7 +675,7 @@ public class OrgOfficeNewModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("city_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeNewModel getCity_id Error: " + e);
         }
         return city_id;
     }
@@ -700,7 +703,7 @@ public class OrgOfficeNewModel {
                 list.add("No such City Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeNewModel  getCityName Error: " + e);
         }
         return list;
     }
@@ -723,7 +726,7 @@ public class OrgOfficeNewModel {
                 list.add("No such State Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrgOfficeNewModel getStateName Error: " + e);
         }
         return list;
     }
@@ -745,7 +748,7 @@ public class OrgOfficeNewModel {
 //            export.setParameter(JRExporterParameter.OUTPUT_STREAM, byteArray);
 //            export.exportReport();
         } catch (Exception e) {
-            System.out.println("Error: in OrgOfficeModel generatReport() JRException: " + e);
+            System.out.println("Error: in OrgOfficeNewModel generateOrganisationOfficeList() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -764,7 +767,7 @@ public class OrgOfficeNewModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, reportInbytes);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("Error: in OrgOfficeModel generatReport() JRException: " + e);
+            System.out.println("Error: in OrgOfficeNewModel generateOrganisationOfficeExcelList() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -778,7 +781,7 @@ public class OrgOfficeNewModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, mymap, con);
         } catch (Exception e) {
-            System.out.println("Error: in OrgOfficeModel generatReport() JRException: " + e);
+            System.out.println("Error: in OrgOfficeNewModel generateofficeAddressList() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -795,7 +798,7 @@ public class OrgOfficeNewModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel closeConnection() Error: " + e);
+            System.out.println("OrgOfficeNewModel closeConnection() Error: " + e);
         }
     }
 }

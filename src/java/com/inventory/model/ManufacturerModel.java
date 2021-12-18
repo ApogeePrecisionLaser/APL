@@ -31,20 +31,18 @@ public class ManufacturerModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("ItemTypeModel setConnection() Error: " + e);
+            System.out.println("ManufacturerModel setConnection() Error: " + e);
         }
     }
 
     public List<Manufacturer> showData(String searchManufacturer, String active) {
         List<Manufacturer> list = new ArrayList<Manufacturer>();
 
-        
         String query = " SELECT manufacturer_id, manufacturer_name,description FROM manufacturer where active='Y' ";
 
         if (!searchManufacturer.equals("") && searchManufacturer != null) {
             query += " and manufacturer_name='" + searchManufacturer + "' ";
         }
-        
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -151,6 +149,7 @@ public class ManufacturerModel {
 
             }
         } catch (Exception e) {
+            System.out.println("ManufacturerModel getRevisionno() Error: " + e);
         }
         return revision;
     }
@@ -208,7 +207,7 @@ public class ManufacturerModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemTypeModel closeConnection() Error: " + e);
+            System.out.println("ManufacturerModel closeConnection() Error: " + e);
         }
     }
 }

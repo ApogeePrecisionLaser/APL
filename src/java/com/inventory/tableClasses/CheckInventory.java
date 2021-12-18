@@ -30,6 +30,8 @@ public class CheckInventory {
     private int indent_item_id;
     private String item_name;
     private int item_names_id;
+     private String model;
+    private int model_id;
     private String description;
     private String indent_no;
     private int requested_by_id;
@@ -386,6 +388,34 @@ public class CheckInventory {
      */
     public void setExpected_date_time(String expected_date_time) {
         this.expected_date_time = expected_date_time;
+    }
+
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
+     * @return the model_id
+     */
+    public int getModel_id() {
+        return model_id;
+    }
+
+    /**
+     * @param model_id the model_id to set
+     */
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
     }
 
     

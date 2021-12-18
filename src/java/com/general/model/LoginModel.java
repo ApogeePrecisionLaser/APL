@@ -67,7 +67,7 @@ public class LoginModel {
             }
             //connection.close();
         } catch (Exception e) {
-            System.out.println("LoginModel getUseName() Error: " + e);
+            System.out.println("LoginModel setUserFullDetail() Error: " + e);
         }
     }
 
@@ -105,7 +105,7 @@ public class LoginModel {
 //                + " and l.key_person_id=kp.key_person_id and kp.designation_id=d.designation_id and d.active='Y' ";
 
         String query = " select  d.designation from designation d, key_person kp, user l "
-                + " where l.user_name='"+user_name+"' and l.user_password='"+password+"' and kp.active='y' "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' and kp.active='y' "
                 + " and l.key_person_id=kp.key_person_id and kp.designation_id=d.designation_id and d.active='Y' ";
         try {
             connection.setAutoCommit(false);
@@ -115,7 +115,7 @@ public class LoginModel {
                 str = rst.getString(1);
             }
         } catch (Exception e) {
-            System.out.println("getDesignation ERROR inside orderMgmtModel - " + e);
+            System.out.println("getDesignation ERROR inside LoginModel - " + e);
         }
         return str;
     }
@@ -180,13 +180,21 @@ public class LoginModel {
         return str;
     }
 
-    public String getOfficeAdmin(String user_name, String password, int logged_org_office_id) {
+    public String getOfficeAdmin(String user_name, String password, int logged_org_office_id, String designation) {
         String str = "";
+        String query ="";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
-                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
-                + " and d.designation='Owner' and  oo.active='Y' and kp.active='Y' ";
+        if (designation.equals("technician")) {
+             query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
+                    + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
+                    + " and d.designation='Embeded Software Developer' and  oo.active='Y' and kp.active='Y' ";
+        }else{
+            query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
+                    + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
+                    + " and d.designation='Owner' and  oo.active='Y' and kp.active='Y' ";
+        }
+
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -199,6 +207,27 @@ public class LoginModel {
         }
         return str;
     }
+
+//    public String getOfficeEmbeddedDeveloper(String user_name, String password, int logged_org_office_id) {
+//        String str = "";
+//        PreparedStatement pstmt;
+//        ResultSet rst;
+//        String query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
+//                + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' "
+//                + " and kp.designation_id=d.designation_id "
+//                + " and d.designation='Embeded Software Developer' and  oo.active='Y' and kp.active='Y' ";
+//        try {
+//            connection.setAutoCommit(false);
+//            pstmt = connection.prepareStatement(query);
+//            rst = pstmt.executeQuery();
+//            while (rst.next()) {
+//                str = rst.getString(1);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("getOfficeAdmin ERROR inside LoginModel - " + e);
+//        }
+//        return str;
+//    }
 
     public int getOrgNameId(String user_name, String password) {
         int str = 0;
@@ -215,7 +244,7 @@ public class LoginModel {
                 str = rst.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("getDesignation ERROR inside LoginModel - " + e);
+            System.out.println("getOrgNameId ERROR inside LoginModel - " + e);
         }
         return str;
     }

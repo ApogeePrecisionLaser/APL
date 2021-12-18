@@ -4,7 +4,9 @@
  */
 package com.inventory.controller;
 
+import com.inventory.controller.*;
 import com.DBConnection.DBConnection;
+import com.apl.order.model.DeliverOrderItemModel;
 import com.inventory.model.DeliverItemModel;
 import com.inventory.tableClasses.DeliverItem;
 import java.io.BufferedInputStream;
@@ -24,10 +26,12 @@ import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -38,9 +42,24 @@ import org.json.JSONObject;
  *
  * @author Komal
  */
+@MultipartConfig
 public class DeliverItemController extends HttpServlet {
 
     private File tmpDir;
+
+    private String extractfileName(Part part) {
+        String content = part.getHeader("content-disposition");
+        String[] items = content.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+
+        }
+
+        return null;
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -88,7 +107,7 @@ public class DeliverItemController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ApproveIndentController setConnection() calling try block" + e);
+            System.out.println("error in DeliverItemController setConnection() calling try block" + e);
         }
 
         try {
@@ -134,13 +153,41 @@ public class DeliverItemController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ApproveIndentController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --DeliverItemController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
 
             if (task == null) {
                 task = "";
+            }
+
+            if (task.equals("generateDeliveryReport")) {
+                String counter = request.getParameter("counter");
+                String delivered_qty = request.getParameter("delivered_qty");
+                String delivery_challan_date = request.getParameter("delivery_challan_date");
+                String indent_num = request.getParameter("indent_no");
+                String delivery_challan_no = request.getParameter("delivery_challan_no");
+                String item_name_report = request.getParameter("item_name");
+                
+                List listAll = null;
+                String jrxmlFilePath;
+                response.setContentType("application/pdf");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+
+//                jrxmlFilePath = ctx.getRealPath("/IndentChallan.jrxml");
+                jrxmlFilePath = ctx.getRealPath("/DeliveryChallan.jrxml");
+
+                listAll = model.showReportData(logged_user_name, office_admin, indent_num, delivery_challan_date, delivery_challan_no, item_name_report);
+                // listAll = tubeWellSurveyModel.showData(-1, -1,Pole,IvrsNo,"",FileNo,PageNo,Date,"",meterFunctional,feeder,typeOfConnection,dateTo,searchStatus,feeder_ivrs_search);
+                byte[] reportInbytes = model.generateMapReport(jrxmlFilePath, listAll);
+                response.setContentLength(reportInbytes.length);
+                response.addHeader("Content-disposition", "attachment; filename=" + indent_num);
+
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                return;
             }
             if (task.equals("GetIndentItems")) {
                 // List<ItemName> list = null;
@@ -155,18 +202,26 @@ public class DeliverItemController extends HttpServlet {
 
             if (task.equals("Delete")) {
                 // model.deleteRecord(Integer.parseInt(request.getParameter("indent_table_id")));
-            } else if ((task.equals("Deliver Items"))) {
+            } else if ((task.equals("Upload Challan & Deliver Items"))) {
+
+                String savepath = "C:\\ssadvt_repository\\DeliveryChallanPdf" + File.separator;
+                File file = new File(savepath);
+                Part part = request.getPart("up");
+                String filename = extractfileName(part);
+                part.write(savepath + File.separator + filename);
+                String image_path = savepath.concat(filename);
                 String indent_item_id_arr[] = request.getParameterValues("indent_item_id");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String delivery_challan_no = request.getParameter("delivery_challan_no");
                 String delivery_challan_date = request.getParameter("delivery_challan_date");
                 String decsription = request.getParameter("description");
-                
+
                 String message = "";
                 for (int i = 0; i < indent_item_id_arr.length; i++) {
                     int indent_item_id = Integer.parseInt(indent_item_id_arr[i]);
                     String status_item = request.getParameter("item_status" + indent_item_id);
                     String item_name = request.getParameter("item_name" + indent_item_id);
+                    String model_name = request.getParameter("model" + indent_item_id);
 
                     String requested_by_id = request.getParameter("requested_by");
                     String requsted_to = request.getParameter("requested_to");
@@ -178,14 +233,17 @@ public class DeliverItemController extends HttpServlet {
                     bean.setItem_status(status_item);
                     bean.setDelivered_qty(delivered_qty);
                     bean.setItem_name(item_name);
+                    bean.setModel(model_name);
                     bean.setRequested_by_id(Integer.parseInt(requested_by_id));
                     bean.setDescription(description);
                     bean.setIndent_table_id(indent_table_id);
                     bean.setIndent_item_id(indent_item_id);
+                    bean.setImage_path(image_path);
                     if (!status_item.equals("Denied")) {
                         message = model.updateRecord(bean, indent_item_id, indent_table_id, task, logged_org_office, logged_user_name);
                     }
                 }
+
                 message_split = message.split("&");
                 delivery_indent_table_id = indent_table_id;
 
@@ -195,7 +253,6 @@ public class DeliverItemController extends HttpServlet {
                 request.getRequestDispatcher("deliveryChallan").forward(request, response);
                 return;
             }
-
             //counting = model.getCounting();
             String autogenerate_indent_no = "Indent_" + counting;
 
@@ -213,7 +270,7 @@ public class DeliverItemController extends HttpServlet {
             request.getRequestDispatcher("deliver_item").forward(request, response);
 
         } catch (Exception ex) {
-            System.out.println("ApproveIndentController error: " + ex);
+            System.out.println("DeliverItemController error: " + ex);
         }
     }
 

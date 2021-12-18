@@ -1,3 +1,4 @@
+<%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -514,7 +515,7 @@
         queryString = "task=viewPdf&search_org_office=" + search_org_office + "&search_manufacturer=" + search_manufacturer + "&search_item_code=" + search_item_code + "&search_model=" + search_model;
         //  queryString = "task=viewPdf";
         var url = "OfficeItemMapReportController?" + queryString;
-        popupwin = openPopUp1(url, "Division List", 600, 900);
+        popupwin = openPopUp1(url, "Division List", 600, 1000);
     }
 
     function openPopUp1(url, window_name, popup_height, popup_width) {
@@ -597,48 +598,51 @@
     </div>
 </section>
 
-<section class="marginTop30">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Items List</h5>
-        </div>
-        <div class="row mt-3 table_div">
+<c:if test="${isSelectPriv eq 'Y'}">  
+    <section class="marginTop30">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Items List</h5>
+            </div>
+            <div class="row mt-3 table_div">
 
-            <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
+                <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
 
-                <tr>
-                    <th>Item Name</th>
-                    <th>Org Office</th>
-                    <th>Manufacturer Name</th>
-                    <th>Item Code</th>
-                    <th>Model Name</th>
-                    <!--                                <th>Key Person</th>
-                                                    <th>Minimum Quantity</th>
-                                                    <th>Daily Requirement</th>
-                                                    <th>Opening Balance</th>
-                                                    <th>Date Time</th>
-                                                    <th>Description</th>-->
-                </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="beanType" items="${requestScope['list']}"
-                               varStatus="loopCounter">
-                        <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-                            <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
-                            <td id="${loopCounter.count }3">${beanType.org_office}</td>   
-                            <td id="${loopCounter.count }4">${beanType.manufacturer_name}</td>   
-                            <td id="${loopCounter.count }5">${beanType.item_code}</td>
-                            <td id="${loopCounter.count }6">${beanType.model}</td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>    
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Item Name</th>
+                        <th>Org Office</th>
+                        <th>Manufacturer Name</th>
+                        <th>Item Code</th>
+                        <th>Model Name</th>
+                        <!--                                <th>Key Person</th>
+                                                        <th>Minimum Quantity</th>
+                                                        <th>Daily Requirement</th>
+                                                        <th>Opening Balance</th>
+                                                        <th>Date Time</th>
+                                                        <th>Description</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="beanType" items="${requestScope['list']}"
+                                   varStatus="loopCounter">
+                            <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                <td>${beanType.counting}</td>
+                                <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
+                                <td id="${loopCounter.count }3">${beanType.org_office}</td>   
+                                <td id="${loopCounter.count }4">${beanType.manufacturer_name}</td>   
+                                <td id="${loopCounter.count }5">${beanType.item_code}</td>
+                                <td id="${loopCounter.count }6">${beanType.model}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>    
+            </div>
         </div>
     </div>
 </div>
-</div>
 </section>
-
+</c:if>
 
 <%@include file="../layout/footer.jsp" %>
 

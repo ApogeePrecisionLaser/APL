@@ -163,7 +163,7 @@ public class OrgOfficeModel {
                 list.add(org_office_id);
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel.getAllParentChild() -" + e);
+            System.out.println("OrgOfficeModel.getAllParentChildList() -" + e);
         }
 
         String qry1 = "select org_office_id from org_office where active='Y' and parent_org_office_id='" + org_office_id + "' limit 1 ";
@@ -175,7 +175,7 @@ public class OrgOfficeModel {
                 list.add(parent_id);
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel.getAllParentChild() -" + e);
+            System.out.println("OrgOfficeModel.getAllParentChildList() -" + e);
         }
 
         try {
@@ -209,7 +209,7 @@ public class OrgOfficeModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:--organisation--- showData--" + e);
+            System.out.println("Error:--OrgOfficeModel--- getAllParentChildList--" + e);
         }
         String qry2 = "select org_office_id from org_office where active='Y' and parent_org_office_id='" + org_office_id + "' ";
         try {
@@ -219,7 +219,7 @@ public class OrgOfficeModel {
                 list.add(rstt.getInt(1));
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel.getAllParentChild() -" + e);
+            System.out.println("OrgOfficeModel.getAllParentChildList() -" + e);
         }
 
         list.removeAll(Arrays.asList(0));
@@ -240,7 +240,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgid--" + e);
+            System.out.println("Error:OrgOfficeModel  getOrgid--" + e);
         }
         return organisation_id;
     }
@@ -255,7 +255,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("parent_org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getParentOrgid--" + e);
+            System.out.println("Error: OrgOfficeModel getParentOrgid--" + e);
         }
         return organisation_id;
     }
@@ -272,7 +272,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getcheckorgid--" + e);
+            System.out.println("Error:OrgOfficeModel getcheckorgid--" + e);
         }
         return organisation_id;
     }
@@ -299,7 +299,7 @@ public class OrgOfficeModel {
             }
 
         } catch (Exception ex) {
-            System.err.println("Orgofficename error---------" + ex);
+            System.err.println("OrgOfficeModel Orgofficename error---------" + ex);
         }
 
         return id;
@@ -321,7 +321,7 @@ public class OrgOfficeModel {
             }
 
         } catch (Exception ex) {
-            System.err.println("getIdOfParent error---------" + ex);
+            System.err.println("OrgOfficeModel getIdOfParent error---------" + ex);
         }
 
         return id;
@@ -338,7 +338,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: v--" + e);
+            System.out.println("OrgOfficeModel Error: getOrg_Office_id--" + e);
         }
         return organisation_id;
     }
@@ -355,7 +355,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("generation");
         } catch (Exception e) {
-            System.out.println("Error: getParentGeneration--" + e);
+            System.out.println("OrgOfficeModel Error: getParentGeneration--" + e);
         }
         return organisation_id;
     }
@@ -408,7 +408,7 @@ public class OrgOfficeModel {
                 count = rst.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("error in insertRecord model -" + e);
+            System.out.println("OrgOfficeModel error in insertRecord model -" + e);
         }
         if (count > 0) {
             message = "Cannot save the record, already mapped!";
@@ -458,7 +458,7 @@ public class OrgOfficeModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: organisation---insertRecord" + e);
+            System.out.println("Error: OrgOfficeModel---insertRecord" + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -482,7 +482,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgofficeid--" + e);
+            System.out.println("OrgOfficeModel Error: getOrgofficeid--" + e);
         }
         return organisation_id;
     }
@@ -581,7 +581,7 @@ public class OrgOfficeModel {
 
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel updateRecord() Error: " + e);
+            System.out.println("OrgOfficeModel updateRecord() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -619,7 +619,7 @@ public class OrgOfficeModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: getMobilevalidty-" + e);
+            System.out.println("Error:OrgOfficeModel getMobilevalidty-" + e);
         }
         return list;
     }
@@ -639,7 +639,7 @@ public class OrgOfficeModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error------------" + e);
+            System.err.println("OrgOfficeModel getRevisionno error------------" + e);
         }
         return revision;
     }
@@ -699,7 +699,7 @@ public class OrgOfficeModel {
 
             }
         } catch (Exception e) {
-            System.out.println("getPointLatLong error-------" + e);
+            System.out.println("OrgOfficeModel getPointLatLong error-------" + e);
         }
 
         return lat + "," + longi;
@@ -723,7 +723,7 @@ public class OrgOfficeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--organisation_Name()-- " + e);
+            System.out.println("Error:OrgOfficeModel--organisation_Name()-- " + e);
         }
         return list;
     }
@@ -747,7 +747,7 @@ public class OrgOfficeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("getHierarchsearch ERROR - " + e);
+            System.out.println("OrgOfficeModel getHierarchsearch ERROR - " + e);
         }
         return list;
     }
@@ -770,7 +770,7 @@ public class OrgOfficeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--searchMobile()-- " + e);
+            System.out.println("Error:OrgOfficeModel--searchMobile()-- " + e);
         }
         return list;
     }
@@ -793,7 +793,7 @@ public class OrgOfficeModel {
                 list.add("No such Organisation Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrganisation_Name()-- " + e);
+            System.out.println("Error:OrgOfficeModel--getOrganisation_Name()-- " + e);
         }
         return list;
     }
@@ -816,7 +816,7 @@ public class OrgOfficeModel {
                 list.add("No such Generation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getGeneration()-- " + e);
+            System.out.println("Error:OrgOfficeModel--getGeneration()-- " + e);
         }
         return list;
     }
@@ -833,7 +833,7 @@ public class OrgOfficeModel {
             organisation_id = rset.getInt("organisation_id");
 
         } catch (Exception e) {
-            System.out.println("Error: getOrganisation_id--" + e);
+            System.out.println("OrgOfficeModel Error: getOrganisation_id--" + e);
         }
         return organisation_id;
     }
@@ -849,7 +849,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getOfficetype_id--" + e);
+            System.out.println("OrgOfficeModel Error: getOfficetype_id--" + e);
         }
         return organisation_id;
     }
@@ -876,7 +876,7 @@ public class OrgOfficeModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOfficeType-- " + e);
+            System.out.println("Error:OrgOfficeModel--OrgOfficeType-- " + e);
         }
         return list;
     }
@@ -903,7 +903,7 @@ public class OrgOfficeModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOfficeType-- " + e);
+            System.out.println("Error:OrgOfficeModel--getMobile-- " + e);
         }
         return list;
     }
@@ -930,7 +930,7 @@ public class OrgOfficeModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--OrgOfficeType-- " + e);
+            System.out.println("Error:OrgOfficeModel--gethierarchysearch-- " + e);
         }
         return list;
     }
@@ -945,7 +945,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("getDesgn_id Error: " + e);
+            System.out.println("OrgOfficeModel getDesgn_id Error: " + e);
         }
         return city_id;
     }
@@ -991,7 +991,7 @@ public class OrgOfficeModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("getParentOrgOffice Error: " + e);
+            System.out.println("OrgOfficeModel getParentOrgOffice Error: " + e);
         }
         return list;
     }
@@ -1021,7 +1021,7 @@ public class OrgOfficeModel {
                 list.add("No Such Office Name Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgOfficeNameSearch-- " + e);
+            System.out.println("Error:OrgOfficeModel--getOrgOfficeNameSearch-- " + e);
         }
         return list;
     }
@@ -1049,7 +1049,7 @@ public class OrgOfficeModel {
                 list.add("No Such Office Code Exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationMapModel--getOrgOfficeCodeSearch-- " + e);
+            System.out.println("Error:OrgOfficeModel--getOrgOfficeCodeSearch-- " + e);
         }
         return list;
     }
@@ -1066,7 +1066,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             organisation_id = rset.getInt("office_type_id");
         } catch (Exception e) {
-            System.out.println("Error: getOrgOfficeType_id--" + e);
+            System.out.println("OrgOfficeModel Error: getOrgOfficeType_id--" + e);
         }
         return organisation_id;
     }
@@ -1081,7 +1081,7 @@ public class OrgOfficeModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("city_id");
         } catch (Exception e) {
-            System.out.println("getCity_id Error: " + e);
+            System.out.println("OrgOfficeModel getCity_id Error: " + e);
         }
         return city_id;
     }
@@ -1109,7 +1109,7 @@ public class OrgOfficeModel {
                 list.add("No such City Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("getCityName Error: " + e);
+            System.out.println("OrgOfficeModel getCityName Error: " + e);
         }
         return list;
     }
@@ -1132,7 +1132,7 @@ public class OrgOfficeModel {
                 list.add("No such State Name exists.");
             }
         } catch (Exception e) {
-            System.out.println("getStateName Error: " + e);
+            System.out.println("OrgOfficeModel getStateName Error: " + e);
         }
         return list;
     }

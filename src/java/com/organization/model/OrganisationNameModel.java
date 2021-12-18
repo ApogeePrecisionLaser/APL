@@ -43,7 +43,7 @@ public class OrganisationNameModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("QtOohDefaultsModel setConnection() Error: " + e);
+            System.out.println("OrganisationNameModel setConnection() Error: " + e);
         }
     }
 
@@ -143,7 +143,7 @@ public class OrganisationNameModel {
                 list.add(organisationSubType);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrganisationSubTypeModel data-" + e);
+            System.out.println("Error: OrganisationNameModel showData-" + e);
         }
         return list;
     }
@@ -185,7 +185,7 @@ public class OrganisationNameModel {
                 list.add(organisationSubType);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrganisationSubTypeModel pdf-" + e);
+            System.out.println("Error: OrganisationNameModel showPDF-" + e);
         }
         return list;
     }
@@ -295,6 +295,8 @@ public class OrganisationNameModel {
 
             }
         } catch (Exception e) {
+            System.out.println("OrganisationNameModel getRevisionno() Error: " + e);
+
         }
         return revision;
     }
@@ -329,7 +331,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             id = rset.getInt("organisation_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOrganisationID Error: " + e);
         }
         return id;
     }
@@ -345,7 +347,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             id = rset.getInt("organisation_type_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOrganisationTypeID Error: " + e);
         }
         return id;
     }
@@ -361,7 +363,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             id = rset.getInt("organisation_sub_type_id");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOrganisationSubTypeID Error: " + e);
         }
         return id;
     }
@@ -377,7 +379,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("org_type_name");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOrganisationTypeName Error: " + e);
         }
         return name;
     }
@@ -409,7 +411,7 @@ public class OrganisationNameModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getselectedOrg()-- " + e);
         }
         return json;
     }
@@ -425,7 +427,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("office_type");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOfficeTypeName Error: " + e);
         }
         return name;
     }
@@ -441,7 +443,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("organisation_name");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOrganisationName Error: " + e);
         }
         return name;
     }
@@ -457,7 +459,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("org_office_name");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getOfficeName Error: " + e);
         }
         return name;
     }
@@ -473,7 +475,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("id_type");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getidtypename Error: " + e);
         }
         return name;
     }
@@ -489,7 +491,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("designation");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getdesignationName Error: " + e);
         }
         return name;
     }
@@ -505,7 +507,7 @@ public class OrganisationNameModel {
             rset.next();    // move cursor from BOR to valid record.
             name = rset.getString("designation");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getfamilykpid Error: " + e);
         }
         return name;
     }
@@ -527,7 +529,7 @@ public class OrganisationNameModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("OrganisationNameModel getCityName Error: " + e);
         }
         return name;
     }
@@ -586,7 +588,7 @@ public class OrganisationNameModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getselectedOffice()-- " + e);
         }
         return json;
     }
@@ -683,7 +685,7 @@ public class OrganisationNameModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getselectedPerson()-- " + e);
         }
         return json;
     }
@@ -706,7 +708,7 @@ public class OrganisationNameModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getOrganisationTypeName()-- " + e);
         }
         return list;
     }
@@ -729,7 +731,7 @@ public class OrganisationNameModel {
                 list.add("No such Status exists.......");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getOrganisationSubTypeName()-- " + e);
         }
         return list;
     }
@@ -752,7 +754,7 @@ public class OrganisationNameModel {
                 list.add("No such Status exists.......");
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getOrganisationName()-- " + e);
         }
         return list;
     }
@@ -775,7 +777,7 @@ public class OrganisationNameModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationNameModel--getOrganationNameList()-- " + e);
+            System.out.println("Error:OrganisationNameModel--getOrganisationName()-- " + e);
         }
         return list;
     }
@@ -788,7 +790,7 @@ public class OrganisationNameModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
-            System.out.println("Error: in OrganisationNameModel generatReport() JRException: " + e);
+            System.out.println("Error: in OrganisationNameModel generateSiteList() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -805,7 +807,7 @@ public class OrganisationNameModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("OrginisationStatusModel generateOrgnisitionXlsRecordList() JRException: " + e);
+            System.out.println("OrganisationNameModel generateOrginisationXlsRecordList() JRException: " + e);
         }
         return bytArray;
     }
