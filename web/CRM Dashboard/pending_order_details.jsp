@@ -40,7 +40,8 @@
                                             <th>Req Qty</th>
                                             <th>Approved Qty</th>
                                             <th>MRP Price</th>
-                                            <!--<th>Discount Price</th>-->
+                                            <th>Discount Percent</th>
+                                            <th>Discount Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,7 +61,8 @@
                                         <td>${beanType.required_qty}</td>
                                         <td>${beanType.approved_qty}</td>
                                         <td>${beanType.basic_price}</td>
-                                        <!--<td class="font-weight-bold">${beanType.discount_price}</td>-->                        
+                                        <td>${beanType.discount_percent}</td>
+                                        <td>${beanType.discount_price}</td>                        
                                         </tr>
                                     </c:forEach>
 
@@ -73,6 +75,8 @@
                                         <td colspan="5"></td>
                                         <td class="font-weight-bold fontSeventeen text-white py-3">Total Amount</td>
                                         <td class="font-weight-bold fontSeventeen text-white py-3">Rs. ${total_amount}</td>                    
+                                        <td class="font-weight-bold fontSeventeen text-white py-3">Rs. ${total_discount_percent}</td>                    
+                                        <td class="font-weight-bold fontSeventeen text-white py-3">Rs. ${total_discount_price}</td>                    
                                     </tr>                    
                                     </tbody>
                                 </table>

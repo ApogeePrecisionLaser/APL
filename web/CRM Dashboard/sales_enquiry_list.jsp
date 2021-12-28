@@ -9,9 +9,9 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <div class="mr-2" >
-                            <h1>Dealer List</h1>
-                        </div>
+<!--                        <div class="mr-2" >
+                            <h1>Sales Enquiry</h1>
+                        </div>-->
                         <div >
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn">Add New Enquiry</a>
                         </div>                        

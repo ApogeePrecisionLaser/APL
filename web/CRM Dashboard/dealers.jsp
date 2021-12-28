@@ -76,67 +76,6 @@
                                                         <div>
                                                             <a href="DealersController?task=viewDealerDetails&org_office_id=${beanType.org_office_id}&key_person_id=${beanType.key_person_id}" class="btn far fa-eye actionEdit" title="View Dealer Detail"></a>
                                                             <a class="btn actionView" title="Map Items" href="DealerItemMapController?org_office_id=${beanType.org_office_id}">Map Items</a>
-                        <div class="position-relative">
-                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <strong>Success!</strong> 
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Dealers</li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
-    <section class="content">
-        <div class="container-fluid">              
-            <div class="row mt-0">
-                <div class="col-md-12">
-                    <div class="card card-primary card-outline">            
-                        <div class="card-body">
-                            <div>
-                                <div class="table-responsive tableScrollWrap" >
-                                    <table class="table table-striped1 mainTable" id="mytable" >
-                                        <thead>
-                                            <tr>                                
-                                                <th>S.No.</th>
-                                                <th>Org. Office Name</th>
-                                                <th>Office GST</th>
-                                                <!--<th>Office Address</th>-->
-                                                <!--<th>Office Email</th>-->
-                                                <th>Office Mobile</th>
-                                                <th>Person Name</th>
-                                                <!--<th>Person Address</th>-->
-                                                <th>Person Mobile Number</th>
-                                                <!--<th>Person Email</th>-->
-                                                <th></th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <c:forEach var="beanType" items="${requestScope['list']}" varStatus="loopCounter">
-                                                <tr
-                                                    onclick="fillColumn();">
-                                                    <td>${loopCounter.count }</td>
-                                                    <td>${beanType.org_office_name}</td>
-                                                    <td>${beanType.gst_number}</td>
-                                                    <!--<td>${beanType.off_address_line1}</td>-->
-                                                    <!--<td>${beanType.off_email_id1}</td>-->
-                                                    <td>${beanType.off_mobile_no1}</td>
-                                                    <td>${beanType.key_person_name}</td>
-                                                    <!--<td>${beanType.kp_address_line1}</td>-->
-                                                    <td>${beanType.kp_mobile_no1}</td>
-                                                    <!--<td>${beanType.kp_email_id1}</td>-->
-                                                    <td>
-                                                        <div>
-                                                            <a href="DealersController?task=viewDealerDetails&org_office_id=${beanType.org_office_id}&key_person_id=${beanType.key_person_id}" class="btn far fa-eye actionEdit" title="View Dealer Detail"></a>
-                                                            <a class="btn btn-info" title="Map Items" href="DealerItemMapController?org_office_id=${beanType.org_office_id}">Map Items</a>
                                                         </div> 
                                                     </td>
 

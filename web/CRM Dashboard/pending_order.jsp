@@ -88,6 +88,10 @@
                                                         <a href="PendingOrdersController?task=viewOrderDetails&order_table_id=${beanType.order_table_id}"
                                                            class="btn far fa-eye actionEdit" title="View Order Detail"></a>
                                                         <!--<a onclick="deleteOrder('${beanType.order_table_id}')" class="btn far fa-times-circle actionDelete" title="Cancel Order"></a>-->
+                                                        <c:if test="${beanType.status == 'Approved' && user_role=='Dealer'}" >  
+                                                            <a href="DealersOrderController?task=checkout&order_table_id=${beanType.order_table_id}"
+                                                               class="btn btn-info" title="CheckOut">CheckOut</a>
+                                                        </c:if>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
