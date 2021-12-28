@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -22,6 +23,16 @@ import org.codehaus.jettison.json.JSONException;
 //import org.json.simple.JSONArray;
 //import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
+import com.dashboard.bean.Enquiry;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.net.ssl.HttpsURLConnection;
+import javax.ws.rs.GET;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -46,7 +57,7 @@ public class APLWebServiceController {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in APLWebServiceController setConnection() calling try block" + e);
         }
         String tosend = "Failure";
         String otp = model.random(4);
@@ -88,7 +99,7 @@ public class APLWebServiceController {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in APLWebServiceController setConnection() calling try block" + e);
         }
         Boolean status = false;
         System.out.println("inside method");
@@ -138,7 +149,7 @@ public class APLWebServiceController {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in APLWebServiceController setConnection() calling try block" + e);
         }
         JSONObject obj = new JSONObject();
 
@@ -184,7 +195,7 @@ public class APLWebServiceController {
 //            json = model.getIdType(number);
 //            obj.put("id_type", json);
         } catch (Exception e) {
-            System.out.println("Error in aplService getAllTableRecords()..." + e);
+            System.out.println("Error in APLWebServiceController getAllTableRecords()..." + e);
         }
         return obj;
     }
@@ -209,7 +220,7 @@ public class APLWebServiceController {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in APLWebServiceController setConnection() calling try block" + e);
         }
         JSONObject obj = new JSONObject();
         try {
@@ -289,4 +300,93 @@ public class APLWebServiceController {
         return msg;
 
     }
+
+    @GET
+    @Path("/getEnquiriesFromIndiaMart")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String getEnquiriesFromIndiaMart(String message) throws JSONException {
+        APLWebServiceModel model = new APLWebServiceModel();
+        String msg = "";
+        try {
+            model.setConnection(DBConnection.getConnectionForUtf(serveletContext));
+        } catch (Exception e) {
+            System.out.println("com.webservice.controller.APLWebServiceController.getCalendarData() -" + e);
+        }
+
+        String result = "";
+        JSONObject obj = new JSONObject();
+        try {
+
+            String start_date = "";
+            String end_date = "";
+
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy");
+            start_date = sdf.format(date);
+            end_date = sdf.format(date);
+
+            String webPage = "https://mapi.indiamart.com/wservce/enquiry/listing/GLUSR_MOBILE/7624002261/GLUSR_MOBILE_KEY/MTYzODM1NTQzMy44NzIxIzIzNzczOTYz/Start_Time/" + start_date + "13:00:00/End_Time/" + end_date + "16:00:00/";
+
+            URL url = new URL(webPage);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.addRequestProperty("User-Agent", "Mozilla/4.76");
+            urlConnection.setRequestProperty("Cookie", "foo=bar");
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.setDoOutput(true);
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(urlConnection.getInputStream(), "utf-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+
+                result = response.toString();
+            }
+
+            JSONArray jsonArr = new JSONArray(result);
+
+            for (int i = 0; i < jsonArr.length(); i++) {
+                JSONObject jsonObj = jsonArr.getJSONObject(i);
+
+                int enquiry_table_id = 0;
+
+                Enquiry bean = new Enquiry();
+                bean.setEnquiry_table_id(enquiry_table_id);
+                bean.setMarketing_vertical_name("Agricultural");
+                bean.setEnquiry_no(jsonObj.get("QUERY_ID").toString());
+                bean.setSender_name(jsonObj.get("SENDERNAME").toString());
+                bean.setSender_email(jsonObj.get("SENDEREMAIL").toString());
+                bean.setSender_alternate_email(jsonObj.get("EMAIL_ALT").toString());
+                bean.setSender_mob(jsonObj.get("MOB").toString());
+                bean.setSender_alternate_mob(jsonObj.get("MOBILE_ALT").toString());
+                bean.setSender_company_name(jsonObj.get("GLUSR_USR_COMPANYNAME").toString());
+                bean.setEnquiry_address(jsonObj.get("ENQ_ADDRESS").toString());
+                bean.setEnquiry_city(jsonObj.get("ENQ_CITY").toString());
+                bean.setEnquiry_state(jsonObj.get("ENQ_STATE").toString());
+                bean.setCountry(jsonObj.get("COUNTRY_ISO").toString());
+                bean.setEnquiry_message(jsonObj.get("ENQ_MESSAGE").toString());
+                bean.setDate_time(jsonObj.get("DATE_TIME_RE").toString());
+
+                if (enquiry_table_id == 0) {
+                    model.insertEnquiries(bean);
+                }
+
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
 }
+

@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -141,6 +142,7 @@ public class CheckInventoryController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -161,6 +163,7 @@ public class CheckInventoryController extends HttpServlet {
                 request.setAttribute("indent_items_list", indent_items_list);
                 request.setAttribute("indent_status", indent_status);
                 request.getRequestDispatcher("checkInventoryItemList").forward(request, response);
+                DBConnection.closeConncetion(model.getConnection());
                 return;
             }
 
@@ -237,7 +240,7 @@ public class CheckInventoryController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("check_inventory").forward(request, response);
 

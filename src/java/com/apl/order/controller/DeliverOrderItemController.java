@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -105,7 +106,7 @@ public class DeliverOrderItemController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ApproveIndentController setConnection() calling try block" + e);
+            System.out.println("error in DeliverOrderItemController setConnection() calling try block" + e);
         }
 
         try {
@@ -151,7 +152,7 @@ public class DeliverOrderItemController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ApproveIndentController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --DeliverOrderItemController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -242,7 +243,7 @@ public class DeliverOrderItemController extends HttpServlet {
             request.getRequestDispatcher("deliver_item").forward(request, response);
 
         } catch (Exception ex) {
-            System.out.println("ApproveIndentController error: " + ex);
+            System.out.println("DeliverOrderItemController error: " + ex);
         }
     }
 

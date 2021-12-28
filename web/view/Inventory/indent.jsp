@@ -192,9 +192,7 @@
 
     var json;
     $(function () {
-        //alert("fe");
         var String_data = $('#String_data').val();
-        //alert("string_data --" + String_data);
         var last_ch = String_data.charAt(String_data.length - 1);
         if (last_ch == ",") {
             String_data = String_data.substring(0, String_data.length - 1);
@@ -257,9 +255,7 @@
 
 
     function showData() {
-        //alert("fe");
         var String_data = $('#String_data').val();
-        //alert("string_data --" + String_data);
         var last_ch = String_data.charAt(String_data.length - 1);
         if (last_ch == ",") {
             String_data = String_data.substring(0, String_data.length - 1);
@@ -286,7 +282,6 @@
         }
 
         for (var i = 0; i < json.length; i++) {
-
             tr = table.insertRow(-1);
             tr.setAttribute("id", i + 1);
             for (var j = 0; j < col.length; j++) {
@@ -321,12 +316,12 @@
         var dataLength = "";
         setInterval(function () {
             var String_data = $('#String_data').val();
-            //alert("string_data --" + String_data);
+
             var dataLength2 = "";
             var dataLength2 = String_data.length;
             dataLength = String_data.length;
-            //alert("data leng -"+dataLength+" data len 22 --"+dataLength2);
-            if (dataLength > dataLength2 || dataLength > 0) {//alert(121);
+            if (dataLength > dataLength2 || dataLength > 0) {
+
                 showData();
             } else {
                 //alert(2321);

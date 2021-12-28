@@ -37,6 +37,10 @@
 				</textElement>
 				<text><![CDATA[Delivery Challan]]></text>
 			</staticText>
+			<image>
+				<reportElement x="11" y="46" width="150" height="58"/>
+				<imageExpression><![CDATA["E:\\Komal Backup\\Projects\\APL project\\APL\\web\\assets\\images\\logo.png"]]></imageExpression>
+			</image>
 			<staticText>
 				<reportElement x="196" y="46" width="546" height="58" forecolor="#00006D"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
@@ -73,10 +77,6 @@
 			<line>
 				<reportElement x="809" y="0" width="1" height="145" forecolor="#00006D"/>
 			</line>
-			<image>
-				<reportElement x="7" y="46" width="148" height="58"/>
-				<imageExpression><![CDATA["C:\\Users\\Administrator\\Desktop\\vikrant bakup\\APL\\web\\assets\\images\\logo.png"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>

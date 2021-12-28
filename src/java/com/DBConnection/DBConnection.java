@@ -47,7 +47,7 @@ public class DBConnection {
             Class.forName(ctx.getInitParameter("driverClass"));
             conn = (Connection) DriverManager.getConnection((String) ctx.getInitParameter("connectionString") + "?useUnicode=true&characterEncoding=UTF-8&character_set_results=utf8", (String) ctx.getInitParameter("db_username"), (String) ctx.getInitParameter("db_password"));
         } catch (Exception e) {
-            System.out.println(" getConnectionForUtf() Error: " + e);
+            System.out.println("DBConncetion getConnectionForUtf() Error: " + e);
         }
         return conn;
     }

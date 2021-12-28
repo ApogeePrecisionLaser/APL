@@ -1,3 +1,4 @@
+
 package com.apl.order.model;
 
 import com.inventory.model.*;
@@ -38,7 +39,7 @@ public class DeliverOrderItemModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("DeliverOrderItemModel setConnection() Error: " + e);
         }
     }
 
@@ -70,7 +71,7 @@ public class DeliverOrderItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverOrderItemModel showIndents-" + e);
         }
         return list;
     }
@@ -108,7 +109,7 @@ public class DeliverOrderItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverOrderItemModel getIndentItems-" + e);
         }
         return list;
     }
@@ -288,7 +289,7 @@ public class DeliverOrderItemModel {
             while (rs.next()) {
                 inventory_basic_id = rs.getInt("inventory_basic_id");
             }
-            
+
             String query_insert = "INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
                     + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -349,7 +350,7 @@ public class DeliverOrderItemModel {
             updateRowsAffected4 = pstm4.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("DeliverItemModel updateRecord() Error: " + e);
+            System.out.println("DeliverOrderItemModel updateRecord() Error: " + e);
         }
         if (updateRowsAffected4 > 0) {
             message = "Record updated successfully.";
@@ -514,7 +515,7 @@ public class DeliverOrderItemModel {
             updateRowsAffected4 = pstm4.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("DeliverItemModel updateRecord() Error: " + e);
+            System.out.println("DeliverOrderItemModel updateRecord() Error: " + e);
         }
         if (updateRowsAffected4 > 0) {
             message = "Record updated successfully.";
@@ -535,7 +536,7 @@ public class DeliverOrderItemModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("DeliverOrderItemModel getRequestedKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -549,7 +550,7 @@ public class DeliverOrderItemModel {
             rset.next();
             order_no = rset.getString("order_no");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("DeliverOrderItemModel getOrderNo Error: " + e);
         }
         return order_no;
     }
@@ -569,7 +570,7 @@ public class DeliverOrderItemModel {
             rset.next();
             model_id = rset.getInt("model_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("DeliverOrderItemModel getModelId Error: " + e);
         }
         return model_id;
     }
@@ -584,7 +585,7 @@ public class DeliverOrderItemModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: " + e);
+            System.out.println("DeliverOrderItemModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -599,7 +600,7 @@ public class DeliverOrderItemModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("DeliverOrderItemModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -623,7 +624,7 @@ public class DeliverOrderItemModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:DeliverOrderItemModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -647,7 +648,7 @@ public class DeliverOrderItemModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:DeliverOrderItemModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -671,7 +672,7 @@ public class DeliverOrderItemModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:DeliverOrderItemModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -688,7 +689,7 @@ public class DeliverOrderItemModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("DeliverOrderItemModel closeConnection() Error: " + e);
         }
     }
 }

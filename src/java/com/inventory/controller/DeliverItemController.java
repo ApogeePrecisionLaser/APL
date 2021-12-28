@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -107,7 +108,7 @@ public class DeliverItemController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ApproveIndentController setConnection() calling try block" + e);
+            System.out.println("error in DeliverItemController setConnection() calling try block" + e);
         }
 
         try {
@@ -150,10 +151,11 @@ public class DeliverItemController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ApproveIndentController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --DeliverItemController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -169,7 +171,7 @@ public class DeliverItemController extends HttpServlet {
                 String indent_num = request.getParameter("indent_no");
                 String delivery_challan_no = request.getParameter("delivery_challan_no");
                 String item_name_report = request.getParameter("item_name");
-                
+
                 List listAll = null;
                 String jrxmlFilePath;
                 response.setContentType("application/pdf");
@@ -265,12 +267,12 @@ public class DeliverItemController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("deliver_item").forward(request, response);
 
         } catch (Exception ex) {
-            System.out.println("ApproveIndentController error: " + ex);
+            System.out.println("DeliverItemController error: " + ex);
         }
     }
 

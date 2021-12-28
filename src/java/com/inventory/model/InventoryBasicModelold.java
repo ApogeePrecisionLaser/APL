@@ -1,3 +1,4 @@
+
 package com.inventory.model;
 
 import java.io.ByteArrayOutputStream;
@@ -752,5 +753,8 @@ public class InventoryBasicModelold {
         } catch (Exception e) {
             System.out.println("ItemNameModel closeConnection() Error: " + e);
         }
+    }
+     public Connection getConnection() {
+        return connection;
     }
 }

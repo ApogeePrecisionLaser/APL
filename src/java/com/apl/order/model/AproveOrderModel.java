@@ -1,3 +1,4 @@
+
 package com.apl.order.model;
 
 import java.io.ByteArrayOutputStream;
@@ -49,7 +50,7 @@ public class AproveOrderModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("AproveOrderModel setConnection() Error: " + e);
         }
     }
 
@@ -94,7 +95,7 @@ public class AproveOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: AproveOrderModel showIndents-" + e);
         }
         return list;
     }
@@ -116,7 +117,7 @@ public class AproveOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: AproveOrderModel getStatus-" + e);
         }
         return list;
     }
@@ -146,7 +147,7 @@ public class AproveOrderModel {
                 + " and indt.order_table_id='" + indent_table_id + "' and ib.model_id=m.model_id  "
                 + " and kp.active='Y'  and kp.key_person_id=inv.key_person_id "
                 + " and indi.model_id=m.model_id and inv.key_person_id=115 ";
-        
+
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -166,11 +167,11 @@ public class AproveOrderModel {
                 bean.setPaymentmode(rset.getString("payment_mode"));
                 bean.setModel(rset.getString("model"));
                 bean.setStock_qty(rset.getInt("stock_quantity"));
-              //  bean.setPrice(rset.getString("prices"));
+                //  bean.setPrice(rset.getString("prices"));
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: AproveOrderModel getIndentItems-" + e);
         }
         return list;
     }
@@ -213,7 +214,7 @@ public class AproveOrderModel {
             updateRowsAffected2 = pstm2.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("ApproveIndentModel updateRecord() Error: " + e);
+            System.out.println("AproveOrderModel updateRecord() Error: " + e);
         }
         if (updateRowsAffected2 > 0) {
             message = "Your Indent is '" + status + "'!.";
@@ -241,7 +242,7 @@ public class AproveOrderModel {
             }
 
         } catch (Exception e) {
-            System.out.println("ApproveIndentModel updateRecord() Error: " + e);
+            System.out.println("AproveOrderModel insertPrice() Error: " + e);
         }
 
         return status;
@@ -256,7 +257,7 @@ public class AproveOrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("AproveOrderModel getRequestedKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -271,7 +272,7 @@ public class AproveOrderModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: " + e);
+            System.out.println("AproveOrderModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -286,7 +287,7 @@ public class AproveOrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("AproveOrderModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -310,7 +311,7 @@ public class AproveOrderModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:AproveOrderModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -334,7 +335,7 @@ public class AproveOrderModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:AproveOrderModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -358,7 +359,7 @@ public class AproveOrderModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:AproveOrderModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -375,7 +376,7 @@ public class AproveOrderModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("AproveOrderModel closeConnection() Error: " + e);
         }
     }
 }

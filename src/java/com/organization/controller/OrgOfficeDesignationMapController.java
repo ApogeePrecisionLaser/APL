@@ -46,7 +46,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in OrgOfficeDesignationMapController setConnection() calling try block" + e);
         }
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
@@ -116,7 +116,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --OrgOfficeController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --OrgOfficeDesignationMapController get JQuery Parameters Part-" + e);
             }
 
             String organisation_name = request.getParameter("designation_code");
@@ -261,7 +261,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                 request.getRequestDispatcher("orgOfficeDesignationMap").forward(request, response);
             }
         } catch (Exception ex) {
-            System.out.println("OrgOfficeController error: " + ex);
+            System.out.println("OrgOfficeDesignationMapController error: " + ex);
         }
     }
 

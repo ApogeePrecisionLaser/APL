@@ -61,7 +61,7 @@ public class OrgOfficeTypeController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --OrgOfficeTypeController get JQuery Parameters Part-" + e);
             }
             searchOrgOfficeType = request.getParameter("searchOrgOfficeType");
             try {

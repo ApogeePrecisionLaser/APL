@@ -78,7 +78,7 @@ public class ContactUsModel {
             }
 
         } catch (Exception e) {
-            System.err.println("Exception in getDealersList---------" + e);
+            System.err.println("Exception in ContactUsModel getDealersList---------" + e);
         }
 
         return arrayObj;
@@ -101,7 +101,7 @@ public class ContactUsModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("DesignationModel setConnection() Error: " + e);
+            System.out.println("ContactUsModel setConnection() Error: " + e);
         }
     }
 

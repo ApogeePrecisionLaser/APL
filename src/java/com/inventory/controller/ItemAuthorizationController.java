@@ -50,14 +50,13 @@ public class ItemAuthorizationController extends HttpServlet {
 
         String search_item_name = "";
         String search_designation = "";
-       
+
         search_item_name = request.getParameter("search_item_name");
         search_designation = request.getParameter("search_designation");
-        
-        HttpSession session = request.getSession();
-        String loggedUser="";
-        loggedUser = session.getAttribute("user_role").toString();	
 
+        HttpSession session = request.getSession();
+        String loggedUser = "";
+        loggedUser = session.getAttribute("user_role").toString();
 
         if (search_item_name == null) {
             search_item_name = "";
@@ -65,7 +64,6 @@ public class ItemAuthorizationController extends HttpServlet {
         if (search_designation == null) {
             search_designation = "";
         }
-        
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -85,7 +83,7 @@ public class ItemAuthorizationController extends HttpServlet {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
                     JSONObject json = null;
-                   
+
                     if (JQstring.equals("getDesignation")) {
                         list = model.getDesignation(q);
                     }
@@ -94,7 +92,6 @@ public class ItemAuthorizationController extends HttpServlet {
                         list = model.getItemName(q);
                     }
 
-                    
                     if (json != null) {
 
                         out.println(json);
@@ -104,10 +101,11 @@ public class ItemAuthorizationController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ItemAuthorizationController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -150,7 +148,7 @@ public class ItemAuthorizationController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("item_authorization").forward(request, response);
         } catch (Exception ex) {

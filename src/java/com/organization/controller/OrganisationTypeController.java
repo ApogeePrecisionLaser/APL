@@ -77,7 +77,7 @@ public class OrganisationTypeController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --OrganisationTypeController get JQuery Parameters Part-" + e);
             }
             String searchOrgType = request.getParameter("searchOrgType");
             String searchgeneration = request.getParameter("searchgeneration");

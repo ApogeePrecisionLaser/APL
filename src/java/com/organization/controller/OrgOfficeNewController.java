@@ -36,7 +36,7 @@ public class OrgOfficeNewController extends HttpServlet {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in OrgOfficeNewController setConnection() calling try block" + e);
         }
 
         try {
@@ -159,7 +159,7 @@ public class OrgOfficeNewController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --OrgOfficeController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --OrgOfficeNewController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -339,7 +339,7 @@ public class OrgOfficeNewController extends HttpServlet {
             organisationModel.closeConnection();
             request.getRequestDispatcher("orgOffice").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("OrgOfficeController error: " + ex);
+            System.out.println("OrgOfficeNewController error: " + ex);
         }
     }
 

@@ -33,7 +33,7 @@ public class CityController extends HttpServlet {
             //       organisationNameModel.setConnection(DBConnection.getConnection(ctx, session));
             cityModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrganisationNameController setConnection() calling try block" + e);
+            System.out.println("error in CityController setConnection() calling try block" + e);
         }
 
         request.setCharacterEncoding("UTF-8");
@@ -59,11 +59,11 @@ public class CityController extends HttpServlet {
                 JSONObject gson = new JSONObject();
                 gson.put("list", list);
                 out.println(gson);
-                cityModel.closeConnection();
+                DBConnection.closeConncetion(cityModel.getConnection());
                 return;
             }
         } catch (Exception e) {
-            System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+            System.out.println("\n Error --CityController get JQuery Parameters Part-" + e);
         }
 
         if (searchCity == null) {
@@ -127,7 +127,7 @@ public class CityController extends HttpServlet {
         request.setAttribute("message", cityModel.getMessage());
         request.setAttribute("msgBgColor", cityModel.getMessageBGColor());
         request.setAttribute("cityList", list);
-        cityModel.closeConnection();
+        DBConnection.closeConncetion(cityModel.getConnection());
 
         request.getRequestDispatcher("city_view").forward(request, response);
     }

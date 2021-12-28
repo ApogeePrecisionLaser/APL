@@ -36,7 +36,7 @@ public class DealerSalemanMapController extends HttpServlet {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeController setConnection() calling try block" + e);
+            System.out.println("error in DealerSalemanMapController setConnection() calling try block" + e);
         }
 
         try {
@@ -113,46 +113,12 @@ public class DealerSalemanMapController extends HttpServlet {
                 if (JQstring != null) {
                     PrintWriter out = response.getWriter();
                     List<String> list = null;
-                    if (JQstring.equals("getOrgTypeName")) {
-                        list = organisationModel.organisation_Name(q);
-                    }
-                    if (JQstring.equals("getMobile")) {
-                        list = organisationModel.searchMobile(q);
-                    } else if (JQstring.equals("mobile_number")) {
-                        list = organisationModel.getMobilevalidty(q);//, request.getParameter("action2")
-                    }
-                    if (JQstring.equals("getsearchgeneration")) {
-                        list = organisationModel.getGeneration(q);
-                    }
-                    if (JQstring.equals("searchOrgTypeName")) {
-                        list = organisationModel.getOrganisation_Name(q);
-                    } else if (JQstring.equals("getOfficeCodeName")) {
+                    if (JQstring.equals("getDealer")) {
                         String org_name = request.getParameter("action2");
-                        list = organisationModel.getOrgOfficeCodeSearch(q, org_name);
-                    } else if (JQstring.equals("getDealer")) {
-                        String org_name = request.getParameter("action2");
-                        list = organisationModel.getDealer();
+                        list = organisationModel.getDealer(q);
                     } else if (JQstring.equals("getSalesDealer")) {
-
-                        list = organisationModel.getSalesDealer();
-                    } else if (JQstring.equals("getParentOrgOffice")) {
-                        String code = request.getParameter("action2");
-                        String edit = request.getParameter("action3");
-                        String generation = request.getParameter("action4");
-                        String currdesig = request.getParameter("action5");
-                        list = organisationModel.getParentOrgOffice(q, code, edit, generation, currdesig);
-                    } else if (JQstring.equals("getOrgOfficeType")) {
-                        list = organisationModel.OrgOfficeType(q);
-                    }// else if (JQstring.equals("getStateName")) {
-                    //  list = organisationModel.getStateName(q);
-                    // }
-                    else if (JQstring.equals("getCityName")) {
-                        list = organisationModel.getCityName(q);//, request.getParameter("action2")
-                    }
-
-                    if (JQstring.equals("gethierarchysearch")) {
-                        list = organisationModel.getHierarchsearch(q);
-                    }
+                        list = organisationModel.getSalesDealer(q);
+                    } 
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
@@ -161,7 +127,7 @@ public class DealerSalemanMapController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --OrgOfficeController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --DealerSalemanMapController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -205,27 +171,6 @@ public class DealerSalemanMapController extends HttpServlet {
                     // update existing record.
                     organisationModel.updateRecordd(dealerkpid, salesmankpid, remark, org_office_id);
                 }
-            }
-
-            if (task.equals("showMapWindow")) {
-
-                String point_id = request.getParameter("org_office_id");
-                String latitude = "";
-                String longitude = "";
-                String LatLong = organisationModel.getPointLatLong(point_id);
-                // System.out.println(LatLong);
-                String[] words = LatLong.split("\\,");
-                for (int i = 0; i < words.length; i++) {
-                    latitude = words[0];
-                    longitude = words[1];
-                    //  System.out.println(latitude + "  " + longitude);
-                }
-                request.setAttribute("longi", longitude);
-                request.setAttribute("latti", latitude);
-                //System.out.println(latti + "," + longi);
-                request.getRequestDispatcher("openMapWindowView").forward(request, response);
-                return;
-
             }
 
             String searchdealername = "";
@@ -311,7 +256,7 @@ public class DealerSalemanMapController extends HttpServlet {
             organisationModel.closeConnection();
             request.getRequestDispatcher("dealersalesmap").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("OrgOfficeController error: " + ex);
+            System.out.println("DealerSalemanMapController error: " + ex);
         }
     }
 

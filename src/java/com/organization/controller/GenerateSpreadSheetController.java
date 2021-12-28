@@ -112,6 +112,7 @@ public class GenerateSpreadSheetController extends HttpServlet {
         ServletContext ctx = getServletContext();
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
+
         GenerateSpreadSheetModel model = new GenerateSpreadSheetModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
@@ -120,7 +121,7 @@ public class GenerateSpreadSheetController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ItemNameController setConnection() calling try block" + e);
+            System.out.println("error in GenerateSpreadSheetController setConnection() calling try block" + e);
         }
         String message = null;
         String bgColor = null;

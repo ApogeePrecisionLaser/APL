@@ -49,7 +49,7 @@ public class ApproveIndentModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("ApproveIndentModel setConnection() Error: " + e);
         }
     }
 
@@ -94,7 +94,7 @@ public class ApproveIndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: ApproveIndentModel showIndents-" + e);
         }
         return list;
     }
@@ -116,7 +116,7 @@ public class ApproveIndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: ApproveIndentModel getStatus-" + e);
         }
         return list;
     }
@@ -136,7 +136,7 @@ public class ApproveIndentModel {
 //                + " and inv.active='Y' and m.active='Y' and mim.active='Y' "
 //                + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
 //                + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='115' and ib.model_id=m.model_id ";
-        String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
+        String query = "select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
                 + " s1.status as indent_status,s2.status as "
                 + " item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, indi.deliver_qty,indt.requested_by, "
                 + " indt.requested_to,m.model "
@@ -178,7 +178,7 @@ public class ApproveIndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: ApproveIndentModel getIndentItems-" + e);
         }
         return list;
     }
@@ -242,7 +242,7 @@ public class ApproveIndentModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("ApproveIndentModel getRequestedByKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -257,7 +257,7 @@ public class ApproveIndentModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: " + e);
+            System.out.println("ApproveIndentModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -272,7 +272,7 @@ public class ApproveIndentModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("ApproveIndentModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -296,7 +296,7 @@ public class ApproveIndentModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:ApproveIndentModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -320,7 +320,7 @@ public class ApproveIndentModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:ApproveIndentModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -344,7 +344,7 @@ public class ApproveIndentModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:ApproveIndentModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -361,7 +361,11 @@ public class ApproveIndentModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("ApproveIndentModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

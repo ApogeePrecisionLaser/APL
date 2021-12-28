@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -122,7 +123,7 @@ public class DealersReportController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ItemNameController setConnection() calling try block" + e);
+            System.out.println("error in DealersReportController setConnection() calling try block" + e);
         }
         String message = null;
         String bgColor = null;
@@ -225,7 +226,7 @@ public class DealersReportController extends HttpServlet {
             request.setAttribute("searchPerson", searchPerson);
             request.getRequestDispatcher("dealersReport").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("GenerateSpreadSheetController error: " + ex);
+            System.out.println("DealersReportController error: " + ex);
         }
     }
 
@@ -273,3 +274,4 @@ public class DealersReportController extends HttpServlet {
         doGet(request, response);
     }
 }
+

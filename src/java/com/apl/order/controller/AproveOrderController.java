@@ -90,7 +90,7 @@ public class AproveOrderController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ApproveIndentController setConnection() calling try block" + e);
+            System.out.println("error in AproveOrderController setConnection() calling try block" + e);
         }
 
         try {
@@ -136,7 +136,7 @@ public class AproveOrderController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ApproveIndentController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --AproveOrderController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -220,7 +220,7 @@ public class AproveOrderController extends HttpServlet {
             request.getRequestDispatcher("approve_order").forward(request, response);
 
         } catch (Exception ex) {
-            System.out.println("ApproveIndentController error: " + ex);
+            System.out.println("AproveOrderController error: " + ex);
         }
     }
 

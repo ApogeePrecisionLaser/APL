@@ -44,11 +44,11 @@
         $("#tehsil").autocomplete({
 
             source: function (request, response) {
-
+                var random = $('#tehsil').val();
                 $.ajax({
-                    url: "cityTypeCont",
+                    url: "CityController",
                     dataType: "json",
-                    data: {action1: "getTehsil"},
+                    data: {action1: "getTehsil", str: random},
                     success: function (data) {
 
                         console.log(data);
@@ -91,6 +91,7 @@
             }
         });
 
+
     });
 
 
@@ -127,7 +128,6 @@
         }
 
     }
-
 
     function popupWindow(url, windowName)
     {
@@ -299,8 +299,6 @@
         </form>
     </div>
 </section>
-
-
 
 <%@include file="../layout/footer.jsp" %>
 

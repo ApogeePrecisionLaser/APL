@@ -175,7 +175,7 @@ public class GenerateSpreadSheetModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in GoogleSpreadSheet -- " + e);
+            System.out.println("Error in GenerateSpreadSheetModel getData -- " + e);
 
         }
 
@@ -280,7 +280,7 @@ public class GenerateSpreadSheetModel {
                 message = "Sending Mail Failed!...";
             }
         } catch (Exception e) {
-            System.err.println("exception-------" + e);
+            System.err.println("GenerateSpreadSheetModel exception sendReport-------" + e);
         }
         return message;
     }
@@ -451,6 +451,7 @@ public class GenerateSpreadSheetModel {
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
+
             q = q.trim();
             while (rset.next()) {
                 String organisation_name = (rset.getString("organisation_name"));
@@ -463,7 +464,7 @@ public class GenerateSpreadSheetModel {
                 list.add("No such organisation_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getOrgName-- " + e);
+            System.out.println("Error:GenerateSpreadSheetModel --getOrgName-- " + e);
         }
         return list;
     }
@@ -493,7 +494,7 @@ public class GenerateSpreadSheetModel {
                 list.add("No such org_office_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getOrgOfficeName-- " + e);
+            System.out.println("Error:GenerateSpreadSheetModel --getOrgOfficeName-- " + e);
         }
         return list;
     }
@@ -527,7 +528,7 @@ public class GenerateSpreadSheetModel {
                 list.add("No such office_type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getOrgOfficeType-- " + e);
+            System.out.println("Error:GenerateSpreadSheetModel --getOrgOfficeType-- " + e);
         }
         return list;
     }
@@ -560,7 +561,7 @@ public class GenerateSpreadSheetModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:GenerateSpreadSheetModel--getDesignation()-- " + e);
         }
 
         return list;
@@ -595,7 +596,7 @@ public class GenerateSpreadSheetModel {
                 list.add("No such key_person_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getPerson-- " + e);
+            System.out.println("Error:GenerateSpreadSheetModel --getPerson-- " + e);
         }
         return list;
     }
@@ -610,7 +611,7 @@ public class GenerateSpreadSheetModel {
             rset.next();    // move cursor from BOR to valid record.
             org_office_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: GenerateSpreadSheetModel getOrgOfficeId--" + e);
         }
 
         return org_office_id;
@@ -629,7 +630,7 @@ public class GenerateSpreadSheetModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("designationModel closeConnection() Error: " + e);
+            System.out.println("GenerateSpreadSheetModel closeConnection() Error: " + e);
         }
     }
 }

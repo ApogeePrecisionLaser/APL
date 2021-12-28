@@ -68,7 +68,7 @@ public class DesignationModel {
                 list.add(media);
             }
         } catch (Exception e) {
-            System.out.println("designationModel Error: " + e);
+            System.out.println("designationModel showAllData Error: " + e);
         }
         return list;
     }
@@ -101,7 +101,7 @@ public class DesignationModel {
                 list.add(media);
             }
         } catch (Exception e) {
-            System.out.println("designationModel Error: " + e);
+            System.out.println("designationModel showData  Error: " + e);
         }
         return list;
     }
@@ -119,7 +119,7 @@ public class DesignationModel {
             pstmt.setString(6, "OK");
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("designationModel Error: " + e);
+            System.out.println("designationModel insertRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -173,7 +173,7 @@ public class DesignationModel {
 
             }
         } catch (Exception e) {
-            System.out.println("designationModel Error: " + e);
+            System.out.println("designationModel updateRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -191,7 +191,7 @@ public class DesignationModel {
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
         } catch (SQLException e) {
-            System.out.println("designationModel Error: " + e.getMessage());
+            System.out.println("designationModel deleteRecord Error: " + e.getMessage());
 //            System.out.println("Error Code = " + e.getErrorCode());
 //            System.out.println("SQL state = " + e.getSQLState());
 //            System.out.println("Message = " + e.getMessage());
@@ -224,6 +224,8 @@ public class DesignationModel {
 
             }
         } catch (Exception e) {
+            System.out.println("designationModel getRevisionno Error: " + e.getMessage());
+
         }
         return revision;
     }
@@ -274,7 +276,7 @@ public class DesignationModel {
                 list.add("No such Designation exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getDesignationlist-- " + e);
+            System.out.println("Error:designationModel --getDesignationCode-- " + e);
         }
         return list;
     }
@@ -287,7 +289,7 @@ public class DesignationModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
-            System.out.println("Error: in CityModel generateDesignationReport() JRException: " + e);
+            System.out.println("Error: in designationModel generateDesignationReport() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -304,7 +306,7 @@ public class DesignationModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("DesignationStatusModel generateDesignationXlsRecordList() JRException: " + e);
+            System.out.println("designationModel generateDesignationXlsRecordList() JRException: " + e);
         }
         return bytArray;
     }

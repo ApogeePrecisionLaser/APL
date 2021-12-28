@@ -13,6 +13,7 @@
 	<field name="kp_address_line1" class="java.lang.String"/>
 	<field name="kp_mobile_no1" class="java.lang.String"/>
 	<field name="kp_email_id1" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
 	<variable name="s_no" class="java.lang.Integer">
 		<variableExpression><![CDATA[$V{s_no}+1]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -167,18 +168,6 @@
 	<detail>
 		<band height="34" splitType="Stretch">
 			<textField>
-				<reportElement x="1" y="0" width="38" height="33"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement/>
-				<textFieldExpression><![CDATA[$V{s_no}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="39" y="0" width="97" height="33"/>
 				<box>
 					<pen lineWidth="0.5"/>
@@ -273,6 +262,21 @@
 				</box>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{kp_email_id1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="37" height="33"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{s_no}]]></textFieldExpression>
+
 			</textField>
 		</band>
 	</detail>

@@ -119,7 +119,7 @@ public class CheckInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: CheckInventoryModel getStatus-" + e);
         }
         return list;
     }
@@ -164,7 +164,7 @@ public class CheckInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: CheckInventoryModel showdata-" + e);
+            System.out.println("Error: CheckInventoryModel getIndentItems-" + e);
         }
         return list;
     }
@@ -185,12 +185,11 @@ public class CheckInventoryModel {
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
                 + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
                 + " where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
-                + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and "
-                + " ib.item_names_id=itn.item_names_id and ib.active='Y' "
+                + " and indi.purpose_id=p.purpose_id and ib.inventory_basic_id=inv.inventory_basic_id and ib.item_names_id=itn.item_names_id and ib.active='Y' "
                 + " and inv.active='Y' "
                 + " and indt.status_id=s1.status_id and indi.status_id=s2.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
                 + " and m.active='Y' and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and ib.model_id=m.model_id "
-                + " and mim.item_names_id=itn.item_names_id and indi.model_id=m.model_id "
+                + " and mim.item_names_id=itn.item_names_id "
                 + " and indt.indent_table_id='" + indent_table_id + "' and inv.key_person_id='" + logged_key_person_id + "' ";
 
         try {
@@ -216,7 +215,7 @@ public class CheckInventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: CheckInventoryModel showdata-" + e);
+            System.out.println("Error: CheckInventoryModel getIndentItemsForDeliveryChallan-" + e);
         }
         return list;
     }
@@ -292,7 +291,7 @@ public class CheckInventoryModel {
             indent_no = rset.getString("indent_no");
 
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error CheckInventoryModel: " + e);
+            System.out.println("getIndentNo Error CheckInventoryModel: " + e);
         }
 
         return indent_no;
@@ -410,7 +409,7 @@ public class CheckInventoryModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:CheckInventoryModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:CheckInventoryModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -450,5 +449,9 @@ public class CheckInventoryModel {
         } catch (Exception e) {
             System.out.println("CheckInventoryModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

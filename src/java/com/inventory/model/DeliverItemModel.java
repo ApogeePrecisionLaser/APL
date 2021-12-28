@@ -42,7 +42,7 @@ public class DeliverItemModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("DeliverItemModel setConnection() Error: " + e);
         }
     }
 
@@ -58,7 +58,7 @@ public class DeliverItemModel {
                     + " and indt.status_id=s.status_id and indt.active='Y' "
                     + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3) and d.designation_id='5'";
         }
-        
+
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -74,7 +74,7 @@ public class DeliverItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverItemModel showIndents-" + e);
         }
         return list;
     }
@@ -112,7 +112,7 @@ public class DeliverItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverItemModel getIndentItems-" + e);
         }
         return list;
     }
@@ -127,7 +127,7 @@ public class DeliverItemModel {
             rset.next();
             indent_no = rset.getString("indent_no");
         } catch (Exception e) {
-            System.out.println("getIndentNo Error: " + e);
+            System.out.println("DeliverItemModel getIndentNo Error: " + e);
         }
         return indent_no;
     }
@@ -315,7 +315,7 @@ public class DeliverItemModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("DeliverItemModel getRequestedByKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -330,7 +330,7 @@ public class DeliverItemModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("getStatusId Error: " + e);
+            System.out.println("DeliverItemModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -345,7 +345,7 @@ public class DeliverItemModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("DeliverItemModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -369,7 +369,7 @@ public class DeliverItemModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:DeliverItemModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -393,7 +393,7 @@ public class DeliverItemModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:DeliverItemModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -417,7 +417,7 @@ public class DeliverItemModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:DeliverItemModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -504,7 +504,7 @@ public class DeliverItemModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: DeliverItemModel showReportData-" + e);
         }
         return list;
     }
@@ -518,7 +518,7 @@ public class DeliverItemModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
-            System.out.println("Error: in tubeWellUserTypeModel generateMapReport() JRException: " + e);
+            System.out.println("Error: in DeliverItemModel generateMapReport() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -535,7 +535,11 @@ public class DeliverItemModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("DeliverItemModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

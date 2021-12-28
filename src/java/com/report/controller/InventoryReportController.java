@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -152,7 +153,7 @@ public class InventoryReportController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryBasicController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --InventoryReportController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -209,3 +210,4 @@ public class InventoryReportController extends HttpServlet {
         doGet(request, response);
     }
 }
+

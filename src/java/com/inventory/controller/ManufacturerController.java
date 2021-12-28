@@ -36,7 +36,7 @@ public class ManufacturerController extends HttpServlet {
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
         HttpSession session = request.getSession();
-        String loggedUser="";
+        String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -57,7 +57,7 @@ public class ManufacturerController extends HttpServlet {
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
-                    model.closeConnection();
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -79,8 +79,7 @@ public class ManufacturerController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-            
-            
+
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";
                 ac = "ACTIVE RECORDS";
@@ -125,7 +124,7 @@ public class ManufacturerController extends HttpServlet {
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("manufacturer").forward(request, response);
         } catch (Exception ex) {
             System.out.println("ManufacturerController error: " + ex);

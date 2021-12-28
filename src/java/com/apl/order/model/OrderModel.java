@@ -1,3 +1,4 @@
+
 package com.apl.order.model;
 
 import com.inventory.model.*;
@@ -43,11 +44,9 @@ public class OrderModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("OrderModel setConnection() Error: " + e);
         }
     }
-    
-    
 
     public String getRequestedToKeyPersonorder(String q, String requested_by) {
         int loc_of_dealer = getRequestedKeyPersondegId(requested_by);
@@ -65,7 +64,7 @@ public class OrderModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:OrderModel--getRequestedToKeyPersonorder()-- " + e);
         }
 
         return key_person_name;
@@ -202,7 +201,7 @@ public class OrderModel {
                 // sum_value++;
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: OrderModel showReportData-" + e);
         }
         return list;
     }
@@ -270,7 +269,7 @@ public class OrderModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
-            System.out.println("Error: in tubeWellUserTypeModel generateMapReport() JRException: " + e);
+            System.out.println("Error: in OrderModel generateMapReport() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -316,7 +315,7 @@ public class OrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: OrderModel showdata-" + e);
         }
         return list;
     }
@@ -340,7 +339,7 @@ public class OrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: OrderModel getStatus-" + e);
         }
         return list;
     }
@@ -423,7 +422,7 @@ public class OrderModel {
             rowsAffected2 = pstmt2.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("IndentModel insertRecord() Error: " + e);
+            System.out.println("OrderModel insertRecord() Error: " + e);
         }
         if (rowsAffected2 > 0) {
             message = "Record saved successfully.";
@@ -449,7 +448,7 @@ public class OrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("In OrderModel getRequestedByKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -463,7 +462,7 @@ public class OrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println(" In OrderModel getRequestedKeyPersondegId Error: " + e);
         }
         return id;
     }
@@ -478,7 +477,7 @@ public class OrderModel {
             rset.next();
             id = rset.getInt("model_id");
         } catch (Exception e) {
-            System.out.println("getModelId Error: " + e);
+            System.out.println("OrderModel getModelId Error: " + e);
         }
         return id;
     }
@@ -495,7 +494,7 @@ public class OrderModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNameId Error: " + e);
+            System.out.println("OrderModel getItemNameId Error: " + e);
         }
         return id;
     }
@@ -510,7 +509,7 @@ public class OrderModel {
             rset.next();
             id = rset.getInt("purpose_id");
         } catch (Exception e) {
-            System.out.println("getPurposeId Error: " + e);
+            System.out.println("OrderModel getPurposeId Error: " + e);
         }
         return id;
     }
@@ -534,7 +533,7 @@ public class OrderModel {
                 list.add("No such status  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getStatus()-- " + e);
+            System.out.println("Error:OrderModel--getStatus()-- " + e);
         }
         return list;
     }
@@ -558,7 +557,7 @@ public class OrderModel {
                 list.add("No such purpose  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getPurpose()-- " + e);
+            System.out.println("Error:OrderModel--getPurpose()-- " + e);
         }
         return list;
     }
@@ -582,7 +581,7 @@ public class OrderModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:OrderModel--getRequestedByKeyPerson()-- " + e);
         }
         return list;
     }
@@ -609,7 +608,7 @@ public class OrderModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:OrderModel--getRequestedToKeyPerson()-- " + e);
         }
 
         return list;
@@ -702,7 +701,7 @@ public class OrderModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("OrderModel.getIdList() -" + e);
         }
         return list;
     }
@@ -823,7 +822,7 @@ public class OrderModel {
                 //   list.addAll(list1);
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("OrderModel Exception in getItemsList---------" + e);
         }
 
         return list;
@@ -867,7 +866,7 @@ public class OrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: OrderModel getIndentItems-" + e);
         }
         return list;
     }
@@ -888,7 +887,7 @@ public class OrderModel {
                 counting = count;
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getCounting in IndentModel : " + ex);
+            System.out.println("ERROR: in getCounting in OrderModel : " + ex);
         }
         return counting + 1;
     }
@@ -908,7 +907,7 @@ public class OrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getLastIndentTableId error:" + e);
+            System.err.println("In OrderModel getLastIndentTableId error:" + e);
         }
         return indent_table_id;
     }
@@ -925,7 +924,7 @@ public class OrderModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("OrderModel closeConnection() Error: " + e);
         }
     }
 }

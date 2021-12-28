@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -91,7 +92,7 @@ public class InventoryBasicControllerold extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ItemNameController setConnection() calling try block" + e);
+            System.out.println("error in InventoryBasicControllerold setConnection() calling try block" + e);
         }
 
         try {
@@ -142,10 +143,11 @@ public class InventoryBasicControllerold extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryBasicController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --InventoryBasicControllerold get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -236,7 +238,7 @@ public class InventoryBasicControllerold extends HttpServlet {
             }
 
 //            List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person);
-//            request.setAttribute("list", list);
+            // request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
             }
@@ -248,11 +250,12 @@ public class InventoryBasicControllerold extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
-            model.closeConnection();
+
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("inventory_basic").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("InventoryBasicController error: " + ex);
+            System.out.println("InventoryBasicControllerold error: " + ex);
         }
     }
 

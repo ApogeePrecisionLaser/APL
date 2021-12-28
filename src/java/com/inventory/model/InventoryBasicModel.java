@@ -1,3 +1,4 @@
+
 package com.inventory.model;
 
 import java.io.ByteArrayOutputStream;
@@ -225,7 +226,7 @@ public class InventoryBasicModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("com.inventory.model.InventoryBasicModel.getIdList() -" + e);
         }
         return list;
     }
@@ -608,7 +609,7 @@ public class InventoryBasicModel {
                 //  list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("InventoryBasicModel Exception in showData---------" + e);
         }
 
         return list;
@@ -868,7 +869,7 @@ public class InventoryBasicModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("InventoryBasicModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -888,7 +889,7 @@ public class InventoryBasicModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getStockQuantity error:" + e);
+            System.err.println("InventoryBasicModel getStockQuantity error:" + e);
         }
         return quantity;
     }
@@ -1027,7 +1028,7 @@ public class InventoryBasicModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("InventoryBasicModel getRevisionno error:" + e);
         }
         return revision;
     }
@@ -1047,7 +1048,7 @@ public class InventoryBasicModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("InventoryBasicModel getRevisionno2 error:" + e);
         }
         return revision;
     }
@@ -1084,7 +1085,7 @@ public class InventoryBasicModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNamesId Error: " + e);
+            System.out.println("InventoryBasicModel getItemNamesId Error: " + e);
         }
         return id;
     }
@@ -1099,7 +1100,7 @@ public class InventoryBasicModel {
             rset.next();
             id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("getOrgOfficeId Error: " + e);
+            System.out.println("InventoryBasicModel getOrgOfficeId Error: " + e);
         }
         return id;
     }
@@ -1113,7 +1114,7 @@ public class InventoryBasicModel {
             rset.next();
             id = rset.getInt("model_id");
         } catch (Exception e) {
-            System.out.println("getModelId Error: " + e);
+            System.out.println("InventoryBasicModel getModelId Error: " + e);
         }
         return id;
     }
@@ -1128,7 +1129,7 @@ public class InventoryBasicModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("InventoryBasicModel getItemName Error: " + e);
         }
         return name;
     }
@@ -1363,7 +1364,7 @@ public class InventoryBasicModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryModel--getKeyPerson()-- " + e);
+            System.out.println("Error:InventoryBasicModel--getKeyPerson()-- " + e);
         }
         return list;
     }
@@ -1407,7 +1408,10 @@ public class InventoryBasicModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("InventoryBasicModel closeConnection() Error: " + e);
         }
+    }
+     public Connection getConnection() {
+        return connection;
     }
 }

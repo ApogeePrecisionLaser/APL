@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -6,6 +7,7 @@ package com.report.controller;
 
 import com.DBConnection.DBConnection;
 import com.general.model.GeneralModel;
+import com.inventory.model.InventoryBasicModel;
 import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.InventoryBasic;
 import com.report.bean.OfficeItemMapReport;
@@ -148,7 +150,7 @@ public class OfficeItemMapReportController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryBasicController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --OfficeItemMapReportController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");

@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -98,7 +99,7 @@ public class CheckOrderInventoryController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in CheckInventoryController setConnection() calling try block" + e);
+            System.out.println("error in CheckOrderInventoryController setConnection() calling try block" + e);
         }
 
         try {
@@ -144,7 +145,7 @@ public class CheckOrderInventoryController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --CheckInventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --CheckOrderInventoryController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -171,7 +172,7 @@ public class CheckOrderInventoryController extends HttpServlet {
                 List<CheckInventory> indent_items_list = model.getIndentItems(indent_table_id, logged_key_person_id);
                 request.setAttribute("indent_items_list", indent_items_list);
                 request.setAttribute("indent_status", indent_status);
-                request.getRequestDispatcher("deliveritemslist").forward(request, response);
+                request.getRequestDispatcher("checkorderInventoryItemList").forward(request, response);
                 return;
             }
 
@@ -274,7 +275,7 @@ public class CheckOrderInventoryController extends HttpServlet {
             request.getRequestDispatcher("checkorderInventory").forward(request, response);
 
         } catch (Exception ex) {
-            System.out.println("CheckInventoryController error: " + ex);
+            System.out.println("CheckOrderInventoryController error: " + ex);
         }
     }
 

@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -40,7 +41,7 @@ import org.json.simple.JSONObject;
 public class ItemNameController extends HttpServlet {
 
     private File tmpDir;
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -149,6 +150,7 @@ public class ItemNameController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -352,7 +354,7 @@ public class ItemNameController extends HttpServlet {
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("item_name").forward(request, response);
         } catch (Exception ex) {

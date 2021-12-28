@@ -50,13 +50,12 @@ public class OrgOfficeTypeModel {
 //        String query = " SELECT office_type_id, office_type,  description FROM org_office_type where  "
 //                + "  IF('" + active + "'='' ,active LIKE '%%',active = ?)  AND "
 //                + "  IF('" + searchOrgOfficeType + "'='' ,office_type LIKE '%%',office_type = ?)  ";
-
         String query = " SELECT office_type_id, office_type,  description FROM org_office_type where active='Y' ";
 
         if (!searchOrgOfficeType.equals("") && searchOrgOfficeType != null) {
             query += " and office_type='" + searchOrgOfficeType + "' ";
         }
-        
+
         try {
             searchOrgOfficeType = (searchOrgOfficeType);
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -71,7 +70,7 @@ public class OrgOfficeTypeModel {
                 list.add(orgOfficeType);
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeTypeModel showData() Error: " + e);
+            System.out.println("OrgOfficeTypeModel showAllData() Error: " + e);
         }
         return list;
     }
@@ -85,7 +84,7 @@ public class OrgOfficeTypeModel {
         if (!searchOrgOfficeType.equals("") && searchOrgOfficeType != null) {
             query += " and office_type='" + searchOrgOfficeType + "' ";
         }
-        
+
         try {
             searchOrgOfficeType = (searchOrgOfficeType);
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -197,6 +196,8 @@ public class OrgOfficeTypeModel {
 
             }
         } catch (Exception e) {
+            System.out.println("OrgOfficeTypeModel getRevisionno() Error: " + e);
+
         }
         return revision;
     }
@@ -237,7 +238,7 @@ public class OrgOfficeTypeModel {
                 list.add("No such Organisation Office Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("getOrgOfficeType ERROR - " + e);
+            System.out.println("OrgOfficeTypeModel getOrgOfficeType ERROR - " + e);
         }
         return list;
     }
@@ -250,7 +251,7 @@ public class OrgOfficeTypeModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
-            System.out.println("Error: in OrgOfficeReport orgOfficeReport() JRException: " + e);
+            System.out.println("Error: in OrgOfficeTypeModel orgOfficeReport() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -267,7 +268,7 @@ public class OrgOfficeTypeModel {
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
             exporter.exportReport();
         } catch (Exception e) {
-            System.out.println("CityStatusModel orgOfficeXlsRecordList() JRException: " + e);
+            System.out.println("OrgOfficeTypeModel orgOfficeXlsRecordList() JRException: " + e);
         }
         return bytArray;
     }
@@ -284,7 +285,7 @@ public class OrgOfficeTypeModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("getOrgOfficeType closeConnection() Error: " + e);
+            System.out.println("OrgOfficeTypeModel closeConnection() Error: " + e);
         }
     }
 }

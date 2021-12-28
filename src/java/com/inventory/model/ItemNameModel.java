@@ -35,8 +35,7 @@ public class ItemNameModel {
     private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
     int item_id = 0;
-    
-    
+
     public void setConnection(Connection con) {
         try {
             connection = con;
@@ -250,7 +249,7 @@ public class ItemNameModel {
             }
             //  }
         } catch (Exception e) {
-            System.err.println("exception---" + e);
+            System.err.println("ItemNameModel exception---" + e);
         }
         return arrayObj;
     }
@@ -294,7 +293,7 @@ public class ItemNameModel {
                 list.add(item_names_id);
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+            System.out.println("ItemNameModel.getAllParentChildList() -" + e);
         }
 
         String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
@@ -306,7 +305,7 @@ public class ItemNameModel {
                 list.add(parent_id);
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+            System.out.println("ItemNameModel.getAllParentChildList() -" + e);
         }
 
         try {
@@ -339,7 +338,7 @@ public class ItemNameModel {
                 list.add(rset.getInt(9));
             }
         } catch (Exception e) {
-            System.out.println("Error:--ItemNameModel--- showData--" + e);
+            System.out.println("Error:--ItemNameModel--- getAllParentChildList--" + e);
         }
         String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
         try {
@@ -349,7 +348,7 @@ public class ItemNameModel {
                 list.add(rstt.getInt(1));
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+            System.out.println("ItemNameModel.getAllParentChildList() -" + e);
         }
 
         list.removeAll(Arrays.asList(0));
@@ -371,7 +370,7 @@ public class ItemNameModel {
                 name = rset.getString("item_name");
             }
         } catch (Exception ex) {
-            System.err.println("getparentItemName error---------" + ex);
+            System.err.println("ItemNameModel getparentItemName error---------" + ex);
         }
 
         return name;
@@ -391,7 +390,7 @@ public class ItemNameModel {
                 item_code = rset.getString("item_code");
             }
         } catch (Exception ex) {
-            System.err.println("getparentItemCode error---------" + ex);
+            System.err.println("ItemNameModel getparentItemCode error---------" + ex);
         }
 
         return item_code;
@@ -513,7 +512,7 @@ public class ItemNameModel {
             rset.next();
             generation = rset.getInt("generation");
         } catch (Exception e) {
-            System.out.println("Error: getParentGeneration--" + e);
+            System.out.println("ItemNameModel Error: getParentGeneration--" + e);
         }
         return generation;
     }
@@ -541,7 +540,7 @@ public class ItemNameModel {
                 list.add(prefix);
             }
         } catch (Exception e) {
-            System.out.println("Error: getParentPrefix--" + e);
+            System.out.println("ItemNameModel Error: getParentPrefix--" + e);
         }
         return list;
     }
@@ -555,7 +554,7 @@ public class ItemNameModel {
             rset.next();
             p_id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("Error: getParent_Item_id--" + e);
+            System.out.println("ItemNameModel Error: getParent_Item_id--" + e);
         }
         return p_id;
     }
@@ -570,7 +569,7 @@ public class ItemNameModel {
             rset.next();
             p_id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("Error: getParent_Item_id--" + e);
+            System.out.println("ItemNameModel Error: getParent_Item_id_for_code--" + e);
         }
         return p_id;
     }
@@ -677,7 +676,7 @@ public class ItemNameModel {
             }
 
         } catch (Exception e) {
-            System.err.println("Exception in getImageList---------" + e);
+            System.err.println("ItemNameModel Exception in getImageList---------" + e);
         }
         return list;
     }
@@ -832,7 +831,7 @@ public class ItemNameModel {
                 image_count = Integer.parseInt(img_count_arr[3]);
             }
         } catch (Exception e) {
-            System.err.println("getImageCount Exception-----" + e);
+            System.err.println("ItemNameModel getImageCount Exception-----" + e);
         }
         return image_count;
     }
@@ -859,7 +858,7 @@ public class ItemNameModel {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("WirteImage error: " + e);
+                    System.out.println("ItemNameModel WirteImage error: " + e);
                 }
             }
             //}
@@ -874,7 +873,7 @@ public class ItemNameModel {
             try {
                 result = directory.mkdirs();
             } catch (Exception e) {
-                System.out.println("makeDirectory Error - " + e);
+                System.out.println("ItemNameModel makeDirectory Error - " + e);
             }
         }
         return result;
@@ -891,7 +890,7 @@ public class ItemNameModel {
                 revision = rset.getInt("revision_no");
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("ItemNameModel getRevisionno error:" + e);
         }
         return revision;
     }
@@ -909,7 +908,7 @@ public class ItemNameModel {
                 revision = rset.getString("revision_no");
             }
         } catch (Exception e) {
-            System.err.println("getRevisionnoForImage error:--" + e);
+            System.err.println("ItemNameModel getRevisionnoForImage error:--" + e);
         }
         return revision;
     }
@@ -966,7 +965,7 @@ public class ItemNameModel {
             pstm.setString(2, item_image_detail_id);
             rowsAffected = pstm.executeUpdate();
         } catch (Exception e) {
-            System.out.println("deleteImageRecord Error: " + e);
+            System.out.println("ItemNameModel deleteImageRecord Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record deleted successfully.";
@@ -990,7 +989,7 @@ public class ItemNameModel {
                 revision = rset.getInt("revision_no");
             }
         } catch (Exception e) {
-            System.err.println("getImageRevisionno error:--" + e);
+            System.err.println("ItemNameModel getImageRevisionno error:--" + e);
         }
         return revision;
     }
@@ -1005,7 +1004,7 @@ public class ItemNameModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNamesId Error: " + e);
+            System.out.println("ItemNameModel getItemNamesId Error: " + e);
         }
         return id;
     }
@@ -1020,7 +1019,7 @@ public class ItemNameModel {
             rset.next();
             id = rset.getInt("item_type_id");
         } catch (Exception e) {
-            System.out.println("getItemTypeID Error: " + e);
+            System.out.println("ItemNameModel getItemTypeID Error: " + e);
         }
         return id;
     }
@@ -1035,7 +1034,7 @@ public class ItemNameModel {
             rset.next();
             name = rset.getString("item_type");
         } catch (Exception e) {
-            System.out.println("getItemTypeName Error: " + e);
+            System.out.println("ItemNameModel getItemTypeName Error: " + e);
         }
         return name;
     }
@@ -1050,7 +1049,7 @@ public class ItemNameModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("ItemNameModel getItemName Error: " + e);
         }
         return name;
     }
@@ -1262,5 +1261,9 @@ public class ItemNameModel {
         } catch (Exception e) {
             System.out.println("ItemNameModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

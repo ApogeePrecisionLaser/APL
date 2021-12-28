@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -55,7 +56,7 @@ public class OrderController extends HttpServlet {
     String import_purpose = "";
     String import_expected_date_time = "";
     int import_req_qty = 0;
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -111,7 +112,7 @@ public class OrderController extends HttpServlet {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
             model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in IndentController setConnection() calling try block" + e);
+            System.out.println("error in OrderController setConnection() calling try block" + e);
         }
 
         try {
@@ -158,7 +159,7 @@ public class OrderController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --InventoryController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --OrderController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -319,7 +320,7 @@ public class OrderController extends HttpServlet {
 
             request.getRequestDispatcher("order").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("IndentController error: " + ex);
+            System.out.println("OrderController error: " + ex);
         }
     }
 

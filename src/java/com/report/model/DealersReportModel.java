@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -95,13 +96,12 @@ public class DealersReportModel {
 //            System.exit(1);
 //        }
 //    }
-
     public void setConnection(Connection con) {
         try {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("GenerateSpreadSheetModel setConnection() Error: " + e);
+            System.out.println("DealersReportModel setConnection() Error: " + e);
         }
     }
 
@@ -150,10 +150,10 @@ public class DealersReportModel {
                 DealersReport bean = new DealersReport();
                 bean.setKey_person_id(rset.getInt(1));
                 bean.setKey_person_name(rset.getString(2));
-                bean.setKp_address_line1(rset.getString(3)+", "+ rset.getString(4)+", "+rset.getString(5));
+                bean.setKp_address_line1(rset.getString(3) + ", " + rset.getString(4) + ", " + rset.getString(5));
 //                bean.setKp_address_line2(rset.getString(4));
 //                bean.setKp_address_line3(rset.getString(5));
-                bean.setKp_mobile_no1(rset.getString(6)+", "+rset.getString(24));
+                bean.setKp_mobile_no1(rset.getString(6) + ", " + rset.getString(24));
                 bean.setKp_email_id1(rset.getString(7));
                 bean.setEmp_code(rset.getInt(8));
                 bean.setKp_father_name(rset.getString(9));
@@ -163,7 +163,7 @@ public class DealersReportModel {
                 bean.setOrganisation_name(rset.getString(13));
                 bean.setOrganisation_code(rset.getString(14));
                 bean.setOrg_office_name(rset.getString(15));
-                bean.setOff_address_line1(rset.getString(16)+", "+rset.getString(23));
+                bean.setOff_address_line1(rset.getString(16) + ", " + rset.getString(23));
                 bean.setOff_email_id1(rset.getString(17));
                 bean.setOff_mobile_no1(rset.getString(18));
                 bean.setOrg_office_code(rset.getString(19));
@@ -176,21 +176,19 @@ public class DealersReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in GoogleSpreadSheet -- " + e);
+            System.out.println("Error in DealersReportModel getData -- " + e);
 
         }
 
         return dataList;
 
     }
-    
-    
-    
+
     public List<DealersReport> showData(String task, String org_name, String org_office_name, String org_office_type, String designation, String person) {
         List<DealersReport> list = new ArrayList<DealersReport>();
         ArrayList<DealersReport> dataList = new ArrayList<DealersReport>();
 
-       String query = " select distinct "
+        String query = " select distinct "
                 + " kp.key_person_id, "
                 + " kp.key_person_name,kp.address_line1,kp.address_line2,kp.address_line3,kp.mobile_no1,kp.email_id1,kp.emp_code, "
                 + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
@@ -231,10 +229,10 @@ public class DealersReportModel {
                 DealersReport bean = new DealersReport();
                 bean.setKey_person_id(rset.getInt(1));
                 bean.setKey_person_name(rset.getString(2));
-                bean.setKp_address_line1(rset.getString(3)+", "+ rset.getString(4)+", "+rset.getString(5));
+                bean.setKp_address_line1(rset.getString(3) + ", " + rset.getString(4) + ", " + rset.getString(5));
 //                bean.setKp_address_line2(rset.getString(4));
 //                bean.setKp_address_line3(rset.getString(5));
-                bean.setKp_mobile_no1(rset.getString(6)+", "+rset.getString(24));
+                bean.setKp_mobile_no1(rset.getString(6) + ", " + rset.getString(24));
                 bean.setKp_email_id1(rset.getString(7));
                 bean.setEmp_code(rset.getInt(8));
                 bean.setKp_father_name(rset.getString(9));
@@ -244,7 +242,7 @@ public class DealersReportModel {
                 bean.setOrganisation_name(rset.getString(13));
                 bean.setOrganisation_code(rset.getString(14));
                 bean.setOrg_office_name(rset.getString(15));
-                bean.setOff_address_line1(rset.getString(16)+", "+rset.getString(23));
+                bean.setOff_address_line1(rset.getString(16) + ", " + rset.getString(23));
                 bean.setOff_email_id1(rset.getString(17));
                 bean.setOff_mobile_no1(rset.getString(18));
                 bean.setOrg_office_code(rset.getString(19));
@@ -257,7 +255,7 @@ public class DealersReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in GoogleSpreadSheet -- " + e);
+            System.out.println("Error in DealersReportModel showData -- " + e);
 
         }
 
@@ -523,7 +521,6 @@ public class DealersReportModel {
 ////        }
 //        return success_message;
 //    }
-
     public List<String> getOrgName(String q) {
         List<String> list = new ArrayList<String>();
 
@@ -545,7 +542,7 @@ public class DealersReportModel {
                 list.add("No such organisation_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getOrgName-- " + e);
+            System.out.println("Error:DealersReportModel --getOrgName-- " + e);
         }
         return list;
     }
@@ -575,7 +572,7 @@ public class DealersReportModel {
                 list.add("No such org_office_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getOrgOfficeName-- " + e);
+            System.out.println("Error:DealersReportModel --getOrgOfficeName-- " + e);
         }
         return list;
     }
@@ -609,7 +606,7 @@ public class DealersReportModel {
                 list.add("No such office_type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getOrgOfficeType-- " + e);
+            System.out.println("Error:DealersReportModel --getOrgOfficeType-- " + e);
         }
         return list;
     }
@@ -642,7 +639,7 @@ public class DealersReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getDesignationList()-- " + e);
+            System.out.println("Error:DealersReportModel--getDesignation()-- " + e);
         }
 
         return list;
@@ -677,7 +674,7 @@ public class DealersReportModel {
                 list.add("No such key_person_name exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:designationModel --getPerson-- " + e);
+            System.out.println("Error:DealersReportModel --getPerson-- " + e);
         }
         return list;
     }
@@ -692,7 +689,7 @@ public class DealersReportModel {
             rset.next();    // move cursor from BOR to valid record.
             org_office_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("Error: OrganisationMapModel--" + e);
+            System.out.println("Error: DealersReportModel getOrgOfficeId--" + e);
         }
 
         return org_office_id;
@@ -711,7 +708,8 @@ public class DealersReportModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("designationModel closeConnection() Error: " + e);
+            System.out.println("DealersReportModel closeConnection() Error: " + e);
         }
     }
 }
+

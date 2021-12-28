@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -67,7 +68,7 @@ public class LoginModel {
             }
             //connection.close();
         } catch (Exception e) {
-            System.out.println("LoginModel getUseName() Error: " + e);
+            System.out.println("LoginModel setUserFullDetail() Error: " + e);
         }
     }
 
@@ -115,7 +116,7 @@ public class LoginModel {
                 str = rst.getString(1);
             }
         } catch (Exception e) {
-            System.out.println("getDesignation ERROR inside orderMgmtModel - " + e);
+            System.out.println("getDesignation ERROR inside LoginModel - " + e);
         }
         return str;
     }
@@ -244,7 +245,7 @@ public class LoginModel {
                 str = rst.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("getDesignation ERROR inside LoginModel - " + e);
+            System.out.println("getOrgNameId ERROR inside LoginModel - " + e);
         }
         return str;
     }

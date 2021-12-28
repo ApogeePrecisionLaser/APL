@@ -1,3 +1,4 @@
+
 package com.inventory.model;
 
 import java.sql.Connection;
@@ -42,7 +43,7 @@ public class IndentModel {
         try {
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryModel setConnection() Error: " + e);
+            System.out.println("IndentModel setConnection() Error: " + e);
         }
     }
 
@@ -87,7 +88,7 @@ public class IndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: IndentModel showdata-" + e);
         }
         return list;
     }
@@ -152,7 +153,7 @@ public class IndentModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: IndentModel getIndentData-" + e);
         }
         return list;
     }
@@ -176,7 +177,7 @@ public class IndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel getStatus-" + e);
+            System.out.println("Error: IndentModel getStatus-" + e);
         }
         return list;
     }
@@ -280,7 +281,7 @@ public class IndentModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getRequestedByKeyPersonId Error: " + e);
+            System.out.println("IndentModel getRequestedKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -295,7 +296,7 @@ public class IndentModel {
             rset.next();
             id = rset.getInt("model_id");
         } catch (Exception e) {
-            System.out.println("getModelId Error: " + e);
+            System.out.println("IndentModel getModelId Error: " + e);
         }
         return id;
     }
@@ -312,7 +313,7 @@ public class IndentModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNameId Error: " + e);
+            System.out.println("IndentModel getItemNameId Error: " + e);
         }
         return id;
     }
@@ -327,7 +328,7 @@ public class IndentModel {
             rset.next();
             id = rset.getInt("purpose_id");
         } catch (Exception e) {
-            System.out.println("getPurposeId Error: " + e);
+            System.out.println("IndentModel getPurposeId Error: " + e);
         }
         return id;
     }
@@ -423,7 +424,7 @@ public class IndentModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:IndentModel--getRequestedByKeyPerson()-- " + e);
+            System.out.println("Error:IndentModel--getRequestedToKeyPerson()-- " + e);
         }
         return list;
     }
@@ -515,7 +516,7 @@ public class IndentModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("IndentModel getIdList() -" + e);
         }
         return list;
     }
@@ -639,7 +640,7 @@ public class IndentModel {
                 //   list.addAll(list1);
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("IndentModel Exception in getItemsList---------" + e);
         }
 
         return list;
@@ -702,7 +703,7 @@ public class IndentModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: IndentModel getIndentItems-" + e);
         }
         return list;
     }
@@ -768,7 +769,7 @@ public class IndentModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: InventoryModel showdata-" + e);
+            System.out.println("Error: IndentModel getBlankIndentData-" + e);
         }
         return list;
     }
@@ -788,7 +789,7 @@ public class IndentModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getLastIndentTableId error:" + e);
+            System.err.println("IndentModel getLastIndentTableId error:" + e);
         }
         return indent_table_id;
     }
@@ -802,7 +803,7 @@ public class IndentModel {
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
         } catch (Exception e) {
-            System.out.println("Error: in tubeWellUserTypeModel generateMapReport() JRException: " + e);
+            System.out.println("IndentModel generateMapReport() JRException: " + e);
         }
         return reportInbytes;
     }
@@ -819,7 +820,10 @@ public class IndentModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("IndentModel closeConnection() Error: " + e);
         }
+    }
+     public Connection getConnection() {
+        return connection;
     }
 }

@@ -48,8 +48,10 @@ public class InventoryModel {
         }
     }
 
-    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code, 
-            String search_model, String searchKeyPerson,String search_by_date) throws SQLException {
+
+    public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
+            String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
+
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
 
@@ -164,7 +166,7 @@ public class InventoryModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("com.inventory.model.InventoryModel.getIdList() -" + e);
         }
         return list;
     }
@@ -184,7 +186,9 @@ public class InventoryModel {
         String search_generation = "";
 
         try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson,search_by_date);
+
+            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
+
             //  System.err.println("desig list --" + desig_map_list.size());
             //  System.err.println("desig list ele--" + desig_map_list);
             ItemNameModel model = new ItemNameModel();
@@ -361,7 +365,7 @@ public class InventoryModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("InventoryModel Exception in getItemsList---------" + e);
         }
 
         return list;
@@ -413,13 +417,14 @@ public class InventoryModel {
 
             }
         } catch (Exception e) {
-            System.err.println("Exception in getAllDetails---------" + e);
+            System.err.println("InventoryModel Exception in getAllDetails---------" + e);
         }
 
         return list;
 
     }
 
+    
     public String getImagePath(String inventory_id, String uploadedFor) {
         String img_name = "";
         String destination_path = "";
@@ -622,7 +627,7 @@ public class InventoryModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("InventoryModel getRevisionno error:" + e);
         }
         return revision;
     }
@@ -642,7 +647,7 @@ public class InventoryModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getStockQuantity error:" + e);
+            System.err.println("InventoryModel getStockQuantity error:" + e);
         }
         return quantity;
     }
@@ -677,7 +682,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNamesId Error: " + e);
+            System.out.println("InventoryModel getItemNamesId Error: " + e);
         }
         return id;
     }
@@ -692,7 +697,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("getOrgOfficeId Error: " + e);
+            System.out.println("InventoryModel getOrgOfficeId Error: " + e);
         }
         return id;
     }
@@ -707,7 +712,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("getKeyPersonId Error: " + e);
+            System.out.println("InventoryModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -722,7 +727,7 @@ public class InventoryModel {
             rset.next();
             id = rset.getInt("inventory_basic_id");
         } catch (Exception e) {
-            System.out.println("getInventoryBasicId Error: " + e);
+            System.out.println("InventoryModel getInventoryBasicId Error: " + e);
         }
         return id;
     }
@@ -737,7 +742,7 @@ public class InventoryModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("InventoryModel getItemName Error: " + e);
         }
         return name;
     }
@@ -942,7 +947,10 @@ public class InventoryModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("InventoryModel closeConnection() Error: " + e);
         }
+    }
+     public Connection getConnection() {
+        return connection;
     }
 }

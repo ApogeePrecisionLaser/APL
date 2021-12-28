@@ -135,7 +135,7 @@ public class ItemAuthorizationModel {
                     rowsAffected = pstmt.executeUpdate();
                 }
             }
-            
+
             String query5 = " select item_names_id from item_names where item_names_id"
                     + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
                     + "  and active='Y' ";
@@ -279,7 +279,7 @@ public class ItemAuthorizationModel {
 
             }
         } catch (Exception e) {
-            System.err.println("getRevisionno error:" + e);
+            System.err.println("ItemAuthorizationModel getRevisionno error:" + e);
         }
         return revision;
     }
@@ -314,7 +314,7 @@ public class ItemAuthorizationModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("getItemNamesId Error: " + e);
+            System.out.println("ItemAuthorizationModel getItemNamesId Error: " + e);
         }
         return id;
     }
@@ -329,7 +329,7 @@ public class ItemAuthorizationModel {
             rset.next();
             id = rset.getInt("designation_id");
         } catch (Exception e) {
-            System.out.println("getDesignationId Error: " + e);
+            System.out.println("ItemAuthorizationModel getDesignationId Error: " + e);
         }
         return id;
     }
@@ -344,7 +344,7 @@ public class ItemAuthorizationModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("ItemAuthorizationModel getItemName Error: " + e);
         }
         return name;
     }
@@ -410,7 +410,11 @@ public class ItemAuthorizationModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("ItemAuthorizationModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

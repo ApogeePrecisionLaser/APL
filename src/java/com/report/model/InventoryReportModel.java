@@ -1,3 +1,4 @@
+
 package com.report.model;
 
 import java.io.ByteArrayOutputStream;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
+import com.inventory.model.InventoryBasicModel;
 import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.InventoryBasic;
@@ -54,7 +56,7 @@ public class InventoryReportModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("InventoryBasicModel setConnection() Error: " + e);
+            System.out.println("InventoryReportModel setConnection() Error: " + e);
         }
     }
 
@@ -173,7 +175,7 @@ public class InventoryReportModel {
             }
 
         } catch (Exception e) {
-            System.out.println("com.inventory.model.IndentModel.getIdList() -" + e);
+            System.out.println("com.inventory.model.InventoryReportModel.getIdList() -" + e);
         }
         return list;
     }
@@ -187,7 +189,7 @@ public class InventoryReportModel {
             rset.next();
             p_id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("Error: getParent_Item_id--" + e);
+            System.out.println("InventoryReportModel Error: getParent_Item_id--" + e);
         }
         return p_id;
     }
@@ -470,7 +472,7 @@ public class InventoryReportModel {
 
             }
         } catch (Exception e) {
-            System.err.println("Exception in getItemsList---------" + e);
+            System.err.println("InventoryReportModel Exception in showData---------" + e);
         }
 
         return list;
@@ -495,7 +497,7 @@ public class InventoryReportModel {
                 list.add(item_names_id);
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+            System.out.println("InventoryReportModel.getAllParentChildList() -" + e);
         }
 
         String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
@@ -507,7 +509,7 @@ public class InventoryReportModel {
                 list.add(parent_id);
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+            System.out.println("InventoryReportModel.getAllParentChildList() -" + e);
         }
 
         try {
@@ -540,7 +542,7 @@ public class InventoryReportModel {
                 list.add(rset.getInt(9));
             }
         } catch (Exception e) {
-            System.out.println("Error:--ItemNameModel--- showData--" + e);
+            System.out.println("Error:--InventoryReportModel--- getAllParentChildList--" + e);
         }
         String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
         try {
@@ -550,7 +552,7 @@ public class InventoryReportModel {
                 list.add(rstt.getInt(1));
             }
         } catch (Exception e) {
-            System.out.println("ItemNameModel.getAllParentChild() -" + e);
+            System.out.println("InventoryReportModel.getAllParentChildList() -" + e);
         }
 
         list.removeAll(Arrays.asList(0));
@@ -568,7 +570,7 @@ public class InventoryReportModel {
             rset.next();
             name = rset.getString("item_name");
         } catch (Exception e) {
-            System.out.println("getItemName Error: " + e);
+            System.out.println("InventoryReportModel getItemName Error: " + e);
         }
         return name;
     }
@@ -598,7 +600,7 @@ public class InventoryReportModel {
                 list.add("No such item_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getItemName()-- " + e);
+            System.out.println("Error:InventoryReportModel--getItemName()-- " + e);
         }
         return list;
     }
@@ -632,7 +634,7 @@ public class InventoryReportModel {
                 list.add("No such item_code  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getItemCode()-- " + e);
+            System.out.println("Error:InventoryReportModel--getItemCode()-- " + e);
         }
         return list;
     }
@@ -658,7 +660,7 @@ public class InventoryReportModel {
                 list.add("No such org_office_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getOrgOffice()-- " + e);
+            System.out.println("Error:InventoryReportModel--getOrgOffice()-- " + e);
         }
         return list;
     }
@@ -684,7 +686,7 @@ public class InventoryReportModel {
                 list.add("No such manufacturer_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getManufacturer()-- " + e);
+            System.out.println("Error:InventoryReportModel--getManufacturer()-- " + e);
         }
         return list;
     }
@@ -729,7 +731,7 @@ public class InventoryReportModel {
                 list.add("No such model  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getModelName()-- " + e);
+            System.out.println("Error:InventoryReportModel--getModelName()-- " + e);
         }
         return list;
     }
@@ -759,7 +761,7 @@ public class InventoryReportModel {
                 list.add("No such key_person_name  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryModel--getKeyPerson()-- " + e);
+            System.out.println("Error:InventoryReportModel--getKeyPerson()-- " + e);
         }
         return list;
     }
@@ -786,7 +788,7 @@ public class InventoryReportModel {
                 list.add("No such model  exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getModelName()-- " + e);
+            System.out.println("Error:InventoryReportModel--getLeadTime()-- " + e);
         }
         return list;
     }
@@ -803,7 +805,8 @@ public class InventoryReportModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemNameModel closeConnection() Error: " + e);
+            System.out.println("InventoryReportModel closeConnection() Error: " + e);
         }
     }
 }
+

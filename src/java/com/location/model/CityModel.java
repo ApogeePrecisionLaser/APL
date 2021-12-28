@@ -30,7 +30,7 @@ public class CityModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("QtOohDefaultsModel setConnection() Error: " + e);
+            System.out.println("CityModel setConnection() Error: " + e);
         }
     }
 
@@ -40,21 +40,17 @@ public class CityModel {
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
+            q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-
-                q = q.trim();
-                while (rset.next()) {
-                    String city_name = (rset.getString("city_name"));
-                    if (city_name.toUpperCase().startsWith(q.toUpperCase())) {
-                        list.add(city_name);
-                        count++;
-                    }
-
+//                String district_type = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("district_name"));
+                String city_name = rset.getString("city_name");
+                if (city_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(city_name);
+                    count++;
                 }
-
             }
             if (count == 0) {
-                list.add("No such city exists.......");
+                list.add("No such city_name exists.......");
             }
         } catch (Exception e) {
             System.out.println("getCity ERROR inside CityModel - " + e);
@@ -63,25 +59,28 @@ public class CityModel {
     }
 
     public List<String> getTehsil(String q) {
+        if (q == null) {
+            q = "";
+        }
         List<String> list = new ArrayList<String>();
         String query = " SELECT tehsil_id, tehsil_name FROM tehsil GROUP BY tehsil_name ORDER BY tehsil_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
-
+            q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-//                String tehsil_type = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("tehsil_name"));
-                String tehsil_type = rset.getString("tehsil_name");
-
-                list.add(tehsil_type);
-                count++;
-
+//                String district_type = unicodeToKruti.Convert_to_Kritidev_010(rset.getString("district_name"));
+                String tehsil_name = rset.getString("tehsil_name");
+                if (tehsil_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(tehsil_name);
+                    count++;
+                }
             }
             if (count == 0) {
-                list.add("No such tehsil exists.......");
+                list.add("No such tehsil_name exists.......");
             }
         } catch (Exception e) {
-            System.out.println("getTehsil ERROR inside TehsilModel - " + e);
+            System.out.println("getTehsil ERROR inside CityModel - " + e);
         }
         return list;
     }
@@ -148,7 +147,7 @@ public class CityModel {
                 messageBGColor = "red";
             }
         } catch (Exception e) {
-            System.out.println("Error in deleting recordl ---- CityModel : " + e);
+            System.out.println("Error in deleting record ---- CityModel : " + e);
         }
     }
 
@@ -233,7 +232,7 @@ public class CityModel {
                 division_id = 0;
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: " + ex);
+            System.out.println("Error in getCityId -- CityModel : " + ex);
         }
         return division_id;
     }
@@ -308,7 +307,7 @@ public class CityModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:OrganisationSubTypeModel-" + e);
+            System.out.println("Error:CityModel updateRecord-" + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -334,6 +333,8 @@ public class CityModel {
 
             }
         } catch (Exception e) {
+            System.out.println("Error:CityModel getRevisionno-" + e);
+
         }
         return revision;
     }

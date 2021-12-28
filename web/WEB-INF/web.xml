@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-         version="3.1">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <session-config>
         <session-timeout>
             30    
@@ -21,20 +17,17 @@
         <param-name>connectionString</param-name>
         <param-value>jdbc:mysql://localhost:3306/apl</param-value>
         <!--        <param-value>jdbc:mysql://localhost:3306/apl</param-value>-->
-
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
         <param-value>root</param-value>
     </context-param>
     <context-param>
-        <param-name>db_password</param-name>                
-        <!--<param-value>root</param-value>--> 
-        <param-value>CXKyE2ZpT%HjbP!4c$</param-value>
-
+        <param-name>db_password</param-name>
+        <param-value>root</param-value>
+        <!--        <param-value>root</param-value>-->
     </context-param>
-    
-    
+   
     
     <filter>
         <filter-name>MyCustomLogFilter</filter-name>
@@ -151,8 +144,7 @@
     
     <!-- end organization office type--> 
 
-    
-    
+   
     <!--Start org office-->
     
     <servlet>
@@ -272,6 +264,7 @@
         <servlet-name>generateSpreadSheetController</servlet-name>
         <url-pattern>/generateSpreadSheetController</url-pattern>
     </servlet-mapping>
+    
     <servlet>
         <servlet-name>generateSpreadSheet</servlet-name>
         <jsp-file>/view/organization/generateSpreadSheet.jsp</jsp-file>
@@ -1097,7 +1090,6 @@
         <servlet-name>deliveritemslist</servlet-name>
         <url-pattern>/deliveritemslist</url-pattern>
     </servlet-mapping> 
-    
     <servlet>
         <servlet-name>showorderitemlist</servlet-name>
         <jsp-file>/view/Inventory/showorderItemList.jsp</jsp-file>
@@ -1138,6 +1130,7 @@
     <!--end Office and item map report-->
     
     
+    
     <!--Start dealers report-->
     <servlet>
         <servlet-name>DealersReportController</servlet-name>
@@ -1157,6 +1150,796 @@
     </servlet-mapping>
     <!--end dealers report-->
     
+   
     
+    <!--Start Dashboard-->
+    <servlet>
+        <servlet-name>CRMDashboardController</servlet-name>
+        <servlet-class>com.dashboard.controller.CRMDashboardController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CRMDashboardController</servlet-name>
+        <url-pattern>/CRMDashboardController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CRMDashboard</servlet-name>
+        <jsp-file>/CRM Dashboard/CRMDashboard.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CRMDashboard</servlet-name>
+        <url-pattern>/CRMDashboard</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>admin_dashboard</servlet-name>
+        <jsp-file>/CRM Dashboard/admin_dashboard.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>admin_dashboard</servlet-name>
+        <url-pattern>/admin_dashboard</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>salesperson_dashboard</servlet-name>
+        <jsp-file>/CRM Dashboard/salesperson_dashboard.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesperson_dashboard</servlet-name>
+        <url-pattern>/salesperson_dashboard</url-pattern>
+    </servlet-mapping>
+    
+    <!--end Dashboard-->
+    
+    
+    <!--Start Dealers Order -->
+    <servlet>
+        <servlet-name>DealersOrderController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealersOrderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealersOrderController</servlet-name>
+        <url-pattern>/DealersOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealers_order</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers_order.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers_order</servlet-name>
+        <url-pattern>/dealers_order</url-pattern>
+    </servlet-mapping>
+    <!--end Dealers Order -->
+    
+    
+    
+    
+    <!--Start Dealers Inventory -->
+    <servlet>
+        <servlet-name>DealersInventoryController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealersInventoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealersInventoryController</servlet-name>
+        <url-pattern>/DealersInventoryController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealers_inventory</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers_inventory.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers_inventory</servlet-name>
+        <url-pattern>/dealers_inventory</url-pattern>
+    </servlet-mapping>
+    <!--end Dealers Inventory -->
+    
+    
+    <!--Start Dealers Enquiry -->
+    <servlet>
+        <servlet-name>DealersEnquiryController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealersEnquiryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealersEnquiryController</servlet-name>
+        <url-pattern>/DealersEnquiryController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealers_enquiry</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers_enquiry.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers_enquiry</servlet-name>
+        <url-pattern>/dealers_enquiry</url-pattern>
+    </servlet-mapping>
+    <!--end Dealers Enquiry -->
+    
+    
+    <!--Start Dealers sales -->
+    <servlet>
+        <servlet-name>DealersSalesController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealersSalesController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealersSalesController</servlet-name>
+        <url-pattern>/DealersSalesController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealers_sales</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers_sales.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers_sales</servlet-name>
+        <url-pattern>/dealers_sales</url-pattern>
+    </servlet-mapping>
+    <!--end Dealers sales -->
+    
+    
+    <!--Start Dealers sales -->
+    <servlet>
+        <servlet-name>DealersComplaintController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealersComplaintController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealersComplaintController</servlet-name>
+        <url-pattern>/DealersComplaintController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealers_complaint</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers_complaint.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers_complaint</servlet-name>
+        <url-pattern>/dealers_complaint</url-pattern>
+    </servlet-mapping>
+    <!--end Dealers sales -->
+    
+    
+    <!--Start CRM category -->
+    <servlet>
+        <servlet-name>CRM_category</servlet-name>
+        <jsp-file>/CRM Dashboard/CRM_category.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CRM_category</servlet-name>
+        <url-pattern>/CRM_category</url-pattern>
+    </servlet-mapping>
+    <!--end CRM category -->
+   
+    <!--Start ProductsDetails -->
+    <servlet>
+        <servlet-name>product_details</servlet-name>
+        <jsp-file>/CRM Dashboard/product_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>product_details</servlet-name>
+        <url-pattern>/product_details</url-pattern>
+    </servlet-mapping>
+    <!--end ProductsDetails -->
+    
+    
+    <!--Start cart -->
+    <servlet>
+        <servlet-name>cart_view</servlet-name>
+        <jsp-file>/CRM Dashboard/cart_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>cart_view</servlet-name>
+        <url-pattern>/cart_view</url-pattern>
+    </servlet-mapping>
+    <!--end cart -->
+    
+    <!--Start thank you -->
+    <servlet>
+        <servlet-name>thank_you</servlet-name>
+        <jsp-file>/CRM Dashboard/thank_you.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>thank_you</servlet-name>
+        <url-pattern>/thank_you</url-pattern>
+    </servlet-mapping>
+    <!--end thank you -->
+    
+    <!--Start error -->
+    <servlet>
+        <servlet-name>error</servlet-name>
+        <jsp-file>/CRM Dashboard/error.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>error</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+    <!--end error -->
+    
+    
+    <!--Start PENDING ORDERS -->
+    <servlet>
+        <servlet-name>PendingOrdersController</servlet-name>
+        <servlet-class>com.dashboard.controller.PendingOrdersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PendingOrdersController</servlet-name>
+        <url-pattern>/PendingOrdersController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>pending_order</servlet-name>
+        <jsp-file>/CRM Dashboard/pending_order.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>pending_order</servlet-name>
+        <url-pattern>/pending_order</url-pattern>
+    </servlet-mapping>
+    <!--end PENDING ORDERS -->
+    
+    
+    <!--Start notification -->
+    <servlet>
+        <servlet-name>NotificationController</servlet-name>
+        <servlet-class>com.dashboard.controller.NotificationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NotificationController</servlet-name>
+        <url-pattern>/NotificationController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>notification</servlet-name>
+        <jsp-file>/CRM Dashboard/notification.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>notification</servlet-name>
+        <url-pattern>/notification</url-pattern>
+    </servlet-mapping>
+    <!--end notification -->
+    
+      
+    <!--Start Dealers profile -->
+    <servlet>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>com.dashboard.controller.ProfileController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileController</servlet-name>
+        <url-pattern>/ProfileController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>profile</servlet-name>
+        <jsp-file>/CRM Dashboard/profile.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>profile</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <!--end Dealers profile -->
+    
+    <!--Start edit Dealers profile -->
+    <servlet>
+        <servlet-name>EditProfileController</servlet-name>
+        <servlet-class>com.dashboard.controller.EditProfileController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditProfileController</servlet-name>
+        <url-pattern>/EditProfileController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>edit_profile</servlet-name>
+        <jsp-file>/CRM Dashboard/edit_profile.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>edit_profile</servlet-name>
+        <url-pattern>/edit_profile</url-pattern>
+    </servlet-mapping>
+    <!--end edit Dealers profile -->
+    
+    <!--Start help -->
+    <servlet>
+        <servlet-name>HelpController</servlet-name>
+        <servlet-class>com.dashboard.controller.HelpController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelpController</servlet-name>
+        <url-pattern>/HelpController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>help</servlet-name>
+        <jsp-file>/CRM Dashboard/help.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>help</servlet-name>
+        <url-pattern>/help</url-pattern>
+    </servlet-mapping>
+    <!--end help-->
+    
+    <!--Start Pending Order Details -->
+    <servlet>
+        <servlet-name>OrderDetailsController</servlet-name>
+        <servlet-class>com.dashboard.controller.OrderDetailsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderDetailsController</servlet-name>
+        <url-pattern>/OrderDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>pending_order_details</servlet-name>
+        <jsp-file>/CRM Dashboard/pending_order_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>pending_order_details</servlet-name>
+        <url-pattern>/pending_order_details</url-pattern>
+    </servlet-mapping>
+    <!--end Pending Order Details  -->
+    
+    
+    <!--Start Order History -->
+    <servlet>
+        <servlet-name>OrdersHistoryController</servlet-name>
+        <servlet-class>com.dashboard.controller.OrdersHistoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrdersHistoryController</servlet-name>
+        <url-pattern>/OrdersHistoryController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>order_history</servlet-name>
+        <jsp-file>/CRM Dashboard/order_history.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>order_history</servlet-name>
+        <url-pattern>/order_history</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>historyOrderDetails</servlet-name>
+        <jsp-file>/CRM Dashboard/historyOrderDetails.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>historyOrderDetails</servlet-name>
+        <url-pattern>/historyOrderDetails</url-pattern>
+    </servlet-mapping>
+    
+    <!--end Order History -->
+    
+    <!--Start Approve Order  -->
+    <servlet>
+        <servlet-name>ApproveOrdersController</servlet-name>
+        <servlet-class>com.dashboard.controller.ApproveOrdersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApproveOrdersController</servlet-name>
+        <url-pattern>/ApproveOrdersController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>salesperson_approve_order</servlet-name>
+        <jsp-file>/CRM Dashboard/salesperson_approve_order.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesperson_approve_order</servlet-name>
+        <url-pattern>/salesperson_approve_order</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>approve_order_details</servlet-name>
+        <jsp-file>/CRM Dashboard/approve_order_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approve_order_details</servlet-name>
+        <url-pattern>/approve_order_details</url-pattern>
+    </servlet-mapping>
+    
+    <!--end Approve Order   -->
+    
+    
+        
+    <!--Start Sales Enquiry  -->
+    <servlet>
+        <servlet-name>SalesEnquiryController</servlet-name>
+        <servlet-class>com.dashboard.controller.SalesEnquiryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SalesEnquiryController</servlet-name>
+        <url-pattern>/SalesEnquiryController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>sales_enquiry_form</servlet-name>
+        <jsp-file>/CRM Dashboard/sales_enquiry_form.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sales_enquiry_form</servlet-name>
+        <url-pattern>/sales_enquiry_form</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>sales_enquiry_list</servlet-name>
+        <jsp-file>/CRM Dashboard/sales_enquiry_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sales_enquiry_list</servlet-name>
+        <url-pattern>/sales_enquiry_list</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>sales_enquiry_details</servlet-name>
+        <jsp-file>/CRM Dashboard/sales_enquiry_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sales_enquiry_details</servlet-name>
+        <url-pattern>/sales_enquiry_details</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>complaint_enquiry_list</servlet-name>
+        <jsp-file>/CRM Dashboard/complaint_enquiry_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>complaint_enquiry_list</servlet-name>
+        <url-pattern>/complaint_enquiry_list</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>complaint_enquiry_details</servlet-name>
+        <jsp-file>/CRM Dashboard/complaint_enquiry_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>complaint_enquiry_details</servlet-name>
+        <url-pattern>/complaint_enquiry_details</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+    <servlet>
+        <servlet-name>salesperson_sales_enquiry_list</servlet-name>
+        <jsp-file>/CRM Dashboard/salesperson_sales_enquiry_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesperson_sales_enquiry_list</servlet-name>
+        <url-pattern>/salesperson_sales_enquiry_list</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>salesperson_complaint_enquiry_list</servlet-name>
+        <jsp-file>/CRM Dashboard/salesperson_complaint_enquiry_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesperson_complaint_enquiry_list</servlet-name>
+        <url-pattern>/salesperson_complaint_enquiry_list</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>salesperson_sales_enquiry_details</servlet-name>
+        <jsp-file>/CRM Dashboard/salesperson_sales_enquiry_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesperson_sales_enquiry_details</servlet-name>
+        <url-pattern>/salesperson_sales_enquiry_details</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>salesperson_complaint_enquiry_details</servlet-name>
+        <jsp-file>/CRM Dashboard/salesperson_complaint_enquiry_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesperson_complaint_enquiry_details</servlet-name>
+        <url-pattern>/salesperson_complaint_enquiry_details</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>dealer_sales_enquiry_list</servlet-name>
+        <jsp-file>/CRM Dashboard/dealer_sales_enquiry_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealer_sales_enquiry_list</servlet-name>
+        <url-pattern>/dealer_sales_enquiry_list</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>dealer_complaint_enquiry_list</servlet-name>
+        <jsp-file>/CRM Dashboard/dealer_complaint_enquiry_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealer_complaint_enquiry_list</servlet-name>
+        <url-pattern>/dealer_complaint_enquiry_list</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>dealer_sales_enquiry_details</servlet-name>
+        <jsp-file>/CRM Dashboard/dealer_sales_enquiry_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealer_sales_enquiry_details</servlet-name>
+        <url-pattern>/dealer_sales_enquiry_details</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>dealer_complaint_enquiry_details</servlet-name>
+        <jsp-file>/CRM Dashboard/dealer_complaint_enquiry_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealer_complaint_enquiry_details</servlet-name>
+        <url-pattern>/dealer_complaint_enquiry_details</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!--end Enquiry   -->
+    
+    
+    
+    
+    <!--Start Enquiry Source -->
+    <servlet>
+        <servlet-name>EnquirySourceController</servlet-name>
+        <servlet-class>com.dashboard.controller.EnquirySourceController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnquirySourceController</servlet-name>
+        <url-pattern>/EnquirySourceController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>enquiry_source</servlet-name>
+        <jsp-file>/CRM Dashboard/enquiry_source.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>enquiry_source</servlet-name>
+        <url-pattern>/enquiry_source</url-pattern>
+    </servlet-mapping>
+  
+    <!--end Enquiry Source  -->
+    
+    <!--Start Marketing Vertical-->
+    <servlet>
+        <servlet-name>MarketingVerticalController</servlet-name>
+        <servlet-class>com.dashboard.controller.MarketingVerticalController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MarketingVerticalController</servlet-name>
+        <url-pattern>/MarketingVerticalController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>marketing_vertical</servlet-name>
+        <jsp-file>/CRM Dashboard/marketing_vertical.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>marketing_vertical</servlet-name>
+        <url-pattern>/marketing_vertical</url-pattern>
+    </servlet-mapping>
+  
+    <!--end  Marketing Vertical  -->
+    
+    
+    <!--Start Dealers Network-->
+    <servlet>
+        <servlet-name>DealersController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealersController</servlet-name>
+        <url-pattern>/DealersController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealers</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers</servlet-name>
+        <url-pattern>/dealers</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>dealer_details</servlet-name>
+        <jsp-file>/CRM Dashboard/dealer_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealer_details</servlet-name>
+        <url-pattern>/dealer_details</url-pattern>
+    </servlet-mapping>
+    
+  
+    <!--endDealers Network  -->
+    
+    <!--Start SalesManager State mapping-->
+    <servlet>
+        <servlet-name>SalesManagerStateMappingController</servlet-name>
+        <servlet-class>com.apl.order.controller.SalesManagerStateMappingController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SalesManagerStateMappingController</servlet-name>
+        <url-pattern>/SalesManagerStateMappingController</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>salesmanager_state_mapping</servlet-name>
+        <jsp-file>/view/Inventory/salesmanager_state_mapping.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>salesmanager_state_mapping</servlet-name>
+        <url-pattern>/salesmanager_state_mapping</url-pattern>
+    </servlet-mapping>
+  
+    <!--end SalesManager State mapping  -->
+    
+    
+    
+    <!-- start location module -->
+    
+    <servlet>
+        <servlet-name>tehsilView</servlet-name>
+        <jsp-file>/view/location/tehsilView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>tehsilView</servlet-name>
+        <url-pattern>/tehsilView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TehsilController</servlet-name>
+        <servlet-class>com.location.controller.TehsilController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TehsilController</servlet-name>
+        <url-pattern>/tehsilTypeCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>country</servlet-name>
+        <jsp-file>/view/location/country.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>country</servlet-name>
+        <url-pattern>/country</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CountryController</servlet-name>
+        <servlet-class>com.location.controller.CountryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CountryController</servlet-name>
+        <url-pattern>/countryCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>districtController</servlet-name>
+        <servlet-class>com.location.controller.DistrictController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>districtController</servlet-name>
+        <url-pattern>/districtTypeCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>districtView</servlet-name>
+        <jsp-file>/view/location/districtView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>districtView</servlet-name>
+        <url-pattern>/districtView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>divisionController</servlet-name>
+        <servlet-class>com.location.controller.DivisionController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>divisionController</servlet-name>
+        <url-pattern>/divisionTypeCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>divisionView</servlet-name>
+        <jsp-file>/view/location/divisionView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>divisionView</servlet-name>
+        <url-pattern>/divisionView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>stateutController</servlet-name>
+        <servlet-class>com.location.controller.StateutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>stateutController</servlet-name>
+        <url-pattern>/stateutTypeCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>stateutView</servlet-name>
+        <jsp-file>/view/location/stateutView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>stateutView</servlet-name>
+        <url-pattern>/stateutView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>zoneView</servlet-name>
+        <jsp-file>/view/location/zoneView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zoneView</servlet-name>
+        <url-pattern>/zoneView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>zoneNewController</servlet-name>
+        <servlet-class>com.location.controller.ZoneNewController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zoneNewController</servlet-name>
+        <url-pattern>/zoneTypeCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>zoneNewView</servlet-name>
+        <jsp-file>/view/location/zoneNewView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zoneNewView</servlet-name>
+        <url-pattern>/zoneNewView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>cityLocation</servlet-name>
+        <jsp-file>/view/location/cityLocation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>cityLocation</servlet-name>
+        <url-pattern>/cityLocationView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CityLocationCont</servlet-name>
+        <servlet-class>com.location.controller.CityLocationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CityLocationCont</servlet-name>
+        <url-pattern>/cityLocationCont</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>WardView</servlet-name>
+        <jsp-file>/view/location/wardView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WardView</servlet-name>
+        <url-pattern>/wardView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>wardTypeCont</servlet-name>
+        <servlet-class>com.location.controller.WardController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>wardTypeCont</servlet-name>
+        <url-pattern>/wardTypeCont</url-pattern>
+    </servlet-mapping>
+    
+    <!--Start of Area Controller -->
+    <servlet>
+        <servlet-name>Area_Type_View</servlet-name>
+        <jsp-file>/view/location/areaView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Area_Type_View</servlet-name>
+        <url-pattern>/area_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AreaTypeCont</servlet-name>
+        <servlet-class>com.location.controller.AreaTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AreaTypeCont</servlet-name>
+        <url-pattern>/areaTypeCont</url-pattern>
+    </servlet-mapping>
+    
+    <!-- end location module -->
+    
+    
+    <!--Start Dealer Item Mapping -->
+    <servlet>
+        <servlet-name>dealer_item_map</servlet-name>
+        <jsp-file>/CRM Dashboard/dealer_item_map.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealer_item_map</servlet-name>
+        <url-pattern>/dealer_item_map</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DealerItemMapController</servlet-name>
+        <servlet-class>com.dashboard.controller.DealerItemMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DealerItemMapController</servlet-name>
+        <url-pattern>/DealerItemMapController</url-pattern>
+    </servlet-mapping>
+    
+    <!-- end Dealer Item Mapping -->
+    
+    
+    
+    
+    <listener>
+        <!-- send tank and graph report through mail  -->
+        <listener-class>
+            com.webservice.controller.IndiamartEnquiriesService
+        </listener-class>
+    </listener>
     
 </web-app>

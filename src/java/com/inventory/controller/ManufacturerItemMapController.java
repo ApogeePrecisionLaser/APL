@@ -40,7 +40,7 @@ public class ManufacturerItemMapController extends HttpServlet {
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
-            System.out.println("error in ManufacturerItemModelMapController setConnection() calling try block" + e);
+            System.out.println("error in ManufacturerItemMapController setConnection() calling try block" + e);
         }
         try {
             String searchManufacturer = request.getParameter("searchManufacturer");
@@ -77,11 +77,11 @@ public class ManufacturerItemMapController extends HttpServlet {
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
-                    model.closeConnection();
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ManufacturerItemModelMapController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ManufacturerItemMapController get JQuery Parameters Part-" + e);
             }
 
             String task = request.getParameter("task");
@@ -130,8 +130,7 @@ public class ManufacturerItemMapController extends HttpServlet {
                 searchManufacturer = "";
                 searchItem = "";
             }
-            
-            
+
             String buttonAction = request.getParameter("buttonAction");
             if (buttonAction == null) {
                 buttonAction = "none";
@@ -154,10 +153,10 @@ public class ManufacturerItemMapController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("list", list);
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("manufacturer_item_map").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("OrgOfficeController error: " + ex);
+            System.out.println("ManufacturerItemMapController error: " + ex);
         }
     }
 

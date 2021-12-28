@@ -38,6 +38,12 @@
                                                                     <a class="nav-link" href="dashboard">Home</a>
                                                                 </li>-->
 
+
+
+
+
+
+
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin")) {
                                 %>
@@ -54,7 +60,8 @@
                                         <a class="dropdown-item" href="DesignationController" class="dropdown-item">Designation</a>
                                         <a class="dropdown-item" href="OrgOfficeDesignationMapController" class="dropdown-item">Org. Office Designation Map</a>
                                         <a class="dropdown-item" href="KeypersonController" class="dropdown-item">Org Person's Name</a>
-                                        <!--<a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Report</a>-->
+                                        <!--<a class="dropdown-item" href="DealersReportController" class="dropdown-item">Dealer's Report</a>-->
+                                        <!--<a class="dropdown-item" href="generateSpreadSheetController" class="dropdown-item">Dealer's Report</a>-->
 
                                     </div>
                                 </li>  
@@ -62,7 +69,7 @@
 
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Employee")
-                                            || session.getAttribute("user_role").equals("Incharge")|| session.getAttribute("user_role").equals("Guest")) {
+                                            || session.getAttribute("user_role").equals("Incharge") || session.getAttribute("user_role").equals("Guest")) {
                                 %>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -107,6 +114,15 @@
                                     </a>
                                     <div class="dropdown-menu">
                                         <a href="CityController" class="dropdown-item">City</a>
+                                        <a href="tehsilTypeCont" class="dropdown-item">Tehsil</a>
+                                        <a href="countryCont" class="dropdown-item">Country</a>
+                                        <a href="stateutTypeCont" class="dropdown-item">State</a>
+                                        <a href="districtTypeCont" class="dropdown-item">District</a>
+                                        <a href="divisionTypeCont" class="dropdown-item">Division</a>
+                                        <a href="zoneTypeCont" class="dropdown-item">Zone</a>
+                                        <a href="wardTypeCont" class="dropdown-item">Ward</a>
+                                        <a href="areaTypeCont" class="dropdown-item">Area</a>
+                                        <a href="cityLocationCont" class="dropdown-item">Location</a>
                                     </div>
                                 </li>
 
@@ -129,6 +145,9 @@
                                 <%}
                                 %>
 
+
+
+
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Incharge")) {
                                 %>
@@ -141,6 +160,7 @@
                                             if (session.getAttribute("user_role").equals("Super Admin")) {
                                         %>
                                         <a href="DealerSalemanMapController" class="dropdown-item">Dealer-Salesman-Mapping</a> 
+                                        <a href="SalesManagerStateMappingController" class="dropdown-item">SalesManager State Mapping</a> 
                                         <%}%>
                                         <%
                                             if (session.getAttribute("user_role").equals("Dealer")) {
@@ -151,7 +171,9 @@
                                         <%
                                             if (session.getAttribute("user_role").equals("Sales")) {
                                         %>
-                                        <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>     
+                                        <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>  
+                                        <a class="dropdown-item" href="CRMDashboardController">Dashboard</a>
+
                                         <%}%>
 
                                         <%
@@ -177,7 +199,8 @@
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="OfficeItemMapReportController">Office and Item Map Report</a>
                                         <a class="dropdown-item" href="InventoryReportController">Inventory Report</a>
-                                         <a class="dropdown-item" href="DealersReportController" class="dropdown-item">Dealer's Report</a>
+                                        <a class="dropdown-item" href="DealersReportController" class="dropdown-item">Dealer's Report</a>
+
                                         <!--<a class="dropdown-item" href="TestController">Test Report</a>-->
                                     </div>
                                 </li>  
@@ -231,3 +254,5 @@
                 </nav>
             </div>
         </div>
+    </body>
+</html>

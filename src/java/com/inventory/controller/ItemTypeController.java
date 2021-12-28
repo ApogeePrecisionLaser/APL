@@ -38,19 +38,19 @@ public class ItemTypeController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
-        String loggedUser="";
+        String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
-                
+
         try {
             String driverClass = session.getAttribute("driverClass").toString();
             String connectionString = session.getAttribute("connectionString").toString();
             String myDbUserName = session.getAttribute("myDbUserName").toString();
             String myDbUserpass = session.getAttribute("myDbUserPass").toString();
-            
-            Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserpass);            
+
+            Connection con = DriverManager.getConnection(connectionString, myDbUserName, myDbUserpass);
             model.setConnection(con);
         } catch (Exception e) {
-            System.out.println("error in OrgOfficeTypeController setConnection() calling try block" + e);
+            System.out.println("error in ItemTypeController setConnection() calling try block" + e);
         }
         try {
             String searchItemType = "";
@@ -66,11 +66,11 @@ public class ItemTypeController extends HttpServlet {
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
-                    model.closeConnection();
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --ClientPersonMapController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --ItemTypeController get JQuery Parameters Part-" + e);
             }
             searchItemType = request.getParameter("searchItemType");
             try {
@@ -132,7 +132,7 @@ public class ItemTypeController extends HttpServlet {
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("item_type").forward(request, response);
         } catch (Exception ex) {
             System.out.println("ItemTypeController error: " + ex);

@@ -64,7 +64,7 @@ public class KeyPersonNewController extends HttpServlet {
 //            keyModel.setConnection();
 
         } catch (Exception e) {
-            System.out.println("error in KeypersonController setConnection() calling try block" + e);
+            System.out.println("error in KeyPersonNewController setConnection() calling try block" + e);
         }
 
         try {
@@ -166,7 +166,7 @@ public class KeyPersonNewController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --SiteListController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --KeyPersonNewController get JQuery Parameters Part-" + e);
             }
 
             List id_list = keyModel.getIdtypeList();
@@ -317,7 +317,7 @@ public class KeyPersonNewController extends HttpServlet {
                     keyModel.closeConnection();
                     return;
                 } catch (Exception e) {
-                    System.out.println("SelectSupplierController Demand Note Error :" + e);
+                    System.out.println("KeyPersonNewController Demand Note Error :" + e);
                     return;
                 }
             }
@@ -590,7 +590,7 @@ public class KeyPersonNewController extends HttpServlet {
 
         } catch (Exception ex) {
 
-            System.out.println("KeypersonController error: " + ex);
+            System.out.println("KeyPersonNewController error: " + ex);
         }
     }
 

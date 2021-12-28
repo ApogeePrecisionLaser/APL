@@ -69,7 +69,7 @@ public class FormDataController extends HttpServlet {
 //            keyModel.setConnection();
 
         } catch (Exception e) {
-            System.out.println("error in KeypersonController setConnection() calling try block" + e);
+            System.out.println("error in FormDataController setConnection() calling try block" + e);
         }
 
         try {
@@ -160,7 +160,7 @@ public class FormDataController extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                System.out.println("\n Error --SiteListController get JQuery Parameters Part-" + e);
+                System.out.println("\n Error --FormDataController get JQuery Parameters Part-" + e);
             }
 
             List id_list = keyModel.getIdtypeList();
@@ -292,7 +292,7 @@ public class FormDataController extends HttpServlet {
                     keyModel.closeConnection();
                     return;
                 } catch (Exception e) {
-                    System.out.println("SelectSupplierController Demand Note Error :" + e);
+                    System.out.println("FormDataController Demand Note Error :" + e);
                     return;
                 }
             }
@@ -666,7 +666,7 @@ public class FormDataController extends HttpServlet {
 
         } catch (Exception ex) {
 
-            System.out.println("KeypersonController error: " + ex);
+            System.out.println("FormDataController error: " + ex);
         }
     }
 
