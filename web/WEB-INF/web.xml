@@ -219,7 +219,7 @@
     <servlet-mapping>
         <servlet-name>openMapWindowView</servlet-name>
         <url-pattern>/openMapWindowView</url-pattern>
-    </servlet-mapping>heade
+    </servlet-mapping>
     
     <!--End map-->
     
