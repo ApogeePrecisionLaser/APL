@@ -9,9 +9,9 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
-<!--                        <div class="mr-2" >
-                            <h1>Sales Enquiry</h1>
-                        </div>-->
+                        <!--                        <div class="mr-2" >
+                                                    <h1>Sales Enquiry</h1>
+                                                </div>-->
                         <div >
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn">Add New Enquiry</a>
                         </div>                        
@@ -52,8 +52,9 @@
                                                 <th class="fontFourteen">Sender Mobile</th>
                                                 <!-- <th>Sender Company Name</th> -->
                                                 <!-- <th>Sender Address</th> -->
-                                                <!--<th>City</th>-->
-                                                <th class="fontFourteen">District</th>
+                                                <th>City</th>
+                                                <th>State</th>
+                                                <!--<th class="fontFourteen">District</th>-->
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <!-- <th>Enquiry Message</th> -->
                                                 <th  class="fontFourteen">Status</th>
@@ -73,8 +74,9 @@
                                                     <td class="fontFourteen">${beanType.sender_mob}</td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
-                                                    <!--<td class="fontFourteen">${beanType.enquiry_city}</td>-->
-                                                    <td class="fontFourteen">${beanType.description}</td>
+                                                    <td class="fontFourteen">${beanType.enquiry_city}</td>
+                                                    <td class="fontFourteen">${beanType.enquiry_state}</td>
+                                                    <!--<td class="fontFourteen">${beanType.description}</td>-->
                                                     <td class="fontFourteen">${beanType.enquiry_date_time}</td>
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
                                                     <td  class="fontFourteen">
@@ -84,12 +86,13 @@
                                                                 <a href="SalesEnquiryController?task=assignToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&sales_person_name=${beanType.assigned_to}" class="btn myBtnInfo fontFourteen" title="Assigned To SalesManager">Assign To SalesManager</a>
                                                             </c:when>
                                                             <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                                <button class="btn btn-danger" disabled>In Conversation</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>In Conversation</button>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
                                                             </c:otherwise>
                                                         </c:choose>
+
                                                     </td>
 
 
