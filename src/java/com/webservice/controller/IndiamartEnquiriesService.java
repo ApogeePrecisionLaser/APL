@@ -1,4 +1,3 @@
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -88,7 +87,6 @@ public class IndiamartEnquiriesService implements ServletContextListener {
 
                 String start_date = "";
                 String end_date = "";
-
                 Date date = new Date();
                 Date yesterday_date = new Date();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy");
@@ -98,7 +96,6 @@ public class IndiamartEnquiriesService implements ServletContextListener {
 
 //                String webPage = "https://mapi.indiamart.com/wservce/enquiry/listing/GLUSR_MOBILE/7624002261/GLUSR_MOBILE_KEY/MTYzODM1NTQzMy44NzIxIzIzNzczOTYz/Start_Time/" + start_date + "12:00:00/End_Time/" + end_date + "12:00:00/";
                 String webPage = "https://mapi.indiamart.com/wservce/enquiry/listing/GLUSR_MOBILE/7624002261/GLUSR_MOBILE_KEY/MTYzODM1NTQzMy44NzIxIzIzNzczOTYz/Start_Time/" + start_date + "/End_Time/" + end_date + "/";
-//                String webPage = "https://mapi.indiamart.com/wservce/enquiry/listing/GLUSR_MOBILE/7624002261/GLUSR_MOBILE_KEY/MTYzODM1NTQzMy44NzIxIzIzNzczOTYz/";
                 URL url = new URL(webPage);
                 HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
                 urlConnection.addRequestProperty("User-Agent", "Mozilla/4.76");

@@ -49,8 +49,9 @@
                                                 <th class="fontFourteen">Sender Mobile</th>
                                                 <!-- <th>Sender Company Name</th> -->
                                                 <!-- <th>Sender Address</th> -->
-                                                <!--<th>City</th>-->
-                                                <th class="fontFourteen">District</th>
+                                                <th>City</th>
+                                                <th>State</th>
+                                                <!--<th class="fontFourteen">District</th>-->
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <th class="fontFourteen">Status</th>
                                                 <!-- <th>Enquiry Message</th> -->
@@ -70,8 +71,9 @@
                                                     <td class="fontFourteen">${beanType.sender_mob}</td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
-                                                    <!--<td class="fontFourteen">${beanType.enquiry_city}</td>-->
-                                                    <td class="fontFourteen">${beanType.description}</td>
+                                                    <td class="fontFourteen">${beanType.enquiry_city}</td>
+                                                    <td class="fontFourteen">${beanType.enquiry_state}</td>
+                                                    <!--<td class="fontFourteen">${beanType.description}</td>-->
                                                     <td class="fontFourteen">${beanType.enquiry_date_time}</td>
 
                                                     <c:choose>

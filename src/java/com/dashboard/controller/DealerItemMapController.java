@@ -120,7 +120,7 @@ public class DealerItemMapController extends HttpServlet {
             if (org_office_id == null) {
                 org_office_id = "";
             }
-            String org_office_name=model.getOrgOfficeName(org_office_id);
+            String org_office_name = model.getOrgOfficeName(org_office_id);
 
             if (task.equals("Submit")) {
                 int dealer_item_map_id = 0;
@@ -142,6 +142,9 @@ public class DealerItemMapController extends HttpServlet {
                 //else {
 //                    model.updateRecord(bean, dealer_item_map_id);
 //                }
+            }
+            if (task.equals("deleteMapping")) {
+                model.deleteMapping(request.getParameter("dealer_item_map_id").trim());
             }
 
             List<DealerItemMap> list = model.showData(org_office_id);

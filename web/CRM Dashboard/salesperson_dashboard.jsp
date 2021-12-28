@@ -35,7 +35,6 @@
                         <div class="inner">
                             <h3>${pending_orders}</h3>
                             <p>Pending Order</p>
-    
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>

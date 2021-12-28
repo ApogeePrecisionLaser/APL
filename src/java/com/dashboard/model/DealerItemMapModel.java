@@ -201,7 +201,7 @@ public class DealerItemMapModel {
         int item_name_id = getItemNamesId(bean.getItem_name());
         int model_id = getModelId(bean.getModel());
         int item_authorization_id = getItemAuthorizationId(item_name_id);
-        
+
         int map_count = 0;
         try {
             String query1 = "SELECT count(*) as count FROM dealer_item_map WHERE "
@@ -245,6 +245,27 @@ public class DealerItemMapModel {
             message = "Dealer has already mapped to this item!..";
             msgBgColor = COLOR_ERROR;
         }
+        return rowsAffected;
+    }
+
+    public int deleteMapping(String dealer_item_map_id) {
+        String query = " DELETE FROM dealer_item_map WHERE dealer_item_map_id ='" + dealer_item_map_id + "' and active='Y' ";
+        int rowsAffected = 0;
+        try {
+
+            rowsAffected = connection.prepareStatement(query).executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("DealerItemMapModel deleteMapping() Error: " + e);
+        }
+        if (rowsAffected > 0) {
+            message = "Record deleted successfully.";
+            msgBgColor = COLOR_OK;
+        } else {
+            message = "Cannot delete the record, some error.";
+            msgBgColor = COLOR_ERROR;
+        }
+
         return rowsAffected;
     }
 

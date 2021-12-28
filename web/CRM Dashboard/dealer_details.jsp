@@ -114,6 +114,7 @@
 
 <script>
     var key_person_id = $('#key_person_id').val();
+//    $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
     $('.usr_image').attr("src", "http://localhost:8080/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
 
 </script>

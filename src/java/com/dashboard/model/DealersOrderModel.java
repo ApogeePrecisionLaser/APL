@@ -410,6 +410,30 @@ public class DealersOrderModel {
         return list;
     }
 
+    public List<String> getPaymentMode(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = " SELECT payment_type FROM payment_type where active='Y' group by payment_type order by payment_type ";
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String payment_type = (rset.getString("payment_type"));
+                if (payment_type.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(payment_type);
+                    count++;
+                }
+            }
+
+            if (count == 0) {
+                list.add("No such payment_type  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:DealersOrderModel--getPaymentMode()-- " + e);
+        }
+        return list;
+    }
+
     public int getItemId(String model_id) {
 
         String query = "SELECT itn.item_names_id FROM item_names itn,manufacturer mr,manufacturer_item_map mim,model m "
@@ -1712,7 +1736,7 @@ public class DealersOrderModel {
 //                enquiry_date_time = split_arr[0] + " " + split_arr[1];
 
 //                SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss a");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
                 java.util.Date date = new java.util.Date();
                 String currentDateString = dateFormatter.format(date);
                 java.util.Date currentDate = dateFormatter.parse(currentDateString);
@@ -1780,7 +1804,7 @@ public class DealersOrderModel {
 //                enquiry_date_time = split_arr[0] + " " + split_arr[1];
 
 //                SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss a");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
                 java.util.Date date = new java.util.Date();
                 String currentDateString = dateFormatter.format(date);
                 java.util.Date currentDate = dateFormatter.parse(currentDateString);

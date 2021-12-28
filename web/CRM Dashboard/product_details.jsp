@@ -384,7 +384,7 @@
             if (image2 != "") {
                 image2 = image2.replace(/\\/g, "/");
             }
-            $('.my_img2' + (k + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image2 + "");
+            $('.my_img2' + (k + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image2 + "");
         }
     });
 
@@ -408,7 +408,7 @@
             if (image3 != "") {
                 image3 = image3.replace(/\\/g, "/");
             }
-            $('.my_img3' + (l + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image3 + "");
+            $('.my_img3' + (l + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image3 + "");
         }
     });
 

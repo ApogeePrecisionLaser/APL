@@ -210,7 +210,8 @@
                                                                         image = image.replace(/\\/g, "/");
                                                                     }
                                                                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
-                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
+//                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
+                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
                                                                 }
                                                             });
 

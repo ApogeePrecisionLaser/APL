@@ -20,7 +20,6 @@
 
                         </div>
                     </c:if>
-                    <a href="salesperson_sales_enquiry_details.jsp"></a>
 
                 </div>
                 <div class="col-sm-5">

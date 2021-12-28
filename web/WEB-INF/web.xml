@@ -1463,6 +1463,16 @@
         <servlet-name>pending_order_details</servlet-name>
         <url-pattern>/pending_order_details</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>checkout</servlet-name>
+        <jsp-file>/CRM Dashboard/checkout.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkout</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+    
     <!--end Pending Order Details  -->
     
     

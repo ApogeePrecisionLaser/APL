@@ -121,6 +121,7 @@
 
 
 <script>
+//    $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage");
     $('.usr_image').attr("src", "http://localhost:8080/APL/CRMDashboardController?task=viewImage");
 
 </script>

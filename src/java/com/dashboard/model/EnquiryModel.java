@@ -508,7 +508,7 @@ public class EnquiryModel {
         int rowsAffected = 0;
 
         java.util.Date date = new java.util.Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
         String date_time = sdf.format(date);
 
         int enquiry_source_table_id = getSourceTableId(bean.getEnquiry_source());

@@ -45,7 +45,7 @@ public class ProfileModel {
         }
     }
 
-    public ArrayList<Profile> getAllDetails(String logged_user_name, String logged_org_office) {
+    public static ArrayList<Profile> getAllDetails(String logged_user_name, String logged_org_office) {
         ArrayList<Profile> list = new ArrayList<Profile>();
         try {
             String query = " select oo.org_office_name,kp.key_person_name,oo.email_id1,oo.landline_no1,oo.mobile_no1 as office_mobile, "
@@ -101,7 +101,7 @@ public class ProfileModel {
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
                 + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
-                + " and oo.office_type_id=3 ";
+                + " and oo.office_type_id=3 order by oo.org_office_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
