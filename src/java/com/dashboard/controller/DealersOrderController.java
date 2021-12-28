@@ -4,7 +4,10 @@ import com.location.model.CityModel;
 import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealersOrder;
+import com.dashboard.bean.Enquiry;
+import com.dashboard.bean.Profile;
 import com.dashboard.model.DealersOrderModel;
+import com.dashboard.model.ProfileModel;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,6 +44,7 @@ public class DealersOrderController extends HttpServlet {
         response.setContentType("text/html");
         ServletContext ctx = getServletContext();
         DealersOrderModel model = new DealersOrderModel();
+        ProfileModel profileModel = new ProfileModel();
 
         String logged_user_name = "";
         String logged_designation = "";
@@ -88,6 +92,7 @@ public class DealersOrderController extends HttpServlet {
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            profileModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in DealersOrderController setConnection() calling try block" + e);
         }
@@ -110,6 +115,9 @@ public class DealersOrderController extends HttpServlet {
                     String item_name = request.getParameter("item_name");
                     list = model.getModelName(q, logged_designation, item_name);
                 }
+                if (JQstring.equals("getPaymentMode")) {
+                    list = model.getPaymentMode(q);
+                }
 
                 if (json != null) {
                     out.println(json);
@@ -119,6 +127,8 @@ public class DealersOrderController extends HttpServlet {
                     gson.put("list", list);
                     out.println(gson);
                 }
+                DBConnection.closeConncetion(model.getConnection());
+
                 return;
             }
         } catch (Exception e) {
@@ -164,7 +174,7 @@ public class DealersOrderController extends HttpServlet {
         }
         if (task.equals("viewAll") || !search_model.equals("")) {
             String item_name = request.getParameter("item_name");
-            ArrayList<DealersOrder> list = model.getAllModel(logged_designation, item_name, search_model);
+            ArrayList<DealersOrder> list = model.getAllModel(logged_org_office_id, item_name, search_model);
 
             ArrayList<DealersOrder> cart_list = model.viewCart(logged_key_person_id);
             request.setAttribute("cart_count", cart_list.size());
@@ -173,7 +183,8 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("item_name", item_name);
             request.setAttribute("search_model", search_model);
             request.setAttribute("count", list.size());
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             request.getRequestDispatcher("CRM_category").forward(request, response);
         }
         if (task.equals("viewDetail")) {
@@ -182,7 +193,7 @@ public class DealersOrderController extends HttpServlet {
             ArrayList<DealersOrder> list2 = new ArrayList<>();
             ArrayList<DealersOrder> list3 = new ArrayList<>();
             list2 = model.getAllImages(list);
-            list3 = model.getAllSimilarProducts(model_id);
+            list3 = model.getAllSimilarProducts(model_id, logged_org_office_id);
 
             ArrayList<DealersOrder> cart_list = model.viewCart(logged_key_person_id);
             request.setAttribute("cart_count", cart_list.size());
@@ -193,7 +204,8 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("count", list.size());
             request.setAttribute("count2", list2.size());
             request.setAttribute("count3", list3.size());
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             request.getRequestDispatcher("product_details").forward(request, response);
         }
 
@@ -268,7 +280,8 @@ public class DealersOrderController extends HttpServlet {
                     out.println(gson);
                 }
 
-                model.closeConnection();
+                DBConnection.closeConncetion(model.getConnection());
+
                 return;
 //                request.getRequestDispatcher("dealers_order").forward(request, response);
             } catch (SQLException ex) {
@@ -319,7 +332,8 @@ public class DealersOrderController extends HttpServlet {
                     out.println(gson);
                 }
 
-                model.closeConnection();
+                DBConnection.closeConncetion(model.getConnection());
+
                 return;
 //                request.getRequestDispatcher("dealers_order").forward(request, response);
             } catch (SQLException ex) {
@@ -367,7 +381,8 @@ public class DealersOrderController extends HttpServlet {
                     out.println(gson);
                 }
 
-                model.closeConnection();
+                DBConnection.closeConncetion(model.getConnection());
+
                 return;
 //                request.getRequestDispatcher("dealers_order").forward(request, response);
             } catch (SQLException ex) {
@@ -381,12 +396,13 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
 
-            ArrayList<DealersOrder> list1 = model.getAllItems(logged_designation, search_item);
+            ArrayList<DealersOrder> list1 = model.getAllItems(logged_org_office_id, search_item);
             ArrayList<DealersOrder> list2 = new ArrayList<>();
-            list2 = model.getAllModels(logged_designation, list1);
+            list2 = model.getAllModels(logged_org_office_id, list1);
             request.setAttribute("list2", list2);
             request.setAttribute("count2", list2.size());
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             request.getRequestDispatcher("cart_view").forward(request, response);
         }
 
@@ -446,6 +462,87 @@ public class DealersOrderController extends HttpServlet {
             }
         }
 
+        if (task.equals("sales_enquiry_list")) {
+            ArrayList<Enquiry> list = model.getAllEnquiriesForDealer(logged_key_person_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_sales_enquiry_list").forward(request, response);
+        }
+        if (task.equals("complaint_enquiry_list")) {
+            ArrayList<Enquiry> list = model.getAllComplaintForDealer(logged_key_person_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_complaint_enquiry_list").forward(request, response);
+        }
+
+        if (task.equals("viewEnquiryDetails")) {
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_sales_enquiry_details").forward(request, response);
+        }
+        if (task.equals("viewComplaintDetails")) {
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_complaint_enquiry_details").forward(request, response);
+        }
+
+        if (task.equals("checkout")) {
+            String order_table_id = request.getParameter("order_table_id");
+
+            List<Profile> dealer_list = profileModel.getAllDetails(logged_user_name, logged_org_office);
+            String email = dealer_list.get(0).getEmail_id1().toString();
+            String mobile1 = dealer_list.get(0).getMobile_no1().toString();
+            String city = dealer_list.get(0).getCity_name().toString();
+            String address_line1 = dealer_list.get(0).getAddress_line1().toString();
+            String address_line2 = dealer_list.get(0).getAddress_line2().toString();
+            String address_line3 = dealer_list.get(0).getAddress_line3().toString();
+
+            ArrayList<DealersOrder> order_list = model.getAllOrderItems(order_table_id);
+            int total_amount = 0;
+            int total_discount_price = 0;
+            int total_discount_percent = 0;
+            for (int i = 0; i < order_list.size(); i++) {
+                total_amount = total_amount + Integer.parseInt(order_list.get(i).getBasic_price());
+                total_discount_price = total_discount_price + Integer.parseInt(order_list.get(i).getDiscount_price());
+                total_discount_percent = total_discount_percent + Integer.parseInt(order_list.get(i).getDiscount_percent());
+            }
+
+            ArrayList<DealersOrder> list = model.viewCart(logged_key_person_id);
+            ArrayList<DealersOrder> list1 = model.getAllItems(logged_org_office_id, search_item);
+            ArrayList<DealersOrder> list2 = new ArrayList<>();
+            list2 = model.getAllModels(logged_org_office_id, list1);
+
+            request.setAttribute("list", list);
+            request.setAttribute("count", list.size());
+            request.setAttribute("list2", list2);
+            request.setAttribute("count2", list2.size());
+            request.setAttribute("total_amount", total_amount);
+            request.setAttribute("total_discount_price", total_discount_price);
+            request.setAttribute("total_discount_percent", total_discount_percent);
+
+            request.setAttribute("logged_user_name", logged_user_name);
+            request.setAttribute("logged_org_office", logged_org_office);
+            request.setAttribute("email", email);
+            request.setAttribute("mobile1", mobile1);
+            request.setAttribute("city", city);
+            request.setAttribute("address_line1", address_line1);
+            request.setAttribute("address_line2", address_line2);
+            request.setAttribute("address_line3", address_line3);
+//            request.setAttribute("logged_email", logged_org_office);
+            DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(profileModel.getConnection());
+
+            request.getRequestDispatcher("checkout").forward(request, response);
+        }
+
         String getImage = request.getParameter("getImage");
         try {
             if (getImage == null) {
@@ -485,9 +582,10 @@ public class DealersOrderController extends HttpServlet {
             System.out.println("errorr -" + e);
             return;
         }
-        ArrayList<DealersOrder> list1 = model.getAllItems(logged_designation, search_item);
+
+        ArrayList<DealersOrder> list1 = model.getAllItems(logged_org_office_id, search_item);
         ArrayList<DealersOrder> list2 = new ArrayList<>();
-        list2 = model.getAllModels(logged_designation, list1);
+        list2 = model.getAllModels(logged_org_office_id, list1);
 
         ArrayList<DealersOrder> cart_list = model.viewCart(logged_key_person_id);
         request.setAttribute("cart_count", cart_list.size());
@@ -499,7 +597,8 @@ public class DealersOrderController extends HttpServlet {
         request.setAttribute("list2", list2);
         request.setAttribute("count", list2.size());
 
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("dealers_order").forward(request, response);
     }
 

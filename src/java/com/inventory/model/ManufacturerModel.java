@@ -210,4 +210,8 @@ public class ManufacturerModel {
             System.out.println("ManufacturerModel closeConnection() Error: " + e);
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

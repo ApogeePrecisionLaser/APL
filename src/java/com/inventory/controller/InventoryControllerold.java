@@ -55,8 +55,7 @@ public class InventoryControllerold extends HttpServlet {
         String search_item_code = "";
         String search_manufacturer = "";
         String search_model = "";
-        
-        
+
         // search_item_name = request.getParameter("search_item_name");
         search_org_office = request.getParameter("search_org_office");
         search_item_code = request.getParameter("search_item_code");
@@ -137,6 +136,7 @@ public class InventoryControllerold extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -179,7 +179,7 @@ public class InventoryControllerold extends HttpServlet {
             }
 
 //            List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,search_key_person);
-           // request.setAttribute("list", list);
+            // request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
             }
@@ -189,8 +189,8 @@ public class InventoryControllerold extends HttpServlet {
             request.setAttribute("search_key_person", search_key_person);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
-            model.closeConnection();
 
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("inventory").forward(request, response);
         } catch (Exception ex) {
             System.out.println("InventoryControllerold error: " + ex);

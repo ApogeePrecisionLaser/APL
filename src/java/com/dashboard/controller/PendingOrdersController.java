@@ -84,12 +84,19 @@ public class PendingOrdersController extends HttpServlet {
             String order_table_id = request.getParameter("order_table_id");
             ArrayList<DealersOrder> list = model.getAllOrderItems(order_table_id);
             int total_amount = 0;
+            int total_discount_price = 0;
+            int total_discount_percent = 0;
             for (int i = 0; i < list.size(); i++) {
                 total_amount = total_amount + Integer.parseInt(list.get(i).getBasic_price());
+                total_discount_price = total_discount_price + Integer.parseInt(list.get(i).getDiscount_price());
+                total_discount_percent = total_discount_percent + Integer.parseInt(list.get(i).getDiscount_percent());
             }
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             request.setAttribute("total_amount", total_amount);
+            request.setAttribute("total_discount_price", total_discount_price);
+            request.setAttribute("total_discount_percent", total_discount_percent);
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
             request.getRequestDispatcher("pending_order_details").forward(request, response);
@@ -121,16 +128,18 @@ public class PendingOrdersController extends HttpServlet {
                 gson.put("msg", message);
                 out.println(gson);
             }
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             return;
         }
 
-        ArrayList<DealersOrder> list = model.getAllOrders(logged_user_name,loggedUser);
+        ArrayList<DealersOrder> list = model.getAllOrders(logged_user_name, loggedUser);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
         request.setAttribute("list", list);
         request.setAttribute("user_role", loggedUser);
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("pending_order").forward(request, response);
     }
 

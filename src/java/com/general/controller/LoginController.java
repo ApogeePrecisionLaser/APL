@@ -121,18 +121,42 @@ public class LoginController extends HttpServlet {
                         ArrayList<DealersOrder> total_orders_list = dealersOrderModel.getAllHistoryOrders(user_name, session.getAttribute("user_role").toString());
                         List<Profile> dealers_list = profileModel.getAllDealers();
                         ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
+                        ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
 
-                        request.setAttribute("total_orders", total_orders_list.size());
-                        request.setAttribute("total_dealers", total_orders_list.size());
-                        request.setAttribute("total_enquiries", total_enquiries_list.size());
+                        session.setAttribute("sales_enquiries", total_enquiries_list.size());
+                        session.setAttribute("total_dealers", dealers_list.size());
+                        session.setAttribute("complaint_enquiries", total_complaint_list.size());
+                        session.setAttribute("total_orders", total_orders_list.size());
+                        session.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size()) ));
 
                         request.getRequestDispatcher("admin_dashboard").forward(request, response);
-
                     }
-                    if (session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales")) {
-                        ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllOrders(user_name,  session.getAttribute("user_role").toString());
-                        request.setAttribute("pending_orders", pending_orders_list.size());
+                    if (session.getAttribute("user_role").equals("Dealer")) {
+                        ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllOrders(user_name, session.getAttribute("user_role").toString());
+                        ArrayList<Enquiry> sales_enquiry_list = dealersOrderModel.getAllEnquiriesForDealer(logged_key_person_id);
+                        ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaintForDealer(logged_key_person_id);
+
+                        session.setAttribute("sales_enquiries", sales_enquiry_list.size());
+                        session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
+                        session.setAttribute("pending_orders", pending_orders_list.size());
+                        session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size()) ));
+
                         request.getRequestDispatcher("CRMDashboard").forward(request, response);
+                    }
+                    if (session.getAttribute("user_role").equals("Sales")) {
+                        ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Pending");
+                        ArrayList<DealersOrder> approved_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Approved");
+                        ArrayList<DealersOrder> denied_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Denied");
+                        ArrayList<Enquiry> sales_enquiry_list = dealersOrderModel.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id);
+                        ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id);
+
+                        session.setAttribute("sales_enquiries", sales_enquiry_list.size());
+                        session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
+                        session.setAttribute("pending_orders", pending_orders_list.size());
+                        session.setAttribute("approved_orders", approved_orders_list.size());
+                        session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size()) ));
+
+                        request.getRequestDispatcher("salesperson_dashboard").forward(request, response);
 
                     } else {
                         request.getRequestDispatcher("dashboard").forward(request, response);

@@ -4,6 +4,7 @@ import com.location.model.CityModel;
 import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealersOrder;
+import com.dashboard.bean.Enquiry;
 import com.dashboard.model.DealersOrderModel;
 import java.io.ByteArrayOutputStream;
 
@@ -73,21 +74,103 @@ public class ApproveOrdersController extends HttpServlet {
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         System.out.println(model.getConnection());
 
+        try {
+            String JQstring = request.getParameter("action1");
+            String q = request.getParameter("str");   // field own input           
+            if (JQstring != null) {
+                PrintWriter out = response.getWriter();
+                List<String> list = null;
+                if (JQstring.equals("getDealersStateWise")) {
+                    list = model.getDealersStateWise(q, logged_key_person_id);
+                }
+
+                JSONObject gson = new JSONObject();
+                gson.put("list", list);
+                out.println(gson);
+                DBConnection.closeConncetion(model.getConnection());
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("\n Error --SalesEnquiryController get JQuery Parameters Part-" + e);
+        }
+
         String task = request.getParameter("task");
         if (task == null) {
             task = "";
+        }
+
+        if (task.equals("sales_enquiry_list")) {
+            ArrayList<Enquiry> list = model.getAllEnquiries(loggedUser, logged_key_person_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("salesperson_sales_enquiry_list").forward(request, response);
+        }
+        if (task.equals("complaint_enquiry_list")) {
+            ArrayList<Enquiry> list = model.getAllComplaints(loggedUser, logged_key_person_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("salesperson_complaint_enquiry_list").forward(request, response);
+        }
+
+        if (task.equals("viewEnquiryDetails")) {
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("salesperson_sales_enquiry_details").forward(request, response);
+        }
+        if (task.equals("viewComplaintDetails")) {
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("salesperson_complaint_enquiry_details").forward(request, response);
+        }
+
+        if (task.equals("assignToDealer")) {
+            PrintWriter out = response.getWriter();
+
+            String dealer_name = request.getParameter("dealer_name");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            String message = model.assignToDealer(enquiry_table_id, dealer_name);
+            JSONObject gson = new JSONObject();
+            gson.put("message", message);
+            out.println(gson);
+            return;
+        }
+        if (task.equals("assignComplaintToDealer")) {
+            PrintWriter out = response.getWriter();
+
+            String dealer_name = request.getParameter("dealer_name");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            String message = model.assignComplaintToDealer(enquiry_table_id, dealer_name);
+            JSONObject gson = new JSONObject();
+            gson.put("message", message);
+            out.println(gson);
+            return;
         }
 
         if (task.equals("viewOrderDetails")) {
             String order_table_id = request.getParameter("order_table_id");
             ArrayList<DealersOrder> list = model.getAllOrderItems(order_table_id);
             int total_amount = 0;
+            int total_discount_price = 0;
+            int total_discount_percent = 0;
             for (int i = 0; i < list.size(); i++) {
                 total_amount = total_amount + Integer.parseInt(list.get(i).getBasic_price());
+                total_discount_price = total_discount_price + Integer.parseInt(list.get(i).getDiscount_price());
+                total_discount_percent = total_discount_percent + Integer.parseInt(list.get(i).getDiscount_percent());
             }
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             request.setAttribute("total_amount", total_amount);
+            request.setAttribute("total_discount_price", total_discount_price);
+            request.setAttribute("total_discount_percent", total_discount_percent);
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
             request.getRequestDispatcher("approve_order_details").forward(request, response);
@@ -103,6 +186,8 @@ public class ApproveOrdersController extends HttpServlet {
             // int indent_item_id = 0;
             int approved_qty = 0;
             String item_status = "";
+            String discounted_price = "";
+            String discounted_percent = "";
             String order_item_id_arr[] = request.getParameterValues("order_item_id");
 
             for (int i = 0; i < order_item_id_arr.length; i++) {
@@ -110,17 +195,22 @@ public class ApproveOrdersController extends HttpServlet {
                 int order_item_id = Integer.parseInt(order_item_id_arr[i]);
                 item_status = request.getParameter("item_status" + order_item_id);
                 approved_qty = Integer.parseInt(request.getParameter("approved_qty" + order_item_id).trim());
+                discounted_price = request.getParameter("discounted_price" + order_item_id).trim();
+                discounted_percent = request.getParameter("discounted_percent" + order_item_id).trim();
                 DealersOrder bean = new DealersOrder();
                 bean.setStatus(order_status);
                 bean.setItem_status(item_status);
                 bean.setApproved_qty(String.valueOf(approved_qty));
-                String message = model.approveOrder(bean, order_item_id, order_table_id);
+                bean.setDiscount_percent(String.valueOf(discounted_percent));
+                bean.setDiscount_price(String.valueOf(discounted_price));
+                String message = model.approveOrder(bean, order_item_id, order_table_id, i);
 
             }
 
             ArrayList<DealersOrder> list = model.getAllOrders(logged_user_name, loggedUser);
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
             request.getRequestDispatcher("salesperson_approve_order").forward(request, response);
@@ -131,7 +221,8 @@ public class ApproveOrdersController extends HttpServlet {
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
         request.setAttribute("list", list);
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("salesperson_approve_order").forward(request, response);
     }
 

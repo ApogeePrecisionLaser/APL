@@ -17,7 +17,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-
 /**
  *
  * @author Komal
@@ -601,5 +600,9 @@ public class InventoryModelold {
         } catch (Exception e) {
             System.out.println("ItemNameModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

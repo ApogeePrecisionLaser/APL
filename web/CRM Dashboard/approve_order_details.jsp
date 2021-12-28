@@ -42,6 +42,8 @@
                                                 <th>Stock Qty</th>
                                                 <th>Approved Qty</th>
                                                 <th>MRP Price</th>
+                                                <th>Discount %</th>
+                                                <th>Discounted Price</th>
                                                 <th></th>
                                                 <!--<th>Discount Price</th>-->
                                             </tr>
@@ -58,6 +60,7 @@
                                             <input type="hidden" name="order_item_id" id="order_item_id" value="${beanType.order_item_id}">
                                             <input type="hidden" name="item_status" id="item_status" value="${beanType.item_status}">
                                             <input type="hidden" name="order_status" id="order_status" value="${beanType.order_status}">
+                                            <input type="hidden" name="required_qty" id="required_qty${beanType.order_item_id}" value="${beanType.required_qty}">
                                             <td>
                                                 <img class="orderImg img-fluid${loopCounter.count}" 
                                                      src="" width="50px" height="55px">
@@ -71,18 +74,43 @@
                                             <td>
 
                                                 <c:if test="${beanType.order_status=='Pending'}">
-                                                    <input type="text" name="approved_qty${beanType.order_item_id}" value="${beanType.approved_qty}">
-
+                                                    <input type="text" name="approved_qty${beanType.order_item_id}" id="approved_qty${beanType.order_item_id}"
+                                                           value="${beanType.required_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}')">
                                                 </c:if>
 
+
                                                 <c:if test="${beanType.order_status!='Pending'}">
-                                                    <input type="text" name="approved_qty${beanType.order_item_id}"  disabled="" value="${beanType.approved_qty}">
+                                                    <input type="text" name="approved_qty${beanType.order_item_id}" id="approved_qty${beanType.order_item_id}" 
+                                                           disabled="" value="${beanType.approved_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}')">
                                                     <!--<input type="text" name="approved_qty${beanType.order_item_id}" hidden value="${beanType.approved_qty}">-->
 
                                                 </c:if>
                                             </td>
-                                            
+
                                             <td>${beanType.basic_price}</td>
+
+
+                                            <td>
+                                                <c:if test="${beanType.order_status=='Pending'}">
+                                                    <input type="text" name="discounted_percent${beanType.order_item_id}"  id="discounted_percent${beanType.order_item_id}" 
+                                                           value="${beanType.discount_percent}" style="width:100px" onblur="checkValidationForPrice(this.value, '${beanType.basic_price}', '${beanType.order_item_id}')">
+                                                </c:if>
+                                                <c:if test="${beanType.order_status!='Pending'}">
+                                                    <input type="text" name="discounted_percent${beanType.order_item_id}" id="discounted_percent${beanType.order_item_id}"
+                                                           disabled="" value="${beanType.discount_percent}" style="width:100px" onblur="checkValidationForPrice(this.value, '${beanType.basic_price}', '${beanType.order_item_id}')">
+                                                </c:if>
+                                            </td>
+
+                                            <td>
+                                                <c:if test="${beanType.order_status=='Pending'}">
+                                                    <input type="text" name="discounted_price${beanType.order_item_id}"  id="discounted_price${beanType.order_item_id}" 
+                                                           value="${beanType.discount_price}" style="width:100px" >
+                                                </c:if>
+                                                <c:if test="${beanType.order_status!='Pending'}">
+                                                    <input type="text" name="discounted_price${beanType.order_item_id}"  id="discounted_price${beanType.order_item_id}" 
+                                                           value="${beanType.discount_price}" style="width:100px" disabled="">
+                                                </c:if>
+                                            </td>
                                             <td>
                                                 <select class="btn btn-primary ml-3" style="width:100px" value="${beanType.item_status}"
                                                         name="item_status${beanType.order_item_id}">
@@ -107,7 +135,9 @@
                                         <tr class="darkBlueBg">
                                             <td colspan="6"></td>
                                             <td class="font-weight-bold fontSeventeen text-white py-3">Total Amount</td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3">Rs. ${total_amount}</td>   
+                                            <td class="font-weight-bold fontSeventeen text-white py-3">Rs. ${total_amount}</td>  
+                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_percent">${total_discount_percent}</td>
+                                            <td class="font-weight-bold fontSeventeen text-white py-3">${total_discount_price}</td>
                                             <td class="font-weight-bold fontSeventeen text-white py-3">
                                                 <input type="submit" name="task"  id="approved" value="Approve">
                                                 <input type="submit" name="task"  id="denied" value="Denied">
@@ -150,10 +180,38 @@
             if (image != "") {
                 image = image.replace(/\\/g, "/");
             }
+//            $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
             $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 
+//            $('#total_percent').html();
         }
-
-
     });
+
+    function checkValidationForQty(approve_qty, req_qty) {
+        if (approve_qty > req_qty) {
+            alert("Please enter valid quantity!...");
+            return false;
+        }
+    }
+    function checkValidationForPrice(discounted_percent, basic_price, order_item_id) {
+        var numVal1 = basic_price;
+        var numVal2 = discounted_percent / 100;
+        var approved_qty = $('#approved_qty' + order_item_id).val();
+        var required_qty = $('#required_qty' + order_item_id).val();
+        if (approved_qty == '') {
+            alert("Please enter approved qty!...");
+            $('#discounted_percent' + order_item_id).val("");
+            return false;
+        }
+        numVal1 = (basic_price / required_qty) * approved_qty;
+
+//        $('#total_percent').html(parseInt(discounted_percent));
+
+        var totalValue = numVal1 - (numVal1 * numVal2)
+        $('#discounted_price' + order_item_id).val(totalValue);
+        if (parseInt(totalValue) > parseInt(basic_price)) {
+            alert("Please enter valid Price!...");
+            return false;
+        }
+    }
 </script>

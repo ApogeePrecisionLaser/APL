@@ -151,6 +151,7 @@ public class InventoryBasicController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -225,13 +226,13 @@ public class InventoryBasicController extends HttpServlet {
                     bean.setItem_name(item_name_map);
                     bean.setOrg_office(org_office_map);
                     bean.setKey_person(key_person_map);
-                    model.insertMapRecord(bean,search_org_office_old);
+                    model.insertMapRecord(bean, search_org_office_old);
                 }
 
             }
 
             List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,
-                    search_key_person,search_by_date);
+                    search_key_person, search_by_date);
             request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
@@ -245,8 +246,9 @@ public class InventoryBasicController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
-            model.closeConnection();
-
+            
+            DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(model2.getConnection());
             request.getRequestDispatcher("inventory_basic").forward(request, response);
         } catch (Exception ex) {
             System.out.println("InventoryBasicController error: " + ex);

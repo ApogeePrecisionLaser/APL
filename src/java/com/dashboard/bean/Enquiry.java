@@ -40,6 +40,7 @@ public class Enquiry {
     private int assigned_to_id;
     private String assigned_to;
     private String date_time;
+    private String enquiry_type;
 
     /**
      * @return the enquiry_source_table_id
@@ -445,5 +446,19 @@ public class Enquiry {
      */
     public void setDate_time(String date_time) {
         this.date_time = date_time;
+    }
+
+    /**
+     * @return the enquiry_type
+     */
+    public String getEnquiry_type() {
+        return enquiry_type;
+    }
+
+    /**
+     * @param enquiry_type the enquiry_type to set
+     */
+    public void setEnquiry_type(String enquiry_type) {
+        this.enquiry_type = enquiry_type;
     }
 }

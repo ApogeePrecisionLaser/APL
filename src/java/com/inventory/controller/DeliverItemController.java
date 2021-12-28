@@ -151,6 +151,7 @@ public class DeliverItemController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -170,7 +171,7 @@ public class DeliverItemController extends HttpServlet {
                 String indent_num = request.getParameter("indent_no");
                 String delivery_challan_no = request.getParameter("delivery_challan_no");
                 String item_name_report = request.getParameter("item_name");
-                
+
                 List listAll = null;
                 String jrxmlFilePath;
                 response.setContentType("application/pdf");
@@ -266,7 +267,7 @@ public class DeliverItemController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("deliver_item").forward(request, response);
 

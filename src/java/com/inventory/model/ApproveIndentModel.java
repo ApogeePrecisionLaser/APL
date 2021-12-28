@@ -1,4 +1,3 @@
-
 package com.inventory.model;
 
 import java.io.ByteArrayOutputStream;
@@ -364,5 +363,9 @@ public class ApproveIndentModel {
         } catch (Exception e) {
             System.out.println("ApproveIndentModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

@@ -266,6 +266,7 @@ public class DealersOrder {
     private String date_time;
     private String order_status;
     private String item_status;
+    private String discount_percent;
 
     /**
      * @return the item_names_id
@@ -979,6 +980,20 @@ public class DealersOrder {
      */
     public void setItem_status(String item_status) {
         this.item_status = item_status;
+    }
+
+    /**
+     * @return the discount_percent
+     */
+    public String getDiscount_percent() {
+        return discount_percent;
+    }
+
+    /**
+     * @param discount_percent the discount_percent to set
+     */
+    public void setDiscount_percent(String discount_percent) {
+        this.discount_percent = discount_percent;
     }
 
 }

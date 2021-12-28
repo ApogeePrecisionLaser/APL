@@ -88,7 +88,8 @@ public class MarketingVerticalController extends HttpServlet {
                 out.println(gson);
             }
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+
             return;
         }
         if (task.equals("Submit")) {
@@ -119,7 +120,8 @@ public class MarketingVerticalController extends HttpServlet {
         request.setAttribute("list", list);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("marketing_vertical").forward(request, response);
     }
 

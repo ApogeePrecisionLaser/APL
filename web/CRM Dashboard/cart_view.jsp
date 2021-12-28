@@ -63,7 +63,7 @@
             <div class="">
                 <div class="row">
                     <div class="col-md-7">
-                        <a href="DealersOrderController" class="btn btn-info">Back To List</a>
+                        <a href="DealersOrderController" class="btn myThemeBtn">Back To List</a>
 
                     </div>
                     <!--                    <div class="col-md-5">
@@ -308,6 +308,7 @@
                         image = image.replace(/\\/g, "/");
                     }
                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+//                    $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
                     $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 
                 }
@@ -328,6 +329,7 @@
                         image2 = image2.replace(/\\/g, "/");
                     }
                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+//                    $('.img-fluid2' + (k + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image2 + "");
                     $('.img-fluid2' + (k + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image2 + "");
                     var stock_quantity = $('#stock_quantity2' + (k + 1)).val();
                     if (stock_quantity == 0) {
@@ -426,6 +428,7 @@
                                 $('#model_row' + model_id).remove();
                                 $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">Rs. ' + lastaddedbasic_price + '</td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">Rs. ' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
 
+//                                $('.img-fluid' + counting).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
                                 $('.img-fluid' + counting).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
 
                                 var rate = parseInt($('#rate' + lastaddedmodel_id).val());
@@ -477,7 +480,7 @@
 
 
 
-
+                            window.location.reload();
                             $('#msg').text(data.msg);
                             $('.myAlertBox').show();
                             setTimeout(function () {
@@ -528,6 +531,9 @@
                             var coupon_discount = parseInt(($('#coupon_discount').text()));
 
                             $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
+
+                            window.location.reload();
+
                             setTimeout(function () {
                                 $('#msg').fadeOut('fast');
                             }, 1000);
@@ -575,6 +581,7 @@
 
                             $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
 
+                            window.location.reload();
 
                             setTimeout(function () {
                                 $('#msg').fadeOut('fast');
@@ -623,15 +630,11 @@
                             window.open('DealersOrderController?order_no=' + data.order_no, '_self');
                         } else {
                             window.open('error', '_self', data.order_no);
-
                         }
 //                        window.location.reload("thank_you");
 
                     }
-
                 });
-
-
             }
 
 

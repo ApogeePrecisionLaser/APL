@@ -1,0 +1,82 @@
+@media only screen and (max-width: 600px) {
+  
+
+.confirmPage .boxSize {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.confirmPage .boxSize h2{
+    font-size: 25px;
+    font-weight: 600!important;
+}
+.confirmPage .boxSize p{
+    font-size: 14px;
+}
+
+.boxOne{
+    margin-bottom: 20px;
+}
+.SocialIconList ul li {
+    margin-bottom: 12px;
+}
+.SocialIconList ul li a {
+    padding: 1px;
+}
+
+._boxzoom .zoom-thumb {
+    width: 100%;
+}
+
+.piclist li {
+    /*width: 23%;*/
+    height: auto;
+}
+.piclist li img {
+    height: 60px;
+    object-fit: cover;
+}
+._boxzoom ._product-images {
+    width: 100%;
+    display: inline-block;
+}
+.picZoomer-pic-wp{
+    height: 275px!important;
+}
+
+ul.piclist{
+    margin-bottom: 8px;
+    justify-content: space-around;
+    display: flex;
+}
+
+
+
+
+.picZoomer-zoom-wp{
+    display: none!important;
+}
+.picZoomer-pic-wp:hover .picZoomer-cursor {
+     display: none!important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

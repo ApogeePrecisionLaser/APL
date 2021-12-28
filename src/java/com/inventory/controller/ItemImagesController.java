@@ -70,18 +70,18 @@ public class ItemImagesController extends HttpServlet {
                 model.deleteImageRecord(item_image_details_id);
                 list = model.getImageList(model_id);
             }
-            
+
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("model_id", model_id);
             request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("item_images").forward(request, response);
         } catch (Exception ex) {
             System.out.println("ItemImagesController error: " + ex);
         }
     }
-    
-  
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doGet(request, response);

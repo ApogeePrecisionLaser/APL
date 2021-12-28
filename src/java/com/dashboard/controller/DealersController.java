@@ -74,7 +74,20 @@ public class DealersController extends HttpServlet {
             obj1.put("dealers", arrayObj);
             PrintWriter out = response.getWriter();
             out.print(obj1);
+            DBConnection.closeConncetion(model.getConnection());
+
             return;
+        }
+
+        if (task.equals("viewDealerDetails")) {
+            String key_person_id = request.getParameter("key_person_id");
+            String org_office_id = request.getParameter("org_office_id");
+            
+            ArrayList<Profile> list = model.viewDealerDetails(key_person_id,org_office_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_details").forward(request, response);
         }
 
         List<Profile> list = model.getAllDealers();
@@ -82,7 +95,8 @@ public class DealersController extends HttpServlet {
         request.setAttribute("list", list);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("dealers").forward(request, response);
     }
 

@@ -45,7 +45,7 @@ public class ProfileModel {
         }
     }
 
-    public ArrayList<Profile> getAllDetails(String logged_user_name, String logged_org_office) {
+    public static ArrayList<Profile> getAllDetails(String logged_user_name, String logged_org_office) {
         ArrayList<Profile> list = new ArrayList<Profile>();
         try {
             String query = " select oo.org_office_name,kp.key_person_name,oo.email_id1,oo.landline_no1,oo.mobile_no1 as office_mobile, "
@@ -85,8 +85,7 @@ public class ProfileModel {
 
         return list;
     }
-    
-    
+
     public static ArrayList<Profile> getAllDealers() {
         ArrayList<Profile> list = new ArrayList<Profile>();
         String query = " select distinct "
@@ -95,16 +94,16 @@ public class ProfileModel {
                 + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
                 + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
                 + " oo.mobile_no1,oo.org_office_code, "
-                + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no "
+                + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.org_office_id  "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
                 + " org_office_designation_map oodm, org_office_type oot"
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
                 + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
-                + " and oo.office_type_id=3 ";
+                + " and oo.office_type_id=3 order by oo.org_office_name ";
         try {
-            PreparedStatement pstmt = connection.prepareStatement(query);  
+            PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 Profile bean = new Profile();
@@ -131,6 +130,7 @@ public class ProfileModel {
                 bean.setDesignation_code(rset.getInt(21));
                 bean.setOrg_office_type(rset.getString(22));
                 bean.setGst_number(rset.getString(25));
+                bean.setOrg_office_id(rset.getInt(26));
                 list.add(bean);
 
             }
@@ -182,6 +182,70 @@ public class ProfileModel {
         }
 
         return arrayObj;
+    }
+
+    public ArrayList<Profile> viewDealerDetails(String key_person_id, String org_office_id) {
+        ArrayList<Profile> list = new ArrayList<Profile>();
+        String query = " select distinct "
+                + " kp.key_person_id, "
+                + " kp.key_person_name,kp.address_line1,kp.address_line2,kp.address_line3,kp.mobile_no1,kp.email_id1,kp.emp_code, "
+                + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
+                + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
+                + " oo.mobile_no1,oo.org_office_code, "
+                + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.org_office_id  "
+                + " from key_person kp, organisation_name onn, org_office oo, designation d, "
+                + " org_office_designation_map oodm, org_office_type oot"
+                + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
+                + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
+                + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
+                + " and oo.office_type_id=3 ";
+
+        if (!key_person_id.equals("") && key_person_id != null) {
+            query += " and kp.key_person_id='" + key_person_id + "' ";
+        }
+        if (!org_office_id.equals("") && org_office_id != null) {
+            query += " and oo.org_office_id='" + org_office_id + "' ";
+        }
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                Profile bean = new Profile();
+                bean.setKey_person_id(rset.getInt(1));
+                bean.setKey_person_name(rset.getString(2));
+                bean.setKp_address_line1(rset.getString(3) + ", " + rset.getString(4) + ", " + rset.getString(5));
+//                bean.setKp_address_line2(rset.getString(4));
+//                bean.setKp_address_line3(rset.getString(5));
+                bean.setKp_mobile_no1(rset.getString(6) + ", " + rset.getString(24));
+                bean.setKp_email_id1(rset.getString(7));
+                bean.setEmp_code(rset.getInt(8));
+                bean.setKp_father_name(rset.getString(9));
+                bean.setKp_date_of_birth(rset.getString(10));
+                bean.setEmergency_contact_name(rset.getString(11));
+                bean.setEmergency_contact_mobile(rset.getString(12));
+                bean.setOrganisation_name(rset.getString(13));
+                bean.setOrganisation_code(rset.getString(14));
+                bean.setOrg_office_name(rset.getString(15));
+                bean.setOff_address_line1(rset.getString(16) + ", " + rset.getString(23));
+                bean.setOff_email_id1(rset.getString(17));
+                bean.setOff_mobile_no1(rset.getString(18));
+                bean.setOrg_office_code(rset.getString(19));
+                bean.setDesignation(rset.getString(20));
+                bean.setDesignation_code(rset.getInt(21));
+                bean.setOrg_office_type(rset.getString(22));
+                bean.setGst_number(rset.getString(25));
+                bean.setOrg_office_id(rset.getInt(26));
+                list.add(bean);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error in ProfileModel getData -- " + e);
+
+        }
+
+        return list;
     }
 
     public List<String> getCities(String q) {
@@ -279,15 +343,15 @@ public class ProfileModel {
         int updateRowsAffected = 0;
         boolean status = false;
         int kp_id = 0;
-        String query1 = "SELECT max(revision_no) revision_no FROM key_person WHERE key_person_id = " + key_id + "  && active=? ";
-        String query2 = " UPDATE org_office SET email_id1=?,mobile_no1=?,mobile_no2=?,service_tax_reg_no=?,address_line1=?,city_id=? "
-                + " WHERE org_office_id=? and revision_no=?";
+        String query1 = " SELECT max(revision_no) revision_no FROM key_person WHERE key_person_id = " + key_id + "  && active=? ";
+        String query2 = " UPDATE org_office SET email_id1=?,mobile_no1=?,mobile_no2=?,service_tax_reg_no=?,address_line1=?,address_line2=?, "
+                + " address_line3=?,city_id=? "
+                + " WHERE org_office_id=? and revision_no=? ";
         String query4 = " select count(*) from general_image_details where key_person_id='" + key_id + "' ";
 
         String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,"
                 + "revision_no,active,remark) "
                 + " VALUES(?,?,?,?,?,?,?,?)";
-
         // String query6=" UPDATE general_image_details SET active=? WHERE key_person_id=? ";
         int rowsAffected = 0;
         try {
@@ -305,9 +369,12 @@ public class ProfileModel {
                 pstm.setString(3, key.getMobile_no2());
                 pstm.setString(4, key.getGst_number());
                 pstm.setString(5, key.getAddress_line1());
-                pstm.setInt(6, city_id);
-                pstm.setInt(7, oo_id);
-                pstm.setInt(8, revision);
+                pstm.setString(6, key.getAddress_line2());
+                pstm.setString(7, key.getAddress_line3());
+                pstm.setInt(8, city_id);
+                pstm.setInt(9, oo_id);
+                pstm.setInt(10, revision);
+
                 updateRowsAffected = pstm.executeUpdate();
                 if (updateRowsAffected >= 1) {
 

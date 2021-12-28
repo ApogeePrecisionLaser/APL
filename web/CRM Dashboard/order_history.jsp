@@ -9,9 +9,11 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <div>
-                            <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
-                        </div>
+                        <c:if test="${user_role=='Dealer'}">
+                            <div>
+                                <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
+                            </div>
+                        </c:if>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>

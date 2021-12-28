@@ -46,19 +46,19 @@ public class ModelNameController extends HttpServlet {
         ServletContext ctx = getServletContext();
         Map<String, String> map = new HashMap<String, String>();
         request.setCharacterEncoding("UTF-8");
-        
+
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ModelNameModel model = new ModelNameModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String image_folder = "";
         HttpSession session = request.getSession();
-        String loggedUser="";
+        String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
         String image_name = "";
         String active1 = request.getParameter("active");
         try {
-            
+
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in ModelNameController setConnection() calling try block" + e);
@@ -95,7 +95,7 @@ public class ModelNameController extends HttpServlet {
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
-                    model.closeConnection();
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -282,7 +282,7 @@ public class ModelNameController extends HttpServlet {
                 bean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id")));
                 bean.setItem_code(map.get("item_code"));
                 bean.setLead_time(Integer.parseInt("0" + map.get("lead_time").trim()));
-                bean.setBasic_price( map.get("basic_price").trim());
+                bean.setBasic_price(map.get("basic_price").trim());
                 if (map.get("model_no") == null) {
                     model_no = "";
                 } else {
@@ -337,7 +337,7 @@ public class ModelNameController extends HttpServlet {
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("model_name").forward(request, response);
         } catch (Exception ex) {
             System.out.println("ModelNameController error: " + ex);

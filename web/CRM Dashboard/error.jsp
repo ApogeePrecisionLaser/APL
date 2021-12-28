@@ -2,7 +2,6 @@
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -25,16 +24,16 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline">            
                     <div class="card-body"> 
-                        <div>
-                            <img src="CRM Dashboard/assets2/img/product/logo.png">
+                        <div class="text-center text-md-right">
+                            <img src="CRM Dashboard/assets2/img/product/logo.png" width="140">
                         </div>             
                         <div class="boxSize">
                             <div class="text-center">
-                                <img src="CRM Dashboard/assets2/img/product/sorrySticker.png" width="90">
+                                <img src="CRM Dashboard/assets2/img/product/sorrySticker.png" width="75">
                             </div>
-                            <div class="text-center mt-3" >
+                            <div class="text-center mt-2" >
                                 <h2 class="font-weight-bold text-danger">Oops Something Went Wrong! </h2>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,</p>
+                                <p class="mb-0">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,</p>
                             </div>
                             <br>
                             <div class="row">
@@ -88,6 +87,7 @@
         </div>
     </div>
 </div>
+
 
 
 

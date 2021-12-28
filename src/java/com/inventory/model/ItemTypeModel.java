@@ -242,4 +242,8 @@ public class ItemTypeModel {
             System.out.println("ItemTypeModel closeConnection() Error: " + e);
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

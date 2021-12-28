@@ -869,4 +869,8 @@ public class ModelNameModel {
             System.out.println("ModelNameModel closeConnection() Error: " + e);
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

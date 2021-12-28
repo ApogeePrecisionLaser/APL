@@ -754,4 +754,7 @@ public class InventoryBasicModelold {
             System.out.println("ItemNameModel closeConnection() Error: " + e);
         }
     }
+     public Connection getConnection() {
+        return connection;
+    }
 }

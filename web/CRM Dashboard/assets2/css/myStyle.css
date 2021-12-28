@@ -1,4 +1,4 @@
-p
+
 
 .marginTop25{
     margin-top: 25px;
@@ -21,9 +21,11 @@ p
 .myThemeBtn:hover{
     color: #fff;
 }
+.fontTen{
+    font-size: 10px;
+}
 .fontFourteen{
     font-size: 14px;
-    text-align: center;
 }
 .fontSeventeen{
     font-size: 17px!important;
@@ -69,7 +71,7 @@ p
     box-shadow: 2px 2px 4px #999;
 }
 .brand-link {
-    padding: 15px .5rem 8px;
+    padding: 8px .5rem 8px;
 }
 .brand-text{
     color: #102f42;
@@ -82,7 +84,7 @@ p
     /*margin: 3px!important;*/
     /*margin-bottom: 3px!important;
     padding-bottom: 3px!important;*/
-    padding-top: 0;
+    padding: 12px 0!important;
 }
 .content-header {
     padding: 3px 0.5rem;
@@ -136,6 +138,9 @@ p
     transition: all .3s ease;
 }
 
+.fontFourteen{
+    font-size: 14px;
+}
 
 table.dataTable tbody th, table.dataTable tbody td{
     padding: 2px 8px;
@@ -217,8 +222,13 @@ table.dataTable thead .sorting_asc {
 }
 
 .sidebarNavWrap nav ul{
-    padding-left: 7px;
+    padding-left: 0px;
 }
+
+.lineHeightOneTwo{
+    line-height: 1.25;
+}
+
 /*.leftSideMenuBox {
     padding: 6px;
     background-color: #102f42;
@@ -491,6 +501,7 @@ table.dataTable thead .sorting_asc {
     border:1px solid #eee;
     height: 460px;
     margin-top: -19px;
+    background-color: #fff;
 }
 .picZoomer-cursor{
     display: none;
@@ -718,12 +729,12 @@ table.dataTable thead .sorting_asc {
 ._p-qty .decrease_ {
     position: relative;
     right: -5px;
-    top: 3px;
+    top: 2px;
 }
 
 ._p-qty .increase_ {
     position: relative;
-    top: 3px;
+    top: 2px;
     left: -5px;
 }
 /*========box========*/
@@ -799,6 +810,8 @@ table.dataTable thead .sorting_asc {
 
 
 
+
+
 .statusApprove{
     background-color: #28A745;
     padding: 2px 15px;
@@ -823,7 +836,7 @@ table.dataTable thead .sorting_asc {
     color: #fff;
     border-radius: 20px;
 }
-;
+
 
 
 .orderImg{
@@ -834,7 +847,7 @@ table.dataTable thead .sorting_asc {
 
 
 
-.myForm input, .myForm select{
+.myForm input[type=text], .myForm select{
     height: 32px!important;
     border-radius: 0;
     padding: 0 8px;

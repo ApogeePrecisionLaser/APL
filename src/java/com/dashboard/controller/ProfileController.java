@@ -95,6 +95,8 @@ public class ProfileController extends HttpServlet {
                     gson.put("list", list);
                     out.println(gson);
                 }
+                DBConnection.closeConncetion(model.getConnection());
+
                 return;
             }
         } catch (Exception e) {
@@ -149,13 +151,14 @@ public class ProfileController extends HttpServlet {
             key.setGst_number(map.get("gst").trim());
             key.setCity_name(map.get("city").trim());
 //            key.setState_name(map.get("state").trim());
-            key.setAddress_line1(map.get("address").trim());
+            key.setAddress_line1(map.get("address_line1").trim());
+            key.setAddress_line2(map.get("address_line2").trim());
+            key.setAddress_line3(map.get("address_line3").trim());
             key.setImage_name(map.get("image").trim());
             String photo_destination = model.getDestination_Path("key_person_photo");
             response.setContentType("image/jpeg");
             model.updateRecord(key, itr, logged_key_person_id, logged_org_office_id, photo_destination);
         }
-
 
         List<Profile> list = model.getAllDetails(logged_user_name, logged_org_office);
         String email = list.get(0).getEmail_id1().toString();
@@ -182,7 +185,8 @@ public class ProfileController extends HttpServlet {
 
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("profile").forward(request, response);
     }
 

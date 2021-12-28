@@ -46,26 +46,26 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>53<!-- <sup style="font-size: 20px">%</sup> --></h3>
+                            <h3>${sales_enquiries}<!-- <sup style="font-size: 20px">%</sup> --></h3>
                             <p>Sales Enquiry </p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="DealersEnquiryController" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="DealersOrderController?task=sales_enquiry_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
+                            <h3>${complaint_enquiries}</h3>
                             <p>Customer Complaint</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="DealersComplaintController" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="DealersOrderController?task=complaint_enquiry_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -134,21 +134,21 @@
 
                 </section>
 
-                <section class="col-lg-6  content">
-                    <div class="container-fluid">  
-                        <div class="card-header border-0">
-                            <h3 class="card-title">
-                                <i class="fas fa-th mr-1"></i>
-                                Dealer Location
-                            </h3>
-
-                        </div>
-                        <div class="card-body">
-                            <div id="map" style="height: 280px; width: auto;"></div>
-
-                        </div>
-                    </div>
-                </section>
+                <!--                <section class="col-lg-6  content">
+                                    <div class="container-fluid">  
+                                        <div class="card-header border-0">
+                                            <h3 class="card-title">
+                                                <i class="fas fa-th mr-1"></i>
+                                                Dealer Location
+                                            </h3>
+                
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="map" style="height: 280px; width: auto;"></div>
+                
+                                        </div>
+                                    </div>
+                                </section>-->
                 <!-- right col -->
             </div>
         </div>

@@ -56,7 +56,6 @@ public class EditProfileController extends HttpServlet {
         } catch (Exception e) {
             System.out.println("error in CityController setConnection() calling try block" + e);
         }
-
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         System.out.println(model.getConnection());
@@ -90,7 +89,8 @@ public class EditProfileController extends HttpServlet {
         request.setAttribute("address_line3", address_line3);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("edit_profile").forward(request, response);
     }
 

@@ -135,6 +135,7 @@ public class ApproveIndentController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -151,10 +152,11 @@ public class ApproveIndentController extends HttpServlet {
                 //  String indent_no = request.getParameter("indent_no");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String indent_status = request.getParameter("indent_status");
-                List<ApproveIndent> indent_items_list = model.getIndentItems(indent_table_id,logged_org_office);
+                List<ApproveIndent> indent_items_list = model.getIndentItems(indent_table_id, logged_org_office);
                 request.setAttribute("indent_items_list", indent_items_list);
                 request.setAttribute("indent_status", indent_status);
                 request.getRequestDispatcher("approveIndentItemList").forward(request, response);
+                DBConnection.closeConncetion(model.getConnection());
                 return;
             }
             if (task.equals("Delete")) {
@@ -190,6 +192,7 @@ public class ApproveIndentController extends HttpServlet {
                 request.setAttribute("final_status", message_split[1]);
                 request.setAttribute("final_indent_table_id", final_indent_table_id);
                 request.getRequestDispatcher("approveIndentItemList").forward(request, response);
+                DBConnection.closeConncetion(model.getConnection());
                 return;
             }
 
@@ -203,7 +206,7 @@ public class ApproveIndentController extends HttpServlet {
             if (searchIndentStatusWise.equals("searchIndentStatusWise")) {
                 status = request.getParameter("status");
             }
-            List<ApproveIndent> list = model.showIndents(logged_user_name, status,search_by_date);
+            List<ApproveIndent> list = model.showIndents(logged_user_name, status, search_by_date);
             List<ApproveIndent> status_list = model.getStatus();
 
             request.setAttribute("list", list);
@@ -215,7 +218,7 @@ public class ApproveIndentController extends HttpServlet {
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("approve_indent").forward(request, response);
 

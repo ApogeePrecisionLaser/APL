@@ -1132,50 +1132,65 @@ public class APLWebServiceModel {
                 + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
 
+        String query2 = " select count(*) as count from enquiry_table where enquiry_no='" + bean.getEnquiry_no() + "' and active='Y' ";
+        
         java.util.Date date = new java.util.Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String date_time = sdf.format(date);
 
         int enquiry_source_table_id = 1;
-        int marketing_vertical_id = getMarketingVerticalId(bean.getMarketing_vertical_name());
+//        int marketing_vertical_id = getMarketingVerticalId(bean.getMarketing_vertical_name());
+
         try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, enquiry_source_table_id);
-            pstmt.setInt(2, marketing_vertical_id);
-            pstmt.setInt(3, 2);
-            pstmt.setString(4, bean.getEnquiry_no());
-            pstmt.setString(5, bean.getSender_name());
-            pstmt.setString(6, bean.getSender_email());
-            pstmt.setString(7, bean.getSender_mob());
-            pstmt.setString(8, bean.getSender_company_name());
-            pstmt.setString(9, bean.getEnquiry_address());
-            pstmt.setString(10, bean.getEnquiry_city());
-            pstmt.setString(11, bean.getEnquiry_state());
-            pstmt.setString(12, bean.getCountry());
-            pstmt.setString(13, bean.getEnquiry_message());
-            pstmt.setString(14, date_time);
-            String enquiry_call_duration = "";
-            enquiry_call_duration = bean.getEnquiry_call_duration();
-            if (enquiry_call_duration == null) {
-                enquiry_call_duration = "";
+            int count = 0;
+            ResultSet rst = connection.prepareStatement(query2).executeQuery();
+            while (rst.next()) {
+                count = rst.getInt("count");
             }
-            pstmt.setString(15, enquiry_call_duration);
+            if (count > 0) {
+                message = "Cannot save the record, some error.";
+                messageBGColor = "";
+            } else {
+                PreparedStatement pstmt = connection.prepareStatement(query);
+                pstmt.setInt(1, enquiry_source_table_id);
+                pstmt.setInt(2, 0);
+                pstmt.setInt(3, 1);
+                pstmt.setString(4, bean.getEnquiry_no());
+                pstmt.setString(5, bean.getSender_name());
+                pstmt.setString(6, bean.getSender_email());
+                pstmt.setString(7, bean.getSender_mob());
+                pstmt.setString(8, bean.getSender_company_name());
+                pstmt.setString(9, bean.getEnquiry_address());
+                pstmt.setString(10, bean.getEnquiry_city());
+                pstmt.setString(11, bean.getEnquiry_state());
+                pstmt.setString(12, bean.getCountry());
+                pstmt.setString(13, bean.getEnquiry_message());
 
-            String enquiry_reciever_mob = "";
-            enquiry_reciever_mob = bean.getEnquiry_reciever_mob();
-            if (enquiry_reciever_mob == null) {
-                enquiry_reciever_mob = "";
+                pstmt.setString(14, bean.getDate_time());
+
+                String enquiry_call_duration = "";
+                enquiry_call_duration = bean.getEnquiry_call_duration();
+                if (enquiry_call_duration == null) {
+                    enquiry_call_duration = "";
+                }
+                pstmt.setString(15, enquiry_call_duration);
+
+                String enquiry_reciever_mob = "";
+                enquiry_reciever_mob = bean.getEnquiry_reciever_mob();
+                if (enquiry_reciever_mob == null) {
+                    enquiry_reciever_mob = "";
+                }
+                pstmt.setString(15, enquiry_call_duration);
+
+                pstmt.setString(16, enquiry_reciever_mob);
+                pstmt.setString(17, bean.getSender_alternate_email());
+                pstmt.setString(18, bean.getSender_alternate_mob());
+                pstmt.setInt(19, bean.getRevision_no());
+                pstmt.setString(20, "Y");
+                pstmt.setString(21, "Anand");
+                pstmt.setInt(22, 129);
+                rowsAffected = pstmt.executeUpdate();
             }
-            pstmt.setString(15, enquiry_call_duration);
-
-            pstmt.setString(16, enquiry_reciever_mob);
-            pstmt.setString(17, bean.getSender_alternate_email());
-            pstmt.setString(18, bean.getSender_alternate_mob());
-            pstmt.setInt(19, bean.getRevision_no());
-            pstmt.setString(20, "Y");
-            pstmt.setString(21, "OK");
-            pstmt.setInt(22, 117);
-            rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
             System.out.println("EnquiryModel insertEnquiries() Error: " + e);
         }
@@ -1279,4 +1294,3 @@ public class APLWebServiceModel {
     }
 
 }
-

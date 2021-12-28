@@ -9,9 +9,11 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <div>
-                            <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
-                        </div>
+                        <c:if test="${user_role=='Dealer'}">
+                            <div>
+                                <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
+                            </div>
+                        </c:if>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -67,22 +69,27 @@
 
                                                     <c:choose>  
                                                         <c:when test="${beanType.status == 'Pending'}">  
-                                                            <td class="fontFourteen"><i class="statusDisapprove">Not Approved</i></td>
+                                                            <td class="fontFourteen"><i class="statusPending">${beanType.status}</i></td>
 
                                                         </c:when>   
                                                         <c:when test="${beanType.status == 'Approved'}">  
-                                                            <td class="fontFourteen"><i class="statusApprove">Approved</i></td>
+                                                            <td class="fontFourteen"><i class="statusApprove">${beanType.status}</i></td>
 
                                                         </c:when>  
                                                         <c:otherwise>  
-                                                            <td class="fontFourteen"><i class="statusDisapprove">Not Approved</i></td>
-                                                        </c:otherwise>  
-                                                    </c:choose>  
+                                                            <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i></td>
+                                                            </c:otherwise>  
+                                                        </c:choose>  
 
                                                     <td class="fontFourteen">
                                                         <a href="PendingOrdersController?task=viewOrderDetails&order_table_id=${beanType.order_table_id}"
                                                            class="btn far fa-eye actionEdit" title="View Order Detail"></a>
-                                                        <!--<a onclick="deleteOrder('${beanType.order_table_id}')" class="btn far fa-times-circle actionDelete" title="Cancel Order"></a>-->
+                                                        <c:if test="${beanType.status == 'Approved' && user_role=='Dealer'}" >  
+                                                            <a href="DealersOrderController?task=checkout&order_table_id=${beanType.order_table_id}"
+                                                               class="btn btn-info" title="CheckOut">CheckOut</a>
+                                                        </c:if>
+
+<!--<a onclick="deleteOrder('${beanType.order_table_id}')" class="btn far fa-times-circle actionDelete" title="Cancel Order"></a>-->
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -94,7 +101,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>

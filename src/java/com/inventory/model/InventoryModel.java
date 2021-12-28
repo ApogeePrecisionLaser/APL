@@ -950,4 +950,7 @@ public class InventoryModel {
             System.out.println("InventoryModel closeConnection() Error: " + e);
         }
     }
+     public Connection getConnection() {
+        return connection;
+    }
 }

@@ -77,7 +77,7 @@ public class ManufacturerItemMapController extends HttpServlet {
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);
-                    model.closeConnection();
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -130,8 +130,7 @@ public class ManufacturerItemMapController extends HttpServlet {
                 searchManufacturer = "";
                 searchItem = "";
             }
-            
-            
+
             String buttonAction = request.getParameter("buttonAction");
             if (buttonAction == null) {
                 buttonAction = "none";
@@ -154,7 +153,7 @@ public class ManufacturerItemMapController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("list", list);
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
             request.getRequestDispatcher("manufacturer_item_map").forward(request, response);
         } catch (Exception ex) {
             System.out.println("ManufacturerItemMapController error: " + ex);

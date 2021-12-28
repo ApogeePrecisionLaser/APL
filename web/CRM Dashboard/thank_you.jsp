@@ -26,16 +26,16 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline">            
                     <div class="card-body"> 
-                        <div>
-                            <img src="CRM Dashboard/assets2/img/product/logo.png">
+                        <div class="text-center text-md-right">
+                            <img src="CRM Dashboard/assets2/img/product/logo.png" width="140">
                         </div>             
                         <div class="boxSize">
                             <div class="text-center">
-                                <img src="CRM Dashboard/assets2/img/product/thankyouSticker.jpg" width="125">
+                                <img src="CRM Dashboard/assets2/img/product/thankyouSticker.jpg" width="75">
                             </div>
-                            <div class="text-center mt-3" >
-                                <h2 class="font-weight-bold text-success">Thank You!</h2>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,</p>
+                            <div class="text-center mt-2" >
+                                <h2 class="font-weight-bold text-success">Thank You! </h2>
+                                <p class="mb-0">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,</p>
                                 <h5>Your Order No.-<B> ${order_no}</B> </h5>
                             </div>
                             <br>
@@ -90,6 +90,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 

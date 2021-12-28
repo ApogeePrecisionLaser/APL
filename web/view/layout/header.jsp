@@ -114,6 +114,15 @@
                                     </a>
                                     <div class="dropdown-menu">
                                         <a href="CityController" class="dropdown-item">City</a>
+                                        <a href="tehsilTypeCont" class="dropdown-item">Tehsil</a>
+                                        <a href="countryCont" class="dropdown-item">Country</a>
+                                        <a href="stateutTypeCont" class="dropdown-item">State</a>
+                                        <a href="districtTypeCont" class="dropdown-item">District</a>
+                                        <a href="divisionTypeCont" class="dropdown-item">Division</a>
+                                        <a href="zoneTypeCont" class="dropdown-item">Zone</a>
+                                        <a href="wardTypeCont" class="dropdown-item">Ward</a>
+                                        <a href="areaTypeCont" class="dropdown-item">Area</a>
+                                        <a href="cityLocationCont" class="dropdown-item">Location</a>
                                     </div>
                                 </li>
 
@@ -151,6 +160,7 @@
                                             if (session.getAttribute("user_role").equals("Super Admin")) {
                                         %>
                                         <a href="DealerSalemanMapController" class="dropdown-item">Dealer-Salesman-Mapping</a> 
+                                        <a href="SalesManagerStateMappingController" class="dropdown-item">SalesManager State Mapping</a> 
                                         <%}%>
                                         <%
                                             if (session.getAttribute("user_role").equals("Dealer")) {

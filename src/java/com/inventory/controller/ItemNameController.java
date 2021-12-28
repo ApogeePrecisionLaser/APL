@@ -135,7 +135,7 @@ public class ItemNameController extends HttpServlet {
                     if (JQstring.equals("getItems")) {
                         JSONObject obj1 = new JSONObject();
                         JSONArray arrayObj = new JSONArray();
-                        String item_names=request.getParameter("item_name");
+                        String item_names = request.getParameter("item_name");
                         arrayObj = model.getItems(item_names);
                         obj1.put("org_chart_data", arrayObj);
                         out.print(obj1);
@@ -150,6 +150,7 @@ public class ItemNameController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -334,11 +335,11 @@ public class ItemNameController extends HttpServlet {
                 org_chart = "";
             }
             if (org_chart.equals("Org Chart")) {
-                String item_names=request.getParameter("item_name");
+                String item_names = request.getParameter("item_name");
                 request.setAttribute("item_name", item_names);
                 request.getRequestDispatcher("orgChart.jsp").forward(request, response);
             }
-            
+
             //Auto increment count for item code
             //  counting = model.getCounting();
             List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code, search_super_child, search_generation);
@@ -353,7 +354,7 @@ public class ItemNameController extends HttpServlet {
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("item_name").forward(request, response);
         } catch (Exception ex) {

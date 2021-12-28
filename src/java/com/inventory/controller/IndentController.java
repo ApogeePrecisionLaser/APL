@@ -158,6 +158,7 @@ public class IndentController extends HttpServlet {
                         gson.put("list", list);
                         out.println(gson);
                     }
+                    DBConnection.closeConncetion(model.getConnection());
                     return;
                 }
             } catch (Exception e) {
@@ -190,7 +191,7 @@ public class IndentController extends HttpServlet {
                         JSONObject jsonObj = jsonArr.getJSONObject(i);
 
                         Iterator<String> keys = jsonObj.keys();
-                        
+
                         while (keys.hasNext()) {
                             String key = keys.next();
                             checkedValue = (String) jsonObj.get("checkedValue");
@@ -231,7 +232,7 @@ public class IndentController extends HttpServlet {
                 servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
                 servletOutputStream.flush();
                 servletOutputStream.close();
-
+                DBConnection.closeConncetion(model.getConnection());
                 return;
 
             }
@@ -251,6 +252,7 @@ public class IndentController extends HttpServlet {
                 servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
                 servletOutputStream.flush();
                 servletOutputStream.close();
+                DBConnection.closeConncetion(model.getConnection());
                 return;
             }
 
@@ -330,7 +332,8 @@ public class IndentController extends HttpServlet {
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
 
-            model.closeConnection();
+            DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(model2.getConnection());
 
             request.getRequestDispatcher("indent").forward(request, response);
         } catch (Exception ex) {

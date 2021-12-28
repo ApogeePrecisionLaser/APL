@@ -393,4 +393,8 @@ public class ManufacturerItemMapModel {
             System.out.println("ManufacturerItemMapModel closeConnection() Error: " + e);
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

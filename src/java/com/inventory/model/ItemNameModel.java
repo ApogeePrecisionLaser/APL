@@ -1,4 +1,3 @@
-
 package com.inventory.model;
 
 import java.sql.Connection;
@@ -1262,5 +1261,9 @@ public class ItemNameModel {
         } catch (Exception e) {
             System.out.println("ItemNameModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

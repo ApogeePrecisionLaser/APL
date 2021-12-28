@@ -1,4 +1,3 @@
-
 package com.inventory.model;
 
 import java.sql.Connection;
@@ -413,5 +412,9 @@ public class ItemAuthorizationModel {
         } catch (Exception e) {
             System.out.println("ItemAuthorizationModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

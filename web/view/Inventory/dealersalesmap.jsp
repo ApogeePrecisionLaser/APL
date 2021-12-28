@@ -71,11 +71,11 @@
             $("#salesmanname").autocomplete({
 
                 source: function (request, response) {
-                 //   var random = document.getElementById("organisation_name").value;
+                    var random = document.getElementById("salesmanname").value;
                     $.ajax({
                         url: "DealerSalemanMapController",
                         dataType: "json",
-                        data: {action1: "getSalesDealer"},
+                        data: {action1: "getSalesDealer", str: random},
                         success: function (data) {
 
                             console.log(data);
@@ -95,11 +95,11 @@
             $("#dealername").autocomplete({
 
                 source: function (request, response) {
-                 
+                    var random = document.getElementById("dealername").value;
                     $.ajax({
                         url: "DealerSalemanMapController",
                         dataType: "json",
-                        data: {action1: "getDealer"},
+                        data: {action1: "getDealer", str: random},
                         success: function (data) {
 
                             console.log(data);
@@ -116,16 +116,16 @@
                     return false;
                 }
             });
-            
-            
+
+
             $("#sales_search").autocomplete({
 
                 source: function (request, response) {
-                 //   var random = document.getElementById("organisation_name").value;
+                    var random = document.getElementById("sales_search").value;
                     $.ajax({
                         url: "DealerSalemanMapController",
                         dataType: "json",
-                        data: {action1: "getSalesDealer"},
+                        data: {action1: "getSalesDealer", str: random},
                         success: function (data) {
 
                             console.log(data);
@@ -145,11 +145,12 @@
             $("#searchdealername").autocomplete({
 
                 source: function (request, response) {
-                 
+                    var random = document.getElementById("searchdealername").value;
+
                     $.ajax({
                         url: "DealerSalemanMapController",
                         dataType: "json",
-                        data: {action1: "getDealer"},
+                        data: {action1: "getDealer", str: random},
                         success: function (data) {
 
                             console.log(data);
@@ -370,7 +371,7 @@
         $('#salesmanname').val($("#" + count + '2').html());
         $('#dealername').val($("#" + count + '3').html());
         $('#remark').val($("#" + count + '4').html());
-         
+
         $('#edit').attr('disabled', false);
         $('#delete').attr('disabled', false);
     }
@@ -383,7 +384,7 @@
     function makeEditable(id) {
         document.getElementById("salesmanname").disabled = false;
         document.getElementById("dealername").disabled = false;
-    
+
         document.getElementById("remark").disabled = false;
         document.getElementById("save").disabled = false;
         if (id == 'new') {
@@ -398,7 +399,7 @@
             document.getElementById("delete").disabled = true;
             // document.getElementById("save_As").disabled = true;
             document.getElementById("get_cordinate").disabled = false;
-           // setDefaultColordOrgn(document.getElementById("noOfRowsTraversed").value, 17);
+            // setDefaultColordOrgn(document.getElementById("noOfRowsTraversed").value, 17);
             document.getElementById("organisation_name").focus();
         }
         if (id == 'edit') {
@@ -453,7 +454,7 @@
     function verify() {
         var result;
         //alert("verify");
-       // $('#message').remove();
+        // $('#message').remove();
         if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
             var organisation_name = document.getElementById("organisation_name").value;
             var office_type = document.getElementById("office_type").value;
@@ -470,7 +471,7 @@
                 return false;
             }
             if (myLeftTrim(office_type).length === 0) {
-               // alert(office_type);
+                // alert(office_type);
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Office Type  is required...</b></label></div>');
                 document.getElementById("office_type").focus();
                 return false;
@@ -506,7 +507,7 @@
 
             var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
             if (reg.test(email_id1) == false) {
-               // alert(email_id1);
+                // alert(email_id1);
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Please Enter Correct Email Id...</b></label></div>');
                 document.getElementById("email_id1").focus();
                 return false;
@@ -809,10 +810,10 @@
                                value="${sales_search}" size="20">
                     </div>
                 </div>
-                
-                
-               
-               
+
+
+
+
             </div>
 
             <hr>
@@ -837,13 +838,13 @@
                         <thead>
                             <tr>   
                                 <th>S.No.</th>
-                               
-                                
+
+
                                 <th>Salesman Name</th>
-                              <th>Dealer Name</th>
+                                <th>Dealer Name</th>
                                 <th>Remark</th>
-                                
-                               
+
+
                             </tr>
                         </thead>
                         <tbody>   
@@ -851,15 +852,15 @@
                                 <tr
                                     onclick="fillColumn('${organisation.map_id}', '${loopCounter.count }');">
                                     <td>${loopCounter.count }</td>        
-                                      <td id="${loopCounter.count }2">${organisation.salesmanname}</td>
+                                    <td id="${loopCounter.count }2">${organisation.salesmanname}</td>
                                     <td id="${loopCounter.count }3">${organisation.dealername}</td>
-                                  
+
                                     <td id="${loopCounter.count }4">${organisation.remark}</td>
-                                   
-                                   
-<!--                                    <td>
-                                        <input type="button" class="btn normalBtn"  value ="View Map" id="map_container${loopCounter.count}" onclick="openMap('${organisation.map_id}');"/>
-                                    </td>-->
+
+
+                                    <!--                                    <td>
+                                                                            <input type="button" class="btn normalBtn"  value ="View Map" id="map_container${loopCounter.count}" onclick="openMap('${organisation.map_id}');"/>
+                                                                        </td>-->
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -890,9 +891,9 @@
                         </div>
                     </div>
                 </div>
-                
-                
-             
+
+
+
             </div>
             <div class="row mt-3">
                 <div class="col-md-9">
@@ -903,10 +904,10 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
-            
-             
+
+
             <div class="row mt-3">
                 <div class="col-md-9">
                     <div class="">
@@ -916,43 +917,43 @@
                         </div>
                     </div>
                 </div>
-                
-                
-                
-            </div>
-            
-             
+
+
+
             </div>
 
-           
 
-            <div class="col-md-3">
-                <div class="">
-                    <div class="form-group">
-                        <!--<label>Generation<span class="text-danger">*</span></label>-->
-                        <input class="form-control myInput" type="text" id="generation" name="generation" value="" size="45" disabled hidden>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div id="message">
-                    <c:if test="${not empty message}">
-                        <div class="col-md-12 text-center">
-                            <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
-                        </div>
-                    </c:if>
-                </div>
-                <input type="hidden" id="clickedButton" value="">
-                <div class="col-md-12 text-center"> 
-                    <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                    <input type="reset" class=" btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
-                </div>
-            </div>
-        </form>
     </div>
+
+
+
+    <div class="col-md-3">
+        <div class="">
+            <div class="form-group">
+                <!--<label>Generation<span class="text-danger">*</span></label>-->
+                <input class="form-control myInput" type="text" id="generation" name="generation" value="" size="45" disabled hidden>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div id="message">
+            <c:if test="${not empty message}">
+                <div class="col-md-12 text-center">
+                    <label style="color:${msgBgColor}"><b>Result: ${message}</b></label>
+                </div>
+            </c:if>
+        </div>
+        <input type="hidden" id="clickedButton" value="">
+        <div class="col-md-12 text-center"> 
+            <input type="button" class="btn normalBtn" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
+            <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
+            <input type="reset" class=" btn normalBtn" name="new" id="new" value="New" onclick="makeEditable(id)" >
+            <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
+        </div>
+    </div>
+</form>
+</div>
 </section>
 
 

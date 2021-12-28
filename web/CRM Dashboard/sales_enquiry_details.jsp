@@ -27,30 +27,39 @@
                 <div class="card card-primary rounded-0 profileCard mt-3" style="">
                     <div class="card-body">
                         <div class="mt-1">
-                            <div class="d-flex justify-content-between">
-                                <div class="text-right">
-                                    <a href="SalesEnquiryController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Back</a>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#" class="btn myThemeBtn text-right">Assign to Sale Person</a>
-                                </div>
-                            </div>
-
                             <c:forEach var="beanType" items="${requestScope['list']}"
                                        varStatus="loopCounter">
+                                <div class="d-flex justify-content-between">
+                                    <div class="text-right">
+                                        <a href="SalesEnquiryController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Back</a>
+                                    </div>
+                                    <div class="text-right">
+                                        <c:choose>
+                                            <c:when test="${beanType.status =='Primary'}">
+                                                <a href="SalesEnquiryController?task=assignToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&sales_person_name=${beanType.assigned_to}"
+                                                   class="btn myThemeBtn text-right">Assign to Sale Person</a>                                        </c:when>
+                                            <c:otherwise>
+                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                    </div>
+                                </div>
+
+
                                 <div class="row mt-4">
-                                    <div class="col-md-4">
-                                        <div>
-                                            <p class="mb-0"><small>Enquiry Source:</small></p>
-                                            <p><strong>${beanType.enquiry_source}</strong></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div>
-                                            <p class="mb-0"><small>Marketing Vertical:</small></p>
-                                            <p><strong>${beanType.marketing_vertical_name}</strong></p>
-                                        </div>
-                                    </div>
+                                    <!--                                    <div class="col-md-4">
+                                                                            <div>
+                                                                                <p class="mb-0"><small>Enquiry Source:</small></p>
+                                                                                <p><strong>${beanType.enquiry_source}</strong></p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <div>
+                                                                                <p class="mb-0"><small>Marketing Vertical:</small></p>
+                                                                                <p><strong>${beanType.marketing_vertical_name}</strong></p>
+                                                                            </div>
+                                                                        </div>-->
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Enquiry No:</small></p>
@@ -92,6 +101,12 @@
                                         <div>
                                             <p class="mb-0"><small>City:</small></p>
                                             <p><strong>${beanType.enquiry_city}</strong></p>
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small>District:</small></p>
+                                            <p><strong>${beanType.description}</strong></p>
                                         </div>
                                     </div> 
                                     <div class="col-md-4">

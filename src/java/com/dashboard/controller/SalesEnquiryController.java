@@ -22,8 +22,6 @@ public class SalesEnquiryController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 15, noOfRowsInTable;
-
         System.out.println("Starting application");
         response.setContentType("text/html");
         ServletContext ctx = getServletContext();
@@ -52,10 +50,23 @@ public class SalesEnquiryController extends HttpServlet {
                 if (JQstring.equals("getMarketingVertical")) {
                     list = model.getMarketingVertical(q);
                 }
+                if (JQstring.equals("getDistrict")) {
+                    list = model.getDistrict(q);
+                }
+                if (JQstring.equals("getCities")) {
+                    list = model.getCities(q);
+                }
+                if (JQstring.equals("getStates")) {
+                    list = model.getStates(q);
+                }
+                if (JQstring.equals("getCountry")) {
+                    list = model.getCountry(q);
+                }
                 JSONObject gson = new JSONObject();
                 gson.put("list", list);
                 out.println(gson);
-                model.closeConnection();
+//                model.closeConnection();
+                DBConnection.closeConncetion(model.getConnection());
                 return;
             }
         } catch (Exception e) {
@@ -67,18 +78,57 @@ public class SalesEnquiryController extends HttpServlet {
         }
 
         if (task.equals("sales_enquiry_list")) {
-
             ArrayList<Enquiry> list = model.getAllEnquiries();
             request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
             request.getRequestDispatcher("sales_enquiry_list").forward(request, response);
         }
+        if (task.equals("complaint_enquiry_list")) {
+            ArrayList<Enquiry> list = model.getAllComplaints();
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("complaint_enquiry_list").forward(request, response);
+        }
+
         if (task.equals("viewEnquiryDetails")) {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
             request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("sales_enquiry_details").forward(request, response);
+        }
+        if (task.equals("viewComplaintDetails")) {
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
 
+            request.getRequestDispatcher("complaint_enquiry_details").forward(request, response);
+        }
+        if (task.equals("assignToSalesPerson")) {
+            String sales_person_name = request.getParameter("sales_person_name");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            model.assignToSalesPerson(enquiry_table_id, sales_person_name);
+
+            ArrayList<Enquiry> list = model.getAllEnquiries();
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("sales_enquiry_list").forward(request, response);
+        }
+        if (task.equals("assignComplaintToSalesPerson")) {
+            String sales_person_name = request.getParameter("sales_person_name");
+            String complaint_table_id = request.getParameter("enquiry_table_id");
+            model.assignComplaintToSalesPerson(complaint_table_id, sales_person_name);
+
+            ArrayList<Enquiry> list = model.getAllComplaints();
+            request.setAttribute("list", list);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("complaint_enquiry_list").forward(request, response);
         }
 
         if (task.equals("Submit")) {
@@ -89,7 +139,13 @@ public class SalesEnquiryController extends HttpServlet {
                 enquiry_table_id = 0;
             }
 
+            String enquiry_type = request.getParameter("enquiry_type");
+            if (enquiry_type == null) {
+                enquiry_type = "";
+            }
+
             Enquiry bean = new Enquiry();
+            bean.setEnquiry_type(enquiry_type);
             bean.setEnquiry_table_id(enquiry_table_id);
             bean.setEnquiry_source(request.getParameter("enquiry_source"));
             bean.setMarketing_vertical_name(request.getParameter("marketing_vertical"));
@@ -105,17 +161,18 @@ public class SalesEnquiryController extends HttpServlet {
             bean.setEnquiry_state(request.getParameter("sender_state"));
             bean.setCountry(request.getParameter("sender_country"));
             bean.setEnquiry_message(request.getParameter("enquiry_message").trim());
+            bean.setDescription(request.getParameter("district").trim());
 
             if (enquiry_table_id == 0) {
-                model.insertEnquiries(bean);
-            } else {
-//                model.updateEnquirySources(bean, enquiry_table_id);
+                model.insertEnquiries(bean, enquiry_type);
             }
+
         }
 
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
-        model.closeConnection();
+        DBConnection.closeConncetion(model.getConnection());
+
         request.getRequestDispatcher("sales_enquiry_form").forward(request, response);
     }
 

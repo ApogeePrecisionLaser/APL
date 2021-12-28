@@ -1,4 +1,3 @@
-
 package com.inventory.model;
 
 import java.io.ByteArrayOutputStream;
@@ -450,5 +449,9 @@ public class CheckInventoryModel {
         } catch (Exception e) {
             System.out.println("CheckInventoryModel closeConnection() Error: " + e);
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }

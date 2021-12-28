@@ -43,13 +43,14 @@
                                                 <th>S.No.</th>
                                                 <th>Org. Office Name</th>
                                                 <th>Office GST</th>
-                                                <th>Office Address</th>
-                                                <th>Office Email</th>
+                                                <!--<th>Office Address</th>-->
+                                                <!--<th>Office Email</th>-->
                                                 <th>Office Mobile</th>
                                                 <th>Person Name</th>
-                                                <th>Person Address</th>
+                                                <!--<th>Person Address</th>-->
                                                 <th>Person Mobile Number</th>
-                                                <th>Person Email</th>
+                                                <!--<th>Person Email</th>-->
+                                                <th></th>
 
                                             </tr>
                                         </thead>
@@ -61,13 +62,19 @@
                                                     <td>${loopCounter.count }</td>
                                                     <td>${beanType.org_office_name}</td>
                                                     <td>${beanType.gst_number}</td>
-                                                    <td>${beanType.off_address_line1}</td>
-                                                    <td>${beanType.off_email_id1}</td>
+                                                    <!--<td>${beanType.off_address_line1}</td>-->
+                                                    <!--<td>${beanType.off_email_id1}</td>-->
                                                     <td>${beanType.off_mobile_no1}</td>
                                                     <td>${beanType.key_person_name}</td>
-                                                    <td>${beanType.kp_address_line1}</td>
+                                                    <!--<td>${beanType.kp_address_line1}</td>-->
                                                     <td>${beanType.kp_mobile_no1}</td>
-                                                    <td>${beanType.kp_email_id1}</td>
+                                                    <!--<td>${beanType.kp_email_id1}</td>-->
+                                                    <td>
+                                                        <div>
+                                                            <a href="DealersController?task=viewDealerDetails&org_office_id=${beanType.org_office_id}&key_person_id=${beanType.key_person_id}" class="btn far fa-eye actionEdit" title="View Dealer Detail"></a>
+                                                            <a class="btn btn-info" title="Map Items" href="DealerItemMapController?org_office_id=${beanType.org_office_id}">Map Items</a>
+                                                        </div> 
+                                                    </td>
 
                                                 </tr>
                                             </c:forEach>
@@ -148,7 +155,7 @@
                                                                                 'click',
                                                                                 (function (marker, i) {
                                                                                     return function () {
-                                                                                        infowindow.setContent('<b><h6>'+dealer_office_name[i]+' ('+person_name[i]+')</h6></b></br><b>Email:- </b>'+email[i]+'</br><b>Mobile:- </b>'+mobile[i]+'</br><b>Latitude:- </b>'+latitude[i]+'</br><b>Longitude:- </b>'+longitude[i]+'')
+                                                                                        infowindow.setContent('<b><h6>' + dealer_office_name[i] + ' (' + person_name[i] + ')</h6></b></br><b>Email:- </b>' + email[i] + '</br><b>Mobile:- </b>' + mobile[i] + '</br><b>Latitude:- </b>' + latitude[i] + '</br><b>Longitude:- </b>' + longitude[i] + '')
                                                                                         infowindow.open(map, marker)
                                                                                     }
                                                                                 })(marker, i)
@@ -164,5 +171,6 @@
 
 
                                                         });
+
 
 </script>

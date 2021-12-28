@@ -823,4 +823,7 @@ public class IndentModel {
             System.out.println("IndentModel closeConnection() Error: " + e);
         }
     }
+     public Connection getConnection() {
+        return connection;
+    }
 }

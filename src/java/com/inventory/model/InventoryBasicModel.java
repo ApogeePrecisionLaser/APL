@@ -1411,4 +1411,7 @@ public class InventoryBasicModel {
             System.out.println("InventoryBasicModel closeConnection() Error: " + e);
         }
     }
+     public Connection getConnection() {
+        return connection;
+    }
 }

@@ -1,4 +1,3 @@
-
 package com.location.controller;
 
 import com.location.model.CityModel;
@@ -60,7 +59,7 @@ public class CityController extends HttpServlet {
                 JSONObject gson = new JSONObject();
                 gson.put("list", list);
                 out.println(gson);
-                cityModel.closeConnection();
+                DBConnection.closeConncetion(cityModel.getConnection());
                 return;
             }
         } catch (Exception e) {
@@ -128,7 +127,7 @@ public class CityController extends HttpServlet {
         request.setAttribute("message", cityModel.getMessage());
         request.setAttribute("msgBgColor", cityModel.getMessageBGColor());
         request.setAttribute("cityList", list);
-        cityModel.closeConnection();
+        DBConnection.closeConncetion(cityModel.getConnection());
 
         request.getRequestDispatcher("city_view").forward(request, response);
     }

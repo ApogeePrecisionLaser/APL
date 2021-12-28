@@ -91,10 +91,17 @@ public class CRMDashboardController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-            
+
             if (task.equals("viewImage")) {
                 String destinationPath = "";
                 String type = "ph";
+                String key_person_id = request.getParameter("key_person_id");
+                if (key_person_id == null) {
+                    key_person_id = "";
+                }
+                if (!key_person_id.equals("")) {
+                    logged_key_person_id = Integer.parseInt(key_person_id);
+                }
                 destinationPath = model.getImagePath(String.valueOf(logged_key_person_id), type);
                 if (destinationPath.isEmpty()) {
                     destinationPath = "C:\\ssadvt_repository\\APL\\key_person\\no_image.png";
@@ -126,6 +133,10 @@ public class CRMDashboardController extends HttpServlet {
                 out.close();
                 os.close();
                 response.flushBuffer();
+                DBConnection.closeConncetion(model.getConnection());
+                DBConnection.closeConncetion(profileModel.getConnection());
+                DBConnection.closeConncetion(enquiryModel.getConnection());
+
                 return;
             }
 
@@ -136,6 +147,9 @@ public class CRMDashboardController extends HttpServlet {
                 obj1.put("dealers", arrayObj);
                 PrintWriter out = response.getWriter();
                 out.print(obj1);
+                DBConnection.closeConncetion(model.getConnection());
+                DBConnection.closeConncetion(profileModel.getConnection());
+                DBConnection.closeConncetion(enquiryModel.getConnection());
                 return;
             }
 
@@ -144,22 +158,67 @@ public class CRMDashboardController extends HttpServlet {
             return;
         }
 
-        if (session.getAttribute(
-                "user_role").equals("Admin")) {
+        if (session.getAttribute("user_role").equals("Admin")) {
             ArrayList<DealersOrder> total_orders_list = model.getAllHistoryOrders(logged_user_name, loggedUser);
             List<Profile> dealers_list = profileModel.getAllDealers();
             ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
+            ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
 
             request.setAttribute("total_orders", total_orders_list.size());
-            request.setAttribute("total_dealers", total_orders_list.size());
-            request.setAttribute("total_enquiries", total_enquiries_list.size());
+            request.setAttribute("total_dealers", dealers_list.size());
+            request.setAttribute("sales_enquiries", total_enquiries_list.size());
+            request.setAttribute("complaint_enquiries", total_complaint_list.size());
+            DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(profileModel.getConnection());
+            DBConnection.closeConncetion(enquiryModel.getConnection());
+            request.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size()) + 3));
+
             request.getRequestDispatcher("admin_dashboard").forward(request, response);
 
-        } else {
-            ArrayList<DealersOrder> pending_orders_list = model.getAllOrders(logged_user_name, loggedUser);
-            request.setAttribute("pending_orders", pending_orders_list.size());
-            request.getRequestDispatcher("CRMDashboard").forward(request, response);
         }
+        if (session.getAttribute("user_role").equals("Dealer")) {
+            ArrayList<DealersOrder> pending_orders_list = model.getAllOrders(logged_user_name, session.getAttribute("user_role").toString());
+            ArrayList<Enquiry> sales_enquiry_list = model.getAllEnquiriesForDealer(logged_key_person_id);
+            ArrayList<Enquiry> complaint_enquiry_list = model.getAllComplaintForDealer(logged_key_person_id);
+
+            request.setAttribute("sales_enquiries", sales_enquiry_list.size());
+            request.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
+            request.setAttribute("pending_orders", pending_orders_list.size());
+            request.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size()) + 3));
+            DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(profileModel.getConnection());
+            DBConnection.closeConncetion(enquiryModel.getConnection());
+            request.getRequestDispatcher("CRMDashboard").forward(request, response);
+
+        }
+        if (session.getAttribute("user_role").equals("Sales")) {
+            ArrayList<DealersOrder> pending_orders_list = model.getAllPendingOrders(logged_user_name, session.getAttribute("user_role").toString(), "Pending");
+            ArrayList<DealersOrder> approved_orders_list = model.getAllPendingOrders(logged_user_name, session.getAttribute("user_role").toString(), "Approved");
+            ArrayList<DealersOrder> denied_orders_list = model.getAllPendingOrders(logged_user_name, session.getAttribute("user_role").toString(), "Denied");
+            ArrayList<Enquiry> sales_enquiry_list = model.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id);
+            ArrayList<Enquiry> complaint_enquiry_list = model.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id);
+
+            request.setAttribute("sales_enquiries", sales_enquiry_list.size());
+            request.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
+            request.setAttribute("pending_orders", pending_orders_list.size());
+            request.setAttribute("approved_orders", approved_orders_list.size());
+            request.setAttribute("denied_orders", denied_orders_list.size());
+            request.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size()) + 3));
+            DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(profileModel.getConnection());
+            DBConnection.closeConncetion(enquiryModel.getConnection());
+            request.getRequestDispatcher("salesperson_dashboard").forward(request, response);
+
+        }
+//        else {
+//            ArrayList<DealersOrder> pending_orders_list = model.getAllOrders(logged_user_name, loggedUser);
+//
+//            request.setAttribute("pending_orders", pending_orders_list.size());
+//            DBConnection.closeConncetion(model.getConnection());
+//            DBConnection.closeConncetion(profileModel.getConnection());
+//            DBConnection.closeConncetion(enquiryModel.getConnection());
+//            request.getRequestDispatcher("CRMDashboard").forward(request, response);
+//        }
     }
 
     @Override
