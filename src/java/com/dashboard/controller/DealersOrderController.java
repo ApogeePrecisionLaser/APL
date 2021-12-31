@@ -440,7 +440,6 @@ public class DealersOrderController extends HttpServlet {
                     }
                 }
             }
-            model.closeConnection();
 
             JSONObject json = null;
             PrintWriter out = response.getWriter();
@@ -458,6 +457,8 @@ public class DealersOrderController extends HttpServlet {
 
                 }
                 out.println(gson);
+                DBConnection.closeConncetion(model.getConnection());
+
                 return;
             }
         }
@@ -506,13 +507,16 @@ public class DealersOrderController extends HttpServlet {
             String address_line3 = dealer_list.get(0).getAddress_line3().toString();
 
             ArrayList<DealersOrder> order_list = model.getAllOrderItems(order_table_id);
-            int total_amount = 0;
-            int total_discount_price = 0;
-            int total_discount_percent = 0;
+            float total_amount = 0;
+            float total_discount_price = 0;
+            float total_discount_percent = 0;
+            float total_approved_price = 0;
+
             for (int i = 0; i < order_list.size(); i++) {
-                total_amount = total_amount + Integer.parseInt(order_list.get(i).getBasic_price());
-                total_discount_price = total_discount_price + Integer.parseInt(order_list.get(i).getDiscount_price());
-                total_discount_percent = total_discount_percent + Integer.parseInt(order_list.get(i).getDiscount_percent());
+                total_amount = total_amount + Float.parseFloat(order_list.get(i).getBasic_price());
+                total_discount_price = total_discount_price + Float.parseFloat(order_list.get(i).getDiscount_price());
+                total_discount_percent = total_discount_percent + Float.parseFloat(order_list.get(i).getDiscount_percent());
+                total_approved_price = total_approved_price + Float.parseFloat(order_list.get(i).getApproved_price());
             }
 
             ArrayList<DealersOrder> list = model.viewCart(logged_key_person_id);
@@ -526,7 +530,8 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("count2", list2.size());
             request.setAttribute("total_amount", total_amount);
             request.setAttribute("total_discount_price", total_discount_price);
-            request.setAttribute("total_discount_percent", total_discount_percent);
+            request.setAttribute("total_approved_price", total_approved_price);
+            request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
 
             request.setAttribute("logged_user_name", logged_user_name);
             request.setAttribute("logged_org_office", logged_org_office);
@@ -598,6 +603,7 @@ public class DealersOrderController extends HttpServlet {
         request.setAttribute("count", list2.size());
 
         DBConnection.closeConncetion(model.getConnection());
+        DBConnection.closeConncetion(profileModel.getConnection());
 
         request.getRequestDispatcher("dealers_order").forward(request, response);
     }

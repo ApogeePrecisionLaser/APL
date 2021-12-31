@@ -267,6 +267,7 @@ public class DealersOrder {
     private String order_status;
     private String item_status;
     private String discount_percent;
+    private String approved_price;
 
     /**
      * @return the item_names_id
@@ -994,6 +995,20 @@ public class DealersOrder {
      */
     public void setDiscount_percent(String discount_percent) {
         this.discount_percent = discount_percent;
+    }
+
+    /**
+     * @return the approved_price
+     */
+    public String getApproved_price() {
+        return approved_price;
+    }
+
+    /**
+     * @param approved_price the approved_price to set
+     */
+    public void setApproved_price(String approved_price) {
+        this.approved_price = approved_price;
     }
 
 }

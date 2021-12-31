@@ -136,8 +136,8 @@
                                             <tr>
                                                 <th>Firstname</th>
                                                 <th>Quantity</th>
-                                                <th>Rate</th>
-                                                <th>Price</th>
+                                                <th>Rate (Rs.)</th>
+                                                <th>Price (Rs.)</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -177,10 +177,10 @@
                                                     </td>
                                                     <td>
                                                         <input type="hidden" name="rate${beanType.model_id}" id="rate${beanType.model_id}" value="${beanType.basic_price}">
-                                                        Rs. ${beanType.basic_price}</td>
+                                                        ${beanType.basic_price}</td>
                                                     <td id="price_div${beanType.model_id}">
                                                         <input type="hidden" name="basic_price${beanType.model_id}" id="basic_price${beanType.model_id}" value="${beanType.basic_price * beanType.quantity}">
-                                                        Rs. ${beanType.basic_price * beanType.quantity}</td>
+                                                        ${beanType.basic_price * beanType.quantity}</td>
                                                     <td>
                                                         <a class="removeCart" 
                                                            onclick="removeAllFromcart('${beanType.model_id}', '${beanType.model}', '${beanType.basic_price}')"><i class="fas fa-trash-alt"></i></a> </td>
@@ -214,11 +214,11 @@
                                         </tr>
                                         <tr>
                                             <td>Delivery Charge</td>
-                                            <td id="delivery_charge">80</td>
+                                            <td id="delivery_charge">0</td>
                                         </tr>
                                         <tr>
                                             <td>Coupon Discount</td>
-                                            <td id="coupon_discount">80</td>
+                                            <td id="coupon_discount">0</td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;">Total Amount</td>
@@ -550,50 +550,56 @@
 
             function removeAllFromcart(model_id, model, basic_price) {
                 var qty;
-                var count = $('#count').val();
-                $.ajax({
-                    url: "DealersOrderController",
-                    dataType: "json",
-                    data: {task: "removeAllFromcart", model_id: model_id, model_name: model, basic_price: basic_price, qty: qty},
-                    success: function (data) {
-                        console.log(data);
-                        if (data.list > 0) {
-                            $('.counting').text(data.list);
-                            $('#msg').text(data.msg);
-                            $('.myAlertBox').show();
-                            var total_price = 0;
-                            $('#model_row' + model_id).remove();
-                            count = parseInt(data.list) + 1;
-                            for (var j = 0; j < count; j++) {
-                                var model_ids = $('#model_id' + (j + 1)).val();
-                                var price = ($('#basic_price' + model_ids)).val();
+                if (confirm('Are you sure you want to remove it from cart?')) {
+                    var count = $('#count').val();
+                    $.ajax({
+                        url: "DealersOrderController",
+                        dataType: "json",
+                        data: {task: "removeAllFromcart", model_id: model_id, model_name: model, basic_price: basic_price, qty: qty},
+                        success: function (data) {
+                            console.log(data);
+                            if (data.list > 0) {
+                                $('.counting').text(data.list);
+                                $('#msg').text(data.msg);
+                                $('.myAlertBox').show();
+                                var total_price = 0;
+                                $('#model_row' + model_id).remove();
+                                count = parseInt(data.list) + 1;
+                                for (var j = 0; j < count; j++) {
+                                    var model_ids = $('#model_id' + (j + 1)).val();
+                                    var price = ($('#basic_price' + model_ids)).val();
 
-                                if (price == undefined) {
-                                    price = 0;
+                                    if (price == undefined) {
+                                        price = 0;
+                                    }
+
+                                    total_price = parseInt(total_price) + parseInt(price);
+
+                                    $('#subtotal').text(total_price);
                                 }
+                                var delivery_charge = parseInt(($('#delivery_charge').text()));
+                                var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                total_price = parseInt(total_price) + parseInt(price);
+                                $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
 
-                                $('#subtotal').text(total_price);
+                                window.location.reload();
+
+                                setTimeout(function () {
+                                    $('#msg').fadeOut('fast');
+                                }, 1000);
+                            } else {
+                                $('.myAlertBox').hide();
                             }
-                            var delivery_charge = parseInt(($('#delivery_charge').text()));
-                            var coupon_discount = parseInt(($('#coupon_discount').text()));
-
-                            $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
-
-                            window.location.reload();
-
-                            setTimeout(function () {
-                                $('#msg').fadeOut('fast');
-                            }, 1000);
-                        } else {
-                            $('.myAlertBox').hide();
+                        }, error: function (error) {
+                            console.log(error.responseText);
+                            response(error.responseText);
                         }
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
+                    });
+                } else {
+                    return false;
+                }
+
+
             }
 
             function completeOrder() {

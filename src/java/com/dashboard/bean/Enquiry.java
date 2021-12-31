@@ -41,6 +41,7 @@ public class Enquiry {
     private String assigned_to;
     private String date_time;
     private String enquiry_type;
+    private String assigned_key_person;
 
     /**
      * @return the enquiry_source_table_id
@@ -460,5 +461,19 @@ public class Enquiry {
      */
     public void setEnquiry_type(String enquiry_type) {
         this.enquiry_type = enquiry_type;
+    }
+
+    /**
+     * @return the assigned_key_person
+     */
+    public String getAssigned_key_person() {
+        return assigned_key_person;
+    }
+
+    /**
+     * @param assigned_key_person the assigned_key_person to set
+     */
+    public void setAssigned_key_person(String assigned_key_person) {
+        this.assigned_key_person = assigned_key_person;
     }
 }

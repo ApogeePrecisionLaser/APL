@@ -159,7 +159,7 @@
                                     <tbody>
                                         <tr>
                                             <td >Subtotal</td>
-                                            <td id="subtotal">${total_amount}</td>
+                                            <td id="subtotal">${total_approved_price}</td>
                                         </tr>
                                         <tr>
                                             <td>Delivery Charge</td>
@@ -171,7 +171,7 @@
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;">Total Amount</td>
-                                            <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;" id="total_amount">${total_discount_price}</td>
+                                            <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;" id="total_amount">Rs. ${total_discount_price}</td>
                                         </tr>
                                     </tbody>
                                 </table>

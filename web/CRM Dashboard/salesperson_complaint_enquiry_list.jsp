@@ -55,6 +55,7 @@
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <!-- <th>Enquiry Message</th> -->
                                                 <th class="fontFourteen">Status</th>
+                                                <th class="fontFourteen">Assigned To</th>
                                                 <th class="fontFourteen">Action</th>
                                             </tr>
                                         </thead>
@@ -62,7 +63,7 @@
                                             <c:forEach var="beanType" items="${requestScope['list']}"
                                                        varStatus="loopCounter">
                                                 <tr>
-                                                    <td class="fontFourteen">${loopCounter.count}</td>
+                                                    <td class="fontFourteen">${loopCounter.count} <input type="hidden" name="district${beanType.enquiry_table_id}" value="${beanType.description}" id="district${beanType.enquiry_table_id}"></td>
                                                     <!--<td class="fontFourteen">${beanType.enquiry_source}</td>--> 
                                                     <!--<td class="fontFourteen">${beanType.marketing_vertical_name}</td>-->
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
@@ -82,17 +83,15 @@
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To SalesManager'}">
                                                                 <input type="text" name="dealers" class="dealers" id="dealers${beanType.enquiry_table_id}">
-                                                                <a onclick="assignComplaintToDealer('${beanType.enquiry_table_id}')" class="btn btn-info" title="Assigned To Dealer">Assign To Dealer</a>
+                                                                <a onclick="assignComplaintToDealer('${beanType.enquiry_table_id}')" class="btn myBtnInfo fontFourteen" title="Assigned To Dealer">Assign To Dealer</a>
                                                             </c:when>
-                                                            <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                                <button class="btn btn-danger" disabled>In Conversation</button>
-                                                            </c:when>
+
                                                             <c:otherwise>
-                                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
-
+                                                    <td>${beanType.assigned_to}</td>
                                                     <td class="fontFourteen d-flex">
                                                         <div>
                                                             <a href="ApproveOrdersController?task=viewComplaintDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Complaint Detail"></a>
@@ -115,12 +114,12 @@
 </div>
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
-
+<!--
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
       rel = "stylesheet">
 <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
 <script>
 //                                                                    $(function () {
 //                                                                        $(".dealers").autocomplete({
@@ -148,57 +147,59 @@
 //                                                                    });
 
 
-                                                                    $(function () {
-                                                                        $(document).on('keydown', '.dealers', function () {
-                                                                            var id = this.id;
-                                                                            var random = this.value;
-                                                                            $('#' + id).autocomplete({
-                                                                                source: function (request, response) {
-                                                                                    $.ajax({
-                                                                                        url: "ApproveOrdersController",
-                                                                                        dataType: "json",
-                                                                                        data: {
-                                                                                            action1: "getDealersStateWise",
-                                                                                            str: random
-                                                                                        },
-                                                                                        success: function (data) {
-                                                                                            console.log(data);
-                                                                                            response(data.list);
-                                                                                        },
-                                                                                        error: function (error) {
-                                                                                            console.log(error.responseText);
-                                                                                            response(error.responseText);
-                                                                                        }
-                                                                                    });
-                                                                                },
-                                                                                select: function (events, ui) {
-                                                                                    console.log(ui);
-                                                                                    $(this).val(ui.item.label); // display the selected text
-                                                                                    return false;
-                                                                                }
-                                                                            });
-                                                                        });
-                                                                    }
-                                                                    );
+    $(function () {
+        $(document).on('keydown', '.dealers', function () {
+            var id = this.id;
+            var random = this.value;
+            var district = $('#district' + id.substring(7)).val();
+            $('#' + id).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "ApproveOrdersController",
+                        dataType: "json",
+                        data: {
+                            action1: "getDealersStateWise",
+                            str: random,
+                            district: district
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            response(data.list);
+                        },
+                        error: function (error) {
+                            console.log(error.responseText);
+                            response(error.responseText);
+                        }
+                    });
+                },
+                select: function (events, ui) {
+                    console.log(ui);
+                    $(this).val(ui.item.label); // display the selected text
+                    return false;
+                }
+            });
+        });
+    }
+    );
 
-                                                                    function assignComplaintToDealer(enquiry_table_id) {
-                                                                        var dealer_name = $('#dealers' + enquiry_table_id).val();
-                                                                        $.ajax({
-                                                                            url: "ApproveOrdersController",
-                                                                            dataType: "json",
-                                                                            data: {task: "assignComplaintToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
-                                                                            success: function (data) {
-                                                                                if (data.message != '') {
-                                                                                    $('#msg').text(data.message);
-                                                                                    $('.myAlertBox').show();
-                                                                                    setTimeout(function () {
-                                                                                        $('#msg').fadeOut('fast');
-                                                                                    }, 1000);
-                                                                                    window.location.reload();
-                                                                                } else {
-                                                                                    $('.myAlertBox').hide();
-                                                                                }
-                                                                            }
-                                                                        });
-                                                                    }
+    function assignComplaintToDealer(enquiry_table_id) {
+        var dealer_name = $('#dealers' + enquiry_table_id).val();
+        $.ajax({
+            url: "ApproveOrdersController",
+            dataType: "json",
+            data: {task: "assignComplaintToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
+            success: function (data) {
+                if (data.message != '') {
+                    $('#msg').text(data.message);
+                    $('.myAlertBox').show();
+                    setTimeout(function () {
+                        $('#msg').fadeOut('fast');
+                    }, 1000);
+                    window.location.reload();
+                } else {
+                    $('.myAlertBox').hide();
+                }
+            }
+        });
+    }
 </script>

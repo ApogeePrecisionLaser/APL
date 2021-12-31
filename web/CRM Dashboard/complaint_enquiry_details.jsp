@@ -34,12 +34,15 @@
                                         <a href="SalesEnquiryController?task=complaint_enquiry_list" class="btn myThemeBtn text-right">Back</a>
                                     </div>
                                     <div class="text-right">
+
+
                                         <c:choose>
                                             <c:when test="${beanType.status =='Enquiry Generated'}">
-                                                <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&sales_person_name=${beanType.assigned_to}"
-                                                   class="btn myThemeBtn text-right">Assign to Sale Person</a>                                        </c:when>
+                                                <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&state=${beanType.enquiry_state}&city=${beanType.enquiry_city}" class="btn myBtnInfo fontFourteen" title="Assigned To SalesManager">Assign To SalesManager & Dealer</a>
+                                            </c:when>
+
                                             <c:otherwise>
-                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} <b>(${beanType.assigned_to})</b></button>
                                             </c:otherwise>
                                         </c:choose>
 

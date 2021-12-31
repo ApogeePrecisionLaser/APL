@@ -12,53 +12,53 @@
 
 
 
-                <nav class="navbar navbar-expand-md navbar-dark" >
-                    <a class="navbar-brand" href="#">SHOPPING</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">One</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Two</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Three</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Four</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Five</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Six</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Seven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eight</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Nine</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ten</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eleven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Twelve</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
+                <!--                <nav class="navbar navbar-expand-md navbar-dark" >
+                                    <a class="navbar-brand" href="#">SHOPPING</a>
+                                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                                        <ul class="navbar-nav ml-auto">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">One</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Two</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Three</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Four</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Five</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Six</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Seven</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Eight</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Nine</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Ten</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Eleven</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Twelve</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>-->
 
 
             <div class=" marginTop40">

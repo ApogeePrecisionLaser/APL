@@ -3,18 +3,42 @@ package com.dashboard.model;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.bean.Enquiry;
 import static com.dashboard.model.EnquiryModel.timeAgo;
+import com.google.gson.Gson;
 import com.inventory.tableClasses.Indent;
 import com.organization.model.OrganisationTypeModel;
 import com.organization.tableClasses.OrganisationType;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -31,12 +55,45 @@ public class DealersOrderModel {
 
     static private Connection connection;
     private String driver, url, user, password;
-    private String message, messageBGColor = "#a2a220";
-    private final String COLOR_OK = "green";
-    private final String COLOR_ERROR = "red";
+    static private String message, messageBGColor = "#a2a220";
+    static private final String COLOR_OK = "green";
+    static private final String COLOR_ERROR = "red";
     int item_id = 0;
     int item_id1 = 0;
     int order_table_id = 0;
+    private File tmpDir;
+//    static final String SAVE_DIR = "C:\\ssadvt\\";
+//    static final int BUFFER_SIZE = 4096;
+    private static final String INSTANCE_ID = "5";
+    private static final String CLIENT_ID = "chandansingh23396@gmail.com";
+    private static final String CLIENT_SECRET = "3ae49e46cfe748bb83c39b5a47594353";
+
+    private static String GATEWAY_URL_FOR_SENDING_MESSAGE_TO_SINGLE_USER = "http://api.whatsmate.net/v1/telegram/single/message/" + INSTANCE_ID;
+    private static String GATEWAY_URL_FOR_SENDING_MESSAGE_TO_MULTIPLE_USERS = "http://api.whatsmate.net/v1/telegram/batch/message/" + INSTANCE_ID;
+
+    private static String GATEWAY_URL_FOR_SENDING_IMAGES_TO_SINGLE_USER = "http://api.whatsmate.net/v1/telegram/single/photo/binary/" + INSTANCE_ID;
+    private static String GATEWAY_URL_FOR_SENDING_IMAGES_TO_MULTIPLE_USERS = "http://api.whatsmate.net/v1/telegram/batch/photo/binary/" + INSTANCE_ID;
+
+    private static String GATEWAY_URL_FOR_SENDING_DOCUMENT_TO_SINGLE_USER = "http://api.whatsmate.net/v1/telegram/single/document/binary/" + INSTANCE_ID;
+    private static String GATEWAY_URL_FOR_SENDING_DOCUMENT_TO_MULTIPLE_USERS = "http://api.whatsmate.net/v1/telegram/batch/document/binary/" + INSTANCE_ID;
+
+    private static String GATEWAY_URL_FOR_SENDING_AUDIO_TO_SINGLE_USER = "http://api.whatsmate.net/v1/telegram/single/audio/binary/" + INSTANCE_ID;
+    private static String GATEWAY_URL_FOR_SENDING_AUDIO_TO_MULTIPLE_USERS = "http://api.whatsmate.net/v1/telegram/batch/audio/binary/" + INSTANCE_ID;
+
+    private static String GATEWAY_URL_FOR_SENDING_LOCATION_TO_SINGLE_USER = "http://api.whatsmate.net/v1/telegram/single/location/" + INSTANCE_ID;
+    private static String GATEWAY_URL_FOR_SENDING_LOCATION_TO_MULTIPLE_USERS = "http://api.whatsmate.net/v1/telegram/batch/location/" + INSTANCE_ID;
+
+    private String[] numbers;
+    private static String caption;
+    private String image;
+    private static String filename;
+    private String document;
+    private static String audio;
+    private double latitude;
+    private double longitude;
+    String output;
+
+    ArrayList<String> arr = new ArrayList<String>();
 
     public void setConnection(Connection con) {
         try {
@@ -47,7 +104,7 @@ public class DealersOrderModel {
         }
     }
 
-    public ArrayList<DealersOrder> getAllItems(int logged_org_office_id, String search_item) {
+    public static ArrayList<DealersOrder> getAllItems(int logged_org_office_id, String search_item) {
         ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
 
         try {
@@ -90,7 +147,7 @@ public class DealersOrderModel {
         return list;
     }
 
-    public ArrayList<DealersOrder> getAllModels(int logged_org_office_id, List<DealersOrder> list2) {
+    public static ArrayList<DealersOrder> getAllModels(int logged_org_office_id, List<DealersOrder> list2) {
         ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
         if (list2.size() > 0) {
             for (int i = 0; i < list2.size(); i++) {
@@ -953,12 +1010,13 @@ public class DealersOrderModel {
                 ResultSet rs2 = pstmt2.getGeneratedKeys();
                 while (rs2.next()) {
                     int order_item_id = rs2.getInt(1);
-                    PreparedStatement pay2 = connection.prepareStatement("insert into orders_sales_pricing(order_id,order_item_id,discount_percent,prices)"
-                            + " values(?,?,?,?)");
+                    PreparedStatement pay2 = connection.prepareStatement("insert into orders_sales_pricing(order_id,order_item_id,discount_percent,prices,approved_price)"
+                            + " values(?,?,?,?,?)");
                     pay2.setInt(1, order_table_id);
                     pay2.setInt(2, order_item_id);
                     pay2.setString(3, "0");
                     pay2.setString(4, bean.getBasic_price());
+                    pay2.setString(5, bean.getBasic_price());
 
                     rowsAffected = pay2.executeUpdate();
                 }
@@ -1131,7 +1189,7 @@ public class DealersOrderModel {
 //                + " and odi.model_id=m.model_id and inv.key_person_id=115 group by m.model_id ";
         String query = " select odt.order_no,itn.item_name,odi.required_qty,odi.expected_date_time,odi.approved_qty, s1.status as order_status,"
                 + " s2.status as item_status,odi.order_item_id,odt.order_table_id,inv.stock_quantity, odi.deliver_qty,odt.requested_by,"
-                + "  odt.requested_to,m.model,pm.payment_mode,iid.image_path,iid.image_name,m.basic_price,osp.discount_percent,osp.prices "
+                + "  odt.requested_to,m.model,pm.payment_mode,iid.image_path,iid.image_name,m.basic_price,osp.discount_percent,osp.prices,osp.approved_price "
                 + " from order_table odt,order_item odi, item_names itn,payment_mode pm,  status s1,status s2,inventory inv,"
                 + " inventory_basic ib,model m,  manufacturer_item_map mim,item_image_details iid, "
                 + " key_person kp,orders_sales_pricing osp where odt.order_table_id=odi.order_table_id and odi.item_names_id=itn.item_names_id  "
@@ -1168,6 +1226,7 @@ public class DealersOrderModel {
                 bean.setDiscount_percent(rset.getString("discount_percent"));
                 bean.setImage_path(rset.getString("image_path"));
                 bean.setImage_name(rset.getString("image_name"));
+                bean.setApproved_price(rset.getString("approved_price"));
 
                 list.add(bean);
             }
@@ -1357,12 +1416,13 @@ public class DealersOrderModel {
                 PreparedStatement pstm3 = connection.prepareStatement(query_update);
                 updateRowsAffected3 = pstm3.executeUpdate();
             }
-            PreparedStatement pay2 = connection.prepareStatement("insert into orders_sales_pricing(order_id,order_item_id,discount_percent,prices)"
-                    + " values(?,?,?,?)");
+            PreparedStatement pay2 = connection.prepareStatement("insert into orders_sales_pricing(order_id,order_item_id,discount_percent,prices,approved_price)"
+                    + " values(?,?,?,?,?)");
             pay2.setInt(1, order_table_id);
             pay2.setInt(2, order_item_id);
             pay2.setString(3, bean.getDiscount_percent());
             pay2.setString(4, bean.getDiscount_price());
+            pay2.setString(5, bean.getApproved_price());
 
             rowsAffected = pay2.executeUpdate();
 
@@ -1489,7 +1549,12 @@ public class DealersOrderModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
-                bean.setAssigned_to(rst.getString("org_office_name"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
 
                 String enquiry_date_time = rst.getString("enquiry_date_time");
 //                String split_arr[] = enquiry_date_time.split(" ");
@@ -1557,7 +1622,12 @@ public class DealersOrderModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
-                bean.setAssigned_to(rst.getString("org_office_name"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
 
                 String enquiry_date_time = rst.getString("enquiry_date_time");
 //                String split_arr[] = enquiry_date_time.split(" ");
@@ -1624,6 +1694,12 @@ public class DealersOrderModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
                 list.add(bean);
             }
         } catch (Exception e) {
@@ -1676,6 +1752,12 @@ public class DealersOrderModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
                 list.add(bean);
             }
         } catch (Exception e) {
@@ -1822,21 +1904,44 @@ public class DealersOrderModel {
         return list;
     }
 
-    public List<String> getDealersStateWise(String q, int logged_person) {
+    public List<String> getDealersStateWise(String q, String district, String city, String state) {
         List<String> list = new ArrayList<String>();
-        String logged_key_person_id = String.valueOf(logged_person);
-        String query = " select oo.org_office_name  from state st,salesmanager_state_mapping ssm,org_office oo,city ct,tehsil th, "
-                + " district dt,division dv,key_person kp "
-                + " where st.active='Y' and ssm.active='Y' and oo.active='Y' and ct.active='Y' and dt.active='Y' and th.active='Y' "
-                + " and dv.active='Y' "
-                + " and oo.city_id=ct.city_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  "
-                + " kp.active='Y' and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                + " and ssm.state_id=st.state_id  and ssm.salesman_id=kp.key_person_id and oo.office_type_id=3 ";
-        if (!logged_key_person_id.equals("") && logged_key_person_id != null) {
-            query += " and kp.key_person_id='" + logged_key_person_id + "' ";
-        }
-
         try {
+            String query_map_district = " select dt.district_name from district dt,city ct,tehsil th,state st,division dv "
+                    + " where dt.active='Y' and ct.active='Y' and th.active='Y' and st.active='Y' "
+                    + " and dv.active='Y' "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id "
+                    + " and dv.state_id=st.state_id ";
+            if (city.equals("") || state.equals("")) {
+
+                query_map_district += " and dt.district_name='" + district + "' ";
+            }
+            if (!city.equals("") && city != null) {
+                query_map_district += " and ct.city_name='" + city + "' ";
+            }
+            if (!state.equals("") && state != null) {
+                query_map_district += " and st.state_name='" + state + "' ";
+            }
+            PreparedStatement pstmt2 = connection.prepareStatement(query_map_district);
+            ResultSet rs2 = pstmt2.executeQuery();
+            String district_name = "";
+            while (rs2.next()) {
+                district_name = rs2.getString("district_name");
+            }
+            if (!district_name.equals("")) {
+                district = district_name;
+            } else {
+                district = "Hapur";
+            }
+            String query = " select oo.org_office_name  from state st,salesmanager_state_mapping ssm,org_office oo,city ct,tehsil th, "
+                    + " district dt,division dv,key_person kp "
+                    + " where st.active='Y' and ssm.active='Y' and oo.active='Y' and ct.active='Y' and dt.active='Y' and th.active='Y' "
+                    + " and dv.active='Y' "
+                    + " and oo.city_id=ct.city_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  "
+                    + " kp.active='Y' and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                    + " and ssm.state_id=st.state_id  and ssm.salesman_id=kp.key_person_id and oo.office_type_id=3 "
+                    + " and dt.district_name='" + district + "' ";
+
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
@@ -1933,6 +2038,7 @@ public class DealersOrderModel {
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
+
                     } else {
                         status = false;
                     }
@@ -2171,11 +2277,11 @@ public class DealersOrderModel {
         return password;
     }
 
-    public String getMessage() {
+    public static String getMessage() {
         return message;
     }
 
-    public String getMessageBGColor() {
+    public static String getMessageBGColor() {
         return messageBGColor;
     }
 

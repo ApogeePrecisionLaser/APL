@@ -81,7 +81,19 @@ public class ApproveOrdersController extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 List<String> list = null;
                 if (JQstring.equals("getDealersStateWise")) {
-                    list = model.getDealersStateWise(q, logged_key_person_id);
+                    String district = request.getParameter("district");
+                    String city = request.getParameter("city");
+                    String state = request.getParameter("state");
+                    if (city == null) {
+                        city = "";
+                    }
+                    if (state == null) {
+                        state = "";
+                    }
+                    if (district == null) {
+                        district = "";
+                    }
+                    list = model.getDealersStateWise(q, district, city, state);
                 }
 
                 JSONObject gson = new JSONObject();
@@ -140,6 +152,8 @@ public class ApproveOrdersController extends HttpServlet {
             JSONObject gson = new JSONObject();
             gson.put("message", message);
             out.println(gson);
+            DBConnection.closeConncetion(model.getConnection());
+
             return;
         }
         if (task.equals("assignComplaintToDealer")) {
@@ -151,26 +165,33 @@ public class ApproveOrdersController extends HttpServlet {
             JSONObject gson = new JSONObject();
             gson.put("message", message);
             out.println(gson);
+            DBConnection.closeConncetion(model.getConnection());
+
             return;
         }
 
         if (task.equals("viewOrderDetails")) {
             String order_table_id = request.getParameter("order_table_id");
             ArrayList<DealersOrder> list = model.getAllOrderItems(order_table_id);
-            int total_amount = 0;
-            int total_discount_price = 0;
-            int total_discount_percent = 0;
+
+            float total_amount = 0;
+            float total_discount_price = 0;
+            float total_discount_percent = 0;
+            float total_approved_price = 0;
+
             for (int i = 0; i < list.size(); i++) {
-                total_amount = total_amount + Integer.parseInt(list.get(i).getBasic_price());
-                total_discount_price = total_discount_price + Integer.parseInt(list.get(i).getDiscount_price());
-                total_discount_percent = total_discount_percent + Integer.parseInt(list.get(i).getDiscount_percent());
+                total_amount = total_amount + Float.parseFloat(list.get(i).getBasic_price());
+                total_discount_price = total_discount_price + Float.parseFloat(list.get(i).getDiscount_price());
+//                total_discount_percent = total_discount_percent + Float.parseFloat(list.get(i).getDiscount_percent());
+                total_approved_price = total_approved_price + Float.parseFloat(list.get(i).getApproved_price());
             }
 
             DBConnection.closeConncetion(model.getConnection());
 
             request.setAttribute("total_amount", total_amount);
             request.setAttribute("total_discount_price", total_discount_price);
-            request.setAttribute("total_discount_percent", total_discount_percent);
+            request.setAttribute("total_approved_price", total_approved_price);
+            request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
             request.getRequestDispatcher("approve_order_details").forward(request, response);
@@ -185,6 +206,7 @@ public class ApproveOrdersController extends HttpServlet {
 
             // int indent_item_id = 0;
             int approved_qty = 0;
+            int approved_price = 0;
             String item_status = "";
             String discounted_price = "";
             String discounted_percent = "";
@@ -195,12 +217,14 @@ public class ApproveOrdersController extends HttpServlet {
                 int order_item_id = Integer.parseInt(order_item_id_arr[i]);
                 item_status = request.getParameter("item_status" + order_item_id);
                 approved_qty = Integer.parseInt(request.getParameter("approved_qty" + order_item_id).trim());
+                approved_price = Integer.parseInt(request.getParameter("approved_price" + order_item_id).trim());
                 discounted_price = request.getParameter("discounted_price" + order_item_id).trim();
                 discounted_percent = request.getParameter("discounted_percent" + order_item_id).trim();
                 DealersOrder bean = new DealersOrder();
                 bean.setStatus(order_status);
                 bean.setItem_status(item_status);
                 bean.setApproved_qty(String.valueOf(approved_qty));
+                bean.setApproved_price(String.valueOf(approved_price));
                 bean.setDiscount_percent(String.valueOf(discounted_percent));
                 bean.setDiscount_price(String.valueOf(discounted_price));
                 String message = model.approveOrder(bean, order_item_id, order_table_id, i);

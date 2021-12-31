@@ -1945,11 +1945,10 @@
     
     
     
-<!--    <listener>
-         send tank and graph report through mail  
+    <listener>
         <listener-class>
             com.webservice.controller.IndiamartEnquiriesService
         </listener-class>
-    </listener>-->
+    </listener>
     
 </web-app>

@@ -36,11 +36,12 @@
                                     <div class="text-right">
                                         <c:choose>
                                             <c:when test="${beanType.status =='Enquiry Generated'}">
-                                                <a honclick="assignToDealer('${beanType.enquiry_table_id}')"
+                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')"
                                                    class="btn myThemeBtn text-right">Assign to Dealer</a>                                        
                                             </c:when>
+
                                             <c:otherwise>
-                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                                <button class="btn btn-danger" disabled>${beanType.status}<b>(${beanType.assigned_to})</b></button>
                                             </c:otherwise>
                                         </c:choose>
 
@@ -154,7 +155,7 @@
             dataType: "json",
             data: {task: "assignComplaintToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
             success: function (data) {
-               // alert(data.message);
+                // alert(data.message);
             }
         });
 

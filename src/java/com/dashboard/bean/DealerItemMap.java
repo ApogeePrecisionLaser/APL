@@ -22,6 +22,12 @@ public class DealerItemMap {
     private String item_name;
     private String model_id;
     private String model;
+    private String manufacturer_name;
+    private String image_path;
+    private String image_name;
+    private String basic_price;
+    private String stock_quantity;
+    private String checked;
     private int revision_no;
 
     /**
@@ -178,6 +184,88 @@ public class DealerItemMap {
         this.revision_no = revision_no;
     }
 
-   
+    /**
+     * @return the manufacturer_name
+     */
+    public String getManufacturer_name() {
+        return manufacturer_name;
+    }
+
+    /**
+     * @param manufacturer_name the manufacturer_name to set
+     */
+    public void setManufacturer_name(String manufacturer_name) {
+        this.manufacturer_name = manufacturer_name;
+    }
+
+    /**
+     * @return the image_path
+     */
+    public String getImage_path() {
+        return image_path;
+    }
+
+    /**
+     * @param image_path the image_path to set
+     */
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
+
+    /**
+     * @return the image_name
+     */
+    public String getImage_name() {
+        return image_name;
+    }
+
+    /**
+     * @param image_name the image_name to set
+     */
+    public void setImage_name(String image_name) {
+        this.image_name = image_name;
+    }
+
+    /**
+     * @return the basic_price
+     */
+    public String getBasic_price() {
+        return basic_price;
+    }
+
+    /**
+     * @param basic_price the basic_price to set
+     */
+    public void setBasic_price(String basic_price) {
+        this.basic_price = basic_price;
+    }
+
+    /**
+     * @return the stock_quantity
+     */
+    public String getStock_quantity() {
+        return stock_quantity;
+    }
+
+    /**
+     * @param stock_quantity the stock_quantity to set
+     */
+    public void setStock_quantity(String stock_quantity) {
+        this.stock_quantity = stock_quantity;
+    }
+
+    /**
+     * @return the checked
+     */
+    public String getChecked() {
+        return checked;
+    }
+
+    /**
+     * @param checked the checked to set
+     */
+    public void setChecked(String checked) {
+        this.checked = checked;
+    }
 
 }

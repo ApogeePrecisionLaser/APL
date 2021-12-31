@@ -42,6 +42,102 @@ public class DealerItemMapModel {
         }
     }
 
+    public static ArrayList<DealerItemMap> getAllItems(String logged_org_office_id) {
+        ArrayList<DealerItemMap> list = new ArrayList<DealerItemMap>();
+
+        try {
+            String query = " select itn.item_name  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
+                    + " designation d,manufacturer mr, "
+                    + " item_image_details iid,org_office oo  where itn.active='Y' and mim.active='Y' "
+                    + " and m.active='Y' and d.active='Y' and mr.active='Y' and iid.active='Y' "
+                    + " and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id  and ia.active='Y' "
+                    + " and itn.item_names_id= mim.item_names_id and oo.active='Y' "
+                    + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id and ia.item_names_id=itn.item_names_id and "
+                    + " d.designation_id=ia.designation_id  ";
+//                    + " and oo.org_office_id='" + logged_org_office_id + "' ";
+
+            query += " group by itn.item_name ";
+
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                DealerItemMap bean = new DealerItemMap();
+                String item_name = rst.getString("item_name");
+                bean.setItem_name(item_name);
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.err.println("Exception------------" + e);
+        }
+
+        return list;
+    }
+
+    public static ArrayList<DealerItemMap> getAllModels(String logged_org_office_id, List<DealerItemMap> list2) {
+        ArrayList<DealerItemMap> list = new ArrayList<DealerItemMap>();
+        if (list2.size() > 0) {
+            for (int i = 0; i < list2.size(); i++) {
+                try {
+
+                    String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
+                            + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
+                            + " designation d,manufacturer mr,"
+                            + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo "
+                            + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
+                            + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
+                            + " and inv.active='Y'  and ia.active='Y' "
+                            + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
+                            + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
+                            + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
+                            + "  and  d.designation_id=ia.designation_id ";
+                    query += " and itn.item_name='" + list2.get(i).getItem_name() + "' group by m.model";
+
+                    ResultSet rst = connection.prepareStatement(query).executeQuery();
+                    while (rst.next()) {
+                        DealerItemMap bean = new DealerItemMap();
+                        String manufacturer_name = rst.getString("manufacturer_name");
+                        String model = rst.getString("model");
+                        String model_id = rst.getString("model_id");
+                        String image_path = rst.getString("image_path");
+                        String image_name = rst.getString("image_name");
+                        String basic_price = rst.getString("basic_price");
+                        String stock_quantity = rst.getString("stock_quantity");
+                        bean.setItem_name(rst.getString("item_name"));
+                        bean.setManufacturer_name(manufacturer_name);
+                        bean.setModel(model);
+                        bean.setModel_id(model_id);
+                        bean.setImage_path(image_path);
+                        bean.setImage_name(image_name);
+                        bean.setBasic_price(basic_price);
+                        bean.setStock_quantity(stock_quantity);
+
+                        String query2 = " select dealer_item_map_id from dealer_item_map where active='Y' and  model_id='" + rst.getString("model_id") + "' "
+                                + " and org_office_id='" + logged_org_office_id + "' ";
+                        int count_map = 0;
+                        ResultSet rst2 = connection.prepareStatement(query2).executeQuery();
+                        while (rst2.next()) {
+                            count_map = rst2.getInt("dealer_item_map_id");
+                        }
+                        if (count_map > 0) {
+                            bean.setChecked("Yes");
+                            bean.setDealer_item_map_id(count_map);
+                        } else {
+                            bean.setChecked("No");
+//                            bean.setDealer_item_map_id(0);
+                        }
+
+                        list.add(bean);
+
+                    }
+
+                } catch (Exception e) {
+                    System.err.println("Exception------------" + e);
+                }
+
+            }
+        }
+        return list;
+    }
+
     public List<DealerItemMap> showData(String org_office_id) {
         List<DealerItemMap> list = new ArrayList<DealerItemMap>();
 
@@ -220,8 +316,8 @@ public class DealerItemMapModel {
                 PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query);
                 psmt.setInt(1, item_authorization_id);
                 psmt.setInt(2, model_id);
-                psmt.setString(3, org_office_id);
-                psmt.setString(4, (bean.getDescription()));
+                psmt.setInt(3, Integer.parseInt(org_office_id));
+                psmt.setString(4, "");
                 psmt.setInt(5, 0);
                 psmt.setString(6, "Y");
                 psmt.setString(7, "OK");

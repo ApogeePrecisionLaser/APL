@@ -152,7 +152,7 @@ public class ProfileModel {
                 + " kp.key_person_name,kp.address_line1,kp.address_line2,kp.address_line3,kp.mobile_no1,kp.email_id1,kp.emp_code, "
                 + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
                 + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
-                + " oo.mobile_no1,oo.org_office_code, "
+                + " oo.mobile_no1,oo.org_office_code,oo.org_office_id, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.latitude,oo.longitude "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
                 + " org_office_designation_map oodm, org_office_type oot"
@@ -168,12 +168,14 @@ public class ProfileModel {
             while (rset.next()) {
 
                 JSONObject jsonObj = new JSONObject();
-                jsonObj.put("dealer_office_name", rset.getString(15));
-                jsonObj.put("latitude", rset.getString(26));
-                jsonObj.put("longitude", rset.getString(27));
-                jsonObj.put("email", rset.getString(17));
-                jsonObj.put("mobile", rset.getString(18));
-                jsonObj.put("person_name", rset.getString(2));
+                jsonObj.put("dealer_office_name", rset.getString("org_office_name"));
+                jsonObj.put("latitude", rset.getString("latitude"));
+                jsonObj.put("longitude", rset.getString("longitude"));
+                jsonObj.put("email", rset.getString("email_id1"));
+                jsonObj.put("mobile", rset.getString("mobile_no1"));
+                jsonObj.put("person_name", rset.getString("key_person_name"));
+                jsonObj.put("org_office_id", rset.getString("org_office_id"));
+                jsonObj.put("key_person_id", rset.getString("key_person_id"));
 
                 arrayObj.add(jsonObj);
             }

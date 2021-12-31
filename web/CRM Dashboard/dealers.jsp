@@ -72,6 +72,8 @@
                                                     <!--<td>${beanType.kp_address_line1}</td>-->
                                                     <td>${beanType.kp_mobile_no1}</td>
                                                     <!--<td>${beanType.kp_email_id1}</td>-->
+<!--                                            <input type="hidden" name="org_office_id" id="org_office_id${beanType.org_office_name}" value="${beanType.org_office_id}">
+                                            <input type="hidden" name="key_person_id" id="key_person_id${beanType.org_office_name}" value="${beanType.key_person_id}">-->
                                                     <td>
                                                         <div>
                                                             <a href="DealersController?task=viewDealerDetails&org_office_id=${beanType.org_office_id}&key_person_id=${beanType.key_person_id}" class="btn far fa-eye actionEdit" title="View Dealer Detail"></a>
@@ -119,6 +121,9 @@
                                                             var mobile = [];
                                                             var email = [];
                                                             var person_name = [];
+                                                            var org_office_id = [];
+                                                            var key_person_id = [];
+
                                                             var dealer_data;
                                                             $.ajax({
                                                                 type: "POST",
@@ -140,11 +145,13 @@
                                                                         email[i] = dealer_data[i]["email"];
                                                                         mobile[i] = dealer_data[i]["mobile"];
                                                                         person_name[i] = dealer_data[i]["person_name"];
+                                                                        org_office_id[i] = dealer_data[i]["org_office_id"];
+                                                                        key_person_id[i] = dealer_data[i]["key_person_id"];
                                                                         if (latitude[i] == '') {
                                                                             latitude[i] = 28.614884;
                                                                             longitude[i] = 77.208917;
                                                                         }
-                                                                        console.log(latitude[i]);
+//                                                                      
 
                                                                         marker = new google.maps.Marker({
                                                                             position: new google.maps.LatLng(latitude[i], longitude[i]),
@@ -160,19 +167,13 @@
                                                                                     return function () {
                                                                                         infowindow.setContent('<b><h6>' + dealer_office_name[i] + ' (' + person_name[i] + ')</h6></b></br><b>Email:- </b>' + email[i] + '</br><b>Mobile:- </b>' + mobile[i] + '</br><b>Latitude:- </b>' + latitude[i] + '</br><b>Longitude:- </b>' + longitude[i] + '')
                                                                                         infowindow.open(map, marker)
+                                                                                        window.location.href = "DealersController?task=viewDealerDetails&org_office_id=" + org_office_id[i] + "&key_person_id=" + key_person_id[i];
                                                                                     }
                                                                                 })(marker, i)
                                                                                 )
-
                                                                     }
-
-
-
                                                                 }
                                                             });
-
-
-
                                                         });
 
 

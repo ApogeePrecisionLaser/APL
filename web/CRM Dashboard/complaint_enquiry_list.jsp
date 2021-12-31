@@ -55,6 +55,7 @@
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <!-- <th>Enquiry Message</th> -->
                                                 <th  class="fontFourteen">Status</th>
+                                                <th  class="fontFourteen">Assigned To</th>
                                                 <th class="fontFourteen">Action</th>
                                             </tr>
                                         </thead>
@@ -80,16 +81,15 @@
 
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Enquiry Generated'}">
-                                                                <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&sales_person_name=${beanType.assigned_to}" class="btn btn-info" title="Assigned To Sales Person">Assign To Sales Person</a>
+                                                                <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&state=${beanType.enquiry_state}&city=${beanType.enquiry_city}" class="btn myBtnInfo fontFourteen" title="Assigned To SalesManager">Assign To SalesManager & Dealer</a>
                                                             </c:when>
-                                                            <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                                <button class="btn myBtnDanger fontFourteen" disabled>In Conversation</button>
-                                                            </c:when>
+
                                                             <c:otherwise>
-                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
+                                                    <td>${beanType.assigned_to}</td>
 
 
                                                     <td class="fontFourteen d-flex">

@@ -27,9 +27,9 @@ public class EnquiryModel {
 
     static private Connection connection;
     private String driver, url, user, password;
-    private String message, messageBGColor = "#a2a220";
-    private final String COLOR_OK = "green";
-    private final String COLOR_ERROR = "red";
+    static private String message, messageBGColor = "#a2a220";
+    static private final String COLOR_OK = "green";
+    static private final String COLOR_ERROR = "red";
     int item_id = 0;
     int item_id1 = 0;
     int order_table_id = 0;
@@ -364,7 +364,7 @@ public class EnquiryModel {
 
     public List<String> getMarketingVertical(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select * from marketing_vertical where active='Y' group by marketing_vertical_name ";
+        String query = " select * from marketing_vertical where active='Y' group by marketing_vertical_name ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -389,7 +389,7 @@ public class EnquiryModel {
 
     public List<String> getDistrict(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select district_name from district where active='Y' group by district_name ";
+        String query = " select district_name from district where active='Y' group by district_name ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -562,9 +562,15 @@ public class EnquiryModel {
         return rowsAffected;
     }
 
-    public String assignToSalesPerson(String enquiry_table_id, String sales_person_name) {
+    public String assignToSalesPerson(String enquiry_table_id, String state, String city) {
         int revision = EnquiryModel.getRevisionno(enquiry_table_id);
         int updateRowsAffected = 0;
+        if (state.equals("Uttar Pradesh")) {
+            state = "UP";
+        }
+        if (state.equals("Madhya Pradesh")) {
+            state = "MP";
+        }
         boolean status = false;
         String query1 = " SELECT max(revision_no) revision_no,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name, "
                 + " sender_email,sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time, "
@@ -577,8 +583,22 @@ public class EnquiryModel {
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
                 + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
-        int assigned_to = getKeyPersonId(sales_person_name);
+
         try {
+            String query_map_state = " select count(*) as count from state where state_name='" + state + "' and active='Y' ";
+            PreparedStatement pstmt3 = connection.prepareStatement(query_map_state);
+            ResultSet rs3 = pstmt3.executeQuery();
+            int count = 0;
+            while (rs3.next()) {
+                count = rs3.getInt("count");
+            }
+            if (count > 0) {
+                state = state;
+            } else {
+                state = "UP";
+            }
+
+            int assigned_to_salesperson = getSalesPersonId(state);
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setString(1, "Y");
             ResultSet rs = pstmt.executeQuery();
@@ -633,7 +653,248 @@ public class EnquiryModel {
                     psmt.setInt(20, revision);
                     psmt.setString(21, "Y");
                     psmt.setString(22, description);
-                    psmt.setInt(23, assigned_to);
+                    psmt.setInt(23, assigned_to_salesperson);
+
+                    rowsAffected = psmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        status = true;
+
+                        String query_map_city = " select count(*) as count from city where city_name='" + city + "' and active='Y' ";
+                        PreparedStatement pstmt1 = connection.prepareStatement(query_map_city);
+                        ResultSet rs1 = pstmt1.executeQuery();
+                        int count1 = 0;
+                        while (rs1.next()) {
+                            count1 = rs1.getInt("count");
+                        }
+                        if (count1 > 0) {
+                            city = city;
+                        } else {
+                            city = "Hapur";
+                        }
+
+                        String district = description;
+                        String query_map_district = " select count(*) as count from district dt,city ct,tehsil th"
+                                + " where dt.district_name='" + district + "' and dt.active='Y' and ct.active='Y' and th.active='Y'"
+                                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ct.city_name='" + city + "' ";
+                        PreparedStatement pstmt2 = connection.prepareStatement(query_map_district);
+                        ResultSet rs2 = pstmt2.executeQuery();
+                        int count2 = 0;
+                        while (rs2.next()) {
+                            count2 = rs2.getInt("count");
+                        }
+                        if (count2 > 0) {
+                            district = district;
+                            EnquiryModel.assignToDealer(enquiry_table_id, district);
+                        }
+
+                    } else {
+                        status = false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+        }
+        if (rowsAffected > 0) {
+            message = " Your Enquiry successfully assigend !.";
+            messageBGColor = COLOR_OK;
+        } else {
+            message = "Cannot update the record, some error.";
+            messageBGColor = COLOR_ERROR;
+        }
+        return message + "&" + status;
+    }
+
+    public static int getSalesPersonId(String state) {
+
+        String query = " SELECT kp.key_person_id from key_person kp,org_office oo,city ct,tehsil th,district dt,division dv,state st, "
+                + " salesmanager_state_mapping ssm where kp.active='Y' and oo.active='Y' and ct.active='Y' and th.active='Y' and dt.active='Y' "
+                + " and dv.active='Y' and st.active='Y' and ssm.active='Y' and oo.org_office_id=kp.org_office_id and "
+                + " ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                + " and ssm.state_id=st.state_id and ssm.salesman_id=kp.key_person_id and st.state_name='" + state + "' group by st.state_name ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("key_person_id");
+        } catch (Exception e) {
+            System.out.println("EnquiryModel getKeyPersonId Error: " + e);
+        }
+        return id;
+    }
+
+    public static String assignToDealer(String enquiry_table_id, String district) {
+        int revision = EnquiryModel.getRevisionno(enquiry_table_id);
+        int updateRowsAffected = 0;
+        boolean status = false;
+        String query1 = " SELECT max(revision_no) revision_no,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name, "
+                + " sender_email,sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time, "
+                + " enquiry_call_duration, "
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to "
+                + " FROM enquiry_table WHERE enquiry_table_id = " + enquiry_table_id + "  && active=? ";
+        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=?";
+        String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
+                + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        int rowsAffected = 0;
+        int assigned_to_dealer = getDealerId(district);
+        try {
+            if (assigned_to_dealer > 0) {
+                PreparedStatement pstmt = connection.prepareStatement(query1);
+                pstmt.setString(1, "Y");
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    revision = rs.getInt("revision_no");
+                    String enquiry_source_table_id = rs.getString("enquiry_source_table_id");
+                    String marketing_vertical_id = rs.getString("marketing_vertical_id");
+                    String enquiry_no = rs.getString("enquiry_no");
+                    String sender_name = rs.getString("sender_name");
+                    String sender_email = rs.getString("sender_email");
+                    String sender_mob = rs.getString("sender_mob");
+                    String sender_company_name = rs.getString("sender_company_name");
+                    String enquiry_address = rs.getString("enquiry_address");
+                    String enquiry_city = rs.getString("enquiry_city");
+                    String enquiry_state = rs.getString("enquiry_state");
+                    String country = rs.getString("country");
+                    String enquiry_message = rs.getString("enquiry_message");
+                    String enquiry_date_time = rs.getString("enquiry_date_time");
+                    String enquiry_call_duration = rs.getString("enquiry_call_duration");
+                    String enquiry_reciever_mob = rs.getString("enquiry_reciever_mob");
+                    String sender_alternate_email = rs.getString("sender_alternate_email");
+                    String sender_alternate_mob = rs.getString("sender_alternate_mob");
+                    String description = rs.getString("description");
+
+                    PreparedStatement pstm = connection.prepareStatement(query2);
+                    pstm.setString(1, "n");
+                    pstm.setString(2, enquiry_table_id);
+                    pstm.setInt(3, revision);
+                    updateRowsAffected = pstm.executeUpdate();
+                    if (updateRowsAffected >= 1) {
+                        revision = rs.getInt("revision_no") + 1;
+                        PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
+                        psmt.setString(1, enquiry_table_id);
+                        psmt.setString(2, enquiry_source_table_id);
+                        psmt.setString(3, marketing_vertical_id);
+                        psmt.setInt(4, 3);
+                        psmt.setString(5, enquiry_no);
+                        psmt.setString(6, sender_name);
+                        psmt.setString(7, sender_email);
+                        psmt.setString(8, sender_mob);
+                        psmt.setString(9, sender_company_name);
+                        psmt.setString(10, enquiry_address);
+                        psmt.setString(11, enquiry_city);
+                        psmt.setString(12, enquiry_state);
+                        psmt.setString(13, country);
+                        psmt.setString(14, enquiry_message);
+                        psmt.setString(15, enquiry_date_time);
+                        psmt.setString(16, enquiry_call_duration);
+                        psmt.setString(17, enquiry_reciever_mob);
+                        psmt.setString(18, sender_alternate_email);
+                        psmt.setString(19, sender_alternate_mob);
+                        psmt.setInt(20, revision);
+                        psmt.setString(21, "Y");
+                        psmt.setString(22, description);
+                        psmt.setInt(23, assigned_to_dealer);
+
+                        rowsAffected = psmt.executeUpdate();
+                        if (rowsAffected > 0) {
+                            status = true;
+
+                        } else {
+                            status = false;
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+        }
+        if (rowsAffected > 0) {
+            message = " Your Enquiry successfully assigend !.";
+            messageBGColor = COLOR_OK;
+        } else {
+            message = "Cannot update the record, some error.";
+            messageBGColor = COLOR_ERROR;
+        }
+        return message + "&" + status;
+
+    }
+
+    public static String assignComplaintToDealer(String complaint_table_id, String district) {
+        int revision = EnquiryModel.getRevisionnoForComplaint(complaint_table_id);
+        int updateRowsAffected = 0;
+        boolean status = false;
+        String query1 = " SELECT max(revision_no) revision_no,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name, "
+                + " sender_email,sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time, "
+                + " enquiry_call_duration, "
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to "
+                + " FROM complaint_table WHERE complaint_table_id = " + complaint_table_id + "  && active=? ";
+        String query2 = " UPDATE complaint_table SET active=? WHERE complaint_table_id=? and revision_no=?";
+        String query3 = " INSERT INTO complaint_table(complaint_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
+                + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        int rowsAffected = 0;
+        int assigned_to_dealer = getDealerId(district);
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query1);
+            pstmt.setString(1, "Y");
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                revision = rs.getInt("revision_no");
+                String enquiry_source_table_id = rs.getString("enquiry_source_table_id");
+                String marketing_vertical_id = rs.getString("marketing_vertical_id");
+                String enquiry_no = rs.getString("enquiry_no");
+                String sender_name = rs.getString("sender_name");
+                String sender_email = rs.getString("sender_email");
+                String sender_mob = rs.getString("sender_mob");
+                String sender_company_name = rs.getString("sender_company_name");
+                String enquiry_address = rs.getString("enquiry_address");
+                String enquiry_city = rs.getString("enquiry_city");
+                String enquiry_state = rs.getString("enquiry_state");
+                String country = rs.getString("country");
+                String enquiry_message = rs.getString("enquiry_message");
+                String enquiry_date_time = rs.getString("enquiry_date_time");
+                String enquiry_call_duration = rs.getString("enquiry_call_duration");
+                String enquiry_reciever_mob = rs.getString("enquiry_reciever_mob");
+                String sender_alternate_email = rs.getString("sender_alternate_email");
+                String sender_alternate_mob = rs.getString("sender_alternate_mob");
+                String description = rs.getString("description");
+
+                PreparedStatement pstm = connection.prepareStatement(query2);
+                pstm.setString(1, "n");
+                pstm.setString(2, complaint_table_id);
+                pstm.setInt(3, revision);
+                updateRowsAffected = pstm.executeUpdate();
+                if (updateRowsAffected >= 1) {
+                    revision = rs.getInt("revision_no") + 1;
+                    PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
+                    psmt.setString(1, complaint_table_id);
+                    psmt.setString(2, enquiry_source_table_id);
+                    psmt.setString(3, marketing_vertical_id);
+                    psmt.setInt(4, 3);
+                    psmt.setString(5, enquiry_no);
+                    psmt.setString(6, sender_name);
+                    psmt.setString(7, sender_email);
+                    psmt.setString(8, sender_mob);
+                    psmt.setString(9, sender_company_name);
+                    psmt.setString(10, enquiry_address);
+                    psmt.setString(11, enquiry_city);
+                    psmt.setString(12, enquiry_state);
+                    psmt.setString(13, country);
+                    psmt.setString(14, enquiry_message);
+                    psmt.setString(15, enquiry_date_time);
+                    psmt.setString(16, enquiry_call_duration);
+                    psmt.setString(17, enquiry_reciever_mob);
+                    psmt.setString(18, sender_alternate_email);
+                    psmt.setString(19, sender_alternate_mob);
+                    psmt.setInt(20, revision);
+                    psmt.setString(21, "Y");
+                    psmt.setString(22, description);
+                    psmt.setInt(23, assigned_to_dealer);
 
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
@@ -645,7 +906,7 @@ public class EnquiryModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:EnquiryModel assignComplaintToSalesPerson-" + e);
         }
         if (rowsAffected > 0) {
             message = " Your Enquiry successfully assigend !.";
@@ -699,9 +960,15 @@ public class EnquiryModel {
         return revision;
     }
 
-    public String assignComplaintToSalesPerson(String complaint_table_id, String sales_person_name) {
+    public String assignComplaintToSalesPerson(String complaint_table_id, String state, String city) {
         int revision = EnquiryModel.getRevisionnoForComplaint(complaint_table_id);
         int updateRowsAffected = 0;
+        if (state.equals("Uttar Pradesh")) {
+            state = "UP";
+        }
+        if (state.equals("Madhya Pradesh")) {
+            state = "MP";
+        }
         boolean status = false;
         String query1 = " SELECT max(revision_no) revision_no,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name, "
                 + " sender_email,sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time, "
@@ -714,8 +981,22 @@ public class EnquiryModel {
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
                 + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
-        int assigned_to = getKeyPersonId(sales_person_name);
+
         try {
+            String query_map_state = " select count(*) as count from state where state_name='" + state + "' and active='Y' ";
+            PreparedStatement pstmt3 = connection.prepareStatement(query_map_state);
+            ResultSet rs3 = pstmt3.executeQuery();
+            int count = 0;
+            while (rs3.next()) {
+                count = rs3.getInt("count");
+            }
+            if (count > 0) {
+                state = state;
+            } else {
+                state = "UP";
+            }
+
+            int assigned_to_salesperson = getSalesPersonId(state);
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setString(1, "Y");
             ResultSet rs = pstmt.executeQuery();
@@ -770,11 +1051,40 @@ public class EnquiryModel {
                     psmt.setInt(20, revision);
                     psmt.setString(21, "Y");
                     psmt.setString(22, description);
-                    psmt.setInt(23, assigned_to);
+                    psmt.setInt(23, assigned_to_salesperson);
 
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
+
+                        String query_map_city = " select count(*) as count from city where city_name='" + city + "' and active='Y' ";
+                        PreparedStatement pstmt1 = connection.prepareStatement(query_map_city);
+                        ResultSet rs1 = pstmt1.executeQuery();
+                        int count1 = 0;
+                        while (rs1.next()) {
+                            count1 = rs1.getInt("count");
+                        }
+                        if (count1 > 0) {
+                            city = city;
+                        } else {
+                            city = "Hapur";
+                        }
+
+                        String district = description;
+                        String query_map_district = " select count(*) as count from district dt,city ct,tehsil th"
+                                + " where dt.district_name='" + district + "' and dt.active='Y' and ct.active='Y' and th.active='Y'"
+                                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ct.city_name='" + city + "' ";
+                        PreparedStatement pstmt2 = connection.prepareStatement(query_map_district);
+                        ResultSet rs2 = pstmt2.executeQuery();
+                        int count2 = 0;
+                        while (rs2.next()) {
+                            count2 = rs2.getInt("count");
+                        }
+                        if (count2 > 0) {
+                            district = district;
+                            EnquiryModel.assignComplaintToDealer(complaint_table_id, district);
+                        }
+
                     } else {
                         status = false;
                     }
@@ -799,6 +1109,26 @@ public class EnquiryModel {
         String query = " SELECT key_person_id from key_person where active='Y' ";
 
         query += " and key_person_name='" + sales_person_name + "' ";
+
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("key_person_id");
+        } catch (Exception e) {
+            System.out.println("EnquiryModel getKeyPersonId Error: " + e);
+        }
+        return id;
+    }
+
+    public static int getDealerId(String district) {
+
+        String query = " SELECT key_person_id from key_person kp,org_office oo,city ct,tehsil th,district dt,division dv,state st "
+                + "  where kp.active='Y' and oo.active='Y' and ct.active='Y' and th.active='Y' and dt.active='Y' and "
+                + " dv.active='Y' and st.active='Y'  and oo.org_office_id=kp.org_office_id and "
+                + " ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                + "  and dt.district_name='" + district + "'  and oo.office_type_id=3 and oo.city_id=ct.city_id ";
 
         int id = 0;
         try {
@@ -854,13 +1184,23 @@ public class EnquiryModel {
             String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
                     + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
                     + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-                    + " kp.key_person_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                    + " salesmanager_state_mapping ssm,key_person kp  "
+                    + " kp.key_person_name,oo.org_office_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " key_person kp,org_office oo  "
                     + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
-                    + " and ssm.active='Y' and kp.active='Y'  "
-                    + " and kp.key_person_id=ssm.salesman_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-                    + " ssm.state_id=st.state_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                    + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
+//            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
+//                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
+//                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
+//                    + " kp.key_person_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                    + " salesmanager_state_mapping ssm,key_person kp  "
+//                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
+//                    + " and ssm.active='Y' and kp.active='Y'  "
+//                    + " and kp.key_person_id=ssm.salesman_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+//                    + " ssm.state_id=st.state_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+//                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
 
             query += " group by et.enquiry_table_id  ";
             query += " order by et.enquiry_table_id desc  ";
@@ -887,7 +1227,13 @@ public class EnquiryModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
-                bean.setAssigned_to(rst.getString("key_person_name"));
+
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
 
                 String enquiry_date_time = rst.getString("enquiry_date_time");
 //                String split_arr[] = enquiry_date_time.split(" ");
@@ -914,19 +1260,18 @@ public class EnquiryModel {
     public static ArrayList<Enquiry> getAllComplaints() {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
-            String query = " select comt.complaint_table_id,es.status,comt.enquiry_no, comt.sender_name,comt.sender_email,comt.sender_mob, "
-                    + " comt.sender_company_name, "
-                    + " comt.enquiry_address,comt.enquiry_city,comt.enquiry_state,comt.country,comt.enquiry_message,comt.enquiry_date_time,  "
-                    + " comt.enquiry_call_duration,comt.enquiry_reciever_mob,comt.sender_alternate_email,comt.sender_alternate_mob,comt.description, "
-                    + " kp.key_person_name  from complaint_table comt,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                    + " salesmanager_state_mapping ssm,key_person kp  "
-                    + " where comt.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
-                    + " and ssm.active='Y' and kp.active='Y'  "
-                    + " and kp.key_person_id=ssm.salesman_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-                    + " ssm.state_id=st.state_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and comt.enquiry_status_id=es.enquiry_status_id and dt.district_name=comt.description and es.active='Y' ";
-            query += " group by comt.complaint_table_id  ";
-            query += " order by comt.complaint_table_id desc  ";
+            String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
+                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
+                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
+                    + " kp.key_person_name,oo.org_office_name  from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " key_person kp,org_office oo  "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
+                    + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
+            query += " group by et.complaint_table_id  ";
+            query += " order by et.complaint_table_id desc  ";
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
                 Enquiry bean = new Enquiry();
@@ -950,7 +1295,12 @@ public class EnquiryModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
-                bean.setAssigned_to(rst.getString("key_person_name"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
 
                 String enquiry_date_time = rst.getString("enquiry_date_time");
 //                String split_arr[] = enquiry_date_time.split(" ");
@@ -1035,13 +1385,13 @@ public class EnquiryModel {
             String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
                     + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
                     + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-                    + " kp.key_person_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                    + " salesmanager_state_mapping ssm,key_person kp  "
+                    + " kp.key_person_name,oo.org_office_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " key_person kp,org_office oo  "
                     + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
-                    + " and ssm.active='Y' and kp.active='Y'  "
-                    + " and kp.key_person_id=ssm.salesman_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-                    + " ssm.state_id=st.state_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y'  ";
+                    + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
             if (!enquiry_table_id.equals("") && enquiry_table_id != null) {
                 query += " and et.enquiry_table_id='" + enquiry_table_id + "' ";
             }
@@ -1070,6 +1420,14 @@ public class EnquiryModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
+
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
+
                 list.add(bean);
             }
         } catch (Exception e) {
@@ -1086,13 +1444,13 @@ public class EnquiryModel {
             String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
                     + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
                     + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-                    + " kp.key_person_name  from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                    + " salesmanager_state_mapping ssm,key_person kp  "
+                    + " kp.key_person_name,oo.org_office_name  from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " key_person kp,org_office oo  "
                     + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
-                    + " and ssm.active='Y' and kp.active='Y'  "
-                    + " and kp.key_person_id=ssm.salesman_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-                    + " ssm.state_id=st.state_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y'  ";
+                    + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
             if (!enquiry_table_id.equals("") && enquiry_table_id != null) {
                 query += " and et.complaint_table_id='" + enquiry_table_id + "' ";
             }
@@ -1122,6 +1480,12 @@ public class EnquiryModel {
                 bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
                 bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
                 bean.setDescription(rst.getString("description"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                }
                 list.add(bean);
             }
         } catch (Exception e) {

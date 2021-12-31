@@ -42,6 +42,7 @@
                                                 <th>Stock Qty</th>
                                                 <th>Approved Qty</th>
                                                 <th>MRP Price</th>
+                                                <th>Approved Price</th>
                                                 <th>Discount %</th>
                                                 <th>Discounted Price</th>
                                                 <th></th>
@@ -57,7 +58,7 @@
                                             <input type="hidden" name="image_name" id="image_name${loopCounter.count}" value="${beanType.image_name}">
                                             <input type="hidden" name="count" id="count" value="${count}">
                                             <input type="hidden" name="order_table_id" id="order_table_id" value="${beanType.order_table_id}">
-                                            <input type="hidden" name="order_item_id" id="order_item_id" value="${beanType.order_item_id}">
+                                            <input type="hidden" name="order_item_id" id="order_item_id${loopCounter.count}" value="${beanType.order_item_id}">
                                             <input type="hidden" name="item_status" id="item_status" value="${beanType.item_status}">
                                             <input type="hidden" name="order_status" id="order_status" value="${beanType.order_status}">
                                             <input type="hidden" name="required_qty" id="required_qty${beanType.order_item_id}" value="${beanType.required_qty}">
@@ -75,19 +76,21 @@
 
                                                 <c:if test="${beanType.order_status=='Pending'}">
                                                     <input type="text" name="approved_qty${beanType.order_item_id}" id="approved_qty${beanType.order_item_id}"
-                                                           value="${beanType.required_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}')">
+                                                           value="${beanType.required_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}', '${beanType.basic_price}', '${beanType.order_item_id}')">
                                                 </c:if>
 
 
                                                 <c:if test="${beanType.order_status!='Pending'}">
                                                     <input type="text" name="approved_qty${beanType.order_item_id}" id="approved_qty${beanType.order_item_id}" 
-                                                           disabled="" value="${beanType.approved_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}')">
+                                                           disabled="" value="${beanType.approved_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}', '${beanType.basic_price}', '${beanType.order_item_id}')">
                                                     <!--<input type="text" name="approved_qty${beanType.order_item_id}" hidden value="${beanType.approved_qty}">-->
 
                                                 </c:if>
                                             </td>
 
                                             <td>${beanType.basic_price}</td>
+                                            <td id="approved_price${beanType.order_item_id}">${beanType.approved_price}</td>
+                                            <input type="hidden" name="approved_price${beanType.order_item_id}" value="${beanType.approved_price}" class="approved_price${beanType.order_item_id}">
 
 
                                             <td>
@@ -133,11 +136,13 @@
                                         </c:forEach>
 
                                         <tr class="darkBlueBg">
-                                            <td colspan="6"></td>
+                                            <td colspan="5"></td>
                                             <td class="font-weight-bold fontSeventeen text-white py-3">Total Amount</td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3">Rs. ${total_amount}</td>  
+                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_approved_qty"></td>
+                                            <td class="font-weight-bold fontSeventeen text-white py-3">${total_amount}</td>  
+                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_approved_price">${total_approved_price}</td>  
                                             <td class="font-weight-bold fontSeventeen text-white py-3" id="total_percent">${total_discount_percent}</td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3">${total_discount_price}</td>
+                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_discounted_price">${total_discount_price}</td>
                                             <td class="font-weight-bold fontSeventeen text-white py-3">
                                                 <input type="submit" name="task"  id="approved" value="Approve">
                                                 <input type="submit" name="task"  id="denied" value="Denied">
@@ -171,11 +176,15 @@
 
         }
         var total_price = 0;
+        var total_approved_qty = 0;
+        var total_discounted_percent = 0;
+        var total_discounted_price = 0;
+        var total_approved_price = 0;
+
         $('.counting').text(count);
         for (var j = 0; j < count; j++) {
             var image_path = $('#image_path' + (j + 1)).val();
             var image_name = $('#image_name' + (j + 1)).val();
-
             var image = image_path + image_name;
             if (image != "") {
                 image = image.replace(/\\/g, "/");
@@ -183,15 +192,70 @@
 //            $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
             $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 
-//            $('#total_percent').html();
+           // var order_item_ids = $('#order_item_id' + (j + 1)).val();
+          //  total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
+//            total_discounted_percent = total_discounted_percent + parseInt($('#discounted_percent' + order_item_ids).val());
+           // total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
+           // total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).html());
         }
+       // total_discounted_percent = (total_approved_price - total_discounted_price) / total_approved_price * 100;
+//
+//        $('#total_approved_qty').html(parseInt(total_approved_qty));
+//        $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
+//        $('#total_discounted_price').html(parseInt(total_discounted_price));
+//        $('#total_approved_price').html(parseInt(total_approved_price));
     });
 
-    function checkValidationForQty(approve_qty, req_qty) {
+    function checkValidationForQty(approve_qty, req_qty, basic_price, order_item_id) {
         if (approve_qty > req_qty) {
             alert("Please enter valid quantity!...");
             return false;
+        } else {
+            var discounted_percent = $('#discounted_percent' + order_item_id).val();
+            var numVal1 = basic_price;
+            var numVal2 = discounted_percent / 100;
+            var approved_qty = $('#approved_qty' + order_item_id).val();
+            var required_qty = $('#required_qty' + order_item_id).val();
+            if (approved_qty == '') {
+                alert("Please enter approved qty!...");
+                $('#discounted_percent' + order_item_id).val("");
+                return false;
+            }
+            numVal1 = (basic_price / required_qty) * approved_qty;
+            var totalValue = numVal1 - (numVal1 * numVal2)
+            $('#discounted_price' + order_item_id).val(totalValue);
+            if (parseInt(totalValue) > parseInt(basic_price)) {
+                alert("Please enter valid Price!...");
+                return false;
+            }
+            $('#approved_price' + order_item_id).html(parseInt(basic_price / required_qty * approved_qty));
+            $('.approved_price' + order_item_id).val(parseInt(basic_price / required_qty * approved_qty));
+
+            // $('#total_percent').html(parseInt(discounted_percent));
+            var count = $('#count').val();
+            var total_approved_qty = 0;
+            var total_discounted_percent = 0;
+            var total_discounted_price = 0;
+            var total_approved_price = 0;
+            for (var k = 0; k < count; k++) {
+                var order_item_ids = $('#order_item_id' + (k + 1)).val();
+                total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
+//                total_discounted_percent = total_discounted_percent + parseInt($('#discounted_percent' + order_item_ids).val());
+                total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
+
+                total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).html());
+
+            }
+            total_discounted_percent = (total_approved_price - total_discounted_price) / total_approved_price * 100;
+
+            $('#total_approved_qty').html(parseInt(total_approved_qty));
+            $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
+            $('#total_discounted_price').html(parseInt(total_discounted_price));
+            $('#total_approved_price').html(parseInt(total_approved_price));
+
         }
+
+
     }
     function checkValidationForPrice(discounted_percent, basic_price, order_item_id) {
         var numVal1 = basic_price;
@@ -204,14 +268,35 @@
             return false;
         }
         numVal1 = (basic_price / required_qty) * approved_qty;
-
-//        $('#total_percent').html(parseInt(discounted_percent));
-
         var totalValue = numVal1 - (numVal1 * numVal2)
         $('#discounted_price' + order_item_id).val(totalValue);
         if (parseInt(totalValue) > parseInt(basic_price)) {
             alert("Please enter valid Price!...");
             return false;
         }
+        $('#approved_price' + order_item_id).html(parseInt(basic_price / required_qty * approved_qty));
+        $('.approved_price' + order_item_id).val(parseInt(basic_price / required_qty * approved_qty));
+
+        var count = $('#count').val();
+        var total_approved_qty = 0;
+        var total_discounted_percent = 0;
+        var total_discounted_price = 0;
+        var total_approved_price = 0;
+        for (var k = 0; k < count; k++) {
+            var order_item_ids = $('#order_item_id' + (k + 1)).val();
+            total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
+//            total_discounted_percent = total_discounted_percent + parseInt($('#discounted_percent' + order_item_ids).val());
+            total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
+            total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).html());
+
+        }
+        total_discounted_percent = ((total_approved_price - total_discounted_price) / total_approved_price) * 100;
+
+        $('#total_approved_qty').html(parseInt(total_approved_qty));
+        $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
+        $('#total_discounted_price').html(parseInt(total_discounted_price));
+        $('#total_approved_price').html(parseInt(total_approved_price));
+
+
     }
 </script>

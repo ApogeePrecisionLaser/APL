@@ -6,7 +6,9 @@ package com.dashboard.controller;
 
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealerItemMap;
+import com.dashboard.bean.DealersOrder;
 import com.dashboard.model.DealerItemMapModel;
+import com.dashboard.model.DealersOrderModel;
 import com.inventory.model.ItemAuthorizationModel;
 import com.inventory.tableClasses.ItemAuthorization;
 import java.io.BufferedInputStream;
@@ -122,7 +124,7 @@ public class DealerItemMapController extends HttpServlet {
             }
             String org_office_name = model.getOrgOfficeName(org_office_id);
 
-            if (task.equals("Submit")) {
+            if (task.equals("mapWithDealer")) {
                 int dealer_item_map_id = 0;
                 try {
                     dealer_item_map_id = Integer.parseInt(request.getParameter("dealer_item_map_id").trim());
@@ -132,29 +134,61 @@ public class DealerItemMapController extends HttpServlet {
 
                 DealerItemMap bean = new DealerItemMap();
                 bean.setDealer_item_map_id(dealer_item_map_id);
-                bean.setItem_name(request.getParameter("item").trim());
-                bean.setModel(request.getParameter("model").trim());
-                bean.setDescription(request.getParameter("description").trim());
-
+                bean.setItem_name(request.getParameter("item_name").trim());
+                bean.setModel(request.getParameter("model_name").trim());
+                bean.setModel_id(request.getParameter("model_id").trim());
+//                bean.setDescription(request.getParameter("description").trim());
+                int rowsAffected = 0;
                 if (dealer_item_map_id == 0) {
-                    model.insertRecord(bean, org_office_id);
+                    rowsAffected = model.insertRecord(bean, org_office_id);
                 }
-                //else {
-//                    model.updateRecord(bean, dealer_item_map_id);
-//                }
+                JSONObject json = null;
+                PrintWriter out = response.getWriter();
+                List<String> list = null;
+                if (json != null) {
+                    out.println(json);
+                } else {
+                    JSONObject gson = new JSONObject();
+                    String message = "";
+                    if (rowsAffected > 0) {
+                        message = "Item mapped with dealer...";
+                    } else {
+                        message = "Something Went Wrong...";
+                    }
+
+                    gson.put("msg", message);
+
+                    out.println(gson);
+                }
+                DBConnection.closeConncetion(model.getConnection());
+                return;
+
             }
             if (task.equals("deleteMapping")) {
-                model.deleteMapping(request.getParameter("dealer_item_map_id").trim());
+                String dealer_item_map_id = request.getParameter("dealer_item_map_id").trim();
+                model.deleteMapping(dealer_item_map_id);
             }
 
-            List<DealerItemMap> list = model.showData(org_office_id);
-            request.setAttribute("list", list);
-//            request.setAttribute("search_item_name", search_item_name);
+//            List<DealerItemMap> list = model.showData(org_office_id);
+//            request.setAttribute("list", list);
+////            request.setAttribute("search_item_name", search_item_name);
+//            request.setAttribute("org_office_name", org_office_name);
+//            request.setAttribute("org_office_id", org_office_id);
+//            request.setAttribute("message", model.getMessage());
+//            request.setAttribute("msgBgColor", model.getMsgBgColor());
+//            request.setAttribute("loggedUser", loggedUser);
+            ArrayList<DealerItemMap> list1 = model.getAllItems(org_office_id);
+            ArrayList<DealerItemMap> list2 = new ArrayList<>();
+            list2 = model.getAllModels(org_office_id, list1);
+
+            // request.setAttribute("message", DealersOrderModel.getMessage());
+//            request.setAttribute("msgBgColor", DealersOrderModel.getMessageBGColor());
+            request.setAttribute("search_item", "");
+            request.setAttribute("list1", list1);
+            request.setAttribute("list2", list2);
             request.setAttribute("org_office_name", org_office_name);
             request.setAttribute("org_office_id", org_office_id);
-            request.setAttribute("message", model.getMessage());
-            request.setAttribute("msgBgColor", model.getMsgBgColor());
-            request.setAttribute("loggedUser", loggedUser);
+            request.setAttribute("count", list2.size());
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("dealer_item_map").forward(request, response);

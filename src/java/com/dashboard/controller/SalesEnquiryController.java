@@ -109,9 +109,10 @@ public class SalesEnquiryController extends HttpServlet {
             request.getRequestDispatcher("complaint_enquiry_details").forward(request, response);
         }
         if (task.equals("assignToSalesPerson")) {
-            String sales_person_name = request.getParameter("sales_person_name");
+            String state = request.getParameter("state");
+            String city = request.getParameter("city");
             String enquiry_table_id = request.getParameter("enquiry_table_id");
-            model.assignToSalesPerson(enquiry_table_id, sales_person_name);
+            model.assignToSalesPerson(enquiry_table_id, state,city);
 
             ArrayList<Enquiry> list = model.getAllEnquiries();
             request.setAttribute("list", list);
@@ -120,9 +121,10 @@ public class SalesEnquiryController extends HttpServlet {
             request.getRequestDispatcher("sales_enquiry_list").forward(request, response);
         }
         if (task.equals("assignComplaintToSalesPerson")) {
-            String sales_person_name = request.getParameter("sales_person_name");
+            String state = request.getParameter("state");
+            String city = request.getParameter("city");
             String complaint_table_id = request.getParameter("enquiry_table_id");
-            model.assignComplaintToSalesPerson(complaint_table_id, sales_person_name);
+            model.assignComplaintToSalesPerson(complaint_table_id, state,city);
 
             ArrayList<Enquiry> list = model.getAllComplaints();
             request.setAttribute("list", list);

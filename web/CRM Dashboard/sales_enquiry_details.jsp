@@ -37,9 +37,11 @@
                                         <c:choose>
                                             <c:when test="${beanType.status =='Primary'}">
                                                 <a href="SalesEnquiryController?task=assignToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&sales_person_name=${beanType.assigned_to}"
-                                                   class="btn myThemeBtn text-right">Assign to Sale Person</a>                                        </c:when>
+                                                   class="btn myThemeBtn text-right">Assign To SalesManager & Dealer</a>
+                                            </c:when>
+
                                             <c:otherwise>
-                                                <button class="btn btn-danger myThemeBtn" disabled>${beanType.status}</button>
+                                                <button class="btn btn-danger " disabled>${beanType.status} <b>(${beanType.assigned_to})</b></button>
                                             </c:otherwise>
                                         </c:choose>
 

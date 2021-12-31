@@ -1,219 +1,225 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
+<style>
+    .productBox .checkboxWrap{
+        margin-right: 4px;
+    }
+    .productBox .checkboxWrap input[type=checkbox]{
+        transform: scale(1.6);
+    }
+</style>
 
 <div class="content-wrapper" id="contentWrapper">
-    <section class="content-header">
+    <section class="content">
         <div class="container-fluid">
-            <div class="row mb-2">
-<!--                <div class="col-sm-2">
-                    <h1>Dealer Item Map 1</h1>
-                </div>-->
+            <div class="mainNavigationMenu">
 
-                <div class="col-sm-6">
-                    <div class="d-flex">
-                        <div class="mr-2">
-                            <a href="DealersController" class="btn btn-primary myNewLinkBtn">Back</a>
-                        </div>
-<!--                        <div class="mr-2">
-                            <h1>Dealer Item Map</h1>
-                        </div>-->
-                        <c:if test="${not empty message}">
-                            <div class="alert alert-success alert-dismissible myAlertBox" id="msg" >
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <strong>Success!</strong> ${message}
-
+                <div class=" marginTop40">
+                    <div class="">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group mb-0 d-flex">
+                                    <a href="DealersController" class="btn btn-primary myNewLinkBtn">Back</a>
+                                </div>                          
                             </div>
-                        </c:if>
-
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Dealer Item Map </li>
-                    </ol>
-                </div>
-
-            </div>
-
-        </div><!-- /.container-fluid -->
-    </section>
-
-
-
-    <section class="content">
-        <div class="container-fluid">              
-            <div class="row mt-0">
-                <div class="col-md-12">
-                    <div class="card card-primary card-outline">            
-                        <div class="card-body">
-                            <div>
-                                <div class="table-responsive tableScrollWrap noWrapTable" >
-                                    <table class="table table-striped1 mainTable" id="mytable" >
-                                        <thead>
-                                            <tr>
-                                                <th>S.No.</th>
-                                                <th>Dealer</th> 
-                                                <th>Item</th> 
-                                                <th>Model</th> 
-                                                <th>Description</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="beanType" items="${requestScope['list']}"
-                                                       varStatus="loopCounter">
-                                                <tr>
-                                            <input type="hidden" name="dealer_item_map_id" id="dealer_item_map_id${beanType.dealer_item_map_id}" value="${beanType.dealer_item_map_id}">
-                                            <td class="fontFourteen">${loopCounter.count}</td>
-                                            <td class="fontFourteen">${beanType.org_office_name}</td> 
-                                            <td class="fontFourteen">${beanType.item_name}</td> 
-                                            <td class="fontFourteen">${beanType.model}</td> 
-                                            <td class="fontFourteen">${beanType.description}</td> 
-                                            <td class="fontFourteen d-flex">
-                                                <div>
-                                                </div> 
-                                            </td>
-                                            </tr> 
-                                        </c:forEach>
-
-                                        </tbody>
-                                    </table>
+                            <div class="col-md-7">
+                                <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <strong>Success!</strong> 
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12 px-3">
-                <div class="card card-primary rounded-0 profileCard mt-2">
-                    <div class="card-body px-4">
-                        <div class="mt-1">
-                            <form class="myForm" action="DealerItemMapController" method="post">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Dealer:<sup class="text-danger">*</sup></label>
-                                            <input type="text" disabled class="form-control" required name="dealer" id="dealer" value="${org_office_name}">
-                                            <input type="hidden" name="dealer_item_map_id" id="dealer_item_map_id" value="">
-                                            <input type="hidden" name="org_office_id" id="org_office_id" value="${org_office_id}">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Items:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" required name="item" id="item" style="position:relative">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Model:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" required name="model" id="model">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Description</label>
-                                            <textarea class="form-control"  rows="4" id="description" name="description"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-0 mt-3">
-                                            <input type="submit" class="btn myThemeBtn" value="Submit" name="task">
-                                        </div>
-                                    </div>
-                                </div>
-                            </form> 
+                <c:forEach var="beanType1" items="${requestScope['list1']}"
+                           varStatus="loopCounter">
+                    <div class="mt-4">
+                        <div class="headerText d-flex justify-content-between mb-3">
+                            <a><h2 class="mb-0 mt-2">${beanType1.item_name}</h2></a>          
                         </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                        <div class="mt-3 ">
+                            <div class="owl-carousel owl-theme productSlider">
+                                <c:forEach var="beanType2" items="${requestScope['list2']}"
+                                           varStatus="loopCounter">
+                                    <c:if test="${beanType1.item_name == beanType2.item_name}" >
+                                        <div class="item">
+                                            <div class="productBox">
+<!--                                                <div class="ribbon-wrapper ribbon-xl" id="msg_div${loopCounter.count }">
+                                                <div class="ribbon bg-danger fontFourteen">
+                                                    Out of Stock
+                                                </div>
+                                            </div>-->
+                                                <div class="card">
+                                                    <div class="card-header" id="myid${loopCounter.count}">
+                                                        <input type="hidden" name="model_id" id="model_id${loopCounter.count }" value="${beanType2.model_id}">
+                                                        <input type="hidden" name="image_path" id="image_path${loopCounter.count}" value="${beanType2.image_path}">
+                                                        <input type="hidden" name="image_name" id="image_name${loopCounter.count}" value="${beanType2.image_name}">
+                                                        <input type="hidden" name="count" id="count" value="${count}">
+                                                        <input type="hidden" name="stock_quantity" id="stock_quantity${loopCounter.count}" value="${beanType2.stock_quantity}">
 
+                                                        <!--<img src="http://apogeeleveller.com/assets/images/gallery/Apogee1Transmitter.png" class="img-fluid">-->
+                                                        <a>
+                                                            <img src="" width="300" height="220" class="img-fluid${loopCounter.count }">
+                                                        </a>
+                                                    </div>
+                                                    <div class="card-body px-2 pt-2 pb-2">
+                                                        <div>
+                                                            <div class="catname">
+                                                                <small>${beanType2.manufacturer_name}</small>
+                                                            </div>
+                                                            <div class="mt-2 productName">
+                                                                <a href="">
+                                                                    <p><b>${beanType2.model}</b></p>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex priceBox">
+                                                                <h2 style="">Rs. ${beanType2.basic_price} </h2> &nbsp&nbsp
+                                                                <!--<h3 style=""> <del>?110.8</del></h3>-->
+                                                                <!--<div id="msg_div${loopCounter.count }" style="color:red;display: none;margin-left: 50px"> <b>Out Of Stock</b></div>-->
+                                                            </div>
+                                                            <div class="checkboxWrap">
+                                                                <c:if  test="${beanType2.checked=='Yes'}">
+                                                                    <input type="checkbox" name="map_item" id="map_item" value="${beanType2.model}" checked="" onclick="unMapItemWithDealer('${beanType2.dealer_item_map_id}')">
+                                                                </c:if>
+                                                                <c:if  test="${beanType2.checked=='No'}">
+                                                                    <input type="checkbox" name="map_item" id="map_item" value="${beanType2.model}" onclick="mapItemWithDealer('${beanType2.model}', '${beanType2.model_id}', '${beanType2.item_name}', '${org_office_id}')">
+                                                                </c:if>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+    </section>
 </div>
-
-
-<%@include file="/CRM Dashboard/CRM_footer.jsp" %>
-
-<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>-->
-<!--<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">-->
-
-
-<!--<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel = "stylesheet">
+<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
-
 <script>
-    
     $(function () {
-        $("#item").autocomplete({
-            source: function (request, response) {
-                var random = $('#item').val();
-                var org_office_id = $('#org_office_id').val();
-                $.ajax({
-                    url: "DealerItemMapController",
-                    dataType: "json",
-                    data: {action1: "getItemName", str: random, org_office_id: org_office_id},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#item').val(ui.item.label);
-                return false;
-            }
-        });
+        var count = $('#count').val();
 
-        $("#model").autocomplete({
-            source: function (request, response) {
-                var random = $('#model').val();
-                var item = $('#item').val();
-                $.ajax({
-                    url: "DealerItemMapController",
-                    dataType: "json",
-                    data: {action1: "getModel", str: random, item: item},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#model').val(ui.item.label);
-                return false;
+//        $("#search_item").autocomplete({
+//            source: function (request, response) {
+//                var random = $('#search_item').val();
+//                $.ajax({
+//                    url: "DealersOrderController",
+//                    dataType: "json",
+//                    data: {action1: "getItemName", str: random},
+//                    success: function (data) {
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#search_item').val(ui.item.label);
+//                return false;
+//            }
+//        });
+
+
+
+        for (var j = 0; j < count; j++) {
+            var image_path = $('#image_path' + (j + 1)).val();
+            var image_name = $('#image_name' + (j + 1)).val();
+            var image = image_path + image_name;
+            if (image != "") {
+                image = image.replace(/\\/g, "/");
             }
-        });
+            // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+//                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
+            $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+
+            var stock_quantity = $('#stock_quantity' + (j + 1)).val();
+            if (stock_quantity == 0) {
+                $('#msg_div' + (j + 1)).show();
+                $('#add' + (j + 1)).attr('disabled', true);
+            } else {
+                $('#msg_div' + (j + 1)).hide();
+                $('#add' + (j + 1)).attr('disabled', false);
+            }
+        }
     });
 
-    $(document).ready(function () {
-        setTimeout(function () {
-            $('.myAlertBox').fadeOut('fast');
-        }, 1000);
 
-    })
+
+
+    function mapItemWithDealer(model, model_id, item_name, org_office_id) {
+        var qty;
+        $.ajax({
+            url: "DealerItemMapController",
+            dataType: "json",
+            data: {task: "mapWithDealer", model_id: model_id, model_name: model, item_name: item_name, org_office_id: org_office_id},
+            success: function (data) {
+                console.log(data.msg);
+                if (data.msg != '') {
+                    $('#msg').text(data.msg);
+                    $('.myAlertBox').show();
+                    setTimeout(function () {
+                        $('#msg').fadeOut('fast');
+                    }, 2000);
+                    window.location.reload();
+                } else {
+                    $('.myAlertBox').hide();
+
+                }
+            }
+        });
+    }
+
+
+    function unMapItemWithDealer(dealer_item_map_id) {
+        var qty;
+        $.ajax({
+            url: "DealerItemMapController",
+            dataType: "json",
+            data: {task: "deleteMapping", dealer_item_map_id: dealer_item_map_id},
+            success: function (data) {
+                console.log(data.msg);
+                if (data.msg != '') {
+                    $('#msg').text(data.msg);
+                    $('.myAlertBox').show();
+                    setTimeout(function () {
+                        $('#msg').fadeOut('fast');
+                    }, 2000);
+                    window.location.reload();
+                } else {
+                    $('.myAlertBox').hide();
+
+                }
+            }
+        });
+    }
+
+
 </script>
+<%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+
+
+
+
+
+
+
+
+
+
