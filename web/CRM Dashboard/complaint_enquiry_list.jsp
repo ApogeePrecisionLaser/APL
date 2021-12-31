@@ -83,10 +83,10 @@
                                                                 <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&sales_person_name=${beanType.assigned_to}" class="btn btn-info" title="Assigned To Sales Person">Assign To Sales Person</a>
                                                             </c:when>
                                                             <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                                <button class="btn btn-danger" disabled>In Conversation</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>In Conversation</button>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>

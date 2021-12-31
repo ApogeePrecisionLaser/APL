@@ -52,7 +52,6 @@
                                                 <th class="fontFourteen">Sender Mobile</th>
                                                 <!-- <th>Sender Company Name</th> -->
                                                 <!-- <th>Sender Address</th> -->
-                                                <!--<th>City</th>-->
                                                 <th>City</th>
                                                 <th>State</th>
                                                 <!--<th class="fontFourteen">District</th>-->
@@ -93,6 +92,7 @@
                                                                 <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
                                                             </c:otherwise>
                                                         </c:choose>
+
                                                     </td>
 
 
