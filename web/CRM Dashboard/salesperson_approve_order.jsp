@@ -36,7 +36,7 @@
                     <div class="card card-primary card-outline">            
                         <div class="card-body">
                             <div>
-                                <div class="table-responsive tableScrollWrap" >
+                                <div class="table-responsive tableScrollWrap noWrapTable" >
                                     <table class="table table-striped1 mainTable" id="mytable" >
                                         <thead>
                                             <tr>
@@ -58,13 +58,13 @@
 
                                                 <c:choose>  
                                                     <c:when test="${beanType.status == 'Pending'}">  
-                                                        <td class="fontFourteen statusPending" style="width:5%">${beanType.status}</td>
+                                                        <td class="fontFourteen"><i class="statusPending">${beanType.status}</i></td>
                                                     </c:when>   
                                                     <c:when test="${beanType.status == 'Approved'}">  
-                                                        <td class="fontFourteen statusApprove" style="width:5%">${beanType.status}</td>
+                                                        <td class="fontFourteen"><i class="statusApprove">${beanType.status}</i></td>
                                                     </c:when>  
                                                     <c:otherwise>  
-                                                        <td class="fontFourteen statusDisapprove" style="width:5%">${beanType.status}</td>
+                                                        <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i></td>
                                                     </c:otherwise>  
                                                 </c:choose>  
 

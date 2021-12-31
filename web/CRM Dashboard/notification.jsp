@@ -25,14 +25,14 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline">            
                     <div class="card-body">              
-                        <div class="table-responsive mailbox-messages tableScrollWrap">
+                        <div class="table-responsive mailbox-messages tableScrollWrap noWrapTable">
                             <table class="table table-hover table-striped" id="mytable">
                                 <thead>
                                     <tr>
                                         <th class="pl-2">Sl. No.</th>
-                                        <th class="pl-2">Img</th>
+                                        <th class="pl-2">Name</th>
                                         <th class="pl-2">Title</th>
-                                        <th class="pl-2">Description</th>
+                                        <!--<th class="pl-2">Description</th>-->
                                         <th class="pl-2">Status</th>
                                         <th class="pl-2">Time</th>
                                         <th class="pl-2">Action</th>
@@ -43,7 +43,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -55,7 +55,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -67,7 +67,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -79,7 +79,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -91,7 +91,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -103,7 +103,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -115,7 +115,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -127,7 +127,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -139,7 +139,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -151,7 +151,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -163,7 +163,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -175,7 +175,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -187,7 +187,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -199,7 +199,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -211,7 +211,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -223,7 +223,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
@@ -235,7 +235,7 @@
                                         <td class="fontFourteen">1</td>
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
-                                        <td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>
+                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                         <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>

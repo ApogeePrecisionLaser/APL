@@ -36,7 +36,7 @@
                     <div class="card card-primary card-outline">            
                         <div class="card-body">
                             <div>
-                                <div class="table-responsive tableScrollWrap" >
+                                <div class="table-responsive tableScrollWrap noWrapTable" >
                                     <table class="table table-striped1 mainTable" id="mytable" >
                                         <thead>
                                             <tr>
@@ -68,7 +68,7 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen">${beanType.sender_mob}</td>
+                                                    <td class="fontFourteen"><a href="tel:${beanType.sender_mob}"> ${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.enquiry_city}</td>
@@ -82,13 +82,13 @@
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To SalesManager'}">
                                                                 <input type="text" name="dealers" class="dealers" id="dealers${beanType.enquiry_table_id}">
-                                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn btn-info" title="Assigned To Dealer">Assign To Dealer</a>
+                                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn myBtnInfo fontFourteen" title="Assigned To Dealer">Assign To Dealer</a>
                                                             </c:when>
                                                             <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                                <button class="btn btn-danger" disabled>In Conversation</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>In Conversation</button>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <button class="btn btn-danger" disabled>${beanType.status}</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>

@@ -5,9 +5,8 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <br>
     <section class="content">
-        <div class="container-fluid">
+<!--        <div class="container-fluid">
             <div class="mainNavigationMenu">
                 <nav class="navbar navbar-expand-md navbar-dark" >
                     <a class="navbar-brand" href="#">SHOPPING</a>
@@ -56,14 +55,14 @@
                     </div>
                 </nav>
             </div>
-        </div>
+        </div>-->
 
 
-        <div class="marginTop30">
+        <div class="marginTop20">
             <div class="">
-                <div class="row">
-                    <div class="col-md-7">
-                        <a href="DealersOrderController" class="btn myThemeBtn">Back To List</a>
+                <div class="row mx-0">
+                    <div class="col-10 col-md-7">
+                        <a href="DealersOrderController" class="btn myThemeBtn fontFourteen">Back To List</a>
 
                     </div>
                     <!--                    <div class="col-md-5">
@@ -76,7 +75,7 @@
                                                 </form>
                                             </div>
                                         </div>-->
-                    <div class="col-md-5">
+                    <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
                             <button type="button" class="close" data-dismiss="alert" >&times;</button>
                             <strong>Success!</strong>
@@ -98,7 +97,7 @@
 
 
         <style>
-            .cartSection .leftSide .removeCart{
+/*            .cartSection .leftSide .removeCart{
                 font-weight: 900;
                 padding: 5px 10px;
                 background-color: #f2f2f2;
@@ -119,7 +118,7 @@
                 width: 55px;
                 height: 50px;
                 object-fit: cover;
-            }
+            }*/
         </style>
 
 
@@ -130,14 +129,14 @@
                         <div class="_product-detail-content leftSide">
                             <p class="_p-name"> Cart Item </p>
                             <div class="_p-price-box">
-                                <div class=""> 
+                                <div class="table-responsive cartTable"> 
                                     <table class="table table-bordered mb-0">
                                         <thead>
                                             <tr>
-                                                <th>Firstname</th>
+                                                <th>Name</th>
                                                 <th>Quantity</th>
-                                                <th>Rate</th>
-                                                <th>Price</th>
+                                                <th>Rate <small>(<i class="fas fa-rupee-sign curruncyIcon"></i>)</small></th>
+                                                <th>Price <small>(<i class="fas fa-rupee-sign curruncyIcon"></i>)</small></th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -195,7 +194,7 @@
                     <div class="col-md-4">
                         <div class="_product-detail-content  border" style="background-color: #102f42;box-shadow: 2px 2px 7px #999;">
                             <p class="_p-name text-white"> Grand Total </p>
-                            <div class="searchWrap mb-3">
+                            <div class="couponWrap mb-3">
                                 <form action="#" class="d-flex mb-1">
                                     <div class="form-group mb-0 w-100">
                                         <input type="text" class="form-control" placeholder="Coupon Code" id="email">
@@ -209,20 +208,20 @@
                                 <table class="table table-bordered mb-0 text-white">
                                     <tbody>
                                         <tr>
-                                            <td >Subtotal</td>
-                                            <td id="subtotal"></td>
+                                            <td class="fontFourteen">Subtotal</td>
+                                            <td class="fontFourteen" id="subtotal"></td>
                                         </tr>
                                         <tr>
-                                            <td>Delivery Charge</td>
-                                            <td id="delivery_charge">80</td>
+                                            <td class="fontFourteen">Delivery Charge</td>
+                                            <td class="fontFourteen" id="delivery_charge">80</td>
                                         </tr>
                                         <tr>
-                                            <td>Coupon Discount</td>
-                                            <td id="coupon_discount">80</td>
+                                            <td class="fontFourteen">Coupon Discount</td>
+                                            <td class="fontFourteen" id="coupon_discount">80</td>
                                         </tr>
                                         <tr>
-                                            <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;">Total Amount</td>
-                                            <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;" id="total_amount">?10,80,000.00</td>
+                                            <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;">Total Amount</td>
+                                            <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;" id="total_amount">?10,80,000.00</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -234,6 +233,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
 

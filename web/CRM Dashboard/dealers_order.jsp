@@ -4,67 +4,26 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <br>
-    <section class="content">
-        <div class="container-fluid">
-            <div class="mainNavigationMenu">
-
-
-
-
-                <nav class="navbar navbar-expand-md navbar-dark" >
-                    <a class="navbar-brand" href="#">SHOPPING</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">One</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Two</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Three</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Four</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Five</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Six</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Seven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eight</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Nine</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ten</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eleven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Twelve</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+    <section class="content ">
+        
+        <div class="">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> New order create successfully.
             </div>
-
-
-            <div class=" marginTop40">
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
+        </div>
+        
+        
+        
+        <div class="container-fluid">
+            <div class=" marginTop20">
                 <div class="">
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-10 col-md-5">
                             <div class="searchWrap">
                                 <form action="DealersOrderController">
                                     <div class="form-group mb-0 d-flex">
@@ -75,13 +34,9 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="col-md-7">
-                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <strong>Success!</strong> 
-                            </div>
+                        <div class="col-2 col-md-7">                            
                             <div class="d-flex">                        
-                                <div class="cartCountWrap d-flex ml-auto">
+                                <div class="cartCountWrap d-flex ml-auto mt-2 mt-sm-0">
                                     <a href="DealersOrderController?task=viewCart" >
                                         <div><i class="fas fa-cart-plus"></i></div>
                                         <div class="counting" id="total_cart_value">${cart_count}</div>
@@ -96,13 +51,13 @@
             <c:forEach var="beanType1" items="${requestScope['list1']}"
                        varStatus="loopCounter">
 
-
                 <div class="mt-4">
                     <div class="headerText d-flex justify-content-between mb-3">
                         <a href="DealersOrderController?task=viewAll&item_name=${beanType1.item_name}"><h2 class="mb-0 mt-2">${beanType1.item_name}</h2></a>          
                         <a href="DealersOrderController?task=viewAll&item_name=${beanType1.item_name}" class="btn btn-primary text-white border-0 rounded-0 viewAllBtn">View All</a>  
                     </div>
 
+                        
 
                     <div class="mt-3 ">
                         <div class="owl-carousel owl-theme productSlider">
@@ -134,15 +89,15 @@
                                                         <div class="catname">
                                                             <small>${beanType2.manufacturer_name}</small>
                                                         </div>
-                                                        <div class="mt-2 productName">
+                                                        <div class="mt-1 productName">
                                                             <a href="DealersOrderController?task=viewDetail&model_id=${beanType2.model_id}">
-                                                                <p><b>${beanType2.model}</b></p>
+                                                                <p class="mb-2"><b>${beanType2.model}</b></p>
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex priceBox">
-                                                            <h2 style="">Rs. ${beanType2.basic_price} </h2> &nbsp&nbsp
+                                                            <h2 class="mb-0 mt-1">Rs. ${beanType2.basic_price} </h2> &nbsp&nbsp
                                                             <!--<h3 style=""> <del>?110.8</del></h3>-->
                                                             <!--<div id="msg_div${loopCounter.count }" style="color:red;display: none;margin-left: 50px"> <b>Out Of Stock</b></div>-->
                                                         </div>
@@ -163,6 +118,9 @@
             </c:forEach>
         </div>
     </section>
+                                    
+                                    
+        
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"

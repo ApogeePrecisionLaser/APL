@@ -36,7 +36,7 @@
                     <div class="card card-primary card-outline">            
                         <div class="card-body">
                             <div>
-                                <div class="table-responsive tableScrollWrap" >
+                                <div class="table-responsive tableScrollWrap noWrapTable" >
                                     <table class="table table-striped1 mainTable" id="mytable" >
                                         <thead>
                                             <tr>
@@ -49,8 +49,9 @@
                                                 <th class="fontFourteen">Sender Mobile</th>
                                                 <!-- <th>Sender Company Name</th> -->
                                                 <!-- <th>Sender Address</th> -->
-                                                <!--<th>City</th>-->
-                                                <th class="fontFourteen">District</th>
+                                                <th>City</th>
+                                                <th>State</th>
+                                                <!--<th class="fontFourteen">District</th>-->
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <!-- <th>Enquiry Message</th> -->
                                                 <th class="fontFourteen">Status</th>
@@ -70,8 +71,9 @@
                                                     <td class="fontFourteen">${beanType.sender_mob}</td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
-                                                    <!--<td class="fontFourteen">${beanType.enquiry_city}</td>-->
-                                                    <td class="fontFourteen">${beanType.description}</td>
+                                                    <td class="fontFourteen">${beanType.enquiry_city}</td>
+                                                    <td class="fontFourteen">${beanType.enquiry_state}</td>
+                                                    <!--<td class="fontFourteen">${beanType.description}</td>-->
                                                     <td class="fontFourteen">${beanType.enquiry_date_time}</td>
 
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->

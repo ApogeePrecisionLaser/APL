@@ -1,5 +1,7 @@
 
-
+.marginTop20{
+    margin-top: 20px;
+}
 .marginTop25{
     margin-top: 25px;
 }
@@ -17,6 +19,7 @@
     color: #fff;
     border-radius: 0;
     border: 1px solid #102F42;
+    font-size: 14px;
 }
 .myThemeBtn:hover{
     color: #fff;
@@ -93,6 +96,7 @@
 .sidebarNavWrap .user-panel a{
     color: #000;
     font-weight: 600;
+    text-transform: capitalize;
 }
 .sidebarNavWrap .user-panel .info a:hover{
     color: #000;
@@ -322,6 +326,7 @@ table.dataTable thead .sorting_asc {
     border: 1px solid #102f42;
     border-radius: 0;
     padding: 5px 20px;
+    transition: all .3s ease;
   }
 
   .actionDelete {
@@ -329,7 +334,7 @@ table.dataTable thead .sorting_asc {
     color: #fff;
     font-size: 12px;
     padding: 3px 6px;
-    /*border-radius:0;*/
+    transition: all .3s ease;
 }
 .actionEdit {
     background-color: #2eaf2b;
@@ -343,17 +348,28 @@ table.dataTable thead .sorting_asc {
     color: #fff;
     font-size: 12px;
     padding: 3px 6px;
-    /*border-radius:0;*/
-    /*border:1px solid #3977db;*/
+    transition: all .3s ease;
+}
+.actionOtherBtn {
+    background-color: #184556;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 6px;
+    transition: all .3s ease;
+}
+.actionOtherBtn:hover{
+    color: #999;
 }
 
 .myAlertBox{
     padding: 5px 40px 5px 20px;
-    border-radius: 0;
-    position: absolute; 
-    z-index: 9;
+    position: fixed; 
+    z-index: 9999;
     white-space: nowrap;
-    margin-left: 10px;
+    border-radius: 4px;
+    right:15px;
+    top:15px;
+    font-size: 14px;
 }
 .myAlertBox.alert-dismissible .close, .myAlertBox.alert-dismissible .mailbox-attachment-close {
     position: absolute;
@@ -376,8 +392,9 @@ table.dataTable thead .sorting_asc {
     padding: 1px 0 1px 1px;
  }
 .productBox .productName p{
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.3;
+    color: #3F99D3;
 }
 .productBox .card-header img{
     width: 80%;
@@ -391,7 +408,7 @@ table.dataTable thead .sorting_asc {
 }
 .productBox .priceBox h2{
     font-weight: 600;
-    font-size: 18px;
+    font-size: 15px;
 }
 .productBox .priceBox h3{
     font-weight: 500;
@@ -433,6 +450,7 @@ table.dataTable thead .sorting_asc {
 .headerText h2{
     font-size: 20px;
     font-weight: 600;
+    color: #3F99D3;
     text-transform: uppercase;
 }
 .headerText .viewAllBtn{
@@ -464,14 +482,33 @@ table.dataTable thead .sorting_asc {
 
 .searchWrap input{
     border-radius: 0px 0 0 0px;
+    height:36px;
+    font-size: 14px;
+    width: 335px;
+    padding-left:7px;
 }
 .searchWrap button{
     border-radius: 0px 0 0 0px;
     background-color: #102f42;
     border: 1px solid #102f42;
+    padding: 2px 10px;
 }
 
 
+
+
+.couponWrap input{
+    border-radius: 0px 0 0 0px;
+    height:36px;
+    font-size: 14px;
+    padding-left:7px;
+}
+.couponWrap button{
+    border-radius: 0px 0 0 0px;
+    background-color: #102f42;
+    border: 1px solid #102f42;
+    padding: 2px 10px;
+}
 
 
 
@@ -631,7 +668,7 @@ table.dataTable thead .sorting_asc {
 
 ._p-qty .value-button {
     border: 0px solid #102f42;
-    height: 35px;
+    height: 28px;
     font-size: 20px;
     font-weight: bold;
 }
@@ -642,7 +679,7 @@ table.dataTable thead .sorting_asc {
     border-bottom: 1px solid #102f42;
     margin: 0px;
     width: 50px!important;
-    height: 35px;
+    height: 28px;
     font-size: 14px;
     box-sizing: border-box;
 }
@@ -848,6 +885,12 @@ table.dataTable thead .sorting_asc {
     color: #fff;
     border-radius: 20px;
 }
+.myBtnDanger{
+    background-color: #E01634;
+    padding: 2px 15px;
+    color: #fff;
+    border-radius: 20px;
+}
 
 
 
@@ -861,9 +904,10 @@ table.dataTable thead .sorting_asc {
 
 
 .myForm input, .myForm select{
-    height: 32px!important;
+    height: 37px!important;
     border-radius: 0;
-    padding: 0 8px;
+    padding: 4px 8px;
+    font-size: 14px;
 }
 
 
@@ -876,12 +920,21 @@ table.dataTable thead .sorting_asc {
 .profileCard .card-body{
   padding: 30px 60px;
 }
+.profileCard .card-body label{
+  margin-bottom: 3px;
+  font-size: 14px;
+}
 .profileHeader{
     background-image: url(../img/product/profileBg.jpg);
     background-size: cover;
     background-position: center;
     height: 170px;
     box-shadow: 3px 3px 9px #000;
+  }
+  .profileHeader h2{
+      font-size: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 .profileHeader img{
     width: 125px;
@@ -896,13 +949,13 @@ table.dataTable thead .sorting_asc {
     font-weight: 600;
   }
 .profileCard .form-group{
-  margin-bottom: 5px;
-}
-sup {
-    top: -0.22em;
+  margin-bottom: 10px;
 }
 
-
+.profileCard p strong {
+    font-weight:600;
+    font-size: 14px;
+}
 .myPopup .modal-header{
     background-color: #102f42;
     color: #fff;
@@ -979,6 +1032,15 @@ sup {
     overflow-y: scroll;
 }
 */
+
+.cartSection .leftSide table thead th{
+      font-size: 14px;
+      padding: 5px 7px;
+}
+.cartSection .leftSide table tbody td{
+      font-size: 14px;
+      padding: 5px 7px;
+}
 .cartSection .leftSide .removeCart{
       font-weight: 900;
        padding: 5px 10px;
@@ -998,8 +1060,8 @@ sup {
       font-size: 13px;
    }
    .cartSection .leftSide img{
-      width: 55px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       object-fit: cover;
    }
 
@@ -1025,4 +1087,14 @@ sup {
 
 .myForm input[type=radio]{
     height: auto!important;
+}
+.content-header .breadcrumb {
+    font-size: 14px;
+}
+
+.productBox .checkboxWrap{
+    margin-right: 4px;
+}
+.productBox .checkboxWrap input[type=checkbox]{
+    transform: scale(1.6);
 }
