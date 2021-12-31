@@ -37,7 +37,7 @@
                 <div class="text-left mt-4">
                     <a href="ProfileController" class="btn myThemeBtn text-right">Back</a>
                 </div>
-                <br><br><br>
+                <br><br>
                 <div class="card card-primary rounded-0 profileCard mt-2">
                     <div class="card-body px-4">
                         <div class="mt-1">
@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="form-group mb-0">
+                                        <div class="form-group mb-0 mt-1">
                                             <button class="btn myThemeBtn" type="submit" name="task" value="Update">Update</button>
                                         </div>
                                     </div>

@@ -3,9 +3,8 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <br>
     <section class="content">
-        <div class="container-fluid">
+<!--        <div class="container-fluid">
             <div class="mainNavigationMenu">
                 <nav class="navbar navbar-expand-md navbar-dark" >
                     <a class="navbar-brand" href="#">SHOPPING</a>
@@ -54,14 +53,14 @@
                     </div>
                 </nav>
             </div>
-        </div>
+        </div>-->
 
 
-        <div class=" marginTop30">
+        <div class=" marginTop20">
             <div class="">
-                <div class="row">
-                    <div class="col-md-7">
-                        <a href="DealersOrderController" class="btn btn-info">Back To List</a>
+                <div class="row mx-0">
+                    <div class="col-10 col-md-7">
+                        <a href="DealersOrderController" class="btn myThemeBtn">Back</a>
 
                     </div>
                     <!--                    <div class="col-md-5">
@@ -75,14 +74,13 @@
                                             </div>
                                         </div>-->
 
-                    <div class="col-md-5">
+                    <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
                             <button type="button" class="close" data-dismiss="alert" >&times;</button>
                             <strong>Success!</strong> 
                         </div>
                         <div class="d-flex">                        
                             <div class="cartCountWrap d-flex ml-auto">
-
                                 <a href="DealersOrderController?task=viewCart" >
                                     <div><i class="fas fa-cart-plus"></i></div>
                                     <div class="counting">${cart_count}</div>
@@ -149,9 +147,9 @@
                                     <ul class="spe_ul"></ul>
                                     <div class="_p-qty-and-cart">
                                         <div class="_p-add-cart">
-                                            <button class="btn-theme btn buy-btn" tabindex="0" id="buy_now_btn">
+<!--                                            <button class="btn-theme btn buy-btn" tabindex="0" id="buy_now_btn">
                                                 <i class="fa fa-shopping-cart"></i> Buy Now
-                                            </button>
+                                            </button>-->
                                             <a>
                                                 <button class="btn-theme btn btn-success"  tabindex="0" onclick="addTocart('${beanType.model_id}', '${beanType.model}', '${beanType.basic_price}')" id="add_to_cart_btn">
                                                     <i class="fa fa-shopping-cart"></i> Add to Cart</button>

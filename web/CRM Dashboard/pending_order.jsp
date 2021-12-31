@@ -14,9 +14,9 @@
                                 <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
                             </div>
                         </c:if>
-                        <div>
+<!--                        <div>
                             <h1>Pending Order</h1>
-                        </div>
+                        </div>-->
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -90,7 +90,7 @@
                                                         <!--<a onclick="deleteOrder('${beanType.order_table_id}')" class="btn far fa-times-circle actionDelete" title="Cancel Order"></a>-->
                                                         <c:if test="${beanType.status == 'Approved' && user_role=='Dealer'}" >  
                                                             <a href="DealersOrderController?task=checkout&order_table_id=${beanType.order_table_id}"
-                                                               class="btn btn-info" title="CheckOut">CheckOut</a>
+                                                               class="btn actionOtherBtn fontFourteen" title="CheckOut">Checkout</a>
                                                         </c:if>
                                                     </td>
                                                 </tr>

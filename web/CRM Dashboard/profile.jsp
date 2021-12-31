@@ -33,7 +33,7 @@
                         <p class="text-secondry">${gst}</p>
                     </div>
                 </div>
-                <br><br><br><br><br><br>
+                    <br><br><br><br><br>
                 <div class="card card-primary rounded-0 profileCard" style="">
                     <div class="card-body">
                         <div class="mt-1">

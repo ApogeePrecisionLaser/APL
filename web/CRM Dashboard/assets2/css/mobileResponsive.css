@@ -1,5 +1,9 @@
 @media only screen and (max-width: 600px) {
   
+    
+    .orderTwo{
+        order:2;
+    }
 
 .confirmPage .boxSize {
     width: 100%;
@@ -28,7 +32,7 @@
     width: 100%;
 }
 
-/*.piclist li {
+.piclist li {
     height: auto;
 }
 .piclist li img {
@@ -58,28 +62,32 @@ ul.piclist{
 .picZoomer-pic-wp:hover .picZoomer-cursor {
      display: none!important;
 }
-*/
 
 
+.productBox .card-header img {
+     width: 100%; 
+}
 
 .myAlertBox{
-    position:absolute;
-    top: 0;
-    right: 0;
-    left: 0;
+    position:fixed;
+    top: 10px;
+    right: 10px;
+    z-index:9999999;
+    border-radius: 4px;
     font-size: 13px;
     white-space: inherit;
 }
 .myAlertBox {
-    padding: 5px 22px 5px 6px;
+    padding: 8px 30px 8px 11px;
 }
 .myAlertBox.alert-dismissible .close, .myAlertBox.alert-dismissible .mailbox-attachment-close {
     position: absolute;
-    top: 0;
+    top: 4px;
     right: 0;
     z-index: 2;
     padding: 2px 5px;
     color: #fff;
+    opacity:1;
 }
 
 
@@ -138,6 +146,34 @@ ul.piclist{
 .profileCard .card-body {
     padding: 20px 20px;
 }
+
+
+.searchWrap input {
+    width: 100%;
+}
+
+
+.headerText h2 {
+    font-size: 19px;
+}
+.productBox .priceBox h2{
+    font-size: 16px;
+}
+.profileCard .form-group {
+    margin-bottom: 7px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

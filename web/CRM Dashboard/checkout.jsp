@@ -3,67 +3,14 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <br>
     <section class="content">
-        <div class="container-fluid">
-            <div class="mainNavigationMenu">
-                <nav class="navbar navbar-expand-md navbar-dark" >
-                    <a class="navbar-brand" href="#">SHOPPING</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">One</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Two</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Three</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Four</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Five</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Six</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Seven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eight</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Nine</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ten</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eleven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Twelve</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
-
-
-        <div class="marginTop25">
+        <div class="marginTop20">
             <div class="">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-10 col-md-7">
                         <a href="PendingOrdersController" class="btn myThemeBtn">Back</a>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <div class="d-flex">                        
                             <div class="cartCountWrap d-flex ml-auto">
                                 <a href="DealersOrderController?task=viewCart" >
@@ -78,61 +25,61 @@
         </div>
 
 
-        <div id="services" class="services section-bg marginTop30 cartSection">
+        <div id="services" class="services section-bg marginTop20 cartSection mb-3 mb-md-2">
             <div class="container-fluid">
                 <div class="row row-sm">
-                    <div class="col-md-8">
+                    <div class="col-md-8 orderTwo">
                         <div class="border px-3 py-3 checkoutLeft">
-                            <p class="checkoutLeftHead"> Checkout</p>
+                            <p class="checkoutLeftHead"> Checkout Detail</p>
                             <div class="mt-1">
                                 <form class="myForm">
                                     <div class="row">
                                         <input type="hidden" name="count" id="count" value="${count}">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="inputName">Name:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Name:<sup class="text-danger">*</sup></label>
                                                 <input type="text" class="form-control" value="${logged_org_office}" name="office_name" id="office_name">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="inputName">Email:</label>
+                                                <label for="inputName" class="fontFourteen">Email:</label>
                                                 <input type="text" class="form-control" readonly value="${email}" name="email" id="email">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="inputName">Mobile:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Mobile:<sup class="text-danger">*</sup></label>
                                                 <input type="text" class="form-control" value="${mobile1}"  name="mobile" id="mobile">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="inputName">Payment Mode:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Payment Mode:<sup class="text-danger">*</sup></label>
                                                 <input type="text" class="form-control" name="payment_mode" id="payment_mode" placeholder="Select Payment mode">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="inputName">Transaction Number:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Transaction Number:<sup class="text-danger">*</sup></label>
                                                 <input type="text" class="form-control" name="transaction_no" id="transaction_no">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="inputName">Amount:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Amount:<sup class="text-danger">*</sup></label>
                                                 <input type="text" class="form-control" value="${total_discount_price}" name="amount" id="amount">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="inputName">Billing Address:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Billing Address:<sup class="text-danger">*</sup></label>
                                                 <textarea class="form-control" readonly name="billing_add" id="billing_add">${address_line1},${address_line2},${address_line3},${city}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="inputName">Shipping Address:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName" class="fontFourteen">Shipping Address:<sup class="text-danger">*</sup></label>
                                                 <textarea class="form-control" name="shipping_add" id="shipping_add"></textarea>
                                             </div>
                                         </div>
@@ -141,10 +88,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-4 mb-md-0">
                         <div class="_product-detail-content  border" style="background-color: #102f42;box-shadow: 2px 2px 7px #999;">
-                            <p class="_p-name text-white"> Grand Total </p>
-                            <div class="searchWrap mb-3">
+                            <p class="_p-name text-white"> Your Order Detail </p>
+                            <div class="couponWrap mb-3">
                                 <form action="#" class="d-flex mb-1">
                                     <div class="form-group mb-0 w-100">
                                         <input type="text" class="form-control" placeholder="Coupon Code" id="email">
@@ -162,12 +109,12 @@
                                             <td id="subtotal">${total_approved_price}</td>
                                         </tr>
                                         <tr>
-                                            <td>Delivery Charge</td>
-                                            <td id="delivery_charge">0</td>
+                                            <td class="fontFourteen">Delivery Charge</td>
+                                            <td class="fontFourteen" id="delivery_charge">0</td>
                                         </tr>
                                         <tr>
-                                            <td>Coupon Discount</td>
-                                            <td id="coupon_discount">${total_discount_percent}</td>
+                                            <td class="fontFourteen">Coupon Discount</td>
+                                            <td class="fontFourteen" id="coupon_discount">${total_discount_percent}</td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;">Total Amount</td>
@@ -177,11 +124,14 @@
                                 </table>
                             </div>               
                         </div>
-                        <div class="text-right mt-3">
+<!--                        <div class="text-right mt-3">
                             <a class="btn myThemeBtn" style="background-color: #102f42;
                                color: white;" onclick="completeOrder()">Complete Order</a>
-                        </div>
+                        </div>-->
                     </div>
+                </div>
+                <div class="text-right mt-3">
+                    <a class="btn myThemeBtn" onclick="completeOrder()">Complete Order</a>
                 </div>
             </div>
         </div>

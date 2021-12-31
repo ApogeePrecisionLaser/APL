@@ -14,9 +14,9 @@
                                 <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
                             </div>
                         </c:if>
-                        <div>
+<!--                        <div>
                             <h1>Order History</h1>
-                        </div>
+                        </div>-->
 
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">

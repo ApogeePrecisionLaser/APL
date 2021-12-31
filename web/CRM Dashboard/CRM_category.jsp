@@ -4,10 +4,9 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <br>
     <section class="content">
         <div class="container-fluid">
-            <div class="mainNavigationMenu">
+<!--            <div class="mainNavigationMenu">
                 <nav class="navbar navbar-expand-md navbar-dark" >
                     <a class="navbar-brand" href="#">SHOPPING</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -54,42 +53,39 @@
                         </ul>
                     </div>
                 </nav>
-            </div>
+            </div>-->
 
-            <div class="marginTop30">
-                <div class="">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <a href="DealersOrderController" class="btn btn-info">Back To List</a>
-
+            <div class="row marginTop20">
+                <div class="col-md-7 col-10 pr-0">
+                    <div class="d-flex">  
+                        <div class="mr-2">
+                            <a href="DealersOrderController" class="btn myThemeBtn fontFourteen">Back</a>
                         </div>
-                        <div class="col-md-5">
-                            <div class="searchWrap">
-                                <form action="DealersOrderController">
-                                    <div class="form-group mb-0 d-flex">
-                                        <input type="hidden" name="item_name" id="item_name" value="${item_name}">
+                        <div class="searchWrap">
+                            <form action="DealersOrderController">
+                                <div class="form-group mb-0 d-flex">
+                                    <input type="hidden" name="item_name" id="item_name" value="${item_name}">
 
-                                        <input type="text" name="search_model" id="search_model" class="form-control" placeholder="Search by product name" value="${search_model}">
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                    </div>                          
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
-                                <button type="button" class="close" data-dismiss="alert" >&times;</button>
-                                <strong>Success!</strong> 
-                            </div>
-                            <div class="d-flex">                        
-                                <div class="cartCountWrap d-flex ml-auto">
-                                    <a href="DealersOrderController?task=viewCart" >
-                                        <div><i class="fas fa-cart-plus"></i></div>
-                                        <div class="counting">${cart_count}</div>
-                                    </a>
-                                </div>
-                            </div>                    
+                                    <input type="text" name="search_model" id="search_model" class="form-control" placeholder="Search by product name" value="${search_model}">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                </div>                          
+                            </form>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-5 col-2">
+                    <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
+                        <button type="button" class="close" data-dismiss="alert" >&times;</button>
+                        <strong>Success!</strong> 
+                    </div>
+                    <div class="d-flex mt-1 mt-md-0">                        
+                        <div class="cartCountWrap d-flex ml-auto">
+                            <a href="DealersOrderController?task=viewCart" >
+                                <div><i class="fas fa-cart-plus"></i></div>
+                                <div class="counting">${cart_count}</div>
+                            </a>
+                        </div>
+                    </div>                    
                 </div>
             </div>
 
@@ -123,15 +119,15 @@
                                         <div class="catname">
                                             <small>${beanType1.manufacturer_name}</small>
                                         </div>
-                                        <div class="mt-2 productName">
+                                        <div class="mt-1 productName">
                                             <a href="DealersOrderController?task=viewDetail&model_id=${beanType1.model_id}">
-                                                <p><b>${beanType1.model}</b></p>
+                                                <p class="mb-2"><b>${beanType1.model}</b></p>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex priceBox">
-                                            <h2 style="">Rs. ${beanType1.basic_price}</h2> &nbsp&nbsp
+                                            <h2 class="mb-0 mt-1">Rs. ${beanType1.basic_price}</h2> &nbsp&nbsp
                                             <!--<h3 style=""> <del>₹110.8</del></h3>-->
                                             <!--<div id="msg_div${loopCounter.count }" style="color:red;display: none;margin-left: 50px"> <b>Out Of Stock</b></div>-->
 
