@@ -90,9 +90,9 @@
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To SalesManager'}">
                                                                 <input type="text" name="dealers" class="dealers" id="dealers${beanType.enquiry_table_id}">
-                                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn myBtnInfo" title="Assigned To Dealer">Assign To Dealer</a>
+                                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn myBtnInfo fontFourteen" title="Assigned To Dealer">Assign To Dealer</a>
                                                             </c:when>
-                                                          
+
                                                             <c:otherwise>
                                                                 <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                                             </c:otherwise>

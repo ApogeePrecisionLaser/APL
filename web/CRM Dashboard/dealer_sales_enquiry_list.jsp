@@ -36,7 +36,7 @@
                     <div class="card card-primary card-outline">            
                         <div class="card-body">
                             <div>
-                                <div class="table-responsive tableScrollWrap" >
+                                <div class="table-responsive tableScrollWrap noWrapTable" >
                                     <table class="table table-striped1 mainTable" id="mytable" >
                                         <thead>
                                             <tr>
@@ -78,7 +78,7 @@
 
                                                     <c:choose>
                                                         <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                            <td class="fontFourteen"><button class="btn btn-danger" disabled>In Conversation</button></td>
+                                                            <td class="fontFourteen"><button class="btn myBtnDanger fontFourteen" disabled>In Conversation</button></td>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <td class="fontFourteen"></td>

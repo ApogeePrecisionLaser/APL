@@ -11,10 +11,10 @@
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Success!</strong> New order create successfully.
             </div>
-            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Oops!</strong> Something went wrong.
-            </div>
+            <!--            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Oops!</strong> Something went wrong.
+                        </div>-->
         </div>
         
         

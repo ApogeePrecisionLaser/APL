@@ -178,6 +178,8 @@
         var mobile = [];
         var email = [];
         var person_name = [];
+        var org_office_id = [];
+        var key_person_id = [];
         var dealer_data;
         $.ajax({
             type: "POST",
@@ -199,6 +201,9 @@
                     email[i] = dealer_data[i]["email"];
                     mobile[i] = dealer_data[i]["mobile"];
                     person_name[i] = dealer_data[i]["person_name"];
+                    org_office_id[i] = dealer_data[i]["org_office_id"];
+                    key_person_id[i] = dealer_data[i]["key_person_id"];
+                    // alert(org_office_id[i]);
                     if (latitude[i] == '') {
                         latitude[i] = 28.614884;
                         longitude[i] = 77.208917;
@@ -218,8 +223,9 @@
                             (function (marker, i) {
                                 return function () {
                                     infowindow.setContent('<b><h6>' + dealer_office_name[i] + ' (' + person_name[i] + ')</h6></b></br><b>Email:- </b>' + email[i] + '</br><b>Mobile:- </b>' + mobile[i] + '</br><b>Latitude:- </b>' + latitude[i] + '</br><b>Longitude:- </b>' + longitude[i] + '')
-
                                     infowindow.open(map, marker)
+                                    window.location.href = "DealersController?task=viewDealerDetails&org_office_id=" + org_office_id[i] + "&key_person_id=" + key_person_id[i];
+
                                 }
                             })(marker, i)
                             )

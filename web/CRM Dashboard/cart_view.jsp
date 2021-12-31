@@ -6,56 +6,56 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content">
-<!--        <div class="container-fluid">
-            <div class="mainNavigationMenu">
-                <nav class="navbar navbar-expand-md navbar-dark" >
-                    <a class="navbar-brand" href="#">SHOPPING</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">One</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Two</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Three</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Four</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Five</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Six</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Seven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eight</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Nine</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ten</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eleven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Twelve</a>
-                            </li>
-                        </ul>
+        <!--        <div class="container-fluid">
+                    <div class="mainNavigationMenu">
+                        <nav class="navbar navbar-expand-md navbar-dark" >
+                            <a class="navbar-brand" href="#">SHOPPING</a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                                <ul class="navbar-nav ml-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">One</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Two</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Three</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Four</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Five</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Six</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Seven</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Eight</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Nine</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Ten</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Eleven</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Twelve</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
                     </div>
-                </nav>
-            </div>
-        </div>-->
+                </div>-->
 
 
         <div class="marginTop20">
@@ -97,28 +97,28 @@
 
 
         <style>
-/*            .cartSection .leftSide .removeCart{
-                font-weight: 900;
-                padding: 5px 10px;
-                background-color: #f2f2f2;
-                box-shadow: 2px 2px 5px #999;
-                color: red;
-            }
-            .cartSection .leftSide .proName{
-                color: #000;
-                font-weight: 600;
-                margin-bottom: 2px;
-            }
-            .cartSection .leftSide .catName{
-                color: #999;
-                font-weight: 400;
-                font-size: 13px;
-            }
-            .cartSection .leftSide img{
-                width: 55px;
-                height: 50px;
-                object-fit: cover;
-            }*/
+            /*            .cartSection .leftSide .removeCart{
+                            font-weight: 900;
+                            padding: 5px 10px;
+                            background-color: #f2f2f2;
+                            box-shadow: 2px 2px 5px #999;
+                            color: red;
+                        }
+                        .cartSection .leftSide .proName{
+                            color: #000;
+                            font-weight: 600;
+                            margin-bottom: 2px;
+                        }
+                        .cartSection .leftSide .catName{
+                            color: #999;
+                            font-weight: 400;
+                            font-size: 13px;
+                        }
+                        .cartSection .leftSide img{
+                            width: 55px;
+                            height: 50px;
+                            object-fit: cover;
+                        }*/
         </style>
 
 
@@ -137,8 +137,8 @@
                                                 <th>Quantity</th>
                                                 <th>Rate <small>(<i class="fas fa-rupee-sign curruncyIcon"></i>)</small></th>
                                                 <th>Price <small>(<i class="fas fa-rupee-sign curruncyIcon"></i>)</small></th>
-                                                <th>Rate (Rs.)</th>
-                                                <th>Price (Rs.)</th>
+                                                <!--                                                <th>Rate (Rs.)</th>
+                                                                                                <th>Price (Rs.)</th>-->
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -218,6 +218,8 @@
                                             <td id="delivery_charge">0</td>
                                         </tr>
                                         <tr>
+                                            <td>Delivery Charge</td>
+                                            <td id="coupon_discount">0</td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;">Total Amount</td>
@@ -233,7 +235,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
 
@@ -302,6 +304,7 @@
                     var image_name = $('#image_name' + (j + 1)).val();
                     var price = $('#price' + (j + 1)).val();
                     total_price = parseInt(total_price) + parseInt(price);
+                    // alert(total_price);
                     $('#subtotal').text(total_price);
                     var image = image_path + image_name;
                     if (image != "") {
@@ -645,5 +648,5 @@
 
 
         </script>
-                                            <td>Coupon Discount</td>
-                                            <td id="coupon_discount">0</td>
+        <td>Coupon Discount</td>
+        <td id="coupon_discount">0</td>

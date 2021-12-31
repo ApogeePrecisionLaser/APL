@@ -61,13 +61,13 @@
 
 
 
-<!--<script>
-  $(document).ready(function() {
-    var table = $('#mytable').DataTable();
-} );
-</script>-->
-
 <script>
+    $(document).ready(function () {
+        var table = $('#mytable').DataTable();
+    });
+</script>
+
+<!--<script>
     $(document).ready(function () {
         $('#mytable').DataTable({
             scrollY: '60vh',
@@ -75,7 +75,7 @@
             paging: true
         });
     });
-</script>
+</script>-->
 
 <script>
     $('.productSlider').owlCarousel({

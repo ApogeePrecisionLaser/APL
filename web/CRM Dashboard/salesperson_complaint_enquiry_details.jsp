@@ -41,8 +41,9 @@
                                             </c:when>
 
                                             <c:otherwise>
-                                                <button class="btn btn-danger" disabled>${beanType.status}<b>(${beanType.assigned_to})</b></button>
-                                            </c:otherwise>
+
+                                                <button class="btn myThemeBtn fontFourteen " disabled>${beanType.status}</button>
+                                                <div><span class="text-danger fontFourteen">(${beanType.assigned_to})</span></div>                                            </c:otherwise>
                                         </c:choose>
 
                                     </div>
