@@ -876,7 +876,7 @@ public class DealersOrderModel {
     }
 
     public int getCounting() {
-        int counting = 100;
+        int counting = 100000;
         int count = 0;
         String query = " SELECT order_no FROM order_table order by order_table_id desc limit 1 ";
         try {
@@ -884,9 +884,9 @@ public class DealersOrderModel {
             ResultSet rs = psmt.executeQuery();
             while (rs.next()) {
                 String order_no = rs.getString("order_no");
-                String order_no_arr[] = order_no.split("_");
-                int length = (order_no_arr.length) - 1;
-                count = Integer.parseInt(order_no_arr[length]);
+//                String order_no_arr[] = order_no.split("_");
+//                int length = (order_no_arr.length) - 1;
+                count = Integer.parseInt(order_no.substring(3));
 
                 counting = count;
             }
@@ -1130,7 +1130,7 @@ public class DealersOrderModel {
                 + " and odi.status_id in (2,6,3) "
                 + " and odt.status_id=s.status_id and odt.active='Y' and kp1.active='Y' and kp2.active='Y'  and odi.active='Y' "
                 + " and pm.active='Y' and odt.order_table_id=odi.order_table_id and pm.order_id=odt.order_table_id and "
-                + " osp.order_id=odt.order_table_id and dsm.dealer_id=kp1.key_person_id and dsm.salesman_id=kp2.key_person_id "
+                + " osp.order_id=odt.order_table_id and dsm.dealer_id=kp1.key_person_id "
                 + " and osp.order_item_id =odi.order_item_id and dsm.active='Y' ";
 
         if (user_role.equals("Dealer")) {
@@ -1344,6 +1344,27 @@ public class DealersOrderModel {
         }
         return revision;
     }
+    
+    public static String getOrderNo(String order_table_id) {
+        String order_no = "";
+        try {
+
+            String query = " SELECT order_no FROM order_table where "
+                    + " order_table_id='" + order_table_id + "' and active='Y' ";
+
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+
+            while (rset.next()) {
+                order_no = rset.getString("order_no");
+
+            }
+        } catch (Exception e) {
+            System.err.println("DealersOrderModel getOrderNo error--------" + e);
+        }
+        return order_no;
+    }
 
     public String getImagePath(String key_person_id, String uploadedFor) {
         String img_name = "";
@@ -1521,10 +1542,11 @@ public class DealersOrderModel {
                     + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' and oo.active='Y' "
                     + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
-                    + " and et.enquiry_status_id!=1 ";
+                    + " and et.enquiry_status_id!=1 and ssm.salesman_id=et.assigned_to ";
             if (user_role.equals("Sales")) {
                 query += " and ssm.salesman_id='" + logged_key_person_id + "' ";
             }
+
             query += " group by et.enquiry_table_id ";
             query += " order by et.enquiry_table_id desc ";
 

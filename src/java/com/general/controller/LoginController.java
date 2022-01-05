@@ -72,7 +72,19 @@ public class LoginController extends HttpServlet {
             System.out.println("conn -" + model);
 
             if (task.equals("login")) {
-                String user_name = request.getParameter("user_name");
+                String mobile = request.getParameter("mobile");
+                String email = request.getParameter("email");
+                if (mobile == null) {
+                    mobile = "";
+                }
+                if (email == null) {
+                    email = "";
+                }
+
+                // String user_name = request.getParameter("user_name");
+                String user_name = "";
+                user_name = model.getUserName(mobile, email);
+//                user_name="jpss";
                 String password = request.getParameter("password");
 
                 model.setUserFullDetail(user_name, password);
@@ -127,7 +139,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("total_dealers", dealers_list.size());
                         session.setAttribute("complaint_enquiries", total_complaint_list.size());
                         session.setAttribute("total_orders", total_orders_list.size());
-                        session.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size()) ));
+                        session.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size())));
 
                         request.getRequestDispatcher("admin_dashboard").forward(request, response);
                     }
@@ -139,7 +151,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("sales_enquiries", sales_enquiry_list.size());
                         session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
                         session.setAttribute("pending_orders", pending_orders_list.size());
-                        session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size()) ));
+                        session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size())));
 
                         request.getRequestDispatcher("CRMDashboard").forward(request, response);
                     }
@@ -154,7 +166,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
                         session.setAttribute("pending_orders", pending_orders_list.size());
                         session.setAttribute("approved_orders", approved_orders_list.size());
-                        session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size()) ));
+                        session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size())));
 
                         request.getRequestDispatcher("salesperson_dashboard").forward(request, response);
 
@@ -189,7 +201,7 @@ public class LoginController extends HttpServlet {
                 session.invalidate();
                 request.getRequestDispatcher("/").forward(request, response);
             }
-            //request.getRequestDispatcher("index").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } catch (Exception e) {
             System.out.println(e);
         }

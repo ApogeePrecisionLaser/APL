@@ -9,8 +9,14 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
+                        <!--                        <div>
+                                                    <a href="OrdersHistoryController" class="btn btn-primary myNewLinkBtn">Back</a>
+                                                </div>-->
+                        <div class="mr-2 backBtnWrap">
+                            <a href="OrdersHistoryController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
                         <div>
-                            <a href="OrdersHistoryController" class="btn btn-primary myNewLinkBtn">Back</a>
+                            <h6 class="mt-2">Order ID : ${order_no}</h6>
                         </div>
                     </div>  
                 </div>

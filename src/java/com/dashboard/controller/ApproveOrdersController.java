@@ -172,6 +172,8 @@ public class ApproveOrdersController extends HttpServlet {
 
         if (task.equals("viewOrderDetails")) {
             String order_table_id = request.getParameter("order_table_id");
+            String order_no = model.getOrderNo(order_table_id);
+
             ArrayList<DealersOrder> list = model.getAllOrderItems(order_table_id);
 
             float total_amount = 0;
@@ -189,6 +191,7 @@ public class ApproveOrdersController extends HttpServlet {
             DBConnection.closeConncetion(model.getConnection());
 
             request.setAttribute("total_amount", total_amount);
+            request.setAttribute("order_no", order_no);
             request.setAttribute("total_discount_price", total_discount_price);
             request.setAttribute("total_approved_price", total_approved_price);
             request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));

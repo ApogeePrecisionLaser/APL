@@ -30,7 +30,8 @@
 
                             <div class="d-flex justify-content-between">
                                 <div class="text-right">
-                                    <a href="DealersOrderController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Back</a>
+                                    <a href="DealersOrderController?task=sales_enquiry_list" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+
                                 </div>
 
                             </div>

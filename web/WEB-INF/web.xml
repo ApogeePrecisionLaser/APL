@@ -1943,6 +1943,34 @@
     <!-- end Dealer Item Mapping -->
     
     
+      
+    <!--Start crm login -->
+    <servlet>
+        <servlet-name>crm_login</servlet-name>
+        <jsp-file>/CRM Dashboard/crm_login.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>crm_login</servlet-name>
+        <url-pattern>/crm_login</url-pattern>
+    </servlet-mapping>
+ 
+    
+    <!-- end crm login -->
+    
+    <!--Start add dealer -->
+    <servlet>
+        <servlet-name>add_dealer</servlet-name>
+        <jsp-file>/CRM Dashboard/add_dealer.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>add_dealer</servlet-name>
+        <url-pattern>/add_dealer</url-pattern>
+    </servlet-mapping>
+ 
+    
+    <!-- end add dealer -->
+    
+    
     
     
     <listener>

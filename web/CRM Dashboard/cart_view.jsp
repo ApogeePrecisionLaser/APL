@@ -6,80 +6,33 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content">
-        <!--        <div class="container-fluid">
-                    <div class="mainNavigationMenu">
-                        <nav class="navbar navbar-expand-md navbar-dark" >
-                            <a class="navbar-brand" href="#">SHOPPING</a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                                <ul class="navbar-nav ml-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">One</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Two</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Three</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Four</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Five</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Six</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Seven</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Eight</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Nine</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Ten</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Eleven</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Twelve</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </div>-->
+
+        <div class="">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> New order create successfully.
+            </div>
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
+        </div>
 
 
         <div class="marginTop20">
             <div class="">
                 <div class="row mx-0">
                     <div class="col-10 col-md-7">
-                        <a href="DealersOrderController" class="btn myThemeBtn fontFourteen">Back To List</a>
+                        <div class="mr-2 backBtnWrap">
+                            <a href="DealersOrderController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
 
                     </div>
-                    <!--                    <div class="col-md-5">
-                                            <div class="searchWrap">
-                                                <form action="#">
-                                                    <div class="form-group mb-0 d-flex">
-                                                        <input type="email" class="form-control" placeholder="Search by product name">
-                                                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                                    </div>                          
-                                                </form>
-                                            </div>
-                                        </div>-->
                     <div class="col-2 col-md-5 mt-1 mt-md-0">
-                        <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
-                            <button type="button" class="close" data-dismiss="alert" >&times;</button>
-                            <strong>Success!</strong>
-                        </div>
+                        <!--                        <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
+                                                    <button type="button" class="close" data-dismiss="alert" >&times;</button>
+                                                    <strong>Success!</strong>
+                                                </div>-->
                         <div class="d-flex">                        
                             <div class="cartCountWrap d-flex ml-auto">
                                 <a href="DealersOrderController?task=viewCart" >
@@ -484,13 +437,29 @@
 
 
                             window.location.reload();
-                            $('#msg').text(data.msg);
-                            $('.myAlertBox').show();
-                            setTimeout(function () {
-                                $('#msg').fadeOut('fast');
-                            }, 1000);
+
+                            if (data.success_msg != '') {
+                                $('.counting').text(data.list);
+                                $('#msg_success').text(data.success_msg);
+                                $('#msg_success').show();
+                                $('#msg_danger').hide();
+                                setTimeout(function () {
+                                    $('#msg_success').fadeOut('fast');
+                                }, 2000);
+                            }
+//                            $('#msg').text(data.msg);
+//                            $('.myAlertBox').show();
+//                            setTimeout(function () {
+//                                $('#msg').fadeOut('fast');
+//                            }, 1000);
                         } else {
-                            $('.myAlertBox').hide();
+                            //$('.myAlertBox').hide();
+                            $('#msg_danger').text(data.error_msg);
+                            $('#msg_danger').show();
+                            $('#msg_success').hide();
+                            setTimeout(function () {
+                                $('#msg_danger').fadeOut('fast');
+                            }, 2000);
                         }
                     }, error: function (error) {
                         console.log(error.responseText);
@@ -510,8 +479,9 @@
                         console.log(data);
                         if (data.list > 0) {
                             $('.counting').text(data.list);
-                            $('#msg').text(data.msg);
-                            $('.myAlertBox').show();
+                            $('#msg_success').text(data.msg);
+                            $('#msg_success').show();
+                            $('#msg_danger').hide();
                             $('#qty' + model_id).val(data.current_quantity);
                             var rate = parseInt($('#rate' + model_id).val());
                             var qty = parseInt(data.current_quantity);
@@ -538,10 +508,15 @@
                             window.location.reload();
 
                             setTimeout(function () {
-                                $('#msg').fadeOut('fast');
+                                $('#msg_danger').fadeOut('fast');
                             }, 1000);
                         } else {
-                            $('.myAlertBox').hide();
+                            $('#msg_success').hide();
+                            $('#msg_danger').show();
+                            setTimeout(function () {
+                                $('#msg_danger').fadeOut('fast');
+                            }, 2000);
+
                         }
                     }, error: function (error) {
                         console.log(error.responseText);
@@ -563,8 +538,9 @@
                             console.log(data);
                             if (data.list > 0) {
                                 $('.counting').text(data.list);
-                                $('#msg').text(data.msg);
-                                $('.myAlertBox').show();
+                                $('#msg_success').text(data.msg);
+                                $('#msg_success').show();
+                                $('#msg_danger').hide();
                                 var total_price = 0;
                                 $('#model_row' + model_id).remove();
                                 count = parseInt(data.list) + 1;
@@ -588,10 +564,15 @@
                                 window.location.reload();
 
                                 setTimeout(function () {
-                                    $('#msg').fadeOut('fast');
-                                }, 1000);
+                                    $('#msg_success').fadeOut('fast');
+                                }, 2000);
                             } else {
-                                $('.myAlertBox').hide();
+                                $('#msg_success').hide();
+                                $('#msg_danger').show();
+                                setTimeout(function () {
+                                    $('#msg_danger').fadeOut('fast');
+                                }, 2000);
+
                             }
                         }, error: function (error) {
                             console.log(error.responseText);

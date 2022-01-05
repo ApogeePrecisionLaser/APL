@@ -56,7 +56,7 @@ public class DealersOrderController extends HttpServlet {
         String office_admin = "";
         String search_by_date = "";
         int last_indent_table_id = 0;
-        int counting = 100;
+        int counting = 100000;
         String indent_no = "";
         String requested_by = "";
         String requested_to = "";
@@ -229,7 +229,7 @@ public class DealersOrderController extends HttpServlet {
 
             try {
                 int previous_quantity = model.getCurrentQuantity(model_id, logged_key_person_id);
-                model.addToCart(bean, logged_key_person_id);
+                int rowsaffected = model.addToCart(bean, logged_key_person_id);
                 int current_quantity = model.getCurrentQuantity(model_id, logged_key_person_id);
 
                 request.setAttribute("message", model.getMessage());
@@ -250,9 +250,13 @@ public class DealersOrderController extends HttpServlet {
                 } else {
                     JSONObject gson = new JSONObject();
                     gson.put("list", cart_list.size());
-                    String message = "";
-                    if (cart_list.size() > 0) {
-                        message = "Product Successfully Added to Cart...";
+                    String success_msg = "";
+                    String error_msg = "";
+
+                    if (rowsaffected > 0) {
+                        success_msg = "Product Successfully Added to Cart...";
+                    } else {
+                        error_msg = "Something Went Wrong!...";
                     }
                     if (lastAddedProduct.size() > 0) {
                         gson.put("model", lastAddedProduct.get(0).getModel());
@@ -274,7 +278,8 @@ public class DealersOrderController extends HttpServlet {
                         gson.put("cart_table_id", "");
                     }
 
-                    gson.put("msg", message);
+                    gson.put("success_msg", success_msg);
+                    gson.put("error_msg", error_msg);
                     gson.put("current_quantity", current_quantity);
 
                     out.println(gson);
@@ -326,6 +331,8 @@ public class DealersOrderController extends HttpServlet {
                     String message = "";
                     if (cart_list.size() > 0) {
                         message = "Product Successfully removed from Cart...";
+                    } else {
+                        message = "Something Went Wrong!...";
                     }
                     gson.put("msg", message);
                     gson.put("current_quantity", current_quantity);
@@ -376,6 +383,8 @@ public class DealersOrderController extends HttpServlet {
                     String message = "";
                     if (cart_list.size() > 0) {
                         message = "Product Successfully removed from Cart...";
+                    } else {
+                        message = "Something Went Wrong!...";
                     }
                     gson.put("msg", message);
                     out.println(gson);
@@ -418,7 +427,7 @@ public class DealersOrderController extends HttpServlet {
             String total_amount = request.getParameter("total_amount");
             String i = "0";
             counting = model.getCounting();
-            autogenerate_order_no = "Order_" + counting;
+            autogenerate_order_no = "APL" + counting;
             int order_table_id = 0;
             int order_item_id = 0;
             for (int k = 0; k < model_id.length; k++) {
@@ -497,6 +506,7 @@ public class DealersOrderController extends HttpServlet {
 
         if (task.equals("checkout")) {
             String order_table_id = request.getParameter("order_table_id");
+            String order_no_for_order = model.getOrderNo(order_table_id);
 
             List<Profile> dealer_list = profileModel.getAllDetails(logged_user_name, logged_org_office);
             String email = dealer_list.get(0).getEmail_id1().toString();
@@ -525,6 +535,7 @@ public class DealersOrderController extends HttpServlet {
             list2 = model.getAllModels(logged_org_office_id, list1);
 
             request.setAttribute("list", list);
+            request.setAttribute("order_no", order_no_for_order);
             request.setAttribute("count", list.size());
             request.setAttribute("list2", list2);
             request.setAttribute("count2", list2.size());

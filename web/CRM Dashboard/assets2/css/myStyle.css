@@ -34,25 +34,33 @@
     font-size: 17px!important;
 }
 
+.bg-voilet {
+    background-color: #550c72!important;
+}
+.btnBack{
+    background-color: #102F42;
+    color: #fff;
+    margin-top: 1px;
+    padding: 6px 7px 3px 7px;
+    border-radius: 0;
+}
+.btnBack i{
+    font-size: 21.5px;
+    color: #fff;
+    line-height: 1;
+}
+
+
 [class*=sidebar-dark-] {
     background-color: #f2f2f2;
-        /*background-image: linear-gradient(to bottom, #031D49 20%, #1489D0 71%, #fff 100%);*/
-        /*background-color: transparent;*/
 }
 .main-header{
     box-shadow: 3px 3px 6px #999;
     background-color: transparent;
 }
-/*.navbar-light .navbar-nav .nav-link {
-    color: #fff;
-}
-.navbar-light .navbar-nav .nav-link:hover {
-    color: #fff;
-}*/
 .content-wrapper{
     background-color: #fff;
     position: relative;
-    /*background-color: transparent;*/
 }
 .content-wrapper>.content {
     background-color: #fff;
@@ -81,13 +89,9 @@
     color: #102f42;
     font-size:29px;
     text-transform: uppercase;
-    /*font-family: 'Lobster', cursive;*/
 }
 
 [class*=sidebar-dark] .user-panel {
-    /*margin: 3px!important;*/
-    /*margin-bottom: 3px!important;
-    padding-bottom: 3px!important;*/
     padding: 12px 0!important;
 }
 .content-header {
@@ -97,6 +101,11 @@
     color: #000;
     font-weight: 600;
     text-transform: capitalize;
+}
+.sidebarNavWrap .user-panel .image img{
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
 }
 .sidebarNavWrap .user-panel .info a:hover{
     color: #000;
@@ -190,7 +199,9 @@ table.dataTable thead .sorting_asc {
     display: none;
 }
 
-
+.content-wrapper {
+/*padding-top: 7px;*/
+}
 .layout-fixed .brand-link {
      width: 250px; 
 }
@@ -200,7 +211,7 @@ table.dataTable thead .sorting_asc {
 .main-sidebar {
     overflow-x: hidden;
 }
-@media (min-width: 768px){
+/*@media (min-width: 768px){
     body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
     transition: margin-left .3s ease-in-out;
     margin-left: 250px;
@@ -211,7 +222,7 @@ table.dataTable thead .sorting_asc {
     .sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused, .sidebar-mini.sidebar-collapse .main-sidebar:hover {
         width: 250px;
     }   
-}
+}*/
 
 [class*=sidebar-dark-] .nav-sidebar>.nav-item.menu-open>.nav-link, [class*=sidebar-dark-] .nav-sidebar>.nav-item:hover>.nav-link, [class*=sidebar-dark-] .nav-sidebar>.nav-item>.nav-link:focus {
     background-color: #ccc;
@@ -406,6 +417,14 @@ table.dataTable thead .sorting_asc {
     width: 300px;
     text-transform: none;
 }
+.list-slider .ribbon-wrapper.ribbon-xl .ribbon {
+    right: -27px;
+    top: 21px;
+    width: 240px;
+}
+.list-slider .ribbon-wrapper .ribbon{
+    font-size: 10px;
+}
 .productBox .priceBox h2{
     font-weight: 600;
     font-size: 15px;
@@ -466,8 +485,8 @@ table.dataTable thead .sorting_asc {
     font-size: 23px;
 }
 .cartCountWrap .counting{
-    margin-top: -43px;
-    margin-left: 18px;
+    margin-top: -40px;
+    margin-left: 14px;
     font-size: 11px;
     background-color: #000;
     border-radius: 50%;
@@ -820,10 +839,10 @@ table.dataTable thead .sorting_asc {
 .sq_box .btn {
     border-radius: 50px;
     padding: 5px 13px;
-    font-size: 15px;
+    font-size: 14px;
     color: #fff;
     background-color: #102f42;
-    font-weight: 600;
+    /*font-weight: 600;*/
 }
 .sq_box .price-box span.price {
     text-decoration: line-through;
@@ -916,6 +935,7 @@ table.dataTable thead .sorting_asc {
 
 .profileCard{
   box-shadow: 3px 3px 9px #000;
+  margin-top: 82px;
 }
 .profileCard .card-body{
   padding: 30px 60px;
@@ -956,6 +976,16 @@ table.dataTable thead .sorting_asc {
     font-weight:600;
     font-size: 14px;
 }
+.profileCard .profileProgreeBar{
+    margin-top: -4px;
+}
+.profileCard .profileProgreeBar p{
+    margin-bottom: 3px;
+}
+.profileCard .profileProgreeBar .progress{
+    width:250px;
+}
+
 .myPopup .modal-header{
     background-color: #102f42;
     color: #fff;
@@ -1097,4 +1127,71 @@ table.dataTable thead .sorting_asc {
 }
 .productBox .checkboxWrap input[type=checkbox]{
     transform: scale(1.6);
+}
+
+
+.totalValue{
+    font-size: 15px!important;
+    /*font-weight: 600;*/
+}
+
+.salesManAppInputWrap{
+    display: flex;
+    white-space: nowrap;
+    position: relative;
+}
+.salesManAppInputWrap a{
+    border-radius: 0;
+    /*position: absolute;*/
+    right: 0;
+    font-size: 13px;
+}
+.salesManAppInputWrap input{
+   border-radius: 0;
+   height:26px;
+   padding: 2px 5px;
+   width: 115px;
+}
+
+
+.sidebar-mini.layout-fixed{
+    top:0!important;
+}
+.languageConvertorWrap{
+    height:25px;
+    overflow: hidden;
+    margin-top: 6px;
+    width: 130px!important;
+}
+select.goog-te-combo{
+    width: 130px;
+}
+.goog-te-banner-frame.skiptranslate{
+    display: none!important;
+}
+.goog-te-gadget .goog-te-combo{
+    border:1px solid #3F99D3;
+    font-size: 14px;
+    color: #3F99D3;
+}
+select.goog-te-combo:focus-visible {
+    outline: #3F99D3 auto 1px;
+}
+select.goog-te-combo option{
+    display: none;
+    font-size: 14px;
+}
+select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]{
+    display: block;
+}
+
+
+
+@media (min-width: 992px){
+    .dashboardTopBox {
+        -webkit-flex: 0 0 16.666667%;
+        -ms-flex: 0 0 16.666667%;
+        flex: 17 0 16.666667%;
+        max-width: 22.666667%!important;
+    }
 }

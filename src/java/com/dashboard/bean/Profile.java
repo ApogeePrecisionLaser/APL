@@ -5,6 +5,8 @@
  */
 package com.dashboard.bean;
 
+import java.util.List;
+
 /**
  *
  * @author DELL
@@ -48,9 +50,37 @@ public class Profile {
     private String gst_number;
 
     private int key_person_id, emp_code, designation_code;
-    private String  kp_address_line1, kp_address_line2, kp_address_line3, kp_mobile_no1, kp_email_id1, kp_father_name, kp_date_of_birth,
+    private String kp_address_line1, kp_address_line2, kp_address_line3, kp_mobile_no1, kp_email_id1, kp_father_name, kp_date_of_birth,
             emergency_contact_name, emergency_contact_mobile, off_address_line1, off_email_id1,
-            off_mobile_no1, designation, organisation_code, org_office_type,image_name;
+            off_mobile_no1, designation, organisation_code, org_office_type, image_name;
+
+    private int designation_id;
+    private String salutation;
+    private String role_name;
+    private int role_id;
+    private String desgin_name;
+    private String image_path;
+    private String image_id;
+    private int general_image_details_id;
+    private String father_name;
+    private String date_of_birth;
+    private String id_proof;
+    private String isVarified;
+    private int id_type_d;
+    private String id_type;
+    private String id_no;
+    private String password;
+    private String blood;
+    private String emergency_name;
+    private String emergency_number;
+    private String gender;
+    private List<Profile> list;
+    private int familyofiiceid;
+    private String familyName;
+    private int familydesignationid;
+    private String familyDesignation;
+    private String relation;
+    private int org_office_des_map_id;
 
     /**
      * @return the org_office_id
@@ -806,5 +836,383 @@ public class Profile {
      */
     public void setImage_name(String image_name) {
         this.image_name = image_name;
+    }
+
+    /**
+     * @return the designation_id
+     */
+    public int getDesignation_id() {
+        return designation_id;
+    }
+
+    /**
+     * @param designation_id the designation_id to set
+     */
+    public void setDesignation_id(int designation_id) {
+        this.designation_id = designation_id;
+    }
+
+    /**
+     * @return the salutation
+     */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /**
+     * @param salutation the salutation to set
+     */
+    public void setSalutation(String salutation) {
+        this.salutation = salutation;
+    }
+
+    /**
+     * @return the role_name
+     */
+    public String getRole_name() {
+        return role_name;
+    }
+
+    /**
+     * @param role_name the role_name to set
+     */
+    public void setRole_name(String role_name) {
+        this.role_name = role_name;
+    }
+
+    /**
+     * @return the role_id
+     */
+    public int getRole_id() {
+        return role_id;
+    }
+
+    /**
+     * @param role_id the role_id to set
+     */
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
+    }
+
+    /**
+     * @return the desgin_name
+     */
+    public String getDesgin_name() {
+        return desgin_name;
+    }
+
+    /**
+     * @param desgin_name the desgin_name to set
+     */
+    public void setDesgin_name(String desgin_name) {
+        this.desgin_name = desgin_name;
+    }
+
+    /**
+     * @return the image_path
+     */
+    public String getImage_path() {
+        return image_path;
+    }
+
+    /**
+     * @param image_path the image_path to set
+     */
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
+
+    /**
+     * @return the image_id
+     */
+    public String getImage_id() {
+        return image_id;
+    }
+
+    /**
+     * @param image_id the image_id to set
+     */
+    public void setImage_id(String image_id) {
+        this.image_id = image_id;
+    }
+
+    /**
+     * @return the general_image_details_id
+     */
+    public int getGeneral_image_details_id() {
+        return general_image_details_id;
+    }
+
+    /**
+     * @param general_image_details_id the general_image_details_id to set
+     */
+    public void setGeneral_image_details_id(int general_image_details_id) {
+        this.general_image_details_id = general_image_details_id;
+    }
+
+    /**
+     * @return the father_name
+     */
+    public String getFather_name() {
+        return father_name;
+    }
+
+    /**
+     * @param father_name the father_name to set
+     */
+    public void setFather_name(String father_name) {
+        this.father_name = father_name;
+    }
+
+    /**
+     * @return the date_of_birth
+     */
+    public String getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    /**
+     * @param date_of_birth the date_of_birth to set
+     */
+    public void setDate_of_birth(String date_of_birth) {
+        this.date_of_birth = date_of_birth;
+    }
+
+    /**
+     * @return the id_proof
+     */
+    public String getId_proof() {
+        return id_proof;
+    }
+
+    /**
+     * @param id_proof the id_proof to set
+     */
+    public void setId_proof(String id_proof) {
+        this.id_proof = id_proof;
+    }
+
+    /**
+     * @return the isVarified
+     */
+    public String getIsVarified() {
+        return isVarified;
+    }
+
+    /**
+     * @param isVarified the isVarified to set
+     */
+    public void setIsVarified(String isVarified) {
+        this.isVarified = isVarified;
+    }
+
+    /**
+     * @return the id_type_d
+     */
+    public int getId_type_d() {
+        return id_type_d;
+    }
+
+    /**
+     * @param id_type_d the id_type_d to set
+     */
+    public void setId_type_d(int id_type_d) {
+        this.id_type_d = id_type_d;
+    }
+
+    /**
+     * @return the id_type
+     */
+    public String getId_type() {
+        return id_type;
+    }
+
+    /**
+     * @param id_type the id_type to set
+     */
+    public void setId_type(String id_type) {
+        this.id_type = id_type;
+    }
+
+    /**
+     * @return the id_no
+     */
+    public String getId_no() {
+        return id_no;
+    }
+
+    /**
+     * @param id_no the id_no to set
+     */
+    public void setId_no(String id_no) {
+        this.id_no = id_no;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the blood
+     */
+    public String getBlood() {
+        return blood;
+    }
+
+    /**
+     * @param blood the blood to set
+     */
+    public void setBlood(String blood) {
+        this.blood = blood;
+    }
+
+    /**
+     * @return the emergency_name
+     */
+    public String getEmergency_name() {
+        return emergency_name;
+    }
+
+    /**
+     * @param emergency_name the emergency_name to set
+     */
+    public void setEmergency_name(String emergency_name) {
+        this.emergency_name = emergency_name;
+    }
+
+    /**
+     * @return the emergency_number
+     */
+    public String getEmergency_number() {
+        return emergency_number;
+    }
+
+    /**
+     * @param emergency_number the emergency_number to set
+     */
+    public void setEmergency_number(String emergency_number) {
+        this.emergency_number = emergency_number;
+    }
+
+    /**
+     * @return the gender
+     */
+    public String getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender the gender to set
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * @return the list
+     */
+    public List<Profile> getList() {
+        return list;
+    }
+
+    /**
+     * @param list the list to set
+     */
+    public void setList(List<Profile> list) {
+        this.list = list;
+    }
+
+    /**
+     * @return the familyofiiceid
+     */
+    public int getFamilyofiiceid() {
+        return familyofiiceid;
+    }
+
+    /**
+     * @param familyofiiceid the familyofiiceid to set
+     */
+    public void setFamilyofiiceid(int familyofiiceid) {
+        this.familyofiiceid = familyofiiceid;
+    }
+
+    /**
+     * @return the familyName
+     */
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    /**
+     * @param familyName the familyName to set
+     */
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    /**
+     * @return the familydesignationid
+     */
+    public int getFamilydesignationid() {
+        return familydesignationid;
+    }
+
+    /**
+     * @param familydesignationid the familydesignationid to set
+     */
+    public void setFamilydesignationid(int familydesignationid) {
+        this.familydesignationid = familydesignationid;
+    }
+
+    /**
+     * @return the familyDesignation
+     */
+    public String getFamilyDesignation() {
+        return familyDesignation;
+    }
+
+    /**
+     * @param familyDesignation the familyDesignation to set
+     */
+    public void setFamilyDesignation(String familyDesignation) {
+        this.familyDesignation = familyDesignation;
+    }
+
+    /**
+     * @return the relation
+     */
+    public String getRelation() {
+        return relation;
+    }
+
+    /**
+     * @param relation the relation to set
+     */
+    public void setRelation(String relation) {
+        this.relation = relation;
+    }
+
+    /**
+     * @return the org_office_des_map_id
+     */
+    public int getOrg_office_des_map_id() {
+        return org_office_des_map_id;
+    }
+
+    /**
+     * @param org_office_des_map_id the org_office_des_map_id to set
+     */
+    public void setOrg_office_des_map_id(int org_office_des_map_id) {
+        this.org_office_des_map_id = org_office_des_map_id;
     }
 }

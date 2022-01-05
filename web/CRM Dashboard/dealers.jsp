@@ -12,8 +12,8 @@
                         <!--                        <div>
                                                     <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
                                                 </div>-->
-                        <div>
-                            <h1>Dealer List</h1>
+                        <div >
+                            <a href="DealersController?task=AddDealer" class="btn btn-primary myNewLinkBtn">Add New Dealer</a>
                         </div>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">

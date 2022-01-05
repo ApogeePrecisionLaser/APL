@@ -39,7 +39,10 @@
                         <div class="card-body">
                             <div class="mt-1">
                                 <div class="text-right">
-                                    <a href="DealersController" class="btn myThemeBtn text-right">Back</a>
+                                    <!--<a href="DealersController" class="btn myThemeBtn text-right">Back</a>-->
+
+                                    <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-md-4">
@@ -96,6 +99,44 @@
                                         <div>
                                             <p class="mb-0"><small> Person Address:</small></p>
                                             <p><strong>${beanType.kp_address_line1}</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small>City:</small></p>
+                                            <p><strong>${beanType.city_name}</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small> Blood Group:</small></p>
+                                            <p><strong>${beanType.blood}</strong></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small> Date Of Birth:</small></p>
+                                            <p><strong>${beanType.kp_date_of_birth}</strong></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small>ID Proof:</small></p>
+                                            <p><strong>${beanType.id_type}</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small>ID No:</small></p>
+                                            <p><strong>${beanType.id_no}</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small>Gender:</small></p>
+                                            <p><strong>${beanType.gender}</strong></p>
                                         </div>
                                     </div>
 

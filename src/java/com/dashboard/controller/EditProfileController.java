@@ -64,6 +64,8 @@ public class EditProfileController extends HttpServlet {
         if (task == null) {
             task = "";
         }
+        List id_list = model.getIdtypeList();
+        request.setAttribute("id_list", id_list);
 
         List<Profile> list = model.getAllDetails(logged_user_name, logged_org_office);
         String email = list.get(0).getEmail_id1().toString();
@@ -75,6 +77,17 @@ public class EditProfileController extends HttpServlet {
         String address_line1 = list.get(0).getAddress_line1().toString();
         String address_line2 = list.get(0).getAddress_line2().toString();
         String address_line3 = list.get(0).getAddress_line3().toString();
+        String blood = list.get(0).getBlood().toString();
+        String date_of_birth = list.get(0).getDate_of_birth().toString();
+        String id_type = list.get(0).getId_type().toString();
+        String id_no = list.get(0).getId_no().toString();
+        String latitude = list.get(0).getLatitude().toString();
+        String longitude = list.get(0).getLongitude().toString();
+        String gender = list.get(0).getGender().toString();
+        int org_office_id = list.get(0).getOrg_office_id();
+        int key_person_id = list.get(0).getKey_person_id();
+        int org_office_designation_map_id = list.get(0).getOrg_office_des_map_id();
+        int general_image_details_id = list.get(0).getGeneral_image_details_id();
 
         request.setAttribute("logged_user_name", logged_user_name);
         request.setAttribute("logged_org_office", logged_org_office);
@@ -82,11 +95,22 @@ public class EditProfileController extends HttpServlet {
         request.setAttribute("landline", landline);
         request.setAttribute("mobile1", mobile1);
         request.setAttribute("mobile2", mobile2);
+        request.setAttribute("org_office_id", org_office_id);
+        request.setAttribute("key_person_id", key_person_id);
+        request.setAttribute("org_office_designation_map_id", org_office_designation_map_id);
+        request.setAttribute("general_image_details_id", general_image_details_id);
         request.setAttribute("gst", gst);
         request.setAttribute("city", city);
         request.setAttribute("address_line1", address_line1);
         request.setAttribute("address_line2", address_line2);
         request.setAttribute("address_line3", address_line3);
+        request.setAttribute("blood", blood);
+        request.setAttribute("date_of_birth", date_of_birth);
+        request.setAttribute("id_type", id_type);
+        request.setAttribute("id_no", id_no);
+        request.setAttribute("latitude", latitude);
+        request.setAttribute("longitude", longitude);
+        request.setAttribute("gender", gender);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
         DBConnection.closeConncetion(model.getConnection());

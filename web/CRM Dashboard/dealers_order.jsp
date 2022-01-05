@@ -5,20 +5,20 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content ">
-        
+
         <div class="">
-            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Success!</strong> New order create successfully.
             </div>
-            <!--            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>Oops!</strong> Something went wrong.
-                        </div>-->
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
         </div>
-        
-        
-        
+
+
+
         <div class="container-fluid">
             <div class=" marginTop20">
                 <div class="">
@@ -57,7 +57,7 @@
                         <a href="DealersOrderController?task=viewAll&item_name=${beanType1.item_name}" class="btn btn-primary text-white border-0 rounded-0 viewAllBtn">View All</a>  
                     </div>
 
-                        
+
 
                     <div class="mt-3 ">
                         <div class="owl-carousel owl-theme productSlider">
@@ -118,9 +118,9 @@
             </c:forEach>
         </div>
     </section>
-                                    
-                                    
-        
+
+
+
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
@@ -191,16 +191,22 @@
                                                                         data: {task: "AddToCart", model_id: model_id, model_name: model, basic_price: basic_price, qty: qty},
                                                                         success: function (data) {
                                                                             console.log(data);
-                                                                            if (data.list > 0) {
+                                                                            if (data.success_msg != '') {
                                                                                 $('.counting').text(data.list);
-                                                                                $('#msg').text(data.msg);
-                                                                                $('.myAlertBox').show();
+                                                                                $('#msg_success').text(data.success_msg);
+                                                                                $('#msg_success').show();
+                                                                                $('#msg_danger').hide();
                                                                                 setTimeout(function () {
-                                                                                    $('#msg').fadeOut('fast');
-                                                                                }, 1000);
+                                                                                    $('#msg_success').fadeOut('fast');
+                                                                                }, 2000);
                                                                             } else {
                                                                                 $('.myAlertBox').hide();
-
+                                                                                $('#msg_danger').text(data.error_msg);
+                                                                                $('#msg_danger').show();
+                                                                                $('#msg_success').hide();
+                                                                                setTimeout(function () {
+                                                                                    $('#msg_danger').fadeOut('fast');
+                                                                                }, 2000);
                                                                             }
 
 

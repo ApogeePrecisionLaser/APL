@@ -69,8 +69,8 @@ public class KeypersonController extends HttpServlet {
             String person = request.getParameter("searchKeyPerson");
             String designation = request.getParameter("searchDesignation");
             String mobile = request.getParameter("searchmobile");
-           // if (counting != 101) {
-                counting = keyModel.getCounting();
+            // if (counting != 101) {
+            counting = keyModel.getCounting();
             //}
 
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
@@ -488,7 +488,7 @@ public class KeypersonController extends HttpServlet {
                 mobile = "";
                 searchfamily = "";
             }
-            
+
             String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
             if (buttonAction == null) {
                 buttonAction = "none";

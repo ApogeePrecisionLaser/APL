@@ -71,7 +71,7 @@ public class LoginModel {
             System.out.println("LoginModel setUserFullDetail() Error: " + e);
         }
     }
-
+    
     public int checkLogin(String user_name, String password) {
         int login_id = 0;
         String designation = "";
@@ -95,6 +95,31 @@ public class LoginModel {
 
         return count;
 
+    }
+
+    public String getUserName(String mobile, String email) {
+        String str = "";
+        PreparedStatement pstmt;
+//        ResultSet rst;
+        String query = " select kp.key_person_name from key_person kp where kp.active='Y' ";
+        if (!mobile.equals("") && mobile != null) {
+            query += " and kp.mobile_no1='" + mobile + "' ";
+        }
+        if (!email.equals("") && email != null) {
+            query += " and kp.email_id1='" + email + "' ";
+        }
+        try {
+//            connection.setAutoCommit(false);
+            Connection con = DriverManager.getConnection(connectionString, "jpss", "jpss");
+
+            ResultSet rst = con.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                str = rst.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getUserName ERROR inside LoginModel - " + e);
+        }
+        return str;
     }
 
     public String getDesignation(String user_name, String password) {
@@ -183,14 +208,14 @@ public class LoginModel {
 
     public String getOfficeAdmin(String user_name, String password, int logged_org_office_id, String designation) {
         String str = "";
-        String query ="";
+        String query = "";
         PreparedStatement pstmt;
         ResultSet rst;
         if (designation.equals("technician")) {
-             query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
+            query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
                     + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
                     + " and d.designation='Embeded Software Developer' and  oo.active='Y' and kp.active='Y' ";
-        }else{
+        } else {
             query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
                     + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
                     + " and d.designation='Owner' and  oo.active='Y' and kp.active='Y' ";
@@ -229,7 +254,6 @@ public class LoginModel {
 //        }
 //        return str;
 //    }
-
     public int getOrgNameId(String user_name, String password) {
         int str = 0;
         PreparedStatement pstmt;

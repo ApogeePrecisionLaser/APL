@@ -9,8 +9,12 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
+
+                        <div class="mr-2 backBtnWrap">
+                            <a href="ApproveOrdersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
                         <div>
-                            <a href="ApproveOrdersController" class="btn btn-primary myNewLinkBtn">Back</a>
+                            <h6 class="mt-2">Order ID : ${order_no}</h6>
                         </div>
                     </div>  
                 </div>
@@ -192,13 +196,13 @@
 //            $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
             $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 
-           // var order_item_ids = $('#order_item_id' + (j + 1)).val();
-          //  total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
+            // var order_item_ids = $('#order_item_id' + (j + 1)).val();
+            //  total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
 //            total_discounted_percent = total_discounted_percent + parseInt($('#discounted_percent' + order_item_ids).val());
-           // total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
-           // total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).html());
+            // total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
+            // total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).html());
         }
-       // total_discounted_percent = (total_approved_price - total_discounted_price) / total_approved_price * 100;
+        // total_discounted_percent = (total_approved_price - total_discounted_price) / total_approved_price * 100;
 //
 //        $('#total_approved_qty').html(parseInt(total_approved_qty));
 //        $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));

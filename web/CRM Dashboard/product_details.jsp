@@ -4,76 +4,28 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content">
-<!--        <div class="container-fluid">
-            <div class="mainNavigationMenu">
-                <nav class="navbar navbar-expand-md navbar-dark" >
-                    <a class="navbar-brand" href="#">SHOPPING</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">One</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Two</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Three</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Four</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Five</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Six</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Seven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eight</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Nine</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ten</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eleven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Twelve</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+
+        <div class="">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> New order create successfully.
             </div>
-        </div>-->
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
+        </div>
 
 
         <div class=" marginTop20">
             <div class="">
                 <div class="row mx-0">
                     <div class="col-10 col-md-7">
-                        <a href="DealersOrderController" class="btn myThemeBtn">Back</a>
+                        <div class="mr-2 backBtnWrap">
+                            <a href="DealersOrderController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
 
                     </div>
-                    <!--                    <div class="col-md-5">
-                                            <div class="searchWrap">
-                                                <form action="#">
-                                                    <div class="form-group mb-0 d-flex">
-                                                        <input type="email" class="form-control" placeholder="Search by product name">
-                                                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                                    </div>                          
-                                                </form>
-                                            </div>
-                                        </div>-->
-
                     <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
                             <button type="button" class="close" data-dismiss="alert" >&times;</button>
@@ -132,12 +84,12 @@
                                         <span class="price"> Rs. ${beanType.basic_price} </span>
                                     </div>
                                     <div class="_p-add-cart">
-                                        <div class="_p-qty">
-                                            <span>Add Quantity</span>
-                                            <div class="value-button decrease_" id="" value="Decrease Value">-</div>
-                                            <input type="number" name="qty" id="qty" class="inputIncDec" value="1" />
-                                            <div class="value-button increase_" id="" value="Increase Value">+</div>
-                                        </div>
+                                        <!--                                        <div class="_p-qty">
+                                                                                    <span>Add Quantity</span>
+                                                                                    <div class="value-button decrease_" id="" value="Decrease Value">-</div>
+                                                                                    <input type="number" name="qty" id="qty" class="inputIncDec" value="1" />
+                                                                                    <div class="value-button increase_" id="" value="Increase Value">+</div>
+                                                                                </div>-->
                                     </div>
                                     <div class="_p-features">
                                         <span> Description About this product:- </span>
@@ -147,9 +99,9 @@
                                     <ul class="spe_ul"></ul>
                                     <div class="_p-qty-and-cart">
                                         <div class="_p-add-cart">
-<!--                                            <button class="btn-theme btn buy-btn" tabindex="0" id="buy_now_btn">
-                                                <i class="fa fa-shopping-cart"></i> Buy Now
-                                            </button>-->
+                                            <!--                                            <button class="btn-theme btn buy-btn" tabindex="0" id="buy_now_btn">
+                                                                                            <i class="fa fa-shopping-cart"></i> Buy Now
+                                                                                        </button>-->
                                             <a>
                                                 <button class="btn-theme btn btn-success"  tabindex="0" onclick="addTocart('${beanType.model_id}', '${beanType.model}', '${beanType.basic_price}')" id="add_to_cart_btn">
                                                     <i class="fa fa-shopping-cart"></i> Add to Cart</button>
@@ -420,17 +372,24 @@
             data: {task: "AddToCart", model_id: model_id, model_name: model, basic_price: basic_price, qty: qty},
             success: function (data) {
                 console.log(data);
-                if (data.list > 0) {
+                if (data.success_msg != '') {
                     $('.counting').text(data.list);
-                    $('#msg').text(data.msg);
-                    $('.myAlertBox').show();
+                    $('#msg_success').text(data.success_msg);
+                    $('#msg_success').show();
+                    $('#msg_danger').hide();
                     setTimeout(function () {
-                        $('#msg').fadeOut('fast');
-                    }, 1000);
+                        $('#msg_success').fadeOut('fast');
+                    }, 2000);
                 } else {
                     $('.myAlertBox').hide();
-
+                    $('#msg_danger').text(data.error_msg);
+                    $('#msg_danger').show();
+                    $('#msg_success').hide();
+                    setTimeout(function () {
+                        $('#msg_danger').fadeOut('fast');
+                    }, 2000);
                 }
+
 
 
             }, error: function (error) {

@@ -8,8 +8,17 @@
             <div class="">
                 <div class="row">
                     <div class="col-10 col-md-7">
-                        <a href="PendingOrdersController" class="btn myThemeBtn">Back</a>
-                    </div>
+                        <div class="d-flex leftHeadText">
+                            <div class="mr-2 backBtnWrap">
+                                <a href="PendingOrdersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                            </div>
+                            <div>
+                                <h6 class="mt-2">Order ID : ${order_no}
+                                </h6></div>
+                        </div>
+                    </div> 
+
+
                     <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <div class="d-flex">                        
                             <div class="cartCountWrap d-flex ml-auto">
@@ -124,10 +133,10 @@
                                 </table>
                             </div>               
                         </div>
-<!--                        <div class="text-right mt-3">
-                            <a class="btn myThemeBtn" style="background-color: #102f42;
-                               color: white;" onclick="completeOrder()">Complete Order</a>
-                        </div>-->
+                        <!--                        <div class="text-right mt-3">
+                                                    <a class="btn myThemeBtn" style="background-color: #102f42;
+                                                       color: white;" onclick="completeOrder()">Complete Order</a>
+                                                </div>-->
                     </div>
                 </div>
                 <div class="text-right mt-3">
@@ -201,17 +210,17 @@
 
 <script>
 
-                                   $(function () {
-                                       var count = $('#count').val();
-                                       var total_price = 0;
-                                       $('.counting').text(count);
-                                       var delivery_charge = parseInt(($('#delivery_charge').text()));
-                                       var coupon_discount = parseInt(($('#coupon_discount').text()));
-                                       var total_price = parseInt(($('#subtotal').text()));
+                        $(function () {
+                            var count = $('#count').val();
+                            var total_price = 0;
+                            $('.counting').text(count);
+                            var delivery_charge = parseInt(($('#delivery_charge').text()));
+                            var coupon_discount = parseInt(($('#coupon_discount').text()));
+                            var total_price = parseInt(($('#subtotal').text()));
 
 //                                       $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
 
-                                   });
+                        });
 
 
 //                                                            $(function () {
@@ -239,30 +248,30 @@
 
 
 
-                                   $(function () {
+                        $(function () {
 
-                                       $("#payment_mode").autocomplete({
-                                           source: function (request, response) {
-                                               var random = $('#payment_mode').val();
-                                               $.ajax({
-                                                   url: "DealersOrderController",
-                                                   dataType: "json",
-                                                   data: {action1: "getPaymentMode", str: random},
-                                                   success: function (data) {
-                                                       console.log(data);
-                                                       response(data.list);
-                                                   }, error: function (error) {
-                                                       console.log(error.responseText);
-                                                       response(error.responseText);
-                                                   }
-                                               });
-                                           },
-                                           select: function (events, ui) {
-                                               console.log(ui);
-                                               $('#payment_mode').val(ui.item.label);
-                                               return false;
-                                           }
-                                       });
+                            $("#payment_mode").autocomplete({
+                                source: function (request, response) {
+                                    var random = $('#payment_mode').val();
+                                    $.ajax({
+                                        url: "DealersOrderController",
+                                        dataType: "json",
+                                        data: {action1: "getPaymentMode", str: random},
+                                        success: function (data) {
+                                            console.log(data);
+                                            response(data.list);
+                                        }, error: function (error) {
+                                            console.log(error.responseText);
+                                            response(error.responseText);
+                                        }
+                                    });
+                                },
+                                select: function (events, ui) {
+                                    console.log(ui);
+                                    $('#payment_mode').val(ui.item.label);
+                                    return false;
+                                }
+                            });
 
-                                   });
+                        });
 </script>

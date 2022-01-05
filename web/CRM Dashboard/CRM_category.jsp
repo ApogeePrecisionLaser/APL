@@ -5,61 +5,24 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content">
+        <div class="">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> New order create successfully.
+            </div>
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
+        </div>
         <div class="container-fluid">
-<!--            <div class="mainNavigationMenu">
-                <nav class="navbar navbar-expand-md navbar-dark" >
-                    <a class="navbar-brand" href="#">SHOPPING</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">One</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Two</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Three</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Four</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Five</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Six</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Seven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eight</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Nine</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Ten</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Eleven</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Twelve</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>-->
+
 
             <div class="row marginTop20">
                 <div class="col-md-7 col-10 pr-0">
                     <div class="d-flex">  
-                        <div class="mr-2">
-                            <a href="DealersOrderController" class="btn myThemeBtn fontFourteen">Back</a>
+                        <div class="mr-2 backBtnWrap">
+                            <a href="DealersOrderController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                         </div>
                         <div class="searchWrap">
                             <form action="DealersOrderController">
@@ -74,10 +37,10 @@
                     </div>
                 </div>
                 <div class="col-md-5 col-2">
-                    <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
-                        <button type="button" class="close" data-dismiss="alert" >&times;</button>
-                        <strong>Success!</strong> 
-                    </div>
+                    <!--                    <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
+                                            <button type="button" class="close" data-dismiss="alert" >&times;</button>
+                                            <strong>Success!</strong> 
+                                        </div>-->
                     <div class="d-flex mt-1 mt-md-0">                        
                         <div class="cartCountWrap d-flex ml-auto">
                             <a href="DealersOrderController?task=viewCart" >
@@ -221,16 +184,22 @@
                                                                     data: {task: "AddToCart", model_id: model_id, model_name: model, basic_price: basic_price, qty: qty},
                                                                     success: function (data) {
                                                                         console.log(data);
-                                                                        if (data.list > 0) {
+                                                                        if (data.success_msg != '') {
                                                                             $('.counting').text(data.list);
-                                                                            $('#msg').text(data.msg);
-                                                                            $('.myAlertBox').show();
+                                                                            $('#msg_success').text(data.success_msg);
+                                                                            $('#msg_success').show();
+                                                                            $('#msg_danger').hide();
                                                                             setTimeout(function () {
-                                                                                $('#msg').fadeOut('fast');
-                                                                            }, 1000);
+                                                                                $('#msg_success').fadeOut('fast');
+                                                                            }, 2000);
                                                                         } else {
                                                                             $('.myAlertBox').hide();
-
+                                                                            $('#msg_danger').text(data.error_msg);
+                                                                            $('#msg_danger').show();
+                                                                            $('#msg_success').hide();
+                                                                            setTimeout(function () {
+                                                                                $('#msg_danger').fadeOut('fast');
+                                                                            }, 2000);
                                                                         }
 
 

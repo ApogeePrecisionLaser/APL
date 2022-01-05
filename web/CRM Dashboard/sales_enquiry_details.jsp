@@ -31,7 +31,7 @@
                                        varStatus="loopCounter">
                                 <div class="d-flex justify-content-between">
                                     <div class="text-right">
-                                        <a href="SalesEnquiryController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Back</a>
+                                        <a href="SalesEnquiryController?task=sales_enquiry_list" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                                     </div>
                                     <div class="text-right">
                                         <c:choose>
@@ -41,7 +41,7 @@
                                             </c:when>
 
                                             <c:otherwise>
-                                                
+
                                                 <button class="btn myThemeBtn fontFourteen " disabled>${beanType.status}</button>
                                                 <div><span class="text-danger fontFourteen">(${beanType.assigned_to})</span></div>
 

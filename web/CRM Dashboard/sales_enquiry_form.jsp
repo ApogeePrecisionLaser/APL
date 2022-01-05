@@ -14,11 +14,20 @@
                 <div class="col-sm-4">
 
                     <c:if test="${not empty message}">
-                        <div class="alert alert-success alert-dismissible myAlertBox" id="msg" >
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>Success!</strong> ${message}
+                        <c:if test="${msgBgColor=='green'}">
+                            <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong> ${message}
 
-                        </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${msgBgColor=='red'}">
+                            <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" >
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>OOps!</strong> ${message}
+
+                            </div>
+                        </c:if>
                     </c:if>
 
                 </div>
@@ -224,6 +233,12 @@
 //    });
 
     $(function () {
+
+
+        setTimeout(function () {
+            $('.myAlertBox').fadeOut('fast');
+        }, 2000);
+
         $("#enquiry_source").autocomplete({
             source: function (request, response) {
                 var random = $('#enquiry_source').val();

@@ -25,9 +25,9 @@
         <div class="wrapper">
 
             <!-- Preloader -->
-<!--            <div class="preloader flex-column justify-content-center align-items-center">
-                <img class="animation__shake" src="CRM Dashboard/assets2/img/product/loaderLogoIcon.png" height="60" width="60">
-            </div>-->
+            <!--            <div class="preloader flex-column justify-content-center align-items-center">
+                            <img class="animation__shake" src="CRM Dashboard/assets2/img/product/loaderLogoIcon.png" height="60" width="60">
+                        </div>-->
 
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -84,11 +84,11 @@
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">12 hours</span>
                             </a>
-<!--                            <div class="dropdown-divider"></div>
-                            <a href="notification.php" class="dropdown-item">
-                                <i class="far fa-file mr-2"></i> 0 News 
-                                <span class="float-right text-muted text-sm">2 days</span>
-                            </a>-->
+                            <!--                            <div class="dropdown-divider"></div>
+                                                        <a href="notification.php" class="dropdown-item">
+                                                            <i class="far fa-file mr-2"></i> 0 News 
+                                                            <span class="float-right text-muted text-sm">2 days</span>
+                                                        </a>-->
                             <% }%>
                             <%
                                 if (session.getAttribute("user_role").equals("Dealer")) {
@@ -120,11 +120,11 @@
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">12 hours</span>
                             </a>
-                                <!--                            <div class="dropdown-divider"></div>
-                                                            <a href="notification.php" class="dropdown-item">
-                                                                <i class="far fa-newspaper mr-2"></i> 0 News 
-                                                                <span class="float-right text-muted text-sm">2 days</span>
-                                                            </a>-->
+                            <!--                            <div class="dropdown-divider"></div>
+                                                        <a href="notification.php" class="dropdown-item">
+                                                            <i class="far fa-newspaper mr-2"></i> 0 News 
+                                                            <span class="float-right text-muted text-sm">2 days</span>
+                                                        </a>-->
                             <% }%>
 
 
@@ -179,7 +179,8 @@
                             <%
                                 if (session.getAttribute("user_role").equals("Admin")) {
                             %>
-                            <a href="CRMDashboardController" class="d-block">Admin</a>
+                            <!--<a href="CRMDashboardController" class="d-block">Admin</a>-->
+                            <a href="CRMDashboardController" class="d-block"><%= session.getAttribute("logged_user_name")%></a>
                             <%}%>
                         </div>
                         <%}%>
@@ -443,6 +444,12 @@
                                         <a href="DealersController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Dealers</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="DealersController?task=AddDealer" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Dealer</p>
                                         </a>
                                     </li>
                                 </ul>
