@@ -34,11 +34,13 @@
                         <p class="text-secondry">${gst}</p>
                     </div>
                 </div>
-                <div class="text-left mt-4">
+<!--                <div class="text-left mt-4">
                     <a href="ProfileController" class="btn myThemeBtn text-right">Back</a>
+                </div>-->
+                <div class="mr-2 mt-2 backBtnWrap">
+                    <a href="ProfileController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                 </div>
-                <br><br>
-                <div class="card card-primary rounded-0 profileCard mt-2">
+                <div class="card card-primary rounded-0 profileCard">
                     <div class="card-body px-4">
                         <div class="mt-1">
                             <form class="myForm" method="post" action="ProfileController" enctype="multipart/form-data">

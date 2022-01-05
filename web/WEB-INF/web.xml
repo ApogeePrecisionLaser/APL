@@ -1945,10 +1945,10 @@
     
     
     
-    <listener>
+    <!--    <listener>
         <listener-class>
             com.webservice.controller.IndiamartEnquiriesService
         </listener-class>
-    </listener>
+    </listener>-->
     
 </web-app>

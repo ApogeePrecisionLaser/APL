@@ -31,16 +31,40 @@
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
                         <p class="text-secondry">${gst}</p>
+<!--                        <div class="text-left1">
+                            <small class="text-danger ">Profile completion</small>
+                            <div class="progress mx-auto" style="width:300px;">                                        
+                                <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                  <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>-->
                     </div>
                 </div>
-                    <br><br><br><br><br>
-                <div class="card card-primary rounded-0 profileCard" style="">
+                <div class="text-right mt-2">
+                    <a href="EditProfileController" class="btn myThemeBtn text-right"><i class="far fa-edit"></i></a>
+                </div>
+
+                <div class="card card-primary rounded-0 profileCard">
                     <div class="card-body">
                         <div class="mt-1">
-                            <div class="text-right">
-                                <a href="EditProfileController" class="btn myThemeBtn text-right">Edit Profile</a>
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <div class="profileProgreeBar mb-2">
+                                    <p class="text-success fontFourteen">Profile completion</p>
+                                    <div class="progress">                                        
+                                        <div class="progress-bar bg-success progress-bar-striped" role="progressbar"
+                                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                          <span class="sr-only1">40% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <div class="text-right">
+                                    <a href="EditProfileController" class="btn myThemeBtn text-right">Edit Profile</a>
+                                </div>-->
                             </div>
-                            <div class="row mt-4">
+                            
+                            <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Dealer Name:</small></p>

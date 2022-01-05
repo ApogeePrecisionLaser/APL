@@ -8,9 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <div class="d-flex">
-                        <div>
-                            <a href="ApproveOrdersController" class="btn btn-primary myNewLinkBtn">Back</a>
+                    <div class="d-flex leftHeadText">
+                        <div class="mr-2 backBtnWrap">
+                            <a href="ApproveOrdersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
+                        <div class="mt-2">
+                            <h6>Order ID: APL0000123</h6>
                         </div>
                     </div>  
                 </div>
@@ -30,8 +33,8 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <form action="ApproveOrdersController" method="POST">
-                                <div class="table-responsive tableScrollWrap" >
-                                    <table class="table table-striped1 mainTable" id="mytable1" >
+                                <div class="table-responsive tableScrollWrap noWrapTable" >
+                                    <table class="table table-striped1 mainTable" id="mytablel" >
                                         <thead>
                                             <tr>
                                                 <th>S.No.</th>
@@ -41,11 +44,11 @@
                                                 <th>Req Qty</th>
                                                 <th>Stock Qty</th>
                                                 <th>Approved Qty</th>
-                                                <th>MRP Price</th>
-                                                <th>Approved Price</th>
-                                                <th>Discount %</th>
-                                                <th>Discounted Price</th>
-                                                <th></th>
+                                                <th>MRP (<small class="fas fa-rupee-sign"></small>)</th>
+                                                <th>Approved (<small class="fas fa-rupee-sign"></small>)</th>
+                                                <th>Discount (%)</th>
+                                                <th>Discounted (<small class="fas fa-rupee-sign"></small>)</th>
+                                                <th>Action</th>
                                                 <!--<th>Discount Price</th>-->
                                             </tr>
                                         </thead>
@@ -63,8 +66,7 @@
                                             <input type="hidden" name="order_status" id="order_status" value="${beanType.order_status}">
                                             <input type="hidden" name="required_qty" id="required_qty${beanType.order_item_id}" value="${beanType.required_qty}">
                                             <td>
-                                                <img class="orderImg img-fluid${loopCounter.count}" 
-                                                     src="" width="50px" height="55px">
+                                                <img class="orderImg img-fluid${loopCounter.count}" src="" width="50px" height="55px">
                                             </td>
 
                                             <td>${beanType.model}</td>
@@ -82,7 +84,7 @@
 
                                                 <c:if test="${beanType.order_status!='Pending'}">
                                                     <input type="text" name="approved_qty${beanType.order_item_id}" id="approved_qty${beanType.order_item_id}" 
-                                                           disabled="" value="${beanType.approved_qty}" style="width:80px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}', '${beanType.basic_price}', '${beanType.order_item_id}')">
+                                                           disabled="" value="${beanType.approved_qty}" style="width:75px" onblur="checkValidationForQty(this.value, '${beanType.required_qty}', '${beanType.basic_price}', '${beanType.order_item_id}')">
                                                     <!--<input type="text" name="approved_qty${beanType.order_item_id}" hidden value="${beanType.approved_qty}">-->
 
                                                 </c:if>
@@ -96,38 +98,38 @@
                                             <td>
                                                 <c:if test="${beanType.order_status=='Pending'}">
                                                     <input type="text" name="discounted_percent${beanType.order_item_id}"  id="discounted_percent${beanType.order_item_id}" 
-                                                           value="${beanType.discount_percent}" style="width:100px" onblur="checkValidationForPrice(this.value, '${beanType.basic_price}', '${beanType.order_item_id}')">
+                                                           value="${beanType.discount_percent}" style="width:70px" onblur="checkValidationForPrice(this.value, '${beanType.basic_price}', '${beanType.order_item_id}')">
                                                 </c:if>
                                                 <c:if test="${beanType.order_status!='Pending'}">
                                                     <input type="text" name="discounted_percent${beanType.order_item_id}" id="discounted_percent${beanType.order_item_id}"
-                                                           disabled="" value="${beanType.discount_percent}" style="width:100px" onblur="checkValidationForPrice(this.value, '${beanType.basic_price}', '${beanType.order_item_id}')">
+                                                           disabled="" value="${beanType.discount_percent}" style="width:70px" onblur="checkValidationForPrice(this.value, '${beanType.basic_price}', '${beanType.order_item_id}')">
                                                 </c:if>
                                             </td>
 
                                             <td>
                                                 <c:if test="${beanType.order_status=='Pending'}">
                                                     <input type="text" name="discounted_price${beanType.order_item_id}"  id="discounted_price${beanType.order_item_id}" 
-                                                           value="${beanType.discount_price}" style="width:100px" >
+                                                           value="${beanType.discount_price}" style="width:90px" >
                                                 </c:if>
                                                 <c:if test="${beanType.order_status!='Pending'}">
                                                     <input type="text" name="discounted_price${beanType.order_item_id}"  id="discounted_price${beanType.order_item_id}" 
-                                                           value="${beanType.discount_price}" style="width:100px" disabled="">
+                                                           value="${beanType.discount_price}" style="width:90px" disabled="">
                                                 </c:if>
                                             </td>
                                             <td>
-                                                <select class="btn btn-primary ml-3" style="width:100px" value="${beanType.item_status}"
+                                                <select class="btn btn-primary myNewLinkBtn px-1 ml-3 fontFourteen" style="width:100px" value="${beanType.item_status}"
                                                         name="item_status${beanType.order_item_id}">
                                                     <!--                                                    <option  class="btn btn-primary">Select</option>-->
                                                     <c:if test="${beanType.item_status=='Approved'}">
-                                                        <option  class="btn btn-primary" value="${beanType.item_status}">Approved</option>
+                                                        <option  class="btn btn-primary actionEdit fontFourteen" value="${beanType.item_status}">Approved</option>
                                                     </c:if>
                                                     <c:if test="${beanType.item_status=='Denied'}">
-                                                        <option  class="btn btn-primary" value="${beanType.item_status}"> Denied</option>
+                                                        <option  class="btn btn-primary actionDelete fontFourteen" value="${beanType.item_status}"> Denied</option>
                                                     </c:if>
                                                     <c:if test="${beanType.item_status=='Pending'}">
-                                                        <option  class="btn btn-primary">Select</option>
-                                                        <option  class="btn btn-primary" value="Approved">Approved</option>
-                                                        <option  class="btn btn-primary" value="Denied">Denied</option>
+                                                        <option  class="btn btn-primary fontFourteen">Select</option>
+                                                        <option  class="btn btn-primary actionEdit fontFourteen" value="Approved">Approved</option>
+                                                        <option  class="btn btn-primary actionDelete fontFourteen" value="Denied">Denied</option>
 
                                                     </c:if>
                                                 </select>
@@ -136,16 +138,16 @@
                                         </c:forEach>
 
                                         <tr class="darkBlueBg">
-                                            <td colspan="5"></td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3">Total Amount</td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_approved_qty"></td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3">${total_amount}</td>  
-                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_approved_price">${total_approved_price}</td>  
-                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_percent">${total_discount_percent}</td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3" id="total_discounted_price">${total_discount_price}</td>
-                                            <td class="font-weight-bold fontSeventeen text-white py-3">
-                                                <input type="submit" name="task"  id="approved" value="Approve">
-                                                <input type="submit" name="task"  id="denied" value="Denied">
+                                            <td colspan="4"></td>
+                                            <td colspan="2" class="totalValue text-white">Total Amount</td>
+                                            <td class="totalValue text-white" id="total_approved_qty"></td>
+                                            <td class="totalValue text-white">${total_amount}</td>  
+                                            <td class="totalValue text-white" id="total_approved_price">${total_approved_price}</td>  
+                                            <td class="totalValue text-white" id="total_percent">${total_discount_percent}</td>
+                                            <td class="totalValue text-white" id="total_discounted_price">${total_discount_price}</td>
+                                            <td class="totalValue text-white py-2">
+                                                <input type="submit" name="task"  class="btn actionEdit fontFourteen" id="approved" value="Approve">
+                                                <input type="submit" name="task"  class="btn actionDelete fontFourteen" id="denied" value="Denied">
                                             </td>   
                                         </tr>                    
                                         </tbody>

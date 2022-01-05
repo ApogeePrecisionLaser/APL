@@ -62,19 +62,15 @@
             <div class="">
                 <div class="row mx-0">
                     <div class="col-10 col-md-7">
-                        <a href="DealersOrderController" class="btn myThemeBtn fontFourteen">Back To List</a>
-
+                        <div class="d-flex leftHeadText">
+                            <div class="mr-2 backBtnWrap">
+                                <a href="DealersOrderController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                            </div>
+<!--                            <div class="mt-2">
+                                <h6>Order ID: APL0000123</h6>
+                            </div>-->
+                        </div> 
                     </div>
-                    <!--                    <div class="col-md-5">
-                                            <div class="searchWrap">
-                                                <form action="#">
-                                                    <div class="form-group mb-0 d-flex">
-                                                        <input type="email" class="form-control" placeholder="Search by product name">
-                                                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                                    </div>                          
-                                                </form>
-                                            </div>
-                                        </div>-->
                     <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
                             <button type="button" class="close" data-dismiss="alert" >&times;</button>
@@ -222,8 +218,8 @@
                                             <td id="coupon_discount">0</td>
                                         </tr>
                                         <tr>
-                                            <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;">Total Amount</td>
-                                            <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;" id="total_amount">?10,80,000.00</td>
+                                            <td class="totalValue">Total Amount</td>
+                                            <td class="totalValue" id="total_amount">?10,80,000.00</td>
                                         </tr>
                                     </tbody>
                                 </table>

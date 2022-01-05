@@ -11,28 +11,37 @@
 </style>
 
 <div class="content-wrapper" id="contentWrapper">
-    <section class="content">
-        <div class="container-fluid">
-            <div class="mainNavigationMenu">
-
-                <div class=" marginTop40">
-                    <div class="">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group mb-0 d-flex">
-                                    <a href="DealersController" class="btn btn-primary myNewLinkBtn">Back</a>
-                                </div>                          
+    <section class="content marginTop20">        
+        <div class="content-header position-relative">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6 pl-0">
+                        <div class="d-flex">
+                            <div class="mr-2 backBtnWrap">
+                                <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                             </div>
-                            <div class="col-md-7">
+                            <div>
+                                <h1>Kisan Agro</h1>
+                            </div>
+                            <div class="position-relative">
                                 <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
                                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                                     <strong>Success!</strong> 
                                 </div>
                             </div>
-                        </div>
+                        </div>  
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Dealers Product Map</li>
+                        </ol>
                     </div>
                 </div>
-
+            </div><!-- /.container-fluid -->
+        </div>
+        
+        <div class="container-fluid">
                 <c:forEach var="beanType1" items="${requestScope['list1']}"
                            varStatus="loopCounter">
                     <div class="mt-4">

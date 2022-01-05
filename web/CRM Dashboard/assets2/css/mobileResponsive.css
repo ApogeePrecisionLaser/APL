@@ -52,7 +52,11 @@ ul.piclist{
     justify-content: space-around;
     display: flex;
 }
-
+._product-images .mainImgPrDetail{
+    width: 100%;
+    height:265px;
+    object-fit: cover;
+}
 
 
 
@@ -163,6 +167,9 @@ ul.piclist{
     margin-bottom: 7px;
 }
 
+.profileCard .profileProgreeBar .progress{
+    width:150px;
+}
 
 
 

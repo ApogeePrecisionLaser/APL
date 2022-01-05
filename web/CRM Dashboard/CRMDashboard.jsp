@@ -27,10 +27,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
+            <div class="row1 d-flex justify-content-between flex-wrap">
+                <div class="col-lg-2 dashboardTopBox col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>${pending_orders}</h3>
@@ -42,8 +40,7 @@
                         <a href="PendingOrdersController" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-2 dashboardTopBox col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>${sales_enquiries}<!-- <sup style="font-size: 20px">%</sup> --></h3>
@@ -55,8 +52,7 @@
                         <a href="DealersOrderController?task=sales_enquiry_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
+                <div class="col-lg-2 dashboardTopBox col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>${complaint_enquiries}</h3>
@@ -68,9 +64,7 @@
                         <a href="DealersOrderController?task=complaint_enquiry_list" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
+                <div class="col-lg-2 dashboardTopBox col-6">
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>65</h3>
@@ -82,7 +76,18 @@
                         <a href="NotificationController" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                <div class="col-lg-2 dashboardTopBox col-6">
+                    <div class="small-box bg-voilet">
+                        <div class="inner">
+                            <h3 class="text-white">65</h3>
+                            <p class="text-white">Total Sale</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="NotificationController" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
             </div>
             <!-- /.row -->
             <!-- Main row -->
@@ -110,7 +115,7 @@
                 </section>
 
 
-                <section class="col-lg-6 connectedSortable ui-sortable"> 
+<!--                <section class="col-lg-6 connectedSortable ui-sortable"> 
                     <div class="card bg-gradient-info">
                         <div class="card-header border-0">
                             <h3 class="card-title">
@@ -130,9 +135,7 @@
                             <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                         </div>              
                     </div>
-                    <!-- /.card -->
-
-                </section>
+                </section>-->
 
                 <!--                <section class="col-lg-6  content">
                                     <div class="container-fluid">  

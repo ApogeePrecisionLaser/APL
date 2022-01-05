@@ -58,8 +58,11 @@
             <div class="row marginTop20">
                 <div class="col-md-7 col-10 pr-0">
                     <div class="d-flex">  
-                        <div class="mr-2">
+<!--                        <div class="mr-2">
                             <a href="DealersOrderController" class="btn myThemeBtn fontFourteen">Back</a>
+                        </div>-->
+                         <div class="mr-2 backBtnWrap">
+                            <a href="DealersOrderController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                         </div>
                         <div class="searchWrap">
                             <form action="DealersOrderController">

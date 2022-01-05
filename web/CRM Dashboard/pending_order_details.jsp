@@ -8,9 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <div class="d-flex">
+                    <div class="d-flex leftHeadText">
+                        <div class="mr-2 backBtnWrap">
+                            <a href="PendingOrdersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
                         <div>
-                            <a href="PendingOrdersController" class="btn btn-primary myNewLinkBtn">Back</a>
+                            <h6 class="mt-2">Order ID : APL0000654</h>
                         </div>
                     </div>  
                 </div>
@@ -39,10 +42,10 @@
                                             <th>Category</th>
                                             <th>Req Qty</th>
                                             <th>Approved Qty</th>
-                                            <th>MRP Price</th>
-                                            <th>Approved Price</th>
-                                            <th>Discount Percent</th>
-                                            <th>Discount Price</th>
+                                            <th>MRP (<small class="fas fa-rupee-sign"></small>)</th>
+                                            <th>Approved (<small class="fas fa-rupee-sign"></small>)</th>
+                                            <th>Discount (%)</th>
+                                            <th>Discount (<small class="fas fa-rupee-sign"></small>)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,11 +78,11 @@
                                                                             </tr>-->
                                     <tr class="darkBlueBg">
                                         <td colspan="5"></td>
-                                        <td class="font-weight-bold fontSeventeen text-white py-3">Total Amount</td>
-                                        <td class="font-weight-bold fontSeventeen text-white py-3">${total_amount}</td>                    
-                                        <td class="font-weight-bold fontSeventeen text-white py-3">${total_approved_price}</td>                    
-                                        <td class="font-weight-bold fontSeventeen text-white py-3">${total_discount_percent}</td>                    
-                                        <td class="font-weight-bold fontSeventeen text-white py-3">${total_discount_price}</td>                    
+                                        <td class="totalValue text-white py-2">Total Amount</td>
+                                        <td class="totalValue text-white">${total_amount}</td>                    
+                                        <td class="totalValue text-white">${total_approved_price}</td>                    
+                                        <td class="totalValue text-white">${total_discount_percent}</td>                    
+                                        <td class="totalValue text-white">${total_discount_price}</td>                    
                                     </tr>                    
                                     </tbody>
                                 </table>
