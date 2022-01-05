@@ -175,8 +175,8 @@
                                             <td id="coupon_discount">0</td>
                                         </tr>
                                         <tr>
-                                            <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;">Total Amount</td>
-                                            <td class="font-weight-bold1" style="font-size: 15px;font-weight: 600;" id="total_amount">?10,80,000.00</td>
+                                            <td class="totalValue">Total Amount</td>
+                                            <td class="totalValue" id="total_amount">?10,80,000.00</td>
                                         </tr>
                                     </tbody>
                                 </table>

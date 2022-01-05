@@ -35,21 +35,28 @@
 
 
 <script src="CRM Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="CRM Dashboard/plugins/chart.js/Chart.min.js"></script>
+<!--<script src="CRM Dashboard/plugins/chart.js/Chart.min.js"></script>
 <script src="CRM Dashboard/plugins/sparklines/sparkline.js"></script>
 <script src="CRM Dashboard/plugins/jqvmap/jquery.vmap.min.js"></script>
 <script src="CRM Dashboard/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <script src="CRM Dashboard/plugins/jquery-knob/jquery.knob.min.js"></script>
 <script src="CRM Dashboard/plugins/moment/moment.min.js"></script>
-<script src="CRM Dashboard/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="CRM Dashboard/plugins/daterangepicker/daterangepicker.js"></script>-->
 <script src="CRM Dashboard/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="CRM Dashboard/plugins/summernote/summernote-bs4.min.js"></script>
+<!--<script src="CRM Dashboard/plugins/summernote/summernote-bs4.min.js"></script>-->
 <script src="CRM Dashboard/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <script src="CRM Dashboard/assets2/js/adminlte.js"></script>
 <script src="CRM Dashboard/assets2/js/demo.js"></script>
 <script src="CRM Dashboard/assets2/js/owl.carousel.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!--<script src="CRM Dashboard/assets2/js/dashboard.js"></script>-->
+
+
+<!--<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>-->
+
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
 <!--<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>-->
 <!--<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
@@ -60,11 +67,16 @@
 </html>
 
 
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+</script>
 
 <script>
-    $(document).ready(function () {
-        var table = $('#mytable').DataTable();
-    });
+    $(document).ready(function() {
+    $('#mytable').DataTable();
+} );
 </script>
 
 <!--<script>

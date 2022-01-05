@@ -34,8 +34,13 @@
                             <p class="text-secondry">${beanType.gst_number}</p>
                         </div>
                     </div>
-                    <br><br><br><br><br><br>
-                    <div class="card card-primary rounded-0 profileCard" style="">
+                    <div class="mr-2 mt-2 backBtnWrap">
+                        <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                    </div>
+<!--                    <div class="text-left mt-4">
+                        <a href="ProfileController" class="btn myThemeBtn text-right">Back</a>
+                    </div>-->
+                    <div class="card card-primary rounded-0 profileCard">
                         <div class="card-body">
                             <div class="mt-1">
                                 <div class="text-right">

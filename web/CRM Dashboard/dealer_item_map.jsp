@@ -59,10 +59,11 @@
                                     <li class="breadcrumb-item active">Dealers Product Map</li>
                                 </ol>
                             </div>
-                        </div>
-                    </div><!-- /.container-fluid -->
                 </div>
-
+            </div><!-- /.container-fluid -->
+        </div>
+        
+        <div class="container-fluid">
                 <c:forEach var="beanType1" items="${requestScope['list1']}"
                            varStatus="loopCounter">
                     <div class="mt-4">
@@ -253,3 +254,11 @@
 
 
 
+                        </div>  
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Dealers Product Map</li>
+                        </ol>
+                    </div>

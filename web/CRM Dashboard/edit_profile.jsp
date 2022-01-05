@@ -39,8 +39,7 @@
                     <a href="ProfileController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
 
                 </div>
-                <br><br>
-                <div class="card card-primary rounded-0 profileCard mt-2">
+                <div class="card card-primary rounded-0 profileCard">
                     <div class="card-body px-4">
                         <div class="mt-1">
                             <form class="myForm" method="post" action="ProfileController" enctype="multipart/form-data">

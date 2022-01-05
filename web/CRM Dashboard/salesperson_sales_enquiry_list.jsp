@@ -89,8 +89,10 @@
 
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To SalesManager'}">
-                                                                <input type="text" name="dealers" class="dealers" id="dealers${beanType.enquiry_table_id}">
-                                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn myBtnInfo fontFourteen" title="Assigned To Dealer">Assign To Dealer</a>
+                                                                <div class="salesManAppInputWrap">
+                                                                    <input type="text" name="dealers" class="dealers form-control" id="dealers${beanType.enquiry_table_id}">
+                                                                    <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn actionEdit fontFourteen px-1" title="Assigned To Dealer"><i class="far fa-share-square"></i></a>
+                                                                </div>
                                                             </c:when>
 
                                                             <c:otherwise>
@@ -102,7 +104,7 @@
 
                                                     <td class="fontFourteen d-flex">
                                                         <div>
-                                                            <a href="ApproveOrdersController?task=viewEnquiryDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Enquiry Detail"></a>
+                                                            <a href="ApproveOrdersController?task=viewEnquiryDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionView" title="View Enquiry Detail"></a>
                                                         </div> 
                                                     </td>
                                                 </tr> 

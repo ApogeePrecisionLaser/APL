@@ -11,8 +11,9 @@
         <link rel="stylesheet" href="CRM Dashboard/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <link rel="stylesheet" href="CRM Dashboard/plugins/jqvmap/jqvmap.min.css">
         <link rel="stylesheet" href="CRM Dashboard/assets2/css/adminlte.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<!--        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="CRM Dashboard/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
         <link rel="stylesheet" href="CRM Dashboard/plugins/daterangepicker/daterangepicker.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
@@ -40,6 +41,11 @@
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        <div class="languageConvertorWrap">
+                            <div id="google_translate_element"></div>
+                        </div>
+                    </li>
+<!--                    <li class="nav-item">
                         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                             <i class="fas fa-search"></i>
                         </a>
@@ -58,7 +64,7 @@
                                 </div>
                             </form>
                         </div>
-                    </li>
+                    </li>-->
 
 
                     <!-- Notifications Dropdown Menu -->
@@ -164,7 +170,6 @@
                         <div class="image">
                             <img src="CRM Dashboard/assets2/img/product/profileImg.png" class="img-circle elevation-2 usr_image" alt="User Image">
                         </div>
-
                         <div class="info">
                             <%
                                 if (session.getAttribute("user_role").equals("Dealer")) {

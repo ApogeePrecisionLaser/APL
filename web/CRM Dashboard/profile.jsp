@@ -32,6 +32,15 @@
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
                         <p class="text-secondry">${gst}</p>
+<!--                        <div class="text-left1">
+                            <small class="text-danger ">Profile completion</small>
+                            <div class="progress mx-auto" style="width:300px;">                                        
+                                <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                  <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>-->
                     </div>
                 </div>
                 <div class="text-right mt-2">
@@ -52,7 +61,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-4">
+                            
+                            <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Dealer Name:</small></p>

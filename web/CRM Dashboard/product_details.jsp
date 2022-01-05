@@ -70,7 +70,7 @@
                                     <input type="hidden" name="count" id="count" value="${count}">
                                     <input type="hidden" name="stock_quantity" id="stock_quantity" value="${beanType.stock_quantity}">
 
-                                    <img class="my_img${loopCounter.count}" src="" alt="" width="500" height="500">
+                                    <img class="my_img${loopCounter.count} mainImgPrDetail" src="" alt=""  width="100%" height="400">
                                 </div>
                             </div>
                         </div>
@@ -230,12 +230,12 @@
 
         };
         $.fn.picZoomer.defaults = {
-            picHeight: 460,
+            picHeight: 400,
             scale: 2.5,
             zoomerPosition: {top: '0', left: '380px'},
 
             zoomWidth: 400,
-            zoomHeight: 460
+            zoomHeight: 400
         };
     })(jQuery);
 

@@ -596,7 +596,7 @@ table.dataTable thead .sorting_asc {
 .piclist li{
     display: inline-block;
     width: 90px;
-    height: 114px;
+    height: 99px;
     border: 1px solid #eee;
 }
 .piclist li img{
@@ -640,8 +640,13 @@ table.dataTable thead .sorting_asc {
 ._boxzoom ._product-images .picZoomer img.my_img {
     width: 100%;
 }
+._product-images .mainImgPrDetail{
+    width: 100%;
+    height:400px;
+    object-fit: cover;
+}
 .piclist li img {
-    height:100px;
+    height:85px;
     object-fit:cover;
 }
 ._product-detail-content {

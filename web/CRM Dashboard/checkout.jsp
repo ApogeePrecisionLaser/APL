@@ -126,8 +126,8 @@
                                             <td class="fontFourteen" id="coupon_discount">${total_discount_percent}</td>
                                         </tr>
                                         <tr>
-                                            <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;">Total Amount</td>
-                                            <td class="font-weight-bold1" style="font-size: 19px;font-weight: 600;" id="total_amount">Rs. ${total_discount_price}</td>
+                                            <td class="totalValue">Total Amount</td>
+                                            <td class="totalValue" id="total_amount">Rs. ${total_discount_price}</td>
                                         </tr>
                                     </tbody>
                                 </table>
