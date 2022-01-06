@@ -20,7 +20,7 @@ public class LoginModel {
     private static Connection connection;
     private String message;
     private String msgBgColor;
-    private final String COLOR_OK = "yellow";
+    private final String COLOR_OK = "green";
     private final String COLOR_ERROR = "red";
     private String driverClass;
     private String connectionString;
@@ -71,7 +71,7 @@ public class LoginModel {
             System.out.println("LoginModel setUserFullDetail() Error: " + e);
         }
     }
-    
+
     public int checkLogin(String user_name, String password) {
         int login_id = 0;
         String designation = "";
@@ -100,7 +100,7 @@ public class LoginModel {
     public String getUserName(String mobile, String email) {
         String str = "";
         PreparedStatement pstmt;
-//        ResultSet rst;
+        ResultSet rst;
         String query = " select kp.key_person_name from key_person kp where kp.active='Y' ";
         if (!mobile.equals("") && mobile != null) {
             query += " and kp.mobile_no1='" + mobile + "' ";
@@ -109,13 +109,13 @@ public class LoginModel {
             query += " and kp.email_id1='" + email + "' ";
         }
         try {
-//            connection.setAutoCommit(false);
-            Connection con = DriverManager.getConnection(connectionString, "jpss", "jpss");
-
-            ResultSet rst = con.prepareStatement(query).executeQuery();
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
             while (rst.next()) {
                 str = rst.getString(1);
             }
+
         } catch (Exception e) {
             System.out.println("getUserName ERROR inside LoginModel - " + e);
         }

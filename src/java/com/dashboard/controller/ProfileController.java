@@ -42,6 +42,8 @@ public class ProfileController extends HttpServlet {
         String logged_org_name = "";
         String logged_org_office = "";
         String loggedUser = "";
+        String loggedMobile = "";
+        String loggedEmail = "";
         int logged_org_office_id = 0;
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
@@ -56,6 +58,8 @@ public class ProfileController extends HttpServlet {
             logged_org_name = session.getAttribute("logged_org_name").toString();
             logged_designation = session.getAttribute("logged_designation").toString();
             logged_org_office = session.getAttribute("logged_org_office").toString();
+            loggedMobile = session.getAttribute("log_mobile").toString();
+            loggedEmail = session.getAttribute("log_email").toString();
             logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
             logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
             logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
@@ -144,6 +148,29 @@ public class ProfileController extends HttpServlet {
         if (task == null) {
             task = "";
         }
+
+        String task1 = request.getParameter("task1");
+        if (task1 == null) {
+            task1 = "";
+        }
+
+        if (task1.equals("Change")) {
+            String newPassword = request.getParameter("newPassword");
+            String confirmPassword = request.getParameter("confirmPassword");
+            int update_rows = 0;
+            try {
+                update_rows = model.updatePassword(logged_key_person_id, newPassword, loggedUser);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            request.setAttribute("message", model.getMessage());
+            request.setAttribute("msgBgColor", model.getMessageBGColor());
+            DBConnection.closeConncetion(model.getConnection());
+            if (update_rows > 0) {
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+        }
         if (task.equals("Update")) {
 //            System.err.println("");
 //            Profile key = new Profile();
@@ -196,7 +223,7 @@ public class ProfileController extends HttpServlet {
             orgOffice.setEmail_id2("");
             orgOffice.setMobile_no1(map.get("mobile1").trim());
             orgOffice.setMobile_no2("");
-            orgOffice.setLandline_no1("");
+            orgOffice.setLandline_no1(map.get("landline").trim());
             orgOffice.setLandline_no2("");
             orgOffice.setLandline_no3("");
             orgOffice.setGst_number(map.get("gst").trim());

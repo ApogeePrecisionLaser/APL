@@ -43,12 +43,12 @@
                     <div class="card card-primary rounded-0 profileCard">
                         <div class="card-body">
                             <div class="mt-1">
-                                <div class="text-right">
-                                    <!--<a href="DealersController" class="btn myThemeBtn text-right">Back</a>-->
+<!--                                <div class="text-right">
+                                    <a href="DealersController" class="btn myThemeBtn text-right">Back</a>
 
                                     <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
 
-                                </div>
+                                </div>-->
                                 <div class="row mt-4">
                                     <div class="col-md-4">
                                         <div>
@@ -161,6 +161,6 @@
 <script>
     var key_person_id = $('#key_person_id').val();
 //    $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
-    $('.usr_image').attr("src", "http://localhost:8080/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
+    $('.usr_image').attr("src", "http://"+IMAGE_URL+"/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
 
 </script>

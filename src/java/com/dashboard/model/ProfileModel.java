@@ -1506,6 +1506,63 @@ public class ProfileModel {
         return list;
     }
 
+    public static int getRevisionnoForUser(int key_id) {
+        int revision = 0;
+        try {
+
+            String query = " SELECT max(rev_no) as revision_no FROM user WHERE key_person_id =" + key_id + "  && active='Y';";
+
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+
+            while (rset.next()) {
+                revision = rset.getInt("revision_no");
+
+            }
+        } catch (Exception e) {
+            System.out.println("KeypersonModel getRevisionnoForUser error: " + e);
+
+        }
+        return revision;
+    }
+
+    public int updatePassword(int logged_key_person_id, String newPassword, String logged_user) throws SQLException {
+//        int revision = ProfileModel.getRevisionnoForUser(logged_key_person_id);
+        int rowsAffected = 0;
+        int count = 0;
+        int updateRowsAffected = 0;
+        Boolean status = false;
+
+        String query2 = "UPDATE user SET user_password=? WHERE key_person_id=? and active='Y' ";
+
+        try {
+            connection.setAutoCommit(false);
+
+            PreparedStatement pstm = connection.prepareStatement(query2);
+            pstm.setString(1, newPassword);
+            pstm.setInt(2, logged_key_person_id);
+            updateRowsAffected = pstm.executeUpdate();
+            if (updateRowsAffected > 0) {
+                status = true;
+                message = "Password Changed successfully Please Login with new password.";
+                messageBGColor = COLOR_OK;
+                connection.commit();
+                //delete record
+            } else {
+                status = false;
+                message = "Cannot update the record, some error.";
+                messageBGColor = COLOR_ERROR;
+                connection.rollback();
+            }
+        } catch (Exception e) {
+            System.out.println("Error: ProfileModel---updatePassword" + e);
+        } finally {
+
+        }
+        return updateRowsAffected;
+    }
+
     public void closeConnection() {
         try {
             connection.close();

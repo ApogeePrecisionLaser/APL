@@ -250,6 +250,7 @@ public class DealersOrder {
     private String partyGSTNo;
     private String officeMobNo;
     private String requested_to;
+    private String requested_to_mobile;
     private String dealer;
     private String salesperson;
     private String delivery_challan_no;
@@ -268,6 +269,16 @@ public class DealersOrder {
     private String item_status;
     private String discount_percent;
     private String approved_price;
+    private int order_checkout_id;
+    private int payment_type_id;
+    private String transaction_no;
+    private String payment_type;
+    private String mobile_no;
+    private String billing_address;
+    private String shipping_address;
+    private String org_office;
+    private String delivery_charge;
+    private String email;
 
     /**
      * @return the item_names_id
@@ -1009,6 +1020,160 @@ public class DealersOrder {
      */
     public void setApproved_price(String approved_price) {
         this.approved_price = approved_price;
+    }
+
+    /**
+     * @return the order_checkout_id
+     */
+    public int getOrder_checkout_id() {
+        return order_checkout_id;
+    }
+
+    /**
+     * @param order_checkout_id the order_checkout_id to set
+     */
+    public void setOrder_checkout_id(int order_checkout_id) {
+        this.order_checkout_id = order_checkout_id;
+    }
+
+    /**
+     * @return the payment_type_id
+     */
+    public int getPayment_type_id() {
+        return payment_type_id;
+    }
+
+    /**
+     * @param payment_type_id the payment_type_id to set
+     */
+    public void setPayment_type_id(int payment_type_id) {
+        this.payment_type_id = payment_type_id;
+    }
+
+    /**
+     * @return the transaction_no
+     */
+    public String getTransaction_no() {
+        return transaction_no;
+    }
+
+    /**
+     * @param transaction_no the transaction_no to set
+     */
+    public void setTransaction_no(String transaction_no) {
+        this.transaction_no = transaction_no;
+    }
+
+    /**
+     * @return the payment_type
+     */
+    public String getPayment_type() {
+        return payment_type;
+    }
+
+    /**
+     * @param payment_type the payment_type to set
+     */
+    public void setPayment_type(String payment_type) {
+        this.payment_type = payment_type;
+    }
+
+    /**
+     * @return the mobile_no
+     */
+    public String getMobile_no() {
+        return mobile_no;
+    }
+
+    /**
+     * @param mobile_no the mobile_no to set
+     */
+    public void setMobile_no(String mobile_no) {
+        this.mobile_no = mobile_no;
+    }
+
+    /**
+     * @return the billing_address
+     */
+    public String getBilling_address() {
+        return billing_address;
+    }
+
+    /**
+     * @param billing_address the billing_address to set
+     */
+    public void setBilling_address(String billing_address) {
+        this.billing_address = billing_address;
+    }
+
+    /**
+     * @return the shipping_address
+     */
+    public String getShipping_address() {
+        return shipping_address;
+    }
+
+    /**
+     * @param shipping_address the shipping_address to set
+     */
+    public void setShipping_address(String shipping_address) {
+        this.shipping_address = shipping_address;
+    }
+
+    /**
+     * @return the org_office
+     */
+    public String getOrg_office() {
+        return org_office;
+    }
+
+    /**
+     * @param org_office the org_office to set
+     */
+    public void setOrg_office(String org_office) {
+        this.org_office = org_office;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the delivery_charge
+     */
+    public String getDelivery_charge() {
+        return delivery_charge;
+    }
+
+    /**
+     * @param delivery_charge the delivery_charge to set
+     */
+    public void setDelivery_charge(String delivery_charge) {
+        this.delivery_charge = delivery_charge;
+    }
+
+    /**
+     * @return the requested_to_mobile
+     */
+    public String getRequested_to_mobile() {
+        return requested_to_mobile;
+    }
+
+    /**
+     * @param requested_to_mobile the requested_to_mobile to set
+     */
+    public void setRequested_to_mobile(String requested_to_mobile) {
+        this.requested_to_mobile = requested_to_mobile;
     }
 
 }

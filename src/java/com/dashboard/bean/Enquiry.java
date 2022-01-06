@@ -42,6 +42,7 @@ public class Enquiry {
     private String date_time;
     private String enquiry_type;
     private String assigned_key_person;
+    private String assigned_to_designation;
 
     /**
      * @return the enquiry_source_table_id
@@ -475,5 +476,19 @@ public class Enquiry {
      */
     public void setAssigned_key_person(String assigned_key_person) {
         this.assigned_key_person = assigned_key_person;
+    }
+
+    /**
+     * @return the assigned_to_designation
+     */
+    public String getAssigned_to_designation() {
+        return assigned_to_designation;
+    }
+
+    /**
+     * @param assigned_to_designation the assigned_to_designation to set
+     */
+    public void setAssigned_to_designation(String assigned_to_designation) {
+        this.assigned_to_designation = assigned_to_designation;
     }
 }

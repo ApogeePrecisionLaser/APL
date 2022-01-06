@@ -1143,7 +1143,7 @@ public class DealersOrderModel {
                 query += " and kp2.key_person_name='" + logged_key_person + "' ";
             }
         }
-        query += " group by odt.order_table_id order by odt.order_no desc ";
+        query += " group by odt.order_table_id order by odt.date_time desc ";
         int prices = 0;
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -1158,6 +1158,46 @@ public class DealersOrderModel {
                 bean.setOrder_table_id(rset.getInt("order_table_id"));
                 bean.setRequested_by(rset.getString("requested_by"));
 //                prices = prices + (rset.getInt("prices"));
+
+                bean.setBasic_price(rset.getString("prices"));
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: OrderModel showdata-" + e);
+        }
+        return list;
+    }
+
+    public ArrayList<DealersOrder> getAllDashboardOrders(String logged_key_person, String user_role) {
+        ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
+        String query = " select odt.order_no,odt.date_time,odt.description  ,s.status,kp2.key_person_name as requested_to,odt.order_table_id ,"
+                + " SUM(osp.prices) as prices,kp1.key_person_name as requested_by,kp2.mobile_no1 as requested_to_mobile "
+                + " from  order_table odt,key_person kp1,key_person kp2,  status s,order_item odi,payment_mode pm,orders_sales_pricing osp "
+                + " where odt.requested_to=kp2.key_person_id  and odt.requested_by=kp1.key_person_id "
+                + " and odt.status_id=s.status_id and odt.active='Y' and kp1.active='Y' and kp2.active='Y'  and odi.active='Y' "
+                + " and pm.active='Y' and odt.order_table_id=odi.order_table_id and pm.order_id=odt.order_table_id and "
+                + " osp.order_id=odt.order_table_id "
+                + " and osp.order_item_id =odi.order_item_id and s.status!='Delivered' ";
+        if (!user_role.equals("Admin")) {
+            if (!logged_key_person.equals("") && logged_key_person != null) {
+                query += " and kp1.key_person_name='" + logged_key_person + "' ";
+            }
+        }
+        query += " group by odt.order_table_id order by odt.date_time desc limit 5 ";
+        int prices = 0;
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            while (rset.next()) {
+                DealersOrder bean = new DealersOrder();
+                bean.setOrder_no(rset.getString("order_no"));
+                bean.setDate_time(rset.getString("date_time"));
+                String status = rset.getString("status");
+                bean.setStatus(status);
+                bean.setRequested_to(rset.getString("requested_to"));
+                bean.setDescription(rset.getString("description"));
+                bean.setOrder_table_id(rset.getInt("order_table_id"));
+                bean.setRequested_by(rset.getString("requested_by"));
+                bean.setRequested_to_mobile(rset.getString("requested_to_mobile"));
 
                 bean.setBasic_price(rset.getString("prices"));
                 list.add(bean);
@@ -1299,7 +1339,7 @@ public class DealersOrderModel {
                 query += " and kp1.key_person_name='" + logged_key_person + "' ";
             }
         }
-        query += " group by odt.order_table_id order by odt.order_no desc ";
+        query += " group by odt.order_table_id order by odt.date_time desc ";
         int prices = 0;
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -1344,7 +1384,7 @@ public class DealersOrderModel {
         }
         return revision;
     }
-    
+
     public static String getOrderNo(String order_table_id) {
         String order_no = "";
         try {
@@ -1616,7 +1656,7 @@ public class DealersOrderModel {
                     + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' and oo.active='Y' "
                     + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id!=1 ";
+                    + " and et.enquiry_status_id!=1 and ssm.salesman_id=et.assigned_to ";
             if (user_role.equals("Sales")) {
                 query += " and ssm.salesman_id='" + logged_key_person_id + "' ";
             }
@@ -2195,6 +2235,36 @@ public class DealersOrderModel {
         return id;
     }
 
+    public int getOrderTableId(String order_no) {
+
+        String query = " select order_table_id from order_table where order_no='" + order_no + "' and active='Y' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("order_table_id");
+        } catch (Exception e) {
+            System.out.println("EnquiryModel getOrderTableId Error: " + e);
+        }
+        return id;
+    }
+
+    public int getPaymentTypeId(String payment_type) {
+
+        String query = " select payment_type_id from payment_type where payment_type='" + payment_type + "' and active='Y' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("payment_type_id");
+        } catch (Exception e) {
+            System.out.println("EnquiryModel getPaymentTypeId Error: " + e);
+        }
+        return id;
+    }
+
     public ArrayList<DealersOrder> getAllPendingOrders(String logged_key_person, String user_role, String order_status) {
         ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
 
@@ -2246,6 +2316,106 @@ public class DealersOrderModel {
             System.out.println("Error: OrderModel showdata-" + e);
         }
         return list;
+    }
+
+    public int orderCheckout(DealersOrder bean, String logged_user_name, int logged_key_person_id) throws SQLException {
+        String query = "INSERT INTO order_checkout(order_table_id,key_person_id,payment_type_id,"
+                + " transaction_no,mobile_no,billing_address,shipping_address,total_amount,total_discount,discounted_amount,"
+                + " active,remark,date_time,revision_no) "
+                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        int rowsAffected = 0;
+        int updateRowsAffected = 0;
+        int updateRowsAffected2 = 0;
+        int requested_by_id = getRequestedKeyPersonId(logged_user_name);
+        int requested_to_id = getRequestedKeyPersonId(bean.getRequested_to());
+        int order_table_id = getOrderTableId(bean.getOrder_no());
+        int payment_type_id = getPaymentTypeId(bean.getPayment_type());
+        int count = 0;
+        java.util.Date date = new java.util.Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String date_time = sdf.format(date);
+
+        try {
+            connection.setAutoCommit(false);
+            String exist_query = " select count(*) as count from order_checkout where active='Y' and order_table_id='" + order_table_id + "' ";
+
+            PreparedStatement pstmt1 = connection.prepareStatement(exist_query);
+            ResultSet rst = pstmt1.executeQuery();
+            while (rst.next()) {
+                count = rst.getInt("count");
+
+            }
+            if (count > 0) {
+                message = "Can't Checkout Again!..";
+                messageBGColor = COLOR_ERROR;
+            } else {
+                PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                pstmt.setInt(1, order_table_id);
+                pstmt.setInt(2, logged_key_person_id);
+                pstmt.setInt(3, payment_type_id);
+                pstmt.setString(4, bean.getTransaction_no());
+                pstmt.setString(5, bean.getMobile_no());
+                pstmt.setString(6, bean.getBilling_address());
+                pstmt.setString(7, bean.getShipping_address());
+                pstmt.setString(8, bean.getTotal_amount());
+                pstmt.setString(9, bean.getDiscount_percent());
+                pstmt.setString(10, bean.getDiscount_price());
+                pstmt.setString(11, "Y");
+                pstmt.setString(12, "OK");
+                pstmt.setString(13, date_time);
+                pstmt.setInt(14, bean.getRevision_no());
+                rowsAffected = pstmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    String query4 = " select approved_qty,order_item_id from order_table odt,order_item odi where odt.order_table_id=odi.order_table_id "
+                            + " and odt.active='Y' and odi.active='Y' and odt.order_table_id='" + order_table_id + "' ";
+
+                    PreparedStatement pstmt4 = connection.prepareStatement(query4);
+                    ResultSet rst4 = pstmt4.executeQuery();
+                    int approved_qty = 0;
+                    int order_item_id = 0;
+                    while (rst4.next()) {
+                        approved_qty = rst4.getInt("approved_qty");
+                        order_item_id = rst4.getInt("order_item_id");
+
+                        String query2 = " UPDATE order_item SET status_id=?,deliver_qty=? WHERE order_table_id=? and order_item_id=? ";
+
+                        PreparedStatement pstm2 = connection.prepareStatement(query2);
+                        pstm2.setInt(1, 13);
+                        pstm2.setInt(2, approved_qty);
+                        pstm2.setInt(3, order_table_id);
+                        pstm2.setInt(4, order_item_id);
+                        updateRowsAffected = pstm2.executeUpdate();
+
+                    }
+
+                    String query3 = " update order_table set status_id=? where order_table_id=? ";
+                    PreparedStatement pstm3 = connection.prepareStatement(query3);
+                    pstm3.setInt(1, 13);
+                    pstm3.setInt(2, order_table_id);
+                    updateRowsAffected2 = pstm3.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("OrderModel orderCheckout() Error: " + e);
+        }
+        if (rowsAffected > 0) {
+            message = "Record saved successfully.";
+            messageBGColor = COLOR_OK;
+            connection.commit();
+
+        } else {
+            message = "Cannot save the record, some error.";
+            messageBGColor = COLOR_ERROR;
+            connection.rollback();
+
+        }
+        if (count > 0) {
+            message = "Indent No. Already Exists!..";
+            messageBGColor = COLOR_ERROR;
+        }
+
+        return rowsAffected;
     }
 
     public void closeConnection() {

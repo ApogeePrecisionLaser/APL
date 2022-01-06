@@ -94,7 +94,10 @@ public class CRMDashboardController extends HttpServlet {
 
             if (task.equals("viewImage")) {
                 String destinationPath = "";
-                String type = "ph";
+                String type = request.getParameter("type");
+                if (type == null) {
+                    type = "";
+                }
                 String key_person_id = request.getParameter("key_person_id");
                 if (key_person_id == null) {
                     key_person_id = "";
@@ -181,6 +184,9 @@ public class CRMDashboardController extends HttpServlet {
             ArrayList<Enquiry> sales_enquiry_list = model.getAllEnquiriesForDealer(logged_key_person_id);
             ArrayList<Enquiry> complaint_enquiry_list = model.getAllComplaintForDealer(logged_key_person_id);
 
+            ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
+
+            request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
             request.setAttribute("sales_enquiries", sales_enquiry_list.size());
             request.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
             request.setAttribute("pending_orders", pending_orders_list.size());

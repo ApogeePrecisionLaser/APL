@@ -69,7 +69,7 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen">${beanType.sender_mob}</td>
+                                                    <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.enquiry_city}</td>
@@ -80,14 +80,18 @@
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
                                                     <td  class="fontFourteen">
 
+                                                       
+
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To SalesManager'}">
-                                                                <input type="text" name="dealers" class="dealers" id="dealers${beanType.enquiry_table_id}">
-                                                                <a onclick="assignComplaintToDealer('${beanType.enquiry_table_id}')" class="btn myBtnInfo fontFourteen" title="Assigned To Dealer">Assign To Dealer</a>
+                                                                <div class="salesManAppInputWrap">
+                                                                    <input type="text" name="dealers" class="dealers form-control" id="dealers${beanType.enquiry_table_id}">
+                                                                    <a onclick="assignComplaintToDealer('${beanType.enquiry_table_id}')" class="btn actionEdit fontFourteen px-1" title="Assigned To Dealer"><i class="far fa-share-square"></i></a>
+                                                                </div>
                                                             </c:when>
 
                                                             <c:otherwise>
-                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status}</button>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>

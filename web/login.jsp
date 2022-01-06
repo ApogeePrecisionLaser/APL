@@ -193,7 +193,7 @@
                                                 </div>-->
 
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile" name="mobile">
+                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile" name="mobile" id="mobile">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-phone"></span>
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="email" class="form-control rounded-0 fontFourteen" placeholder="Email" name="email">
+                            <input type="email" class="form-control rounded-0 fontFourteen" placeholder="Email" name="email" id="email">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-envelope"></span>
@@ -218,13 +218,14 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <button  type="submit" name="task" id="login12" value="login" class="btn myThemeBtn btn-block" >Sign In</button>
+                                <button  type="submit" name="task" id="login12" value="login" class="btn myThemeBtn btn-block" onclick="validate()" >Sign In</button>
                             </div>
                         </div>
                     </form>
                     <div class="d-flex justify-content-center mt-3 login_container">
-                        <strong style="color: red;">${message}</strong>
+                        <strong style="color: red;" id="error_msg">${message}</strong>
                     </div>
+
 
 <!--                    <div class="d-flex justify-content-between mt-3">
                         <p class="mb-1">
@@ -245,6 +246,18 @@
         <script src="CRM Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
         <script src="CRM Dashboard/assets2/js/adminlte.min.js"></script>
+        <script>
+
+                                    function validate() {
+                                        var mobile = $('#mobile').val();
+                                        var email = $('#email').val();
+                                        if (mobile == '' && email == '') {
+                                            $('#error_msg').text("Please fill One of the field either Email Or Mobile!..");
+                                            return false;
+                                        }
+
+                                    }
+        </script>
     </body>
 </html>
 

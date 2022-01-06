@@ -472,6 +472,81 @@ public class DealersOrderController extends HttpServlet {
             }
         }
 
+        if (task.equals("Complete Checkout")) {
+            int rowsAffected = 0;
+            String subtotal = request.getParameter("subtotal");
+            String delivery_charge = request.getParameter("delivery_charge");
+            String coupon_discount = request.getParameter("coupon_discount");
+            String total_amount = request.getParameter("total_amount");
+            String office_name = request.getParameter("office_name");
+            String email = request.getParameter("email");
+            String mobile = request.getParameter("mobile");
+            String payment_mode = request.getParameter("payment_mode");
+            String transaction_no = request.getParameter("transaction_no");
+            String amount = request.getParameter("amount");
+            String billing_add = request.getParameter("billing_add");
+            String shipping_add = request.getParameter("shipping_add");
+            String deliver_order_no = request.getParameter("order_no");
+
+            int order_checkout_id = 0;
+
+            String req_to = model.getRequestedToKeyPersonorder("", logged_user_name);
+            DealersOrder bean = new DealersOrder();
+            bean.setOrder_checkout_id(order_checkout_id);
+            bean.setOrder_no(deliver_order_no);
+            bean.setRequested_by(logged_user_name);
+            bean.setRequested_to(req_to);
+            bean.setOrg_office(office_name);
+            bean.setEmail(email);
+            bean.setMobile_no(mobile);
+            bean.setPayment_type(payment_mode);
+            bean.setTransaction_no(transaction_no);
+            bean.setTotal_amount(total_amount);
+            bean.setBilling_address(billing_add);
+            bean.setShipping_address(shipping_add);
+            bean.setDiscount_percent(coupon_discount);
+            bean.setDelivery_charge(delivery_charge);
+            bean.setDiscount_price(subtotal);
+
+            if (order_checkout_id == 0) {
+                try {
+                    rowsAffected = model.orderCheckout(bean, logged_user_name, logged_key_person_id);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DealersOrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (rowsAffected > 0) {
+                request.setAttribute("order_no", deliver_order_no);
+                request.getRequestDispatcher("thank_you").forward(request, response);
+
+            } else {
+                request.getRequestDispatcher("error").forward(request, response);
+
+            }
+
+//            JSONObject json = null;
+//            PrintWriter out = response.getWriter();
+//            List<String> list = null;
+//            if (json != null) {
+//                out.println(json);
+//            } else {
+//                JSONObject gson = new JSONObject();
+//                if (rowsAffected > 0) {
+//                    gson.put("msg", "thank_you");
+//                    gson.put("order_no", deliver_order_no);
+//                } else {
+//                    gson.put("msg", "error");
+//                    gson.put("order_no", "");
+//
+//                }
+//                out.println(gson);
+//                DBConnection.closeConncetion(model.getConnection());
+//
+//                return;
+//            }
+        }
+
         if (task.equals("sales_enquiry_list")) {
             ArrayList<Enquiry> list = model.getAllEnquiriesForDealer(logged_key_person_id);
             request.setAttribute("list", list);

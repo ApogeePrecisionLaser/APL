@@ -61,7 +61,7 @@
 <!--<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>-->
 <!--<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>  
 
 </body>
 </html>
@@ -69,14 +69,14 @@
 
 <script type="text/javascript">
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
     }
 </script>
 
 <script>
-    $(document).ready(function() {
-    $('#mytable').DataTable();
-} );
+    $(document).ready(function () {
+        $('#mytable').DataTable();
+    });
 </script>
 
 <!--<script>

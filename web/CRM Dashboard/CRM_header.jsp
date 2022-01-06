@@ -11,8 +11,8 @@
         <link rel="stylesheet" href="CRM Dashboard/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <link rel="stylesheet" href="CRM Dashboard/plugins/jqvmap/jqvmap.min.css">
         <link rel="stylesheet" href="CRM Dashboard/assets2/css/adminlte.min.css">
-<!--        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">-->
+        <!--        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+                <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="CRM Dashboard/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
         <link rel="stylesheet" href="CRM Dashboard/plugins/daterangepicker/daterangepicker.css">
@@ -45,26 +45,26 @@
                             <div id="google_translate_element"></div>
                         </div>
                     </li>
-<!--                    <li class="nav-item">
-                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i class="fas fa-search"></i>
-                        </a>
-                        <div class="navbar-search-block">
-                            <form class="form-inline">
-                                <div class="input-group input-group-sm">
-                                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-navbar" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>-->
+                    <!--                    <li class="nav-item">
+                                            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                            <div class="navbar-search-block">
+                                                <form class="form-inline">
+                                                    <div class="input-group input-group-sm">
+                                                        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-navbar" type="submit">
+                                                                <i class="fas fa-search"></i>
+                                                            </button>
+                                                            <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </li>-->
 
 
                     <!-- Notifications Dropdown Menu -->
@@ -526,8 +526,8 @@
 
 
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+            <script src="CRM Dashboard/assets2/js/myJS.js" type="text/javascript"></script>
 
             <script>
-                $('.usr_image').attr("src", "http://localhost:8080/APL/CRMDashboardController?task=viewImage");
-
+                $('.usr_image').attr("src", "http://"+IMAGE_URL+"/APL/CRMDashboardController?task=viewImage&type=ph");
             </script>

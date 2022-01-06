@@ -92,6 +92,8 @@ public class LoginController extends HttpServlet {
                 int count = model.checkLogin(user_name, password);
 
                 session.setAttribute("log_user", user_name);
+                session.setAttribute("log_mobile", mobile);
+                session.setAttribute("log_email", email);
                 session.setAttribute("driverClass", ctx.getInitParameter("driverClass"));
                 session.setAttribute("connectionString", ctx.getInitParameter("connectionString"));
                 session.setAttribute("myDbUserName", model.getMyDbUserName());
@@ -147,7 +149,9 @@ public class LoginController extends HttpServlet {
                         ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllOrders(user_name, session.getAttribute("user_role").toString());
                         ArrayList<Enquiry> sales_enquiry_list = dealersOrderModel.getAllEnquiriesForDealer(logged_key_person_id);
                         ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaintForDealer(logged_key_person_id);
+                        ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
 
+                        request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
                         session.setAttribute("sales_enquiries", sales_enquiry_list.size());
                         session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
                         session.setAttribute("pending_orders", pending_orders_list.size());
@@ -176,6 +180,7 @@ public class LoginController extends HttpServlet {
 //                    request.getRequestDispatcher("dashboard").forward(request, response);
                 } else {
                     request.setAttribute("message", "Credentials mis-match!");
+                    request.setAttribute("msgBgColor", "red");
                     request.getRequestDispatcher("/").forward(request, response);
                 }
 
@@ -201,7 +206,13 @@ public class LoginController extends HttpServlet {
                 session.invalidate();
                 request.getRequestDispatcher("/").forward(request, response);
             }
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            if (session.getAttribute("log_user").toString().equals("")) {
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+            if (!session.getAttribute("log_user").toString().equals("")) {
+                request.getRequestDispatcher("CRMDashboardController").forward(request, response);
+            }
+
         } catch (Exception e) {
             System.out.println(e);
         }

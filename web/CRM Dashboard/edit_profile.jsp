@@ -3,17 +3,36 @@
 
 
 
-
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
+
+
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <h1>Profile</h1>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
+
+                    <c:if test="${not empty message}">
+                        <c:if test="${msgBgColor=='green'}">
+                            <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong> ${message}
+
+                            </div>
+                        </c:if>
+                        <c:if test="${msgBgColor=='red'}">
+                            <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" >
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>OOps!</strong> ${message}
+
+                            </div>
+                        </c:if>
+                    </c:if>
+
+                </div>
+                <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active">Profile</li>
@@ -64,7 +83,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputName">Organisation Picture:<sup class="text-danger">*</sup></label>
-                                            <input type="file" class="form-control" onchange="readURL(this);" name="image" id="image">
+                                            <input type="file" class="form-control" onchange="readURL(this);" name="design_name" id="design_name">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -230,19 +249,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="inputName">Picture:</label>
-                                            <input class="form-control myInput" type="file" id="design_name" name="design_name"  size="30" value="" onchange="readURL(this);"> 
-                                        </div>
-                                    </div>  
+                                    <!--                                    <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="inputName">Picture:</label>
+                                                                                <input class="form-control myInput" type="file" id="design_name" name="design_name"  size="30" value="" onchange="readURL(this);"> 
+                                                                            </div>
+                                                                        </div>  -->
 
                                     <div class="col-md-4">
                                         <div class="myIDImgPopUpWrap d-flex justify-content-start">
                                             <div class="position-relative">
-                                                <img id="myIDImgPopUp" class="IDImg"  src="http://localhost:8080/APL/CRMDashboardController?task=viewImage"  >
+                                                <img id="myIDImgPopUp" class="IDImg"  src=""  >
                                                 <div id="myModal" class="modal">
-                                                    <span class="close">&times;</span>
+                                                    <span class="close" id="close_modal">&times;</span>
                                                     <img class="modal-content" id="img01">
                                                 </div>   
                                             </div>
@@ -251,11 +270,11 @@
                                                 <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="getIDProof(this);">
                                             </div>
                                         </div>
-<!--                                        <div class="form-group">
-                                            <label for="inputName">Select ID Proof:</label>
-                                            <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="readURL(this);">
-                                        </div>-->
-                                    </div> 
+                                        <!--                                        <div class="form-group">
+                                                                                    <label for="inputName">Select ID Proof:</label>
+                                                                                    <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="readURL(this);">
+                                                                                </div>-->
+                                    </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -297,7 +316,49 @@
                                 </div>
                             </form>    
                         </div>
+                    </div>
+                </div>
 
+
+
+
+                <div class="card card-primary rounded-0 profileCard mt-2">
+                    <div class="card-body px-4">
+
+                        <div class="changePasswordSec">
+                            <div class="mb-3">
+                                <h2>Change Password</h2>
+                            </div>
+                            <div class="changePassFormWrap">
+                                <form class="myForm" id="changePassword" method="post" action="ProfileController">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="inputName">New Password:<sup class="text-danger">*</sup></label>
+                                                <input type="password" class="form-control" name="newPassword" id="newPass">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="inputName">Confirm Password:<sup class="text-danger">*</sup></label>
+                                                <input type="password" class="form-control" name="confirmPassword" id="confirmPass">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0 showPassBtn">
+                                                <a class="btn myThemeBtn showPass " id="showPass" onclick="hidePass();"><i class="far fa-eye"></i>  </a>
+                                                <a class="btn myThemeBtn hidePass" id="hidePass" onclick="showPass();"> <i class="fas fa-eye-slash"></i> </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-0" class="changePassBtn">
+                                                <input type="submit" class="btn myThemeBtn" name="task1" value="Change">
+                                            </div>
+                                        </div>                      
+                                    </div>
+                                </form>
+                            </div>   
+                        </div>
                     </div>
                 </div>
             </div>
@@ -311,159 +372,204 @@
 <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
 
+
 <script>
-var modal = document.getElementById("myModal");
-var img = document.getElementById("myIDImgPopUp");
-var modalImg = document.getElementById("img01");
-img.onclick = function(){
-  modal.style.display = "block";
-  modalImg.src = this.src;
-}
-var span = document.getElementsByClassName("close")[0];
-span.onclick = function() {
-  modal.style.display = "none";
-}
+    var modal = document.getElementById("myModal");
+    var img = document.getElementById("myIDImgPopUp");
+    var modalImg = document.getElementById("img01");
+    img.onclick = function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    }
+    // var span = document.getElementsByClassName("close")[0];
+    $('#close_modal').click(function () {
+        modal.style.display = "none";
+    })
+
 </script>
 
 
 
 <script>
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#blah')
-                    .attr('src', e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah')
+                        .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
-}
 
-function getIDProof(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#myIDImgPopUp')
-                    .attr('src', e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
+    function getIDProof(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#myIDImgPopUp')
+                        .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
-}
 </script>
-
 <script>
-                                                
-                                                $(function () {
+    $(function () {
 
-                                                    $("#city").autocomplete({
-                                                        source: function (request, response) {
-                                                            var random = $('#city').val();
-                                                            $.ajax({
-                                                                url: "ProfileController",
-                                                                dataType: "json",
-                                                                data: {action1: "getCities", str: random},
-                                                                success: function (data) {
-                                                                    console.log(data);
-                                                                    response(data.list);
-                                                                }, error: function (error) {
-                                                                    console.log(error.responseText);
-                                                                    response(error.responseText);
-                                                                }
-                                                            });
-                                                        },
-                                                        select: function (events, ui) {
-                                                            console.log(ui);
-                                                            $('#city').val(ui.item.label);
-                                                            return false;
-                                                        }
-                                                    });
+        $("#city").autocomplete({
+            source: function (request, response) {
+                var random = $('#city').val();
+                $.ajax({
+                    url: "ProfileController",
+                    dataType: "json",
+                    data: {action1: "getCities", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#city').val(ui.item.label);
+                return false;
+            }
+        });
 
-                                                });
+    });
 //                                                $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage");
-                                                $('.usr_image').attr("src", "http://localhost:8080/APL/CRMDashboardController?task=viewImage");
+    $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
+    $('#myIDImgPopUp').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=");
 
 
 
-                                                function openMapForCord() {
-                                                    var url = "GeneralController?task=GetCordinates4"; //"getCordinate";
-                                                    popupwin = openPopUp(url, "", 600, 630);
-                                                }
+    function openMapForCord() {
+        var url = "GeneralController?task=GetCordinates4"; //"getCordinate";
+        popupwin = openPopUp(url, "", 600, 630);
+    }
 
 
-                                                function openPopUp(url, window_name, popup_height, popup_width) {
-                                                    var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
-                                                    var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
-                                                    var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
-                                                    return window.open(url, window_name, window_features);
-                                                }
+    function openPopUp(url, window_name, popup_height, popup_width) {
+        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
+        return window.open(url, window_name, window_features);
+    }
 
 
-                                                function myFun(value)
-                                                {
-                                                    var req = null;
-                                                    if (req != null)
-                                                        req.abort();
-                                                    var random = document.getElementById("mobile1").value;
+    function myFun(value)
+    {
+        var req = null;
+        if (req != null)
+            req.abort();
+        var random = document.getElementById("mobile1").value;
 
 
-                                                    if (random.length >= 10)
-                                                    {
-                                                        req = $.ajax({
-                                                            type: "POST",
-                                                            url: "OrgOfficeController",
-                                                            data: {action1: "mobile_number",
-                                                                str: random},
-                                                            dataType: "json",
-                                                            success: function (response_data) {
+        if (random.length >= 10)
+        {
+            req = $.ajax({
+                type: "POST",
+                url: "OrgOfficeController",
+                data: {action1: "mobile_number",
+                    str: random},
+                dataType: "json",
+                success: function (response_data) {
 
-                                                                console.log(response_data);
-                                                                alert(response_data.list[0]);
-                                                                document.getElementById("mobile1").value = response_data.list[0];
-                                                                //  response(response_data.list);
-                                                            }, error: function (error) {
-                                                                console.log(error.responseText);
-                                                                document.getElementById("mobile1").value = "";
-                                                                response(error.responseText);
-                                                            }
-
-
-                                                        });
-                                                    }
-
-                                                }
-
-                                                function myFunForPersonNumber(value)
-                                                {
-                                                    var req = null;
-                                                    if (req != null)
-                                                        req.abort();
-                                                    var random = document.getElementById("mobile2").value;
+                    console.log(response_data);
+                    alert(response_data.list[0]);
+                    document.getElementById("mobile1").value = response_data.list[0];
+                    //  response(response_data.list);
+                }, error: function (error) {
+                    console.log(error.responseText);
+                    document.getElementById("mobile1").value = "";
+                    response(error.responseText);
+                }
 
 
-                                                    if (random.length >= 10)
-                                                    {
-                                                        req = $.ajax({
-                                                            type: "POST",
-                                                            url: "DealersController",
-                                                            data: {action1: "mobile_number",
-                                                                str: random},
-                                                            dataType: "json",
-                                                            success: function (response_data) {
+            });
+        }
 
-                                                                console.log(response_data);
-                                                                alert(response_data.list[0]);
-                                                                document.getElementById("mobile2").value = response_data.list[0];
-                                                                //  response(response_data.list);
-                                                            }, error: function (error) {
-                                                                console.log(error.responseText);
-                                                                document.getElementById("mobile2").value = "";
-                                                                response(error.responseText);
-                                                            }
+    }
+
+    function myFunForPersonNumber(value)
+    {
+        var req = null;
+        if (req != null)
+            req.abort();
+        var random = document.getElementById("mobile2").value;
 
 
-                                                        });
-                                                    }
+        if (random.length >= 10)
+        {
+            req = $.ajax({
+                type: "POST",
+                url: "DealersController",
+                data: {action1: "mobile_number",
+                    str: random},
+                dataType: "json",
+                success: function (response_data) {
 
-                                                }
+                    console.log(response_data);
+                    alert(response_data.list[0]);
+                    document.getElementById("mobile2").value = response_data.list[0];
+                    //  response(response_data.list);
+                }, error: function (error) {
+                    console.log(error.responseText);
+                    document.getElementById("mobile2").value = "";
+                    response(error.responseText);
+                }
+
+
+            });
+        }
+
+    }
+
+
+    $("#hidePass").hide();
+    function hidePass() {
+        $("#newPass").attr('type', 'text');
+        $("#confirmPass").attr('type', 'text');
+        $("#showPass").hide();
+        $("#hidePass").show();
+    }
+    function showPass() {
+        $("#newPass").attr('type', 'password');
+        $("#confirmPass").attr('type', 'password');
+        $("#showPass").show();
+        $("#hidePass").hide();
+    }
+
+
+    $(document).ready(function () {
+        $("#changePassword").validate({
+            rules: {
+                newPassword: {
+                    required: true,
+                    minlength: 6,
+                },
+                confirmPassword: {
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#newPass"
+                }
+            },
+            messages: {
+                newPassword: {
+                    required: "Please enter new password.",
+                    minlength: "Please enter atleast 6 digit."
+                },
+                confirmPassword: {
+                    required: "Please enter confirm password.",
+                    minlength: "Please enter atleast 6 digit.",
+                    equalTo: "Please enter same password"
+                },
+            }
+        });
+    });
+
 </script>
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>

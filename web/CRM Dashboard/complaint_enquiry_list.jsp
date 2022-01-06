@@ -69,7 +69,7 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen">${beanType.sender_mob}</td>
+                                                    <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.enquiry_city}</td>
@@ -81,15 +81,36 @@
 
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Enquiry Generated'}">
-                                                                <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&state=${beanType.enquiry_state}&city=${beanType.enquiry_city}" class="btn myBtnInfo fontFourteen" title="Assigned To SalesManager">Assign To SalesManager & Dealer</a>
+                                                                <a href="SalesEnquiryController?task=assignToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&state=${beanType.enquiry_state}&city=${beanType.enquiry_city}" class="btn enquiryGenerated fontFourteen" title="Assigned To SalesManager">Assign</a>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Assigned To SalesManager'}">
+                                                                <button class="btn assigneSalesMan fontFourteen" disabled>Assigned </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Assigned To Dealer'}">
+                                                                <button class="btn assigneDealer fontFourteen" disabled>Assigned </button>
                                                             </c:when>
 
+                                                            <c:when test="${beanType.status =='In Conversation'}">
+                                                                <button class="btn inConversation fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
+                                                                <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                                <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
                                                             <c:otherwise>
                                                                 <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                                             </c:otherwise>
                                                         </c:choose>
+
                                                     </td>
-                                                    <td>${beanType.assigned_to}</td>
+                                                    <td>${beanType.assigned_to}
+                                                        <c:if test="${beanType.status !='Enquiry Generated'}">
+                                                            <i class="fontTen">(${beanType.assigned_to_designation})</i>
+                                                        </c:if>
+                                                    </td>
+
 
 
                                                     <td class="fontFourteen d-flex">

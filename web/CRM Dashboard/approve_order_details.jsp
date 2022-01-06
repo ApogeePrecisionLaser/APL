@@ -193,7 +193,7 @@
                 image = image.replace(/\\/g, "/");
             }
 //            $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
-            $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+            $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
 
             // var order_item_ids = $('#order_item_id' + (j + 1)).val();
             //  total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());

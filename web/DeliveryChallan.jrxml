@@ -1,545 +1,545 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="delivery_challan" pageWidth="850" pageHeight="900" columnWidth="810" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<field name="requested_by" class="java.lang.String"/>
-	<field name="requested_to" class="java.lang.String"/>
-	<field name="delivery_challan_no" class="java.lang.String"/>
-	<field name="delivery_challan_date" class="java.lang.String"/>
-	<field name="indent_no" class="java.lang.String"/>
-	<field name="itemname" class="java.lang.String"/>
-	<field name="required_qty" class="java.lang.Integer"/>
-	<field name="delivered_qty" class="java.lang.Integer"/>
-	<field name="balance_qty" class="java.lang.Integer"/>
-	<field name="model" class="java.lang.String"/>
-	<field name="HSNCode" class="java.lang.String"/>
-	<field name="key_person_address" class="java.lang.String"/>
-	<field name="requested_by_office" class="java.lang.String"/>
-	<field name="officeGSTNo" class="java.lang.String"/>
-	<field name="partyGSTNo" class="java.lang.String"/>
-	<field name="officeMobNo" class="java.lang.String"/>
-	<field name="office_address" class="java.lang.String"/>
-	<field name="rate" class="java.lang.String"/>
-	<field name="value" class="java.lang.String"/>
-	<field name="total_assessable_value" class="java.lang.String"/>
-	<field name="amount_in_words" class="java.lang.String"/>
-	<variable name="variable1" class="java.lang.String"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band height="147" splitType="Stretch">
-			<staticText>
-				<reportElement mode="Opaque" x="324" y="0" width="146" height="22" forecolor="#FFFFFF" backcolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Delivery Challan]]></text>
-			</staticText>
-			<image>
-				<reportElement x="11" y="46" width="150" height="58"/>
-				<imageExpression><![CDATA["E:\\Komal Backup\\Projects\\APL project\\APL\\web\\assets\\images\\logo.png"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="196" y="46" width="546" height="58" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font size="36" isBold="true"/>
-				</textElement>
-				<text><![CDATA[APOGEE PRECISION LASERS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="338" y="104" width="247" height="21" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[(An ISO 9001 : 2008 Certified Company)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="11" y="125" width="780" height="21" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DEALS IN : LASER GUIDED LAND LEVELER, LAND LEVELER (SCRAPER)  AND AGRICULTURE EQUIPMENTS]]></text>
-			</staticText>
-			<line>
-				<reportElement x="4" y="0" width="1" height="146" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="4" y="0" width="806" height="1" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="4" y="146" width="806" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="809" y="0" width="1" height="145" forecolor="#00006D"/>
-			</line>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="40" splitType="Stretch">
-			<staticText>
-				<reportElement x="248" y="20" width="41" height="20" forecolor="#00006D"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Mob.:]]></text>
-			</staticText>
-			<line>
-				<reportElement x="4" y="39" width="805" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="809" y="0" width="1" height="39" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="4" y="1" width="1" height="39" forecolor="#00006D"/>
-			</line>
-			<textField>
-				<reportElement x="289" y="19" width="281" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{officeMobNo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="248" y="0" width="520" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{office_address}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="219">
-			<staticText>
-				<reportElement x="24" y="10" width="115" height="20" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[GSTIN No. : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="338" y="10" width="51" height="20" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Sr No. : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="585" y="10" width="86" height="20" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Date : ]]></text>
-			</staticText>
-			<line>
-				<reportElement x="4" y="30" width="805" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="11" y="31" width="30" height="20" forecolor="#00006D"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[To,]]></text>
-			</staticText>
-			<line>
-				<reportElement x="41" y="50" width="483" height="1" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="4" y="0" width="2" height="219" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="810" y="0" width="1" height="219" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="545" y="31" width="1" height="154" forecolor="#00006D"/>
-			</line>
-			<staticText>
-				<reportElement x="11" y="63" width="77" height="20" forecolor="#00006D"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Address, ]]></text>
-			</staticText>
-			<line>
-				<reportElement x="88" y="82" width="436" height="1" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="11" y="110" width="513" height="1" forecolor="#00006D"/>
-			</line>
-			<staticText>
-				<reportElement x="11" y="123" width="118" height="20" forecolor="#00006D"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Party GSTIN]]></text>
-			</staticText>
-			<line>
-				<reportElement x="129" y="142" width="395" height="1" forecolor="#00006D"/>
-			</line>
-			<staticText>
-				<reportElement x="11" y="157" width="118" height="20" forecolor="#00006D"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Place Of Supply]]></text>
-			</staticText>
-			<line>
-				<reportElement x="139" y="176" width="385" height="1" forecolor="#00006D"/>
-			</line>
-			<staticText>
-				<reportElement x="597" y="34" width="137" height="20" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Delivery Details]]></text>
-			</staticText>
-			<line>
-				<reportElement x="557" y="93" width="239" height="1" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="557" y="122" width="239" height="1" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="557" y="156" width="239" height="1" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="5" y="185" width="806" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="6" y="195" width="63" height="24" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[S.No. ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="69" y="195" width="388" height="24" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DESCRIPTION]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="457" y="195" width="127" height="24" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[HSN CODE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="584" y="195" width="66" height="24" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Qty./Unit]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="650" y="195" width="63" height="24" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#00006D"/>
-					<topPen lineWidth="1.0" lineColor="#00006D"/>
-					<leftPen lineWidth="1.0" lineColor="#00006D"/>
-					<bottomPen lineWidth="1.0" lineColor="#00006D"/>
-					<rightPen lineWidth="1.0" lineColor="#00006D"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Rate. ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="713" y="195" width="96" height="24" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#00006D"/>
-					<topPen lineWidth="1.0" lineColor="#00006D"/>
-					<leftPen lineWidth="1.0" lineColor="#00006D"/>
-					<bottomPen lineWidth="1.0" lineColor="#00006D"/>
-					<rightPen lineWidth="1.0" lineColor="#00006D"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Value]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="389" y="11" width="100" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{delivery_challan_no}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="671" y="11" width="100" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{delivery_challan_date}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="51" y="31" width="287" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{requested_by_office}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="88" y="62" width="436" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{key_person_address}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="139" y="11" width="167" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{officeGSTNo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="129" y="122" width="241" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{partyGSTNo}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="23" splitType="Stretch">
-			<line>
-				<reportElement x="9" y="0" width="100" height="1"/>
-			</line>
-			<textField>
-				<reportElement x="457" y="1" width="127" height="20" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{HSNCode}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="650" y="0" width="64" height="22" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#00006D"/>
-					<topPen lineWidth="1.0" lineColor="#00006D"/>
-					<leftPen lineWidth="1.0" lineColor="#00006D"/>
-					<bottomPen lineWidth="0.0" lineColor="#00006D"/>
-					<rightPen lineWidth="1.0" lineColor="#00006D"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{rate}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="70" y="1" width="387" height="20" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{itemname}+"--"+$F{model}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="7" y="1" width="63" height="20" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="714" y="0" width="95" height="21" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#00006D"/>
-					<topPen lineWidth="1.0" lineColor="#00006D"/>
-					<leftPen lineWidth="1.0" lineColor="#00006D"/>
-					<bottomPen lineWidth="0.0" lineColor="#00006D"/>
-					<rightPen lineWidth="1.0" lineColor="#00006D"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="585" y="0" width="65" height="21" forecolor="#00006D"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{required_qty}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="7" y="22" width="802" height="1"/>
-			</line>
-		</band>
-	</detail>
-	<columnFooter>
-		<band height="130">
-			<staticText>
-				<reportElement x="12" y="23" width="785" height="25" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total Amount In Word : ]]></text>
-			</staticText>
-			<line>
-				<reportElement x="6" y="-22" width="1" height="152" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="5" y="129" width="804" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="570" y="49" width="1" height="80" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="438" y="49" width="1" height="80" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="7" y="100" width="431" height="1" forecolor="#00006D"/>
-			</line>
-			<staticText>
-				<reportElement x="12" y="54" width="100" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Remarks : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="457" y="54" width="100" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Prepared By :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="571" y="54" width="238" height="20" forecolor="#00006D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[For APOGEE PRECISION LASERS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="640" y="100" width="156" height="20" forecolor="#00006D"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Authorized Signatory]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="11" y="101" width="400" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[All Disputes Subject To HAPUR Jurisdiction]]></text>
-			</staticText>
-			<line>
-				<reportElement x="810" y="-22" width="1" height="151" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="7" y="48" width="803" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="6" y="23" width="803" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="570" y="3" width="142" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total Assessable Value]]></text>
-			</staticText>
-			<line>
-				<reportElement x="713" y="3" width="1" height="20" forecolor="#00006D"/>
-			</line>
-			<line>
-				<reportElement x="6" y="3" width="804" height="1" forecolor="#00006D"/>
-				<graphicElement>
-					<pen lineWidth="1.25"/>
-				</graphicElement>
-			</line>
-			<textField>
-				<reportElement x="714" y="3" width="95" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{total_assessable_value}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="179" y="28" width="592" height="20" forecolor="#00006D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{amount_in_words}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnFooter>
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <field name="requested_by" class="java.lang.String"/>
+    <field name="requested_to" class="java.lang.String"/>
+    <field name="delivery_challan_no" class="java.lang.String"/>
+    <field name="delivery_challan_date" class="java.lang.String"/>
+    <field name="indent_no" class="java.lang.String"/>
+    <field name="itemname" class="java.lang.String"/>
+    <field name="required_qty" class="java.lang.Integer"/>
+    <field name="delivered_qty" class="java.lang.Integer"/>
+    <field name="balance_qty" class="java.lang.Integer"/>
+    <field name="model" class="java.lang.String"/>
+    <field name="HSNCode" class="java.lang.String"/>
+    <field name="key_person_address" class="java.lang.String"/>
+    <field name="requested_by_office" class="java.lang.String"/>
+    <field name="officeGSTNo" class="java.lang.String"/>
+    <field name="partyGSTNo" class="java.lang.String"/>
+    <field name="officeMobNo" class="java.lang.String"/>
+    <field name="office_address" class="java.lang.String"/>
+    <field name="rate" class="java.lang.String"/>
+    <field name="value" class="java.lang.String"/>
+    <field name="total_assessable_value" class="java.lang.String"/>
+    <field name="amount_in_words" class="java.lang.String"/>
+    <variable name="variable1" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="147" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Opaque" x="324" y="0" width="146" height="22" forecolor="#FFFFFF" backcolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Delivery Challan]]></text>
+            </staticText>
+            <image>
+                <reportElement x="11" y="46" width="150" height="58"/>
+                <imageExpression><![CDATA["E:\\Komal Backup\\Projects\\APL project\\APL\\web\\assets\\images\\logo.png"]]></imageExpression>
+            </image>
+            <staticText>
+                <reportElement x="196" y="46" width="546" height="58" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Bottom">
+                    <font size="36" isBold="true"/>
+                </textElement>
+                <text><![CDATA[APOGEE PRECISION LASERS]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="338" y="104" width="247" height="21" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[(An ISO 9001 : 2008 Certified Company)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="11" y="125" width="780" height="21" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[DEALS IN : LASER GUIDED LAND LEVELER, LAND LEVELER (SCRAPER)  AND AGRICULTURE EQUIPMENTS]]></text>
+            </staticText>
+            <line>
+                <reportElement x="4" y="0" width="1" height="146" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="4" y="0" width="806" height="1" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="4" y="146" width="806" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="809" y="0" width="1" height="145" forecolor="#00006D"/>
+            </line>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="40" splitType="Stretch">
+            <staticText>
+                <reportElement x="248" y="20" width="41" height="20" forecolor="#00006D"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Mob.:]]></text>
+            </staticText>
+            <line>
+                <reportElement x="4" y="39" width="805" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="809" y="0" width="1" height="39" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="4" y="1" width="1" height="39" forecolor="#00006D"/>
+            </line>
+            <textField>
+                <reportElement x="289" y="19" width="281" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{officeMobNo}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="248" y="0" width="520" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{office_address}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+    <columnHeader>
+        <band height="219">
+            <staticText>
+                <reportElement x="24" y="10" width="115" height="20" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[GSTIN No. : ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="338" y="10" width="51" height="20" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Sr No. : ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="585" y="10" width="86" height="20" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Date : ]]></text>
+            </staticText>
+            <line>
+                <reportElement x="4" y="30" width="805" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="11" y="31" width="30" height="20" forecolor="#00006D"/>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[To,]]></text>
+            </staticText>
+            <line>
+                <reportElement x="41" y="50" width="483" height="1" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="4" y="0" width="2" height="219" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="810" y="0" width="1" height="219" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="545" y="31" width="1" height="154" forecolor="#00006D"/>
+            </line>
+            <staticText>
+                <reportElement x="11" y="63" width="77" height="20" forecolor="#00006D"/>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Address, ]]></text>
+            </staticText>
+            <line>
+                <reportElement x="88" y="82" width="436" height="1" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="11" y="110" width="513" height="1" forecolor="#00006D"/>
+            </line>
+            <staticText>
+                <reportElement x="11" y="123" width="118" height="20" forecolor="#00006D"/>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Party GSTIN]]></text>
+            </staticText>
+            <line>
+                <reportElement x="129" y="142" width="395" height="1" forecolor="#00006D"/>
+            </line>
+            <staticText>
+                <reportElement x="11" y="157" width="118" height="20" forecolor="#00006D"/>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Place Of Supply]]></text>
+            </staticText>
+            <line>
+                <reportElement x="139" y="176" width="385" height="1" forecolor="#00006D"/>
+            </line>
+            <staticText>
+                <reportElement x="597" y="34" width="137" height="20" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Delivery Details]]></text>
+            </staticText>
+            <line>
+                <reportElement x="557" y="93" width="239" height="1" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="557" y="122" width="239" height="1" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="557" y="156" width="239" height="1" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="5" y="185" width="806" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="6" y="195" width="63" height="24" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[S.No. ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="69" y="195" width="388" height="24" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[DESCRIPTION]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="457" y="195" width="127" height="24" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[HSN CODE]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="584" y="195" width="66" height="24" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Qty./Unit]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="650" y="195" width="63" height="24" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#00006D"/>
+                    <topPen lineWidth="1.0" lineColor="#00006D"/>
+                    <leftPen lineWidth="1.0" lineColor="#00006D"/>
+                    <bottomPen lineWidth="1.0" lineColor="#00006D"/>
+                    <rightPen lineWidth="1.0" lineColor="#00006D"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Rate. ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="713" y="195" width="96" height="24" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#00006D"/>
+                    <topPen lineWidth="1.0" lineColor="#00006D"/>
+                    <leftPen lineWidth="1.0" lineColor="#00006D"/>
+                    <bottomPen lineWidth="1.0" lineColor="#00006D"/>
+                    <rightPen lineWidth="1.0" lineColor="#00006D"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Value]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="389" y="11" width="100" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{delivery_challan_no}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="671" y="11" width="100" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{delivery_challan_date}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="51" y="31" width="287" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{requested_by_office}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="88" y="62" width="436" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{key_person_address}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="139" y="11" width="167" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{officeGSTNo}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="129" y="122" width="241" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{partyGSTNo}]]></textFieldExpression>
+            </textField>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="23" splitType="Stretch">
+            <line>
+                <reportElement x="9" y="0" width="100" height="1"/>
+            </line>
+            <textField>
+                <reportElement x="457" y="1" width="127" height="20" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="0.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{HSNCode}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="650" y="0" width="64" height="22" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#00006D"/>
+                    <topPen lineWidth="1.0" lineColor="#00006D"/>
+                    <leftPen lineWidth="1.0" lineColor="#00006D"/>
+                    <bottomPen lineWidth="0.0" lineColor="#00006D"/>
+                    <rightPen lineWidth="1.0" lineColor="#00006D"/>
+                </box>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{rate}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="70" y="1" width="387" height="20" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="0.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{itemname}+"--"+$F{model}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="7" y="1" width="63" height="20" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="0.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="714" y="0" width="95" height="21" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0" lineColor="#00006D"/>
+                    <topPen lineWidth="1.0" lineColor="#00006D"/>
+                    <leftPen lineWidth="1.0" lineColor="#00006D"/>
+                    <bottomPen lineWidth="0.0" lineColor="#00006D"/>
+                    <rightPen lineWidth="1.0" lineColor="#00006D"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="585" y="0" width="65" height="21" forecolor="#00006D"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="0.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{required_qty}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="7" y="22" width="802" height="1"/>
+            </line>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="130">
+            <staticText>
+                <reportElement x="12" y="23" width="785" height="25" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total Amount In Word : ]]></text>
+            </staticText>
+            <line>
+                <reportElement x="6" y="-22" width="1" height="152" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="5" y="129" width="804" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="570" y="49" width="1" height="80" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="438" y="49" width="1" height="80" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="7" y="100" width="431" height="1" forecolor="#00006D"/>
+            </line>
+            <staticText>
+                <reportElement x="12" y="54" width="100" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Remarks : ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="457" y="54" width="100" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Prepared By :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="571" y="54" width="238" height="20" forecolor="#00006D"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[For APOGEE PRECISION LASERS]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="640" y="100" width="156" height="20" forecolor="#00006D"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Authorized Signatory]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="11" y="101" width="400" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[All Disputes Subject To HAPUR Jurisdiction]]></text>
+            </staticText>
+            <line>
+                <reportElement x="810" y="-22" width="1" height="151" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="7" y="48" width="803" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <line>
+                <reportElement x="6" y="23" width="803" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="570" y="3" width="142" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total Assessable Value]]></text>
+            </staticText>
+            <line>
+                <reportElement x="713" y="3" width="1" height="20" forecolor="#00006D"/>
+            </line>
+            <line>
+                <reportElement x="6" y="3" width="804" height="1" forecolor="#00006D"/>
+                <graphicElement>
+                    <pen lineWidth="1.25"/>
+                </graphicElement>
+            </line>
+            <textField>
+                <reportElement x="714" y="3" width="95" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total_assessable_value}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="179" y="28" width="592" height="20" forecolor="#00006D"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{amount_in_words}]]></textFieldExpression>
+            </textField>
+        </band>
+    </columnFooter>
 </jasperReport>
