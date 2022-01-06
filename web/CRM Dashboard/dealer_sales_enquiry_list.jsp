@@ -76,14 +76,27 @@
                                                     <!--<td class="fontFourteen">${beanType.description}</td>-->
                                                     <td class="fontFourteen">${beanType.enquiry_date_time}</td>
 
-                                                    <c:choose>
-                                                        <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                            <td class="fontFourteen"><button class="btn myBtnDanger fontFourteen" disabled>In Conversation</button></td>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <td class="fontFourteen"></td>
-                                                        </c:otherwise>
-                                                    </c:choose>
+
+
+                                                    <td class="fontFourteen">
+                                                        <c:choose>
+
+                                                            <c:when test="${beanType.status =='Assigned To Dealer'}">
+                                                                <button class="btn inConversation fontFourteen" disabled>In Conversation </button>
+                                                            </c:when>
+
+                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
+                                                                <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                                <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+
 
 
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->

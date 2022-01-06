@@ -1230,9 +1230,12 @@ public class EnquiryModel {
 
                 if (rst.getString("status").equals("Assigned To SalesManager")) {
                     bean.setAssigned_to(rst.getString("key_person_name"));
+                    bean.setAssigned_to_designation("SalesManager");
                 }
                 if (rst.getString("status").equals("Assigned To Dealer")) {
                     bean.setAssigned_to(rst.getString("org_office_name"));
+                    bean.setAssigned_to_designation("Dealer");
+
                 }
 
                 String enquiry_date_time = rst.getString("enquiry_date_time");
@@ -1297,9 +1300,11 @@ public class EnquiryModel {
                 bean.setDescription(rst.getString("description"));
                 if (rst.getString("status").equals("Assigned To SalesManager")) {
                     bean.setAssigned_to(rst.getString("key_person_name"));
+                    bean.setAssigned_to_designation("SalesManager");
                 }
                 if (rst.getString("status").equals("Assigned To Dealer")) {
                     bean.setAssigned_to(rst.getString("org_office_name"));
+                    bean.setAssigned_to_designation("Dealer");
                 }
 
                 String enquiry_date_time = rst.getString("enquiry_date_time");

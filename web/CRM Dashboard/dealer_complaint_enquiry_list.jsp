@@ -68,21 +68,32 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen">${beanType.sender_mob}</td>
+                                                    <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.enquiry_city}</td>
                                                     <td class="fontFourteen">${beanType.enquiry_state}</td>
                                                     <!--<td class="fontFourteen">${beanType.description}</td>-->
                                                     <td class="fontFourteen">${beanType.enquiry_date_time}</td>
-                                                    <c:choose>
-                                                        <c:when test="${beanType.status=='Assigned To Dealer'}">
-                                                            <td class="fontFourteen"><button class="btn btn-danger" disabled>In Conversation</button></td>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <td class="fontFourteen"></td>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                    <td class="fontFourteen">
+                                                        <c:choose>
+
+                                                            <c:when test="${beanType.status =='Assigned To Dealer'}">
+                                                                <button class="btn inConversation fontFourteen" disabled>In Conversation </button>
+                                                            </c:when>
+
+                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
+                                                                <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                                <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
                                                     <td class="fontFourteen d-flex">
                                                         <div>

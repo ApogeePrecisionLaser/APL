@@ -35,7 +35,7 @@
                 <div class="card card-primary rounded-0 profileCard mt-2">
                     <div class="card-body px-4">
                         <div class="mt-1">
-                            <form class="myForm" name="form1" action="DealersController" method="post" enctype="multipart/form-data">
+                            <form class="myForm" name="form1" action="DealersController" method="post" enctype="multipart/form-data" >
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -67,6 +67,12 @@
                                             <input type="text" class="form-control" name="key_person_mobile" id="key_person_mobile" required="" onkeyup="myFunForPersonNumber(id)">
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="inputName">GST:</label>
+                                            <input type="text" class="form-control" name="gst_number" id="gst_number">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row" id="add_info_div" style="display:none">
@@ -76,12 +82,7 @@
                                             <input type="text" class="form-control" name="email_id1" id="email_id1">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="inputName">GST:</label>
-                                            <input type="text" class="form-control" name="gst_number" id="gst_number">
-                                        </div>
-                                    </div>
+
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -179,11 +180,24 @@
                                     </div>  
 
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="inputName">Select ID Proof:</label>
-                                            <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="readURL(this);">
+                                        <div class="myIDImgPopUpWrap d-flex justify-content-start">
+                                            <div class="position-relative">
+                                                <img id="myIDImgPopUp" class="IDImg"  src=""  >
+                                                <div id="myModal" class="modal">
+                                                    <span class="close" id="close_modal">&times;</span>
+                                                    <img class="modal-content" id="img01">
+                                                </div>   
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputName">Select ID Proof:</label>
+                                                <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="getIDProof(this);">
+                                            </div>
                                         </div>
-                                    </div> 
+                                        <!--                                        <div class="form-group">
+                                                                                    <label for="inputName">Select ID Proof:</label>
+                                                                                    <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="readURL(this);">
+                                                                                </div>-->
+                                    </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -213,7 +227,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group mb-0">
                                             <input type="button" id="add_info" value="Additional Info" class="btn myThemeBtn" name="add_info">
-                                            <input type="submit" class="btn myThemeBtn" name="task1" value="Submit">
+                                            <input type="submit" class="btn myThemeBtn" name="task1" value="Submit" >
                                         </div>
                                     </div>
                                 </div>
@@ -229,9 +243,26 @@
 </div>
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+<script>
+    var modal = document.getElementById("myModal");
+    var img = document.getElementById("myIDImgPopUp");
+    var modalImg = document.getElementById("img01");
+    img.onclick = function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    }
+    // var span = document.getElementsByClassName("close")[0];
+    $('#close_modal').click(function () {
+        modal.style.display = "none";
+    })
+
+</script>
+
 
 
 <script>
+    $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
+    $('#myIDImgPopUp').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=");
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -242,6 +273,20 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function getIDProof(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#myIDImgPopUp')
+                        .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<script>
 
     $('#add_info').click(function () {
         if ($('#add_info_div').css('display') == 'none') {
@@ -360,6 +405,14 @@
     });
 
 
+//    function validate() {
+//        var gst = $('#gst_number').val();
+//
+//        if (gst == '') {
+//            alert("Please enter GST number if not add ID proof !...");
+//            return false;
+//        }
+//    }
 
 
 </script>

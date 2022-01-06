@@ -165,7 +165,7 @@
                                                                         }
                                                                         // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 //                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
-                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
 
                                                                         var stock_quantity = $('#stock_quantity' + (j + 1)).val();
                                                                         if (stock_quantity == 0) {

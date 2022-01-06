@@ -8,10 +8,31 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <h1>Profile</h1>
                 </div>
-                <div class="col-sm-6">
+
+                <div class="col-sm-4">
+
+                    <c:if test="${not empty message}">
+                        <c:if test="${msgBgColor=='green'}">
+                            <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong> ${message}
+
+                            </div>
+                        </c:if>
+                        <c:if test="${msgBgColor=='red'}">
+                            <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" >
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>OOps!</strong> ${message}
+
+                            </div>
+                        </c:if>
+                    </c:if>
+
+                </div>
+                <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="CRMDashboardController">Home</a></li>
                         <li class="breadcrumb-item active">Profile</li>
@@ -32,15 +53,15 @@
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
                         <p class="text-secondry">${gst}</p>
-<!--                        <div class="text-left1">
-                            <small class="text-danger ">Profile completion</small>
-                            <div class="progress mx-auto" style="width:300px;">                                        
-                                <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
-                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                  <span class="sr-only">40% Complete (success)</span>
-                                </div>
-                            </div>
-                        </div>-->
+                        <!--                        <div class="text-left1">
+                                                    <small class="text-danger ">Profile completion</small>
+                                                    <div class="progress mx-auto" style="width:300px;">                                        
+                                                        <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                          <span class="sr-only">40% Complete (success)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
                     </div>
                 </div>
                 <div class="text-right mt-2">
@@ -61,7 +82,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div>
@@ -133,9 +154,18 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <div>
-                                        <p class="mb-0"><small>ID Proof:</small></p>
-                                        <p id="id_type"><strong>${id_type}</strong></p>
+                                    <div class="myIDImgPopUpWrap d-flex justify-content-start">
+                                        <div class="position-relative">
+                                            <img id="myIDImgPopUp" class="img-thumbnail1" src="">
+                                            <div id="myModal" class="modal">
+                                                <span class="close" id="close_modal">&times;</span>
+                                                <img class="modal-content" id="img01">
+                                            </div>   
+                                        </div>
+                                        <div>
+                                            <p class="mb-0"><small>ID Proof:</small></p>
+                                            <p id="id_type"><strong>${id_type}</strong></p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -176,7 +206,22 @@
 
 <script>
 //    $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage");
-    $('.usr_image').attr("src", "http://localhost:8080/APL/CRMDashboardController?task=viewImage");
+    $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
+    $('#myIDImgPopUp').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=");
+
+    var modal = document.getElementById("myModal");
+    var img = document.getElementById("myIDImgPopUp");
+    var modalImg = document.getElementById("img01");
+    img.onclick = function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    }
+//    var span = document.getElementsByClassName("close")[0];
+    $('#close_modal').click(function () {
+        modal.style.display = "none";
+    })
+
+
 
 
     $(function () {

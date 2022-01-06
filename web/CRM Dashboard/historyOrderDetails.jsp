@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
                         <li class="breadcrumb-item active">Order Detail</li>
                     </ol>
                 </div>
@@ -117,7 +117,7 @@
             if (image != "") {
                 image = image.replace(/\\/g, "/");
             }
-            $('.img-fluid' + (j + 1)).attr("src", "http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
+            $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
 
         }
 
