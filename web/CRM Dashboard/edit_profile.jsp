@@ -238,10 +238,23 @@
                                     </div>  
 
                                     <div class="col-md-4">
-                                        <div class="form-group">
+                                        <div class="myIDImgPopUpWrap d-flex justify-content-start">
+                                            <div class="position-relative">
+                                                <img id="myIDImgPopUp" class="IDImg"  src="http://localhost:8080/APL/CRMDashboardController?task=viewImage"  >
+                                                <div id="myModal" class="modal">
+                                                    <span class="close">&times;</span>
+                                                    <img class="modal-content" id="img01">
+                                                </div>   
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputName">Select ID Proof:</label>
+                                                <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="getIDProof(this);">
+                                            </div>
+                                        </div>
+<!--                                        <div class="form-group">
                                             <label for="inputName">Select ID Proof:</label>
                                             <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="readURL(this);">
-                                        </div>
+                                        </div>-->
                                     </div> 
 
                                     <div class="col-md-4">
@@ -292,23 +305,54 @@
     </section>
 </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
       rel = "stylesheet">
 <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
 
 <script>
-                                                function readURL(input) {
-                                                    if (input.files && input.files[0]) {
-                                                        var reader = new FileReader();
-                                                        reader.onload = function (e) {
-                                                            $('#blah')
-                                                                    .attr('src', e.target.result);
-                                                        };
-                                                        reader.readAsDataURL(input.files[0]);
-                                                    }
-                                                }
+var modal = document.getElementById("myModal");
+var img = document.getElementById("myIDImgPopUp");
+var modalImg = document.getElementById("img01");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+}
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+  modal.style.display = "none";
+}
+</script>
+
+
+
+<script>
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#blah')
+                    .attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function getIDProof(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#myIDImgPopUp')
+                    .attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+<script>
+                                                
                                                 $(function () {
 
                                                     $("#city").autocomplete({

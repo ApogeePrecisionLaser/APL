@@ -1200,3 +1200,70 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
         max-width: 22.666667%!important;
     }
 }
+
+
+
+.myIDImgPopUpWrap #myIDImgPopUp {
+  border-radius: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+  width:30px;
+  height:37px;
+  object-fit:cover;
+  margin-right: 5px;
+  margin-top: 8px;
+  border:2px solid #999;
+}
+.myIDImgPopUpWrap .modal {
+    width: 300px;
+    height: auto;
+    margin: 0 auto;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: -220px;
+    right: 0;
+    overflow: hidden;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.9);
+}
+.myIDImgPopUpWrap .modal-content {
+  margin: auto;
+  display: block;
+  width: 100%;
+}
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+.myIDImgPopUpWrap .close {
+    position: absolute;
+    top: 0px;
+    z-index: 4;
+    right: 10px;
+    color: #f1f1f1;
+    font-size: 35px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.myIDImgPopUpWrap .close:hover,
+.myIDImgPopUpWrap .close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+@media only screen and (max-width: 700px){
+  .myIDImgPopUpWrap .modal-content {
+    width: 100%;
+  }
+}
+
+.myIDImgPopUpWrap .IDImg{
+    width: 30px;
+    height: 56px!important;
+    object-fit: cover;
+    margin-right: 5px;
+    margin-top: 8px;
+    border: 2px solid #999;
+}

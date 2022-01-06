@@ -3,7 +3,6 @@
 
 
 
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -133,9 +132,18 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <div>
-                                        <p class="mb-0"><small>ID Proof:</small></p>
-                                        <p id="id_type"><strong>${id_type}</strong></p>
+                                    <div class="myIDImgPopUpWrap d-flex justify-content-start">
+                                        <div class="position-relative">
+                                            <img id="myIDImgPopUp" class="img-thumbnail1" src="http://localhost:8080/APL/CRMDashboardController?task=viewImage">
+                                            <div id="myModal" class="modal">
+                                                <span class="close">&times;</span>
+                                                <img class="modal-content" id="img01">
+                                            </div>   
+                                        </div>
+                                        <div>
+                                            <p class="mb-0"><small>ID Proof:</small></p>
+                                            <p id="id_type"><strong>${id_type}</strong></p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -170,8 +178,28 @@
         </div>
     </section>
 </div>
+                                    
+                                    
+                             
+                                    
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+
+
+
+<script>
+var modal = document.getElementById("myModal");
+var img = document.getElementById("myIDImgPopUp");
+var modalImg = document.getElementById("img01");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+}
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+  modal.style.display = "none";
+}
+</script>
 
 
 <script>
