@@ -11,58 +11,36 @@
 </style>
 
 <div class="content-wrapper" id="contentWrapper">
-    <section class="content">
+    <div class="content-header">
         <div class="container-fluid">
-            <div class="mainNavigationMenu">
-
-                <!--                <div class=" marginTop40">
-                                    <div class="">
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group mb-0 d-flex">
-                                                    <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
-                                                </div>                          
-                                                
-                                            </div>
-                                            <div class="col-md-7">
-                                                <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
-                                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                                    <strong>Success!</strong> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
-                <div class="content-header position-relative">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6 pl-0">
-                                <div class="d-flex">
-                                    <div class="mr-2 backBtnWrap">
-                                        <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
-                                    </div>
-                                    <div>
-                                        <h1>${org_office_name}</h1>
-                                    </div>
-                                    <div class="position-relative">
-                                        <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <strong>Success!</strong> 
-                                        </div>
-                                    </div>
-                                </div>  
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Dealers Product Map</li>
-                                </ol>
+            <div class="row marginTop10 mx-0">
+                <div class="col-sm-6 pl-0">
+                    <div class="d-flex">
+                        <div class="mr-2 backBtnWrap">
+                            <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
+                        <div>
+                            <h1>${org_office_name}</h1>
+                        </div>
+                        <div class="position-relative">
+                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong> 
                             </div>
                         </div>
-                    </div><!-- /.container-fluid -->
+                    </div>  
                 </div>
-
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Dealers Product Map</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="container-fluid">
                 <div class="container-fluid">
                     <c:forEach var="beanType1" items="${requestScope['list1']}"
                                varStatus="loopCounter">
@@ -133,13 +111,9 @@
                         </div>
                     </c:forEach>
                 </div>
-                </section>
-            </div>
-            <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-            <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-                  rel = "stylesheet">
-            <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-            <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
+        </div>
+    </section>
+            
             <script>
                 $(function () {
                     var count = $('#count').val();

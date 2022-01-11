@@ -45,7 +45,7 @@
                                                 </div>-->
 
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile" required="">
+                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-phone"></span>
@@ -79,9 +79,9 @@
                         <p class="mb-1">
                             <a href="forgot-password.html" class="fontFourteen">I forgot my password</a>
                         </p>
-<!--                        <p class="mb-0">
-                            <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
-                        </p>-->
+                        <!--                        <p class="mb-0">
+                                                    <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
+                                                </p>-->
                     </div>
 
                 </div>

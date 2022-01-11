@@ -5,7 +5,7 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <h1>Add New Dealer</h1>
                 </div>
@@ -16,10 +16,9 @@
                     </ol>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-
-
+    
     <section class="content">
         <div class="row">
             <div class="col-md-12 px-3">

@@ -8,7 +8,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluid mt-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">Dashboard</h1>
@@ -27,7 +27,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="row1 d-flex justify-content-between flex-wrap">
+            <div class="row1 d-flex justify-content-around flex-wrap">
                 <div class="col-lg-2 dashboardTopBox col-6">
                     <div class="small-box bg-info">
                         <div class="inner">

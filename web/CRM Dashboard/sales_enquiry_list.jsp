@@ -4,16 +4,13 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <section class="content-header">
+    <section class="content-header pl-2">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <!--                        <div class="mr-2" >
-                                                    <h1>Sales Enquiry</h1>
-                                                </div>-->
                         <div >
-                            <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn">Add New Enquiry</a>
+                            <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
                         </div>                        
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">

@@ -7,10 +7,7 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-<!--                <div class="col-sm-2">
-                    <h1>Enquiry Source</h1>
-                </div>-->
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div>
                         <h1>Enquiry Source</h1>

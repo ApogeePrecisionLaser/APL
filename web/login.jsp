@@ -227,14 +227,14 @@
                     </div>
 
 
-                    <div class="d-flex justify-content-between mt-3">
+<!--                    <div class="d-flex justify-content-between mt-3">
                         <p class="mb-1">
                             <a href="forgot-password.html" class="fontFourteen">I forgot my password</a>
                         </p>
-                        <!--                        <p class="mb-0">
-                                                    <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
-                                                </p>-->
-                    </div>
+                        <p class="mb-0">
+                            <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
+                        </p>
+                    </div>-->
 
                 </div>
             </div>

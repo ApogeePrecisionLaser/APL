@@ -1,4 +1,7 @@
 
+.marginTop10{
+    margin-top: 10px;
+}
 .marginTop20{
     margin-top: 20px;
 }
@@ -30,9 +33,16 @@
 .fontTen{
     font-size: 10px;
 }
+.fontTwelve{
+    font-size: 12px;
+}
+.fontThirteen{
+    font-size: 13px;
+}
 .fontFourteen{
     font-size: 14px;
 }
+
 .fontSeventeen{
     font-size: 17px!important;
 }
@@ -98,7 +108,7 @@
     padding: 12px 0!important;
 }
 .content-header {
-    padding: 3px 0.5rem;
+    padding: 3px 15px;
 }
 .sidebarNavWrap .user-panel a{
     color: #000;
@@ -155,9 +165,7 @@
     transition: all .3s ease;
 }
 
-.fontFourteen{
-    font-size: 14px;
-}
+
 
 table.dataTable tbody th, table.dataTable tbody td{
     padding: 2px 8px;
@@ -168,6 +176,7 @@ table.dataTable tbody th, table.dataTable tbody td{
     font-size: 14px;
     font-weight: 600;
     white-space: nowrap;
+    padding: 0.75rem 6px;
 }
 .mainTable.table td{
     font-size: 13.25px;
@@ -954,7 +963,7 @@ table.dataTable thead .sorting_asc {
     margin-top: 82px;
 }
 .profileCard .card-body{
-    padding: 30px 60px;
+    padding: 30px 40px;
 }
 .profileCard .card-body label{
     margin-bottom: 3px;
@@ -1233,7 +1242,7 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     position: absolute;
     z-index: 1;
     left: 0;
-    top: -220px;
+    top: -200px;
     right: 0;
     overflow: hidden;
     background-color: rgb(0,0,0);
@@ -1253,7 +1262,7 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     top: 0px;
     z-index: 4;
     right: 10px;
-    color: #f1f1f1;
+    color: #000;
     font-size: 35px;
     font-weight: bold;
     transition: 0.3s;
@@ -1329,4 +1338,36 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     padding: 2px 15px;
     color: #000;
     border-radius: 20px
+}
+
+
+.changePasswordSec h2{
+    font-size: 22px;
+    border-left: 5px solid #102F42;
+    padding-left: 10px;
+    font-weight: 500;
+  }
+  .changePasswordSec .changePassFormWrap .showPassBtn{
+    margin-top:27px
+  }
+  .changePasswordSec .changePassFormWrap .showPassBtn .showPass{
+    background-color: #2eaf2b;
+    border: 1px solid #2eaf2b;
+  }
+  .changePasswordSec .changePassFormWrap .showPassBtn .hidePass{
+    background-color: #e01634;
+    border: 1px solid #e01634;
+  }
+  .error{
+    color: #e01634;
+  }
+
+  
+  
+  .users-list>li img {
+    border-radius: 50%;
+    height: auto;
+    /* max-width: 100%; */
+    width: 70px;
+    height: 70px;
 }

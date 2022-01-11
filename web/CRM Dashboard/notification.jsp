@@ -6,7 +6,7 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <h1>News</h1>
                 </div>
@@ -44,7 +44,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -56,7 +56,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -68,7 +68,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -80,7 +80,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -92,7 +92,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -104,7 +104,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -116,7 +116,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -128,7 +128,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -140,7 +140,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -152,7 +152,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -164,7 +164,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -176,7 +176,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -188,7 +188,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -200,7 +200,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -212,7 +212,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -224,7 +224,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
@@ -236,7 +236,7 @@
                                         <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
                                         <td class="fontFourteen">Why do we use it?</td>
                                         <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class="fontFourteen"><i class="statusDisapprove">Unread</i></td>
+                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>

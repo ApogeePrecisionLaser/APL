@@ -6,7 +6,7 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <h1>Complaint Enquiry Detail</h1>
                 </div>
@@ -24,7 +24,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12 px-3">
-                <div class="card card-primary rounded-0 profileCard mt-3" style="">
+                <div class="card card-primary rounded-0 profileCard mt-2 card-outline" style="">
                     <div class="card-body">
                         <div class="mt-1">
                             <c:forEach var="beanType" items="${requestScope['list']}"
