@@ -353,7 +353,11 @@ public class ProfileModel {
                 bean.setDesignation(rset.getString(20));
                 bean.setDesignation_code(rset.getInt(21));
                 bean.setOrg_office_type(rset.getString(22));
-                bean.setGst_number(rset.getString(25));
+                String gst = rset.getString(25);
+                if (gst == null) {
+                    gst = "";
+                }
+                bean.setGst_number(gst);
                 bean.setOrg_office_id(rset.getInt(26));
                 bean.setBlood(rset.getString(27));
                 bean.setGender(rset.getString(28));
@@ -1164,7 +1168,6 @@ public class ProfileModel {
 //                        if (user_count == 0) {
 //
 //                        }
-
                     } else {
                         status = false;
                     }

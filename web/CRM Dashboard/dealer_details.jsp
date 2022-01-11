@@ -31,7 +31,10 @@
                             <input type="hidden" name="key_person_id" id="key_person_id" value="${beanType.key_person_id}">
                             <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                             <h2 class="mt-1 mb-1">${beanType.org_office_name}</h2>
-                            <p class="text-secondry"><strong>GST:</strong> ${beanType.gst_number}</p>
+                            <c:if test="${beanType.gst_number!=''}">
+                                <p class="text-secondry"><strong>GST:</strong> ${beanType.gst_number}</p>
+                            </c:if>
+                            <!--<p class="text-secondry"><strong>GST:</strong> ${beanType.gst_number}</p>-->
                         </div>
                     </div>
                     <div class="mr-2 mt-2 backBtnWrap">

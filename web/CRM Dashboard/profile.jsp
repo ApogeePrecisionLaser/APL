@@ -48,7 +48,10 @@
                         <input type="hidden" name="image_path" id="image_path" value="${image_path}">
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
-                        <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
+                        <c:if test="${gst!=''}">
+                            <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
+                        </c:if>
+
                         <!--                        <div class="text-left1">
                                                     <small class="text-danger ">Profile completion</small>
                                                     <div class="progress mx-auto" style="width:300px;">                                        

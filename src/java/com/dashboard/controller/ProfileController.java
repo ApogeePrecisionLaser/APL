@@ -265,7 +265,7 @@ public class ProfileController extends HttpServlet {
             key.setDate_of_birth((map.get("date_of_birth").trim()));
             key.setDesignation("Owner");
             key.setDesignation_id(8);
-            key.setId_type(map.get("id_type"));
+            key.setId_type(map.get("id_type").trim());
             key.setId_type_d(model.getIdtype_id(map.get("id_type")));
             key.setId_no(map.get("id_no").trim());
             key.setOrg_office_id(model.getOrgOffice_id(logged_org_office, logged_org_office));
@@ -280,18 +280,19 @@ public class ProfileController extends HttpServlet {
             if (map.get("gender") == null) {
                 gender = "";
             }
-            String salutation = map.get("salutation").trim();
-            if (salutation == null) {
-                salutation = "";
-            }
-            if (salutation.equals("Mr.")) {
-                key.setGender("M");
-            }
-            if (salutation.equals("Mrs.")) {
-                key.setGender("F");
-            } else {
-                key.setGender("M");
-            }
+//            String salutation = map.get("salutation").trim();
+//            if (salutation == null) {
+//                salutation = "";
+//            }
+//            if (salutation.equals("Mr.")) {
+//                key.setGender("M");
+//            }
+//            if (salutation.equals("Mrs.")) {
+//                key.setGender("F");
+//            } else {
+//                key.setGender("M");
+//            }
+            key.setGender("M");
             key.setPassword("");
             key.setBlood(map.get("blood").trim());
             key.setEmergency_number("");

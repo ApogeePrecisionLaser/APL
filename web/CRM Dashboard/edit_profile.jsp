@@ -48,7 +48,10 @@
                     <div class="text-center">
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
-                        <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
+                        <!--<p class="text-secondry"><strong>GST:</strong> ${gst}</p>-->
+                        <c:if test="${gst!=''}">
+                            <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
+                        </c:if>
                     </div>
                 </div>
                 <div class="text-left mt-2">
