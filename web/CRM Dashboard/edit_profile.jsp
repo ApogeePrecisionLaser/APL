@@ -5,12 +5,10 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
-
-
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-3">
-                    <h1>Profile</h1>
+                    <h1>Profile 12</h1>
                 </div>
                 <div class="col-sm-4">
 
@@ -53,7 +51,7 @@
                         <p class="text-secondry">${gst}</p>
                     </div>
                 </div>
-                <div class="text-left mt-4">
+                <div class="text-left mt-2">
                     <!--<a href="ProfileController" class="btn myThemeBtn text-right">Back</a>-->
                     <a href="ProfileController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
 
@@ -61,12 +59,21 @@
                 <div class="card card-primary rounded-0 profileCard">
                     <div class="card-body px-4">
                         <div class="mt-1">
-                            <form class="myForm" method="post" action="ProfileController" enctype="multipart/form-data">
+                            <form id="editProfile" class="myForm" method="post" action="ProfileController" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
+                                            <label for="inputName">Title:<sup class="text-danger">*</sup></label>
+                                            <select class="form-control" name="gender">
+                                                <option>Mr</option>
+                                                <option>Mrs</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
                                             <label for="inputName">Dealer Name:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" disabled="" value="${logged_user_name}" name="dealer_name" id="dealer_name">
+                                            <input type="text" class="form-control" value="${logged_user_name}" name="dealer_name" id="dealer_name">
                                             <input type="hidden" class="form-control myInput" id="org_office_id" name="org_office_id" value="${org_office_id}" >
                                             <input type="hidden" class="form-control myInput" id="key_person_id" name="key_person_id" value="${key_person_id}" >
                                             <input type="hidden" class="form-control myInput" id="org_office_designation_map_id" name="org_office_designation_map_id" value="${org_office_designation_map_id}" >
@@ -74,15 +81,9 @@
 
                                         </div>
                                     </div>
-                                    <!--                                    <div class="col-md-4">
-                                                                            <div class="form-group">
-                                                                                <label for="inputName">Last Name:</label>
-                                                                                <input type="text" class="form-control" value="">
-                                                                            </div>
-                                                                        </div>-->
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">Organisation Picture:<sup class="text-danger">*</sup></label>
+                                            <label for="inputName">Organisation Picture:</label>
                                             <input type="file" class="form-control" onchange="readURL(this);" name="design_name" id="design_name">
                                         </div>
                                     </div>
@@ -106,34 +107,22 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">Person Mobile No:</label>
+                                            <label for="inputName">Person Mobile No:<sup class="text-danger">*</sup></label>
                                             <input type="text" class="form-control" value="${mobile2}" name="mobile2" id="mobile2" onkeyup="myFunForPersonNumber(id)">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputName">GST No:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" value="${gst}" name="gst" id="gst">
+                                            <input type="text" class="form-control" value="${gst}" name="gst" id="gst" disabled>
                                         </div>
-                                    </div>
-                                    <!--                                    <div class="col-md-4">
-                                                                            <div class="form-group">
-                                                                                <label for="inputName">Landmark:</label>
-                                                                                <input type="text" class="form-control" value="" name="landmark" id="landmark">
-                                                                            </div>
-                                                                        </div>                    -->
-                                    <!--                                    <div class="col-md-4">
-                                                                            <div class="form-group">
-                                                                                <label for="inputName">State:<sup class="text-danger">*</sup></label>
-                                                                                <input type="text" class="form-control" value="" name="state" id="state">
-                                                                            </div>
-                                                                        </div>-->
+                                    </div>                                    
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputName">City:<sup class="text-danger">*</sup></label>
                                             <input type="text" class="form-control" value="${city}" name="city" id="city">
                                         </div>
-                                    </div>
+                                    </div>                                        
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputDescription">Address Line1:<sup class="text-danger">*</sup></label>
@@ -148,7 +137,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputDescription">Address Line3:<sup class="text-danger">*</sup></label>
+                                            <label for="inputDescription">Address Line3:</label>
                                             <input type="text" class="form-control" value="${address_line3}" name="address_line3" id="address_line3">
                                         </div>
                                     </div>
@@ -200,14 +189,14 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">Date Of Birth:</label>
+                                            <label for="inputName">Date Of Birth:<sup class="text-danger">*</sup></label>
                                             <input type="date" class="form-control" name="date_of_birth" id="date_of_birth" size="5" value="${date_of_birth}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">ID Proof Type:</label>
+                                            <label for="inputName">ID Proof Type:<sup class="text-danger">*</sup></label>
                                             <select class="ui dropdown form-control mySelect" name="id_type" id="id_type">
                                                 <option>---Select--- </option>
                                                 <c:forEach var="id_list"  items="${requestScope['id_list']}">
@@ -225,23 +214,24 @@
                                             </select>
                                         </div>
                                     </div>
+                                        
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">ID Proof No:</label>
+                                            <label for="inputName">ID Proof No:<sup class="text-danger">*</sup></label>
                                             <input class="form-control myInput" type="text" id="id_no" name="id_no"  size="30" value="${id_no}" >
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">Latitude:</label>
+                                            <label for="inputName">Latitude:<sup class="text-danger">*</sup></label>
                                             <input type="text" class="form-control" name="latitude" id="latitude" value="${latitude}">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">Longitude:</label>
+                                            <label for="inputName">Longitude:<sup class="text-danger">*</sup></label>
                                             <div class="d-flex">
                                                 <input class="form-control" type="text" id="longitude" name="longitude"  size="20" value="${longitude}">
                                                 <input class="btn myThemeBtn rounded-0 px-2" type="button" id="get_cordinate" value="Get Cordinate" onclick="openMapForCord()">
@@ -266,7 +256,7 @@
                                                 </div>   
                                             </div>
                                             <div class="form-group">
-                                                <label for="inputName">Select ID Proof:</label>
+                                                <label for="inputName">Select ID Proof:<sup class="text-danger">*</sup></label>
                                                 <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="getIDProof(this);">
                                             </div>
                                         </div>
@@ -276,11 +266,11 @@
                                                                                 </div>-->
                                     </div>
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
+<!--                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
                                             <label for="inputName">Gender:</label>
                                         </div>
-                                        <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
+                                        <div class="form-group form-check d-inline mr-2 pl-0">
                                             <label class="form-check-label ">
                                                 <c:choose>
                                                     <c:when test="${gender=='M'}">
@@ -307,9 +297,9 @@
 
                                             </label>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="col-md-12">
-                                        <div class="form-group mb-0 mt-1">
+                                        <div class="form-group mb-0 mt-3">
                                             <button class="btn myThemeBtn" type="submit" name="task" value="Update">Update</button>
                                         </div>
                                     </div>
@@ -344,15 +334,15 @@
                                                 <input type="password" class="form-control" name="confirmPassword" id="confirmPass">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-2">
                                             <div class="form-group mb-0 showPassBtn">
                                                 <a class="btn myThemeBtn showPass " id="showPass" onclick="hidePass();"><i class="far fa-eye"></i>  </a>
                                                 <a class="btn myThemeBtn hidePass" id="hidePass" onclick="showPass();"> <i class="fas fa-eye-slash"></i> </a>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-0" class="changePassBtn">
-                                                <input type="submit" class="btn myThemeBtn" name="task1" value="Change">
+                                        <div class="col-md-12 col-10">
+                                            <div class="form-group mb-0 changePassBtn">
+                                                <input type="submit" class="btn myThemeBtn " name="task1" value="Update Password">
                                             </div>
                                         </div>                      
                                     </div>
@@ -365,6 +355,9 @@
         </div>
     </section>
 </div>
+                                                
+                                                
+                                                <br><br><br><br><br><br><br><br>
 
 <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
@@ -573,3 +566,61 @@
 
 </script>
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+
+
+
+
+<script>
+    $(document).ready(function(){
+        $("#editProfile").validate({
+            rules: {
+                gender: {
+                    required: true,
+                },
+                dealer_name: {
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email:true
+                },
+                mobile1: {
+                    required: true
+                },
+                mobile2: {
+                    required: true
+                },
+                gst: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                address_line1: {
+                    required: true
+                },
+                address_line2: {
+                    required: true
+                },
+                date_of_birth: {
+                    required: true
+                },
+                id_type: {
+                    required: true
+                },
+                id_no: {
+                    required: true
+                },
+                latitude: {
+                    required: true
+                },
+                longitude: {
+                    required: true
+                },
+                id_proof: {
+                    required: true
+                },
+            }
+        });
+    });
+</script>

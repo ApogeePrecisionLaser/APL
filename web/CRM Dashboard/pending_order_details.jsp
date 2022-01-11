@@ -6,14 +6,9 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <!--                        <div>
-                                                    <a href="PendingOrdersController" class="btn btn-primary myNewLinkBtn">Back</a>
-                                                </div>
-                        -->
-
                         <div class="mr-2 backBtnWrap">
                             <a href="PendingOrdersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                         </div>
@@ -38,7 +33,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <div class="table-responsive tableScrollWrap noWrapTable" >
-                                <table class="table table-striped1 mainTable" id="mytable1" >
+                                <table class="table table-striped1 mainTable mb-0" id="mytable1" >
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
@@ -84,10 +79,10 @@
                                     <tr class="darkBlueBg">
                                         <td colspan="5"></td>
                                         <td class="totalValue text-white py-2">Total Amount</td>
-                                        <td class="totalValue text-white">${total_amount}</td>                    
-                                        <td class="totalValue text-white">${total_approved_price}</td>                    
-                                        <td class="totalValue text-white">${total_discount_percent}</td>                    
-                                        <td class="totalValue text-white">${total_discount_price}</td>                    
+                                        <td class="totalValue text-white py-2">${total_amount}</td>                    
+                                        <td class="totalValue text-white py-2">${total_approved_price}</td>                    
+                                        <td class="totalValue text-white py-2">${total_discount_percent}</td>                    
+                                        <td class="totalValue text-white py-2">${total_discount_price}</td>                    
                                     </tr>                    
                                     </tbody>
                                 </table>

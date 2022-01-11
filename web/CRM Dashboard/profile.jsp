@@ -6,13 +6,11 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-3">
                     <h1>Profile</h1>
                 </div>
-
                 <div class="col-sm-4">
-
                     <c:if test="${not empty message}">
                         <c:if test="${msgBgColor=='green'}">
                             <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
@@ -29,7 +27,6 @@
                             </div>
                         </c:if>
                     </c:if>
-
                 </div>
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
@@ -81,12 +78,19 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Dealer Name:</small></p>
-                                        <p id="user_name"><strong>${logged_user_name}</strong></p>
+                                        <p id="user_name"><strong>
+                                                <c:if test="${gender=='M'}">
+                                                    Mr.
+                                                </c:if>
+                                                <c:if test="${gender=='F'}">
+                                                    Mrs.
+                                                </c:if>
+                                                
+                                                ${logged_user_name}</strong></p>
                                     </div>
                                 </div>
 
@@ -130,13 +134,14 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div>
-                                        <p class="mb-0"><small>Address:</small></p>
+                                        <p class="mb-0"><small>Address Line 1:</small></p>
                                         <p><strong>${address_line1},${address_line2},${address_line3}</strong></p>
                                         <p id="address1" hidden=""><strong>${address_line1}</strong></p>
                                         <p id="address2" hidden=""><strong>${address_line2}</strong></p>
                                         <p id="address3" hidden=""><strong>${address_line3}</strong></p>
                                     </div>
                                 </div>
+                                
 
                                 <div class="col-md-4">
                                     <div>
@@ -173,12 +178,12 @@
                                         <p id="id_no"><strong>${id_no}</strong></p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+<!--                                <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Gender:</small></p>
                                         <p id="gender"><strong>${gender}</strong></p>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Latitude:</small></p>

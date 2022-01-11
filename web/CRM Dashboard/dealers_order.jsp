@@ -3,9 +3,37 @@
 
 
 
-<div class="content-wrapper" id="contentWrapper">
+<div class="content-wrapper" id="contentWrapper">        
+    <div class="content-header">
+        <div class="marginTop20">
+            <div class="">
+                <div class="row">
+                    <div class="col-10 col-md-5">
+                        <div class="searchWrap">
+                            <form action="DealersOrderController">
+                                <div class="form-group mb-0 d-flex">
+                                    <input type="text" class="form-control" name="search_item" id="search_item" 
+                                           placeholder="Search by product name" value="${search_item}">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                </div>                          
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-2 col-md-7">                            
+                        <div class="d-flex">                        
+                            <div class="cartCountWrap d-flex ml-auto mt-2 mt-sm-0">
+                                <a href="DealersOrderController?task=viewCart" >
+                                    <div><i class="fas fa-cart-plus"></i></div>
+                                    <div class="counting" id="total_cart_value">${cart_count}</div>
+                                </a>
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content ">
-
         <div class="">
             <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -16,38 +44,7 @@
                 <strong>Oops!</strong> Something went wrong.
             </div>
         </div>
-
-
-
         <div class="container-fluid">
-            <div class=" marginTop20">
-                <div class="">
-                    <div class="row">
-                        <div class="col-10 col-md-5">
-                            <div class="searchWrap">
-                                <form action="DealersOrderController">
-                                    <div class="form-group mb-0 d-flex">
-                                        <input type="text" class="form-control" name="search_item" id="search_item" 
-                                               placeholder="Search by product name" value="${search_item}">
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                    </div>                          
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-2 col-md-7">                            
-                            <div class="d-flex">                        
-                                <div class="cartCountWrap d-flex ml-auto mt-2 mt-sm-0">
-                                    <a href="DealersOrderController?task=viewCart" >
-                                        <div><i class="fas fa-cart-plus"></i></div>
-                                        <div class="counting" id="total_cart_value">${cart_count}</div>
-                                    </a>
-                                </div>
-                            </div>                    
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <c:forEach var="beanType1" items="${requestScope['list1']}"
                        varStatus="loopCounter">
 
@@ -165,7 +162,7 @@
                                                                         }
                                                                         // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 //                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
-                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
+                                                                        $('.img-fluid' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
 
                                                                         var stock_quantity = $('#stock_quantity' + (j + 1)).val();
                                                                         if (stock_quantity == 0) {

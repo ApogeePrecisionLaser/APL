@@ -6,14 +6,14 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
+            <div class="row mb-2 marginTop10">
+                <div class="col-sm-6 pl-0">
                     <div class="d-flex">
                         <!--                        <div>
                                                     <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
                                                 </div>-->
                         <div >
-                            <a href="DealersController?task=AddDealer" class="btn btn-primary myNewLinkBtn">Add New Dealer</a>
+                            <a href="DealersController?task=AddDealer" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Dealer</a>
                         </div>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">

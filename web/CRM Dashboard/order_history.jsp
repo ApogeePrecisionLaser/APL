@@ -6,7 +6,7 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div class="d-flex">
                         <c:if test="${user_role=='Dealer'}">
@@ -14,10 +14,11 @@
                                 <a href="DealersOrderController" class="btn btn-primary myNewLinkBtn">Create Order</a>
                             </div>
                         </c:if>
-<!--                        <div>
-                            <h1>Order History</h1>
-                        </div>-->
-
+                        <c:if test="${user_role=='Admin'}">
+                            <div>
+                                <h1>Order History</h1>
+                            </div>
+                       </c:if>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>

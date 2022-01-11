@@ -70,6 +70,7 @@ ul.piclist{
 
     .productBox .card-header img {
         width: 100%; 
+        height: auto;
     }
 
     .myAlertBox{
@@ -177,8 +178,12 @@ ul.piclist{
 .myIDImgPopUpWrap .modal {
     top: -191px;
 }
-
-
+.changePasswordSec .changePassFormWrap .showPassBtn {
+    margin-top: 6px;
+}
+.changePasswordSec .changePassFormWrap .changePassBtn{
+    margin-top: 6px;
+}
 
 
 

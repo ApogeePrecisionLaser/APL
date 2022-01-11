@@ -4,20 +4,8 @@
 
 
 <div class="content-wrapper" id="contentWrapper">
-    <section class="content">
+    <div class="content-header">
         <div class="">
-            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Success!</strong> New order create successfully.
-            </div>
-            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Oops!</strong> Something went wrong.
-            </div>
-        </div>
-        <div class="container-fluid">
-
-
             <div class="row marginTop20">
                 <div class="col-md-7 col-10 pr-0">
                     <div class="d-flex">  
@@ -37,10 +25,6 @@
                     </div>
                 </div>
                 <div class="col-md-5 col-2">
-                    <!--                    <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
-                                            <button type="button" class="close" data-dismiss="alert" >&times;</button>
-                                            <strong>Success!</strong> 
-                                        </div>-->
                     <div class="d-flex mt-1 mt-md-0">                        
                         <div class="cartCountWrap d-flex ml-auto">
                             <a href="DealersOrderController?task=viewCart" >
@@ -51,7 +35,20 @@
                     </div>                    
                 </div>
             </div>
-
+        </div>
+    </div>
+    <section class="content">
+        <div class="">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> New order create successfully.
+            </div>
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
+        </div>        
+        <div class="container-fluid">
             <div class="row mt-3">
                 <c:forEach var="beanType1" items="${requestScope['list']}"
                            varStatus="loopCounter">
