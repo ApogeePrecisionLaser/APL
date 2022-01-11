@@ -124,7 +124,7 @@
                                             <tr>
                                                 <td><a href="OrdersHistoryController?task=viewOrderDetails&order_table_id=${beanType.order_table_id}">${beanType.order_no}</a></td>
                                                 <td>${beanType.requested_to}</td>
-                                                <td><a href="tel:+${beanType.requested_to_mobile}">+${beanType.requested_to_mobile}</a></td>
+                                                <td><a href="tel:+${beanType.requested_to_mobile}">${beanType.requested_to_mobile}</a></td>
                                                 <td>${beanType.basic_price}</td>
                                                 <td>${beanType.date_time}</td>
 

@@ -357,6 +357,14 @@ table.dataTable thead .sorting_asc {
     padding: 3px 6px;
     /*border-radius:0;*/
 }
+
+.actionPending {
+    background-color: #d77a37;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 6px;
+    /*border-radius:0;*/
+}
 .actionView {
     background-color: #3977db;
     color: #fff;

@@ -136,7 +136,11 @@ public class LoginController extends HttpServlet {
                         List<Profile> dealers_list = profileModel.getAllDealers();
                         ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
                         ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
+                        ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
+                        List<Profile> latest_dealers = profileModel.getAllLatestDealers();
 
+                        request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+                        request.setAttribute("latest_dealers", latest_dealers);
                         session.setAttribute("sales_enquiries", total_enquiries_list.size());
                         session.setAttribute("total_dealers", dealers_list.size());
                         session.setAttribute("complaint_enquiries", total_complaint_list.size());

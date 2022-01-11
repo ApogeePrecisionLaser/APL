@@ -5,6 +5,16 @@
 
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
+        <div class="">
+            <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> New order create successfully.
+            </div>
+            <div class="alert alert-danger alert-dismissible myAlertBox mb-0" style="display:none" id="msg_danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oops!</strong> Something went wrong.
+            </div>
+        </div>
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -12,12 +22,12 @@
                         <!--                        <div>
                                                     <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn">Add New Enquiry</a>
                                                 </div>-->
-                        <div class="position-relative">
-                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <strong>Success!</strong> Indicates a successful or positive action.
-                            </div>
-                        </div>
+                        <!--                        <div class="position-relative">
+                                                    <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
+                                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                                        <strong>Success!</strong> Indicates a successful or positive action.
+                                                    </div>
+                                                </div>-->
                     </div>  
                 </div>
                 <div class="col-sm-6">
@@ -80,30 +90,43 @@
 
                                                     <td class="fontFourteen">
                                                         <c:choose>
-
                                                             <c:when test="${beanType.status =='Assigned To Dealer'}">
-                                                                <button class="btn inConversation fontFourteen" disabled>In Conversation </button>
+                                                                <button class="btn inConversation fontFourteen" id="status${beanType.enquiry_table_id}" disabled>In Conversation</button>
                                                             </c:when>
-
                                                             <c:when test="${beanType.status =='Enquiry Failed'}">
-                                                                <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                                <button class="btn enquiryFailed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:when test="${beanType.status =='Enquiry Passed'}">
-                                                                <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
+                                                                <button class="btn enquiryPassed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
+                                                                <button class="btn myBtnDanger fontFourteen "  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
 
 
 
-                                                    <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
                                                     <td class="fontFourteen d-flex">
                                                         <div>
                                                             <a href="DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Enquiry Detail"></a>
                                                         </div> 
+
+
+                                                        <select class="btn btn-primary myNewLinkBtn px-1 ml-3 fontFourteen" id="enquiry_status${beanType.enquiry_table_id}" name="item_status" style="width:100px" onchange="changeStatus('${beanType.enquiry_table_id}')">
+                                                            <c:if test="${beanType.status=='Enquiry Passed'}">
+                                                                <option  class="btn btn-primary actionEdit fontFourteen" value="Enquiry Passed" id="enquiry_status${beanType.enquiry_table_id}">Resolved</option>
+                                                            </c:if>
+                                                            <c:if test="${beanType.status=='Enquiry Failed'}">
+                                                                <option  class="btn btn-primary actionDelete fontFourteen" value="Enquiry Failed" id="enquiry_status${beanType.enquiry_table_id}">Unresolved</option>
+                                                            </c:if>
+
+                                                            <c:if test="${beanType.status=='Assigned To Dealer'}">
+                                                                <option class="btn btn-primary fontFourteen" id="enquiry_status${beanType.enquiry_table_id}">Select</option>
+                                                                <option class="btn btn-primary actionEdit fontFourteen" value="Enquiry Passed" id="enquiry_status${beanType.enquiry_table_id}">Resolved</option>
+                                                                <option class="btn btn-primary actionDelete fontFourteen" value="Enquiry Failed" id="enquiry_status${beanType.enquiry_table_id}">Unresolved</option>
+                                                            </c:if>
+                                                        </select>
                                                     </td>
                                                 </tr> 
                                             </c:forEach>
@@ -114,7 +137,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -164,6 +186,56 @@
                 alert(data.message);
             }
         });
+
+    }
+
+
+    function changeStatus(enquiry_table_id) {
+        var enquiry_status = $('#enquiry_status' + enquiry_table_id).val();
+        if (enquiry_status == 'Select') {
+            alert("Please Select one of the status!...");
+            return false;
+        } else {
+            $.ajax({
+                url: "DealersOrderController",
+                dataType: "json",
+                data: {task: "changeStatus", enquiry_status: enquiry_status, enquiry_table_id: enquiry_table_id},
+                success: function (data) {
+                    console.log(data.msg);
+                    if (data.msg == 'Enquiry Passed') {
+                        $('#msg_success').show();
+                        $('#msg_danger').hide();
+                        $('#msg_success').html("Enquiry Resolved");
+                        $('#status' + enquiry_table_id).html(data.msg);
+                        $('#status' + enquiry_table_id).removeClass("inConversation");
+                        $('#status' + enquiry_table_id).addClass("enquiryPassed");
+
+//                        $('#enquiry_status' + enquiry_table_id).removeClass("inConversation");
+//                        $('#enquiry_status' + enquiry_table_id).addClass("actionEdit");
+                        $('#enquiry_status' + enquiry_table_id).val(data.msg);
+
+                    }
+                    if (data.msg == 'Enquiry Failed') {
+                        $('#msg_success').hide();
+                        $('#msg_danger').show();
+                        $('#msg_danger').html("Enquiry Not Resolved");
+                        $('#status' + enquiry_table_id).html(data.msg);
+                        $('#status' + enquiry_table_id).removeClass("inConversation");
+                        $('#status' + enquiry_table_id).addClass("actionDelete");
+                        $('#enquiry_status' + enquiry_table_id).val(data.msg);
+                    }
+                    setTimeout(function () {
+                        $('#msg_success').fadeOut('fast');
+                    }, 2000);
+                    setTimeout(function () {
+                        $('#msg_danger').fadeOut('fast');
+                    }, 2000);
+
+                }, error: function (error) {
+                    console.log(error.responseText);
+                }
+            });
+        }
 
     }
 </script>

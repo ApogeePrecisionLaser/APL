@@ -251,6 +251,7 @@ public class DealersOrder {
     private String officeMobNo;
     private String requested_to;
     private String requested_to_mobile;
+    private String requested_by_mobile;
     private String dealer;
     private String salesperson;
     private String delivery_challan_no;
@@ -1174,6 +1175,20 @@ public class DealersOrder {
      */
     public void setRequested_to_mobile(String requested_to_mobile) {
         this.requested_to_mobile = requested_to_mobile;
+    }
+
+    /**
+     * @return the requested_by_mobile
+     */
+    public String getRequested_by_mobile() {
+        return requested_by_mobile;
+    }
+
+    /**
+     * @param requested_by_mobile the requested_by_mobile to set
+     */
+    public void setRequested_by_mobile(String requested_by_mobile) {
+        this.requested_by_mobile = requested_by_mobile;
     }
 
 }

@@ -634,6 +634,68 @@ public class DealersOrderController extends HttpServlet {
             request.getRequestDispatcher("checkout").forward(request, response);
         }
 
+        if (task.equals("changeStatus")) {
+            String message = "";
+            String enquiry_status = request.getParameter("enquiry_status");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            try {
+                message = model.changeEnquiryStatus(enquiry_status, enquiry_table_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(DealersOrderController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            JSONObject json = null;
+            PrintWriter out = response.getWriter();
+            List<String> list = null;
+            if (json != null) {
+                out.println(json);
+            } else {
+                JSONObject gson = new JSONObject();
+
+                if (message.equals("Enquiry Passed")) {
+                    gson.put("msg", message);
+                }
+                if (message.equals("Enquiry Failed")) {
+                    gson.put("msg", message);
+                }
+                out.println(gson);
+                DBConnection.closeConncetion(model.getConnection());
+
+                return;
+            }
+        }
+
+        if (task.equals("changeComplaintStatus")) {
+            String message = "";
+            String enquiry_status = request.getParameter("enquiry_status");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+            try {
+                message = model.changeComplaintEnquiryStatus(enquiry_status, enquiry_table_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(DealersOrderController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            JSONObject json = null;
+            PrintWriter out = response.getWriter();
+            List<String> list = null;
+            if (json != null) {
+                out.println(json);
+            } else {
+                JSONObject gson = new JSONObject();
+
+                if (message.equals("Enquiry Passed")) {
+                    gson.put("msg", message);
+                }
+                if (message.equals("Enquiry Failed")) {
+                    gson.put("msg", message);
+                }
+                out.println(gson);
+                DBConnection.closeConncetion(model.getConnection());
+
+                return;
+            }
+        }
+
         String getImage = request.getParameter("getImage");
         try {
             if (getImage == null) {

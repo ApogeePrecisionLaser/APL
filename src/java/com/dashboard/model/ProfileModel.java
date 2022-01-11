@@ -63,6 +63,7 @@ public class ProfileModel {
             while (rst1.next()) {
                 count_map = rst1.getInt("count");
             }
+
             if (count_map > 0) {
                 query = " select oo.org_office_name,kp.key_person_name,oo.email_id1,oo.landline_no1,oo.mobile_no1 as office_mobile, "
                         + " kp.mobile_no1 as person_mobile,oo.service_tax_reg_no,oo.address_line1,oo.address_line2,oo.address_line3, "
@@ -71,7 +72,7 @@ public class ProfileModel {
                         + " from key_person kp,org_office oo,city c,id_type idt,org_office_designation_map oodm,general_image_details gid "
                         + " where kp.active='Y' and oo.active='Y' and c.active='Y' and oodm.active='Y' and gid.active='Y' "
                         + " and oodm.org_office_id=oo.org_office_id and oodm.designation_id=8 and gid.key_person_id=kp.key_person_id "
-                        + " and c.city_id=oo.city_id and kp.org_office_id=oo.org_office_id and kp.id_type_id=idt.id_type_id  ";
+                        + " and c.city_id=oo.city_id and kp.org_office_id=oo.org_office_id  ";
 
                 if (!logged_user_name.equals("") && logged_user_name != null) {
                     query += " and kp.key_person_name='" + logged_user_name + "' ";
@@ -199,6 +200,63 @@ public class ProfileModel {
         return list;
     }
 
+    public static ArrayList<Profile> getAllLatestDealers() {
+        ArrayList<Profile> list = new ArrayList<Profile>();
+        String query = " select distinct "
+                + " kp.key_person_id, "
+                + " kp.key_person_name,kp.address_line1,kp.address_line2,kp.address_line3,kp.mobile_no1,kp.email_id1,kp.emp_code, "
+                + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
+                + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
+                + " oo.mobile_no1,oo.org_office_code, "
+                + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.org_office_id  "
+                + " from key_person kp, organisation_name onn, org_office oo, designation d, "
+                + " org_office_designation_map oodm, org_office_type oot"
+                + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
+                + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
+                + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
+                + " and oo.office_type_id=3  ORDER BY kp.created_at desc limit 10 ";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                Profile bean = new Profile();
+                bean.setKey_person_id(rset.getInt(1));
+                bean.setKey_person_name(rset.getString(2));
+                bean.setKp_address_line1(rset.getString(3) + ", " + rset.getString(4) + ", " + rset.getString(5));
+//                bean.setKp_address_line2(rset.getString(4));
+//                bean.setKp_address_line3(rset.getString(5));
+                bean.setKp_mobile_no1(rset.getString(6) + ", " + rset.getString(24));
+                bean.setKp_email_id1(rset.getString(7));
+                bean.setEmp_code(rset.getInt(8));
+                bean.setKp_father_name(rset.getString(9));
+                bean.setKp_date_of_birth(rset.getString(10));
+                bean.setEmergency_contact_name(rset.getString(11));
+                bean.setEmergency_contact_mobile(rset.getString(12));
+                bean.setOrganisation_name(rset.getString(13));
+                bean.setOrganisation_code(rset.getString(14));
+                bean.setOrg_office_name(rset.getString(15));
+                bean.setOff_address_line1(rset.getString(16) + ", " + rset.getString(23));
+                bean.setOff_email_id1(rset.getString(17));
+                bean.setOff_mobile_no1(rset.getString(18));
+                bean.setOrg_office_code(rset.getString(19));
+                bean.setDesignation(rset.getString(20));
+                bean.setDesignation_code(rset.getInt(21));
+                bean.setOrg_office_type(rset.getString(22));
+                bean.setGst_number(rset.getString(25));
+                bean.setOrg_office_id(rset.getInt(26));
+                list.add(bean);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error in ProfileModel getData -- " + e);
+
+        }
+
+        return list;
+    }
+
     public JSONArray getAllDealerList() {
 
         JSONObject obj = new JSONObject();
@@ -241,7 +299,8 @@ public class ProfileModel {
 
         return arrayObj;
     }
-
+    
+    
     public ArrayList<Profile> viewDealerDetails(String key_person_id, String org_office_id) {
         ArrayList<Profile> list = new ArrayList<Profile>();
         String query = " select distinct "

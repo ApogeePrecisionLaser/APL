@@ -166,7 +166,11 @@ public class CRMDashboardController extends HttpServlet {
             List<Profile> dealers_list = profileModel.getAllDealers();
             ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
             ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
+            ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
+            List<Profile> latest_dealers = profileModel.getAllLatestDealers();
 
+            request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+            request.setAttribute("latest_dealers", latest_dealers);
             request.setAttribute("total_orders", total_orders_list.size());
             request.setAttribute("total_dealers", dealers_list.size());
             request.setAttribute("sales_enquiries", total_enquiries_list.size());

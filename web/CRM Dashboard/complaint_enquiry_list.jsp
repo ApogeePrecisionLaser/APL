@@ -106,7 +106,8 @@
 
                                                     </td>
                                                     <td>${beanType.assigned_to}
-                                                        <c:if test="${beanType.status !='Enquiry Generated'}">
+                                                        <c:if test="${beanType.status =='Assigned To SalesManager' || beanType.status =='Assigned To Dealer' }">
+
                                                             <i class="fontTen">(${beanType.assigned_to_designation})</i>
                                                         </c:if>
                                                     </td>
