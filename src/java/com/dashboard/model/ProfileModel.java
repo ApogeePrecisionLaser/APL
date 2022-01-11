@@ -68,11 +68,12 @@ public class ProfileModel {
                 query = " select oo.org_office_name,kp.key_person_name,oo.email_id1,oo.landline_no1,oo.mobile_no1 as office_mobile, "
                         + " kp.mobile_no1 as person_mobile,oo.service_tax_reg_no,oo.address_line1,oo.address_line2,oo.address_line3, "
                         + " c.city_name,c.pin_code,kp.bloodgroup,kp.gender,kp.id_no,idt.id_type,kp.date_of_birth,oo.org_office_id,kp.key_person_id, "
-                        + " oodm.org_office_designation_map_id,gid.general_image_details_id,kp.latitude,kp.longitude,gid.image_destination_id,gid.image_name "
+                        + " oodm.org_office_designation_map_id,gid.general_image_details_id,kp.latitude,kp.longitude,gid.image_destination_id,"
+                        + " gid.image_name,kp.salutation "
                         + " from key_person kp,org_office oo,city c,id_type idt,org_office_designation_map oodm,general_image_details gid "
                         + " where kp.active='Y' and oo.active='Y' and c.active='Y' and oodm.active='Y' and gid.active='Y' "
                         + " and oodm.org_office_id=oo.org_office_id and oodm.designation_id=8 and gid.key_person_id=kp.key_person_id "
-                        + " and c.city_id=oo.city_id and kp.org_office_id=oo.org_office_id  ";
+                        + " and c.city_id=oo.city_id and kp.org_office_id=oo.org_office_id and idt.id_type_id=kp.id_type_id ";
 
                 if (!logged_user_name.equals("") && logged_user_name != null) {
                     query += " and kp.key_person_name='" + logged_user_name + "' ";
@@ -84,7 +85,7 @@ public class ProfileModel {
                 query = " select oo.org_office_name,kp.key_person_name,oo.email_id1,oo.landline_no1,oo.mobile_no1 as office_mobile, "
                         + " kp.mobile_no1 as person_mobile,oo.service_tax_reg_no,oo.address_line1,oo.address_line2,oo.address_line3, "
                         + " c.city_name,c.pin_code,kp.bloodgroup,kp.gender,kp.id_no,kp.date_of_birth,oo.org_office_id,kp.key_person_id, "
-                        + " oodm.org_office_designation_map_id,kp.latitude,kp.longitude "
+                        + " oodm.org_office_designation_map_id,kp.latitude,kp.longitude,kp.salutation "
                         + " from key_person kp,org_office oo,city c,org_office_designation_map oodm "
                         + " where kp.active='Y' and oo.active='Y' and c.active='Y' and oodm.active='Y' "
                         + " and oodm.org_office_id=oo.org_office_id and oodm.designation_id=8 "
@@ -104,6 +105,7 @@ public class ProfileModel {
                 bean.setOrg_office_name(rst.getString("org_office_name"));
                 bean.setKey_person_name(rst.getString("key_person_name"));
                 bean.setEmail_id1(rst.getString("email_id1"));
+                bean.setSalutation(rst.getString("salutation"));
                 bean.setLandline_no1(rst.getString("landline_no1"));
                 bean.setMobile_no1(rst.getString("office_mobile"));
                 bean.setMobile_no2(rst.getString("person_mobile"));
@@ -299,8 +301,7 @@ public class ProfileModel {
 
         return arrayObj;
     }
-    
-    
+
     public ArrayList<Profile> viewDealerDetails(String key_person_id, String org_office_id) {
         ArrayList<Profile> list = new ArrayList<Profile>();
         String query = " select distinct "
@@ -1087,6 +1088,11 @@ public class ProfileModel {
         String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,"
                 + "revision_no,active,remark) "
                 + " VALUES(?,?,?,?,?,?,?,?)";
+        String query6 = " select count(*) as count from user where key_person_id='" + key_id + "' and user_name='" + key.getKey_person_name() + "' and active='Y' ";
+//        String user_update = " UPDATE user SET active=? WHERE key_person_id=? and revision_no=? ";
+//        String user_insert = " INSERT INTO user (user_name, user_password, registration_date, key_person_id,"
+//                + "rev_no,active) "
+//                + " VALUES(?,?,?,?,?,?) ";
 
         try {
             connection.setAutoCommit(false);
@@ -1142,11 +1148,23 @@ public class ProfileModel {
                     psmt.setInt(33, 0);
                     psmt.setString(34, key.getRelation());
                     psmt.setInt(35, key.getOrg_office_des_map_id());
+//                    psmt.setString(36, key.getSalutation());
                     rowsAffected = psmt.executeUpdate();
 
                     if (rowsAffected > 0) {
                         status = true;
                         kp_id = key_id;
+
+//                        PreparedStatement pstmt2 = connection.prepareStatement(query6);
+//                        ResultSet rs6 = pstmt2.executeQuery();
+//                        int user_count = 0;
+//                        while (rs6.next()) {
+//                            user_count = rs6.getInt("count");
+//                        }
+//                        if (user_count == 0) {
+//
+//                        }
+
                     } else {
                         status = false;
                     }

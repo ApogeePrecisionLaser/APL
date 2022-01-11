@@ -9,15 +9,27 @@
             <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <div >
+                        <div class="mr-2">
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
-                        </div>                        
+                        </div> 
+                        <div class="mr-2 selectEnquiryWrap">
+                            <select class="form-control rounded-0 selectEnquiry" onchange="chnageEnquirySource(this.value)">
+                                <option selected disabled>--select one--</option>
+                                <option>Indiamart</option>
+                                <option>Justdial</option>
+                                <option>Admin</option>
+                            </select>
+                        </div>
+                        <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
+
+                        </div>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <strong>Success!</strong> Indicates a successful or positive action.
                             </div>
                         </div>
+
                     </div>  
                 </div>
                 <div class="col-sm-6">
@@ -134,3 +146,9 @@
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
 
+<script>
+    function chnageEnquirySource(val) {
+        $("#enqStatusBtnWrap").empty();
+        $("#enqStatusBtnWrap").append('<a href="#" class="btn btn-primary fontFourteen rounded-0 enquiryPendingBtn mr-2" id="enquiryPendingBtn">Pending</a><a href="#" class="btn btn-primary fontFourteen rounded-0 enquiryCompleteBtn" id="enquiryCompleteBtn">Complete</a>');
+    }
+</script>

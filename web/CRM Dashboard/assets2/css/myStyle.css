@@ -350,6 +350,7 @@ table.dataTable thead .sorting_asc {
     border-radius: 0;
     padding: 5px 20px;
     transition: all .3s ease;
+    white-space: nowrap;
 }
 
 .actionDelete {
@@ -1346,28 +1347,44 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     border-left: 5px solid #102F42;
     padding-left: 10px;
     font-weight: 500;
-  }
-  .changePasswordSec .changePassFormWrap .showPassBtn{
+}
+.changePasswordSec .changePassFormWrap .showPassBtn{
     margin-top:27px
-  }
-  .changePasswordSec .changePassFormWrap .showPassBtn .showPass{
+}
+.changePasswordSec .changePassFormWrap .showPassBtn .showPass{
     background-color: #2eaf2b;
     border: 1px solid #2eaf2b;
-  }
-  .changePasswordSec .changePassFormWrap .showPassBtn .hidePass{
+}
+.changePasswordSec .changePassFormWrap .showPassBtn .hidePass{
     background-color: #e01634;
     border: 1px solid #e01634;
-  }
-  .error{
+}
+.error{
     color: #e01634;
-  }
+}
 
-  
-  
-  .users-list>li img {
+
+
+.users-list>li img {
     border-radius: 50%;
     height: auto;
     /* max-width: 100%; */
     width: 70px;
     height: 70px;
+}
+
+
+.selectEnquiryWrap select{
+    height: 34px;
+    padding: 4px 3px;
+}
+.enquiryPendingBtn{
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+.enquiryCompleteBtn{
+    background-color: #2eaf2b;
+    border-color: #2eaf2b;
+    color: #fff;
 }

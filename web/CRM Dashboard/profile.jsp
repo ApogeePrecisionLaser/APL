@@ -48,7 +48,7 @@
                         <input type="hidden" name="image_path" id="image_path" value="${image_path}">
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
-                        <p class="text-secondry">${gst}</p>
+                        <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
                         <!--                        <div class="text-left1">
                                                     <small class="text-danger ">Profile completion</small>
                                                     <div class="progress mx-auto" style="width:300px;">                                        
@@ -83,13 +83,13 @@
                                     <div>
                                         <p class="mb-0"><small>Dealer Name:</small></p>
                                         <p id="user_name"><strong>
-                                                <c:if test="${gender=='M'}">
+                                                <c:if test="${salutation=='Mr.'}">
                                                     Mr.
                                                 </c:if>
-                                                <c:if test="${gender=='F'}">
+                                                <c:if test="${salutation=='Mrs.'}">
                                                     Mrs.
                                                 </c:if>
-                                                
+
                                                 ${logged_user_name}</strong></p>
                                     </div>
                                 </div>
@@ -141,7 +141,7 @@
                                         <p id="address3" hidden=""><strong>${address_line3}</strong></p>
                                     </div>
                                 </div>
-                                
+
 
                                 <div class="col-md-4">
                                     <div>
@@ -178,12 +178,13 @@
                                         <p id="id_no"><strong>${id_no}</strong></p>
                                     </div>
                                 </div>
-<!--                                <div class="col-md-4">
-                                    <div>
-                                        <p class="mb-0"><small>Gender:</small></p>
-                                        <p id="gender"><strong>${gender}</strong></p>
-                                    </div>
-                                </div>-->
+                                <p id="gender" hidden=""><strong>${gender}</strong></p>
+                                <!--                                <div class="col-md-4">
+                                                                    <div>
+                                                                        <p class="mb-0"><small>Gender:</small></p>
+                                                                        <p id="gender"><strong>${gender}</strong></p>
+                                                                    </div>
+                                                                </div>-->
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Latitude:</small></p>
@@ -204,27 +205,27 @@
         </div>
     </section>
 </div>
-                                    
-                                    
-                             
-                                    
+
+
+
+
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
 
 
 <script>
-var modal = document.getElementById("myModal");
-var img = document.getElementById("myIDImgPopUp");
-var modalImg = document.getElementById("img01");
-img.onclick = function(){
-  modal.style.display = "block";
-  modalImg.src = this.src;
-}
-var span = document.getElementsByClassName("close")[0];
-span.onclick = function() {
-  modal.style.display = "none";
-}
+    var modal = document.getElementById("myModal");
+    var img = document.getElementById("myIDImgPopUp");
+    var modalImg = document.getElementById("img01");
+    img.onclick = function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    }
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
 </script>
 
 

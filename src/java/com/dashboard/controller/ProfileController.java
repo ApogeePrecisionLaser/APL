@@ -258,6 +258,8 @@ public class ProfileController extends HttpServlet {
             Profile key = new Profile();
             key.setKey_person_id(logged_key_person_id);
             key.setSalutation("Mr.");
+//            key.setSalutation(map.get("salutation").trim());
+//            key.setKey_person_name(map.get("dealer_name").trim());
             key.setKey_person_name(logged_user_name);
             key.setFather_name("");
             key.setDate_of_birth((map.get("date_of_birth").trim()));
@@ -278,7 +280,18 @@ public class ProfileController extends HttpServlet {
             if (map.get("gender") == null) {
                 gender = "";
             }
-            key.setGender(gender.trim());
+            String salutation = map.get("salutation").trim();
+            if (salutation == null) {
+                salutation = "";
+            }
+            if (salutation.equals("Mr.")) {
+                key.setGender("M");
+            }
+            if (salutation.equals("Mrs.")) {
+                key.setGender("F");
+            } else {
+                key.setGender("M");
+            }
             key.setPassword("");
             key.setBlood(map.get("blood").trim());
             key.setEmergency_number("");
@@ -314,6 +327,7 @@ public class ProfileController extends HttpServlet {
 
         List<Profile> list = model.getAllDetails(logged_user_name, logged_org_office);
         String email = "";
+        String salutation = "";
         String landline = "";
         String mobile1 = "";
         String mobile2 = "";
@@ -334,6 +348,9 @@ public class ProfileController extends HttpServlet {
 
         if (list.get(0).getEmail_id1() != null) {
             email = list.get(0).getEmail_id1().toString();
+        }
+        if (list.get(0).getSalutation() != null) {
+            salutation = list.get(0).getSalutation().toString();
         }
         if (list.get(0).getLandline_no1() != null) {
             landline = list.get(0).getLandline_no1().toString();
@@ -396,6 +413,7 @@ public class ProfileController extends HttpServlet {
         request.setAttribute("logged_user_name", logged_user_name);
         request.setAttribute("logged_org_office", logged_org_office);
         request.setAttribute("email", email);
+        request.setAttribute("salutation", salutation);
         request.setAttribute("landline", landline);
         request.setAttribute("mobile1", mobile1);
         request.setAttribute("mobile2", mobile2);

@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2 marginTop10">
                 <div class="col-sm-3">
-                    <h1>Profile 12</h1>
+                    <h1>Profile</h1>
                 </div>
                 <div class="col-sm-4">
 
@@ -48,7 +48,7 @@
                     <div class="text-center">
                         <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                         <h2 class="mt-1 mb-1">${logged_org_office}</h2>
-                        <p class="text-secondry">${gst}</p>
+                        <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
                     </div>
                 </div>
                 <div class="text-left mt-2">
@@ -64,16 +64,29 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputName">Title:<sup class="text-danger">*</sup></label>
-                                            <select class="form-control" name="gender">
-                                                <option>Mr</option>
-                                                <option>Mrs</option>
+
+
+
+                                            <select class="form-control" name="salutation" disabled="">
+                                                <c:if test="${salutation=='Mr.'}">
+                                                    <option value="Mr." selected="">Mr.</option>
+                                                </c:if>
+                                                <c:if test="${salutation=='Mrs.'}">
+                                                    <option value="Mrs." selected="">Mrs.</option>
+                                                </c:if>
+                                                <c:if test="${salutation!='Mr.' || salutation!='Mrs.'}">
+                                                    <option>---Select--- </option>
+                                                    <option value="Mr." >Mr.</option>
+                                                    <option value="Mrs." >Mrs.</option>
+
+                                                </c:if>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputName">Dealer Name:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" value="${logged_user_name}" name="dealer_name" id="dealer_name">
+                                            <input type="text" disabled="" class="form-control" value="${logged_user_name}" name="dealer_name" id="dealer_name">
                                             <input type="hidden" class="form-control myInput" id="org_office_id" name="org_office_id" value="${org_office_id}" >
                                             <input type="hidden" class="form-control myInput" id="key_person_id" name="key_person_id" value="${key_person_id}" >
                                             <input type="hidden" class="form-control myInput" id="org_office_designation_map_id" name="org_office_designation_map_id" value="${org_office_designation_map_id}" >
@@ -111,12 +124,12 @@
                                             <input type="text" class="form-control" value="${mobile2}" name="mobile2" id="mobile2" onkeyup="myFunForPersonNumber(id)">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="inputName">GST No:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" value="${gst}" name="gst" id="gst" disabled>
-                                        </div>
-                                    </div>                                    
+                                    <!--                                    <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="inputName">GST No:<sup class="text-danger">*</sup></label>-->
+                                    <input type="hidden" class="form-control" value="${gst}" name="gst" id="gst">
+                                    <!--                                        </div>
+                                                                        </div>                                    -->
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputName">City:<sup class="text-danger">*</sup></label>
@@ -196,7 +209,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">ID Proof Type:<sup class="text-danger">*</sup></label>
+                                            <label for="inputName">ID Proof Type:</label>
                                             <select class="ui dropdown form-control mySelect" name="id_type" id="id_type">
                                                 <option>---Select--- </option>
                                                 <c:forEach var="id_list"  items="${requestScope['id_list']}">
@@ -214,11 +227,11 @@
                                             </select>
                                         </div>
                                     </div>
-                                        
+
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="inputName">ID Proof No:<sup class="text-danger">*</sup></label>
+                                            <label for="inputName">ID Proof No:</label>
                                             <input class="form-control myInput" type="text" id="id_no" name="id_no"  size="30" value="${id_no}" >
                                         </div>
                                     </div>
@@ -256,7 +269,7 @@
                                                 </div>   
                                             </div>
                                             <div class="form-group">
-                                                <label for="inputName">Select ID Proof:<sup class="text-danger">*</sup></label>
+                                                <label for="inputName">Select ID Proof:</label>
                                                 <input class="form-control myInput" type="file" id="id_proof" name="id_proof"  size="30" value=""  onchange="getIDProof(this);">
                                             </div>
                                         </div>
@@ -266,38 +279,38 @@
                                                                                 </div>-->
                                     </div>
 
-<!--                                    <div class="col-md-4">
-                                        <div class="form-group mb-0">
-                                            <label for="inputName">Gender:</label>
-                                        </div>
-                                        <div class="form-group form-check d-inline mr-2 pl-0">
-                                            <label class="form-check-label ">
-                                                <c:choose>
-                                                    <c:when test="${gender=='M'}">
-                                                        <input type="radio" id="genderm" name="gender" value="M" checked=""> Male
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <input type="radio" id="genderm" name="gender" value="M" > Male
-                                                    </c:otherwise>
-                                                </c:choose>
+                                    <!--                                    <div class="col-md-4">
+                                                                            <div class="form-group mb-0">
+                                                                                <label for="inputName">Gender:</label>
+                                                                            </div>
+                                                                            <div class="form-group form-check d-inline mr-2 pl-0">
+                                                                                <label class="form-check-label ">
+                                    <c:choose>
+                                        <c:when test="${gender=='M'}">
+                                            <input type="radio" id="genderm" name="gender" value="M" checked=""> Male
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="radio" id="genderm" name="gender" value="M" > Male
+                                        </c:otherwise>
+                                    </c:choose>
 
-                                            </label>
-                                        </div>
-                                        <div class="form-group form-check d-inline pl-0">
-                                            <label class="form-check-label">
+                                </label>
+                            </div>
+                            <div class="form-group form-check d-inline pl-0">
+                                <label class="form-check-label">
 
-                                                <c:choose>
-                                                    <c:when test="${gender=='F'}">
-                                                        <input type="radio" id="genderf" name="gender" value="F" checked=""> Female
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <input type="radio" id="genderf" name="gender" value="F" > Female
-                                                    </c:otherwise>
-                                                </c:choose>
+                                    <c:choose>
+                                        <c:when test="${gender=='F'}">
+                                            <input type="radio" id="genderf" name="gender" value="F" checked=""> Female
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="radio" id="genderf" name="gender" value="F" > Female
+                                        </c:otherwise>
+                                    </c:choose>
 
-                                            </label>
-                                        </div>
-                                    </div>-->
+                                </label>
+                            </div>
+                        </div>-->
                                     <div class="col-md-12">
                                         <div class="form-group mb-0 mt-3">
                                             <button class="btn myThemeBtn" type="submit" name="task" value="Update">Update</button>
@@ -355,9 +368,9 @@
         </div>
     </section>
 </div>
-                                                
-                                                
-                                                <br><br><br><br><br><br><br><br>
+
+
+<br><br><br><br><br><br><br><br>
 
 <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
@@ -571,7 +584,7 @@
 
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $("#editProfile").validate({
             rules: {
                 gender: {
@@ -582,7 +595,7 @@
                 },
                 email: {
                     required: true,
-                    email:true
+                    email: true
                 },
                 mobile1: {
                     required: true
@@ -605,21 +618,21 @@
                 date_of_birth: {
                     required: true
                 },
-                id_type: {
-                    required: true
-                },
-                id_no: {
-                    required: true
-                },
+//                id_type: {
+//                    required: true
+//                },
+//                id_no: {
+//                    required: true
+//                },
                 latitude: {
                     required: true
                 },
                 longitude: {
                     required: true
                 },
-                id_proof: {
-                    required: true
-                },
+//                id_proof: {
+//                    required: true
+//                },
             }
         });
     });

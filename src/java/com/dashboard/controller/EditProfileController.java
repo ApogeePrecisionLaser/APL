@@ -68,30 +68,100 @@ public class EditProfileController extends HttpServlet {
         request.setAttribute("id_list", id_list);
 
         List<Profile> list = model.getAllDetails(logged_user_name, logged_org_office);
-        String email = list.get(0).getEmail_id1().toString();
-        String landline = list.get(0).getLandline_no1().toString();
-        String mobile1 = list.get(0).getMobile_no1().toString();
-        String mobile2 = list.get(0).getMobile_no2().toString();
-        String gst = list.get(0).getGst_number().toString();
-        String city = list.get(0).getCity_name().toString();
-        String address_line1 = list.get(0).getAddress_line1().toString();
-        String address_line2 = list.get(0).getAddress_line2().toString();
-        String address_line3 = list.get(0).getAddress_line3().toString();
-        String blood = list.get(0).getBlood().toString();
-        String date_of_birth = list.get(0).getDate_of_birth().toString();
-        String id_type = list.get(0).getId_type().toString();
-        String id_no = list.get(0).getId_no().toString();
-        String latitude = list.get(0).getLatitude().toString();
-        String longitude = list.get(0).getLongitude().toString();
-        String gender = list.get(0).getGender().toString();
+
+        String email = "";
+        String salutation = "";
+        String landline = "";
+        String mobile1 = "";
+        String mobile2 = "";
+        String gst = "";
+        String city = "";
+        String address_line1 = "";
+        String address_line2 = "";
+        String address_line3 = "";
+        String blood = "";
+        String date_of_birth = "";
+        String id_no = "";
+        String id_type = "";
+        String gender = "";
+        String latitude = "";
+        String longitude = "";
+        String image_path = "";
+        String image_name = "";
         int org_office_id = list.get(0).getOrg_office_id();
         int key_person_id = list.get(0).getKey_person_id();
         int org_office_designation_map_id = list.get(0).getOrg_office_des_map_id();
         int general_image_details_id = list.get(0).getGeneral_image_details_id();
 
+        if (list.get(0).getEmail_id1() != null) {
+            email = list.get(0).getEmail_id1().toString();
+        }
+        
+        if (list.get(0).getSalutation() != null) {
+            salutation = list.get(0).getSalutation().toString();
+        }
+        if (list.get(0).getLandline_no1() != null) {
+            landline = list.get(0).getLandline_no1().toString();
+        }
+        if (list.get(0).getMobile_no1() != null) {
+            mobile1 = list.get(0).getMobile_no1().toString();
+        }
+        if (list.get(0).getMobile_no2() != null) {
+            mobile2 = list.get(0).getMobile_no2().toString();
+        }
+        if (list.get(0).getGst_number() != null) {
+            gst = list.get(0).getGst_number().toString();
+        }
+
+        if (list.get(0).getCity_name() != null) {
+            city = list.get(0).getCity_name().toString();
+        }
+
+        if (list.get(0).getAddress_line1() != null) {
+            address_line1 = list.get(0).getAddress_line1().toString();
+        }
+        if (list.get(0).getAddress_line2() != null) {
+            address_line2 = list.get(0).getAddress_line2().toString();
+        }
+        if (list.get(0).getAddress_line3() != null) {
+            address_line3 = list.get(0).getAddress_line3().toString();
+        }
+
+        if (list.get(0).getBlood() != null) {
+            blood = list.get(0).getBlood().toString();
+        }
+
+        if (list.get(0).getDate_of_birth() != null) {
+            date_of_birth = list.get(0).getDate_of_birth().toString();
+        }
+
+        if (list.get(0).getId_no() != null) {
+            id_no = list.get(0).getId_no().toString();
+        }
+
+        if (list.get(0).getId_type() != null) {
+            id_type = list.get(0).getId_type().toString();
+        }
+        if (list.get(0).getGender() != null) {
+            gender = list.get(0).getGender().toString();
+        }
+        if (list.get(0).getLatitude() != null) {
+            latitude = list.get(0).getLatitude().toString();
+        }
+        if (list.get(0).getLongitude() != null) {
+            longitude = list.get(0).getLongitude().toString();
+        }
+        if (list.get(0).getImage_path() != null) {
+            image_path = list.get(0).getImage_path().toString();
+        }
+        if (list.get(0).getImage_name() != null) {
+            image_name = list.get(0).getImage_name().toString();
+        }
+
         request.setAttribute("logged_user_name", logged_user_name);
         request.setAttribute("logged_org_office", logged_org_office);
         request.setAttribute("email", email);
+        request.setAttribute("salutation", salutation);
         request.setAttribute("landline", landline);
         request.setAttribute("mobile1", mobile1);
         request.setAttribute("mobile2", mobile2);
@@ -106,11 +176,13 @@ public class EditProfileController extends HttpServlet {
         request.setAttribute("address_line3", address_line3);
         request.setAttribute("blood", blood);
         request.setAttribute("date_of_birth", date_of_birth);
-        request.setAttribute("id_type", id_type);
         request.setAttribute("id_no", id_no);
+        request.setAttribute("id_type", id_type);
+        request.setAttribute("gender", gender);
         request.setAttribute("latitude", latitude);
         request.setAttribute("longitude", longitude);
-        request.setAttribute("gender", gender);
+        request.setAttribute("image_path", image_path);
+        request.setAttribute("image_name", image_name);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
         DBConnection.closeConncetion(model.getConnection());

@@ -31,24 +31,24 @@
                             <input type="hidden" name="key_person_id" id="key_person_id" value="${beanType.key_person_id}">
                             <img id="blah" class="img-thumbnail usr_image" src="CRM Dashboard/assets2/img/product/profileImg.png" />
                             <h2 class="mt-1 mb-1">${beanType.org_office_name}</h2>
-                            <p class="text-secondry">${beanType.gst_number}</p>
+                            <p class="text-secondry"><strong>GST:</strong> ${beanType.gst_number}</p>
                         </div>
                     </div>
                     <div class="mr-2 mt-2 backBtnWrap">
                         <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                     </div>
-<!--                    <div class="text-left mt-4">
-                        <a href="ProfileController" class="btn myThemeBtn text-right">Back</a>
-                    </div>-->
+                    <!--                    <div class="text-left mt-4">
+                                            <a href="ProfileController" class="btn myThemeBtn text-right">Back</a>
+                                        </div>-->
                     <div class="card card-primary rounded-0 profileCard">
                         <div class="card-body">
                             <div class="mt-1">
-<!--                                <div class="text-right">
-                                    <a href="DealersController" class="btn myThemeBtn text-right">Back</a>
-
-                                    <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
-
-                                </div>-->
+                                <!--                                <div class="text-right">
+                                                                    <a href="DealersController" class="btn myThemeBtn text-right">Back</a>
+                                
+                                                                    <a href="DealersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
+                                
+                                                                </div>-->
                                 <div class="row mt-4">
                                     <div class="col-md-4">
                                         <div>
@@ -161,6 +161,6 @@
 <script>
     var key_person_id = $('#key_person_id').val();
 //    $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
-    $('.usr_image').attr("src", "http://"+IMAGE_URL+"/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
+    $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
 
 </script>
