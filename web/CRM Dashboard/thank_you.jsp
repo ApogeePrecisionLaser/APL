@@ -3,7 +3,6 @@
 
 
 
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -13,7 +12,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
                         <li class="breadcrumb-item active">Thankyou</li>
                     </ol>
                 </div>
@@ -35,7 +34,7 @@
                             </div>
                             <div class="text-center mt-2" >
                                 <h2 class="font-weight-bold text-success">Thank You! </h2>
-                                <p class="mb-0">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,</p>
+                                <p class="mb-0">Thank you for ordering with us. Your payment has been completed.  For any query, you can write us at <a href="mailto:sumit@apogeeleveller.com">sumit@apogeeleveller.com.</a> or contact us at <a href="tel:+91 7624009260">7624009260</a>. Stay Connected with us.</p>
                                 <h5>Your Order No.-<B> ${order_no}</B> </h5>
                             </div>
                             <br>
@@ -90,6 +89,12 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
 
 
 

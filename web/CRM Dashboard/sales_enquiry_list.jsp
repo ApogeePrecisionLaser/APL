@@ -12,14 +12,14 @@
                         <div class="mr-2">
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
                         </div> 
-                        <div class="mr-2 selectEnquiryWrap">
+<!--                        <div class="mr-2 selectEnquiryWrap">
                             <select class="form-control rounded-0 selectEnquiry" onchange="chnageEnquirySource(this.value)">
                                 <option selected disabled>--select one--</option>
                                 <option>Indiamart</option>
                                 <option>Justdial</option>
                                 <option>Admin</option>
                             </select>
-                        </div>
+                        </div>-->
                         <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
 
                         </div>

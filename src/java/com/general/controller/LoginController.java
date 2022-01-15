@@ -6,11 +6,15 @@
 package com.general.controller;
 
 import com.DBConnection.DBConnection;
+import com.dashboard.bean.DealerItemMap;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.bean.Enquiry;
+import com.dashboard.bean.Help;
 import com.dashboard.bean.Profile;
+import com.dashboard.model.DealerItemMapModel;
 import com.dashboard.model.DealersOrderModel;
 import com.dashboard.model.EnquiryModel;
+import com.dashboard.model.HelpModel;
 import com.dashboard.model.ProfileModel;
 import com.general.model.LoginModel;
 import java.io.IOException;
@@ -51,12 +55,16 @@ public class LoginController extends HttpServlet {
         DealersOrderModel dealersOrderModel = new DealersOrderModel();
         ProfileModel profileModel = new ProfileModel();
         EnquiryModel enquiryModel = new EnquiryModel();
+        HelpModel helpModel = new HelpModel();
+
         model.setDriverClass(ctx.getInitParameter("driverClass"));
         model.setConnectionString(ctx.getInitParameter("connectionString"));
 
         profileModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         dealersOrderModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         enquiryModel.setConnection(DBConnection.getConnectionForUtf(ctx));
+        helpModel.setConnection(DBConnection.getConnectionForUtf(ctx));
+
         HttpSession session = request.getSession();
         String task = request.getParameter("task");
         if (task == null || task.isEmpty()) {
@@ -138,8 +146,14 @@ public class LoginController extends HttpServlet {
                         ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
                         ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
                         List<Profile> latest_dealers = profileModel.getAllLatestDealers();
+                        List<Help> supportMessages = helpModel.getAllSupportMessages();
 
+                         ArrayList<DealersOrder> allModels = dealersOrderModel.getAllLatestItems(String.valueOf(logged_org_office_id));
+
+                        request.setAttribute("allProducts", allModels.size());
+                        request.setAttribute("allModels", allModels);
                         request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+                        request.setAttribute("supportMessages", supportMessages.size());
                         request.setAttribute("latest_dealers", latest_dealers);
                         session.setAttribute("sales_enquiries", total_enquiries_list.size());
                         session.setAttribute("total_dealers", dealers_list.size());
@@ -147,6 +161,10 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("total_orders", total_orders_list.size());
                         session.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size())));
 
+                        DBConnection.closeConncetion(model.getConnection());
+                        DBConnection.closeConncetion(profileModel.getConnection());
+                        DBConnection.closeConncetion(enquiryModel.getConnection());
+                        DBConnection.closeConncetion(helpModel.getConnection());
                         request.getRequestDispatcher("admin_dashboard").forward(request, response);
                     }
                     if (session.getAttribute("user_role").equals("Dealer")) {
@@ -161,6 +179,9 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("pending_orders", pending_orders_list.size());
                         session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size())));
 
+                        DBConnection.closeConncetion(model.getConnection());
+                        DBConnection.closeConncetion(profileModel.getConnection());
+                        DBConnection.closeConncetion(enquiryModel.getConnection());
                         request.getRequestDispatcher("CRMDashboard").forward(request, response);
                     }
                     if (session.getAttribute("user_role").equals("Sales")) {
@@ -176,6 +197,9 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("approved_orders", approved_orders_list.size());
                         session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size())));
 
+                        DBConnection.closeConncetion(model.getConnection());
+                        DBConnection.closeConncetion(profileModel.getConnection());
+                        DBConnection.closeConncetion(enquiryModel.getConnection());
                         request.getRequestDispatcher("salesperson_dashboard").forward(request, response);
 
                     } else {

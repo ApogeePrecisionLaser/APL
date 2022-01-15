@@ -311,7 +311,7 @@ public class ProfileModel {
                 + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
                 + " oo.mobile_no1,oo.org_office_code, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.org_office_id, "
-                + " kp.bloodgroup,kp.gender,kp.id_no,idt.id_type,ct.city_name "
+                + " kp.bloodgroup,kp.gender,kp.id_no,idt.id_type,ct.city_name,kp.latitude,kp.longitude "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
                 + " org_office_designation_map oodm, org_office_type oot,id_type idt,city ct "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
@@ -364,6 +364,8 @@ public class ProfileModel {
                 bean.setId_no(rset.getString(29));
                 bean.setId_type(rset.getString(30));
                 bean.setCity_name(rset.getString(31));
+                bean.setLatitude(rset.getString(32));
+                bean.setLongitude(rset.getString(33));
                 list.add(bean);
 
             }

@@ -49,8 +49,8 @@ public class ModelNameModel {
         String searchItemName = "";
         if (!searchItemCode.equals("")) {
             String searchItemCodearr[] = searchItemCode.split(" # ");
-            searchItemCode = searchItemCodearr[0];
-            searchItemName = searchItemCodearr[1];
+            searchItemCode = searchItemCodearr[1];
+            searchItemName = searchItemCodearr[0];
         }
 
         String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_code,mim.manufacturer_item_map_id,m.lead_time"
@@ -109,8 +109,8 @@ public class ModelNameModel {
         String item_code = model_name.getItem_code();
         if (!item_code.equals("")) {
             String item_code_arr[] = item_code.split(" # ");
-            item_code = item_code_arr[0];
-            item_name = item_code_arr[1];
+            item_code = item_code_arr[1];
+            item_name = item_code_arr[0];
         }
 
         int item_id = getItemId(item_code);
@@ -217,8 +217,8 @@ public class ModelNameModel {
         String item_code = model_name.getItem_code();
         if (!item_code.equals("")) {
             String item_code_arr[] = item_code.split(" # ");
-            item_code = item_code_arr[0];
-            item_name = item_code_arr[1];
+            item_code = item_code_arr[1];
+            item_name = item_code_arr[0];
         }
 
         int item_id = getItemId(item_code);
@@ -360,8 +360,8 @@ public class ModelNameModel {
         String item_name = "";
         if (!item_code.equals("")) {
             String item_code_arr[] = item_code.split(" # ");
-            item_code = item_code_arr[0];
-            item_name = item_code_arr[1];
+            item_code = item_code_arr[1];
+            item_name = item_code_arr[0];
         }
         try {
 
@@ -566,6 +566,25 @@ public class ModelNameModel {
         return destination_path;
     }
 
+    public String getItemNameCode(String item_names_id) {
+        String item_name_code = "";
+
+        String query = " SELECT CONCAT(inn.item_name, ' # ', inn.item_code) as item_name "
+                + " FROM item_names inn where inn.active='Y' "
+                + " and inn.item_names_id='" + item_names_id + "' ";
+
+        try {
+            ResultSet rs = connection.prepareStatement(query).executeQuery();
+            while (rs.next()) {
+                item_name_code = rs.getString("item_name");
+            }
+
+        } catch (Exception ex) {
+            System.out.println("ERROR: in getItemNameCode in ModelNameModel : " + ex);
+        }
+        return item_name_code;
+    }
+
     public int getImageCount(int model_id) {
         int image_count = 0;
         String image_name = "";
@@ -728,7 +747,7 @@ public class ModelNameModel {
         List<String> list = new ArrayList<String>();
         String query = "";
 
-        query = " SELECT CONCAT(inn.item_code, ' # ', inn.item_name) as item_code FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
+        query = " SELECT CONCAT(inn.item_name, ' # ', inn.item_code) as item_name FROM item_names inn where inn.active='Y' and inn.is_super_child='Y' "
                 + " ORDER BY inn.item_code ";
 
         try {
@@ -736,9 +755,9 @@ public class ModelNameModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String item_code = (rset.getString("item_code"));
-                if (item_code.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(item_code);
+                String item_name = (rset.getString("item_name"));
+                if (item_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(item_name);
                     count++;
                 }
             }
@@ -797,6 +816,12 @@ public class ModelNameModel {
 //    }
     public List<String> getModel(String q, String manufacturer_name, String item_code) {
         List<String> list = new ArrayList<String>();
+        String item_name = "";
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" # ");
+            item_code = item_code_arr[1];
+            item_name = item_code_arr[0];
+        }
         String query = " select m.model from model m,manufacturer mr,item_names inn,manufacturer_item_map mim "
                 + " where m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
                 + " and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and m.active='Y' and mr.active='Y' "

@@ -1388,3 +1388,13 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     border-color: #2eaf2b;
     color: #fff;
 }
+.salesComplaintFilter span{
+    font-size: 14px;
+    font-weight: 600;
+}
+.salesComplaintFilter input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+    margin-top: 6.97px;
+    margin-left: -1rem;
+}

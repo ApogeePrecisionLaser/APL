@@ -251,6 +251,12 @@ public class ModelNameController extends HttpServlet {
                     return;
                 }
             }
+//            if (task1.equals("map_model")) {
+//                String item_names_id = request.getParameter("item_names_id").trim();
+//                String item_code=model.getItemNameCode(item_names_id);
+//                request.setAttribute("item_code", item_code);
+//                request.getRequestDispatcher("model_name").forward(request, response);
+//            }
 
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(map.get("model_id")));  // Pretty sure that office_type_id will be available.
@@ -267,9 +273,6 @@ public class ModelNameController extends HttpServlet {
                     model_id = 0;
                     manufacturer_item_map_id = 0;
                     item_image_details_id = 0;
-                }
-                if (task.equals("Save AS New")) {
-                    //office_type_id = 0;
                 }
 
                 String model_no = "";

@@ -7,7 +7,10 @@ package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
 import com.inventory.model.ItemNameModel;
+import com.inventory.model.ModelNameModel;
+import com.inventory.tableClasses.ItemAuthorization;
 import com.inventory.tableClasses.ItemName;
+import com.inventory.tableClasses.ModelName;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -50,6 +53,7 @@ public class ItemNameController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemNameModel model = new ItemNameModel();
+        ModelNameModel model2 = new ModelNameModel();
         String loggedUser = "";
         String active = "Y";
         String ac = "ACTIVE RECORDS";
@@ -94,9 +98,11 @@ public class ItemNameController extends HttpServlet {
         if (search_super_child == null) {
             search_super_child = "";
         }
+
         try {
             loggedUser = session.getAttribute("user_role").toString();
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in ItemNameController setConnection() calling try block" + e);
         }
@@ -185,7 +191,6 @@ public class ItemNameController extends HttpServlet {
                         if (item.getName() == null || item.getName().isEmpty()) {
                             map.put(item.getFieldName(), "");
                         } else {
-
                             image_name = item.getName();
                             imageNameList.add(image_name);
                             image_name = image_name.substring(0, image_name.length());
@@ -284,34 +289,42 @@ public class ItemNameController extends HttpServlet {
                     return;
                 }
             }
+            List<String> lst = new ArrayList<>();
 
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(map.get("item_name_id")));
             } else if (task.equals("Save") || task.equals("Save AS New") || task.equals("Save & Next")) {
                 int item_name_id = 0;
+                int model_id = 0;
+                int manufacturer_item_map_id = 0;
+                int item_image_details_id = 0;
+                int item_authorization_id = 0;
+                int count = 0;
                 try {
-
                     item_name_id = Integer.parseInt(map.get("item_name_id").trim());
+//                    model_id = Integer.parseInt(map.get("model_id"));
+//                    manufacturer_item_map_id = Integer.parseInt(map.get("manufacturer_item_map_id"));
+//                    item_image_details_id = Integer.parseInt(map.get("item_image_details_id"));
                 } catch (Exception e) {
                     item_name_id = 0;
-                }
-
-                if (task.equals("Save AS New")) {
-                    item_name_id = 0;
+                    model_id = 0;
+                    manufacturer_item_map_id = 0;
+                    item_image_details_id = 0;
+                    item_authorization_id = 0;
                 }
 
                 ItemName bean = new ItemName();
                 bean.setItem_names_id(item_name_id);
                 // bean.setItem_code(map.get("item_code").trim());
                 bean.setItem_type_id(model.getItemTypeID(map.get("item_type").trim()));
-                String qty = map.get("quantity");
-                int int_qty = 0;
-                if (qty.equals("")) {
-                    int_qty = 0;
-                } else {
-                    int_qty = Integer.parseInt(map.get("quantity").trim());
-                }
-                bean.setQuantity(int_qty);
+//                String qty = map.get("quantity");
+//                int int_qty = 0;
+//                if (qty.equals("")) {
+//                    int_qty = 0;
+//                } else {
+//                    int_qty = Integer.parseInt(map.get("quantity").trim());
+//                }
+//                bean.setQuantity(int_qty);
                 bean.setHSNCode(map.get("HSNCode").trim());
                 bean.setItem_name(map.get("item_name").trim());
                 bean.setPrefix(map.get("prefix").trim());
@@ -321,13 +334,100 @@ public class ItemNameController extends HttpServlet {
                 if (superp == null) {
                     superp = "";
                 }
+
                 bean.setSuperp(superp);
-                String item_image = "";
+
+                ItemAuthorization itemAuthBean = new ItemAuthorization();
+                itemAuthBean.setItem_authorization_id(item_authorization_id);
+                itemAuthBean.setDesignation(map.get("designation").trim());
 
                 if (item_name_id == 0) {
-                    model.insertRecord(bean, itr);
+                    if (superp.equals("Y")) {
+                        String model_no = "";
+                        String part_no = "";
+                        ModelName modelBean = new ModelName();
+
+                        count = Integer.parseInt(map.get("count").trim());
+                        if (count == 0) {
+                            count = 1;
+                        }
+                        for (int j = 0; j < count; j++) {
+                            modelBean.setModel_id(model_id);
+                            modelBean.setModel(map.get("model_" + (j + 1)).trim());
+                            modelBean.setManufacturer_name(map.get("manufacturer_name_" + (j + 1)));
+                            modelBean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id_" + (j + 1))));
+                            modelBean.setLead_time(Integer.parseInt("0" + map.get("lead_time_" + (j + 1)).trim()));
+                            modelBean.setBasic_price(map.get("basic_price_" + (j + 1)).trim());
+                            if (map.get("model_no_" + (j + 1)) == null) {
+                                model_no = "";
+                            } else {
+                                model_no = map.get("model_no_" + (j + 1));
+                            }
+                            if (map.get("part_no_" + (j + 1)) == null) {
+                                part_no = "";
+                            } else {
+                                part_no = map.get("part_no_" + (j + 1));
+                            }
+                            modelBean.setModel_no(model_no);
+                            modelBean.setPart_no(part_no);
+                            modelBean.setDescription(map.get("description").trim());
+                            String item_image = "";
+                            modelBean.setItem_image_details_id(item_image_details_id);
+                            modelBean.setImage_path(image_folder);
+                            modelBean.setImage_name(image_name);
+                            item_image = model.getDestination_Path("item_img");
+                            response.setContentType("image/jpeg");
+                            model.insertRecord(bean, itr, modelBean, j, image_name, image_folder, itemAuthBean);
+                        }
+                    } else {
+                        model.insertParent(bean, itr);
+                    }
                 } else {
                     model.updateRecord(bean, itr, item_name_id);
+                }
+
+                String item_types = map.get("item_type").trim();
+                request.setAttribute("item_type", map.get("item_type").trim());
+                request.setAttribute("item_name", map.get("item_name").trim());
+                request.setAttribute("prefix", map.get("prefix").trim());
+                request.setAttribute("parent_item", map.get("parent_item").trim());
+                request.setAttribute("super_child", map.get("super").trim());
+                request.setAttribute("HSNCode", map.get("HSNCode").trim());
+                request.setAttribute("designation", map.get("designation").trim());
+                request.setAttribute("count", map.get("count").trim());
+                request.setAttribute("description", map.get("description").trim());
+
+                List<String> lst2 = new ArrayList<>();
+                List<String> lst3 = new ArrayList<>();
+                List<String> lst4 = new ArrayList<>();
+                List<String> lst5 = new ArrayList<>();
+                List<String> lst6 = new ArrayList<>();
+                if (superp.equals("Y")) {
+//                    if (count == 0) {
+//                        count = 1;
+//                    }
+                    for (int k = 0; k < count; k++) {
+                        lst.add(map.get("manufacturer_name_" + (k + 1)).trim());
+                        lst2.add(map.get("model_" + (k + 1)).trim());
+                        lst3.add(map.get("lead_time_" + (k + 1)).trim());
+                        lst4.add(map.get("basic_price_" + (k + 1)).trim());
+                        if (item_types.equals("Non-Raw Material")) {
+                            lst5.add(map.get("model_no_" + (k + 1)).trim());
+
+                        } else {
+                            lst6.add(map.get("part_no_" + (k + 1)).trim());
+
+                        }
+
+                    }
+
+                    request.setAttribute("lst", lst);
+                    request.setAttribute("lst2", lst2);
+                    request.setAttribute("lst3", lst3);
+                    request.setAttribute("lst4", lst4);
+                    request.setAttribute("lst5", lst5);
+                    request.setAttribute("lst6", lst6);
+
                 }
             }
             String org_chart = request.getParameter("org_chart");
@@ -354,6 +454,8 @@ public class ItemNameController extends HttpServlet {
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
+            request.setAttribute("lst_size", lst.size());
+
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("item_name").forward(request, response);

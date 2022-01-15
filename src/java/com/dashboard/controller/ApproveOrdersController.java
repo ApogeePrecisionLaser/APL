@@ -220,7 +220,7 @@ public class ApproveOrdersController extends HttpServlet {
                 int order_item_id = Integer.parseInt(order_item_id_arr[i]);
                 item_status = request.getParameter("item_status" + order_item_id);
                 approved_qty = Integer.parseInt(request.getParameter("approved_qty" + order_item_id).trim());
-                approved_price = Integer.parseInt(request.getParameter("approved_price" + order_item_id).trim());
+                approved_price = (int) Float.parseFloat(request.getParameter("approved_price" + order_item_id).trim());
                 discounted_price = request.getParameter("discounted_price" + order_item_id).trim();
                 discounted_percent = request.getParameter("discounted_percent" + order_item_id).trim();
                 DealersOrder bean = new DealersOrder();

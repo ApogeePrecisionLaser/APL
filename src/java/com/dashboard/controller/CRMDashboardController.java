@@ -3,11 +3,15 @@ package com.dashboard.controller;
 import com.location.model.CityModel;
 import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
+import com.dashboard.bean.DealerItemMap;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.bean.Enquiry;
+import com.dashboard.bean.Help;
 import com.dashboard.bean.Profile;
+import com.dashboard.model.DealerItemMapModel;
 import com.dashboard.model.DealersOrderModel;
 import com.dashboard.model.EnquiryModel;
+import com.dashboard.model.HelpModel;
 import com.dashboard.model.ProfileModel;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -73,11 +77,13 @@ public class CRMDashboardController extends HttpServlet {
         DealersOrderModel model = new DealersOrderModel();
         ProfileModel profileModel = new ProfileModel();
         EnquiryModel enquiryModel = new EnquiryModel();
+        HelpModel helpModel = new HelpModel();
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
             profileModel.setConnection(DBConnection.getConnectionForUtf(ctx));
             enquiryModel.setConnection(DBConnection.getConnectionForUtf(ctx));
+            helpModel.setConnection(DBConnection.getConnectionForUtf(ctx));
 
         } catch (Exception e) {
             System.out.println("error in CityController setConnection() calling try block" + e);
@@ -156,6 +162,44 @@ public class CRMDashboardController extends HttpServlet {
                 return;
             }
 
+            if (task.equals("getAllSalesEnquiries")) {
+                // List<DashboardReportsBean> list = model.getOverheadtankWaterdata();
+                model.setConnection(DBConnection.getConnectionForUtf(ctx));
+                String sales_enquiry_source = request.getParameter("sales_enquiry_source");
+                if (sales_enquiry_source == null) {
+                    sales_enquiry_source = "";
+                }
+
+                JSONObject obj1 = new JSONObject();
+                JSONArray arrayObj = new JSONArray();
+
+                arrayObj = model.getAllSalesEnquiries(sales_enquiry_source);
+
+                obj1.put("sales_enquiries", arrayObj);
+                PrintWriter out = response.getWriter();
+                out.print(obj1);
+                //System.err.println("water_data obj**************"+obj1.toString());
+                return;
+
+            }
+
+            if (task.equals("getAllComplaintEnquiries")) {
+                // List<DashboardReportsBean> list = model.getOverheadtankWaterdata();
+                model.setConnection(DBConnection.getConnectionForUtf(ctx));
+
+                JSONObject obj1 = new JSONObject();
+                JSONArray arrayObj = new JSONArray();
+
+                arrayObj = model.getAllComplaintEnquiries();
+
+                obj1.put("complaint_enquiries", arrayObj);
+                PrintWriter out = response.getWriter();
+                out.print(obj1);
+                //System.err.println("water_data obj**************"+obj1.toString());
+                return;
+
+            }
+
         } catch (Exception e) {
             System.out.println("errorr -" + e);
             return;
@@ -168,16 +212,26 @@ public class CRMDashboardController extends HttpServlet {
             ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
             ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
             List<Profile> latest_dealers = profileModel.getAllLatestDealers();
+            List<Help> supportMessages = helpModel.getAllSupportMessages();
 
+            ArrayList<DealersOrder> allModels = model.getAllLatestItems(String.valueOf(logged_org_office_id));
+//            ArrayList<DealerItemMap> allModels = new ArrayList<>();
+//            allModels = dealerItemMapModel.getAllModels(String.valueOf(logged_org_office_id), allItems);
+
+            request.setAttribute("allProducts", allModels.size());
+            request.setAttribute("allModels", allModels);
             request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+            request.setAttribute("supportMessages", supportMessages.size());
             request.setAttribute("latest_dealers", latest_dealers);
             request.setAttribute("total_orders", total_orders_list.size());
             request.setAttribute("total_dealers", dealers_list.size());
             request.setAttribute("sales_enquiries", total_enquiries_list.size());
             request.setAttribute("complaint_enquiries", total_complaint_list.size());
+
             DBConnection.closeConncetion(model.getConnection());
             DBConnection.closeConncetion(profileModel.getConnection());
             DBConnection.closeConncetion(enquiryModel.getConnection());
+            DBConnection.closeConncetion(helpModel.getConnection());
             request.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size()) + 3));
 
             request.getRequestDispatcher("admin_dashboard").forward(request, response);

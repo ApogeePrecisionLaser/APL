@@ -229,6 +229,10 @@
     span.onclick = function () {
         modal.style.display = "none";
     }
+
+    setTimeout(function () {
+        $('#msg').fadeOut('fast');
+    }, 3000);
 </script>
 
 

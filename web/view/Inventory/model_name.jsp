@@ -299,7 +299,7 @@
     function fillColumn(id, count) {
         $('#model_id').val(id);
         $('#manufacturer_name').val($("#" + count + '2').html());
-        $('#item_code').val($("#" + count + '3').html() + " # " + $("#" + count + '13').html());
+        $('#item_code').val($("#" + count + '13').html() + " # " + $("#" + count + '3').html());
         $('#model').val($("#" + count + '4').html());
         $('#model_no').val($("#" + count + '5').html());
         $('#part_no').val($("#" + count + '6').html());
@@ -338,7 +338,7 @@
 
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
-                        <label>Item Code - Item Name</label>
+                        <label>Item Name - Item Code</label>
                         <input class="form-control myInput searchInput1 w-100" type="text" id="searchItemCode" name="searchItemCode"
                                value="${searchItemCode}" size="30" >
                     </div>
@@ -448,8 +448,8 @@
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Item Code - Item Name<span class="text-danger">*</span></label>  
-                            <input class="form-control myInput" type="text" id="item_code" name="item_code" value=""
+                            <label>Item Name - Item Code<span class="text-danger">*</span></label>  
+                            <input class="form-control myInput" type="text" id="item_code" name="item_code" value="${item_code}"
                                    size="40" disabled>
                         </div>
                     </div>

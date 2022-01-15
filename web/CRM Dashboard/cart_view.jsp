@@ -617,7 +617,7 @@
                         console.log(data.msg);
                         console.log(data.order_no);
                         if (data.msg == 'thank_you') {
-                            window.open('DealersOrderController?order_no=' + data.order_no, '_self');
+                            window.open('DealersOrderController?order_no=' + data.order_no+"&pending_approval=approval_pending", '_self');
                         } else {
                             window.open('error', '_self', data.order_no);
                         }

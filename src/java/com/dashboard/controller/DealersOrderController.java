@@ -141,12 +141,16 @@ public class DealersOrderController extends HttpServlet {
         String task = request.getParameter("task");
 
         String order_no = request.getParameter("order_no");
+        String pending_approval = request.getParameter("pending_approval");
         if (order_no == null) {
             order_no = "";
         }
-        if (!order_no.equals("")) {
+        if (pending_approval == null) {
+            pending_approval = "";
+        }
+        if (pending_approval.equals("approval_pending")) {
             request.setAttribute("order_no", order_no);
-            request.getRequestDispatcher("thank_you").forward(request, response);
+            request.getRequestDispatcher("pendingApproval").forward(request, response);
         }
 
         try {
@@ -488,6 +492,12 @@ public class DealersOrderController extends HttpServlet {
             String shipping_add = request.getParameter("shipping_add");
             String deliver_order_no = request.getParameter("order_no");
 
+            if (shipping_add == null) {
+                shipping_add = "";
+            }
+            if (shipping_add.equals("")) {
+                shipping_add = billing_add;
+            }
             int order_checkout_id = 0;
 
             String req_to = model.getRequestedToKeyPersonorder("", logged_user_name);
@@ -501,12 +511,12 @@ public class DealersOrderController extends HttpServlet {
             bean.setMobile_no(mobile);
             bean.setPayment_type(payment_mode);
             bean.setTransaction_no(transaction_no);
-            bean.setTotal_amount(total_amount);
+            bean.setTotal_amount(subtotal);
             bean.setBilling_address(billing_add);
             bean.setShipping_address(shipping_add);
             bean.setDiscount_percent(coupon_discount);
             bean.setDelivery_charge(delivery_charge);
-            bean.setDiscount_price(subtotal);
+            bean.setDiscount_price(amount);
 
             if (order_checkout_id == 0) {
                 try {
@@ -519,7 +529,6 @@ public class DealersOrderController extends HttpServlet {
             if (rowsAffected > 0) {
                 request.setAttribute("order_no", deliver_order_no);
                 request.getRequestDispatcher("thank_you").forward(request, response);
-
             } else {
                 request.getRequestDispatcher("error").forward(request, response);
 

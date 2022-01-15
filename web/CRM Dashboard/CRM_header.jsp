@@ -158,7 +158,7 @@
                 <!-- Brand Logo -->
                 <a href="CRMDashboardController" class="brand-link">
                     <img src="CRM Dashboard/assets2/img/product/logoIcon.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8;margin-top: 6px;">
-                    <span class="brand-text font-weight-light">Apogee CRM</span>
+                    <span class="brand-text font-weight-light1">Apogee</span>
                 </a>
 
                 <!-- Sidebar -->
@@ -508,6 +508,26 @@
                                 </ul>
 
                             </li>
+
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon far fa-envelope"></i>
+                                    <p>
+                                        Message
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="SupportMessagesController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Support Messages</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item">
                                 <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo">
                                     <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
@@ -529,5 +549,5 @@
             <script src="CRM Dashboard/assets2/js/myJS.js" type="text/javascript"></script>
 
             <script>
-                $('.usr_image').attr("src", "http://"+IMAGE_URL+"/APL/CRMDashboardController?task=viewImage&type=ph");
+                $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
             </script>

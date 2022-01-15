@@ -2651,6 +2651,264 @@ public class DealersOrderModel {
         return enquiry_status;
     }
 
+    public JSONArray getAllSalesEnquiries(String sales_enquiry_source) {
+
+        PreparedStatement pstmt = null;
+        ResultSet rset = null;
+        int enquiry_source_id = 0;
+        JSONObject obj = new JSONObject();
+        JSONArray arrayObj = new JSONArray();
+        if (sales_enquiry_source.equals("IndiaMART")) {
+            enquiry_source_id = 1;
+        }
+        if (sales_enquiry_source.equals("Other")) {
+            enquiry_source_id = 0;
+        }
+        String resolved_query = " select count(*) as count  from enquiry_table where enquiry_status_id in(6) and active='Y' ";
+        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+            resolved_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
+        }
+        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+            resolved_query += " and enquiry_source_table_id in(1,0) ";
+        }
+
+        String unresolved_query = " select count(*) as count from enquiry_table where enquiry_status_id in(5) and active='Y' ";
+        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+            unresolved_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
+        }
+        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+            unresolved_query += " and enquiry_source_table_id in(1,0) ";
+        }
+
+        String assigned_query = " select count(*) as count from enquiry_table where enquiry_status_id in(2,3,4) and active='Y' ";
+        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+            assigned_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
+        }
+        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+            assigned_query += " and enquiry_source_table_id in(1,0) ";
+        }
+        String pending_query = " select count(*) as count from enquiry_table where enquiry_status_id in(1) and active='Y' ";
+        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+            pending_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
+        }
+        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+            pending_query += " and enquiry_source_table_id in(1,0) ";
+        }
+
+        int resolved_enquiry_count = 0;
+        int unresolved_enquiry_count = 0;
+        int assigned_enquiry_count = 0;
+        int pending_enquiry_count = 0;
+        try {
+            pstmt = connection.prepareStatement(resolved_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                resolved_enquiry_count = rset.getInt("count");
+            }
+
+            pstmt = null;
+            rset = null;
+            pstmt = connection.prepareStatement(unresolved_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                unresolved_enquiry_count = rset.getInt("count");
+            }
+
+            pstmt = null;
+            rset = null;
+            pstmt = connection.prepareStatement(assigned_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                assigned_enquiry_count = rset.getInt("count");
+            }
+
+            pstmt = null;
+            rset = null;
+            pstmt = connection.prepareStatement(pending_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                pending_enquiry_count = rset.getInt("count");
+            }
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("resolved_enquiry_count", resolved_enquiry_count);
+            jsonObj.put("unresolved_enquiry_count", unresolved_enquiry_count);
+            jsonObj.put("assigned_enquiry_count", assigned_enquiry_count);
+            jsonObj.put("pending_enquiry_count", pending_enquiry_count);
+
+            arrayObj.add(jsonObj);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return arrayObj;
+    }
+
+    public JSONArray getAllComplaintEnquiries() {
+
+        PreparedStatement pstmt = null;
+        ResultSet rset = null;
+        JSONObject obj = new JSONObject();
+        JSONArray arrayObj = new JSONArray();
+        String resolved_query = " select count(*) as count  from complaint_table where enquiry_status_id in(6) and active='Y' ";
+        String unresolved_query = " select count(*) as count from complaint_table where enquiry_status_id in(5) and active='Y' ";
+        String assigned_query = " select count(*) as count from complaint_table where enquiry_status_id in(2,3,4) and active='Y' ";
+        String pending_query = " select count(*) as count from complaint_table where enquiry_status_id in(1) and active='Y' ";
+
+        int resolved_enquiry_count = 0;
+        int unresolved_enquiry_count = 0;
+        int assigned_enquiry_count = 0;
+        int pending_enquiry_count = 0;
+        try {
+            pstmt = connection.prepareStatement(resolved_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                resolved_enquiry_count = rset.getInt("count");
+            }
+
+            pstmt = null;
+            rset = null;
+            pstmt = connection.prepareStatement(unresolved_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                unresolved_enquiry_count = rset.getInt("count");
+            }
+
+            pstmt = null;
+            rset = null;
+            pstmt = connection.prepareStatement(assigned_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                assigned_enquiry_count = rset.getInt("count");
+            }
+
+            pstmt = null;
+            rset = null;
+            pstmt = connection.prepareStatement(pending_query);
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                pending_enquiry_count = rset.getInt("count");
+            }
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("resolved_enquiry_count", resolved_enquiry_count);
+            jsonObj.put("unresolved_enquiry_count", unresolved_enquiry_count);
+            jsonObj.put("assigned_enquiry_count", assigned_enquiry_count);
+            jsonObj.put("pending_enquiry_count", pending_enquiry_count);
+
+            arrayObj.add(jsonObj);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return arrayObj;
+    }
+
+    public static ArrayList<DealersOrder> getAllLatestItems(String logged_org_office_id) {
+        ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
+
+        try {
+            String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
+                    + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
+                    + " designation d,manufacturer mr,"
+                    + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo "
+                    + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
+                    + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
+                    + " and inv.active='Y'  and ia.active='Y' "
+                    + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
+                    + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
+                    + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
+                    + "  and  d.designation_id=ia.designation_id ";
+            query += " and itn.parent_id='717' group by m.model order by itn.created_at desc";
+
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                DealersOrder bean = new DealersOrder();
+                String manufacturer_name = rst.getString("manufacturer_name");
+                String model = rst.getString("model");
+                int model_id = rst.getInt("model_id");
+                String image_path = rst.getString("image_path");
+                String image_name = rst.getString("image_name");
+                String basic_price = rst.getString("basic_price");
+                String stock_quantity = rst.getString("stock_quantity");
+                bean.setItem_name(rst.getString("item_name"));
+                bean.setManufacturer_name(manufacturer_name);
+                bean.setModel(model);
+                bean.setModel_id(model_id);
+                bean.setImage_path(image_path);
+                bean.setImage_name(image_name);
+                bean.setBasic_price(basic_price);
+                bean.setStock_quantity(stock_quantity);
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.err.println("Exception------------" + e);
+        }
+
+        return list;
+    }
+
+//    public static ArrayList<DealerItemMap> getAllModels(String logged_org_office_id, List<DealerItemMap> list2) {
+//        ArrayList<DealerItemMap> list = new ArrayList<DealerItemMap>();
+//        if (list2.size() > 0) {
+//            for (int i = 0; i < list2.size(); i++) {
+//                try {
+//
+//                    String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
+//                            + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
+//                            + " designation d,manufacturer mr,"
+//                            + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo "
+//                            + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
+//                            + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
+//                            + " and inv.active='Y'  and ia.active='Y' "
+//                            + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
+//                            + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
+//                            + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
+//                            + "  and  d.designation_id=ia.designation_id ";
+//                    query += " and itn.item_name='" + list2.get(i).getItem_name() + "' group by m.model";
+//
+//                    ResultSet rst = connection.prepareStatement(query).executeQuery();
+//                    while (rst.next()) {
+//                        DealerItemMap bean = new DealerItemMap();
+//                        String manufacturer_name = rst.getString("manufacturer_name");
+//                        String model = rst.getString("model");
+//                        String model_id = rst.getString("model_id");
+//                        String image_path = rst.getString("image_path");
+//                        String image_name = rst.getString("image_name");
+//                        String basic_price = rst.getString("basic_price");
+//                        String stock_quantity = rst.getString("stock_quantity");
+//                        bean.setItem_name(rst.getString("item_name"));
+//                        bean.setManufacturer_name(manufacturer_name);
+//                        bean.setModel(model);
+//                        bean.setModel_id(model_id);
+//                        bean.setImage_path(image_path);
+//                        bean.setImage_name(image_name);
+//                        bean.setBasic_price(basic_price);
+//                        bean.setStock_quantity(stock_quantity);
+//
+//                        String query2 = " select dealer_item_map_id from dealer_item_map where active='Y' and  model_id='" + rst.getString("model_id") + "' "
+//                                + " and org_office_id='" + logged_org_office_id + "' ";
+//                        int count_map = 0;
+//                        ResultSet rst2 = connection.prepareStatement(query2).executeQuery();
+//                        while (rst2.next()) {
+//                            count_map = rst2.getInt("dealer_item_map_id");
+//                        }
+//                        if (count_map > 0) {
+//                            bean.setChecked("Yes");
+//                            bean.setDealer_item_map_id(count_map);
+//                        } else {
+//                            bean.setChecked("No");
+////                            bean.setDealer_item_map_id(0);
+//                        }
+//
+//                        list.add(bean);
+//
+//                    }
+//
+//                } catch (Exception e) {
+//                    System.err.println("Exception------------" + e);
+//                }
+//
+//            }
+//        }
+//        return list;
+//    }
     public void closeConnection() {
         try {
             connection.close();

@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
+import com.inventory.tableClasses.ItemAuthorization;
 import com.inventory.tableClasses.ItemName;
+import com.inventory.tableClasses.ModelName;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,6 +37,7 @@ public class ItemNameModel {
     private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
     int item_id = 0;
+    int model_id = 0;
 
     public void setConnection(Connection con) {
         try {
@@ -396,7 +399,7 @@ public class ItemNameModel {
         return item_code;
     }
 
-    public int insertRecord(ItemName item_name, Iterator itr) throws SQLException {
+    public int insertParent(ItemName item_name, Iterator itr) throws SQLException {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
                 + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -431,7 +434,7 @@ public class ItemNameModel {
                 + " prefix='" + item_name.getPrefix() + "' and parent_id='" + p_item_id_for_code + "' ";
 
         try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, item_name.getItem_name());
             pstmt.setInt(2, item_name.getItem_type_id());
             pstmt.setString(3, item_name.getDescription());
@@ -482,7 +485,9 @@ public class ItemNameModel {
                 message = "This Prefix Already Exists for another item for this parent ";
                 msgBgColor = COLOR_ERROR;
             } else {
+
                 rowsAffected = pstmt.executeUpdate();
+
             }
             // rowsAffected = insertImageRecord(rowsAffected, item_name, itr, destination, item_id, image_name, image_count);
 
@@ -501,6 +506,370 @@ public class ItemNameModel {
             msgBgColor = COLOR_ERROR;
         }
         return rowsAffected;
+    }
+
+    public int getDesignationId(String designation) {
+
+        String query = "SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("designation_id");
+        } catch (Exception e) {
+            System.out.println("ItemAuthorizationModel getDesignationId Error: " + e);
+        }
+        return id;
+    }
+
+    public int insertRecord(ItemName item_name, Iterator itr, ModelName modelBean, int j, String image_name, String destination,
+            ItemAuthorization itemAuthBean) throws SQLException {
+        String query = "INSERT INTO item_names(item_name,item_type_id,description,"
+                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
+                + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+
+        int rowsAffected = 0;
+        int p_item_id = 0;
+        int p_item_id_for_code = 0;
+        int count = 0;
+        String is_child = item_name.getSuperp();
+        if (is_child != null) {
+            if (is_child.equals("yes") || is_child.equals("Yes") || is_child.equals("YES") || is_child.equals("Y") || is_child.equals("y")) {
+                is_child = "Y";
+            } else {
+                is_child = "N";
+            }
+        }
+        if (!item_name.getParent_item().equals("")) {
+            String parent_item_name_arr[] = item_name.getParent_item().split(" - ");
+            String p_item_name = parent_item_name_arr[0];
+            String item_code = parent_item_name_arr[1];
+            p_item_id_for_code = getParent_Item_id_for_code(p_item_name, item_code);
+            //  p_item_id = getParent_Item_id(p_item_name);
+        }
+
+        int generation = 0;
+        if (p_item_id_for_code == 0) {
+            generation = 1;
+        } else {
+            generation = getParentGeneration(p_item_id_for_code) + 1;
+        }
+        String query2 = " select count(*) as count from item_names where "
+                + " prefix='" + item_name.getPrefix() + "' and parent_id='" + p_item_id_for_code + "' ";
+
+        try {
+            if (j == 0) {
+                PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                pstmt.setString(1, item_name.getItem_name());
+                pstmt.setInt(2, item_name.getItem_type_id());
+                pstmt.setString(3, item_name.getDescription());
+                pstmt.setInt(4, item_name.getRevision_no());
+                pstmt.setString(5, "Y");
+                pstmt.setString(6, "OK");
+
+                List<String> list = new ArrayList<String>();
+                String parent_prefix = "";
+                String item_code = "";
+
+                StringBuilder item_code_builder = new StringBuilder();
+                item_code_builder.delete(0, item_code_builder.length());
+
+                if (p_item_id_for_code != 0) {
+                    list = getParentPrefix(p_item_id_for_code);
+
+                    if (list != null) {
+                        for (int i = 0; i < list.size(); i++) {
+                            parent_prefix = list.get(i);
+                            item_code_builder.append(parent_prefix).toString();
+                        }
+                        item_code = (item_code_builder.toString() + item_name.getPrefix()).toString();
+                    }
+                } else {
+                    item_code = item_name.getPrefix();
+                }
+
+                pstmt.setString(7, item_code);
+                pstmt.setInt(8, item_name.getQuantity());
+                if (p_item_id_for_code == 0) {
+                    pstmt.setString(9, null);
+                } else {
+                    pstmt.setInt(9, p_item_id_for_code);
+                }
+
+                pstmt.setInt(10, generation);
+                pstmt.setString(11, is_child);
+                pstmt.setString(12, item_name.getPrefix());
+                pstmt.setString(13, item_name.getHSNCode());
+
+                ResultSet rset = connection.prepareStatement(query2).executeQuery();
+
+                while (rset.next()) {
+                    count = rset.getInt("count");
+                }
+                if (count > 0) {
+                    message = "This Prefix Already Exists for another item for this parent ";
+                    msgBgColor = COLOR_ERROR;
+                } else {
+
+                    rowsAffected = pstmt.executeUpdate();
+
+                    ResultSet rs = pstmt.getGeneratedKeys();
+                    while (rs.next()) {
+                        item_id = rs.getInt(1);
+                        int designation_id = getDesignationId(itemAuthBean.getDesignation());
+                        String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+                                + " revision_no,active,remark,qty,monthly_limit) "
+                                + " VALUES(?,?,?,?,?,?,?,?) ";
+
+                        String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
+                                + " item_names_id='" + item_id + "' and designation_id='" + designation_id + "'"
+                                + " and active='Y'  ";
+                        int auth_map_count = 0;
+                        PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
+                        ResultSet rs1 = pstmt1.executeQuery();
+                        while (rs1.next()) {
+                            auth_map_count = rs1.getInt("count");
+                        }
+                        if (auth_map_count > 0) {
+                            message = "Designation has already mapped to this item!..";
+                            msgBgColor = COLOR_ERROR;
+                        } else {
+                            PreparedStatement pstmt_auth = connection.prepareStatement(item_auth_query);
+                            pstmt_auth.setInt(1, item_id);
+                            pstmt_auth.setInt(2, designation_id);
+                            pstmt_auth.setString(3, "");
+                            pstmt_auth.setInt(4, itemAuthBean.getRevision_no());
+                            pstmt_auth.setString(5, "Y");
+                            pstmt_auth.setString(6, "OK");
+                            pstmt_auth.setInt(7, 0);
+                            pstmt_auth.setInt(8, 0);
+                            rowsAffected = pstmt_auth.executeUpdate();
+                        }
+                    }
+                }
+            }
+
+            String query_count_model = " select count(*) as count from model where model='" + modelBean.getModel() + "' and active='Y' ";
+            String query_insert_model = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,"
+                    + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?) ";
+
+            int manufacturer_item_map_id = 0;
+            int map_count = 0;
+
+            int manufacturer_id = getManufacturerId(modelBean.getManufacturer_name());
+
+            String query_insert_manufacturer_item_map = "insert into manufacturer_item_map(manufacturer_id,item_names_id,"
+                    + " active,revision,remark,created_by,serial_no,created_at) "
+                    + " values (?,?,?,?,?,?,?,now()) ";
+
+            java.sql.PreparedStatement pstmt3 = connection.prepareStatement(query_insert_manufacturer_item_map, Statement.RETURN_GENERATED_KEYS);
+            String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
+            int manufacturer_item_map_ids = 0;
+            PreparedStatement pstmt1 = connection.prepareStatement(query4);
+            ResultSet rs1 = pstmt1.executeQuery();
+            while (rs1.next()) {
+                manufacturer_item_map_ids = rs1.getInt("manufacturer_item_map_id");
+            }
+            String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
+                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y'"
+                    + " and m.model='" + modelBean.getModel() + "' ";
+
+            PreparedStatement pstmt2 = connection.prepareStatement(query5);
+            ResultSet rs2 = pstmt2.executeQuery();
+            while (rs2.next()) {
+                map_count = rs2.getInt("count");
+            }
+            if (map_count > 0) {
+                message = "Item has already mapped with this manufacturer!..";
+                msgBgColor = COLOR_ERROR;
+            } else {
+                pstmt3.setInt(1, manufacturer_id);
+                pstmt3.setInt(2, item_id);
+                pstmt3.setString(3, "Y");
+                pstmt3.setString(4, "0");
+                pstmt3.setString(5, "OK");
+                pstmt3.setString(6, "Komal");
+                pstmt3.setString(7, modelBean.getDescription());
+                rowsAffected = pstmt3.executeUpdate();
+                ResultSet rs3 = pstmt3.getGeneratedKeys();
+                while (rs3.next()) {
+                    manufacturer_item_map_id = rs3.getInt(1);
+                }
+            }
+
+            PreparedStatement pstm = connection.prepareStatement(query_insert_model, Statement.RETURN_GENERATED_KEYS);
+            pstm.setString(1, (modelBean.getModel()));
+            pstm.setInt(2, manufacturer_item_map_id);
+            pstm.setInt(3, modelBean.getLead_time());
+            pstm.setString(4, (modelBean.getDescription()));
+            pstm.setInt(5, modelBean.getRevision_no());
+            pstm.setString(6, "Y");
+            pstm.setString(7, "OK");
+            pstm.setString(8, modelBean.getModel_no());
+            pstm.setString(9, modelBean.getPart_no());
+            pstm.setString(10, modelBean.getBasic_price());
+            ResultSet rset2 = connection.prepareStatement(query_count_model).executeQuery();
+            int count2 = 0;
+            while (rset2.next()) {
+                count2 = rset2.getInt("count");
+            }
+            if (count2 > 0) {
+                message = "Model Already Exists.";
+                msgBgColor = COLOR_ERROR;
+            } else {
+                rowsAffected = pstm.executeUpdate();
+                ResultSet rs4 = pstm.getGeneratedKeys();
+                while (rs4.next()) {
+                    model_id = rs4.getInt(1);
+                }
+            }
+            rowsAffected = insertImageRecord(rowsAffected, modelBean, itr, destination, model_id, image_name, j, item_name.getItem_name());
+
+            // rowsAffected = insertImageRecord(rowsAffected, item_name, itr, destination, item_id, image_name, image_count);
+        } catch (Exception e) {
+            System.out.println("ItemNameModel insertRecord() Error: " + e);
+        }
+        if (rowsAffected > 0) {
+            message = "Record saved successfully.";
+            msgBgColor = COLOR_OK;
+        } else {
+            message = "Cannot save the record, some error.";
+            msgBgColor = COLOR_ERROR;
+        }
+        if (count > 0) {
+            message = "This Prefix Already Exists for another item for this parent ";
+            msgBgColor = COLOR_ERROR;
+        }
+        return rowsAffected;
+    }
+
+    public int insertImageRecord(int rowsAffected, ModelName model_name, Iterator itr, String destination, int model_id, String image_name,
+            int image_count, String item_name) {
+        String img_message = "";
+        DateFormat dateFormat1 = new SimpleDateFormat("dd.MMMMM.yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
+        Date date = new Date();
+        String middleName = "";
+        String current_date = dateFormat.format(date);
+        String query3 = "INSERT INTO item_image_details (image_name, image_path, date_time, description,model_id,revision_no,active,remark) "
+                + " VALUES(?,?,?,?,?,?,?,?)";
+        String imageName = "";
+//        String item_code = model_name.getItem_code();
+//        String item_name = "";
+//        if (!item_code.equals("")) {
+//            String item_code_arr[] = item_code.split(" # ");
+//            item_code = item_code_arr[0];
+//            item_name = item_code_arr[1];
+//        }
+        try {
+
+            if ((!model_name.getImage_path().isEmpty())) {
+                if ((!model_name.getImage_path().isEmpty())) {
+                    String tempExt = image_name;
+                    if (!tempExt.isEmpty()) {
+
+                        String fieldName = "";
+                        if (tempExt.equals(image_name)) {
+                            String model = model_name.getModel().replaceAll("[^a-zA-Z0-9]", "_");
+                            middleName = "img_Item_" + model + "_" + image_count;
+                            destination = "C:\\ssadvt_repository\\APL\\item\\" + item_name + "\\" + model + "\\";
+                            fieldName = "item_image";
+                        }
+
+                        int index = tempExt.lastIndexOf(".");
+                        int index1 = tempExt.length();
+                        String Extention = tempExt.substring(index + 1, index1);
+                        tempExt = "." + Extention;
+                        // middleName=middleName.replaceAll("[^a-zA-Z0-9]", "_");
+                        imageName = middleName + tempExt;
+
+                        // imageName = imageName.replaceAll("[^a-zA-Z0-9]", "_");
+                        WirteImage(model_name, itr, destination, imageName, fieldName);
+                    }
+                    PreparedStatement pstmt1 = connection.prepareStatement(query3);
+                    pstmt1.setString(1, imageName);
+                    pstmt1.setString(2, destination);
+                    pstmt1.setString(3, current_date);
+                    pstmt1.setString(4, "this image is for site");
+                    pstmt1.setInt(5, model_id);
+                    pstmt1.setString(6, "0");
+                    pstmt1.setString(7, "Y");
+                    pstmt1.setString(8, "ok");
+                    rowsAffected = pstmt1.executeUpdate();
+                    pstmt1.close();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("ModelNameModel insertImageRecord exception-----" + e);
+        }
+        return rowsAffected;
+    }
+
+    public void WirteImage(ModelName key, Iterator itr, String destination, String imageName, String fieldName) {
+        int count = 0;
+
+        try {
+            while (itr.hasNext()) {
+                FileItem item = (FileItem) itr.next();
+                makeDirectory(destination);
+                try {
+                    if (!item.isFormField()) {
+                        if (item.getFieldName().equals(fieldName)) {
+                            File file = new File(destination + imageName);
+                            String image = item.getName();
+                            if (image.isEmpty() || image.equals(destination)) {
+                            } else {
+                                item.write(file);
+                                message = "Image Uploaded Successfully.";
+                                count++;
+                            }
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("ModelNameModel WirteImage error: " + e);
+                }
+            }
+            //}
+        } catch (Exception ex) {
+        }
+    }
+
+    public boolean makeDirectory(String dirPathName) {
+        boolean result = false;
+        File directory = new File(dirPathName);
+        if (!directory.exists()) {
+            try {
+                result = directory.mkdirs();
+            } catch (Exception e) {
+                System.out.println("ModelNameModel makeDirectory Error - " + e);
+            }
+        }
+        return result;
+    }
+
+    public static int getManufacturerId(String manufacturer_name) {
+        int manufacturer_id = 0;
+        try {
+            String query = " SELECT manufacturer_id FROM manufacturer WHERE manufacturer_name='" + manufacturer_name + "' "
+                    + " AND active='Y' ";
+
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+
+            while (rset.next()) {
+                manufacturer_id = rset.getInt("manufacturer_id");
+
+            }
+        } catch (Exception e) {
+            System.err.println("ModelNameModel getManufacturerId Exception-----" + e);
+
+        }
+        return manufacturer_id;
     }
 
     public int getParentGeneration(int p_id) {
@@ -864,19 +1233,6 @@ public class ItemNameModel {
             //}
         } catch (Exception ex) {
         }
-    }
-
-    public boolean makeDirectory(String dirPathName) {
-        boolean result = false;
-        File directory = new File(dirPathName);
-        if (!directory.exists()) {
-            try {
-                result = directory.mkdirs();
-            } catch (Exception e) {
-                System.out.println("ItemNameModel makeDirectory Error - " + e);
-            }
-        }
-        return result;
     }
 
     public static int getRevisionno(ItemName itemName, int item_names_id) {

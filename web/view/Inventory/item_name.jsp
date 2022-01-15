@@ -1,5 +1,6 @@
 <%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -218,6 +219,35 @@
                 return false;
             }
         });
+
+
+        $("#designation").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("designation").value;
+                $.ajax({
+                    url: "ItemAuthorizationController",
+                    dataType: "json",
+                    data: {action1: "getDesignation", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#designation').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+
+
+
 //        $('#item_name').blur(function () {
 //            var min = 10000;
 //            var max = 900000;
@@ -231,7 +261,7 @@
         document.getElementById("item_type").disabled = false;
         document.getElementById("item_name").disabled = false;
         //  document.getElementById("item_code").disabled = false;
-        document.getElementById("quantity").disabled = false;
+//        document.getElementById("quantity").disabled = false;
         document.getElementById("HSNCode").disabled = false;
         document.getElementById("prefix").disabled = false;
         document.getElementById("description").disabled = false;
@@ -271,7 +301,7 @@
         if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
             var item_type = document.getElementById("item_type").value;
             var item_name = document.getElementById("item_name").value;
-            var quantity = document.getElementById("quantity").value;
+//            var quantity = document.getElementById("quantity").value;
             var prefix = document.getElementById("prefix").value;
             if (myLeftTrim(item_type).length === 0) {
                 $("#message").html('<div class="col-md-12 text-center"><label style="color:red"><b>Item Type is required...</b></label></div>');
@@ -332,11 +362,14 @@
         }
     }
     function fillColumn(id, count) {
+
         $('#item_name_id').val(id);
+
         $('#item_name').val($("#" + count + '2').text());
+        // alert($("#" + count + '3').text());
         $('#prefix').val($("#" + count + '3').html());
         $('#item_type').val($("#" + count + '5').html());
-        $('#quantity').val($("#" + count + '6').html());
+//        $('#quantity').val($("#" + count + '6').html());
         $('#HSNCode').val($("#" + count + '7').html());
         if (($("#" + count + '10').text()) != "") {
             $('#parent_item').val($("#" + count + '10').html() + " - " + $("#" + count + '12').html());
@@ -353,19 +386,121 @@
         document.getElementById("edit").disabled = false;
         document.getElementById("delete").disabled = false;
     }
+
+
     function showQuantity() {
         var is_super_child = $("input[name='super']:checked").val();
         if (is_super_child == 'Y') {
-            $('#quantity_div').show();
+//            $('#quantity_div').show();
             $('#HSNCode_div').show();
+            $('.is_super_child_yes').show();
+            $('#designation_div').show();
+
         } else {
-            $('#quantity_div').hide();
+//            $('#quantity_div').hide();
             $('#HSNCode_div').hide();
+            $('.is_super_child_yes').hide();
+            $('#designation_div').hide();
         }
     }
     function getOrgChartData(item_name) {
         window.open("ItemNameController?org_chart=Org Chart&item_name=" + item_name);
     }
+
+    function getItemTypeForModelOrPart() {
+        var item_type = $('#item_type').val();
+
+        if (item_type == "Non-Raw Material") {
+            $('.model_no_div').show();
+            $('.part_no_div').hide();
+        } else {
+            $('.model_no_div').hide();
+            $('.part_no_div').show();
+        }
+
+    }
+
+    $(document).ready(function () {
+
+        // Add new element
+        $(".add").click(function () {
+            var count = $('#count').val();
+//            alert(count);
+//            if (count > 0) {
+//                total_element = 0;
+//            }
+            // Finding total number of elements added
+            var total_element = $(".is_super_child_yes").length;
+
+            // last <div> with element class id
+            var lastid = $(".is_super_child_yes:last").attr("id");
+            var split_id = lastid.split("_");
+            var nextindex = Number(split_id[1]) + 1;
+
+            var max = 5;
+            // Check total number elements
+            if (total_element < max) {
+                // Adding new div container after last occurance of element class
+                $(".is_super_child_yes:last").after("<div class='is_super_child_yes row' id='superchilddiv_" + nextindex + "'></div>");
+
+                // Adding element to <div>
+                $("#superchilddiv_" + nextindex).append('<div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="hidden" id="model_id_' + nextindex + '" name="model_id_' + nextindex + '" value="" ><input class="form-control myInput" type="hidden" id="manufacturer_item_map_id_' + nextindex + '" name="manufacturer_item_map_id_' + nextindex + '" value="" ><input type="hidden" id="item_image_details_id_' + nextindex + '" name="item_image_details_id_' + nextindex + '" value="" size="28"   /><input class="form-control myInput myAutocompleteClass" type="text" id="manufacturer_name_' + nextindex + '" name="manufacturer_name_' + nextindex + '" value="" size="40"></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="model_' + nextindex + '" name="model_' + nextindex + '" value="" size="40"  onblur="getItemTypeForModelOrPart()"></div></div></div><div class="col-md-2 model_no_div" id="model_no_div" style="display: none"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="model_no_' + nextindex + '" name="model_no_' + nextindex + '" value="" size="40"></div></div></div><div class="col-md-2 part_no_div" id="part_no_div" style="display: none"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="part_no_' + nextindex + '" name="part_no_' + nextindex + '" value="" size="40"  ></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="lead_time_' + nextindex + '" name="lead_time_' + nextindex + '" value="0"  size="40"></div></div></div><div class="col-md-1"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="basic_price_' + nextindex + '" name="basic_price_' + nextindex + '" value="0" size="40" ></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="file" multiple id="item_image_' + nextindex + '" name="item_image"  size="30" value=""  onchange="readURL(this);"></div></div></div><input type="button" class="btn btn-danger remove" id="remove_' + nextindex + '" style="height:35px;" value="X">');
+
+            } else {
+                alert("Can't Add More Than 5 !.....");
+                return false;
+            }
+
+
+
+            $('#count').val(total_element + 1);
+        });
+
+
+
+
+        $(document).on('keydown', '.myAutocompleteClass', function () {
+            var id = this.id;
+            var random = this.value;
+            $('#' + id).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "ModelNameController",
+                        dataType: "json",
+                        data: {action1: "getManufacturer", str: random},
+                        success: function (data) {
+                            console.log(data);
+                            response(data.list);
+                        },
+                        error: function (error) {
+                            console.log(error.responseText);
+                            response(error.responseText);
+                        }
+                    });
+                },
+                select: function (events, ui) {
+                    console.log(ui);
+                    $(this).val(ui.item.label);
+                    return false;
+                }
+            });
+        });
+
+        // Remove element
+        $('.container').on('click', '.remove', function () {
+            var id = this.id;
+
+            var split_id = id.split("_");
+            var deleteindex = split_id[1];
+            // Remove <div> with id
+            $("#superchilddiv_" + deleteindex).remove();
+            if ($('#count').val() > 0) {
+                $('#count').val($('#count').val() - 1);
+
+            }
+
+        });
+    });
 </script>
 
 
@@ -441,7 +576,7 @@
                 <th>Prefix</th>
                 <th>Item Code</th>
                 <th>Item Type</th>
-                <th>Quantity</th>
+                <!--<th>Quantity</th>-->
                 <th>HSN CODE</th>
                 <th>Generation</th>
                 <th>Description</th>
@@ -459,7 +594,7 @@
                         <td id="${loopCounter.count }3">${beanType.prefix}</td>
                         <td id="${loopCounter.count }4">${beanType.item_code}</td>                                               
                         <td id="${loopCounter.count }5">${beanType.item_type}</td>                                               
-                        <td id="${loopCounter.count }6">${beanType.quantity}</td> 
+                        <!--<td id="${loopCounter.count }6">${beanType.quantity}</td>--> 
                         <td id="${loopCounter.count }7">${beanType.HSNCode}</td> 
                         <td id="${loopCounter.count }8">${beanType.generation}</td>
                         <td id="${loopCounter.count }9">${beanType.description}</td> 
@@ -468,12 +603,11 @@
                         <td id="${loopCounter.count }12" style="display:none">${beanType.parent_item_code}</td>
                         <td id="${loopCounter.count }13">
                             <input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart" onclick="getOrgChartData('${beanType.item_name}')">
-                        </td>
 
+     <!--<a class="btn normalBtn" target="_blank" href="ModelNameController?task1=map_model&item_names_id=${beanType.item_names_id}">Map Model</a>-->
+                        </td>
                     </tr>
                 </c:forEach>
-
-
                 </tbody>
             </table>
         </div>          
@@ -492,8 +626,11 @@
                         <div class="form-group">
                             <label>Item Type<span class="text-danger">*</span></label>
                             <input class="form-control myInput" type="hidden" id="item_name_id" name="item_name_id" value="" >
+                            <input class="form-control myInput" type="hidden" id="count" name="count" value="0" >
                             <input type="hidden" id="item_image_details_id" name="item_image_details_id" value="" size="28"   />
-                            <input class="form-control myInput" type="text" id="item_type" name="item_type" value="" disabled >
+                            <input type="hidden" name="item_authorization_id" id="item_authorization_id" value="">
+
+                            <input class="form-control myInput" type="text" id="item_type" name="item_type" value="${item_type}" disabled >
                         </div>
                     </div>
                 </div>
@@ -501,7 +638,7 @@
                     <div class="">
                         <div class="form-group">
                             <label>Item Name<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="item_name" name="item_name" size="60" value="" disabled >
+                            <input class="form-control myInput" type="text" id="item_name" name="item_name" size="60" value="${item_name}" disabled >
                         </div>
                     </div>
                 </div>
@@ -510,72 +647,346 @@
                     <div class="">
                         <div class="form-group">
                             <label>Prefix<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="prefix" name="prefix" size="60" value="" disabled >
+                            <input class="form-control myInput" type="text" id="prefix" name="prefix" size="60" value="${prefix}" disabled >
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-            <div class="row mt-3">
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
                             <label>Parent Item - Code<span class="text-danger"></span></label>                            
-                            <input class="form-control myInput" type="text" id="parent_item" name="parent_item"  value="" disabled>
+                            <input class="form-control myInput" type="text" id="parent_item" name="parent_item"  value="${parent_item}" disabled>
                             <input class="form-control myInput" type="text" id="generation" name="generation" value="" size="45" disabled hidden>
                         </div>
                     </div>
                 </div>
+            </div>
 
+
+            <div class="row mt-3">
                 <div class="col-md-3">
                     <div class="form-group mb-1">
                         <label class="" for="email">Is super child<span class="text-danger">*</span></label>
                     </div>
-                    <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
-                        <label class="form-check-label">
-                            <input type="radio" id="supery" name="super" value="Y" disabled onclick="showQuantity()"> Yes
-                        </label>
-                    </div>
-                    <div class="form-group form-check d-inline pl-0">
-                        <label class="form-check-label">
-                            <input type="radio" id="supern" name="super" value="N" disabled onclick="showQuantity()"> No
-                        </label>
-                    </div>
+                    <c:choose>
+                        <c:when test="${super_child=='Y'}">
+                            <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
+                                <label class="form-check-label">
+                                    <input type="radio" id="supery" name="super" value="Y" disabled onclick="showQuantity()" checked=""> Yes
+                                </label>
+                            </div>
+                            <div class="form-group form-check d-inline pl-0">
+                                <label class="form-check-label">
+                                    <input type="radio" id="supern" name="super" value="N" disabled onclick="showQuantity()"> No
+                                </label>
+                            </div>
+
+                        </c:when>
+                        <c:when test="${super_child=='N'}">
+                            <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
+                                <label class="form-check-label">
+                                    <input type="radio" id="supery" name="super" value="Y" disabled onclick="showQuantity()"> Yes
+                                </label>
+                            </div>
+                            <div class="form-group form-check d-inline pl-0">
+                                <label class="form-check-label">
+                                    <input type="radio" id="supern" name="super" value="N" disabled onclick="showQuantity()" checked=""> No
+                                </label>
+                            </div>
+
+                        </c:when>
+                        <c:otherwise>
+                            <div class="form-group form-check mb-0 d-inline mr-2 pl-0">
+                                <label class="form-check-label">
+                                    <input type="radio" id="supery" name="super" value="Y" disabled onclick="showQuantity()"> Yes
+                                </label>
+                            </div>
+                            <div class="form-group form-check d-inline pl-0">
+                                <label class="form-check-label">
+                                    <input type="radio" id="supern" name="super" value="N" disabled onclick="showQuantity()"> No
+                                </label>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
-                <div class="col-md-3" style="display:none" id="quantity_div">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Quantity<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
+
+                <c:choose>
+                    <c:when test="${super_child=='Y'}">
+                        <div class="col-md-3" id="HSNCode_div">
+                            <div class="">
+                                <div class="form-group">
+                                    <label>HSN CODE<span class="text-danger">*</span></label>
+                                    <input class="form-control myInput" type="text" id="HSNCode" name="HSNCode" value="${HSNCode}" >
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+
+
+                        <div class="col-md-3"  id="designation_div">
+                            <div class="">
+                                <div class="form-group">
+                                    <label>Designation<span class="text-danger">*</span></label>
+                                    <input class="form-control myInput" type="text" id="designation" name="designation" value="${designation}" >
+                                </div>
+                            </div>
+                        </div>
+                    </c:when>
+
+                    <c:otherwise>
+                        <div class="col-md-3" style="display:none" id="HSNCode_div">
+                            <div class="">
+                                <div class="form-group">
+                                    <label>HSN CODE<span class="text-danger">*</span></label>
+                                    <input class="form-control myInput" type="text" id="HSNCode" name="HSNCode" value="" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="display:none" id="designation_div">
+                            <div class="">
+                                <div class="form-group">
+                                    <label>Designation<span class="text-danger">*</span></label>
+                                    <input class="form-control myInput" type="text" id="designation" name="designation" value="" >
+                                </div>
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
-            <div class="row mt-3">
 
-                <div class="col-md-3" style="display:none" id="HSNCode_div">
-                    <div class="">
-                        <div class="form-group">
-                            <label>HSN CODE<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="HSNCode" name="HSNCode" value="" disabled>
+
+            <hr>
+
+            <c:if test="${super_child=='Y'}">
+                <c:forEach items = "${lst}" var = "lst" varStatus="loopCounter">   
+
+                    <div class="row is_super_child_yes" id="superchilddiv_${loopCounter.count}">
+                        <div class="col-md-2">
+                            <div class="">
+                                <div class="form-group">
+                                    <c:if test="${loopCounter.count==1}">
+                                        <label>Manufacturer Name<span class="text-danger">*</span></label> 
+                                    </c:if>
+
+                                    <input class="form-control myInput" type="hidden" id="model_id_${loopCounter.count}" name="model_id_${loopCounter.count}" value="" >
+                                    <input class="form-control myInput" type="hidden" id="manufacturer_item_map_id_${loopCounter.count}" name="manufacturer_item_map_id_${loopCounter.count}" value="" >
+                                    <input type="hidden" id="item_image_details_id_${loopCounter.count}" name="item_image_details_id_${loopCounter.count}" value="" size="28"   />
+
+
+                                    <div class="d-flex">
+                                        <input class="form-control myInput myAutocompleteClass" type="text" id="manufacturer_name_${loopCounter.count}" name="manufacturer_name_${loopCounter.count}"
+                                               value="${lst}"  size="40">
+                                        <a class="btn normalBtn" target="_blank" href="ManufacturerController">New</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="">
+                                <div class="form-group">
+                                    <c:if test="${loopCounter.count==1}">
+                                        <label>Model Name<span class="text-danger">*</span></label>    
+                                    </c:if>
+                                    <input class="form-control myInput" value="${lst2[loopCounter.count-1]}" type="text" id="model_${loopCounter.count}" name="model_${loopCounter.count}"
+                                           size="40"  onblur="getItemTypeForModelOrPart()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <c:choose>
+                            <c:when test="${item_type=='Non-Raw Material'}">
+
+                                <div class="col-md-2 model_no_div" id="model_no_div" >
+                                    <div class="">
+                                        <div class="form-group">
+                                            <c:if test="${loopCounter.count==1}">
+                                                <label>Model No.<span class="text-danger">*</span></label>   
+                                            </c:if>
+
+                                            <input class="form-control myInput" type="text" id="model_no_${loopCounter.count}" name="model_no_${loopCounter.count}" 
+                                                   value="${lst5[loopCounter.count-1]}"  size="40"  >
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="col-md-2 part_no_div" id="part_no_div" >
+                                    <div class="">
+                                        <div class="form-group">
+                                            <c:if test="${loopCounter.count==1}">
+                                                <label>Part No.<span class="text-danger">*</span></label>   
+                                            </c:if>
+                                            <input class="form-control myInput" type="text" id="part_no_${loopCounter.count}" name="part_no_${loopCounter.count}" 
+                                                   value="${lst6[loopCounter.count-1]}"  size="40"  >
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+
+
+
+
+                        <div class="col-md-2">
+                            <div class="">
+                                <div class="form-group">
+                                    <c:if test="${loopCounter.count==1}">
+                                        <label>Lead Time in Days<span class="text-danger">*</span></label>           
+                                    </c:if>
+                                    <input class="form-control myInput" type="text" id="lead_time_${loopCounter.count}" name="lead_time_${loopCounter.count}" value="${lst3[loopCounter.count-1]}"
+                                           size="40">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-1">
+                            <div class="">
+                                <div class="form-group">
+                                    <c:if test="${loopCounter.count==1}">
+                                        <label>Basic Price<span class="text-danger">*</span></label>      
+                                    </c:if>
+                                    <input class="form-control myInput" type="text" id="basic_price_${loopCounter.count}" name="basic_price_${loopCounter.count}" value="${lst4[loopCounter.count-1]}"
+                                           size="40" >
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="">
+                                <div class="form-group">
+                                    <c:if test="${loopCounter.count==1}">
+                                        <label>Select Photo<span class="text-danger"></span></label>
+                                        </c:if>
+                                    <input class="form-control myInput" type="file" multiple id="item_image_${loopCounter.count}" name="item_image"  size="30" value=""  onchange="readURL(this);"> 
+                                </div>
+                            </div>
+                        </div>
+                        <c:if test="${loopCounter.count==1}">
+                            <a class="btn normalBtn add" style="height:35px;margin-top: 22px">+</a>
+                        </c:if>
+                        <c:if test="${loopCounter.count!=1}">
+                            <input type="button" class="btn btn-danger remove" id="remove_${loopCounter.count}" style="height:35px;" value="X">
+                        </c:if>
+                    </div>
+                </c:forEach>
+            </c:if>
+
+            <c:if test="${lst_size==0}">
+
+                <div class="row is_super_child_yes" id="superchilddiv_1" style="display:none">
+                    <div class="col-md-2">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Manufacturer Name<span class="text-danger">*</span></label> 
+
+                                <input class="form-control myInput" type="hidden" id="model_id_1" name="model_id_1" value="" >
+                                <input class="form-control myInput" type="hidden" id="manufacturer_item_map_id_1" name="manufacturer_item_map_id_1" value="" >
+                                <input type="hidden" id="item_image_details_id_1" name="item_image_details_id_1" value="" size="28"   />
+
+                                <div class="d-flex">
+                                    <input class="form-control myInput myAutocompleteClass" type="text" id="manufacturer_name_1" name="manufacturer_name_1" value=""
+                                           size="40">
+                                    <a class="btn normalBtn" target="_blank" href="ManufacturerController">New</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="col-md-2">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Model Name<span class="text-danger">*</span></label>                            
+                                <input class="form-control myInput" type="text" id="model_1" name="model_1" value=""
+                                       size="40"  onblur="getItemTypeForModelOrPart()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 model_no_div" id="model_no_div" style="display: none">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Model No.<span class="text-danger">*</span></label>                            
+                                <input class="form-control myInput" type="text" id="model_no_1" name="model_no_1" value=""
+                                       size="40"  >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 part_no_div" id="part_no_div" style="display: none">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Part No.<span class="text-danger">*</span></label>                            
+                                <input class="form-control myInput" type="text" id="part_no_1" name="part_no_1" value=""
+                                       size="40"  >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Lead Time in Days<span class="text-danger">*</span></label>                            
+                                <input class="form-control myInput" type="text" id="lead_time_1" name="lead_time_1" value="0"
+                                       size="40">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-1">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Basic Price<span class="text-danger">*</span></label>                            
+                                <input class="form-control myInput" type="text" id="basic_price_1" name="basic_price_1" value="0"
+                                       size="40" >
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-2">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Select Photo<span class="text-danger"></span></label>
+                                <input class="form-control myInput" type="file" multiple id="item_image_1" name="item_image"  size="30" value=""  onchange="readURL(this);"> 
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--                <div class="col-md-11">
+                                        <div class="">
+                                            <div class="form-group">
+                                                <label>Model Description</label>
+                                                <input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >
+                                                <textarea class="form-control myTextArea" id="model_description_1" name="model_description_1" rows="1"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                    <a class="btn normalBtn add" style="height:35px;margin-top: 22px">+</a>
                 </div>
-            </DIV>
+            </c:if>
+            <hr>
             <div class="row mt-12">
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
                             <label>Description</label>
                             <!--<input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >-->
-                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
+                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled ></textarea>
                         </div>
                     </div>
                 </div>
             </div>
-    </div>      
+    </div>
+
+
     <hr>
     <div class="row">
         <div id="message">
