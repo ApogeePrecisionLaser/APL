@@ -1190,7 +1190,7 @@ public class EnquiryModel {
                     + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
                     + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
                     + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
+                    + " and et.enquiry_status_id=es.enquiry_status_id  and es.active='Y' ";
 //            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
 //                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
 //                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
@@ -1272,7 +1272,7 @@ public class EnquiryModel {
                     + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
                     + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
                     + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
+                    + " and et.enquiry_status_id=es.enquiry_status_id and es.active='Y' ";
             query += " group by et.complaint_table_id  ";
             query += " order by et.complaint_table_id desc  ";
             ResultSet rst = connection.prepareStatement(query).executeQuery();
