@@ -9,9 +9,22 @@
             <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <div>
+                        <div class="mr-2">
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
                         </div>
+
+                        <form name="my-form" method="post" action="SalesEnquiryController?task=complaint_enquiry_list" class="d-flex">
+                            <div class="mr-2 selectEnquiryWrap">
+                                <input type="text" name="enquiry_source" id="enquiry_source" class="form-control" value="${enquiry_source}"> 
+                            </div>
+                            <div class="mr-2 selectEnquiryWrap">
+                                <input type="text" name="status" id="status" class="form-control" value="${status}"> 
+                            </div>
+                            <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
+                                <input type="submit" value="Search"
+                                       class="btn btn-primary myNewLinkBtn fontFourteen" name="search" id="search" class="form-control"> 
+                            </div>
+                        </form>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -137,3 +150,54 @@
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
 
+<script>
+
+    $(function () {
+        $("#enquiry_source").autocomplete({
+            source: function (request, response) {
+                var random = $('#enquiry_source').val();
+                $.ajax({
+                    url: "SalesEnquiryController",
+                    dataType: "json",
+                    data: {action1: "getEnquirySource", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#enquiry_source').val(ui.item.label);
+                return false;
+            }
+        });
+        $("#status").autocomplete({
+            source: function (request, response) {
+                var random = $('#status').val();
+                $.ajax({
+                    url: "SalesEnquiryController",
+                    dataType: "json",
+                    data: {action1: "getStatus", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#status').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+    })
+</script>

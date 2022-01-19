@@ -490,6 +490,32 @@ public class EnquiryModel {
         return list;
     }
 
+    public List<String> getStatus(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = "SELECT status from enquiry_status where active='Y'";
+
+        query += " group by status order by status  ";
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String country_name = (rset.getString("status"));
+                if (country_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(country_name);
+                    count++;
+                }
+            }
+
+            if (count == 0) {
+                list.add("No such status  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:getStatus()-- " + e);
+        }
+        return list;
+    }
+
     public int insertEnquiries(Enquiry bean, String enquiry_type) {
         String query = "";
         if (enquiry_type.equals("Sales")) {
@@ -512,6 +538,9 @@ public class EnquiryModel {
         String date_time = sdf.format(date);
 
         int enquiry_source_table_id = getSourceTableId(bean.getEnquiry_source());
+        if (bean.getEnquiry_source().equals("")) {
+            enquiry_source_table_id = 13;
+        }
         int marketing_vertical_id = getMarketingVerticalId(bean.getMarketing_vertical_name());
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1178,30 +1207,26 @@ public class EnquiryModel {
         return id;
     }
 
-    public static ArrayList<Enquiry> getAllEnquiries() {
+    public static ArrayList<Enquiry> getAllEnquiries(String enquiry_source, String status) {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
             String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
                     + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
                     + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
                     + " kp.key_person_name,oo.org_office_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                    + " key_person kp,org_office oo  "
+                    + " key_person kp,org_office oo,enquiry_source_table est  "
                     + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
                     + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
                     + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id=es.enquiry_status_id  and es.active='Y' ";
-//            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
-//                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
-//                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-//                    + " kp.key_person_name  from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-//                    + " salesmanager_state_mapping ssm,key_person kp  "
-//                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
-//                    + " and ssm.active='Y' and kp.active='Y'  "
-//                    + " and kp.key_person_id=ssm.salesman_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-//                    + " ssm.state_id=st.state_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-//                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
-
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id and est.active='Y' "
+                    + " and et.enquiry_source_table_id=est.enquiry_source_table_id "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
+            if (!enquiry_source.equals("") && enquiry_source != null) {
+                query += " and est.enquiry_source='" + enquiry_source + "' ";
+            }
+            if (!status.equals("") && status != null) {
+                query += " and es.status='" + status + "' ";
+            }
             query += " group by et.enquiry_table_id  ";
             query += " order by et.enquiry_table_id desc  ";
             ResultSet rst = connection.prepareStatement(query).executeQuery();
@@ -1260,19 +1285,26 @@ public class EnquiryModel {
         return list;
     }
 
-    public static ArrayList<Enquiry> getAllComplaints() {
+    public static ArrayList<Enquiry> getAllComplaints(String enquiry_source, String status) {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
             String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
                     + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
                     + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
                     + " kp.key_person_name,oo.org_office_name  from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                    + " key_person kp,org_office oo  "
+                    + " key_person kp,org_office oo,enquiry_source_table est  "
                     + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
                     + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
                     + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
-                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                    + " and et.enquiry_status_id=es.enquiry_status_id and es.active='Y' ";
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id and est.active='Y' "
+                    + " and et.enquiry_source_table_id=est.enquiry_source_table_id  "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and dt.district_name=et.description and es.active='Y' ";
+            if (!enquiry_source.equals("") && enquiry_source != null) {
+                query += " and est.enquiry_source='" + enquiry_source + "' ";
+            }
+            if (!status.equals("") && status != null) {
+                query += " and es.status='" + status + "' ";
+            }
             query += " group by et.complaint_table_id  ";
             query += " order by et.complaint_table_id desc  ";
             ResultSet rst = connection.prepareStatement(query).executeQuery();

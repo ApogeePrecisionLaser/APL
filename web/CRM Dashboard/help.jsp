@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="CRMDashboardController">Home</a></li>
                         <li class="breadcrumb-item active">Help</li>
                     </ol>
                 </div>
@@ -50,17 +50,17 @@
                             </div>
                             <div class="card-body">                
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Subject:" name="subject">
+                                    <input class="form-control" placeholder="Subject:" name="subject" required="">
                                 </div>
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="6" name="message"></textarea>
+                                    <textarea class="form-control" rows="6" name="message" required=""></textarea>
                                 </div>
                                 <div class="form-group">
                                     <div class="btn btn-default btn-file">
                                         <i class="fas fa-paperclip"></i> Attachment
                                         <input type="file" name="document_name">
                                     </div>
-                                    <p class="help-block">Max. 32MB</p>
+                                    <!--<p class="help-block">Max. 32MB</p>-->
                                 </div>
                             </div>
                             <!-- /.card-body -->
@@ -86,10 +86,6 @@
 
 </div>
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
-
-
-
-
 
 
 <script>

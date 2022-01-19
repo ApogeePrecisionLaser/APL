@@ -12,24 +12,24 @@
                         <div class="mr-2">
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
                         </div> 
-<!--                        <div class="mr-2 selectEnquiryWrap">
-                            <select class="form-control rounded-0 selectEnquiry" onchange="chnageEnquirySource(this.value)">
-                                <option selected disabled>--select one--</option>
-                                <option>Indiamart</option>
-                                <option>Justdial</option>
-                                <option>Admin</option>
-                            </select>
-                        </div>-->
-                        <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
-
-                        </div>
+                        <form name="my-form" method="post" action="SalesEnquiryController?task=sales_enquiry_list" class="d-flex">
+                            <div class="mr-2 selectEnquiryWrap">
+                                <input type="text" name="enquiry_source" id="enquiry_source" class="form-control" value="${enquiry_source}"> 
+                            </div>
+                            <div class="mr-2 selectEnquiryWrap">
+                                <input type="text" name="status" id="status" class="form-control" value="${status}"> 
+                            </div>
+                            <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
+                                <input type="submit" value="Search"
+                                       class="btn btn-primary myNewLinkBtn fontFourteen" name="search" id="search" class="form-control"> 
+                            </div>
+                        </form>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <strong>Success!</strong> Indicates a successful or positive action.
                             </div>
                         </div>
-
                     </div>  
                 </div>
                 <div class="col-sm-6">
@@ -151,4 +151,54 @@
         $("#enqStatusBtnWrap").empty();
         $("#enqStatusBtnWrap").append('<a href="#" class="btn btn-primary fontFourteen rounded-0 enquiryPendingBtn mr-2" id="enquiryPendingBtn">Pending</a><a href="#" class="btn btn-primary fontFourteen rounded-0 enquiryCompleteBtn" id="enquiryCompleteBtn">Complete</a>');
     }
+
+    $(function () {
+        $("#enquiry_source").autocomplete({
+            source: function (request, response) {
+                var random = $('#enquiry_source').val();
+                $.ajax({
+                    url: "SalesEnquiryController",
+                    dataType: "json",
+                    data: {action1: "getEnquirySource", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#enquiry_source').val(ui.item.label);
+                return false;
+            }
+        });
+        $("#status").autocomplete({
+            source: function (request, response) {
+                var random = $('#status').val();
+                $.ajax({
+                    url: "SalesEnquiryController",
+                    dataType: "json",
+                    data: {action1: "getStatus", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#status').val(ui.item.label);
+                return false;
+            }
+        });
+
+
+    })
+
 </script>

@@ -117,7 +117,6 @@ public class IndiamartEnquiriesService implements ServletContextListener {
                 }
 
                 JSONArray jsonArr = new JSONArray(result);
-
                 for (int i = jsonArr.length() - 1; i >= 0; i--) {
                     JSONObject jsonObj = jsonArr.getJSONObject(i);
 
@@ -139,6 +138,7 @@ public class IndiamartEnquiriesService implements ServletContextListener {
                     bean.setCountry(jsonObj.get("COUNTRY_ISO").toString());
                     bean.setEnquiry_message(jsonObj.get("ENQ_MESSAGE").toString());
                     bean.setDate_time(jsonObj.get("DATE_TIME_RE").toString());
+                    bean.setProduct_name(jsonObj.get("PRODUCT_NAME").toString());
 
                     if (enquiry_table_id == 0) {
                         model.insertEnquiries(bean);

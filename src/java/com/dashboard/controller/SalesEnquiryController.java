@@ -62,6 +62,9 @@ public class SalesEnquiryController extends HttpServlet {
                 if (JQstring.equals("getCountry")) {
                     list = model.getCountry(q);
                 }
+                if (JQstring.equals("getStatus")) {
+                    list = model.getStatus(q);
+                }
                 JSONObject gson = new JSONObject();
                 gson.put("list", list);
                 out.println(gson);
@@ -78,15 +81,35 @@ public class SalesEnquiryController extends HttpServlet {
         }
 
         if (task.equals("sales_enquiry_list")) {
-            ArrayList<Enquiry> list = model.getAllEnquiries();
+            String enquiry_source = request.getParameter("enquiry_source");
+            String status = request.getParameter("status");
+            if (enquiry_source == null) {
+                enquiry_source = "";
+            }
+            if (status == null) {
+                status = "";
+            }
+            ArrayList<Enquiry> list = model.getAllEnquiries(enquiry_source, status);
             request.setAttribute("list", list);
+            request.setAttribute("enquiry_source", enquiry_source);
+            request.setAttribute("status", status);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("sales_enquiry_list").forward(request, response);
         }
         if (task.equals("complaint_enquiry_list")) {
-            ArrayList<Enquiry> list = model.getAllComplaints();
+            String enquiry_source = request.getParameter("enquiry_source");
+            String status = request.getParameter("status");
+            if (enquiry_source == null) {
+                enquiry_source = "";
+            }
+            if (status == null) {
+                status = "";
+            }
+            ArrayList<Enquiry> list = model.getAllComplaints(enquiry_source, status);
             request.setAttribute("list", list);
+             request.setAttribute("enquiry_source", enquiry_source);
+            request.setAttribute("status", status);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("complaint_enquiry_list").forward(request, response);
@@ -112,9 +135,17 @@ public class SalesEnquiryController extends HttpServlet {
             String state = request.getParameter("state");
             String city = request.getParameter("city");
             String enquiry_table_id = request.getParameter("enquiry_table_id");
-            model.assignToSalesPerson(enquiry_table_id, state,city);
+            model.assignToSalesPerson(enquiry_table_id, state, city);
+            String enquiry_source = request.getParameter("enquiry_source");
+            String status = request.getParameter("status");
+            if (enquiry_source == null) {
+                enquiry_source = "";
+            }
+            if (status == null) {
+                status = "";
+            }
 
-            ArrayList<Enquiry> list = model.getAllEnquiries();
+            ArrayList<Enquiry> list = model.getAllEnquiries(enquiry_source, status);
             request.setAttribute("list", list);
             DBConnection.closeConncetion(model.getConnection());
 
@@ -124,9 +155,17 @@ public class SalesEnquiryController extends HttpServlet {
             String state = request.getParameter("state");
             String city = request.getParameter("city");
             String complaint_table_id = request.getParameter("enquiry_table_id");
-            model.assignComplaintToSalesPerson(complaint_table_id, state,city);
+            model.assignComplaintToSalesPerson(complaint_table_id, state, city);
+            String enquiry_source = request.getParameter("enquiry_source");
+            String status = request.getParameter("status");
+            if (enquiry_source == null) {
+                enquiry_source = "";
+            }
+            if (status == null) {
+                status = "";
+            }
 
-            ArrayList<Enquiry> list = model.getAllComplaints();
+            ArrayList<Enquiry> list = model.getAllComplaints(enquiry_source,status);
             request.setAttribute("list", list);
             DBConnection.closeConncetion(model.getConnection());
 

@@ -143,8 +143,6 @@ public class CRMDashboardController extends HttpServlet {
                 os.close();
                 response.flushBuffer();
                 DBConnection.closeConncetion(model.getConnection());
-                DBConnection.closeConncetion(profileModel.getConnection());
-                DBConnection.closeConncetion(enquiryModel.getConnection());
 
                 return;
             }
@@ -157,8 +155,7 @@ public class CRMDashboardController extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 out.print(obj1);
                 DBConnection.closeConncetion(model.getConnection());
-                DBConnection.closeConncetion(profileModel.getConnection());
-                DBConnection.closeConncetion(enquiryModel.getConnection());
+
                 return;
             }
 
@@ -178,6 +175,8 @@ public class CRMDashboardController extends HttpServlet {
                 obj1.put("sales_enquiries", arrayObj);
                 PrintWriter out = response.getWriter();
                 out.print(obj1);
+                DBConnection.closeConncetion(model.getConnection());
+
                 //System.err.println("water_data obj**************"+obj1.toString());
                 return;
 
@@ -195,6 +194,8 @@ public class CRMDashboardController extends HttpServlet {
                 obj1.put("complaint_enquiries", arrayObj);
                 PrintWriter out = response.getWriter();
                 out.print(obj1);
+                DBConnection.closeConncetion(model.getConnection());
+
                 //System.err.println("water_data obj**************"+obj1.toString());
                 return;
 
@@ -208,8 +209,8 @@ public class CRMDashboardController extends HttpServlet {
         if (session.getAttribute("user_role").equals("Admin")) {
             ArrayList<DealersOrder> total_orders_list = model.getAllHistoryOrders(logged_user_name, loggedUser);
             List<Profile> dealers_list = profileModel.getAllDealers();
-            ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
-            ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
+            ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries("", "");
+            ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints("", "");
             ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
             List<Profile> latest_dealers = profileModel.getAllLatestDealers();
             List<Help> supportMessages = helpModel.getAllSupportMessages();

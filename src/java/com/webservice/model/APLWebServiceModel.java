@@ -1281,17 +1281,51 @@ public class APLWebServiceModel {
 
                         APLWebServiceModel.assignToSalesPerson(enquiry_table_id, state);
 
-                        String query_map_city = " select count(*) as count from city where city_name='" + city + "' and active='Y' ";
-                        PreparedStatement pstmt2 = connection.prepareStatement(query_map_city);
+//                        String query_map_city = " select count(*) as count from city where city_name='" + city + "' and active='Y' ";
+//                        PreparedStatement pstmt2 = connection.prepareStatement(query_map_city);
+//                        ResultSet rs2 = pstmt2.executeQuery();
+//                        int count2 = 0;
+//                        while (rs2.next()) {
+//                            count2 = rs2.getInt("count");
+//                        }
+                        String query_map_district1 = " select dt.district_name from district dt,city ct,tehsil th,state st,division dv "
+                                + " where dt.active='Y' and ct.active='Y' and th.active='Y' and st.active='Y' "
+                                + " and dv.active='Y' "
+                                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id "
+                                + " and dv.state_id=st.state_id ";
+//                        if (state.equals("Uttar Pradesh")) {
+//                            state = "UP";
+//                        }
+//                        if (state.equals("Madhya Pradesh")) {
+//                            state = "MP";
+//                        }
+
+                        if (city.equals("") || state.equals("")) {
+
+                            query_map_district1 += " and dt.district_name='" + district + "' ";
+                        }
+                        if (!city.equals("") && city != null) {
+                            query_map_district1 += " and ct.city_name='" + city + "' ";
+                        }
+                        if (!state.equals("") && state != null) {
+                            query_map_district1 += " and st.state_name='" + state + "' ";
+                        }
+                        PreparedStatement pstmt2 = connection.prepareStatement(query_map_district1);
                         ResultSet rs2 = pstmt2.executeQuery();
-                        int count2 = 0;
+                        String district_name = "";
                         while (rs2.next()) {
-                            count2 = rs2.getInt("count");
+                            district_name = rs2.getString("district_name");
                         }
-                        if (count2 > 0) {
-                            city = city;
-                            APLWebServiceModel.assignToDealer(enquiry_table_id, city);
+                        if (!district_name.equals("")) {
+                            district = district_name;
+                        } else {
+                            district = "Hapur";
                         }
+
+//                        if (count2 > 0) {
+                        city = city;
+                        APLWebServiceModel.assignToDealer(enquiry_table_id, district, bean.getProduct_name().toString());
+//                        }
                     }
                 }
             }
@@ -1428,13 +1462,20 @@ public class APLWebServiceModel {
         return id;
     }
 
-    public static int getDealerId(String city) {
-
+    public static int getDealerId(String district) {
         String query = " SELECT key_person_id from key_person kp,org_office oo,city ct,tehsil th,district dt,division dv,state st "
                 + "  where kp.active='Y' and oo.active='Y' and ct.active='Y' and th.active='Y' and dt.active='Y' and "
                 + " dv.active='Y' and st.active='Y'  and oo.org_office_id=kp.org_office_id and "
                 + " ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                + "  and ct.city_name='" + city + "'  and oo.office_type_id=3 and oo.city_id=ct.city_id ";
+                + " and dt.district_name='" + district + "'  and oo.office_type_id=3 and oo.city_id=ct.city_id ";
+//        String query = " select kp.key_person_id  from state st,salesmanager_state_mapping ssm,org_office oo,city ct,tehsil th, "
+//                + " district dt,division dv,key_person kp "
+//                + " where st.active='Y' and ssm.active='Y' and oo.active='Y' and ct.active='Y' and dt.active='Y' and th.active='Y' "
+//                + " and dv.active='Y' "
+//                + " and oo.city_id=ct.city_id and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  "
+//                + " kp.active='Y' and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+//                + " and ssm.state_id=st.state_id  and ssm.salesman_id=kp.key_person_id and oo.office_type_id=3 "
+//                + " and dt.district_name='" + district + "' ";
 
         int id = 0;
         try {
@@ -1448,7 +1489,7 @@ public class APLWebServiceModel {
         return id;
     }
 
-    public static String assignToDealer(String enquiry_table_id, String city) {
+    public static String assignToDealer(String enquiry_table_id, String district, String product_name) {
         int revision = APLWebServiceModel.getRevisionno(enquiry_table_id);
         int updateRowsAffected = 0;
         boolean status = false;
@@ -1465,7 +1506,7 @@ public class APLWebServiceModel {
         int rowsAffected = 0;
 
         try {
-            int assigned_to_dealer = getDealerId(city);
+            int assigned_to_dealer = getDealerId(district);
             if (assigned_to_dealer > 0) {
                 PreparedStatement pstmt = connection.prepareStatement(query1);
                 pstmt.setString(1, "Y");
@@ -1526,8 +1567,8 @@ public class APLWebServiceModel {
                         rowsAffected = psmt.executeUpdate();
                         if (rowsAffected > 0) {
                             status = true;
-                            String message = sendTelegramMessage(sender_name, sender_mob);
-                            String message2 = sendMail(sender_name, sender_email);
+                            String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name);
+                            String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name, enquiry_table_id);
 
                         } else {
                             status = false;
@@ -1549,17 +1590,25 @@ public class APLWebServiceModel {
 
     }
 
-    public static String sendTelegramMessage(String msg, String mob) {
+    public static String sendTelegramMessage(String sender_name, String sender_mob, String enquiry_city, String enquiry_state, String enquiry_no, String product_name) {
         String result = "";
+        String msg = "";
+
         try {
-            msg = "Assigned enquiry of '" + msg + "' ";
+//            msg = "Assigned enquiry of '" + msg + "' ";
+            msg = "Hey,<br/>"
+                    + "You Have 1 new enquiry<br/><br/><br/>"
+                    + "<b>Inquired Product: " + product_name + "</b><br/> "
+                    + "<b>Customer Name: " + sender_name + "</b><br/> "
+                    + "<b>Contact Details: " + sender_mob + "</b><br/> "
+                    + "<b>Enquiry Id: " + enquiry_no + "</b><br/> "
+                    + "<b>State: " + enquiry_state + "</b><br/> ";
             String jsonPayload = "";
             URL url = null;
             String[] recipients = {"918586842143"};
             APLWebServiceModel obj = new APLWebServiceModel();
             obj.numbers = recipients;
-            obj.message = msg;
-
+            obj.message = "Hello " + sender_name + "";
             Gson gson = new Gson();
             jsonPayload = gson.toJson(obj);
 
@@ -1570,6 +1619,7 @@ public class APLWebServiceModel {
             conn.setRequestProperty("X-WM-CLIENT-ID", CLIENT_ID);
             conn.setRequestProperty("X-WM-CLIENT-SECRET", CLIENT_SECRET);
             conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "text/html");
 
             OutputStream os = conn.getOutputStream();
             os.write(jsonPayload.getBytes());
@@ -1594,7 +1644,8 @@ public class APLWebServiceModel {
         return result;
     }
 
-    public static String sendMail(String msg, String email) {
+    public static String sendMail(String sender_name, String email, String sender_mob, String enquiry_city, String enquiry_state,
+            String enquiry_no, String product_name, String enquiry_table_id) {
         String host = "smtp.gmail.com";
         String port = "587";
         String mailFrom = "smartmeter.apogee@gmail.com";
@@ -1604,13 +1655,15 @@ public class APLWebServiceModel {
         String mailTo = "komal.apogee@gmail.com";
 //        String mailTo = email;
         String subject = "Enquiry";
+//        String message = "Hello Sir, Please see the enquiry....";
+
         String message = "Hello Sir, Please see the enquiry....";
 
         APLWebServiceModel mailer = new APLWebServiceModel();
 
         try {
             mailer.sendPlainTextEmail(host, port, mailFrom, password, mailTo,
-                    subject, message);
+                    subject, message, enquiry_city, enquiry_state, enquiry_no, product_name, sender_name, sender_mob, enquiry_table_id);
             System.out.println("Email sent.");
 
         } catch (Exception ex) {
@@ -1622,7 +1675,8 @@ public class APLWebServiceModel {
 
     public static void sendPlainTextEmail(String host, String port,
             final String userName, final String password, String toAddress,
-            String subject, String message) throws AddressException,
+            String subject, String message, String enquiry_city, String enquiry_state,
+            String enquiry_no, String product_name, String sender_name, String sender_mob, String enquiry_table_id) throws AddressException,
             MessagingException {
 
         // sets SMTP server properties
@@ -1648,7 +1702,33 @@ public class APLWebServiceModel {
             msg.setSubject(subject);
 
             BodyPart messageBodyPart1 = new MimeBodyPart();
-            messageBodyPart1.setText(message);
+
+            //Dear Partner, 
+//Hope you are having a good day! 
+//We have one new inquiry for you, kindly check your CRM. 
+//(….Clickable link of particular inquiry...)
+//
+//Customer Name: xyz
+//Inquired Product: laser land leveller 
+//Contact Details: (0011223344 number should be Clickable) 
+//Inquiry I’d: 10001 
+//Location: Particular Location 
+//
+//Thanks & Regards, 
+//Apogee Precision Lasers.
+//Logo.
+            messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
+                    + "We have one new inquiry for you, kindly check your CRM.<br />"
+                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
+                    + "Customer Name: <b>" + sender_name + "</b> <br/>"
+                    + "Inquired Product: <b>" + product_name + "</b> <br/>"
+                    + "Contact Details: <a href='tel:+" + sender_mob + "'>" + sender_mob + "</a><br/>"
+                    + "Enquiry Id: <b>" + enquiry_no + "</b><br/>"
+                    + "Location: <b>" + enquiry_city + "," + enquiry_state + "</b><br/><br/>"
+                    + "Thanks & Regards,<br/>"
+                    + "<b>Apogee Precision Lasers.</b><br/>"
+                    + "<img src='https://www.apogeeleveller.com/assets/images/logo.png'>", "text/html");
+//            messageBodyPart1.setText(message);
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart1);

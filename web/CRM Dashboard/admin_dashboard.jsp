@@ -344,7 +344,7 @@
                             </ul>
                         </div>
                         <div class="card-footer text-center">
-                            <a href="javascript:void(0)" class="uppercase fontFourteen">View All Products</a>
+                            <!--<a href="javascript:void(0)" class="uppercase fontFourteen">View All Products</a>-->
                         </div>
                     </div>
 

@@ -73,7 +73,7 @@ public class HelpModel {
         int rowsAffected = 0;
         int count = 0;
         int key = 0;
-
+        String msg = "";
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM HH-mm-ss");
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
@@ -95,15 +95,24 @@ public class HelpModel {
                 tempExt = "." + Extention;
                 imageName = bean.getDealer_id() + "_" + current_date + tempExt;
                 bean.setDocument_name(imageName);
-                WriteImage(bean, itr, "msg_doc", imageName, fieldName);
+                msg = WriteImage(bean, itr, "msg_doc", imageName, fieldName);
+                if (msg == null) {
+                    msg = "";
+                }
             }
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, "Pending");
             pstmt.setString(2, bean.getSubject());
             pstmt.setInt(3, bean.getDealer_id());
             pstmt.setString(4, bean.getMessage());
-            pstmt.setString(5, "C:/ssadvt_repository/APL/help_doc");
-            pstmt.setString(6, imageName);
+            if (msg.equals("Image Uploaded Successfully.")) {
+                pstmt.setString(5, "C:/ssadvt_repository/APL/help_doc");
+                pstmt.setString(6, imageName);
+            } else {
+                pstmt.setString(5, "");
+                pstmt.setString(6, "");
+            }
+
             pstmt.setInt(7, bean.getRevision_no());
             pstmt.setString(8, "Y");
             pstmt.setString(9, "ok");
@@ -130,8 +139,9 @@ public class HelpModel {
         return rowsAffected;
     }
 
-    public void WriteImage(Help key, Iterator itr, String destination, String imageName, String fieldName) {
+    public String WriteImage(Help key, Iterator itr, String destination, String imageName, String fieldName) {
         int count = 0;
+//        String msg="";
         try {
             while (itr.hasNext()) {
                 FileItem item = (FileItem) itr.next();
@@ -159,6 +169,7 @@ public class HelpModel {
             //}
         } catch (Exception ex) {
         }
+        return message;
     }
 
     public boolean makeDirectory(String dirPathName) {

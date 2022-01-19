@@ -40,34 +40,35 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     <c:forEach var="beanType" items="${requestScope['supportMessages']}"
                                                varStatus="loopCounter">
                                         <tr>
-                                    <input type="hidden" name="message${loopCounter.count}" id="message${loopCounter.count}" value="${beanType.message}">
-                                    <input type="hidden" name="subject${loopCounter.count}" id="subject${loopCounter.count}" value="${beanType.subject}">
-                                    <td class="fontFourteen">${loopCounter.count}</td>
-                                    <td class="fontFourteen">${beanType.dealer_name}</td>
-                                    <td class="fontFourteen"><a href="tel:+91 ${beanType.contact_no}">+91 ${beanType.contact_no}</a></td>
-                                    <td class="fontFourteen">
-                                        <a href="" data-toggle="modal" 
-                                           data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')">
-                                            ${beanType.subject}
-                                        </a>
-                                    </td>
-                                    <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                    <td class=""><i class="statusPending fontThirteen">${beanType.status}</i></td>
-                                    <td class="fontFourteen">${beanType.time_ago}</td>
-                                    <td>
-                                        <!--<a  class="btn far fa-eye actionEdit" title="See Message" data-toggle="modal" data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')"></a>-->
-                                        <!--<a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>-->
-                                        <input type="hidden" name="document_name${loopCounter.count}" id="document_name${loopCounter.count}" value="${beanType.document_name}">
+                                            <td class="fontFourteen">${loopCounter.count}
+                                                <input type="hidden" name="message${loopCounter.count}" id="message${loopCounter.count}" value="${beanType.message}">
+                                                <input type="hidden" name="subject${loopCounter.count}" id="subject${loopCounter.count}" value="${beanType.subject}">
+                                            </td>
+                                            <td class="fontFourteen">${beanType.dealer_name}</td>
+                                            <td class="fontFourteen"><a href="tel:+91 ${beanType.contact_no}">+91 ${beanType.contact_no}</a></td>
+                                            <td class="fontFourteen">
+                                                <a href="" data-toggle="modal" 
+                                                   data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')">
+                                                    ${beanType.subject}
+                                                </a>
+                                            </td>
+                                            <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
+                                            <td class=""><i class="statusPending fontThirteen">${beanType.status}</i></td>
+                                            <td class="fontFourteen">${beanType.time_ago}</td>
+                                            <td>
+                                                <!--<a  class="btn far fa-eye actionEdit" title="See Message" data-toggle="modal" data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')"></a>-->
+                                                <!--<a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>-->
+                                                <input type="hidden" name="document_name${loopCounter.count}" id="document_name${loopCounter.count}" value="${beanType.document_name}">
 
-
-                                        <a class="btn far fa-eye actionEdit"  title="View Document" id="download" onclick="downloadFile('${beanType.document_path}', '${beanType.document_name}',${loopCounter.count})" ></a>
-                                    </td>
-                                    </tr>
-                                </c:forEach>
+                                                <c:if test="${beanType.document_name !=''}">
+                                                    <a class="btn fa fa-file actionEdit"  title="View Document" id="download" href="SupportMessagesController?task1=downloadFile&document_name=${beanType.document_name}" ></a>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
@@ -77,9 +78,6 @@
         </div>
     </section>
 </div>
-
-
-
 
 
 <div class="modal myPopup" id="myPopModal">

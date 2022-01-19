@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.inventory.tableClasses.Indent;
 import com.organization.model.OrganisationTypeModel;
 import com.organization.tableClasses.OrganisationType;
+import static com.webservice.model.APLWebServiceModel.sendMail;
+import static com.webservice.model.APLWebServiceModel.sendTelegramMessage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -2001,6 +2003,13 @@ public class DealersOrderModel {
                     + " and dv.active='Y' "
                     + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id "
                     + " and dv.state_id=st.state_id ";
+            if (state.equals("Uttar Pradesh")) {
+                state = "UP";
+            }
+            if (state.equals("Madhya Pradesh")) {
+                state = "MP";
+            }
+
             if (city.equals("") || state.equals("")) {
 
                 query_map_district += " and dt.district_name='" + district + "' ";
@@ -2022,6 +2031,7 @@ public class DealersOrderModel {
             } else {
                 district = "Hapur";
             }
+
             String query = " select oo.org_office_name  from state st,salesmanager_state_mapping ssm,org_office oo,city ct,tehsil th, "
                     + " district dt,division dv,key_person kp "
                     + " where st.active='Y' and ssm.active='Y' and oo.active='Y' and ct.active='Y' and dt.active='Y' and th.active='Y' "
@@ -2043,7 +2053,7 @@ public class DealersOrderModel {
             }
 
             if (count == 0) {
-                list.add("No such org_office_name  exists.");
+                list.add("Aarav agro tech");
             }
         } catch (Exception e) {
             System.out.println("Error:EnquiryModel--getDealersStateWise()-- " + e);
@@ -2127,7 +2137,8 @@ public class DealersOrderModel {
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
-
+                        String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, "");
+                        String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no, "", enquiry_table_id);
                     } else {
                         status = false;
                     }
@@ -2662,14 +2673,14 @@ public class DealersOrderModel {
             enquiry_source_id = 1;
         }
         if (sales_enquiry_source.equals("Other")) {
-            enquiry_source_id = 0;
+            enquiry_source_id = 13;
         }
         String resolved_query = " select count(*) as count  from enquiry_table where enquiry_status_id in(6) and active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             resolved_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
         if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
-            resolved_query += " and enquiry_source_table_id in(1,0) ";
+            resolved_query += " and enquiry_source_table_id in(1,2,3,4,13,15,16,17,18,19) ";
         }
 
         String unresolved_query = " select count(*) as count from enquiry_table where enquiry_status_id in(5) and active='Y' ";
@@ -2677,7 +2688,7 @@ public class DealersOrderModel {
             unresolved_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
         if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
-            unresolved_query += " and enquiry_source_table_id in(1,0) ";
+            unresolved_query += " and enquiry_source_table_id in(1,2,3,4,13,15,16,17,18,19) ";
         }
 
         String assigned_query = " select count(*) as count from enquiry_table where enquiry_status_id in(2,3,4) and active='Y' ";
@@ -2685,14 +2696,14 @@ public class DealersOrderModel {
             assigned_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
         if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
-            assigned_query += " and enquiry_source_table_id in(1,0) ";
+            assigned_query += " and enquiry_source_table_id in(1,2,3,4,13,15,16,17,18,19) ";
         }
         String pending_query = " select count(*) as count from enquiry_table where enquiry_status_id in(1) and active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             pending_query += " and enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
         if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
-            pending_query += " and enquiry_source_table_id in(1,0) ";
+            pending_query += " and enquiry_source_table_id in(1,2,3,4,13,15,16,17,18,19) ";
         }
 
         int resolved_enquiry_count = 0;

@@ -43,6 +43,7 @@ public class Enquiry {
     private String enquiry_type;
     private String assigned_key_person;
     private String assigned_to_designation;
+    private String product_name;
 
     /**
      * @return the enquiry_source_table_id
@@ -490,5 +491,19 @@ public class Enquiry {
      */
     public void setAssigned_to_designation(String assigned_to_designation) {
         this.assigned_to_designation = assigned_to_designation;
+    }
+
+    /**
+     * @return the product_name
+     */
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    /**
+     * @param product_name the product_name to set
+     */
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 }

@@ -142,13 +142,13 @@ public class LoginController extends HttpServlet {
                     if (session.getAttribute("user_role").equals("Admin")) {
                         ArrayList<DealersOrder> total_orders_list = dealersOrderModel.getAllHistoryOrders(user_name, session.getAttribute("user_role").toString());
                         List<Profile> dealers_list = profileModel.getAllDealers();
-                        ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries();
-                        ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints();
+                        ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries("", "");
+                        ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints("","");
                         ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
                         List<Profile> latest_dealers = profileModel.getAllLatestDealers();
                         List<Help> supportMessages = helpModel.getAllSupportMessages();
 
-                         ArrayList<DealersOrder> allModels = dealersOrderModel.getAllLatestItems(String.valueOf(logged_org_office_id));
+                        ArrayList<DealersOrder> allModels = dealersOrderModel.getAllLatestItems(String.valueOf(logged_org_office_id));
 
                         request.setAttribute("allProducts", allModels.size());
                         request.setAttribute("allModels", allModels);

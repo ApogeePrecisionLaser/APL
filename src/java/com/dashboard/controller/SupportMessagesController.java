@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -116,6 +117,11 @@ public class SupportMessagesController extends HttpServlet {
             task = "";
         }
 
+        String task1 = request.getParameter("task1");
+        if (task1 == null) {
+            task1 = "";
+        }
+
         if (task.equals("Send")) {
             int dealer_help_messages_id = 0;
 
@@ -140,6 +146,49 @@ public class SupportMessagesController extends HttpServlet {
                     Logger.getLogger(HelpController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
+        if (task1.equals("downloadFile")) {
+            String document_name = request.getParameter("document_name");
+            String filePath = "C:/ssadvt_repository/APL/help_doc/" + document_name;
+            File downloadFile = new File(filePath);
+            FileInputStream inStream = new FileInputStream(downloadFile);
+
+            // if you want to use a relative path to context root:
+            String relativePath = getServletContext().getRealPath("");
+            System.out.println("relativePath = " + relativePath);
+
+            // obtains ServletContext
+            ServletContext context = getServletContext();
+
+            // gets MIME type of the file
+            String mimeType = context.getMimeType(filePath);
+            if (mimeType == null) {
+                // set to binary type if MIME mapping not found
+                mimeType = "application/octet-stream";
+            }
+            System.out.println("MIME type: " + mimeType);
+
+            // modifies response
+            response.setContentType(mimeType);
+            response.setContentLength((int) downloadFile.length());
+
+            // forces download
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+            response.setHeader(headerKey, headerValue);
+
+            // obtains response's output stream
+            OutputStream outStream = response.getOutputStream();
+
+            byte[] buffer = new byte[4096];
+            int bytesRead = -1;
+
+            while ((bytesRead = inStream.read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytesRead);
+            }
+
+            inStream.close();
+            outStream.close();
         }
 
         List<Help> supportMessages = model.getAllSupportMessages();

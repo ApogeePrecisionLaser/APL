@@ -52,6 +52,7 @@
                             <p class="text-secondry"><strong>GST:</strong> ${gst}</p>
                         </c:if>
 
+
                         <!--                        <div class="text-left1">
                                                     <small class="text-danger ">Profile completion</small>
                                                     <div class="progress mx-auto" style="width:300px;">                                        
