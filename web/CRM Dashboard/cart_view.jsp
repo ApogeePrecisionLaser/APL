@@ -1,12 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content">
-
         <div class="">
             <div class="alert alert-success alert-dismissible myAlertBox mb-0" style="display:none"  id="msg_success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -18,7 +14,6 @@
             </div>
         </div>
 
-
         <div class="marginTop20">
             <div class="">
                 <div class="row mx-0">
@@ -26,7 +21,6 @@
                         <div class="mr-2 backBtnWrap">
                             <a href="DealersOrderController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                         </div>
-
                     </div>
                     <div class="col-2 col-md-5 mt-1 mt-md-0">
                         <!--                        <div class="alert alert-success alert-dismissible myAlertBox" style="display:none" id="msg">
@@ -45,9 +39,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <style>
             /*            .cartSection .leftSide .removeCart{
@@ -265,7 +256,7 @@
                     }
                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 //                    $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
-                    $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
+                    $('.img-fluid' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
 
                 }
                 var delivery_charge = parseInt(($('#delivery_charge').text()));
@@ -286,7 +277,7 @@
                     }
                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 //                    $('.img-fluid2' + (k + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image2 + "");
-                    $('.img-fluid2' + (k + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image2 + "");
+                    $('.img-fluid2' + (k + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image2 + "");
                     var stock_quantity = $('#stock_quantity2' + (k + 1)).val();
                     if (stock_quantity == 0) {
                         $('#msg_div' + (k + 1)).show();
@@ -382,15 +373,15 @@
                             if (lastaddedmodel_id != '') {
                                 count = parseInt(data.list);
                                 $('#model_row' + model_id).remove();
-                                $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">Rs. ' + lastaddedbasic_price + '</td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">Rs. ' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
+                                $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">' + lastaddedbasic_price + '</td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
 
 //                                $('.img-fluid' + counting).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
-                                $('.img-fluid' + counting).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
+                                $('.img-fluid' + counting).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
 
                                 var rate = parseInt($('#rate' + lastaddedmodel_id).val());
                                 var qty = parseInt(lastaddedquantity);
                                 var price = parseInt($('#basic_price' + lastaddedmodel_id).val());
-                                $('#price_div' + lastaddedmodel_id).html('<input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + rate * qty + '">Rs. ' + rate * qty);
+                                $('#price_div' + lastaddedmodel_id).html('<input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + rate * qty + '">' + rate * qty);
                                 $('#basic_price' + lastaddedmodel_id).val(rate * qty);
                                 var total_price = 0;
                                 for (var j = 0; j < count; j++) {
@@ -415,7 +406,7 @@
                                 var rate = parseInt($('#rate' + model_id).val());
                                 var qty = parseInt(data.current_quantity);
                                 var price = parseInt($('#basic_price' + model_id).val());
-                                $('#price_div' + model_id).html('<input type="hidden" name="basic_price' + model_id + '" id="basic_price' + model_id + '" value="' + rate * qty + '">Rs. ' + rate * qty);
+                                $('#price_div' + model_id).html('<input type="hidden" name="basic_price' + model_id + '" id="basic_price' + model_id + '" value="' + rate * qty + '">' + rate * qty);
                                 $('#basic_price' + model_id).val(rate * qty);
                                 var total_price = 0;
                                 for (var j = 0; j < count; j++) {
@@ -436,7 +427,7 @@
 
 
 
-                            window.location.reload();
+//                            window.location.reload();
 
                             if (data.success_msg != '') {
                                 $('.counting').text(data.list);
@@ -471,6 +462,12 @@
             function removeFromcart(model_id, model, basic_price) {
                 var qty;
                 var count = $('#count').val();
+//                alert($('#qty' + model_id).val());
+                if (($('#qty' + model_id).val()) == 1) {
+                    alert("Quantity can't be Zero.If you don't want,Please remove it from delete button.");
+                    $('#qty' + model_id).val(1);
+                    return false;
+                }
                 $.ajax({
                     url: "DealersOrderController",
                     dataType: "json",
@@ -486,10 +483,11 @@
                             var rate = parseInt($('#rate' + model_id).val());
                             var qty = parseInt(data.current_quantity);
                             var price = parseInt($('#basic_price' + model_id).val());
-                            $('#price_div' + model_id).html('<input type="hidden" name="basic_price' + model_id + '" id="basic_price' + model_id + '" value="' + rate * qty + '">Rs. ' + rate * qty);
+                            $('#price_div' + model_id).html('<input type="hidden" name="basic_price' + model_id + '" id="basic_price' + model_id + '" value="' + rate * qty + '">' + rate * qty);
                             $('#basic_price' + model_id).val(rate * qty);
                             var total_price = 0;
                             count = data.list;
+
 
                             for (var j = 0; j < count; j++) {
                                 var model_ids = $('#model_id' + (j + 1)).val();
@@ -505,7 +503,7 @@
 
                             $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
 
-                            window.location.reload();
+//                            window.location.reload();
 
                             setTimeout(function () {
                                 $('#msg_danger').fadeOut('fast');
@@ -582,8 +580,6 @@
                 } else {
                     return false;
                 }
-
-
             }
 
             function completeOrder() {
@@ -617,7 +613,7 @@
                         console.log(data.msg);
                         console.log(data.order_no);
                         if (data.msg == 'thank_you') {
-                            window.open('DealersOrderController?order_no=' + data.order_no+"&pending_approval=approval_pending", '_self');
+                            window.open('DealersOrderController?order_no=' + data.order_no + "&pending_approval=approval_pending", '_self');
                         } else {
                             window.open('error', '_self', data.order_no);
                         }
@@ -629,5 +625,4 @@
 
 
         </script>
-        <td>Coupon Discount</td>
-        <td id="coupon_discount">0</td>
+

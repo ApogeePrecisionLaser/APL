@@ -1,9 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -398,14 +395,6 @@
 
 <script type="text/javascript">
                                                     $(document).ready(function () {
-//                                                            var locations = [
-//                                                                ['Raj Ghat', 28.648608, 77.250925, 1],
-//                                                                ['Purana Qila', 28.618174, 77.242686, 2],
-//                                                                ['Red Fort', 28.663973, 77.241656, 3],
-//                                                                ['India Gate', 28.620585, 77.228609, 4],
-//                                                                ['Jantar Mantar', 28.636219, 77.213846, 5],
-//                                                                ['Akshardham', 28.622658, 77.277704, 6]
-//                                                            ];
                                                         var latitude = [];
                                                         var longitude = [];
                                                         var dealer_office_name = [];
@@ -463,16 +452,9 @@
                                                                                 }
                                                                             })(marker, i)
                                                                             )
-
                                                                 }
-
-
-
                                                             }
                                                         });
-
-
-
                                                     });
 
 </script>

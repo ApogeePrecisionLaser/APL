@@ -1,7 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -18,7 +17,7 @@
             </div>
         </div>
     </section>
-    
+
     <section class="content">
         <div class="row">
             <div class="col-md-12 px-3">
@@ -257,8 +256,6 @@
 
 </script>
 
-
-
 <script>
     $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
     $('#myIDImgPopUp').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=");
@@ -310,16 +307,12 @@
     }
 
 
-    function myFun(value)
-    {
+    function myFun(value) {
         var req = null;
         if (req != null)
             req.abort();
         var random = document.getElementById("mobile_no1").value;
-
-
-        if (random.length >= 10)
-        {
+        if (random.length >= 10) {
             req = $.ajax({
                 type: "POST",
                 url: "OrgOfficeController",
@@ -327,7 +320,6 @@
                     str: random},
                 dataType: "json",
                 success: function (response_data) {
-
                     console.log(response_data);
                     alert(response_data.list[0]);
                     document.getElementById("mobile_no1").value = response_data.list[0];
@@ -337,21 +329,15 @@
                     document.getElementById("mobile_no1").value = "";
                     response(error.responseText);
                 }
-
-
             });
         }
-
     }
 
-    function myFunForPersonNumber(value)
-    {
+    function myFunForPersonNumber(value) {
         var req = null;
         if (req != null)
             req.abort();
         var random = document.getElementById("key_person_mobile").value;
-
-
         if (random.length >= 10)
         {
             req = $.ajax({
@@ -361,7 +347,6 @@
                     str: random},
                 dataType: "json",
                 success: function (response_data) {
-
                     console.log(response_data);
                     alert(response_data.list[0]);
                     document.getElementById("key_person_mobile").value = response_data.list[0];
@@ -371,11 +356,8 @@
                     document.getElementById("key_person_mobile").value = "";
                     response(error.responseText);
                 }
-
-
             });
         }
-
     }
 
     $(function () {

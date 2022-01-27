@@ -230,7 +230,11 @@ public class ApproveOrdersController extends HttpServlet {
                 bean.setApproved_price(String.valueOf(approved_price));
                 bean.setDiscount_percent(String.valueOf(discounted_percent));
                 bean.setDiscount_price(String.valueOf(discounted_price));
-                String message = model.approveOrder(bean, order_item_id, order_table_id, i);
+                try {
+                    String message = model.approveOrder(bean, order_item_id, order_table_id, i);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
 

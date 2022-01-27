@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <div class="content-header">
         <div class="">
@@ -167,7 +165,7 @@
                                                                     }
                                                                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 //                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
-                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
+                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
                                                                 }
                                                             });
 

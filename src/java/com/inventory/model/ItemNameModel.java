@@ -194,6 +194,30 @@ public class ItemNameModel {
         return list;
     }
 
+    public List<ItemName> getDesignation() {
+        List<ItemName> list = new ArrayList<ItemName>();
+        String query = " SELECT designation from designation where active='Y' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+//            q = q.trim();
+            while (rset.next()) {
+                String designation = (rset.getString("designation"));
+//                if (designation.toUpperCase().startsWith(q.toUpperCase())) {
+                ItemName bean = new ItemName();
+                bean.setDesignation(designation);
+                list.add(bean);
+                count++;
+//                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error:ItemAuthorizationModel--getDesignation()-- " + e);
+        }
+        return list;
+    }
+
     public JSONArray getItems(String searchItemName) {
         JSONObject obj = new JSONObject();
         JSONArray arrayObj = new JSONArray();

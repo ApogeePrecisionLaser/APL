@@ -443,7 +443,6 @@ public class OrgOfficeModel {
             pstmt.setString(16, "Y");
             pstmt.setString(17, "ok");
             pstmt.setInt(18, orgOffice.getOrganisation_id());
-
             pstmt.setInt(19, org_officeid2);
             pstmt.setString(20, is_child);
             pstmt.setInt(21, generation);

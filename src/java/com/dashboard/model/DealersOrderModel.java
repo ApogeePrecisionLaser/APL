@@ -93,9 +93,9 @@ public class DealersOrderModel {
     private static String audio;
     private double latitude;
     private double longitude;
-    String output;
+    static String output;
 
-    ArrayList<String> arr = new ArrayList<String>();
+    static ArrayList<String> arr = new ArrayList<String>();
 
     public void setConnection(Connection con) {
         try {
@@ -1465,7 +1465,7 @@ public class DealersOrderModel {
         return destination_path;
     }
 
-    public String approveOrder(DealersOrder bean, int order_item_id, int order_table_id, int i) {
+    public String approveOrder(DealersOrder bean, int order_item_id, int order_table_id, int i) throws SQLException {
         int updateRowsAffected = 0;
         String status = bean.getStatus();
         if (status.equals("Approve")) {
@@ -1475,6 +1475,12 @@ public class DealersOrderModel {
 
         int status_id = getStatusId(status);
         int item_status_id = getStatusId(item_status);
+        String orderDetail = "   select kp.key_person_name,kp.mobile_no1,kp.email_id1,odt.order_no,osp.prices "
+                + " from order_table odt,order_item odi,orders_sales_pricing osp,key_person kp "
+                + " where odt.active='Y' and kp.active='Y' and odi.active='Y' and odi.order_table_id=odt.order_table_id "
+                + " and odi.order_item_id=osp.order_item_id "
+                + " and odt.requested_by=kp.key_person_id and odt.order_table_id=osp.order_id  and "
+                + " odt.order_table_id='" + order_table_id + "' ";
 
         String query2 = " UPDATE order_item SET status_id=?,approved_qty=? WHERE order_item_id=? ";
 
@@ -1520,11 +1526,168 @@ public class DealersOrderModel {
         if (rowsAffected > 0) {
             message = "Your Indent is '" + status + "'!.";
             messageBGColor = COLOR_OK;
+
+            String order_no = "";
+            String key_person_name = "";
+            String email_id = "";
+            String mobile_no = "";
+            String prices = "";
+            float total_approved_price = 0;
+
+            ResultSet rs2 = connection.prepareStatement(orderDetail).executeQuery();
+            while (rs2.next()) {
+                order_no = rs2.getString("order_no");
+                key_person_name = rs2.getString("key_person_name");
+                email_id = rs2.getString("email_id1");
+                mobile_no = rs2.getString("mobile_no1");
+                prices = rs2.getString("prices");
+                total_approved_price = total_approved_price + Float.parseFloat(prices);
+            }
+
+            String message = sendTelegramMessageForOrder(order_no, key_person_name, email_id, mobile_no, String.valueOf(order_table_id), String.valueOf(total_approved_price));
+            String message2 = sendMailForOrder(order_no, key_person_name, email_id, mobile_no, String.valueOf(order_table_id), String.valueOf(total_approved_price));
+
         } else {
             message = "Cannot update the record, some error.";
             messageBGColor = COLOR_ERROR;
         }
         return message + "&" + status;
+    }
+
+    public static String sendTelegramMessageForOrder(String order_no, String key_person_name, String email_id,
+            String mobile_no, String order_table_id, String prices) {
+        String result = "";
+        String msg = "";
+
+        try {
+//            msg = "Assigned enquiry of '" + msg + "' ";
+            msg = "Hey,<br/>"
+                    + "Your order has been Approved.<br/><br/><br/>";
+
+            String jsonPayload = "";
+            URL url = null;
+            String[] recipients = {"918586842143"};
+            DealersOrderModel obj = new DealersOrderModel();
+            obj.numbers = recipients;
+            obj.message = "Hello";
+            Gson gson = new Gson();
+            jsonPayload = gson.toJson(obj);
+
+            url = new URL(GATEWAY_URL_FOR_SENDING_MESSAGE_TO_MULTIPLE_USERS);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("X-WM-CLIENT-ID", CLIENT_ID);
+            conn.setRequestProperty("X-WM-CLIENT-SECRET", CLIENT_SECRET);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "text/html");
+
+            OutputStream os = conn.getOutputStream();
+            os.write(jsonPayload.getBytes());
+            os.flush();
+            os.close();
+            int statusCode = conn.getResponseCode();
+            System.out.println("Response from Telegram Gateway: \n");
+            System.out.println("Status Code: " + statusCode);
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (statusCode == 200) ? conn.getInputStream() : conn.getErrorStream()
+            ));
+            while ((output = br.readLine()) != null) {
+                System.out.println("output----------" + output);
+                arr.add(output);
+            }
+            conn.disconnect();
+
+        } catch (Exception e) {
+            System.err.println("Exception-----" + e);
+        }
+
+        return result;
+    }
+
+    public static String sendMailForOrder(String order_no, String key_person_name, String email_id,
+            String mobile_no, String order_table_id, String prices) {
+        String host = "smtp.gmail.com";
+        String port = "587";
+        String mailFrom = "smartmeter.apogee@gmail.com";
+        String password = "jpss1277";
+
+        // outgoing message information
+        String mailTo = "komal.apogee@gmail.com";
+//        String mailTo = email;
+        String subject = "Order Approval";
+//        String message = "Hello Sir, Please see the enquiry....";
+
+        String message = "Hello Sir, Please see the enquiry....";
+
+        DealersOrderModel mailer = new DealersOrderModel();
+
+        try {
+            mailer.sendPlainTextEmail(host, port, mailFrom, password, mailTo,
+                    subject, message, order_no, key_person_name, email_id, mobile_no, order_table_id, prices);
+            System.out.println("Email sent.");
+
+        } catch (Exception ex) {
+            System.out.println("Failed to sent email.");
+            ex.printStackTrace();
+        }
+        return "strrrrrr";
+    }
+
+    public static void sendPlainTextEmail(String host, String port,
+            final String userName, final String password, String toAddress,
+            String subject, String message, String order_no, String key_person_name,
+            String email_id, String mobile_no, String order_table_id, String prices) throws AddressException,
+            MessagingException {
+
+        // sets SMTP server properties
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // creates a new session with an authenticator
+        Authenticator auth = new Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        };
+
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(userName));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
+            msg.setSubject(subject);
+
+            BodyPart messageBodyPart1 = new MimeBodyPart();
+            messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
+                    + "Your Order has been approved, kindly see your CRM, and checkout the order.<br />"
+                    + "<a href='http://localhost:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
+                    //                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
+                    + "Click On this For checkout.</a><br/><br/>"
+                    + "Order No: <b>" + order_no + "</b> <br/>"
+                    + "Price: <b>" + prices + "</b> <br/><br/>"
+                    + "Thanks & Regards,<br/>"
+                    + "<b>Apogee Precision Lasers.</b><br/>"
+                    + "<img src='https://www.apogeeleveller.com/assets/images/logo.png'>", "text/html");
+//            messageBodyPart1.setText(message);
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart1);
+
+            msg.setContent(multipart);
+
+            //7) send message  
+            Transport.send(msg);
+
+            System.out.println("message sent....");
+        } catch (MessagingException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     public int getStatusId(String status) {

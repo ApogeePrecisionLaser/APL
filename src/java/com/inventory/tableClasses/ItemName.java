@@ -44,6 +44,7 @@ public class ItemName {
     private String checked_expected_date_time;
     private String checkedValue;
     private String HSNCode;
+    private String designation;
     
     /**
      * @return the item_names_id
@@ -477,6 +478,20 @@ public class ItemName {
      */
     public void setHSNCode(String HSNCode) {
         this.HSNCode = HSNCode;
+    }
+
+    /**
+     * @return the designation
+     */
+    public String getDesignation() {
+        return designation;
+    }
+
+    /**
+     * @param designation the designation to set
+     */
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
 }

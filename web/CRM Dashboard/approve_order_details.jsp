@@ -1,15 +1,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
-
                         <div class="mr-2 backBtnWrap">
                             <a href="ApproveOrdersController" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
                         </div>

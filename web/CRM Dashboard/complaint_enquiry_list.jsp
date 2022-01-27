@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header pl-2">
         <div class="container-fluid">
@@ -116,7 +114,6 @@
                                                                 <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                                             </c:otherwise>
                                                         </c:choose>
-
                                                     </td>
                                                     <td>${beanType.assigned_to}
                                                         <c:if test="${beanType.status =='Assigned To SalesManager' || beanType.status =='Assigned To Dealer' }">
@@ -124,9 +121,6 @@
                                                             <i class="fontTen">(${beanType.assigned_to_designation})</i>
                                                         </c:if>
                                                     </td>
-
-
-
                                                     <td class="fontFourteen d-flex">
                                                         <div>
                                                             <a href="SalesEnquiryController?task=viewComplaintDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Enquiry Detail"></a>
@@ -197,7 +191,5 @@
                 return false;
             }
         });
-
-
     })
 </script>

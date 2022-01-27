@@ -1719,7 +1719,8 @@ public class APLWebServiceModel {
 //Logo.
             messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
                     + "We have one new inquiry for you, kindly check your CRM.<br />"
-                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
+                    + "<a href='http://localhost:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
+                    //                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
                     + "Customer Name: <b>" + sender_name + "</b> <br/>"
                     + "Inquired Product: <b>" + product_name + "</b> <br/>"
                     + "Contact Details: <a href='tel:+" + sender_mob + "'>" + sender_mob + "</a><br/>"

@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="">
@@ -240,6 +238,5 @@
                 }
             });
         }
-
     }
 </script>

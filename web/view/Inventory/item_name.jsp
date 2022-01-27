@@ -246,8 +246,6 @@
 
 
 
-
-
 //        $('#item_name').blur(function () {
 //            var min = 10000;
 //            var max = 900000;
@@ -728,6 +726,14 @@
                                 <div class="form-group">
                                     <label>Designation<span class="text-danger">*</span></label>
                                     <input class="form-control myInput" type="text" id="designation" name="designation" value="${designation}" >
+                                    <!--                                    <select multiple="" name="designation">
+                                    
+                                    <c:forEach var="beanType2" items="${requestScope['designation_list']}"
+                                               varStatus="loopCounter">
+                                        <option>${beanType2.designation}</option>
+                                    </c:forEach>
+                                </select>-->
+
                                 </div>
                             </div>
                         </div>
@@ -748,6 +754,13 @@
                                 <div class="form-group">
                                     <label>Designation<span class="text-danger">*</span></label>
                                     <input class="form-control myInput" type="text" id="designation" name="designation" value="" >
+                                    <!--                                    <select multiple=""  class="form-control myInput" name="designation">
+                                    
+                                    <c:forEach var="beanType2" items="${requestScope['designation_list']}"
+                                               varStatus="loopCounter">
+                                        <option>${beanType2.designation}</option>
+                                    </c:forEach>
+                                </select>-->
                                 </div>
                             </div>
                         </div>

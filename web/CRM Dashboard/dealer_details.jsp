@@ -1,9 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -174,7 +171,6 @@
                                             <p id="longitude"><strong>${beanType.longitude}</strong></p>
                                         </div>
                                     </div>
-
                                 </div> 
                             </div>
                         </div>
@@ -187,16 +183,11 @@
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
-
 <script>
     var key_person_id = $('#key_person_id').val();
     // alert(key_person_id);
 //    $('.usr_image').attr("src", "http://120.138.10.146:8080/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id);
     $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&key_person_id=" + key_person_id + "&type=ph");
-
-
-
-
 
     $(function () {
         CalculatePercentage();

@@ -143,22 +143,33 @@ public class LoginController extends HttpServlet {
                         ArrayList<DealersOrder> total_orders_list = dealersOrderModel.getAllHistoryOrders(user_name, session.getAttribute("user_role").toString());
                         List<Profile> dealers_list = profileModel.getAllDealers();
                         ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries("", "");
-                        ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints("","");
+                        ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints("", "");
                         ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
                         List<Profile> latest_dealers = profileModel.getAllLatestDealers();
                         List<Help> supportMessages = helpModel.getAllSupportMessages();
-
+                        String last_time_of_enquiry = "";
+                        String last_time_of_complaint = "";
                         ArrayList<DealersOrder> allModels = dealersOrderModel.getAllLatestItems(String.valueOf(logged_org_office_id));
+                        for (int j = 0; j < 1; j++) {
+                            if (total_enquiries_list.size() > 0) {
+                                last_time_of_enquiry = total_enquiries_list.get(j).getEnquiry_date_time().toString();
+                            }
+                            if (total_complaint_list.size() > 0) {
+                                last_time_of_complaint = total_complaint_list.get(j).getEnquiry_date_time().toString();
+                            }
+                        }
 
                         request.setAttribute("allProducts", allModels.size());
                         request.setAttribute("allModels", allModels);
                         request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
-                        request.setAttribute("supportMessages", supportMessages.size());
+                        session.setAttribute("supportMessages", supportMessages.size());
                         request.setAttribute("latest_dealers", latest_dealers);
                         session.setAttribute("sales_enquiries", total_enquiries_list.size());
                         session.setAttribute("total_dealers", dealers_list.size());
                         session.setAttribute("complaint_enquiries", total_complaint_list.size());
                         session.setAttribute("total_orders", total_orders_list.size());
+                        session.setAttribute("last_time_of_complaint", last_time_of_complaint);
+                        session.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
                         session.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size())));
 
                         DBConnection.closeConncetion(model.getConnection());
@@ -173,7 +184,20 @@ public class LoginController extends HttpServlet {
                         ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaintForDealer(logged_key_person_id);
                         ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
 
-                        request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+                        String last_time_of_enquiry = "";
+                        String last_time_of_complaint = "";
+                        for (int j = 0; j < 1; j++) {
+                            if (sales_enquiry_list.size() > 0) {
+                                last_time_of_enquiry = sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                            }
+                            if (complaint_enquiry_list.size() > 0) {
+                                last_time_of_complaint = complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                            }
+                        }
+
+                        session.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
+                        session.setAttribute("last_time_of_complaint", last_time_of_complaint);
+                        session.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
                         session.setAttribute("sales_enquiries", sales_enquiry_list.size());
                         session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
                         session.setAttribute("pending_orders", pending_orders_list.size());
@@ -190,6 +214,20 @@ public class LoginController extends HttpServlet {
                         ArrayList<DealersOrder> denied_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Denied");
                         ArrayList<Enquiry> sales_enquiry_list = dealersOrderModel.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id);
                         ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id);
+
+                        String last_time_of_enquiry = "";
+                        String last_time_of_complaint = "";
+                        for (int j = 0; j < 1; j++) {
+                            if (sales_enquiry_list.size() > 0) {
+                                last_time_of_enquiry = sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                            }
+                            if (complaint_enquiry_list.size() > 0) {
+                                last_time_of_complaint = complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                            }
+                        }
+
+                        session.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
+                        session.setAttribute("last_time_of_complaint", last_time_of_complaint);
 
                         session.setAttribute("sales_enquiries", sales_enquiry_list.size());
                         session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());

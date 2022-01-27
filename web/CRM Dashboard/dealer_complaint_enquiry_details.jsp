@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -31,9 +29,7 @@
                             <div class="d-flex justify-content-between">
                                 <div class="text-right">
                                     <a href="DealersOrderController?task=complaint_enquiry_list" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
-
                                 </div>
-
                             </div>
 
                             <c:forEach var="beanType" items="${requestScope['list']}"
@@ -147,6 +143,5 @@
                 // alert(data.message);
             }
         });
-
     }
 </script>

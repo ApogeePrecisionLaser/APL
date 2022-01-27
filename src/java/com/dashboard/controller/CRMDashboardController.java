@@ -219,6 +219,17 @@ public class CRMDashboardController extends HttpServlet {
 //            ArrayList<DealerItemMap> allModels = new ArrayList<>();
 //            allModels = dealerItemMapModel.getAllModels(String.valueOf(logged_org_office_id), allItems);
 
+            String last_time_of_enquiry = "";
+            String last_time_of_complaint = "";
+            for (int j = 0; j < 1; j++) {
+                if (total_enquiries_list.size() > 0) {
+                    last_time_of_enquiry = total_enquiries_list.get(j).getEnquiry_date_time().toString();
+                }
+                if (total_complaint_list.size() > 0) {
+                    last_time_of_complaint = total_complaint_list.get(j).getEnquiry_date_time().toString();
+                }
+            }
+
             request.setAttribute("allProducts", allModels.size());
             request.setAttribute("allModels", allModels);
             request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
@@ -228,6 +239,8 @@ public class CRMDashboardController extends HttpServlet {
             request.setAttribute("total_dealers", dealers_list.size());
             request.setAttribute("sales_enquiries", total_enquiries_list.size());
             request.setAttribute("complaint_enquiries", total_complaint_list.size());
+            request.setAttribute("last_time_of_complaint", last_time_of_complaint);
+            request.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
 
             DBConnection.closeConncetion(model.getConnection());
             DBConnection.closeConncetion(profileModel.getConnection());
@@ -245,6 +258,19 @@ public class CRMDashboardController extends HttpServlet {
 
             ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
 
+            String last_time_of_enquiry = "";
+            String last_time_of_complaint = "";
+            for (int j = 0; j < 1; j++) {
+                if (sales_enquiry_list.size() > 0) {
+                    last_time_of_enquiry = sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                }
+                if (complaint_enquiry_list.size() > 0) {
+                    last_time_of_complaint = complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                }
+            }
+
+            request.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
+            request.setAttribute("last_time_of_complaint", last_time_of_complaint);
             request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
             request.setAttribute("sales_enquiries", sales_enquiry_list.size());
             request.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
@@ -263,6 +289,19 @@ public class CRMDashboardController extends HttpServlet {
             ArrayList<Enquiry> sales_enquiry_list = model.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id);
             ArrayList<Enquiry> complaint_enquiry_list = model.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id);
 
+            String last_time_of_enquiry = "";
+            String last_time_of_complaint = "";
+            for (int j = 0; j < 1; j++) {
+                if (sales_enquiry_list.size() > 0) {
+                    last_time_of_enquiry = sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                }
+                if (complaint_enquiry_list.size() > 0) {
+                    last_time_of_complaint = complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                }
+            }
+
+            request.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
+            request.setAttribute("last_time_of_complaint", last_time_of_complaint);
             request.setAttribute("sales_enquiries", sales_enquiry_list.size());
             request.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
             request.setAttribute("pending_orders", pending_orders_list.size());

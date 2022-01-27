@@ -1396,6 +1396,9 @@ public class ProfileModel {
     public int insertKeyPersonRecord(Profile key, Iterator itr, String photo_destination, String iD_destination) throws SQLException {
         //  System.err.println("insert -----------------------");
         int rowsAffected = 0;
+        int rowsAffected2 = 0;
+        int rowsAffected3 = 0;
+        int rowsAffected4 = 0;
         DateFormat dateFormat1 = new SimpleDateFormat("dd.MMMMM.yyyy");
         DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
         java.util.Date date = new java.util.Date();
@@ -1467,6 +1470,43 @@ public class ProfileModel {
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 kp_id = rs.getInt(1);
+                String dealer_sales_map = "insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
+                        + "VALUES( ?, ?, ?)";
+                PreparedStatement pstmt2 = connection.prepareStatement(dealer_sales_map, Statement.RETURN_GENERATED_KEYS);
+                //   pstmt.setInt(1, orgOffice.getOrganisation_id());
+                pstmt2.setInt(1, kp_id);
+                pstmt2.setInt(2, 167);
+                pstmt2.setString(3, "");
+
+                rowsAffected2 = pstmt2.executeUpdate();
+
+                String user_query = "insert into user(user_name,user_password,key_person_id,active,rev_no) "
+                        + "VALUES( ?, ?, ?,?,?)";
+                PreparedStatement pstmt3 = connection.prepareStatement(user_query, Statement.RETURN_GENERATED_KEYS);
+                //   pstmt.setInt(1, orgOffice.getOrganisation_id());
+                pstmt3.setString(1, key.getKey_person_name());
+                pstmt3.setString(2, key.getKey_person_name());
+                pstmt3.setInt(3, kp_id);
+                pstmt3.setString(4, "Y");
+                pstmt3.setInt(5, 0);
+
+                rowsAffected3 = pstmt3.executeUpdate();
+                ResultSet rs3 = pstmt3.getGeneratedKeys();
+                int user_id = 0;
+                if (rs3.next()) {
+                    user_id = rs3.getInt(1);
+                    String user_role_map = "insert into user_role_map(user_id,user_role_id,active,rev_no) "
+                            + "VALUES( ?, ?, ?,?)";
+                    PreparedStatement pstmt4 = connection.prepareStatement(user_role_map, Statement.RETURN_GENERATED_KEYS);
+                    //   pstmt.setInt(1, orgOffice.getOrganisation_id());
+                    pstmt4.setInt(1, user_id);
+                    pstmt4.setInt(2, 5);
+                    pstmt4.setString(3, "Y");
+                    pstmt4.setInt(4, 0);
+
+                    rowsAffected4 = pstmt4.executeUpdate();
+                }
+
             }
         } catch (Exception e) {
             System.out.println("Error:keypersonModel--insertRecord-- " + e);
@@ -1516,6 +1556,7 @@ public class ProfileModel {
                 pstmt.setString(8, "ok");
                 rowsAffected = pstmt.executeUpdate();
                 pstmt.close();
+
             }
 
         }

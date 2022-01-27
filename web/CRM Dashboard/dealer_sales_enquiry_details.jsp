@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -27,15 +25,11 @@
                 <div class="card card-primary rounded-0 profileCard mt-3" style="">
                     <div class="card-body">
                         <div class="mt-1">
-
                             <div class="d-flex justify-content-between">
                                 <div class="text-right">
                                     <a href="DealersOrderController?task=sales_enquiry_list" class="btn btnBack "><i class="fas fa-chevron-circle-left"></i></a>
-
                                 </div>
-
                             </div>
-
                             <c:forEach var="beanType" items="${requestScope['list']}"
                                        varStatus="loopCounter">
                                 <div class="row mt-4">
@@ -136,7 +130,6 @@
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 <script>
-
     function assignToDealer(enquiry_table_id) {
         var dealer_name = $('#dealers' + enquiry_table_id).val();
         $.ajax({
@@ -147,6 +140,5 @@
                 // alert(data.message);
             }
         });
-
     }
 </script>

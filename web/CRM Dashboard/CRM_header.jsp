@@ -83,12 +83,12 @@
                             %>
                             <a href="SalesEnquiryController?task=sales_enquiry_list" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("sales_enquiries")%> Sales Enquiry
-                                <span class="float-right text-muted text-sm">3 mins</span>
+                                <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="SalesEnquiryController?task=complaint_enquiry_list" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
-                                <span class="float-right text-muted text-sm">12 hours</span>
+                                <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <!--                            <div class="dropdown-divider"></div>
                                                         <a href="notification.php" class="dropdown-item">
@@ -101,17 +101,17 @@
                             %>
                             <a href="DealersOrderController?task=sales_enquiry_list" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("sales_enquiries")%> Sales Enquiry
-                                <span class="float-right text-muted text-sm">3 mins</span>
+                                <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="DealersOrderController?task=complaint_enquiry_list" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
-                                <span class="float-right text-muted text-sm">12 hours</span>
+                                <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="notification.php" class="dropdown-item">
                                 <i class="far fa-newspaper mr-2"></i> 0 News 
-                                <span class="float-right text-muted text-sm">2 days</span>
+                                <span class="float-right text-muted text-sm"></span>
                             </a>
                             <% }%>
                             <%
@@ -119,12 +119,12 @@
                             %>
                             <a href="ApproveOrdersController?task=sales_enquiry_list" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("sales_enquiries")%> Sales Enquiry
-                                <span class="float-right text-muted text-sm">3 mins</span>
+                                <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="ApproveOrdersController?task=complaint_enquiry_list" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
-                                <span class="float-right text-muted text-sm">12 hours</span>
+                                <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <!--                            <div class="dropdown-divider"></div>
                                                         <a href="notification.php" class="dropdown-item">

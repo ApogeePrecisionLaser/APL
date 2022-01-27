@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -35,8 +33,6 @@
 
                                     </div>
                                     <div class="text-right">
-
-
                                         <c:choose>
                                             <c:when test="${beanType.status =='Enquiry Generated'}">
                                                 <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&state=${beanType.enquiry_state}&city=${beanType.enquiry_city}" class="btn myBtnInfo fontFourteen" title="Assigned To SalesManager">Assign To SalesManager & Dealer</a>
@@ -47,7 +43,6 @@
                                                 <button class="btn myThemeBtn fontFourteen " disabled>${beanType.status}</button>
                                                 <div><span class="text-danger fontFourteen">(${beanType.assigned_to})</span></div>                                            </c:otherwise>
                                         </c:choose>
-
                                     </div>
                                 </div>
 

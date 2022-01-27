@@ -1,9 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -391,13 +388,11 @@
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 <script src="CRM Dashboard/assets2/js/pages/dashboard.js"></script>
-
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOT5yBi-LAmh9P2X0jQmm4y7zOUaWRXI0&sensor=false"></script>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
-
         var latitude = [];
         var longitude = [];
         var dealer_office_name = [];
@@ -451,17 +446,7 @@
                             )
 
                 }
-
-
-
             }
         });
-
-
-
     });
-
-
-
-
 </script>

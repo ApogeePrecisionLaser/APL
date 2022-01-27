@@ -237,44 +237,44 @@ public class HelpModel {
         //Second or Seconds ago calculation
         if (msExpired < milliSecPerMinute) {
             if (Math.round(msExpired / 1000) == 1) {
-                return String.valueOf(Math.round(msExpired / 1000)) + " second ago... ";
+                return String.valueOf(Math.round(msExpired / 1000)) + " second ago";
             } else {
-                return String.valueOf(Math.round(msExpired / 1000) + " seconds ago...");
+                return String.valueOf(Math.round(msExpired / 1000) + " seconds ago");
             }
         } //Minute or Minutes ago calculation
         else if (msExpired < milliSecPerHour) {
             if (Math.round(msExpired / milliSecPerMinute) == 1) {
-                return String.valueOf(Math.round(msExpired / milliSecPerMinute)) + " minute ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerMinute)) + " minute ago";
             } else {
-                return String.valueOf(Math.round(msExpired / milliSecPerMinute)) + " minutes ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerMinute)) + " minutes ago";
             }
         } //Hour or Hours ago calculation
         else if (msExpired < milliSecPerDay) {
             if (Math.round(msExpired / milliSecPerHour) == 1) {
-                return String.valueOf(Math.round(msExpired / milliSecPerHour)) + " hour ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerHour)) + " hour ago";
             } else {
-                return String.valueOf(Math.round(msExpired / milliSecPerHour)) + " hours ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerHour)) + " hours ago";
             }
         } //Day or Days ago calculation
         else if (msExpired < milliSecPerMonth) {
             if (Math.round(msExpired / milliSecPerDay) == 1) {
-                return String.valueOf(Math.round(msExpired / milliSecPerDay)) + " day ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerDay)) + " day ago";
             } else {
-                return String.valueOf(Math.round(msExpired / milliSecPerDay)) + " days ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerDay)) + " days ago";
             }
         } //Month or Months ago calculation 
         else if (msExpired < milliSecPerYear) {
             if (Math.round(msExpired / milliSecPerMonth) == 1) {
-                return String.valueOf(Math.round(msExpired / milliSecPerMonth)) + "  month ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerMonth)) + "  month ago";
             } else {
-                return String.valueOf(Math.round(msExpired / milliSecPerMonth)) + "  months ago... ";
+                return String.valueOf(Math.round(msExpired / milliSecPerMonth)) + "  months ago";
             }
         } //Year or Years ago calculation 
         else {
             if (Math.round(msExpired / milliSecPerYear) == 1) {
-                return String.valueOf(Math.round(msExpired / milliSecPerYear)) + " year ago...";
+                return String.valueOf(Math.round(msExpired / milliSecPerYear)) + " year ago";
             } else {
-                return String.valueOf(Math.round(msExpired / milliSecPerYear)) + " years ago...";
+                return String.valueOf(Math.round(msExpired / milliSecPerYear)) + " years ago";
             }
         }
     }

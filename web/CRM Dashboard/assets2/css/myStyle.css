@@ -16,6 +16,9 @@
 .marginTop40{
     margin-top: 50px;
 }
+.inputHeight34{
+    height:34px;
+}
 
 .myThemeBtn{
     background-color: #102F42;
@@ -204,12 +207,12 @@ table.dataTable tbody th, table.dataTable tbody td{
 /*.table.dataTable thead .sorting {
     background-image: url("");
 }*/
-table.dataTable thead .sorting_asc {
+/*table.dataTable thead .sorting_asc {
     background-image: url() !important;
 }
 #dataPlace label:not(.form-check-label):not(.custom-file-label) {
     display: none;
-}
+}*/
 
 .content-wrapper {
     /*padding-top: 7px;*/
@@ -903,24 +906,35 @@ table.dataTable thead .sorting_asc {
     padding: 2px 15px;
     color: #fff;
     border-radius: 20px;
+    white-space: nowrap;
 }
 .statusDisapprove{
     background-color: #E01634;
     padding: 2px 15px;
     color: #fff;
     border-radius: 20px;
+    white-space: nowrap;
 }
 .statusPending{
     background-color: #ffc107;
     padding: 2px 15px;
     color: #000;
     border-radius: 20px;
+    white-space: nowrap;
 }
 .statusDelivered{
     background-color: #28A745;
     padding: 2px 15px;
     color: #fff;
     border-radius: 20px;
+    white-space: nowrap;
+}
+.statusComplete{
+    background-color: #2eaf2b;
+    padding: 2px 15px;
+    color: #fff;
+    border-radius: 20px;
+    white-space: nowrap;
 }
 
 
@@ -1397,4 +1411,22 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     padding: 0;
     margin-top: 6.97px;
     margin-left: -1rem;
+}
+
+.ui-menu-item-wrapper{
+    font-size: 14px;
+}
+
+
+
+.backBtnAllPage{
+    position: fixed;    
+    width: 45px;
+    height: 45px;
+    right: 15px;
+    bottom: 10px;
+    background-color: #fff;
+    box-shadow: 2px 2px 9px #999;
+    border-radius: 50%;
+    padding: 7px 9px;
 }

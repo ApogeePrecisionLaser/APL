@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -54,7 +52,6 @@
                                                 <th>Person Mobile Number</th>
                                                 <!--<th>Person Email</th>-->
                                                 <th></th>
-
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -80,7 +77,6 @@
                                                             <a class="btn actionView" title="Map Items" href="DealerItemMapController?org_office_id=${beanType.org_office_id}">Map Items</a>
                                                         </div> 
                                                     </td>
-
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -90,7 +86,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="row mt-3">
                 <div class="col-md-12 mt-3 img-thumbnail">

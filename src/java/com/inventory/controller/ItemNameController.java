@@ -443,6 +443,7 @@ public class ItemNameController extends HttpServlet {
             //Auto increment count for item code
             //  counting = model.getCounting();
             List<ItemName> list = model.showData(search_item_name, search_item_type, search_item_code, search_super_child, search_generation);
+            List<ItemName> designation_list = model.getDesignation();
             String auto_item_code = "APL_ITEM_" + counting;
             request.setAttribute("list", list);
             // request.setAttribute("auto_item_code", auto_item_code);
@@ -451,6 +452,7 @@ public class ItemNameController extends HttpServlet {
             request.setAttribute("search_item_code", search_item_code);
             request.setAttribute("search_super_child", search_super_child);
             request.setAttribute("search_generation", search_generation);
+            request.setAttribute("designation_list", designation_list);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
