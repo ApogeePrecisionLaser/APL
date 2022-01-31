@@ -585,6 +585,8 @@
             }
         }
     }
+
+
 </script>
 
 
@@ -644,7 +646,7 @@
                                class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
-                               
+
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Date</label>
@@ -757,8 +759,10 @@
                                         <tr onclick="fillColumn('${beanType.inventory_basic_id}', '${beanType.inventory_id}', '${loopCounter.count}');"
                                             data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}"
                                             data-level="${beanType.generation}" id="table_row">
-                                            <td id="${loopCounter.count }1"><input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
-                                                                                   value="${beanType.item_name}"></td>  
+                                            <td id="${loopCounter.count }1">
+                                                <input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
+                                                       value="${beanType.item_name}">
+                                            </td>  
                                             <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
                                             <td id="${loopCounter.count }3">${beanType.item_code}</td>
                                             <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
@@ -778,8 +782,10 @@
                                         <tr 
                                             data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}"
                                             data-level="${beanType.generation}" id="table_row">
-                                            <td id="${loopCounter.count }1"><input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
-                                                                                   value="${beanType.item_name}"></td>  
+                                            <td id="${loopCounter.count }1">
+                                                <input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
+                                                       value="${beanType.item_name}">
+                                            </td>  
                                             <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
                                             <td id="${loopCounter.count }3">${beanType.item_code}</td>
                                             <td id="${loopCounter.count }4" >${beanType.org_office}</td> 

@@ -6,7 +6,9 @@ package com.inventory.controller;
 
 import com.DBConnection.DBConnection;
 import com.inventory.model.ItemAuthorizationModel;
+import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.ItemAuthorization;
+import com.inventory.tableClasses.ItemName;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -47,12 +49,15 @@ public class ItemAuthorizationController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemAuthorizationModel model = new ItemAuthorizationModel();
+        ItemNameModel model2 = new ItemNameModel();
 
         String search_item_name = "";
         String search_designation = "";
+        String search_org_office = "";
 
         search_item_name = request.getParameter("search_item_name");
         search_designation = request.getParameter("search_designation");
+        search_org_office = request.getParameter("search_org_office");
 
         HttpSession session = request.getSession();
         String loggedUser = "";
@@ -64,9 +69,37 @@ public class ItemAuthorizationController extends HttpServlet {
         if (search_designation == null) {
             search_designation = "";
         }
+        if (search_org_office == null) {
+            search_org_office = "";
+        }
+
+        String logged_user_name = "";
+        String logged_designation = "";
+        String logged_org_name = "";
+        String logged_org_office = "";
+        int logged_org_office_id = 0;
+        int logged_org_name_id = 0;
+        int logged_key_person_id = 0;
+
+        loggedUser = session.getAttribute("user_role").toString();
+
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        } else {
+            logged_user_name = session.getAttribute("logged_user_name").toString();
+            logged_org_name = session.getAttribute("logged_org_name").toString();
+            logged_designation = session.getAttribute("logged_designation").toString();
+            logged_org_office = session.getAttribute("logged_org_office").toString();
+            logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
+            logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
+            logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
+            // office_embedded_dev = session.getAttribute("office_embedded_dev").toString();
+        }
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
+            model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
             System.out.println("error in ItemAuthorizationController setConnection() calling try block" + e);
         }
@@ -91,6 +124,10 @@ public class ItemAuthorizationController extends HttpServlet {
                     if (JQstring.equals("getItemName")) {
                         list = model.getItemName(q);
                     }
+                    if (JQstring.equals("getAllChild")) {
+                        String item_names_id = request.getParameter("item_names_id");
+                        list = model.getAllChild(item_names_id);
+                    }
 
                     if (json != null) {
 
@@ -109,9 +146,23 @@ public class ItemAuthorizationController extends HttpServlet {
             }
 
             String task = request.getParameter("task");
+            String task1 = request.getParameter("task1");
             if (task == null) {
                 task = "";
             }
+            if (task1 == null) {
+                task1 = "";
+            }
+
+            if (task1.equals("viewMappedDesignation")) {
+                String item_names_id = request.getParameter("item_names_id");
+                String org_office = request.getParameter("org_office");
+                List<ItemAuthorization> list = model.getMappedItemDesignation(item_names_id, org_office);
+                request.setAttribute("list", list);
+
+                request.getRequestDispatcher("item_authorization_designation").forward(request, response);
+            }
+
             if (task.equals("Delete")) {
                 model.deleteRecord(Integer.parseInt(request.getParameter("item_authorization_id")));
             } else if (task.equals("Save") || task.equals("Save AS New") || task.equals("Save & Next")) {
@@ -128,27 +179,34 @@ public class ItemAuthorizationController extends HttpServlet {
 
                 ItemAuthorization bean = new ItemAuthorization();
                 bean.setItem_authorization_id(item_authorization_id);
-                bean.setItem_name(request.getParameter("item_name").trim());
-                bean.setDesignation(request.getParameter("designation").trim());
+                String item_checkbox[] = request.getParameterValues("item_checkbox");
+                String des_checkbox[] = request.getParameterValues("designation");
                 bean.setDescription(request.getParameter("description").trim());
-                bean.setQuantity(Integer.parseInt(request.getParameter("quantity").trim()));
-                bean.setMonthly_limit(Integer.parseInt(request.getParameter("monthly_limit").trim()));
-
-                if (item_authorization_id == 0) {
-                    model.insertRecord(bean);
-                } else {
-                    model.updateRecord(bean, item_authorization_id);
+                bean.setOrg_office(request.getParameter("org_office").trim());
+                bean.setQuantity(0);
+                bean.setMonthly_limit(0);
+                for (int i = 0; i < item_checkbox.length; i++) {
+                    bean.setItem_name(item_checkbox[i]);
+                    if (item_authorization_id == 0) {
+                        model.insertRecord(bean, des_checkbox);
+                    } else {
+                        model.updateRecord(bean, item_authorization_id);
+                    }
                 }
             }
 
-            List<ItemAuthorization> list = model.showData(search_item_name, search_designation);
+//            List<ItemAuthorization> list = model.showData(search_item_name, search_designation);
+            List<ItemName> list = model.getItemsList(logged_designation, search_org_office,search_item_name);
+
             request.setAttribute("list", list);
             request.setAttribute("search_item_name", search_item_name);
             request.setAttribute("search_designation", search_designation);
+            request.setAttribute("search_org_office", search_org_office);
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
             DBConnection.closeConncetion(model.getConnection());
+            DBConnection.closeConncetion(model2.getConnection());
 
             request.getRequestDispatcher("item_authorization").forward(request, response);
         } catch (Exception ex) {

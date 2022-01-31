@@ -1,4 +1,3 @@
-
 package com.inventory.model;
 
 import java.sql.Connection;
@@ -429,15 +428,18 @@ public class IndentModel {
         return list;
     }
 
-    public List<Integer> getIdList(String logged_designation) {
+    public List<Integer> getIdList(String logged_designation, String org_office) {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
         try {
             String query = " select itn.item_names_id "
-                    + " from item_names itn, item_type itt,item_authorization ia,designation d where "
-                    + " ia.designation_id=d.designation_id and ia.item_names_id=itn.item_names_id and d.designation='" + logged_designation + "' "
-                    + " and itt.item_type_id=itn.item_type_id  and itn.active='Y' "
-                    + " and itt.active='y' and ia.active='Y' and d.active='Y' ";
+                    + " from item_names itn, item_type itt,item_authorization ia,designation d,org_office oo,org_office_designation_map oodm "
+                    + " where ia.item_names_id=itn.item_names_id "
+                    + " and d.designation='" + logged_designation + "' and oo.org_office_name='" + org_office + "' "
+                    + " and itt.item_type_id=itn.item_type_id  and itn.active='Y' and oodm.designation_id=d.designation_id "
+                    + " and oodm.org_office_id=oo.org_office_id  and ia.designation_id=d.designation_id "
+                    + " and oodm.org_office_designation_map_id=ia.org_office_designation_map_id "
+                    + " and itt.active='y' and ia.active='Y' and d.active='Y' and oo.active='y' and oodm.active='y' ";
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
                 list2.add(rst.getInt(1));
@@ -522,7 +524,7 @@ public class IndentModel {
     }
 
     public List<ItemName> getItemsList(String logged_designation, String checkedValue, int checked_req_qty, String checked_purpose,
-            String checked_item_name, String checked_expected_date_time, String checked_model) {
+            String checked_item_name, String checked_expected_date_time, String checked_model, String org_office) {
         List<ItemName> list = new ArrayList<ItemName>();
         List<ItemName> list1 = new ArrayList<ItemName>();
         List<Integer> desig_map_list = new ArrayList<Integer>();
@@ -535,7 +537,7 @@ public class IndentModel {
         String search_super_child = "";
         String search_generation = "";
         try {
-            desig_map_list = getIdList(logged_designation);
+            desig_map_list = getIdList(logged_designation, org_office);
             ItemNameModel model = new ItemNameModel();
             List<ItemName> allIdList = model.showData(search_item_name, search_item_type, search_item_codee, search_super_child, search_generation);
             for (int k = 0; k < allIdList.size(); k++) {
@@ -823,7 +825,8 @@ public class IndentModel {
             System.out.println("IndentModel closeConnection() Error: " + e);
         }
     }
-     public Connection getConnection() {
+
+    public Connection getConnection() {
         return connection;
     }
 }

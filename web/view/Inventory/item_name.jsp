@@ -41,6 +41,13 @@
     .ui-widget{
         font-size: 1.4em;
     }
+
+    .scrollable {
+        overflow: auto;
+        height: 100px;
+        border: 1px solid #332A7C;
+        font-size: 13px;
+    }
 </style>
 <script>
     $(document).ready(function () {
@@ -221,13 +228,45 @@
         });
 
 
-        $("#designation").autocomplete({
+
+//
+//        $("#designation").autocomplete({
+//            source: function (request, response) {
+//                var random = document.getElementById("designation").value;
+//                var org_office = document.getElementById("org_office").value;
+//                if (org_office == '') {
+//                    alert("Please select org office!..");
+//                    return  false;
+//                }
+//                $.ajax({
+//                    url: "ItemNameController",
+//                    dataType: "json",
+//                    data: {action1: "getDesignation", str: random, org_office: org_office},
+//                    success: function (data) {
+//                        console.log(data);
+//                        response(data.list);
+//                    }, error: function (error) {
+//                        console.log(error.responseText);
+//                        response(error.responseText);
+//                    }
+//                });
+//            },
+//            select: function (events, ui) {
+//                console.log(ui);
+//                $('#designation').html('<input type="checkbox" name="designation_check">' + ui.item.label);
+//                return false;
+//            }
+//        });
+
+        $("#org_office").autocomplete({
             source: function (request, response) {
-                var random = document.getElementById("designation").value;
+                var random = document.getElementById("org_office").value;
+                var search_org_office = "";
+                //  alert("jfhg");
                 $.ajax({
-                    url: "ItemAuthorizationController",
+                    url: "InventoryBasicController",
                     dataType: "json",
-                    data: {action1: "getDesignation", str: random},
+                    data: {action1: "getOrgOffice", str: random, search_org_office: search_org_office},
                     success: function (data) {
                         console.log(data);
                         response(data.list);
@@ -239,10 +278,11 @@
             },
             select: function (events, ui) {
                 console.log(ui);
-                $('#designation').val(ui.item.label);
+                $('#org_office').val(ui.item.label);
                 return false;
             }
         });
+
 
 
 
@@ -255,6 +295,50 @@
 //            $('#item_code').val(auto_item_code);
 //        });
     });
+
+
+
+    function getDesignation() {
+        var random = "";
+        var org_office = document.getElementById("org_office").value;
+        $('#des_list').empty();
+        if (org_office == '') {
+            alert("Please select org office!..");
+            return  false;
+        }
+        $.ajax({
+            url: "ItemNameController",
+            dataType: "json",
+            data: {action1: "getDesignation", str: random, org_office: org_office},
+            success: function (data) {
+                console.log(data);
+//                response(data.list);
+//                alert(data.list.length);
+                console.log(data.list.length);
+                if (data.list.length > 1) {
+                    $('#des_list').append('<input name="designation" type="checkbox" id="checkAll" value="All" onchange="checkAllCheckBoxes()" > All');
+                }
+                for (var i = 0; i < data.list.length; i++) {
+                    $('#des_list').append(' <li><input name="designation" type="checkbox" id="des_check' + data.list[i] + '" value="' + data.list[i] + '"> ' + data.list[i] + '</li>');
+                }
+
+//                $('#designation').html('<input type="checkbox" name="designation_check">' + );
+            }
+        });
+    }
+
+    function checkAllCheckBoxes() {
+        var checkboxes = document.getElementsByTagName('input');
+        var val = null;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].type == 'checkbox') {
+                if (val === null)
+                    val = checkboxes[i].checked;
+                checkboxes[i].checked = val;
+            }
+        }
+    }
+
     function makeEditable(id) {
         document.getElementById("item_type").disabled = false;
         document.getElementById("item_name").disabled = false;
@@ -393,12 +477,14 @@
             $('#HSNCode_div').show();
             $('.is_super_child_yes').show();
             $('#designation_div').show();
+            $('#org_office_div').show();
 
         } else {
 //            $('#quantity_div').hide();
             $('#HSNCode_div').hide();
             $('.is_super_child_yes').hide();
             $('#designation_div').hide();
+            $('#org_office_div').hide();
         }
     }
     function getOrgChartData(item_name) {
@@ -719,20 +805,50 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-md-3"  id="org_office_div">
+                            <div class="">
+                                <div class="form-group">
+                                    <label>Org Office<span class="text-danger">*</span></label>
+                                    <input class="form-control myInput" type="text" id="org_office" name="org_office" 
+                                           value="${org_office}" onblur="getDesignation()">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="col-md-3"  id="designation_div">
                             <div class="">
                                 <div class="form-group">
                                     <label>Designation<span class="text-danger">*</span></label>
-                                    <input class="form-control myInput" type="text" id="designation" name="designation" value="${designation}" >
-                                    <!--                                    <select multiple="" name="designation">
-                                    
-                                    <c:forEach var="beanType2" items="${requestScope['designation_list']}"
-                                               varStatus="loopCounter">
-                                        <option>${beanType2.designation}</option>
-                                    </c:forEach>
-                                </select>-->
+                                    <div class="scrollable" id="des_list">
+                                        <c:if test="${all_checked=='checked'}">
+                                            <li>
+                                                <input name="designation" checked="" type="checkbox" id="checkAll" onchange="checkAllCheckBoxes()" value="All"> All
+                                            </li>
+                                        </c:if>
+                                        <c:if test="${all_checked!='checked'}">
+                                            <li>
+                                                <input name="designation"  type="checkbox" id="checkAll" onchange="checkAllCheckBoxes()" value="All"> All
+                                            </li>
+                                        </c:if>
+
+                                        <c:forEach var="test" items="${requestScope['desig_map_listAllFinal']}"
+                                                   varStatus="loopCounter">
+                                            <li>
+                                                <input name="designation" checked="" type="checkbox" id="des_check${test}" value="${test}"> ${test}
+                                            </li>
+                                        </c:forEach>
+                                        <c:forEach var="test2" items="${requestScope['all_des_list']}"
+                                                   varStatus="loopCounter">
+                                            <li>
+                                                <input name="designation" type="checkbox" id="des_check${test2}" value="${test2}"> ${test2}
+                                            </li>
+                                        </c:forEach>
+
+
+                                        <!--                                        <li>
+                                                                                    <input name="designation" type="checkbox" id="check_all" value="All"> All
+                                                                                </li>-->
+                                    </div>
 
                                 </div>
                             </div>
@@ -749,18 +865,23 @@
                             </div>
                         </div>
 
+                        <div class="col-md-3" style="display:none" id="org_office_div">
+                            <div class="">
+                                <div class="form-group">
+                                    <label>Org Office<span class="text-danger">*</span></label>
+                                    <input class="form-control myInput" type="text" id="org_office" name="org_office"  
+                                           value="${org_office}"  onblur="getDesignation()">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-md-3" style="display:none" id="designation_div">
                             <div class="">
                                 <div class="form-group">
                                     <label>Designation<span class="text-danger">*</span></label>
-                                    <input class="form-control myInput" type="text" id="designation" name="designation" value="" >
-                                    <!--                                    <select multiple=""  class="form-control myInput" name="designation">
-                                    
-                                    <c:forEach var="beanType2" items="${requestScope['designation_list']}"
-                                               varStatus="loopCounter">
-                                        <option>${beanType2.designation}</option>
-                                    </c:forEach>
-                                </select>-->
+                                    <div class="scrollable" id="des_list">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -548,7 +548,7 @@ public class ItemNameModel {
     }
 
     public int insertRecord(ItemName item_name, Iterator itr, ModelName modelBean, int j, String image_name, String destination,
-            ItemAuthorization itemAuthBean) throws SQLException {
+            ItemAuthorization itemAuthBean, List<String> des_list) throws SQLException {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
                 + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -641,34 +641,41 @@ public class ItemNameModel {
                     ResultSet rs = pstmt.getGeneratedKeys();
                     while (rs.next()) {
                         item_id = rs.getInt(1);
-                        int designation_id = getDesignationId(itemAuthBean.getDesignation());
-                        String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
-                                + " revision_no,active,remark,qty,monthly_limit) "
-                                + " VALUES(?,?,?,?,?,?,?,?) ";
+                        for (int k = 0; k < des_list.size(); k++) {
+                            int org_office_des_map_id = getOrgOfficeDesignationMapId(item_name.getOrg_office(), des_list.get(k));
+                            if (!des_list.get(k).equals("All") && !des_list.get(k).equals("")) {
+                                int designation_id = getDesignationId(des_list.get(k));
+                                String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+                                        + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id) "
+                                        + " VALUES(?,?,?,?,?,?,?,?,?) ";
 
-                        String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
-                                + " item_names_id='" + item_id + "' and designation_id='" + designation_id + "'"
-                                + " and active='Y'  ";
-                        int auth_map_count = 0;
-                        PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
-                        ResultSet rs1 = pstmt1.executeQuery();
-                        while (rs1.next()) {
-                            auth_map_count = rs1.getInt("count");
-                        }
-                        if (auth_map_count > 0) {
-                            message = "Designation has already mapped to this item!..";
-                            msgBgColor = COLOR_ERROR;
-                        } else {
-                            PreparedStatement pstmt_auth = connection.prepareStatement(item_auth_query);
-                            pstmt_auth.setInt(1, item_id);
-                            pstmt_auth.setInt(2, designation_id);
-                            pstmt_auth.setString(3, "");
-                            pstmt_auth.setInt(4, itemAuthBean.getRevision_no());
-                            pstmt_auth.setString(5, "Y");
-                            pstmt_auth.setString(6, "OK");
-                            pstmt_auth.setInt(7, 0);
-                            pstmt_auth.setInt(8, 0);
-                            rowsAffected = pstmt_auth.executeUpdate();
+                                String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
+                                        + " item_names_id='" + item_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
+                                        + " and active='Y'  ";
+                                int auth_map_count = 0;
+                                PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
+                                ResultSet rs1 = pstmt1.executeQuery();
+                                while (rs1.next()) {
+                                    auth_map_count = rs1.getInt("count");
+                                }
+                                if (auth_map_count > 0) {
+                                    message = "Designation has already mapped to this item!..";
+                                    msgBgColor = COLOR_ERROR;
+                                } else {
+                                    PreparedStatement pstmt_auth = connection.prepareStatement(item_auth_query);
+                                    pstmt_auth.setInt(1, item_id);
+                                    pstmt_auth.setInt(2, designation_id);
+                                    pstmt_auth.setString(3, "");
+                                    pstmt_auth.setInt(4, itemAuthBean.getRevision_no());
+                                    pstmt_auth.setString(5, "Y");
+                                    pstmt_auth.setString(6, "OK");
+                                    pstmt_auth.setInt(7, 0);
+                                    pstmt_auth.setInt(8, 0);
+                                    pstmt_auth.setInt(9, org_office_des_map_id);
+                                    rowsAffected = pstmt_auth.executeUpdate();
+                                }
+
+                            }
                         }
                     }
                 }
@@ -1404,6 +1411,24 @@ public class ItemNameModel {
         return id;
     }
 
+    public int getOrgOfficeDesignationMapId(String org_office, String designation) {
+        String query = " SELECT org_office_designation_map_id "
+                + " FROM org_office_designation_map oodm,org_office oo,designation d WHERE d.active='Y' and oo.active='Y' "
+                + " and oodm.active='Y' and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
+                + " and oo.org_office_name='" + org_office + "' and d.designation='" + designation + "' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            //// pstmt.setString(1, item_type);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("org_office_designation_map_id");
+        } catch (Exception e) {
+            System.out.println("ItemNameModel getOrgOfficeDesignationMapId Error: " + e);
+        }
+        return id;
+    }
+
     public String getItemTypeName(int item_type) {
         String query = "SELECT item_type FROM item_type WHERE item_type_id = ? and active='Y'";
         String name = "";
@@ -1587,6 +1612,32 @@ public class ItemNameModel {
             }
         } catch (Exception e) {
             System.out.println("Error:ItemNameModel--getSuperChild()-- " + e);
+        }
+        return list;
+    }
+
+    public List<String> getDesignation(String q, String org_office) {
+        List<String> list = new ArrayList<String>();
+        String query = " SELECT distinct d.designation from designation d,org_office oo,org_office_designation_map oodm "
+                + " where d.active='Y' and oo.active='Y' and oodm.active='Y' "
+                + " and d.designation_id=oodm.designation_id and oo.org_office_id=oodm.org_office_id and oo.org_office_name='" + org_office + "' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String designation = (rset.getString("designation"));
+                if (designation.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(designation);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such designation  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:ItemAuthorizationModel--getDesignation()-- " + e);
         }
         return list;
     }

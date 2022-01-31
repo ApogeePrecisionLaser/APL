@@ -1,4 +1,3 @@
-
 package com.inventory.model;
 
 import java.io.ByteArrayOutputStream;
@@ -1411,7 +1410,8 @@ public class InventoryBasicModel {
             System.out.println("InventoryBasicModel closeConnection() Error: " + e);
         }
     }
-     public Connection getConnection() {
+
+    public Connection getConnection() {
         return connection;
     }
 }

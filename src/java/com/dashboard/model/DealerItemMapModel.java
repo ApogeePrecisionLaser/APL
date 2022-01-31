@@ -258,9 +258,12 @@ public class DealerItemMapModel {
         return id;
     }
 
-    public int getItemAuthorizationId(int item_name_id) {
-        String query = " SELECT item_authorization_id FROM item_authorization WHERE item_names_id = '" + item_name_id + "' "
-                + " and active='Y' and designation_id=8 ";
+    public int getItemAuthorizationId(int item_name_id, String org_office_id) {
+        String query = " SELECT item_authorization_id FROM item_authorization ia,org_office_designation_map oodm,designation d,org_office oo "
+                + " WHERE ia.item_names_id = '" + item_name_id + "' "
+                + " and ia.active='Y' and oo.org_office_id='" + org_office_id + "' and d.designation_id=8 and d.active='Y' and oo.active='Y' "
+                + " and oodm.active='Y' and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
+                + " and ia.org_office_designation_map_id=oodm.org_office_designation_map_id ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -296,7 +299,7 @@ public class DealerItemMapModel {
         int rowsAffected = 0;
         int item_name_id = getItemNamesId(bean.getItem_name());
         int model_id = getModelId(bean.getModel());
-        int item_authorization_id = getItemAuthorizationId(item_name_id);
+        int item_authorization_id = getItemAuthorizationId(item_name_id, org_office_id);
 
         int map_count = 0;
         try {

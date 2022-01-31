@@ -1970,5 +1970,14 @@
     </servlet-mapping>   
     <!-- end Support Messages -->
     
+    
+     <servlet>
+        <servlet-name>item_authorization_designation</servlet-name>
+        <jsp-file>/view/Inventory/item_authorization_designation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>item_authorization_designation</servlet-name>
+        <url-pattern>/item_authorization_designation</url-pattern>
+    </servlet-mapping>
 
 </web-app>

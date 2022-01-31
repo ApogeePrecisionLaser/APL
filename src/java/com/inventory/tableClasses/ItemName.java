@@ -45,6 +45,7 @@ public class ItemName {
     private String checkedValue;
     private String HSNCode;
     private String designation;
+    private String org_office;
     
     /**
      * @return the item_names_id
@@ -492,6 +493,20 @@ public class ItemName {
      */
     public void setDesignation(String designation) {
         this.designation = designation;
+    }
+
+    /**
+     * @return the org_office
+     */
+    public String getOrg_office() {
+        return org_office;
+    }
+
+    /**
+     * @param org_office the org_office to set
+     */
+    public void setOrg_office(String org_office) {
+        this.org_office = org_office;
     }
 
 }

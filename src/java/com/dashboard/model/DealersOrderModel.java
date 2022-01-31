@@ -121,15 +121,17 @@ public class DealersOrderModel {
 
             String query = " select itn.item_name  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
                     + " designation d,manufacturer mr, "
-                    + " item_image_details iid,dealer_item_map dim,org_office oo  where itn.active='Y' and mim.active='Y' "
+                    + " item_image_details iid,dealer_item_map dim,org_office oo,org_office_designation_map oodm "
+                    + " where itn.active='Y' and mim.active='Y' and oodm.active='Y' and oodm.designation_id=d.designation_id and "
+                    + " oodm.org_office_id=oo.org_office_id and d.designation='Owner' "
                     + " and m.active='Y' and d.active='Y' and mr.active='Y' and iid.active='Y' "
                     + " and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id  and ia.active='Y' "
                     + " and itn.item_names_id= mim.item_names_id and dim.active='Y' and oo.active='Y' "
                     + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id and ia.item_names_id=itn.item_names_id and "
                     + " d.designation_id=ia.designation_id  and dim.org_office_id=oo.org_office_id "
                     + " and dim.item_authorization_id=ia.item_authorization_id "
-                    + " and oo.org_office_id='" + logged_org_office_id + "' ";
-
+                    + " and oodm.org_office_designation_map_id=ia.org_office_designation_map_id "
+                    + " and oo.org_office_id='" + logged_org_office_id + "'  ";
             if (!search_item.equals("") && search_item != null) {
                 query += " and itn.item_name='" + search_item + "' ";
             }
@@ -168,14 +170,16 @@ public class DealersOrderModel {
                     String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
                             + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
                             + " designation d,manufacturer mr,"
-                            + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo,dealer_item_map dim  "
+                            + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo,dealer_item_map dim, "
+                            + " org_office_designation_map oodm  "
                             + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
                             + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
-                            + " and inv.active='Y'  and ia.active='Y' "
+                            + " and inv.active='Y'  and ia.active='Y' and oodm.active='Y' and oodm.designation_id=d.designation_id and "
+                            + " oodm.org_office_id=oo.org_office_id and d.designation='Owner' "
                             + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                             + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
                             + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
-                            + "  and  d.designation_id=ia.designation_id "
+                            + "  and  d.designation_id=ia.designation_id and oodm.org_office_designation_map_id=ia.org_office_designation_map_id "
                             + " and dim.org_office_id=oo.org_office_id and dim.active='Y' and dim.model_id=m.model_id "
                             + " and dim.item_authorization_id=ia.item_authorization_id and oo.org_office_id='" + logged_org_office_id + "' ";
 

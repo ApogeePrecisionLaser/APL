@@ -1,8 +1,13 @@
 <%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="collapsetable/css/bootstrap.min.css">
+<!--<script src="collapsetable/js/jquery-3.1.1.min.js"></script>-->
+<!--<script src="collapsetable/js/bootstrap.min.js"></script>-->
+<script src="collapsetable/js/javascript.js"></script>
 
 <style>
     .selected_row {
@@ -10,8 +15,53 @@
         color: blue;
         border: 3px solid black;
     }
-    table.dataTable {      
-        border-collapse: collapse;
+
+
+    .treegrid-indent {
+        width: 0px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
+    }
+
+    .treegrid-expander {
+        width: 0px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
+        left:-17px;
+        cursor: pointer;
+    }
+    label{
+        font-size: 13px;
+    }
+    table{
+        font-size:13px
+    }
+    .ui-widget{
+        font-size: 1.4em;
+    }
+    .table_div{
+        height:300px;
+        overflow-y: scroll;
+        position:relative;
+    }
+    .table_div{
+        height:300px;
+        overflow-y: scroll;
+        position:relative;
+    }
+    .scrollable {
+        overflow: auto;
+        height: 60px;
+        border: 1px solid #332A7C;
+        font-size: 13px;
+    }
+    .scrollable2 {
+        overflow: auto;
+        height: 100px;
+        border: 1px solid #332A7C;
+        font-size: 13px;
     }
 </style>
 <script>
@@ -28,8 +78,6 @@
             }
         });
     });
-
-
     $(function () {
         setTimeout(function () {
             $('#message').fadeOut('fast');
@@ -56,7 +104,6 @@
                 return false;
             }
         });
-
         $("#designation").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("designation").value;
@@ -79,8 +126,6 @@
                 return false;
             }
         });
-
-
         $("#search_item_name").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_name").value;
@@ -103,7 +148,6 @@
                 return false;
             }
         });
-
         $("#search_designation").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_designation").value;
@@ -126,16 +170,160 @@
                 return false;
             }
         });
+        $("#org_office").autocomplete({
+            source: function (request, response) {
+//                if ($('.messageCheckbox').prop("checked") == false) {
+//                    alert("Please Select any one of the item!...");
+//                    return  false;
+//                }
+                var random = document.getElementById("org_office").value;
+                var search_org_office = "";
+                //  alert("jfhg");
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getOrgOffice", str: random, search_org_office: search_org_office},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#org_office').val(ui.item.label);
+                return false;
+            }
+        });
+        $("#search_org_office").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("search_org_office").value;
+                var search_org_office = "";
+                //  alert("jfhg");
+                $.ajax({
+                    url: "InventoryBasicController",
+                    dataType: "json",
+                    data: {action1: "getOrgOffice", str: random, search_org_office: search_org_office},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#search_org_office').val(ui.item.label);
+                return false;
+            }
+        });
     });
+    function getDesignation() {
+        var random = "";
+        var org_office = document.getElementById("org_office").value;
+        $('#des_list').empty();
+        if (org_office == '') {
+            alert("Please select org office!..");
+            return  false;
+        }
+        $.ajax({
+            url: "ItemNameController",
+            dataType: "json",
+            data: {action1: "getDesignation", str: random, org_office: org_office},
+            success: function (data) {
+                console.log(data);
+//                response(data.list);
+//                alert(data.list.length);
+                console.log(data.list.length);
+                if (data.list.length > 1) {
+                    $('#des_list').append('<input name="designation"  type="checkbox" id="checkAllDes" value="All" onchange="checkAllCheckBoxes()" > All');
+                }
+                for (var i = 0; i < data.list.length; i++) {
+                    $('#des_list').append(' <li><input name="designation"  class="des_checkboxes" type="checkbox" id="des_check' + data.list[i] + '" value="' + data.list[i] + '"> ' + data.list[i] + '</li>');
+                }
+
+//                $('#designation').html('<input type="checkbox" name="designation_check">' + );
+            }
+        });
+    }
+    function checkAllCheckBoxes() {
+        var checkboxes = document.getElementsByClassName("des_checkboxes");
+        var val = null;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if ($('#checkAllDes').prop("checked") == true) {
+                $('.des_checkboxes').attr("checked", true);
+            } else {
+
+                $('.des_checkboxes').attr("checked", false);
+            }
+        }
+
+    }
 
 
+//        var checkboxes = document.getElementsByTagName('input');
+//        var val = null;
+//        for (var i = 0; i < checkboxes.length; i++) {
+//            if (checkboxes[i].type == 'checkbox') {
+//                if (val === null)
+//                    val = checkboxes[i].checked;
+//                checkboxes[i].checked = val;
+//            }
+//        }
+    function checkAll() {
+        var checkboxes = document.getElementsByClassName("messageCheckbox");
+        var val = null;
+        for (var i = 0; i < checkboxes.length; i++) {
+            if ($('#checkall').prop("checked") == true) {
+                $('.messageCheckbox').attr("checked", true);
+            } else {
+
+                $('.messageCheckbox').attr("checked", false);
+            }
+        }
+
+    }
+
+    function checkUncheck(item_names_id) {
+        if ($('#pchcheck' + item_names_id).prop("checked") == true) {
+            $.ajax({
+                url: "ItemAuthorizationController",
+                dataType: "json",
+                data: {action1: "getAllChild", item_names_id: item_names_id},
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.list);
+                    for (var i = 0; i < data.list.length; i++) {
+                        $('#pchcheck' + data.list[i]).attr("checked", true);
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: "ItemAuthorizationController",
+                dataType: "json",
+                data: {action1: "getAllChild", item_names_id: item_names_id},
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.list);
+                    for (var i = 0; i < data.list.length; i++) {
+                        $('#pchcheck' + data.list[i]).attr("checked", false);
+                    }
+                }
+            });
+        }
+    }
 
     function makeEditable(id) {
-        document.getElementById("item_name").disabled = false;
-        document.getElementById("designation").disabled = false;
-        document.getElementById("quantity").disabled = false;
+//        document.getElementById("item_name").disabled = false;
+//        document.getElementById("quantity").disabled = false;
         document.getElementById("description").disabled = false;
-        document.getElementById("monthly_limit").disabled = false;
+//        document.getElementById("monthly_limit").disabled = false;
 
         document.getElementById("save").disabled = false;
         if (id === 'new') {
@@ -220,10 +408,17 @@
         }
     }
 
-    function openPopUp(window_name, popup_height, popup_width, id) {
+
+    function viewMappedDesignation(item_names_id, org_office) {
+        popupwin = openPopUp("Show Mapped Designation", 1000, 1000, item_names_id, org_office);
+    }
+
+    function openPopUp(window_name, popup_height, popup_width, item_names_id, org_office) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
+        var queryString = "task1=viewMappedDesignation&item_names_id=" + item_names_id + "&org_office=" + org_office;
+        var url = "ItemAuthorizationController?" + queryString;
         return window.open(url, window_name, window_features);
     }
     if (!document.all) {
@@ -270,13 +465,19 @@
                         <input type="text" Placeholder="Item Name" name="search_item_name" id="search_item_name" value="${search_item_name}" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
-
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
-                        <label>Designation</label>
-                        <input type="text" Placeholder="Designation" name="search_designation" id="search_designation" value="${search_designation}" class="form-control myInput searchInput1 w-100">
+                        <label>Org Office</label>
+                        <input type="text" Placeholder="Org Office" name="search_org_office" id="search_org_office" value="${search_org_office}" class="form-control myInput searchInput1 w-100">
                     </div>
-                </div>        
+                </div>
+
+                <!--                <div class="col-md-4">
+                                    <div class="form-group mb-md-0">
+                                        <label>Designation</label>
+                                        <input type="text" Placeholder="Designation" name="search_designation" id="search_designation" value="${search_designation}" class="form-control myInput searchInput1 w-100">
+                                    </div>
+                                </div>        -->
             </div>
             <hr>
             <div class="row">
@@ -288,63 +489,74 @@
     </div>
 </section>
 
-<c:if test="${isSelectPriv eq 'Y'}">
-    <section class="marginTop30 ">
+
+<form name="form2" method="POST" action="ItemAuthorizationController" onsubmit="return verify()" >
+    <section class="marginTop30">
         <div class="container organizationBox">
             <div class="headBox">
-                <h5 class="">Search List</h5>
+                <h5 class="">Items List</h5>
             </div>
-            <div class="row mt-3 myTable">
-                <div class="col-md-12">
-                    <div class="table-responsive verticleScroll">
-                        <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
-                            <thead>
-                                <tr>
-                                    <th>S.No.</th>
-                                    <th>Item Name</th>
-                                    <th>Designation</th>
-                                    <th>Quantity</th>
-                                    <th>Monthly Limit</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="beanType" items="${requestScope['list']}"
-                                           varStatus="loopCounter">
-                                    <tr
-                                        onclick="fillColumn('${beanType.item_authorization_id}', '${loopCounter.count }');">
-                                        <td>${loopCounter.count }</td>               
-                                        <td id="${loopCounter.count }2">${beanType.item_name}</td>   
-                                        <td id="${loopCounter.count }3">${beanType.designation}</td>
-                                        <td id="${loopCounter.count }4">${beanType.quantity}</td> 
-                                        <td id="${loopCounter.count }5">${beanType.monthly_limit}</td> 
-                                        <td id="${loopCounter.count }6">${beanType.description}</td>  
+            <div class="row mt-3 table_div">
 
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>    
-                    </div>
-                </div>
-            </div>
+                <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
+
+                    <tr>
+                        <th><input type="checkbox" onchange="checkAll()" name="chk[]" id="checkall" /></th>
+                        <th>Item Name</th>
+                        <th >Org Office</th>
+                        <!--<th >Designation</th>-->
+                    </tr>
+                    <tbody>
+                        <c:forEach var="beanType" items="${requestScope['list']}"
+                                   varStatus="loopCounter">
+
+                            <tr data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                <td>
+                                    <input type="checkbox" class="messageCheckbox" onchange="checkUncheck('${beanType.item_names_id}')" 
+                                           id="pchcheck${beanType.item_names_id}" name="item_checkbox" value="${beanType.item_name}">
+                                </td>
+                                <td id="${beanType.item_names_id }" data-column="name">${beanType.item_name}</td>
+                                <td>
+                                    <c:if test="${beanType.org_office!=''}">
+                                        <div class="scrollable">
+                                            <c:forTokens items="${beanType.org_office}" delims="," var="mySplit">
+                                                <li>  
+                                                    <a href="" onclick="viewMappedDesignation('${beanType.item_names_id }', '${mySplit}')" value="${mySplit}">${mySplit}</a>
+                                                    </br>
+                                                </li>
+                                            </c:forTokens>
+                                        </div>
+                                    </c:if>
+
+                                </td>
+                                <!--                                <td> 
+                                
+                                                                </td>-->
+                            </tr>
+
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+            </div>      
         </div>
     </section>
-</c:if>
 
-<section class="marginTop30">
-    <div class="container organizationBox">
-        <div class="headBox">
-            <h5 class="">Data Entry</h5>
-        </div>
-        <form name="form2" method="POST" action="ItemAuthorizationController" onsubmit="return verify()" >
+    <section class="marginTop30">
+        <div class="container organizationBox">
+            <div class="headBox">
+                <h5 class="">Data Entry</h5>
+            </div>
+
             <div class="row mt-3">
                 <div class="col-md-3">
                     <div class="">
                         <div class="form-group">
-                            <label>Item Name<span class="text-danger">*</span></label>
+                            <label>Org Office<span class="text-danger">*</span></label>
                             <input type="hidden" name="item_authorization_id" id="item_authorization_id" value="">
 
-                            <input class="form-control myInput" type="text" id="item_name" name="item_name" value="" disabled >
+                            <input class="form-control myInput" type="text" id="org_office" name="org_office" 
+                                   value="${org_office}" onblur="getDesignation()">
                         </div>
                     </div>
                 </div>
@@ -353,37 +565,39 @@
                     <div class="">
                         <div class="form-group">
                             <label>Designation<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="designation" name="designation" value="" disabled >
+                            <div class="scrollable2" id="des_list">
+
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
 
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Quantity<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="">
-                        <div class="form-group">
-                            <label>Monthly Limit<span class="text-danger">*</span></label>
-                            <input class="form-control myInput" type="text" id="monthly_limit" name="monthly_limit" value="" disabled>
-                        </div>
-                    </div>
-                </div>
+                <!--                <div class="col-md-3">
+                                    <div class="">
+                                        <div class="form-group">
+                                            <label>Quantity<span class="text-danger">*</span></label>
+                                            <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class="col-md-3">
+                                    <div class="">
+                                        <div class="form-group">
+                                            <label>Monthly Limit<span class="text-danger">*</span></label>
+                                            <input class="form-control myInput" type="text" id="monthly_limit" name="monthly_limit" value="" disabled>
+                                        </div>
+                                    </div>
+                                </div>-->
 
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">
                             <label>Description</label>
                             <!--<input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >-->
-                            <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
+                            <textarea class="form-control myTextArea" id="description" name="description" name="description" ></textarea>
                         </div>
                     </div>
                 </div>
@@ -400,25 +614,24 @@
                 <input type="hidden" id="clickedButton" value="">
                 <div class="col-md-12 text-center">                       
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','update') eq 'True'}">
-                    <input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">
+                        <!--<input type="button" class="btn normalBtn" name="task" id="edit" value="Edit" onclick="makeEditable(id)" disabled="">-->
                     </c:if>
-                    
+
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','insert') eq 'True'}">
-                    <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)" disabled="">
+                        <input type="submit" class="btn normalBtn" name="task" id="save" value="Save" onclick="setStatus(id)">
                     </c:if>
-                    
+
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','insert') eq 'True'}">
-                    <input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">
+                        <!--<input type="reset" class="btn normalBtn" name="task" id="new" value="New" onclick="makeEditable(id)">-->
                     </c:if>
-                    
+
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','delete') eq 'True'}">
-                    <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                        <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
                     </c:if>
                 </div>
             </div>
-        </form>
-    </div>
-</section>
+        </div>
+    </section>
+</form>
 
 <%@include file="../layout/footer.jsp" %>
-

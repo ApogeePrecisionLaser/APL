@@ -13,6 +13,7 @@ import java.util.List;
 public class ItemAuthorization {
 
     private int item_authorization_id;
+    private int org_office_designation_map_id;
     private String item_name;
     private int item_names_id;
     private String description;
@@ -20,6 +21,7 @@ public class ItemAuthorization {
     private int designation_id;
     private String active;
     private String remark;
+    private String org_office;
     private int revision_no;
     private int quantity;
     private int monthly_limit;
@@ -176,6 +178,34 @@ public class ItemAuthorization {
      */
     public void setMonthly_limit(int monthly_limit) {
         this.monthly_limit = monthly_limit;
+    }
+
+    /**
+     * @return the org_office_designation_map_id
+     */
+    public int getOrg_office_designation_map_id() {
+        return org_office_designation_map_id;
+    }
+
+    /**
+     * @param org_office_designation_map_id the org_office_designation_map_id to set
+     */
+    public void setOrg_office_designation_map_id(int org_office_designation_map_id) {
+        this.org_office_designation_map_id = org_office_designation_map_id;
+    }
+
+    /**
+     * @return the org_office
+     */
+    public String getOrg_office() {
+        return org_office;
+    }
+
+    /**
+     * @param org_office the org_office to set
+     */
+    public void setOrg_office(String org_office) {
+        this.org_office = org_office;
     }
 
    

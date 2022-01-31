@@ -54,6 +54,8 @@ public class ItemNameController extends HttpServlet {
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         ItemNameModel model = new ItemNameModel();
         ModelNameModel model2 = new ModelNameModel();
+        List<String> des_list = new ArrayList<String>();
+
         String loggedUser = "";
         String active = "Y";
         String ac = "ACTIVE RECORDS";
@@ -138,6 +140,11 @@ public class ItemNameController extends HttpServlet {
                     if (JQstring.equals("getSuperChild")) {
                         list = model.getSuperChild(q);
                     }
+
+                    if (JQstring.equals("getDesignation")) {
+                        String org_office = request.getParameter("org_office");
+                        list = model.getDesignation(q, org_office);
+                    }
                     if (JQstring.equals("getItems")) {
                         JSONObject obj1 = new JSONObject();
                         JSONArray arrayObj = new JSONArray();
@@ -185,7 +192,9 @@ public class ItemNameController extends HttpServlet {
                     if (item.isFormField()) {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getString() + "\n");
                         map.put(item.getFieldName(), item.getString("UTF-8"));
-
+                        if (item.getFieldName().equals("designation")) {
+                            des_list.add(item.getString());
+                        }
                     } else {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getName());
                         if (item.getName() == null || item.getName().isEmpty()) {
@@ -203,6 +212,7 @@ public class ItemNameController extends HttpServlet {
                             imagePath = image_folder;
                             image_name_list.add(image_name);
                             list2.add(new File(imagePath + "\\" + image_name));
+
                         }
                     }
                 }
@@ -336,11 +346,16 @@ public class ItemNameController extends HttpServlet {
                 }
 
                 bean.setSuperp(superp);
+                bean.setOrg_office(map.get("org_office").trim());
 
+//                int org_office_des_map_id = model.getOrgOfficeDesignationMapId(map.get("org_office").trim(), map.get("designation").trim());
                 ItemAuthorization itemAuthBean = new ItemAuthorization();
                 itemAuthBean.setItem_authorization_id(item_authorization_id);
-                itemAuthBean.setDesignation(map.get("designation").trim());
 
+//                for (int k = 0; k < des_list.size(); k++) {
+//                    itemAuthBean.setDesignation(des_list.get(k));
+//                }
+//                itemAuthBean.setOrg_office_designation_map_id(org_office_des_map_id);
                 if (item_name_id == 0) {
                     if (superp.equals("Y")) {
                         String model_no = "";
@@ -377,7 +392,7 @@ public class ItemNameController extends HttpServlet {
                             modelBean.setImage_name(image_name);
                             item_image = model.getDestination_Path("item_img");
                             response.setContentType("image/jpeg");
-                            model.insertRecord(bean, itr, modelBean, j, image_name, image_folder, itemAuthBean);
+                            model.insertRecord(bean, itr, modelBean, j, image_name, image_folder, itemAuthBean, des_list);
                         }
                     } else {
                         model.insertParent(bean, itr);
@@ -393,9 +408,26 @@ public class ItemNameController extends HttpServlet {
                 request.setAttribute("parent_item", map.get("parent_item").trim());
                 request.setAttribute("super_child", map.get("super").trim());
                 request.setAttribute("HSNCode", map.get("HSNCode").trim());
-                request.setAttribute("designation", map.get("designation").trim());
+                request.setAttribute("des_list", des_list);
                 request.setAttribute("count", map.get("count").trim());
                 request.setAttribute("description", map.get("description").trim());
+                request.setAttribute("org_office", map.get("org_office").trim());
+                if (des_list.get(0).equals("All")) {
+                    request.setAttribute("all_checked", "checked");
+                }
+
+                String org_office = map.get("org_office").trim();
+                List<String> all_des_list = new ArrayList<>();
+                List<String> desig_map_listAllFinal = new ArrayList<>();
+                List<String> desig_map_listUnmatched = new ArrayList<>();
+
+                all_des_list = model.getDesignation("", org_office);
+
+                desig_map_listAllFinal.addAll(all_des_list);
+                all_des_list.removeAll(des_list);
+                desig_map_listUnmatched.addAll(all_des_list);
+
+                desig_map_listAllFinal.removeAll(desig_map_listUnmatched);
 
                 List<String> lst2 = new ArrayList<>();
                 List<String> lst3 = new ArrayList<>();
@@ -427,6 +459,9 @@ public class ItemNameController extends HttpServlet {
                     request.setAttribute("lst4", lst4);
                     request.setAttribute("lst5", lst5);
                     request.setAttribute("lst6", lst6);
+                    request.setAttribute("lst6", lst6);
+                    request.setAttribute("desig_map_listAllFinal", desig_map_listAllFinal);
+                    request.setAttribute("all_des_list", all_des_list);
 
                 }
             }
