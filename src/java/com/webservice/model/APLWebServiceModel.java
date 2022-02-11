@@ -31,6 +31,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1174,7 +1175,7 @@ public class APLWebServiceModel {
         String query = "INSERT INTO enquiry_table(enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
                 + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+                + " revision_no,active,description,assigned_to,product_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
 
         String query2 = " select count(*) as count from enquiry_table where enquiry_no='" + bean.getEnquiry_no() + "' and active='Y' ";
@@ -1245,10 +1246,18 @@ public class APLWebServiceModel {
                 }
 
                 if (district.equals("")) {
-                    district = "Hapur";
+                    district = "Others";
                 }
                 pstmt.setString(21, district);
                 pstmt.setInt(22, 129);
+
+                String product_name = "";
+                product_name = bean.getProduct_name();
+                if (product_name == null) {
+                    product_name = "";
+                }
+                pstmt.setString(23, product_name);
+//                pstmt.setString(23, bean.getProduct_name());
                 rowsAffected = pstmt.executeUpdate();
 
                 if (rowsAffected > 0) {
@@ -1279,7 +1288,7 @@ public class APLWebServiceModel {
                             state = "UP";
                         }
 
-                        APLWebServiceModel.assignToSalesPerson(enquiry_table_id, state);
+                        APLWebServiceModel.assignToSalesPerson(enquiry_table_id, state, district);
 
 //                        String query_map_city = " select count(*) as count from city where city_name='" + city + "' and active='Y' ";
 //                        PreparedStatement pstmt2 = connection.prepareStatement(query_map_city);
@@ -1319,13 +1328,14 @@ public class APLWebServiceModel {
                         if (!district_name.equals("")) {
                             district = district_name;
                         } else {
-                            district = "Hapur";
+                            district = "Others";
                         }
 
-//                        if (count2 > 0) {
                         city = city;
-                        APLWebServiceModel.assignToDealer(enquiry_table_id, district, bean.getProduct_name().toString());
-//                        }
+
+                        if (!district.equals("Others")) {
+                            APLWebServiceModel.assignToDealer(enquiry_table_id, district, bean.getProduct_name().toString());
+                        }
                     }
                 }
             }
@@ -1342,26 +1352,30 @@ public class APLWebServiceModel {
         return rowsAffected;
     }
 
-    public static String assignToSalesPerson(String enquiry_table_id, String state) {
+    public static String assignToSalesPerson(String enquiry_table_id, String state, String district) {
         int revision = APLWebServiceModel.getRevisionno(enquiry_table_id);
         int updateRowsAffected = 0;
         boolean status = false;
         String query1 = " SELECT max(revision_no) revision_no,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name, "
                 + " sender_email,sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time, "
                 + " enquiry_call_duration, "
-                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to "
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to,product_name "
                 + " FROM enquiry_table WHERE enquiry_table_id = " + enquiry_table_id + "  && active=? ";
         String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=?";
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
                 + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
 
         try {
 
-            int assigned_to_sales_person = getSalesPersonId(state);
-            if (assigned_to_sales_person > 0) {
+            int assigned_to_salesperson = 0;
+            List<Integer> assigned_to_salesperson_list = getSalesPersonId(state);
+            if (district.equals("Others")) {
+                assigned_to_salesperson_list.add(168);
+            }
+            if (assigned_to_salesperson_list.size() > 0) {
                 PreparedStatement pstmt = connection.prepareStatement(query1);
                 pstmt.setString(1, "Y");
                 ResultSet rs = pstmt.executeQuery();
@@ -1385,6 +1399,7 @@ public class APLWebServiceModel {
                     String sender_alternate_email = rs.getString("sender_alternate_email");
                     String sender_alternate_mob = rs.getString("sender_alternate_mob");
                     String description = rs.getString("description");
+                    String product_name = rs.getString("product_name");
 
                     PreparedStatement pstm = connection.prepareStatement(query2);
                     pstm.setString(1, "n");
@@ -1392,37 +1407,46 @@ public class APLWebServiceModel {
                     pstm.setInt(3, revision);
                     updateRowsAffected = pstm.executeUpdate();
                     if (updateRowsAffected >= 1) {
-                        revision = rs.getInt("revision_no") + 1;
-                        PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
-                        psmt.setString(1, enquiry_table_id);
-                        psmt.setString(2, enquiry_source_table_id);
-                        psmt.setString(3, marketing_vertical_id);
-                        psmt.setInt(4, 2);
-                        psmt.setString(5, enquiry_no);
-                        psmt.setString(6, sender_name);
-                        psmt.setString(7, sender_email);
-                        psmt.setString(8, sender_mob);
-                        psmt.setString(9, sender_company_name);
-                        psmt.setString(10, enquiry_address);
-                        psmt.setString(11, enquiry_city);
-                        psmt.setString(12, enquiry_state);
-                        psmt.setString(13, country);
-                        psmt.setString(14, enquiry_message);
-                        psmt.setString(15, enquiry_date_time);
-                        psmt.setString(16, enquiry_call_duration);
-                        psmt.setString(17, enquiry_reciever_mob);
-                        psmt.setString(18, sender_alternate_email);
-                        psmt.setString(19, sender_alternate_mob);
-                        psmt.setInt(20, revision);
-                        psmt.setString(21, "Y");
-                        psmt.setString(22, description);
-                        psmt.setInt(23, assigned_to_sales_person);
+                        for (int i = 0; i < assigned_to_salesperson_list.size(); i++) {
+                            assigned_to_salesperson = assigned_to_salesperson_list.get(i);
+                            revision = rs.getInt("revision_no") + 1;
+                            PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
+                            psmt.setString(1, enquiry_table_id);
+                            psmt.setString(2, enquiry_source_table_id);
+                            psmt.setString(3, marketing_vertical_id);
+                            psmt.setInt(4, 2);
+                            psmt.setString(5, enquiry_no);
+                            psmt.setString(6, sender_name);
+                            psmt.setString(7, sender_email);
+                            psmt.setString(8, sender_mob);
+                            psmt.setString(9, sender_company_name);
+                            psmt.setString(10, enquiry_address);
+                            psmt.setString(11, enquiry_city);
+                            psmt.setString(12, enquiry_state);
+                            psmt.setString(13, country);
+                            psmt.setString(14, enquiry_message);
+                            psmt.setString(15, enquiry_date_time);
+                            psmt.setString(16, enquiry_call_duration);
+                            psmt.setString(17, enquiry_reciever_mob);
+                            psmt.setString(18, sender_alternate_email);
+                            psmt.setString(19, sender_alternate_mob);
+                            psmt.setInt(20, revision);
+                            psmt.setString(21, "Y");
+                            psmt.setString(22, description);
+                            psmt.setInt(23, assigned_to_salesperson);
+                            psmt.setString(24, product_name);
 
-                        rowsAffected = psmt.executeUpdate();
-                        if (rowsAffected > 0) {
-                            status = true;
-                        } else {
-                            status = false;
+                            rowsAffected = psmt.executeUpdate();
+                            if (rowsAffected > 0) {
+                                status = true;
+                                String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name,
+                                        assigned_to_salesperson, "sales", "salesperson");
+                                String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+                                        product_name, enquiry_table_id, assigned_to_salesperson, "sales", "salesperson");
+                            } else {
+                                status = false;
+                            }
+
                         }
                     }
 
@@ -1442,32 +1466,36 @@ public class APLWebServiceModel {
         return message;
     }
 
-    public static int getSalesPersonId(String state) {
-
+    public static List<Integer> getSalesPersonId(String state) {
+        List<Integer> list = new ArrayList<>();
         String query = " SELECT kp.key_person_id from key_person kp,org_office oo,city ct,tehsil th,district dt,division dv,state st, "
                 + " salesmanager_state_mapping ssm where kp.active='Y' and oo.active='Y' and ct.active='Y' and th.active='Y' and dt.active='Y' "
                 + " and dv.active='Y' and st.active='Y' and ssm.active='Y' and oo.org_office_id=kp.org_office_id and "
                 + " ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                + " and ssm.state_id=st.state_id and ssm.salesman_id=kp.key_person_id and st.state_name='" + state + "' group by st.state_name ";
-
+                + " and ssm.state_id=st.state_id and ssm.salesman_id=kp.key_person_id and st.state_name='" + state + "' group by kp.key_person_id ";
         int id = 0;
+        String all_id = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
-            rset.next();
-            id = rset.getInt("key_person_id");
+            while (rset.next()) {
+                id = rset.getInt("key_person_id");
+                list.add(id);
+            }
+
         } catch (Exception e) {
             System.out.println("EnquiryModel getKeyPersonId Error: " + e);
         }
-        return id;
+        return list;
     }
 
     public static int getDealerId(String district) {
-        String query = " SELECT key_person_id from key_person kp,org_office oo,city ct,tehsil th,district dt,division dv,state st "
-                + "  where kp.active='Y' and oo.active='Y' and ct.active='Y' and th.active='Y' and dt.active='Y' and "
-                + " dv.active='Y' and st.active='Y'  and oo.org_office_id=kp.org_office_id and "
-                + " ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
-                + " and dt.district_name='" + district + "'  and oo.office_type_id=3 and oo.city_id=ct.city_id ";
+
+//        String query = " SELECT key_person_id from key_person kp,org_office oo,city ct,tehsil th,district dt,division dv,state st "
+//                + "  where kp.active='Y' and oo.active='Y' and ct.active='Y' and th.active='Y' and dt.active='Y' and "
+//                + " dv.active='Y' and st.active='Y'  and oo.org_office_id=kp.org_office_id and "
+//                + " ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and dt.division_id=dv.division_id and dv.state_id=st.state_id "
+//                + " and dt.district_name='" + district + "'  and oo.office_type_id=3 and oo.city_id=ct.city_id ";
 //        String query = " select kp.key_person_id  from state st,salesmanager_state_mapping ssm,org_office oo,city ct,tehsil th, "
 //                + " district dt,division dv,key_person kp "
 //                + " where st.active='Y' and ssm.active='Y' and oo.active='Y' and ct.active='Y' and dt.active='Y' and th.active='Y' "
@@ -1476,13 +1504,38 @@ public class APLWebServiceModel {
 //                + " kp.active='Y' and dt.division_id=dv.division_id and dv.state_id=st.state_id "
 //                + " and ssm.state_id=st.state_id  and ssm.salesman_id=kp.key_person_id and oo.office_type_id=3 "
 //                + " and dt.district_name='" + district + "' ";
-
         int id = 0;
         try {
+
+            String query_city = " select ct.city_id from city ct,tehsil th,district dt where ct.active='Y' and th.active='Y' "
+                    + " and dt.active='Y' and ct.tehsil_id=th.tehsil_id "
+                    + " and th.district_id =dt.district_id and dt.district_name='" + district + "' ";
+
+            ResultSet rset2 = connection.prepareStatement(query_city).executeQuery();
+
+            List<Integer> city_id_list = new ArrayList<>();
+            while (rset2.next()) {
+                int city_id = rset2.getInt("city_id");
+                city_id_list.add(city_id);
+            }
+
+            String query2 = " select oo.org_office_name  from org_office oo where oo.office_type_id=3 and city_id "
+                    + " in(" + city_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") group by oo.org_office_name  ";
+
+            ResultSet rset = connection.prepareStatement(query2).executeQuery();
+            String org_office_name = "";
+            while (rset.next()) {
+                org_office_name = (rset.getString("org_office_name"));
+            }
+
+            String query = " select kp.key_person_id from key_person kp,org_office oo where kp.active='Y' and oo.active='Y' "
+                    + " and kp.org_office_id=oo.org_office_id "
+                    + " and oo.org_office_name='" + org_office_name + "' ";
+
             PreparedStatement pstmt = connection.prepareStatement(query);
-            ResultSet rset = pstmt.executeQuery();
-            rset.next();
-            id = rset.getInt("key_person_id");
+            ResultSet rset3 = pstmt.executeQuery();
+            rset3.next();
+            id = rset3.getInt("key_person_id");
         } catch (Exception e) {
             System.out.println("EnquiryModel getKeyPersonId Error: " + e);
         }
@@ -1496,13 +1549,13 @@ public class APLWebServiceModel {
         String query1 = " SELECT max(revision_no) revision_no,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name, "
                 + " sender_email,sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time, "
                 + " enquiry_call_duration, "
-                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to "
+                + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to,product_name "
                 + " FROM enquiry_table WHERE enquiry_table_id = " + enquiry_table_id + "  && active=? ";
         String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=?";
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
                 + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
 
         try {
@@ -1531,6 +1584,7 @@ public class APLWebServiceModel {
                     String sender_alternate_email = rs.getString("sender_alternate_email");
                     String sender_alternate_mob = rs.getString("sender_alternate_mob");
                     String description = rs.getString("description");
+                    product_name = rs.getString("product_name");
 
                     PreparedStatement pstm = connection.prepareStatement(query2);
                     pstm.setString(1, "n");
@@ -1563,12 +1617,15 @@ public class APLWebServiceModel {
                         psmt.setString(21, "Y");
                         psmt.setString(22, description);
                         psmt.setInt(23, assigned_to_dealer);
+                        psmt.setString(24, product_name);
 
                         rowsAffected = psmt.executeUpdate();
                         if (rowsAffected > 0) {
                             status = true;
-                            String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name);
-                            String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name, enquiry_table_id);
+                            String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+                                    product_name, assigned_to_dealer, "sales", "dealer");
+                            String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+                                    product_name, enquiry_table_id, assigned_to_dealer, "sales", "dealer");
 
                         } else {
                             status = false;
@@ -1590,7 +1647,8 @@ public class APLWebServiceModel {
 
     }
 
-    public static String sendTelegramMessage(String sender_name, String sender_mob, String enquiry_city, String enquiry_state, String enquiry_no, String product_name) {
+    public static String sendTelegramMessage(String sender_name, String sender_mob, String enquiry_city, String enquiry_state,
+            String enquiry_no, String product_name, int assigned_to_dealer, String enquiry_type, String user_type) {
         String result = "";
         String msg = "";
 
@@ -1645,16 +1703,26 @@ public class APLWebServiceModel {
     }
 
     public static String sendMail(String sender_name, String email, String sender_mob, String enquiry_city, String enquiry_state,
-            String enquiry_no, String product_name, String enquiry_table_id) {
+            String enquiry_no, String product_name, String enquiry_table_id, int assigned_to_salesperson, String enquiry_type, String user_type) {
         String host = "smtp.gmail.com";
         String port = "587";
         String mailFrom = "smartmeter.apogee@gmail.com";
         String password = "jpss1277";
 
-        // outgoing message information
+        String email_to = getEmail(assigned_to_salesperson);
         String mailTo = "komal.apogee@gmail.com";
+//        if (user_type.equals("salesperson")) {
+//            mailTo = email_to;
+//        }
+        String subject = "Enquiry";        // outgoing message information
+
 //        String mailTo = email;
-        String subject = "Enquiry";
+        if (enquiry_type.equals("sales")) {
+            subject = "Sales Enquiry";
+        }
+        if (enquiry_type.equals("complaint")) {
+            subject = "Complaint Enquiry";
+        }
 //        String message = "Hello Sir, Please see the enquiry....";
 
         String message = "Hello Sir, Please see the enquiry....";
@@ -1663,7 +1731,8 @@ public class APLWebServiceModel {
 
         try {
             mailer.sendPlainTextEmail(host, port, mailFrom, password, mailTo,
-                    subject, message, enquiry_city, enquiry_state, enquiry_no, product_name, sender_name, sender_mob, enquiry_table_id);
+                    subject, message, enquiry_city, enquiry_state, enquiry_no, product_name, sender_name, sender_mob, enquiry_table_id
+            );
             System.out.println("Email sent.");
 
         } catch (Exception ex) {
@@ -1676,7 +1745,8 @@ public class APLWebServiceModel {
     public static void sendPlainTextEmail(String host, String port,
             final String userName, final String password, String toAddress,
             String subject, String message, String enquiry_city, String enquiry_state,
-            String enquiry_no, String product_name, String sender_name, String sender_mob, String enquiry_table_id) throws AddressException,
+            String enquiry_no, String product_name, String sender_name, String sender_mob, String enquiry_table_id)
+            throws AddressException,
             MessagingException {
 
         // sets SMTP server properties
@@ -1744,6 +1814,36 @@ public class APLWebServiceModel {
             ex.printStackTrace();
         }
 
+    }
+
+    public static String getEmail(int assigned_to) {
+        String email = "";
+        try {
+            String query2 = "";
+            String query = " SELECT designation_id from key_person where key_person_id='" + assigned_to + "' and active='Y' ";
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+
+            while (rset.next()) {
+                int designation_id = rset.getInt("designation_id");
+//                if (designation_id == 8) {
+                query2 = " SELECT email_id1 from key_person where key_person_id='" + assigned_to + "' and active='Y' ";
+//                } else {
+//                    query2 = " SELECT email_id1 from key_person where key_person_id='" + assigned_to + "' and active='Y' ";
+//                }
+                PreparedStatement pstmt2 = (PreparedStatement) connection.prepareStatement(query2);
+
+                ResultSet rset2 = pstmt2.executeQuery();
+                while (rset2.next()) {
+                    email = rset2.getString("email_id1");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error:EnquiryModel getRevisionno-" + e);
+
+        }
+        return email;
     }
 
     public static int getRevisionno(String enquiry_table_id) {

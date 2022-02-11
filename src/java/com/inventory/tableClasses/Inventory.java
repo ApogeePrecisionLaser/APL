@@ -29,6 +29,7 @@ public class Inventory {
     private int inward_quantity;
     private int outward_quantity;
     private int stock_quantity;
+    private int min_quantity;
     private String date_time;
     private String reference_document_type;
     private String reference_document_id;
@@ -44,6 +45,7 @@ public class Inventory {
     private String parent_item_id;
     private int generation;
     private String popupval;
+    private String is_super_child;
     private String delivery_challan_img;
 
     /**
@@ -492,6 +494,34 @@ public class Inventory {
      */
     public void setDelivery_challan_img(String delivery_challan_img) {
         this.delivery_challan_img = delivery_challan_img;
+    }
+
+    /**
+     * @return the min_quantity
+     */
+    public int getMin_quantity() {
+        return min_quantity;
+    }
+
+    /**
+     * @param min_quantity the min_quantity to set
+     */
+    public void setMin_quantity(int min_quantity) {
+        this.min_quantity = min_quantity;
+    }
+
+    /**
+     * @return the is_super_child
+     */
+    public String getIs_super_child() {
+        return is_super_child;
+    }
+
+    /**
+     * @param is_super_child the is_super_child to set
+     */
+    public void setIs_super_child(String is_super_child) {
+        this.is_super_child = is_super_child;
     }
 
 }

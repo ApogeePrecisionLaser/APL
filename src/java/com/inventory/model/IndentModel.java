@@ -181,14 +181,14 @@ public class IndentModel {
         return list;
     }
 
-    public int insertRecord(Indent bean, String logged_user_name, String office_admin, int i) throws SQLException {
+    public int insertRecord(Indent bean, String logged_user_name, String office_admin, int i, int logged_org_office_id) throws SQLException {
         String query = "INSERT INTO indent_table(indent_no,requested_by,requested_to,"
                 + " status_id,active,remark,date_time,description,revision_no) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
         int rowsAffected = 0;
-        int requested_by_id = getRequestedKeyPersonId(logged_user_name);
-        int requested_to_id = getRequestedKeyPersonId(office_admin);
+        int requested_by_id = getRequestedKeyPersonId(logged_user_name, logged_org_office_id);
+        int requested_to_id = getRequestedKeyPersonId(office_admin, logged_org_office_id);
         int count = 0;
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -271,8 +271,8 @@ public class IndentModel {
         return rowsAffected2;
     }
 
-    public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+    public int getRequestedKeyPersonId(String person_name, int logged_org_office_id) {
+        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' and org_office_id='" + logged_org_office_id + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);

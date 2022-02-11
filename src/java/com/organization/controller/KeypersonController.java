@@ -28,6 +28,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -55,7 +56,11 @@ public class KeypersonController extends HttpServlet {
         KeypersonModel keyModel = new KeypersonModel();
         String k = "";
         int counting = 101;
-
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             keyModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {

@@ -35,7 +35,11 @@ public class DesignationController extends HttpServlet {
         DesignationModel designationModel = new DesignationModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
-
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             designationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {

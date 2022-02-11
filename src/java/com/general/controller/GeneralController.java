@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.general.controller;
 
 import com.DBConnection.DBConnection;
@@ -16,103 +15,116 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author komal
  */
 public class GeneralController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         ServletContext ctx = getServletContext();
-       GeneralModel gm = new GeneralModel();
-       //PrintWriter out = response.getWriter();
+        GeneralModel gm = new GeneralModel();
+        //PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
 
-
-       try {
+        try {
 //           gm.setConnection((Connection) DBConnection.getConnectionForUtf(ctx));
-       } catch (Exception e) {
-           System.out.print(e);
-       }
-    
+        } catch (Exception e) {
+            System.out.print(e);
+        }
+
         try {
             String task = request.getParameter("task");
-            if(task == null)
+            if (task == null) {
                 task = "";
+            }
 
-        if (task.equals("GetCordinates4"))
-            {
+            if (task.equals("GetCordinates4")) {
                 System.err.println("GetCordinates4-----------------");
                 String longi = request.getParameter("longitude");
                 String latti = request.getParameter("latitude");
-                if(longi == null || longi.equals("undefined"))
+                if (longi == null || longi.equals("undefined")) {
                     longi = "0";
-                if(latti == null || latti.equals("undefined"))
+                }
+                if (latti == null || latti.equals("undefined")) {
                     latti = "0";
+                }
                 request.setAttribute("longi", longi);
                 request.setAttribute("latti", latti);
                 System.out.println(latti + "," + longi);
                 request.getRequestDispatcher("getCordinate4").forward(request, response);
                 return;
             }
-            if (task.equals("GetCordinates1"))
-            {
+            if (task.equals("GetCordinates1")) {
                 String longi = request.getParameter("longitude");
                 String latti = request.getParameter("latitude");
-                if(longi == null || longi.equals("undefined"))
+                if (longi == null || longi.equals("undefined")) {
                     longi = "0";
-                if(latti == null || latti.equals("undefined"))
+                }
+                if (latti == null || latti.equals("undefined")) {
                     latti = "0";
+                }
                 request.setAttribute("longi", longi);
                 request.setAttribute("latti", latti);
                 System.out.println(latti + "," + longi);
                 request.getRequestDispatcher("getCordinate1").forward(request, response);
                 return;
             }
-            if (task.equals("GetCordinates2"))
-            {
+            if (task.equals("GetCordinates2")) {
                 String longi = request.getParameter("longitude");
                 String latti = request.getParameter("latitude");
-                if(longi == null || longi.equals("undefined"))
+                if (longi == null || longi.equals("undefined")) {
                     longi = "0";
-                if(latti == null || latti.equals("undefined"))
+                }
+                if (latti == null || latti.equals("undefined")) {
                     latti = "0";
+                }
                 request.setAttribute("longi", longi);
                 request.setAttribute("latti", latti);
                 System.out.println(latti + "," + longi);
                 request.getRequestDispatcher("getCordinate2").forward(request, response);
                 return;
             }
-            if(task.equals("GetDistance"))
-            {
+            if (task.equals("GetDistance")) {
                 int disance = 0;//MapDetailClass.getDistance(request.getParameter("source"), request.getParameter("destination"));
                 PrintWriter out = response.getWriter();
                 out.print(disance);
                 out.close();
                 return;
             }
-            if (task.equals("GetBendCordinates"))
-            {
+            if (task.equals("GetBendCordinates")) {
                 String headlongi = request.getParameter("head_longitude");
                 String headlatti = request.getParameter("head_latitude");
                 String taillongi = request.getParameter("tail_longitude");
                 String taillatti = request.getParameter("tail_latitude");
-                if(headlongi == null || headlongi.equals("undefined"))
+                if (headlongi == null || headlongi.equals("undefined")) {
                     headlongi = "0";
-                if(headlatti == null || headlatti.equals("undefined"))
+                }
+                if (headlatti == null || headlatti.equals("undefined")) {
                     headlatti = "0";
-                if(taillongi == null || taillongi.equals("undefined"))
+                }
+                if (taillongi == null || taillongi.equals("undefined")) {
                     taillongi = "0";
-                if(taillatti == null || taillatti.equals("undefined"))
+                }
+                if (taillatti == null || taillatti.equals("undefined")) {
                     taillatti = "0";
+                }
                 request.setAttribute("headlongi", headlongi);
                 request.setAttribute("headlatti", headlatti);
                 request.setAttribute("taillongi", taillongi);
@@ -122,30 +134,29 @@ public class GeneralController extends HttpServlet {
                 request.getRequestDispatcher("getCordinate3").forward(request, response);
                 return;
             }
-            if (task.equals("GetCordinates5"))
-            {
-                List list=gm.getNodeDetail();
+            if (task.equals("GetCordinates5")) {
+                List list = gm.getNodeDetail();
                 request.setAttribute("list", list);
                 request.getRequestDispatcher("node_detail_map1").forward(request, response);
                 return;
             }
-            if(task.equals("checkSubPointExits"))
-           {
-               String node_name = request.getParameter("temp");
-              String data= gm.getLatLang(node_name);
+            if (task.equals("checkSubPointExits")) {
+                String node_name = request.getParameter("temp");
+                String data = gm.getLatLang(node_name);
 
-              PrintWriter out = response.getWriter();
-              out.print(data);
-               return;
-           }
-        } finally { 
-           
+                PrintWriter out = response.getWriter();
+                out.print(data);
+                return;
+            }
+        } finally {
+
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -153,12 +164,13 @@ public class GeneralController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -166,12 +178,13 @@ public class GeneralController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

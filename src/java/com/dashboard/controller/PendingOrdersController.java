@@ -28,7 +28,6 @@ public class PendingOrdersController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 15, noOfRowsInTable;
 
         String logged_user_name = "";
         String logged_designation = "";
@@ -37,14 +36,6 @@ public class PendingOrdersController extends HttpServlet {
         int logged_org_office_id = 0;
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
-        String office_admin = "";
-        String search_by_date = "";
-        int last_indent_table_id = 0;
-        int counting = 100;
-        String indent_no = "";
-        String requested_by = "";
-        String requested_to = "";
-        String description = "";
         String loggedUser = "";
 
         HttpSession session = request.getSession();

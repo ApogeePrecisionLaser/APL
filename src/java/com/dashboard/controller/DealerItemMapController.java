@@ -52,21 +52,14 @@ public class DealerItemMapController extends HttpServlet {
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         DealerItemMapModel model = new DealerItemMapModel();
 
-//        String search_item_name = "";
-//        String search_designation = "";
-//
-//        search_item_name = request.getParameter("search_item_name");
-//        search_designation = request.getParameter("search_designation");
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
 
-//        if (search_item_name == null) {
-//            search_item_name = "";
-//        }
-//        if (search_designation == null) {
-//            search_designation = "";
-//        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -169,20 +162,10 @@ public class DealerItemMapController extends HttpServlet {
                 model.deleteMapping(dealer_item_map_id);
             }
 
-//            List<DealerItemMap> list = model.showData(org_office_id);
-//            request.setAttribute("list", list);
-////            request.setAttribute("search_item_name", search_item_name);
-//            request.setAttribute("org_office_name", org_office_name);
-//            request.setAttribute("org_office_id", org_office_id);
-//            request.setAttribute("message", model.getMessage());
-//            request.setAttribute("msgBgColor", model.getMsgBgColor());
-//            request.setAttribute("loggedUser", loggedUser);
             ArrayList<DealerItemMap> list1 = model.getAllItems(org_office_id);
             ArrayList<DealerItemMap> list2 = new ArrayList<>();
             list2 = model.getAllModels(org_office_id, list1);
 
-            // request.setAttribute("message", DealersOrderModel.getMessage());
-//            request.setAttribute("msgBgColor", DealersOrderModel.getMessageBGColor());
             request.setAttribute("search_item", "");
             request.setAttribute("list1", list1);
             request.setAttribute("list2", list2);

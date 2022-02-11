@@ -53,6 +53,10 @@ public class ModelNameController extends HttpServlet {
         String ac = "ACTIVE RECORDS";
         String image_folder = "";
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
         String image_name = "";

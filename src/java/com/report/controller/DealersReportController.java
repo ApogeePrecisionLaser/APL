@@ -119,7 +119,11 @@ public class DealersReportController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String msg = "";
-
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -274,4 +278,3 @@ public class DealersReportController extends HttpServlet {
         doGet(request, response);
     }
 }
-

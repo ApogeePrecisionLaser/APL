@@ -53,14 +53,7 @@ public class DealersOrderController extends HttpServlet {
         int logged_org_office_id = 0;
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
-        String office_admin = "";
-        String search_by_date = "";
-        int last_indent_table_id = 0;
         int counting = 100000;
-        String indent_no = "";
-        String requested_by = "";
-        String requested_to = "";
-        String description = "";
         String loggedUser = "";
         String search_item = "";
         String autogenerate_order_no = "";

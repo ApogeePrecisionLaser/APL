@@ -48,8 +48,8 @@
                                         <td class="fontFourteen">5 mins ago</td>
                                         <td>
                                             <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
+                                            <!--<a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>-->
+                                            <a onclick="document.getElementById('id01').style.display = 'block'" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="fontFourteen">1</td>
@@ -243,6 +243,20 @@
                                             <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
                                         </td>
                                     </tr>
+
+                                <div id="id01" class="modal deleteAlertModel">
+                                    <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">×</span>
+                                    <div class="modal-content" action="/action_page.php">
+                                        <div class="container">
+                                            <h1>Delete Account</h1>
+                                            <p>Are you sure you want to delete your account?</p>
+                                            <div class="clearfix">
+                                                <a type="button" href="#" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</a>
+                                                <a type="button" href="#" onclick="document.getElementById('id01').style.display = 'none'" class="deletebtn">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 </tbody>
                             </table>
                         </div>
@@ -275,3 +289,12 @@
 
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+<script>
+
+    var modal = document.getElementById('id01');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>

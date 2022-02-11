@@ -16,6 +16,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 public class SalesEnquiryController extends HttpServlet {
@@ -26,6 +27,30 @@ public class SalesEnquiryController extends HttpServlet {
         response.setContentType("text/html");
         ServletContext ctx = getServletContext();
         EnquiryModel model = new EnquiryModel();
+
+        String logged_user_name = "";
+        String logged_designation = "";
+        String logged_org_name = "";
+        String logged_org_office = "";
+        int logged_org_office_id = 0;
+        int logged_org_name_id = 0;
+        int logged_key_person_id = 0;
+        String loggedUser = "";
+
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
+            logged_user_name = session.getAttribute("logged_user_name").toString();
+            logged_org_name = session.getAttribute("logged_org_name").toString();
+            logged_designation = session.getAttribute("logged_designation").toString();
+            logged_org_office = session.getAttribute("logged_org_office").toString();
+            logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
+            logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
+            logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
+        }
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -51,7 +76,7 @@ public class SalesEnquiryController extends HttpServlet {
                     list = model.getMarketingVertical(q);
                 }
                 if (JQstring.equals("getDistrict")) {
-                    list = model.getDistrict(q);
+                    list = model.getDistrict(q, loggedUser,logged_key_person_id);
                 }
                 if (JQstring.equals("getCities")) {
                     list = model.getCities(q);
@@ -108,7 +133,7 @@ public class SalesEnquiryController extends HttpServlet {
             }
             ArrayList<Enquiry> list = model.getAllComplaints(enquiry_source, status);
             request.setAttribute("list", list);
-             request.setAttribute("enquiry_source", enquiry_source);
+            request.setAttribute("enquiry_source", enquiry_source);
             request.setAttribute("status", status);
             DBConnection.closeConncetion(model.getConnection());
 
@@ -165,7 +190,7 @@ public class SalesEnquiryController extends HttpServlet {
                 status = "";
             }
 
-            ArrayList<Enquiry> list = model.getAllComplaints(enquiry_source,status);
+            ArrayList<Enquiry> list = model.getAllComplaints(enquiry_source, status);
             request.setAttribute("list", list);
             DBConnection.closeConncetion(model.getConnection());
 
@@ -205,13 +230,13 @@ public class SalesEnquiryController extends HttpServlet {
             bean.setDescription(request.getParameter("district").trim());
 
             if (enquiry_table_id == 0) {
-                model.insertEnquiries(bean, enquiry_type);
+                model.insertEnquiries(bean, enquiry_type, loggedUser, logged_key_person_id);
             }
-
         }
 
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
+        request.setAttribute("user_role", loggedUser);
         DBConnection.closeConncetion(model.getConnection());
 
         request.getRequestDispatcher("sales_enquiry_form").forward(request, response);

@@ -48,7 +48,6 @@ public class InventoryModel {
         }
     }
 
-
     public List<Integer> getIdList(String searchItemName, String searchOrgOffice, String search_manufacturer, String search_item_code,
             String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
 
@@ -272,7 +271,8 @@ public class InventoryModel {
                     String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
                             + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
                             + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                            + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name,m.model_no,m.part_no  "
+                            + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name,m.model_no,m.part_no,ib.min_quantity,"
+                            + " itn.is_super_child  "
                             + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
                             + " org_office oo,manufacturer mr "
                             + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
@@ -315,6 +315,7 @@ public class InventoryModel {
                             bean.setInward_quantity(0);
                             bean.setOutward_quantity(0);
                             bean.setStock_quantity(0);
+                            bean.setMin_quantity(0);
                             bean.setDate_time("");
                             bean.setDescription("");
                             bean.setManufacturer_name("");
@@ -324,6 +325,7 @@ public class InventoryModel {
                             bean.setReference_document_type("");
                             bean.setReference_document_id("");
                             bean.setPopupval("openpopup");
+                            bean.setIs_super_child("");
                         } else {
                             bean.setInventory_id(rset2.getInt("inventory_id"));
                             bean.setInventory_basic_id(rset2.getInt("inventory_basic_id"));
@@ -333,6 +335,8 @@ public class InventoryModel {
                             bean.setOutward_quantity(rset2.getInt("outward_quantity"));
                             int stock_quantity = (rset2.getInt("stock_quantity"));
                             bean.setStock_quantity(stock_quantity);
+                            bean.setMin_quantity(rset2.getInt("min_quantity"));
+
                             bean.setDate_time(rset2.getString("date_time"));
                             bean.setDescription(rset2.getString("description"));
                             bean.setManufacturer_name(rset2.getString("manufacturer_name"));
@@ -342,6 +346,7 @@ public class InventoryModel {
                             bean.setReference_document_type(rset2.getString("reference_document_type"));
                             bean.setReference_document_id(rset2.getString("reference_document_id"));
                             bean.setPopupval("");
+                            bean.setIs_super_child(rset2.getString("is_super_child"));
                         }
                     }
                 } else {
@@ -352,6 +357,7 @@ public class InventoryModel {
                     bean.setInward_quantity(0);
                     bean.setOutward_quantity(0);
                     bean.setStock_quantity(0);
+                    bean.setMin_quantity(0);
                     bean.setDate_time("");
                     bean.setDescription("");
                     bean.setManufacturer_name("");
@@ -361,6 +367,7 @@ public class InventoryModel {
                     bean.setReference_document_type("");
                     bean.setReference_document_id("");
                     bean.setPopupval("");
+                    bean.setIs_super_child("");
                 }
                 list.add(bean);
             }
@@ -424,7 +431,6 @@ public class InventoryModel {
 
     }
 
-    
     public String getImagePath(String inventory_id, String uploadedFor) {
         String img_name = "";
         String destination_path = "";
@@ -778,34 +784,147 @@ public class InventoryModel {
         return list;
     }
 
-    public List<String> getItemCode(String q, String manufacturer) {
-        List<String> list = new ArrayList<String>();
-        String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
-                + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
-                + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
+    public List<String> getItemCode(String q, String manufacturer, String searchOrgOffice, String searchKeyPerson, String user_role) {
+        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list2 = new ArrayList<>();
+        List<String> list3 = new ArrayList<>();
+        if (user_role.equals("Super Admin")) {
+            String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+                    + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
+                    + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
 
-        if (!manufacturer.equals("") && manufacturer != null) {
-            query += " and mr.manufacturer_name='" + manufacturer + "' ";
-        }
-        query += " group by itn.item_code ORDER BY itn.item_code ";
-        try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            int count = 0;
-            q = q.trim();
-            while (rset.next()) {
-                String item_code = (rset.getString("item_code"));
-                if (item_code.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(item_code);
-                    count++;
+            if (!manufacturer.equals("") && manufacturer != null) {
+                query += " and mr.manufacturer_name='" + manufacturer + "' ";
+            }
+            query += " group by itn.item_code ORDER BY itn.item_code ";
+            try {
+                ResultSet rset = connection.prepareStatement(query).executeQuery();
+                int count = 0;
+                q = q.trim();
+                while (rset.next()) {
+                    String item_code = (rset.getString("item_code"));
+                    if (item_code.toUpperCase().startsWith(q.toUpperCase())) {
+                        list3.add(item_code);
+                        count++;
+                    }
                 }
+                if (count == 0) {
+                    list3.add("No such item_code  exists.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error:InventoryModel--getItemCode()-- " + e);
             }
-            if (count == 0) {
-                list.add("No such item_code  exists.");
+        } else {
+            try {
+                String query = " select itn.item_names_id "
+                        + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv, "
+                        + " key_person kp,org_office oo,manufacturer mr "
+                        + " where itt.item_type_id=itn.item_type_id and mim.item_names_id=itn.item_names_id"
+                        + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
+                        + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
+                        + " and oo.org_office_id=ib.org_office_id "
+                        + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id "
+                        + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' and itn.active='Y' "
+                        + " and itt.active='y' and mim.active='Y' and mr.active='Y' ";
+
+//            if (!q.equals("") && q != null) {
+//                query += " and itn.item_code='" + q + "' ";
+//            }
+                if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
+                    query += " and oo.org_office_name='" + searchOrgOffice + "' ";
+                }
+                if (!searchKeyPerson.equals("") && searchKeyPerson != null) {
+                    query += " and kp.key_person_name='" + searchKeyPerson + "' ";
+                }
+
+                if (!manufacturer.equals("") && manufacturer != null) {
+                    query += " and mr.manufacturer_name='" + manufacturer + "' ";
+                }
+                ResultSet rst = connection.prepareStatement(query).executeQuery();
+                while (rst.next()) {
+                    list2.add(rst.getInt(1));
+                }
+
+                // Start Sorted Array for Parent Child Hierarchy
+                List<Integer> list3_value = new ArrayList<>();
+                List<Integer> list3_key = new ArrayList<>();
+                List<Integer> list4 = new ArrayList<>();
+                List<Integer> sorted_list = new ArrayList<>();
+                List<Integer> sorted_list_noDuplicacy = new ArrayList<>();
+
+                MultiMap map = new MultiValueMap();
+
+                for (int k = 0; k < list2.size(); k++) {
+                    String qry_order = " SELECT T2.item_names_id,T2.item_name FROM (SELECT @r AS _id, "
+                            + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
+                            + " @l := @l + 1 AS lvl "
+                            + " FROM "
+                            + " (SELECT @r := '" + list2.get(k) + "', @l := 0) vars, "
+                            + " item_names h "
+                            + " WHERE @r <> 0) T1 "
+                            + " JOIN item_names T2 "
+                            + " ON T1._id = T2.item_names_id where T2.active='y'  "
+                            + " ORDER BY T1.lvl DESC limit 1 ";
+
+                    ResultSet rst3 = connection.prepareStatement(qry_order).executeQuery();
+                    while (rst3.next()) {
+                        map.put(rst3.getInt("item_names_id"), list2.get(k));
+                        list3_key.add(list2.get(k));
+                        list3_value.add(rst3.getInt("item_names_id"));
+                    }
+                }
+
+                Collections.sort(list3_value);
+
+                for (int k = 0; k < list3_value.size(); k++) {
+                    if (sorted_list.contains(list3_value.get(k))) {
+                    } else {
+                        sorted_list.add(list3_value.get(k));
+                    }
+                }
+
+                List<Integer> intArr = new ArrayList<Integer>();
+
+                for (int k = 0; k < sorted_list.size(); k++) {
+
+                    map.values();
+                    List<ArrayList> ee = new ArrayList<>();
+                    ee.add((ArrayList) map.get(sorted_list.get(k)));
+
+                    for (int v = 0; v < ee.get(0).size(); v++) {
+                        list4.add((Integer) ee.get(0).get(v));
+                    }
+                }
+
+                //  System.err.println("list 4 size-" + list4.size());
+                //  System.err.println("list 4 sttring-" + list4);
+                // END Sorted Array for Parent Child Hierarchy
+                for (int k = 0; k < list4.size(); k++) {
+                    String qry = " SELECT T2.item_names_id,concat(T2.item_name,' - ',T2.item_code) AS item_code,T2.is_super_child FROM (SELECT @r AS _id, "
+                            + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id and active='Y') AS parent_id, "
+                            + " @l := @l + 1 AS lvl "
+                            + " FROM "
+                            + " (SELECT @r := '" + list4.get(k) + "', @l := 0) vars, "
+                            + " item_names h "
+                            + " WHERE @r <> 0) T1 "
+                            + " JOIN item_names T2 "
+                            + " ON T1._id = T2.item_names_id where T2.active='y'  "
+                            + " ORDER BY T1.lvl DESC ";
+
+                    ResultSet rst2 = connection.prepareStatement(qry).executeQuery();
+                    while (rst2.next()) {
+                        list.add(rst2.getInt(1));
+                        String is_super_child = rst2.getString("is_super_child");
+                        if (is_super_child.equals("Y")) {
+                            list3.add(rst2.getString(2));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Exception--" + e);
             }
-        } catch (Exception e) {
-            System.out.println("Error:InventoryModel--getItemCode()-- " + e);
         }
-        return list;
+        return list3;
     }
 
     public List<String> getModelName(String q, String manufacturer_name, String item_code) {
@@ -879,58 +998,66 @@ public class InventoryModel {
         return list;
     }
 
-    public List<String> getOrgOffice(String q) {
+    public List<String> getOrgOffice(String q, String search_org_office, String logged_key_person, String user_role) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_name FROM org_office oo where"
-                + " oo.active='Y' ";
+        if (!user_role.equals("Super Admin")) {
+            list.add(search_org_office);
+        } else {
+            String query = "SELECT oo.org_office_name FROM org_office oo where"
+                    + " oo.active='Y' ";
 
-        query += " group by oo.org_office_name ORDER BY oo.org_office_name ";
-        try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            int count = 0;
-            q = q.trim();
-            while (rset.next()) {
-                String org_office_name = (rset.getString("org_office_name"));
-                if (org_office_name.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(org_office_name);
-                    count++;
+            query += " group by oo.org_office_name ORDER BY oo.org_office_name ";
+            try {
+                ResultSet rset = connection.prepareStatement(query).executeQuery();
+                int count = 0;
+                q = q.trim();
+                while (rset.next()) {
+                    String org_office_name = (rset.getString("org_office_name"));
+                    if (org_office_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(org_office_name);
+                        count++;
+                    }
                 }
+                if (count == 0) {
+                    list.add("No such org_office_name  exists.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error:InventoryModel--getOrgOffice()-- " + e);
             }
-            if (count == 0) {
-                list.add("No such org_office_name  exists.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error:InventoryModel--getOrgOffice()-- " + e);
         }
         return list;
     }
 
-    public List<String> getKeyPerson(String q, String org_office) {
+    public List<String> getKeyPerson(String q, String org_office, String logged_key_person, String user_role) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT kp.key_person_name FROM key_person kp,org_office oo where"
-                + " kp.org_office_id=oo.org_office_id and kp.active='Y' and oo.active='Y' ";
+        if (!user_role.equals("Super Admin")) {
+            list.add(logged_key_person);
+        } else {
+            String query = "SELECT kp.key_person_name FROM key_person kp,org_office oo where"
+                    + " kp.org_office_id=oo.org_office_id and kp.active='Y' and oo.active='Y' ";
 
-        if (!org_office.equals("") && org_office != null) {
-            query += " and oo.org_office_name='" + org_office + "' ";
-        }
+            if (!org_office.equals("") && org_office != null) {
+                query += " and oo.org_office_name='" + org_office + "' ";
+            }
 
-        query += " group by kp.key_person_name ORDER BY kp.key_person_name ";
-        try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            int count = 0;
-            q = q.trim();
-            while (rset.next()) {
-                String key_person_name = (rset.getString("key_person_name"));
-                if (key_person_name.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(key_person_name);
-                    count++;
+            query += " group by kp.key_person_name ORDER BY kp.key_person_name ";
+            try {
+                ResultSet rset = connection.prepareStatement(query).executeQuery();
+                int count = 0;
+                q = q.trim();
+                while (rset.next()) {
+                    String key_person_name = (rset.getString("key_person_name"));
+                    if (key_person_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(key_person_name);
+                        count++;
+                    }
                 }
+                if (count == 0) {
+                    list.add("No such key_person_name  exists.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error:InventoryModel--getKeyPerson()-- " + e);
             }
-            if (count == 0) {
-                list.add("No such key_person_name  exists.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error:InventoryModel--getKeyPerson()-- " + e);
         }
         return list;
     }
@@ -950,7 +1077,8 @@ public class InventoryModel {
             System.out.println("InventoryModel closeConnection() Error: " + e);
         }
     }
-     public Connection getConnection() {
+
+    public Connection getConnection() {
         return connection;
     }
 }

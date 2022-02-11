@@ -59,9 +59,30 @@ public class InventoryController extends HttpServlet {
         String search_model = "";
         String search_by_date = "";
 
-        HttpSession session = request.getSession();
         String loggedUser = "";
-        loggedUser = session.getAttribute("user_role").toString();
+        String logged_user_name = "";
+        String logged_designation = "";
+        String logged_org_name = "";
+        String logged_org_office = "";
+        int logged_org_office_id = 0;
+        int logged_org_name_id = 0;
+        int logged_key_person_id = 0;
+
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
+            logged_user_name = session.getAttribute("logged_user_name").toString();
+            logged_org_name = session.getAttribute("logged_org_name").toString();
+            logged_designation = session.getAttribute("logged_designation").toString();
+            logged_org_office = session.getAttribute("logged_org_office").toString();
+            logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
+            logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
+            logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
+            //  office_admin = session.getAttribute("office_admin").toString();
+        }
 
         // search_item_name = request.getParameter("search_item_name");
         search_org_office = request.getParameter("search_org_office");
@@ -124,7 +145,10 @@ public class InventoryController extends HttpServlet {
 
                     if (JQstring.equals("getItemCode")) {
                         String manufacturer = request.getParameter("manufacturer");
-                        list = model.getItemCode(q, manufacturer);
+                        if (!loggedUser.equals("Super Admin")) {
+                            search_org_office = logged_org_office;
+                        }
+                        list = model.getItemCode(q, manufacturer, search_org_office, logged_user_name,loggedUser);
                     }
 
                     if (JQstring.equals("getModelName")) {
@@ -133,10 +157,14 @@ public class InventoryController extends HttpServlet {
                         list = model.getModelName(q, manufacturer_name, item_code);
                     }
                     if (JQstring.equals("getOrgOffice")) {
-                        list = model.getOrgOffice(q);
+                        search_org_office = request.getParameter("search_org_office");
+                        if (!loggedUser.equals("Super Admin")) {
+                            search_org_office = logged_org_office;
+                        }
+                        list = model.getOrgOffice(q, search_org_office, logged_user_name, loggedUser);
                     }
                     if (JQstring.equals("getKeyPerson")) {
-                        list = model.getKeyPerson(q, str2);
+                        list = model.getKeyPerson(q, str2, logged_user_name, loggedUser);
                     }
 
                     if (json != null) {
@@ -261,6 +289,13 @@ public class InventoryController extends HttpServlet {
                 }
             }
 
+            if (!loggedUser.equals("Super Admin")) {
+                search_org_office = logged_org_office;
+                search_key_person = logged_user_name;
+                request.setAttribute("org_office", logged_org_office);
+                request.setAttribute("key_person", logged_user_name);
+
+            }
             List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,
                     search_key_person, search_by_date);
             request.setAttribute("list", list);

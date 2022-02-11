@@ -84,6 +84,7 @@
 
                 <tr>
                     <th >Designation</th>
+                    <th >Key Person</th>
                 </tr>
                 <tbody>
                     <c:forEach var="beanType" items="${requestScope['list']}"
@@ -93,6 +94,9 @@
 
                             <td> 
                                 ${beanType.designation}
+                            </td>
+                            <td> 
+                                ${beanType.key_person}
                             </td>
                         </tr>
 

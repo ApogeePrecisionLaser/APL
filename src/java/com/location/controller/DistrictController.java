@@ -15,6 +15,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 public class DistrictController extends HttpServlet {
@@ -27,7 +28,11 @@ public class DistrictController extends HttpServlet {
         response.setContentType("text/html");
         ServletContext ctx = getServletContext();
         DistrictModel districtModel = new DistrictModel();
-
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             //       organisationNameModel.setConnection(DBConnection.getConnection(ctx, session));
             districtModel.setConnection(DBConnection.getConnectionForUtf(ctx));

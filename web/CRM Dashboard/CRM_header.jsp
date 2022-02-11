@@ -138,14 +138,17 @@
 
                         </div>
                     </li>
+                    <%
+                        if (session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Admin")) {
+                    %>
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                            <i class="fas fa-expand-arrows-alt"></i>
+                        <a class="nav-link" href="SalesEnquiryController" role="button">
+                            <img src="CRM Dashboard/assets2/img/product/addEnquiry.png" width="20">
                         </a>
                     </li>
+                    <%}%>
                     <li class="nav-item mr-3">
                         <a class="nav-link lineHeightOneTwo pl-1" href="LoginController?task=logout">
-                            <!-- <i class="fas fa-th-large">sda</i> -->
                             <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20">
                         </a>
                     </li>
@@ -372,6 +375,12 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="SalesEnquiryController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add Enquiry</p>
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="ApproveOrdersController?task=sales_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>

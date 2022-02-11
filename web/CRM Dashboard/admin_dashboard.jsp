@@ -140,10 +140,10 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${beanType.status=='Pending'}">
-                                                            <span class="badge badge-warning">${beanType.status}</span>
+                                                            <span class="badge badge-warning">Order Placed</span>
                                                         </c:when>
                                                         <c:when test="${beanType.status=='Approved'}">
-                                                            <span class="badge badge-info">${beanType.status}</span>
+                                                            <span class="badge badge-info">Order Confirmed</span>
                                                         </c:when>
                                                         <c:when test="${beanType.status=='Denied'}">
                                                             <span class="badge badge-danger">${beanType.status}</span>

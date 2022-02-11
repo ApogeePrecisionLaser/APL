@@ -52,8 +52,12 @@
                             <div class="d-flex justify-content-between">
 
                                 <div class="text-right">
-                                    <a href="SalesEnquiryController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Go to Enquiries List</a>
-                                </div>
+                                    <c:if test="${user_role=='Sales'}">
+                                        <a href="ApproveOrdersController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Go to Enquiries List</a>
+                                    </c:if>
+                                    <c:if test="${user_role!='Sales'}">
+                                        <a href="SalesEnquiryController?task=sales_enquiry_list" class="btn myThemeBtn text-right">Go to Enquiries List</a>
+                                    </c:if>                                </div>
                             </div>
                             <form class="myForm" action="SalesEnquiryController" method="post" style="margin-top:20px">
                                 <div class="row">
@@ -98,7 +102,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Mobile:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" required name="sender_mob" id="sender_mob">
+                                            <input type="text" class="form-control" required name="sender_mob" id="sender_mob" onblur="ValidateNo()">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -144,20 +148,20 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Sender Email:</label>
-                                            <input type="email" class="form-control"  name="sender_email" id="sender_email">
+                                            <input type="email" class="form-control"  name="sender_email" id="sender_email" onblur="ValidateEmail()">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Sender Alternate Email:</label>
-                                            <input type="email" class="form-control"  name="sender_alternate_email" id="sender_alternate_email">
+                                            <input type="email" class="form-control"  name="sender_alternate_email" id="sender_alternate_email" >
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Sender Alternate Mobile:</label>
-                                            <input type="text" class="form-control"  name="sender_alternate_mob" id="sender_alternate_mob">
+                                            <input type="text" class="form-control"  name="sender_alternate_mob" id="sender_alternate_mob" onblur="ValidateAlternateNo()">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -232,161 +236,204 @@
 //        return false;
 //    });
 
-    $(function () {
+                                                $(function () {
 
 
-        setTimeout(function () {
-            $('.myAlertBox').fadeOut('fast');
-        }, 2000);
+                                                    setTimeout(function () {
+                                                        $('.myAlertBox').fadeOut('fast');
+                                                    }, 2000);
 
-        $("#enquiry_source").autocomplete({
-            source: function (request, response) {
-                var random = $('#enquiry_source').val();
-                $.ajax({
-                    url: "SalesEnquiryController",
-                    dataType: "json",
-                    data: {action1: "getEnquirySource", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#enquiry_source').val(ui.item.label);
-                return false;
-            }
-        });
+                                                    $("#enquiry_source").autocomplete({
+                                                        source: function (request, response) {
+                                                            var random = $('#enquiry_source').val();
+                                                            $.ajax({
+                                                                url: "SalesEnquiryController",
+                                                                dataType: "json",
+                                                                data: {action1: "getEnquirySource", str: random},
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                    response(data.list);
+                                                                }, error: function (error) {
+                                                                    console.log(error.responseText);
+                                                                    response(error.responseText);
+                                                                }
+                                                            });
+                                                        },
+                                                        select: function (events, ui) {
+                                                            console.log(ui);
+                                                            $('#enquiry_source').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
 
-        $("#marketing_vertical").autocomplete({
-            source: function (request, response) {
-                var random = $('#marketing_vertical').val();
-                $.ajax({
-                    url: "SalesEnquiryController",
-                    dataType: "json",
-                    data: {action1: "getMarketingVertical", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#marketing_vertical').val(ui.item.label);
-                return false;
-            }
-        });
-
-
-        $("#district").autocomplete({
-            source: function (request, response) {
-                var random = $('#district').val();
-                $.ajax({
-                    url: "SalesEnquiryController",
-                    dataType: "json",
-                    data: {action1: "getDistrict", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#district').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $("#sender_city").autocomplete({
-            source: function (request, response) {
-                var random = $('#sender_city').val();
-                $.ajax({
-                    url: "SalesEnquiryController",
-                    dataType: "json",
-                    data: {action1: "getCities", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#sender_city').val(ui.item.label);
-                return false;
-            }
-        });
+                                                    $("#marketing_vertical").autocomplete({
+                                                        source: function (request, response) {
+                                                            var random = $('#marketing_vertical').val();
+                                                            $.ajax({
+                                                                url: "SalesEnquiryController",
+                                                                dataType: "json",
+                                                                data: {action1: "getMarketingVertical", str: random},
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                    response(data.list);
+                                                                }, error: function (error) {
+                                                                    console.log(error.responseText);
+                                                                    response(error.responseText);
+                                                                }
+                                                            });
+                                                        },
+                                                        select: function (events, ui) {
+                                                            console.log(ui);
+                                                            $('#marketing_vertical').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
 
 
-        $("#sender_state").autocomplete({
-            source: function (request, response) {
-                var random = $('#sender_state').val();
-                $.ajax({
-                    url: "SalesEnquiryController",
-                    dataType: "json",
-                    data: {action1: "getStates", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#sender_state').val(ui.item.label);
-                return false;
-            }
-        });
+                                                    $("#district").autocomplete({
+                                                        source: function (request, response) {
+                                                            var random = $('#district').val();
+                                                            $.ajax({
+                                                                url: "SalesEnquiryController",
+                                                                dataType: "json",
+                                                                data: {action1: "getDistrict", str: random},
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                    response(data.list);
+                                                                }, error: function (error) {
+                                                                    console.log(error.responseText);
+                                                                    response(error.responseText);
+                                                                }
+                                                            });
+                                                        },
+                                                        select: function (events, ui) {
+                                                            console.log(ui);
+                                                            $('#district').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
 
-        $("#sender_country").autocomplete({
-            source: function (request, response) {
-                var random = $('#sender_country').val();
-                $.ajax({
-                    url: "SalesEnquiryController",
-                    dataType: "json",
-                    data: {action1: "getCountry", str: random},
-                    success: function (data) {
-                        console.log(data);
-                        response(data.list);
-                    }, error: function (error) {
-                        console.log(error.responseText);
-                        response(error.responseText);
-                    }
-                });
-            },
-            select: function (events, ui) {
-                console.log(ui);
-                $('#sender_country').val(ui.item.label);
-                return false;
-            }
-        });
-    });
+                                                    $("#sender_city").autocomplete({
+                                                        source: function (request, response) {
+                                                            var random = $('#sender_city').val();
+                                                            $.ajax({
+                                                                url: "SalesEnquiryController",
+                                                                dataType: "json",
+                                                                data: {action1: "getCities", str: random},
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                    response(data.list);
+                                                                }, error: function (error) {
+                                                                    console.log(error.responseText);
+                                                                    response(error.responseText);
+                                                                }
+                                                            });
+                                                        },
+                                                        select: function (events, ui) {
+                                                            console.log(ui);
+                                                            $('#sender_city').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
 
-    $('#add_info').click(function () {
-        if ($('#add_info_div').css('display') == 'none') {
-            $('#add_info_div').show();
-        } else {
-            $('#add_info_div').hide();
-        }
 
-    });
+                                                    $("#sender_state").autocomplete({
+                                                        source: function (request, response) {
+                                                            var random = $('#sender_state').val();
+                                                            $.ajax({
+                                                                url: "SalesEnquiryController",
+                                                                dataType: "json",
+                                                                data: {action1: "getStates", str: random},
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                    response(data.list);
+                                                                }, error: function (error) {
+                                                                    console.log(error.responseText);
+                                                                    response(error.responseText);
+                                                                }
+                                                            });
+                                                        },
+                                                        select: function (events, ui) {
+                                                            console.log(ui);
+                                                            $('#sender_state').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    $("#sender_country").autocomplete({
+                                                        source: function (request, response) {
+                                                            var random = $('#sender_country').val();
+                                                            $.ajax({
+                                                                url: "SalesEnquiryController",
+                                                                dataType: "json",
+                                                                data: {action1: "getCountry", str: random},
+                                                                success: function (data) {
+                                                                    console.log(data);
+                                                                    response(data.list);
+                                                                }, error: function (error) {
+                                                                    console.log(error.responseText);
+                                                                    response(error.responseText);
+                                                                }
+                                                            });
+                                                        },
+                                                        select: function (events, ui) {
+                                                            console.log(ui);
+                                                            $('#sender_country').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
+                                                });
+
+                                                $('#add_info').click(function () {
+                                                    if ($('#add_info_div').css('display') == 'none') {
+                                                        $('#add_info_div').show();
+                                                    } else {
+                                                        $('#add_info_div').hide();
+                                                    }
+
+                                                });
+
+                                                function ValidateNo() {
+                                                    var phoneNo = document.getElementById('sender_mob');
+
+                                                    if (phoneNo.value == "" || phoneNo.value == null) {
+                                                        alert("Please enter your Mobile No.");
+                                                        return false;
+                                                    }
+                                                    if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
+                                                        alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+                                                        return false;
+                                                    }
+                                                    return true;
+                                                }
+
+                                                function ValidateAlternateNo() {
+                                                    var phoneNo = document.getElementById('sender_alternate_mob');
+
+                                                    if (phoneNo.value == "" || phoneNo.value == null) {
+                                                        alert("Please enter your Mobile No.");
+                                                        return false;
+                                                    }
+                                                    if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
+                                                        alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+                                                        return false;
+                                                    }
+                                                    return true;
+                                                }
+
+                                                function ValidateEmail() {
+                                                    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+                                                    if (($('#sender_email').val()).match(validRegex)) {
+                                                        return true;
+
+                                                    } else {
+                                                        alert("Invalid email address!");
+                                                        document.getElementById("sender_email").focus();
+                                                        return false;
+
+                                                    }
+
+                                                }
 
 </script>

@@ -19,6 +19,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 /**
@@ -37,6 +38,11 @@ public class CityLocationController extends HttpServlet {
         ServletContext ctx = getServletContext();
         CityLocationModel cityLocationModel = new CityLocationModel();
 
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             //       organisationNameModel.setConnection(DBConnection.getConnection(ctx, session));
             cityLocationModel.setConnection(DBConnection.getConnectionForUtf(ctx));

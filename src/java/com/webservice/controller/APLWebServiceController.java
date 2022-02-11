@@ -27,6 +27,7 @@ import com.dashboard.bean.Enquiry;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -388,5 +389,45 @@ public class APLWebServiceController {
 
     }
 
+//    @POST
+//    @Path("/sendSmsToAssignedFor")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public String sendSmsToAssignedFor(String numberStr1, String messageStr1) {
+//        String result = "";
+//        numberStr1 = "8882349596";
+//        messageStr1 = "Hello";
+//
+//        try {
+//            String host_url = "http://login.smsgatewayhub.com/api/mt/SendSMS?";;
+//            messageStr1 = java.net.URLEncoder.encode(messageStr1, "UTF-8");
+//            String queryString = "APIKey=WIOg7OdIzkmYTrqTsw262w&senderid=JPSOFT&channel=2&DCS=8&flashsms=0&number=" + numberStr1 + "&text=" + messageStr1 + "&route=";
+//            String url = host_url + queryString;
+//            result = callURL(url);
+//            System.out.println("SMS URL: " + url);
+//        } catch (Exception e) {
+//            result = e.toString();
+//            System.out.println("SMSModel sendSMS() Error: " + e);
+//        }
+//        return result;
+//    }
+//
+//    private String callURL(String strURL) {
+//        String status = "";
+//        try {
+//            java.net.URL obj = new java.net.URL(strURL);
+//            HttpURLConnection httpReq = (HttpURLConnection) obj.openConnection();
+//            httpReq.setDoOutput(true);
+//            httpReq.setInstanceFollowRedirects(true);
+//            httpReq.setRequestMethod("GET");
+//            status = httpReq.getResponseMessage();
+//        } catch (MalformedURLException me) {
+//            status = me.toString();
+//        } catch (IOException ioe) {
+//            status = ioe.toString();
+//        } catch (Exception e) {
+//            status = e.toString();
+//        }
+//        return status;
+//    }
 }
-

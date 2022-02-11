@@ -141,11 +141,6 @@
 
 
 
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -170,6 +165,14 @@
     </style>
 
     <body class="hold-transition login-page myLoginPage">
+
+        <%
+            session = request.getSession(false);
+            if (session.getAttribute("log_user") != null) {
+                response.sendRedirect("LoginController");
+            }
+
+        %>
         <div class="login-box">
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">
@@ -192,16 +195,16 @@
                                                     </div>
                                                 </div>-->
 
+                        <!--                        <div class="input-group mb-3">
+                                                    <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile" name="mobile" id="mobile">
+                                                    <div class="input-group-append">
+                                                        <div class="input-group-text rounded-0">
+                                                            <span class="fas fa-phone"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile" name="mobile" id="mobile">
-                            <div class="input-group-append">
-                                <div class="input-group-text rounded-0">
-                                    <span class="fas fa-phone"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control rounded-0 fontFourteen" placeholder="Email" name="email" id="email">
+                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile Or Email" name="email" id="email">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-envelope"></span>
@@ -227,14 +230,14 @@
                     </div>
 
 
-<!--                    <div class="d-flex justify-content-between mt-3">
-                        <p class="mb-1">
-                            <a href="forgot-password.html" class="fontFourteen">I forgot my password</a>
-                        </p>
-                        <p class="mb-0">
-                            <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
-                        </p>
-                    </div>-->
+                    <!--                    <div class="d-flex justify-content-between mt-3">
+                                            <p class="mb-1">
+                                                <a href="forgot-password.html" class="fontFourteen">I forgot my password</a>
+                                            </p>
+                                            <p class="mb-0">
+                                                <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
+                                            </p>
+                                        </div>-->
 
                 </div>
             </div>
@@ -249,10 +252,10 @@
         <script>
 
                                     function validate() {
-                                        var mobile = $('#mobile').val();
+//                                        var mobile = $('#mobile').val();
                                         var email = $('#email').val();
-                                        if (mobile == '' && email == '') {
-                                            $('#error_msg').text("Please fill One of the field either Email Or Mobile!..");
+                                        if (email == '') {
+                                            $('#error_msg').text("Please enter any one of the info either Email Or Mobile!..");
                                             return false;
                                         }
 

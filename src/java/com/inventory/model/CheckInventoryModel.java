@@ -44,7 +44,8 @@ public class CheckInventoryModel {
         }
     }
 
-    public List<CheckInventory> showIndents(String logged_designation, String indent_status, String user_role, String search_by_date) {
+    public List<CheckInventory> showIndents(String logged_designation, String indent_status, String user_role, String search_by_date,
+            int logged_org_office_id) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
         if (indent_status.equals("All")) {
             indent_status = "";
@@ -53,9 +54,12 @@ public class CheckInventoryModel {
         if (logged_designation.equals("Store Incharge")) {
             query = " select indt.indent_no,indt.date_time,indt.description "
                     + " ,s.status,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to,indt.indent_table_id "
-                    + " from indent_table indt,key_person kp1,key_person kp2,"
+                    + " from indent_table indt,key_person kp1,key_person kp2,item_authorization ia,indent_item indi,org_office oo, "
                     + " status s,designation d where indt.requested_to=kp2.key_person_id "
-                    + " and indt.requested_by=kp1.key_person_id "
+                    + " and indt.requested_by=kp1.key_person_id and ia.active='Y' "
+                    + " and indi.active='Y' and indt.indent_table_id=indi.indent_table_id "
+                    + " and indi.item_names_id=ia.item_names_id "
+                    + " and  kp1.org_office_id=oo.org_office_id   "
                     + " and indt.status_id=s.status_id and indt.active='Y' "
                     + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3,11) and d.designation_id='5'";
             if (!indent_status.equals("") && indent_status != null) {
@@ -64,7 +68,10 @@ public class CheckInventoryModel {
             if (!search_by_date.equals("") && search_by_date != null) {
                 query += " and indt.date_time like '" + search_by_date + "%' ";
             }
-            query += " order by indt.indent_table_id desc ";
+            if (logged_org_office_id != 0) {
+                query += " and kp1.org_office_id='" + logged_org_office_id + "' ";
+            }
+            query += " group by indt.indent_table_id  order by indt.indent_table_id desc ";
         }
 
         if (user_role.equals("Super Admin")) {
@@ -78,7 +85,7 @@ public class CheckInventoryModel {
             if (!indent_status.equals("") && indent_status != null) {
                 query += " and s.status='" + indent_status + "' ";
             }
-            query += " order by indt.indent_table_id desc ";
+            query += " group by indt.indent_table_id  order by indt.indent_table_id desc ";
         }
 
         try {
@@ -124,7 +131,7 @@ public class CheckInventoryModel {
         return list;
     }
 
-    public List<CheckInventory> getIndentItems(int indent_table_id, int logged_key_person_id) {
+    public List<CheckInventory> getIndentItems(int indent_table_id, int logged_key_person_id, String user_role) {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "

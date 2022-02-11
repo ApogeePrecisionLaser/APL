@@ -159,7 +159,7 @@ public class CheckInventoryController extends HttpServlet {
                 //  String indent_no = request.getParameter("indent_no");
                 int indent_table_id = Integer.parseInt(request.getParameter("indent_table_id").trim());
                 String indent_status = request.getParameter("indent_status");
-                List<CheckInventory> indent_items_list = model.getIndentItems(indent_table_id, logged_key_person_id);
+                List<CheckInventory> indent_items_list = model.getIndentItems(indent_table_id, logged_key_person_id,user_role);
                 request.setAttribute("indent_items_list", indent_items_list);
                 request.setAttribute("indent_status", indent_status);
                 request.getRequestDispatcher("checkInventoryItemList").forward(request, response);
@@ -229,7 +229,7 @@ public class CheckInventoryController extends HttpServlet {
                 status = request.getParameter("status");
             }
 
-            List<CheckInventory> list = model.showIndents(logged_designation, status, user_role, search_by_date);
+            List<CheckInventory> list = model.showIndents(logged_designation, status, user_role, search_by_date,logged_org_office_id);
 
             List<CheckInventory> status_list = model.getStatus();
 

@@ -55,7 +55,10 @@ public class OfficeItemMapReportController extends HttpServlet {
         OfficeItemMapReportModel model = new OfficeItemMapReportModel();
         ItemNameModel model2 = new ItemNameModel();
         String loggedUser = "";
-
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         String search_item_name = "";
         String search_org_office = "";
         String search_item_code = "";

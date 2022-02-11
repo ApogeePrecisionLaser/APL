@@ -20,6 +20,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -632,6 +633,12 @@ public class InventoryBasicModel {
         int key_person_id = getKeyPersonId(bean.getKey_person());
         int stock_quantity = getStockQuantity(item_name_id);
 
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String date_time = bean.getDate_time();
+        String current_time = sdf.format(date);
+        date_time = date_time + " " + current_time;
+
         int map_count = 0;
         try {
             String query4 = " SELECT count(*) as count FROM inventory_basic ib,inventory inv,model m WHERE "
@@ -684,7 +691,7 @@ public class InventoryBasicModel {
                     pstmt2.setString(6, "OK");
                     pstmt2.setInt(7, bean.getStock_quantity());
                     pstmt2.setInt(8, 0);
-                    pstmt2.setString(9, bean.getDate_time());
+                    pstmt2.setString(9, date_time);
                     pstmt2.setString(10, "");
                     pstmt2.setString(11, "");
                     pstmt2.setInt(12, bean.getStock_quantity());
@@ -724,6 +731,9 @@ public class InventoryBasicModel {
         int key_person_id = getKeyPersonId(bean.getKey_person());
 //        int stock_quantity = getStockQuantity(item_name_id);
 
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        String date_time = sdf.format(date);
         int map_count = 0;
         try {
             String query1 = " select  item_names_id, "
@@ -762,7 +772,7 @@ public class InventoryBasicModel {
                     int model_id = 0;
                     String description = "";
                     int stock_quantity = 0;
-                    String date_time = "";
+//                    String date_time = "";
                     int org_office_id_old = 0;
 
                     while (rs3.next()) {
@@ -773,7 +783,7 @@ public class InventoryBasicModel {
                         model_id = rs3.getInt("model_id");
                         description = rs3.getString("description");
                         stock_quantity = rs3.getInt("stock_quantity");
-                        date_time = rs3.getString("date_time");
+//                        date_time = rs3.getString("date_time");
                         org_office_id_old = rs3.getInt("org_office_id");
 
                         String query4 = " SELECT count(*) as count FROM inventory_basic ib,inventory inv,model m WHERE "
@@ -904,6 +914,12 @@ public class InventoryBasicModel {
             item_code = item_code_arr[0];
         }
 
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String date_time = bean.getDate_time();
+        String current_time = sdf.format(date);
+        date_time = date_time + " " + current_time;
+
         int item_name_id = getItemNamesId(item_code);
         int org_office_id = getOrgOfficeId(bean.getOrg_office());
         int model_id = getModelId(bean.getModel());
@@ -988,16 +1004,14 @@ public class InventoryBasicModel {
                     psmt2.setString(7, "OK");
                     psmt2.setInt(8, bean.getStock_quantity());
                     psmt2.setInt(9, 0);
-                    psmt2.setString(10, bean.getDate_time());
+                    psmt2.setString(10, date_time);
                     psmt2.setString(11, "");
                     psmt2.setString(12, "");
                     psmt2.setInt(13, bean.getStock_quantity());
+
                     rowsAffected2 = psmt2.executeUpdate();
-
                 }
-
             }
-
         } catch (Exception e) {
             System.out.println("InventoryBasicModel updateRecord() Error: " + e);
         }
@@ -1019,12 +1033,10 @@ public class InventoryBasicModel {
                     + " WHERE inventory_basic_id =" + inventory_basic_id + "  and active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-
             ResultSet rset = pstmt.executeQuery();
 
             while (rset.next()) {
                 revision = rset.getInt("revision_no");
-
             }
         } catch (Exception e) {
             System.err.println("InventoryBasicModel getRevisionno error:" + e);
@@ -1039,12 +1051,10 @@ public class InventoryBasicModel {
                     + " WHERE inventory_id =" + inventory_id + "  and active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-
             ResultSet rset = pstmt.executeQuery();
 
             while (rset.next()) {
                 revision = rset.getInt("revision_no");
-
             }
         } catch (Exception e) {
             System.err.println("InventoryBasicModel getRevisionno2 error:" + e);
@@ -1071,7 +1081,6 @@ public class InventoryBasicModel {
             message = "Cannot delete the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-
         return rowsAffected;
     }
 
@@ -1163,16 +1172,42 @@ public class InventoryBasicModel {
         return list;
     }
 
-    public List<String> getItemCode(String q, String manufacturer) {
+    public List<String> getItemCode(String q, String manufacturer, String logged_key_person, String user_role, String logged_org_office) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
-                + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
-                + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
+        String query = "";
 
-        if (!manufacturer.equals("") && manufacturer != null) {
-            query += " and mr.manufacturer_name='" + manufacturer + "' ";
+        if (user_role.equals("Super Admin")) {
+            query = " SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+                    + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
+                    + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
+
+            if (!manufacturer.equals("") && manufacturer != null) {
+                query += " and mr.manufacturer_name='" + manufacturer + "' ";
+            }
+            query += " group by itn.item_code ORDER BY itn.item_code ";
+        } else {
+            query = "  SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn, "
+                    + " manufacturer mr,manufacturer_item_map mim,item_authorization ia,key_person kp, "
+                    + " org_office oo,org_office_designation_map oodm,designation d where mr.manufacturer_id=mim.manufacturer_id "
+                    + " and itn.item_names_id=mim.item_names_id and itn.active='Y'  and mr.active='Y' and mim.active='Y' "
+                    + " and itn.is_super_child='Y' "
+                    + " and oo.org_office_id=oodm.org_office_id  and d.designation_id=oodm.designation_id "
+                    + " and oodm.org_office_designation_map_id=ia.org_office_designation_map_id "
+                    + " and ia.item_names_id=itn.item_names_id and "
+                    + " ia.active='Y' and oo.active='Y' and d.active='Y' and oodm.active='Y' "
+                    + " and d.designation='Store Incharge' and ia.key_person_id=kp.key_person_id ";
+
+            if (!manufacturer.equals("") && manufacturer != null) {
+                query += " and mr.manufacturer_name='" + manufacturer + "' ";
+            }
+            if (!logged_org_office.equals("") && logged_org_office != null) {
+                query += " and oo.org_office_name='" + logged_org_office + "' ";
+            }
+            if (!logged_key_person.equals("") && logged_key_person != null) {
+                query += " and kp.key_person_name='" + logged_key_person + "' ";
+            }
+            query += " group by itn.item_code ORDER BY itn.item_code ";
         }
-        query += " group by itn.item_code ORDER BY itn.item_code ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1237,32 +1272,36 @@ public class InventoryBasicModel {
 //        }
 //        return list;
 //    }
-    public List<String> getOrgOffice(String q, String search_org_office) {
+    public List<String> getOrgOffice(String q, String search_org_office, String logged_key_person, String user_role) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_name FROM org_office oo where"
-                + " oo.active='Y' ";
+        if (!user_role.equals("Super Admin")) {
+            list.add(search_org_office);
+        } else {
 
-        if (!search_org_office.equals("") && search_org_office != null) {
-            query += " and  oo.org_office_name!='" + search_org_office + "' ";
-        }
+            String query = " SELECT oo.org_office_name FROM org_office oo where"
+                    + " oo.active='Y' ";
 
-        query += " group by oo.org_office_name ORDER BY oo.org_office_name ";
-        try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            int count = 0;
-            q = q.trim();
-            while (rset.next()) {
-                String org_office_name = (rset.getString("org_office_name"));
-                if (org_office_name.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(org_office_name);
-                    count++;
+            if (!search_org_office.equals("") && search_org_office != null) {
+                query += " and  oo.org_office_name!='" + search_org_office + "' ";
+            }
+            query += " group by oo.org_office_name ORDER BY oo.org_office_name ";
+            try {
+                ResultSet rset = connection.prepareStatement(query).executeQuery();
+                int count = 0;
+                q = q.trim();
+                while (rset.next()) {
+                    String org_office_name = (rset.getString("org_office_name"));
+                    if (org_office_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(org_office_name);
+                        count++;
+                    }
                 }
+                if (count == 0) {
+                    list.add("No such org_office_name  exists.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error:InventoryBasicModel--getOrgOffice()-- " + e);
             }
-            if (count == 0) {
-                list.add("No such org_office_name  exists.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getOrgOffice()-- " + e);
         }
         return list;
     }
@@ -1338,32 +1377,37 @@ public class InventoryBasicModel {
         return list;
     }
 
-    public List<String> getKeyPerson(String q, String org_office) {
+    public List<String> getKeyPerson(String q, String org_office, String logged_key_person, String user_role) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT kp.key_person_name FROM key_person kp,org_office oo where"
-                + " kp.org_office_id=oo.org_office_id and kp.active='Y' and oo.active='Y' ";
 
-        if (!org_office.equals("") && org_office != null) {
-            query += " and oo.org_office_name='" + org_office + "' ";
-        }
+        if (!user_role.equals("Super Admin")) {
+            list.add(logged_key_person);
+        } else {
+            String query = "SELECT kp.key_person_name FROM key_person kp,org_office oo where"
+                    + " kp.org_office_id=oo.org_office_id and kp.active='Y' and oo.active='Y' and kp.designation_id=5 ";
 
-        query += " group by kp.key_person_name ORDER BY kp.key_person_name ";
-        try {
-            ResultSet rset = connection.prepareStatement(query).executeQuery();
-            int count = 0;
-            q = q.trim();
-            while (rset.next()) {
-                String key_person_name = (rset.getString("key_person_name"));
-                if (key_person_name.toUpperCase().startsWith(q.toUpperCase())) {
-                    list.add(key_person_name);
-                    count++;
+            if (!org_office.equals("") && org_office != null) {
+                query += " and oo.org_office_name='" + org_office + "' ";
+            }
+
+            query += " group by kp.key_person_name ORDER BY kp.key_person_name ";
+            try {
+                ResultSet rset = connection.prepareStatement(query).executeQuery();
+                int count = 0;
+                q = q.trim();
+                while (rset.next()) {
+                    String key_person_name = (rset.getString("key_person_name"));
+                    if (key_person_name.toUpperCase().startsWith(q.toUpperCase())) {
+                        list.add(key_person_name);
+                        count++;
+                    }
                 }
+                if (count == 0) {
+                    list.add("No such key_person_name  exists.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error:InventoryBasicModel--getKeyPerson()-- " + e);
             }
-            if (count == 0) {
-                list.add("No such key_person_name  exists.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error:InventoryBasicModel--getKeyPerson()-- " + e);
         }
         return list;
     }

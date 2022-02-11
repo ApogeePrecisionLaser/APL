@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.fileupload.FileItem;
@@ -548,7 +549,7 @@ public class ItemNameModel {
     }
 
     public int insertRecord(ItemName item_name, Iterator itr, ModelName modelBean, int j, String image_name, String destination,
-            ItemAuthorization itemAuthBean, List<String> des_list) throws SQLException {
+            ItemAuthorization itemAuthBean, List<String> des_list, HashMap<Integer, Integer> key_person_map) throws SQLException {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
                 + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -641,17 +642,84 @@ public class ItemNameModel {
                     ResultSet rs = pstmt.getGeneratedKeys();
                     while (rs.next()) {
                         item_id = rs.getInt(1);
-                        for (int k = 0; k < des_list.size(); k++) {
-                            int org_office_des_map_id = getOrgOfficeDesignationMapId(item_name.getOrg_office(), des_list.get(k));
-                            if (!des_list.get(k).equals("All") && !des_list.get(k).equals("")) {
-                                int designation_id = getDesignationId(des_list.get(k));
+//                        for (int k = 0; k < des_list.size(); k++) {
+//                            int org_office_des_map_id = getOrgOfficeDesignationMapId(item_name.getOrg_office(), des_list.get(k));
+//                            
+//                            
+//                            
+//                            if (!des_list.get(k).equals("All") && !des_list.get(k).equals("")) {
+//                                int designation_id = getDesignationId(des_list.get(k));
+//                                String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+//                                        + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id) "
+//                                        + " VALUES(?,?,?,?,?,?,?,?,?) ";
+//
+//                                String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
+//                                        + " item_names_id='" + item_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
+//                                        + " and active='Y'  ";
+//                                int auth_map_count = 0;
+//                                PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
+//                                ResultSet rs1 = pstmt1.executeQuery();
+//                                while (rs1.next()) {
+//                                    auth_map_count = rs1.getInt("count");
+//                                }
+//                                if (auth_map_count > 0) {
+//                                    message = "Designation has already mapped to this item!..";
+//                                    msgBgColor = COLOR_ERROR;
+//                                } else {
+//                                    PreparedStatement pstmt_auth = connection.prepareStatement(item_auth_query);
+//                                    pstmt_auth.setInt(1, item_id);
+//                                    pstmt_auth.setInt(2, designation_id);
+//                                    pstmt_auth.setString(3, "");
+//                                    pstmt_auth.setInt(4, itemAuthBean.getRevision_no());
+//                                    pstmt_auth.setString(5, "Y");
+//                                    pstmt_auth.setString(6, "OK");
+//                                    pstmt_auth.setInt(7, 0);
+//                                    pstmt_auth.setInt(8, 0);
+//                                    pstmt_auth.setInt(9, org_office_des_map_id);
+//                                    rowsAffected = pstmt_auth.executeUpdate();
+//                                }
+//
+//                            }
+//                        }
+
+                        Iterator<Map.Entry<Integer, Integer>> itr_map = key_person_map.entrySet().iterator();
+                        ArrayList list_key = new ArrayList();
+                        ArrayList list_value = new ArrayList();
+                        while (itr_map.hasNext()) {
+                            Map.Entry<Integer, Integer> entry = itr_map.next();
+//                            System.out.println("Key = " + entry.getKey()
+//                                    + ", Value = " + entry.getValue());
+
+                            list_key.add(entry.getKey());
+                            list_value.add(entry.getValue());
+
+                        }
+
+//                        System.err.println("list val --" + list_value.size());
+//                        System.err.println("list val at 1  --" + list_value.get(1));
+//                        System.err.println("list val at 1 string  --" + list_value.get(1).toString());
+                        int designation_id = 0;
+                        String key_person_id = "";
+
+                        for (int k = 0; k < list_key.size(); k++) {
+                            designation_id = Integer.parseInt(list_key.get(k).toString());
+                            key_person_id = list_value.get(k).toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                            ArrayList<String> key_p_list = new ArrayList<>(Arrays.asList(key_person_id.split(",")));
+                            //key_p_list.add(key_person_id);
+//                            System.err.println("key p list ---" + key_p_list.size());
+//                            System.err.println("key p list ---" + key_p_list.toString());
+                            for (int l = 0; l < key_p_list.size(); l++) {
+                                String kkk = key_p_list.get(l).trim();
+//                                System.err.println("final val --- " + kkk);
+
+                                int org_office_des_map_id = getOrgOfficeDesignationMapIdOO(item_name.getOrg_office(), designation_id);
                                 String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
-                                        + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id) "
-                                        + " VALUES(?,?,?,?,?,?,?,?,?) ";
+                                        + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id,key_person_id) "
+                                        + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
                                 String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
                                         + " item_names_id='" + item_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
-                                        + " and active='Y'  ";
+                                        + " and active='Y' and key_person_id='" + kkk + "'  ";
                                 int auth_map_count = 0;
                                 PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
                                 ResultSet rs1 = pstmt1.executeQuery();
@@ -672,15 +740,16 @@ public class ItemNameModel {
                                     pstmt_auth.setInt(7, 0);
                                     pstmt_auth.setInt(8, 0);
                                     pstmt_auth.setInt(9, org_office_des_map_id);
+                                    pstmt_auth.setString(10, kkk);
                                     rowsAffected = pstmt_auth.executeUpdate();
                                 }
 
                             }
+
                         }
                     }
                 }
             }
-
             String query_count_model = " select count(*) as count from model where model='" + modelBean.getModel() + "' and active='Y' ";
             String query_insert_model = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,"
                     + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?) ";
@@ -763,14 +832,16 @@ public class ItemNameModel {
         } catch (Exception e) {
             System.out.println("ItemNameModel insertRecord() Error: " + e);
         }
-        if (rowsAffected > 0) {
+        if (rowsAffected
+                > 0) {
             message = "Record saved successfully.";
             msgBgColor = COLOR_OK;
         } else {
             message = "Cannot save the record, some error.";
             msgBgColor = COLOR_ERROR;
         }
-        if (count > 0) {
+        if (count
+                > 0) {
             message = "This Prefix Already Exists for another item for this parent ";
             msgBgColor = COLOR_ERROR;
         }
@@ -1411,11 +1482,11 @@ public class ItemNameModel {
         return id;
     }
 
-    public int getOrgOfficeDesignationMapId(String org_office, String designation) {
+    public int getOrgOfficeDesignationMapIdOO(String org_office, int designation_id) {
         String query = " SELECT org_office_designation_map_id "
                 + " FROM org_office_designation_map oodm,org_office oo,designation d WHERE d.active='Y' and oo.active='Y' "
                 + " and oodm.active='Y' and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
-                + " and oo.org_office_name='" + org_office + "' and d.designation='" + designation + "' ";
+                + " and oo.org_office_name='" + org_office + "' and d.designation_id='" + designation_id + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1425,6 +1496,23 @@ public class ItemNameModel {
             id = rset.getInt("org_office_designation_map_id");
         } catch (Exception e) {
             System.out.println("ItemNameModel getOrgOfficeDesignationMapId Error: " + e);
+        }
+        return id;
+    }
+
+    public int getKeyPersonId(String key_person, String org_office) {
+        String query = " SELECT distinct key_person_id "
+                + " FROM org_office_designation_map oodm,org_office oo,designation d,key_person kp WHERE d.active='Y' and oo.active='Y' "
+                + " and oodm.active='Y' and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id and kp.active='Y' "
+                + " and kp.org_office_id=oo.org_office_id and oo.org_office_name='" + org_office + "' and kp.key_person_name='" + key_person + "' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("key_person_id");
+        } catch (Exception e) {
+            System.out.println("ItemNameModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -1618,7 +1706,7 @@ public class ItemNameModel {
 
     public List<String> getDesignation(String q, String org_office) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT distinct d.designation from designation d,org_office oo,org_office_designation_map oodm "
+        String query = " SELECT distinct concat(d.designation,'-',d.designation_id) as designation from designation d,org_office oo,org_office_designation_map oodm "
                 + " where d.active='Y' and oo.active='Y' and oodm.active='Y' "
                 + " and d.designation_id=oodm.designation_id and oo.org_office_id=oodm.org_office_id and oo.org_office_name='" + org_office + "' ";
 
@@ -1638,6 +1726,105 @@ public class ItemNameModel {
             }
         } catch (Exception e) {
             System.out.println("Error:ItemAuthorizationModel--getDesignation()-- " + e);
+        }
+        return list;
+    }
+
+    public List<String> getDesignationForList(String q, String org_office) {
+        List<String> list = new ArrayList<String>();
+        String query = " SELECT distinct concat(d.designation,'&',d.designation_id) as designation from designation d,org_office oo,org_office_designation_map oodm "
+                + " where d.active='Y' and oo.active='Y' and oodm.active='Y' "
+                + " and d.designation_id=oodm.designation_id and oo.org_office_id=oodm.org_office_id and oo.org_office_name='" + org_office + "' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String designation = (rset.getString("designation"));
+                if (designation.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(designation);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such designation  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:ItemAuthorizationModel--getDesignation()-- " + e);
+        }
+        return list;
+    }
+
+    public String getDesignationId(String key_person_name, String org_office) {
+        int designation_id = 0;
+        int key_person_id = 0;
+        String query = " SELECT distinct d.designation_id,kp.key_person_id from designation d,org_office oo,org_office_designation_map oodm,key_person kp "
+                + " where d.active='Y' and oo.active='Y' and oodm.active='Y' and kp.active='Y' "
+                + " and d.designation_id=oodm.designation_id and oo.org_office_id=oodm.org_office_id "
+                + " and oo.org_office_name='" + org_office + "' and kp.org_office_id=oo.org_office_id and kp.designation_id=d.designation_id "
+                + " and kp.key_person_name='" + key_person_name + "' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            while (rset.next()) {
+                designation_id = (rset.getInt("designation_id"));
+                key_person_id = (rset.getInt("key_person_id"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error:ItemAuthorizationModel--getDesignation()-- " + e);
+        }
+        return designation_id + "&" + key_person_id;
+    }
+
+    public String getDesignationKeyPerson(String key_person_name, String org_office) {
+        String designation = "";
+        String key_person = "";
+        String query = " SELECT distinct d.designation,kp.key_person_name from designation d,org_office oo,org_office_designation_map oodm,key_person kp "
+                + " where d.active='Y' and oo.active='Y' and oodm.active='Y' and kp.active='Y' "
+                + " and d.designation_id=oodm.designation_id and oo.org_office_id=oodm.org_office_id "
+                + " and oo.org_office_name='" + org_office + "' and kp.org_office_id=oo.org_office_id and kp.designation_id=d.designation_id "
+                + " and kp.key_person_name='" + key_person_name + "' ";
+
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            while (rset.next()) {
+                designation = (rset.getString("designation"));
+                key_person = (rset.getString("key_person_name"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error:ItemAuthorizationModel--getDesignation()-- " + e);
+        }
+        return designation + "&" + key_person;
+    }
+
+    public List<String> getKeyPerson(String q, String org_office, int designation_id) {
+        List<String> list = new ArrayList<String>();
+        String query = " SELECT distinct concat(kp.key_person_name,'-',kp.key_person_id) as key_person_name from key_person kp,org_office oo,designation d,org_office_designation_map oodm "
+                + " where kp.active='Y' and oo.active='Y' and d.active='Y' and oodm.active='Y' and "
+                + " kp.org_office_designation_map_id=oodm.org_office_designation_map_id and "
+                + " oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
+                + " and d.designation_id='" + designation_id + "' and oo.org_office_name='" + org_office + "' ";
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String key_person_name = (rset.getString("key_person_name"));
+                if (key_person_name.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(key_person_name);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such key_person_name  exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:ItemAuthorizationModel--getKeyPerson()-- " + e);
         }
         return list;
     }

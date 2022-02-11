@@ -106,16 +106,16 @@
                             <div class="col-md-4 mb-4 mb-md-0">
                                 <div class="_product-detail-content  border" style="background-color: #102f42;box-shadow: 2px 2px 7px #999;">
                                     <p class="_p-name text-white"> Your Order Detail </p>
-                                    <div class="couponWrap mb-3">
-                                        <div class="d-flex justify-content-start">
-                                            <div class="form-group mb-0 w-100">
-                                                <input type="text" class="form-control" placeholder="Coupon Code" id="email">
-                                            </div>
-                                            <button type="button" class="btn bg-white border-white">Apply</button>
-                                        </div>
-                                        <p class="mb-0" style="color:#a1ff71;">Coupon Applied</p>
-                                        <!-- <p class="text-danger mb-0" style="color: #621c23;">Coupon Invalid</p> -->
-                                    </div>
+                                    <!--                                    <div class="couponWrap mb-3">
+                                                                            <div class="d-flex justify-content-start">
+                                                                                <div class="form-group mb-0 w-100">
+                                                                                    <input type="text" class="form-control" placeholder="Coupon Code" id="email">
+                                                                                </div>
+                                                                                <button type="button" class="btn bg-white border-white">Apply</button>
+                                                                            </div>
+                                                                            <p class="mb-0" style="color:#a1ff71;">Coupon Applied</p>
+                                                                             <p class="text-danger mb-0" style="color: #621c23;">Coupon Invalid</p> 
+                                                                        </div>-->
                                     <div>
                                         <table class="table table-bordered mb-0 text-white">
                                             <tbody>

@@ -1,5 +1,6 @@
 <%@taglib prefix="myfn" uri="http://MyCustomTagFunctions" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
 <%@include file="../layout/header.jsp" %>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -319,7 +320,12 @@
                     $('#des_list').append('<input name="designation" type="checkbox" id="checkAll" value="All" onchange="checkAllCheckBoxes()" > All');
                 }
                 for (var i = 0; i < data.list.length; i++) {
-                    $('#des_list').append(' <li><input name="designation" type="checkbox" id="des_check' + data.list[i] + '" value="' + data.list[i] + '"> ' + data.list[i] + '</li>');
+                    var designation = data.list[i];
+                    var myArray = designation.split("-");
+                    designation = myArray[0];
+                    var designation_id = myArray[1];
+
+                    $('#des_list').append(' <li><input name="designation" type="checkbox" onchange="getKeyPerson(' + designation_id + ');" id="des_check' + designation_id + '" value="' + designation + '"> ' + designation + '<input name="designation_id" type="checkbox" value="' + designation_id + '" hidden id="designation_id' + designation_id + '"></li>');
                 }
 
 //                $('#designation').html('<input type="checkbox" name="designation_check">' + );
@@ -327,14 +333,57 @@
         });
     }
 
+    function getKeyPerson(designation_id) {
+        var org_office = $('#org_office').val();
+//        alert(org_office);
+        var checkAll = document.getElementById("checkAll");
+        var random = "";
+        if ($('#des_check' + designation_id).prop("checked") == true) {
+            var designation = $('#des_check' + designation_id).val();
+            $('#designation_id' + designation_id).attr("checked", "true");
+//            alert(designation);
+//            $('#key_person_div').append('<div class="col-md-3" id="key_person_col' + designation_id + '"><div class=""><div class="form-group"><label>' + designation + '<span class="text-danger">*</span></label><div class="scrollable" id="key_person_list"><li><input name="key_person" type="checkbox"  id="key_person_check' + key_person_id + '" value="' + designation + '"> ' + designation + '</li></div></div></div></div>');
+            $.ajax({
+                url: "ItemNameController",
+                dataType: "json",
+                data: {action1: "getKeyPerson", str: random, org_office: org_office, designation_id: designation_id},
+                success: function (data) {
+                    $('#key_person_div').show();
+                    $('#key_person_div').append('<div class="col-md-3" id="key_person_col' + designation_id + '"><div class=""><div class="form-group"><label>' + designation + '<span class="text-danger">*</span></label><div class="scrollable" id="key_person_list' + designation_id + '"></div></div></div></div>');
+
+                    for (var i = 0; i < data.list.length; i++) {
+                        var key_person = data.list[i];
+                        var myArray = key_person.split("-");
+                        key_person = myArray[0];
+                        var key_person_id = myArray[1];
+                        $('#key_person_list' + designation_id).append('<li><input name="key_person" type="checkbox"  id="key_person_check' + key_person_id + '" value="' + key_person + '"> ' + key_person + '</li>');
+
+//                        $('#des_list').append(' <li><input name="designation" type="checkbox" onchange="getKeyPerson(' + designation_id + ');" id="des_check' + designation_id + '" value="' + designation + '"> ' + designation + '</li>');
+                    }
+
+                }
+            });
+
+
+        } else {
+            $('#key_person_col' + designation_id).remove();
+            $('#designation_id' + designation_id).removeAttr("checked");
+
+        }
+    }
+
     function checkAllCheckBoxes() {
+
         var checkboxes = document.getElementsByTagName('input');
+
         var val = null;
         for (var i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].type == 'checkbox') {
                 if (val === null)
                     val = checkboxes[i].checked;
                 checkboxes[i].checked = val;
+
+
             }
         }
     }
@@ -438,11 +487,11 @@
     if (!document.all) {
         document.captureEvents(Event.CLICK);
     }
-    document.onclick = function () {
-        if (popupwin !== null && !popupwin.closed) {
-            popupwin.focus();
-        }
-    }
+//    document.onclick = function () {
+//        if (popupwin !== null && !popupwin.closed) {
+//            popupwin.focus();
+//        }
+//    }
     function fillColumn(id, count) {
 
         $('#item_name_id').val(id);
@@ -478,6 +527,8 @@
             $('.is_super_child_yes').show();
             $('#designation_div').show();
             $('#org_office_div').show();
+            $('#key_person_div').show();
+
 
         } else {
 //            $('#quantity_div').hide();
@@ -485,6 +536,7 @@
             $('.is_super_child_yes').hide();
             $('#designation_div').hide();
             $('#org_office_div').hide();
+            $('#key_person_div').hide();
         }
     }
     function getOrgChartData(item_name) {
@@ -833,14 +885,19 @@
 
                                         <c:forEach var="test" items="${requestScope['desig_map_listAllFinal']}"
                                                    varStatus="loopCounter">
+                                            <c:set var = "des" value = "${fn:split(test,'&')}" />
                                             <li>
-                                                <input name="designation" checked="" type="checkbox" id="des_check${test}" value="${test}"> ${test}
+                                                <input name="designation"   onchange="getKeyPerson(${des[1]});" type="checkbox" id="des_check${des[1]}" value="${des[0]}"> ${des[0]}
+                                                <input name="designation_id"  type="checkbox" value="${des[1]}" hidden id="designation_id${des[1]}">
                                             </li>
                                         </c:forEach>
                                         <c:forEach var="test2" items="${requestScope['all_des_list']}"
                                                    varStatus="loopCounter">
+                                            <c:set var = "all_des" value = "${fn:split(test2,'&')}" />
+
                                             <li>
-                                                <input name="designation" type="checkbox" id="des_check${test2}" value="${test2}"> ${test2}
+                                                <input name="designation" type="checkbox" onchange="getKeyPerson(${all_des[1]});" id="des_check${all_des[1]}" value="${all_des[0]}"> ${all_des[0]}
+                                                <input name="designation_id" type="checkbox" value="${all_des[1]}" hidden id="designation_id${all_des[1]}">
                                             </li>
                                         </c:forEach>
 
@@ -885,10 +942,24 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
                     </c:otherwise>
                 </c:choose>
 
             </div>
+            <hr>
+
+            <div class="row" id="key_person_div" style="display:none" >
+
+
+            </div>  
+
+
+
+
 
 
             <hr>

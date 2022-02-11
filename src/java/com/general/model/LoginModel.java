@@ -97,16 +97,16 @@ public class LoginModel {
 
     }
 
-    public String getUserName(String mobile, String email) {
+    public String getUserName(String email) {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = " select kp.key_person_name from key_person kp where kp.active='Y' ";
-        if (!mobile.equals("") && mobile != null) {
-            query += " and kp.mobile_no1='" + mobile + "' ";
-        }
+        String query = " select distinct kp.key_person_name from key_person kp where kp.active='Y' ";
+//        if (!mobile.equals("") && mobile != null) {
+//            query += " and kp.mobile_no1='" + mobile + "' ";
+//        }
         if (!email.equals("") && email != null) {
-            query += " and kp.email_id1='" + email + "' ";
+            query += " and kp.email_id1='" + email + "' or kp.mobile_no1='" + email + "' ";
         }
         try {
             connection.setAutoCommit(false);
@@ -206,6 +206,26 @@ public class LoginModel {
         return str;
     }
 
+    public String getMobile(String user_name, String password) {
+        String str = "";
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = "select distinct kp.mobile_no1 from designation d, key_person kp, user l "
+                + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
+                + " and l.key_person_id=kp.key_person_id and d.active='Y' ";
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                str = rst.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getMobile ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+
     public String getOfficeAdmin(String user_name, String password, int logged_org_office_id, String designation) {
         String str = "";
         String query = "";
@@ -214,7 +234,7 @@ public class LoginModel {
         if (designation.equals("technician")) {
             query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
                     + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "
-                    + " and d.designation='Embeded Software Developer' and  oo.active='Y' and kp.active='Y' ";
+                    + " and d.designation='Embedded Developer' and  oo.active='Y' and kp.active='Y' ";
         } else {
             query = " select kp.key_person_name from org_office oo, key_person kp,designation d "
                     + " where kp.org_office_id=oo.org_office_id and  oo.org_office_id='" + logged_org_office_id + "' and kp.designation_id=d.designation_id "

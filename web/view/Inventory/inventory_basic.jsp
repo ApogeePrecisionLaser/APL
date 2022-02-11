@@ -587,6 +587,46 @@
     }
 
 
+    function checkUncheck(item_names_id) {
+        var search_org_office = $('#search_org_office').val();
+        $('#search_org_office_old').val(search_org_office);
+        if (search_org_office == "") {
+            alert("Please select Org Office and search records......");
+            $('#checkall').removeAttr("checked");
+            return false;
+        } else {
+            $('#map_another_office_div').show();
+            $('#save_all_details_div').hide();
+            if ($('#check' + item_names_id).prop("checked") == true) {
+                $.ajax({
+                    url: "ItemAuthorizationController",
+                    dataType: "json",
+                    data: {action1: "getAllChild", item_names_id: item_names_id},
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.list);
+                        for (var i = 0; i < data.list.length; i++) {
+                            $('#check' + data.list[i]).attr("checked", true);
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "ItemAuthorizationController",
+                    dataType: "json",
+                    data: {action1: "getAllChild", item_names_id: item_names_id},
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.list);
+                        for (var i = 0; i < data.list.length; i++) {
+                            $('#check' + data.list[i]).attr("checked", false);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
 </script>
 
 
@@ -760,8 +800,11 @@
                                             data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}"
                                             data-level="${beanType.generation}" id="table_row">
                                             <td id="${loopCounter.count }1">
-                                                <input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
-                                                       value="${beanType.item_name}">
+<!--                                                <input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
+                                                       value="${beanType.item_name}">-->
+
+                                                <input type="checkbox" class="messageCheckbox" onchange="checkUncheck('${beanType.item_names_id}')" 
+                                                       id="check${beanType.item_names_id}" name="checkboxes" value="${beanType.item_name}">
                                             </td>  
                                             <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
                                             <td id="${loopCounter.count }3">${beanType.item_code}</td>
@@ -783,8 +826,10 @@
                                             data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}"
                                             data-level="${beanType.generation}" id="table_row">
                                             <td id="${loopCounter.count }1">
-                                                <input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
-                                                       value="${beanType.item_name}">
+<!--                                                <input type="checkbox" class="checkboxes" name="checkboxes" id="check${beanType.inventory_basic_id}"
+                                                       value="${beanType.item_name}">-->
+                                                <input type="checkbox" class="messageCheckbox" onchange="checkUncheck('${beanType.item_names_id}')" 
+                                                       id="check${beanType.item_names_id}" name="checkboxes" value="${beanType.item_name}">
                                             </td>  
                                             <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
                                             <td id="${loopCounter.count }3">${beanType.item_code}</td>
@@ -824,7 +869,7 @@
                                 <input class="form-control myInput" type="hidden" id="inventory_basic_id" name="inventory_basic_id" value="" >
                                 <input class="form-control myInput" type="hidden" id="inventory_id" name="inventory_id" value="" >
                                 <input class="form-control myInput" type="hidden" id="item_name" name="item_name" value="" disabled >
-                                <input class="form-control myInput" type="text" id="org_office" name="org_office" size="60" value="" disabled >
+                                <input class="form-control myInput" type="text" id="org_office" name="org_office" size="60" value="${org_office}" disabled >
                             </div>
                         </div>
                     </div>
@@ -833,7 +878,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Manufacturer<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="" disabled >
+                                <input class="form-control myInput" type="text" id="manufacturer_name" name="manufacturer_name" value="${manufacturer_name}" disabled >
                             </div>
                         </div>
                     </div>
@@ -843,7 +888,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Item Name - Code<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="item_code" name="item_code" value="" disabled >
+                                <input class="form-control myInput" type="text" id="item_code" name="item_code" value="${item_code}" disabled >
                             </div>
                         </div>
                     </div>
@@ -852,7 +897,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Model<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="model_name" name="model_name" value="" disabled >
+                                <input class="form-control myInput" type="text" id="model_name" name="model_name" value="${model_name}" disabled >
                             </div>
                         </div>
                     </div>
@@ -862,7 +907,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Key Person<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="key_person" name="key_person" value="" disabled >
+                                <input class="form-control myInput" type="text" id="key_person" name="key_person" value="${key_person}" disabled >
                             </div>
                         </div>
                     </div>
@@ -871,7 +916,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Stock Quantity<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled >
+                                <input class="form-control myInput" type="text" id="quantity" name="quantity" value="${quantity}" disabled >
                             </div>
                         </div>
                     </div>
@@ -882,7 +927,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Daily Requirement<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="daily_req" name="daily_req" value="" disabled onblur="calculateMinQty()">
+                                <input class="form-control myInput" type="text" id="daily_req" name="daily_req" value="${daily_req}" disabled onblur="calculateMinQty()">
                             </div>
                         </div>
                     </div>
@@ -891,7 +936,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Minimum Quantity<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="min_quantity" name="min_quantity" value="" disabled>
+                                <input class="form-control myInput" type="text" id="min_quantity" name="min_quantity" value="${min_quantity}" disabled>
                             </div>
                         </div>
                     </div>
@@ -900,7 +945,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Opening Balance<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="text" id="opening_balance" name="opening_balance" value="" disabled>
+                                <input class="form-control myInput" type="text" id="opening_balance" name="opening_balance" value="${opening_balance}" disabled>
                             </div>
                         </div>
                     </div>
@@ -909,7 +954,7 @@
                         <div class="">
                             <div class="form-group">
                                 <label>Date Time<span class="text-danger">*</span></label>
-                                <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="" disabled>
+                                <input class="form-control myInput" type="date"  id="date_time" name="date_time" value="${date_time}" disabled>
                             </div>
                         </div>
                     </div>
@@ -919,7 +964,7 @@
                             <div class="form-group">
                                 <label>Description</label>
                                 <!--<input class="form-control" type="text" id="description" name="description" size="60" value="" disabled >-->
-                                <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled></textarea>
+                                <textarea class="form-control myTextArea" id="description" name="description" name="description" disabled>${description}</textarea>
                             </div>
                         </div>
                     </div>

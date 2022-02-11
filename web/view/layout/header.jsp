@@ -89,18 +89,20 @@
                                         <a href="ItemAuthorizationController" class="dropdown-item">Item Authorization</a>
                                         <%}%>
                                         <%
-                                            if (session.getAttribute("user_role").equals("Employee") || session.getAttribute("user_role").equals("Super Admin")) {
+                                            if (session.getAttribute("user_role").equals("Employee")) {
                                         %>
                                         <a href="IndentController" class="dropdown-item">Request Indent</a>
                                         <%}%>
                                         <%
-                                            if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Guest")) {
+                                            if (session.getAttribute("user_role").equals("Guest") || session.getAttribute("user_role").equals("Super Admin")) {
                                         %>
                                         <a href="ApproveIndentController" class="dropdown-item">Approve Indent</a>
                                         <%}%>
                                         <%
-                                            if (session.getAttribute("user_role").equals("Incharge") || session.getAttribute("user_role").equals("Super Admin")) {
+                                            if (session.getAttribute("user_role").equals("Incharge")) {
                                         %>
+                                        <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
+                                        <a href="InventoryController" class="dropdown-item">Inventory</a>
                                         <a href="CheckInventoryController" class="dropdown-item">Check Inventory & Generate Delivery Challan</a>
                                         <%}%>
                                         <!--                                        <a href="DeliverItemController" class="dropdown-item">Delivery Chalan</a>-->
@@ -108,6 +110,10 @@
                                 </li>
                                 <%}%>
 
+
+                                <%
+                                    if (session.getAttribute("user_role").equals("Super Admin")) {
+                                %>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Location
@@ -125,6 +131,7 @@
                                         <a href="cityLocationCont" class="dropdown-item">Location</a>
                                     </div>
                                 </li>
+                                <%}%>
 
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin")) {
@@ -146,12 +153,10 @@
                                 %>
 
 
-
-
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Incharge")) {
                                 %>
-                                <li class="nav-item dropdown">
+<!--                                <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Order
                                     </a>
@@ -183,7 +188,7 @@
                                         <%}%>
 
                                     </div>
-                                </li>
+                                </li>-->
                                 <%}%>
 
 
@@ -211,6 +216,9 @@
                                     if (!session.getAttribute("user_role").equals("Dealer") && !session.getAttribute("user_role").equals("Sales")) {
                                 %>
 
+                                <%
+                                    if (session.getAttribute("user_role").equals("Super Admin")) {
+                                %>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                                         Flow Screens
@@ -219,6 +227,7 @@
                                         <a href="Flow?nxt=1" class="dropdown-item">Flow</a>                                             
                                     </div>
                                 </li>
+                                <%}%>
 
                                 <%}
                                 %>

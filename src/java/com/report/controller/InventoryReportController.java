@@ -49,6 +49,10 @@ public class InventoryReportController extends HttpServlet {
         ServletContext ctx = getServletContext();
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryReportModel model = new InventoryReportModel();
         ItemNameModel model2 = new ItemNameModel();
@@ -173,7 +177,7 @@ public class InventoryReportController extends HttpServlet {
                 String q = "";
 
                 jrxmlFilePath = ctx.getRealPath("/view/report/InventoryReport.jrxml");
-                list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person,search_by_date);
+                list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person, search_by_date);
                 byte[] reportInbytes = GeneralModel.generateRecordList(jrxmlFilePath, list);
                 response.setContentLength(reportInbytes.length);
                 servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
@@ -181,8 +185,8 @@ public class InventoryReportController extends HttpServlet {
                 servletOutputStream.close();
                 return;
             }
-            
-            List<InventoryReport> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person,search_by_date);
+
+            List<InventoryReport> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model, search_key_person, search_by_date);
             request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
@@ -210,4 +214,3 @@ public class InventoryReportController extends HttpServlet {
         doGet(request, response);
     }
 }
-

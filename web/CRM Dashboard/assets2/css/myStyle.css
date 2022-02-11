@@ -1430,3 +1430,79 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     border-radius: 50%;
     padding: 7px 9px;
 }
+
+.deleteAlertModel .cancelbtn, .deleteAlertModel .deletebtn {
+    float: left;
+    width: 50%;
+    padding: 8px;
+}
+.deleteAlertModel .cancelbtn {
+    background-color: #ccc;
+    color: black;
+}
+.deleteAlertModel .deletebtn {
+    background-color: #f44336;
+    color: #fff;
+}
+.deleteAlertModel .container {
+    padding: 16px;
+    text-align: center;
+}
+.modal.deleteAlertModel {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    right: 0;
+    top: 80px;
+    width: 500px;
+    height: 243px;
+    overflow: auto;
+    margin: 0 auto;
+    background-color: #fff;
+    padding-top: 50px;
+    box-shadow: 3px 3px 9px #999;
+}
+.deleteAlertModel .modal-content {
+    background-color: #fefefe;
+    margin: 0% auto 0% auto;
+    border: 1px solid #888;
+    /*width: 80%;*/
+    box-shadow: none;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    border-top: 1px solid #999;
+    border-radius: 0;
+    padding: 0 7%;
+}
+.deleteAlertModel .close {
+    position: absolute;
+    right: 14px;
+    top: 5px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #0e0e0e;
+}
+.deleteAlertModel .close:hover,
+.deleteAlertModel .close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+.deleteAlertModel .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+@media screen and (max-width: 600px) {
+    .modal.deleteAlertModel{
+        width: 100%;
+    }
+    .modal.deleteAlertModel .modal-content h1{
+        font-size: 30px;
+        font-weight: 500;
+    }
+    .deleteAlertModel .cancelbtn, .deleteAlertModel .deletebtn {
+        width: 100%;
+    }
+}

@@ -46,14 +46,7 @@ public class CRMDashboardController extends HttpServlet {
         int logged_org_office_id = 0;
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
-        String office_admin = "";
-        String search_by_date = "";
-        int last_indent_table_id = 0;
-        int counting = 100;
-        String indent_no = "";
-        String requested_by = "";
-        String requested_to = "";
-        String description = "";
+
         String loggedUser = "";
 
         HttpSession session = request.getSession();
@@ -286,8 +279,8 @@ public class CRMDashboardController extends HttpServlet {
             ArrayList<DealersOrder> pending_orders_list = model.getAllPendingOrders(logged_user_name, session.getAttribute("user_role").toString(), "Pending");
             ArrayList<DealersOrder> approved_orders_list = model.getAllPendingOrders(logged_user_name, session.getAttribute("user_role").toString(), "Approved");
             ArrayList<DealersOrder> denied_orders_list = model.getAllPendingOrders(logged_user_name, session.getAttribute("user_role").toString(), "Denied");
-            ArrayList<Enquiry> sales_enquiry_list = model.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id);
-            ArrayList<Enquiry> complaint_enquiry_list = model.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id);
+            ArrayList<Enquiry> sales_enquiry_list = model.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id, "", "");
+            ArrayList<Enquiry> complaint_enquiry_list = model.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id, "", "");
 
             String last_time_of_enquiry = "";
             String last_time_of_complaint = "";

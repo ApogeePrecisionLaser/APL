@@ -6,16 +6,29 @@
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 marginTop10">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <!--                        <div>
-                                                    <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn">Add New Enquiry</a>
-                                                </div>-->
+                        <div class="mr-2">
+                            <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
+                        </div>
+
+                        <form name="my-form" method="post" action="ApproveOrdersController?task=complaint_enquiry_list" class="d-flex">
+                            <div class="mr-2 selectEnquiryWrap">
+                                <input type="text" name="enquiry_source" id="enquiry_source" class="form-control" value="${enquiry_source}"> 
+                            </div>
+                            <div class="mr-2 selectEnquiryWrap">
+                                <input type="text" name="status" id="status" class="form-control" value="${status}"> 
+                            </div>
+                            <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
+                                <input type="submit" value="Search"
+                                       class="btn btn-primary myNewLinkBtn fontFourteen" name="search" id="search" class="form-control"> 
+                            </div>
+                        </form>
                         <div class="position-relative">
-                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none"  id="msg">
+                            <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <strong>Success!</strong>
+                                <strong>Success!</strong> Indicates a successful or positive action.
                             </div>
                         </div>
                     </div>  
@@ -47,10 +60,11 @@
                                                 <th class="fontFourteen">Sender Name</th>
                                                 <!--<th>Sender Email</th>-->
                                                 <th class="fontFourteen">Sender Mobile</th>
+                                                <th class="fontFourteen">Product Name</th>
                                                 <!-- <th>Sender Company Name</th> -->
                                                 <!-- <th>Sender Address</th> -->
-                                                <th>City</th>
-                                                <th>State</th>
+                                                <th class="fontFourteen">City</th>
+                                                <th class="fontFourteen">State</th>
                                                 <!--<th class="fontFourteen">District</th>-->
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <!-- <th>Enquiry Message</th> -->
@@ -72,6 +86,7 @@
                                                     <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
+                                                    <td class="fontFourteen">${beanType.product_name}</td>
                                                     <td class="fontFourteen">${beanType.enquiry_city}</td>
                                                     <td class="fontFourteen">${beanType.enquiry_state}</td>
                                                     <!--<td class="fontFourteen">${beanType.description}</td>-->
@@ -80,7 +95,7 @@
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
                                                     <td  class="fontFourteen">
 
-                                                       
+
 
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To SalesManager'}">
@@ -206,4 +221,51 @@
             }
         });
     }
+
+    $(function () {
+        $("#enquiry_source").autocomplete({
+            source: function (request, response) {
+                var random = $('#enquiry_source').val();
+                $.ajax({
+                    url: "SalesEnquiryController",
+                    dataType: "json",
+                    data: {action1: "getEnquirySource", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#enquiry_source').val(ui.item.label);
+                return false;
+            }
+        });
+        $("#status").autocomplete({
+            source: function (request, response) {
+                var random = $('#status').val();
+                $.ajax({
+                    url: "SalesEnquiryController",
+                    dataType: "json",
+                    data: {action1: "getStatus", str: random},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#status').val(ui.item.label);
+                return false;
+            }
+        });
+    })
 </script>

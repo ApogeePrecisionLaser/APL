@@ -33,6 +33,11 @@ public class SalesManagerStateMappingController extends HttpServlet {
         DealerMapModel model = new DealerMapModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {

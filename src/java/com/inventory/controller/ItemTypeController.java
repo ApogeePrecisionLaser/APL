@@ -31,6 +31,10 @@ public class ItemTypeController extends HttpServlet {
             throws ServletException, IOException {
         ServletContext ctx = getServletContext();
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         System.err.println("----------------------- item controller -----------------------------");
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");

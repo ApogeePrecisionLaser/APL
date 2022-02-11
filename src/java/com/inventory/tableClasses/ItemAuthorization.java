@@ -22,6 +22,7 @@ public class ItemAuthorization {
     private String active;
     private String remark;
     private String org_office;
+    private String key_person;
     private int revision_no;
     private int quantity;
     private int monthly_limit;
@@ -188,7 +189,8 @@ public class ItemAuthorization {
     }
 
     /**
-     * @param org_office_designation_map_id the org_office_designation_map_id to set
+     * @param org_office_designation_map_id the org_office_designation_map_id to
+     * set
      */
     public void setOrg_office_designation_map_id(int org_office_designation_map_id) {
         this.org_office_designation_map_id = org_office_designation_map_id;
@@ -208,5 +210,18 @@ public class ItemAuthorization {
         this.org_office = org_office;
     }
 
-   
+    /**
+     * @return the key_person
+     */
+    public String getKey_person() {
+        return key_person;
+    }
+
+    /**
+     * @param key_person the key_person to set
+     */
+    public void setKey_person(String key_person) {
+        this.key_person = key_person;
+    }
+
 }

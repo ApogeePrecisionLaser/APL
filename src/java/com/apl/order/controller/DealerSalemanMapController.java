@@ -39,6 +39,11 @@ public class DealerSalemanMapController extends HttpServlet {
             System.out.println("error in DealerSalemanMapController setConnection() calling try block" + e);
         }
 
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             String isOrgBasicStep = request.getParameter("isOrgBasicStep");
             String serial_no = request.getParameter("searchDesignationCode");
@@ -118,7 +123,7 @@ public class DealerSalemanMapController extends HttpServlet {
                         list = organisationModel.getDealer(q);
                     } else if (JQstring.equals("getSalesDealer")) {
                         list = organisationModel.getSalesDealer(q);
-                    } 
+                    }
                     JSONObject gson = new JSONObject();
                     gson.put("list", list);
                     out.println(gson);

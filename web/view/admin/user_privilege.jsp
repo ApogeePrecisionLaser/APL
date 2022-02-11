@@ -349,6 +349,7 @@
         document.getElementById("Dealer").checked = false;
         document.getElementById("Employee").checked = false;
         document.getElementById("Sales").checked = false;
+        document.getElementById("Incharge").checked = false;
 
         var role_name = $("#" + count + '2').html();
         if (role_name === 'Super Admin') {
@@ -487,6 +488,7 @@
                                 <input type="checkbox" id="Dealer" name="role" value="Dealer" checked >Dealer<br>
                                 <input type="checkbox" id="Employee" name="role" value="Employee" checked >Employee<br>
                                 <input type="checkbox" id="Sales" name="role" value="Sales" checked >Sales<br>
+                                <input type="checkbox" id="Incharge" name="role" value="Incharge" checked >Incharge<br>
 
                             </td>
                         </div>

@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -55,6 +56,14 @@ public class ItemNameController extends HttpServlet {
         ItemNameModel model = new ItemNameModel();
         ModelNameModel model2 = new ModelNameModel();
         List<String> des_list = new ArrayList<String>();
+        List<String> des_id_list = new ArrayList<String>();
+        List<String> key_person_list = new ArrayList<String>();
+
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            System.err.println("Session Not Active");
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
 
         String loggedUser = "";
         String active = "Y";
@@ -145,6 +154,12 @@ public class ItemNameController extends HttpServlet {
                         String org_office = request.getParameter("org_office");
                         list = model.getDesignation(q, org_office);
                     }
+
+                    if (JQstring.equals("getKeyPerson")) {
+                        String org_office = request.getParameter("org_office");
+                        int designation_id = Integer.parseInt(request.getParameter("designation_id").trim());
+                        list = model.getKeyPerson(q, org_office, designation_id);
+                    }
                     if (JQstring.equals("getItems")) {
                         JSONObject obj1 = new JSONObject();
                         JSONArray arrayObj = new JSONArray();
@@ -194,6 +209,12 @@ public class ItemNameController extends HttpServlet {
                         map.put(item.getFieldName(), item.getString("UTF-8"));
                         if (item.getFieldName().equals("designation")) {
                             des_list.add(item.getString());
+                        }
+                        if (item.getFieldName().equals("designation_id")) {
+                            des_id_list.add(item.getString());
+                        }
+                        if (item.getFieldName().equals("key_person")) {
+                            key_person_list.add(item.getString());
                         }
                     } else {
                         System.out.println("File Name = " + item.getFieldName() + ", Value = " + item.getName());
@@ -356,10 +377,38 @@ public class ItemNameController extends HttpServlet {
 //                    itemAuthBean.setDesignation(des_list.get(k));
 //                }
 //                itemAuthBean.setOrg_office_designation_map_id(org_office_des_map_id);
+                MultiHashMap key_des_map = new MultiHashMap();
+                MultiHashMap key_des_maping = new MultiHashMap();
+
                 if (item_name_id == 0) {
                     if (superp.equals("Y")) {
                         String model_no = "";
                         String part_no = "";
+
+//                        HashMap<Integer, Integer> key_des_map = new HashMap<>();
+//                        MultiHashMap key_des_map = new MultiHashMap();
+                        for (int kp = 0; kp < key_person_list.size(); kp++) {
+                            String designation_person_id = model.getDesignationId(key_person_list.get(kp), map.get("org_office").trim());
+                            String designation_person_id_arr[] = designation_person_id.split("&");
+
+                            String designation_person = model.getDesignationKeyPerson(key_person_list.get(kp), map.get("org_office").trim());
+                            String designation_person_arr[] = designation_person.split("&");
+
+                            int designation_id = Integer.parseInt(designation_person_id_arr[0]);
+                            int key_person_id = Integer.parseInt(designation_person_id_arr[1]);
+
+                            String designation = designation_person_arr[0];
+                            String key_person = designation_person_arr[1];
+
+                            key_des_map.put(designation_id, key_person_id);
+                            key_des_maping.put(designation + "&" + designation_id, key_person + "&" + key_person_id);
+                        }
+//                        key_des_maping.put("technician", "Hansveer Singh");
+//                        key_des_maping.put("Store Incharge", "Mansi Parekh");
+//                        key_des_maping.put("Store Incharge", "Dalwadi Ashish Kumar");
+//                        key_des_maping.put("technician&3", "Hansveer Singh&98");
+//                        key_des_maping.put("Store Incharge&5", "Mansi Parekh&130");
+//                        key_des_maping.put("Store Incharge&5", "Dalwadi Ashish Kumar&170");
                         ModelName modelBean = new ModelName();
 
                         count = Integer.parseInt(map.get("count").trim());
@@ -383,6 +432,7 @@ public class ItemNameController extends HttpServlet {
                             } else {
                                 part_no = map.get("part_no_" + (j + 1));
                             }
+
                             modelBean.setModel_no(model_no);
                             modelBean.setPart_no(part_no);
                             modelBean.setDescription(map.get("description").trim());
@@ -392,7 +442,7 @@ public class ItemNameController extends HttpServlet {
                             modelBean.setImage_name(image_name);
                             item_image = model.getDestination_Path("item_img");
                             response.setContentType("image/jpeg");
-                            model.insertRecord(bean, itr, modelBean, j, image_name, image_folder, itemAuthBean, des_list);
+                            model.insertRecord(bean, itr, modelBean, j, image_name, image_folder, itemAuthBean, des_list, key_des_map);
                         }
                     } else {
                         model.insertParent(bean, itr);
@@ -408,7 +458,14 @@ public class ItemNameController extends HttpServlet {
                 request.setAttribute("parent_item", map.get("parent_item").trim());
                 request.setAttribute("super_child", map.get("super").trim());
                 request.setAttribute("HSNCode", map.get("HSNCode").trim());
-                request.setAttribute("des_list", des_list);
+                List<String> des_list_new = new ArrayList<String>();
+                for (int k = 0; k < des_list.size(); k++) {
+
+                    String des = des_list.get(k) + "&" + des_id_list.get(k);
+                    des_list_new.add(des);
+                }
+
+                request.setAttribute("des_list", des_list_new);
                 request.setAttribute("count", map.get("count").trim());
                 request.setAttribute("description", map.get("description").trim());
                 request.setAttribute("org_office", map.get("org_office").trim());
@@ -421,10 +478,12 @@ public class ItemNameController extends HttpServlet {
                 List<String> desig_map_listAllFinal = new ArrayList<>();
                 List<String> desig_map_listUnmatched = new ArrayList<>();
 
-                all_des_list = model.getDesignation("", org_office);
+                all_des_list = model.getDesignationForList("", org_office);
 
                 desig_map_listAllFinal.addAll(all_des_list);
-                all_des_list.removeAll(des_list);
+
+                all_des_list.removeAll(des_list_new);
+
                 desig_map_listUnmatched.addAll(all_des_list);
 
                 desig_map_listAllFinal.removeAll(desig_map_listUnmatched);
@@ -462,7 +521,7 @@ public class ItemNameController extends HttpServlet {
                     request.setAttribute("lst6", lst6);
                     request.setAttribute("desig_map_listAllFinal", desig_map_listAllFinal);
                     request.setAttribute("all_des_list", all_des_list);
-
+                    request.setAttribute("multimap", key_des_maping);
                 }
             }
             String org_chart = request.getParameter("org_chart");

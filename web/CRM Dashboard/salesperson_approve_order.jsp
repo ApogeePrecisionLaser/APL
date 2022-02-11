@@ -1,8 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
-
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -58,21 +56,19 @@
 
                                                 <c:choose>  
                                                     <c:when test="${beanType.status == 'Pending'}">  
-                                                        <td class="fontFourteen"><i class="statusPending">${beanType.status}</i></td>
-                                                    </c:when>   
-                                                    <c:when test="${beanType.status == 'Approved'}">  
-                                                        <td class="fontFourteen"><i class="statusApprove">${beanType.status}</i></td>
+                                                        <td class="fontFourteen"><i class="statusPending">Order Placed</i></td>
+                                                        </c:when>   
+                                                        <c:when test="${beanType.status == 'Approved'}">  
+                                                        <td class="fontFourteen"><i class="statusApprove">Order Confirmed</i></td>
                                                     </c:when>  
                                                     <c:otherwise>  
                                                         <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i></td>
-                                                    </c:otherwise>  
-                                                </c:choose>  
+                                                        </c:otherwise>  
+                                                    </c:choose>  
 
                                                 <td class="fontFourteen">Rs.${beanType.basic_price}</td>
                                                 <td class="fontFourteen">${beanType.date_time}</td>
-
-
-
+                                                
                                                 <td class="fontFourteen d-flex">
                                                     <div>
                                                         <a href="ApproveOrdersController?task=viewOrderDetails&order_table_id=${beanType.order_table_id}" class="btn far fa-eye actionEdit" title="View Order Detail"></a>
@@ -82,7 +78,6 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -90,7 +85,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>

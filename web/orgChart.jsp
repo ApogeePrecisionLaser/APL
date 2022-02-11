@@ -478,27 +478,6 @@
                         nodeId: nodeId
                     });
                 }
-
-//                function addSharholder(nodeId) {
-//                    chart.addNode({id: OrgChart.randomId(), pid: nodeId, tags: ["menu-without-add"]});
-//                }
-//
-//                function addAssistant(nodeId) {
-//                    var node = chart.getNode(nodeId);
-//                    var data = {id: OrgChart.randomId(), pid: node.stParent.id, tags: ["assistant"]};
-//                    chart.addNode(data);
-//                }
-//
-//
-//                function addDepartment(nodeId) {
-//                    var node = chart.getNode(nodeId);
-//                    var data = {id: OrgChart.randomId(), pid: node.stParent.id, tags: ["department"]};
-//                    chart.addNode(data);
-//                }
-//
-//                function addManager(nodeId) {
-//                    chart.addNode({id: OrgChart.randomId(), stpid: nodeId});
-//                }
             };
         </script>
     </body>

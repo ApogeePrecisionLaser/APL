@@ -36,6 +36,10 @@ public class ManufacturerController extends HttpServlet {
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
         try {

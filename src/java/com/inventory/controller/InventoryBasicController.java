@@ -51,9 +51,30 @@ public class InventoryBasicController extends HttpServlet {
         InventoryBasicModel model = new InventoryBasicModel();
         ItemNameModel model2 = new ItemNameModel();
 
-        HttpSession session = request.getSession();
         String loggedUser = "";
-        loggedUser = session.getAttribute("user_role").toString();
+        String logged_user_name = "";
+        String logged_designation = "";
+        String logged_org_name = "";
+        String logged_org_office = "";
+        int logged_org_office_id = 0;
+        int logged_org_name_id = 0;
+        int logged_key_person_id = 0;
+
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
+            logged_user_name = session.getAttribute("logged_user_name").toString();
+            logged_org_name = session.getAttribute("logged_org_name").toString();
+            logged_designation = session.getAttribute("logged_designation").toString();
+            logged_org_office = session.getAttribute("logged_org_office").toString();
+            logged_org_name_id = Integer.parseInt(session.getAttribute("logged_org_name_id").toString());
+            logged_org_office_id = Integer.parseInt(session.getAttribute("logged_org_office_id").toString());
+            logged_key_person_id = Integer.parseInt(session.getAttribute("logged_key_person_id").toString());
+            //  office_admin = session.getAttribute("office_admin").toString();
+        }
 
         String search_item_name = "";
         String search_org_office = "";
@@ -122,7 +143,7 @@ public class InventoryBasicController extends HttpServlet {
 
                     if (JQstring.equals("getItemCode")) {
                         String manufacturer = request.getParameter("manufacturer");
-                        list = model.getItemCode(q, manufacturer);
+                        list = model.getItemCode(q, manufacturer, logged_user_name, loggedUser, logged_org_office);
                     }
 
                     if (JQstring.equals("getModelName")) {
@@ -132,7 +153,10 @@ public class InventoryBasicController extends HttpServlet {
                     }
                     if (JQstring.equals("getOrgOffice")) {
                         search_org_office = request.getParameter("search_org_office");
-                        list = model.getOrgOffice(q, search_org_office);
+                        if (!loggedUser.equals("Super Admin")) {
+                            search_org_office = logged_org_office;
+                        }
+                        list = model.getOrgOffice(q, search_org_office, logged_user_name, loggedUser);
                     }
                     if (JQstring.equals("getLeadTime")) {
                         String model_name = request.getParameter("model_name");
@@ -140,7 +164,10 @@ public class InventoryBasicController extends HttpServlet {
                     }
 
                     if (JQstring.equals("getKeyPerson")) {
-                        list = model.getKeyPerson(q, str2);
+//                        if (!loggedUser.equals("Super Admin")) {
+//                            logged_user_name = logged_user_name;
+//                        }
+                        list = model.getKeyPerson(q, str2, logged_user_name, loggedUser);
                     }
                     if (json != null) {
 
@@ -197,6 +224,18 @@ public class InventoryBasicController extends HttpServlet {
 
                 if (inventory_basic_id == 0) {
                     model.insertRecord(bean);
+
+                    request.setAttribute("org_office", request.getParameter("org_office").trim());
+                    request.setAttribute("manufacturer_name", request.getParameter("manufacturer_name").trim());
+                    request.setAttribute("item_code", request.getParameter("item_code").trim());
+                    request.setAttribute("model_name", request.getParameter("model_name").trim());
+                    request.setAttribute("key_person", request.getParameter("key_person").trim());
+                    request.setAttribute("quantity", request.getParameter("quantity").trim());
+                    request.setAttribute("daily_req", request.getParameter("daily_req").trim());
+                    request.setAttribute("min_quantity", request.getParameter("min_quantity").trim());
+                    request.setAttribute("opening_balance", request.getParameter("opening_balance").trim());
+                    request.setAttribute("date_time", request.getParameter("date_time").trim());
+                    request.setAttribute("description", request.getParameter("description").trim());
                 } else {
                     model.updateRecord(bean, inventory_basic_id, inventory_id);
                 }
@@ -229,6 +268,21 @@ public class InventoryBasicController extends HttpServlet {
                     model.insertMapRecord(bean, search_org_office_old);
                 }
 
+//                request.setAttribute("org_office", request.getParameter("org_office").trim());
+//                request.setAttribute("manufacturer_name", request.getParameter("manufacturer_name").trim());
+//                request.setAttribute("item_code", request.getParameter("item_code").trim());
+//                request.setAttribute("model_name", request.getParameter("model_name").trim());
+//                request.setAttribute("key_person", request.getParameter("key_person").trim());
+//                request.setAttribute("quantity", request.getParameter("quantity").trim());
+//                request.setAttribute("daily_req", request.getParameter("daily_req").trim());
+//                request.setAttribute("min_quantity", request.getParameter("min_quantity").trim());
+//                request.setAttribute("opening_balance", request.getParameter("opening_balance").trim());
+//                request.setAttribute("date_time", request.getParameter("date_time").trim());
+//                request.setAttribute("description", request.getParameter("description").trim());
+            }
+
+            if (!loggedUser.equals("Super Admin")) {
+                search_key_person = logged_user_name;
             }
 
             List<InventoryBasic> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,
@@ -237,7 +291,13 @@ public class InventoryBasicController extends HttpServlet {
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
             }
+            if (!loggedUser.equals("Super Admin")) {
+                search_org_office = logged_org_office;
+                search_key_person = logged_user_name;
+                request.setAttribute("org_office", logged_org_office);
+                request.setAttribute("key_person", logged_user_name);
 
+            }
             request.setAttribute("search_org_office", search_org_office);
             request.setAttribute("search_manufacturer", search_manufacturer);
             request.setAttribute("search_model", search_model);
@@ -246,7 +306,7 @@ public class InventoryBasicController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
-            
+
             DBConnection.closeConncetion(model.getConnection());
             DBConnection.closeConncetion(model2.getConnection());
             request.getRequestDispatcher("inventory_basic").forward(request, response);

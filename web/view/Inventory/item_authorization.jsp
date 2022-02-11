@@ -78,10 +78,12 @@
             }
         });
     });
+
     $(function () {
         setTimeout(function () {
             $('#message').fadeOut('fast');
         }, 10000);
+
         $("#item_name").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("item_name").value;
@@ -104,6 +106,7 @@
                 return false;
             }
         });
+
         $("#designation").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("designation").value;
@@ -126,6 +129,7 @@
                 return false;
             }
         });
+
         $("#search_item_name").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_item_name").value;
@@ -148,6 +152,7 @@
                 return false;
             }
         });
+
         $("#search_designation").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_designation").value;
@@ -170,12 +175,13 @@
                 return false;
             }
         });
+
         $("#org_office").autocomplete({
             source: function (request, response) {
-//                if ($('.messageCheckbox').prop("checked") == false) {
-//                    alert("Please Select any one of the item!...");
-//                    return  false;
-//                }
+                if ($('input[type="checkbox"]:checked').length == 0) {
+                    alert("Please Select any one of the item!...");
+                    return  false;
+                }
                 var random = document.getElementById("org_office").value;
                 var search_org_office = "";
                 //  alert("jfhg");
@@ -198,6 +204,7 @@
                 return false;
             }
         });
+
         $("#search_org_office").autocomplete({
             source: function (request, response) {
                 var random = document.getElementById("search_org_office").value;
@@ -223,14 +230,15 @@
             }
         });
     });
+
     function getDesignation() {
         var random = "";
         var org_office = document.getElementById("org_office").value;
         $('#des_list').empty();
-        if (org_office == '') {
-            alert("Please select org office!..");
-            return  false;
-        }
+//        if (org_office == '') {
+//            alert("Please select org office!..");
+//            return  false;
+//        }
         $.ajax({
             url: "ItemNameController",
             dataType: "json",
@@ -244,13 +252,62 @@
                     $('#des_list').append('<input name="designation"  type="checkbox" id="checkAllDes" value="All" onchange="checkAllCheckBoxes()" > All');
                 }
                 for (var i = 0; i < data.list.length; i++) {
-                    $('#des_list').append(' <li><input name="designation"  class="des_checkboxes" type="checkbox" id="des_check' + data.list[i] + '" value="' + data.list[i] + '"> ' + data.list[i] + '</li>');
+                    var designation = data.list[i];
+                    var myArray = designation.split("-");
+                    designation = myArray[0];
+                    var designation_id = myArray[1];
+
+                    $('#des_list').append(' <li><input name="designation" type="checkbox" onchange="getKeyPerson(' + designation_id + ');" id="des_check' + designation_id + '" value="' + designation + '"> ' + designation + '<input name="designation_id" type="checkbox" value="' + designation_id + '" hidden id="designation_id' + designation_id + '"></li>');
                 }
 
 //                $('#designation').html('<input type="checkbox" name="designation_check">' + );
             }
         });
     }
+
+
+
+    function getKeyPerson(designation_id) {
+        var org_office = $('#org_office').val();
+//        alert(designation_id);
+
+        var checkAll = document.getElementById("checkAllDes");
+        var random = "";
+        if ($('#des_check' + designation_id).prop("checked") == true) {
+            var designation = $('#des_check' + designation_id).val();
+            $('#designation_id' + designation_id).attr("checked", "true");
+//            alert(designation);
+//            $('#key_person_div').append('<div class="col-md-3" id="key_person_col' + designation_id + '"><div class=""><div class="form-group"><label>' + designation + '<span class="text-danger">*</span></label><div class="scrollable" id="key_person_list"><li><input name="key_person" type="checkbox"  id="key_person_check' + key_person_id + '" value="' + designation + '"> ' + designation + '</li></div></div></div></div>');
+            $.ajax({
+                url: "ItemNameController",
+                dataType: "json",
+                data: {action1: "getKeyPerson", str: random, org_office: org_office, designation_id: designation_id},
+                success: function (data) {
+                    $('#key_person_div').show();
+                    $('#key_person_div').append('<div class="col-md-3" id="key_person_col' + designation_id + '"><div class=""><div class="form-group"><label>' + designation + '<span class="text-danger">*</span></label><div class="scrollable" id="key_person_list' + designation_id + '"></div></div></div></div>');
+
+                    for (var i = 0; i < data.list.length; i++) {
+                        var key_person = data.list[i];
+                        var myArray = key_person.split("-");
+                        key_person = myArray[0];
+                        var key_person_id = myArray[1];
+                        $('#key_person_list' + designation_id).append('<li><input name="key_person" type="checkbox"  id="key_person_check' + key_person_id + '" value="' + key_person + '"> ' + key_person + '</li>');
+
+//                        $('#des_list').append(' <li><input name="designation" type="checkbox" onchange="getKeyPerson(' + designation_id + ');" id="des_check' + designation_id + '" value="' + designation + '"> ' + designation + '</li>');
+                    }
+
+                }
+            });
+
+
+        } else {
+            $('#key_person_div').hide();
+            $('#key_person_col' + designation_id).remove();
+            $('#designation_id' + designation_id).removeAttr("checked");
+
+        }
+    }
+
     function checkAllCheckBoxes() {
         var checkboxes = document.getElementsByClassName("des_checkboxes");
         var val = null;
@@ -258,11 +315,9 @@
             if ($('#checkAllDes').prop("checked") == true) {
                 $('.des_checkboxes').attr("checked", true);
             } else {
-
                 $('.des_checkboxes').attr("checked", false);
             }
         }
-
     }
 
 
@@ -275,6 +330,7 @@
 //                checkboxes[i].checked = val;
 //            }
 //        }
+
     function checkAll() {
         var checkboxes = document.getElementsByClassName("messageCheckbox");
         var val = null;
@@ -282,11 +338,9 @@
             if ($('#checkall').prop("checked") == true) {
                 $('.messageCheckbox').attr("checked", true);
             } else {
-
                 $('.messageCheckbox').attr("checked", false);
             }
         }
-
     }
 
     function checkUncheck(item_names_id) {
@@ -337,7 +391,6 @@
         }
     }
 
-
     function setStatus(id) {
         if (id === 'save') {
             document.getElementById("clickedButton").value = "Save";
@@ -345,6 +398,7 @@
             document.getElementById("clickedButton").value = "Delete";
         }
     }
+
     function myLeftTrim(str) {
         var beginIndex = 0;
         for (var i = 0; i < str.length; i++) {
@@ -355,6 +409,7 @@
         }
         return str.substring(beginIndex, str.length);
     }
+
     function verify() {
         var result;
         if (document.getElementById("clickedButton").value === 'Save' || document.getElementById("clickedButton").value === 'Save AS New') {
@@ -382,7 +437,6 @@
                 document.getElementById("monthly_limit").focus();
                 return false;
             }
-
             if (result === false) {
             } else {
                 result = true;
@@ -396,6 +450,7 @@
         }
         return result;
     }
+
     function verifySearch() {
         var result;
         if (document.getElementById("clickedButton").value === 'SEARCH') {
@@ -421,14 +476,15 @@
         var url = "ItemAuthorizationController?" + queryString;
         return window.open(url, window_name, window_features);
     }
-    if (!document.all) {
-        document.captureEvents(Event.CLICK);
-    }
-    document.onclick = function () {
-        if (popupwin !== null && !popupwin.closed) {
-            popupwin.focus();
-        }
-    }
+
+//    if (!document.all) {
+//        document.captureEvents(Event.CLICK);
+//    }
+//    document.onclick = function () {
+//        if (popupwin !== null && !popupwin.closed) {
+//            popupwin.focus();
+//        }
+//    }
 
     function fillColumn(id, count) {
         $('#item_authorization_id').val(id);
@@ -527,11 +583,20 @@
                                             </c:forTokens>
                                         </div>
                                     </c:if>
-
                                 </td>
                                 <!--                                <td> 
-                                
-                                                                </td>-->
+                                <c:if test="${beanType.designation!=''}">
+                                    <div class="scrollable">
+                                    <c:forTokens items="${beanType.designation}" delims="," var="mySplit2">
+                                        <li>  
+                                            <a href="" value="${mySplit2}">${mySplit2}</a>
+                                            </br>
+                                        </li>
+                                    </c:forTokens>
+                                </div>
+                                </c:if>
+
+                            </td>-->
                             </tr>
 
                         </c:forEach>
@@ -571,27 +636,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row" id="key_person_div" style="display:none" >
 
 
+            </div>
 
-                <!--                <div class="col-md-3">
-                                    <div class="">
-                                        <div class="form-group">
-                                            <label>Quantity<span class="text-danger">*</span></label>
-                                            <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
-                                        </div>
+
+            <!--                <div class="col-md-3">
+                                <div class="">
+                                    <div class="form-group">
+                                        <label>Quantity<span class="text-danger">*</span></label>
+                                        <input class="form-control myInput" type="text" id="quantity" name="quantity" value="" disabled>
                                     </div>
                                 </div>
-                
-                                <div class="col-md-3">
-                                    <div class="">
-                                        <div class="form-group">
-                                            <label>Monthly Limit<span class="text-danger">*</span></label>
-                                            <input class="form-control myInput" type="text" id="monthly_limit" name="monthly_limit" value="" disabled>
-                                        </div>
+                            </div>
+            
+                            <div class="col-md-3">
+                                <div class="">
+                                    <div class="form-group">
+                                        <label>Monthly Limit<span class="text-danger">*</span></label>
+                                        <input class="form-control myInput" type="text" id="monthly_limit" name="monthly_limit" value="" disabled>
                                     </div>
-                                </div>-->
-
+                                </div>
+                            </div>-->
+            <div class="row">
                 <div class="col-md-12">
                     <div class="">
                         <div class="form-group">

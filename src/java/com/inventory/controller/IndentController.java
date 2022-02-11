@@ -302,7 +302,7 @@ public class IndentController extends HttpServlet {
                         bean.setRequired_qty(Integer.parseInt(request.getParameter("req_qty" + i + "")));
                         bean.setExpected_date_time(request.getParameter("expected_date_time" + i + ""));
                         if (indent_table_id == 0) {
-                            model.insertRecord(bean, logged_user_name, office_admin, i);
+                            model.insertRecord(bean, logged_user_name, office_admin, i,logged_org_office_id);
                         }
                     }
                 }

@@ -36,6 +36,11 @@ public class OrgOfficeTypeController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String active1 = request.getParameter("active");
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             orgOfficeTypeModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -79,7 +84,6 @@ public class OrgOfficeTypeController extends HttpServlet {
             if (task == null) {
                 task = "";
             }
-
 
             if (task.equals("ACTIVE RECORDS")) {
                 active = "Y";

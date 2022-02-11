@@ -59,10 +59,11 @@
                                                 <th class="fontFourteen">Sender Name</th>
                                                 <!--<th>Sender Email</th>-->
                                                 <th class="fontFourteen">Sender Mobile</th>
+                                                <th class="fontFourteen">Product Name</th>
                                                 <!-- <th>Sender Company Name</th> -->
                                                 <!-- <th>Sender Address</th> -->
-                                                <th>City</th>
-                                                <th>State</th>
+                                                <th class="fontFourteen">City</th>
+                                                <th class="fontFourteen">State</th>
                                                 <!--<th class="fontFourteen">District</th>-->
                                                 <th class="fontFourteen">Time Ago</th>
                                                 <!-- <th>Enquiry Message</th> -->
@@ -84,6 +85,7 @@
                                                     <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
+                                                    <td class="fontFourteen">${beanType.product_name}</td>
                                                     <td class="fontFourteen">${beanType.enquiry_city}</td>
                                                     <td class="fontFourteen">${beanType.enquiry_state}</td>
                                                     <!--<td class="fontFourteen">${beanType.description}</td>-->

@@ -519,7 +519,7 @@
                         <input type="text" Placeholder="Key Person" name="search_key_person" id="search_key_person" value="${search_key_person}" class="form-control myInput searchInput1 w-100">
                     </div>
                 </div>
-                    
+
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Date</label>
@@ -549,8 +549,10 @@
                 <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
 
                     <tr>
-                        <!--<th>S.No.</th>-->
-
+                        <th>
+                            <a class="nav-link" href="" role="button">
+                                <img src="CRM Dashboard/assets2/img/product/addEnquiry.png" width="20">
+                            </a></th>
                         <th>Item Name</th>
                         <th style="width:80px">Item Code</th>
                         <th style="width:80px">Org Office</th>
@@ -567,15 +569,36 @@
                         <th style="width:80px">Date Time</th>
                         <!--<th>Description</th>-->
                         <th></th>
+                        <th></th>
                     </tr>
                     <tbody>
                         <c:forEach var="beanType" items="${requestScope['list']}"
                                    varStatus="loopCounter">
                             <!--openpopup-->
+                            <c:choose>
+                                <c:when test="${beanType.stock_quantity==0 && beanType.is_super_child=='Y'}">
+                                    <tr style="background-color: red;font-weight: bold;color:white" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                        data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                    </c:when>
+                                    <c:when test="${(beanType.stock_quantity<=beanType.min_quantity) && beanType.is_super_child=='Y'}">
+                                    <tr style="background-color:yellow;font-weight: bold" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                        data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                    </c:when>
+                                    <c:otherwise>
+                                    <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                        data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                    </c:otherwise>
+                                </c:choose>
 
-                            <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
-                                data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-                                <!--<td data-column="name">${loopCounter.count }</td>-->               
+     <!--<td data-column="name">${loopCounter.count }</td>-->      
+                                <c:choose>
+                                    <c:when test="${beanType.is_super_child=='Y'}">
+                                        <td><input type="checkbox" ></td>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <td></td>
+                                    </c:otherwise>
+                                </c:choose>
 
                                 <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
                                 <td id="${loopCounter.count }3">${beanType.item_code}</td>
@@ -593,13 +616,19 @@
                                 <td id="${loopCounter.count }15">${beanType.date_time}</td> 
                                 <!--<td id="${loopCounter.count }16">${beanType.description}</td>-->  
 
-                                <c:if test="${beanType.popupval=='openpopup'}">
-                                    <td>
-                                        <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
-                                    </td>
-                                </c:if>
+                                <c:choose>
+                                    <c:when test="${beanType.popupval=='openpopup'}">
+                                        <td>
+                                            <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
+                                        </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td></td>
+                                    </c:otherwise>
+                                </c:choose>
 
-                                <td></td>
+
+
                             </tr>
                         </c:forEach>
                     </tbody>

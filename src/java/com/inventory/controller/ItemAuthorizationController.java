@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -60,6 +61,10 @@ public class ItemAuthorizationController extends HttpServlet {
         search_org_office = request.getParameter("search_org_office");
 
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         String loggedUser = "";
         loggedUser = session.getAttribute("user_role").toString();
 
@@ -181,14 +186,37 @@ public class ItemAuthorizationController extends HttpServlet {
                 bean.setItem_authorization_id(item_authorization_id);
                 String item_checkbox[] = request.getParameterValues("item_checkbox");
                 String des_checkbox[] = request.getParameterValues("designation");
+                String key_person_checkbox[] = request.getParameterValues("key_person");
                 bean.setDescription(request.getParameter("description").trim());
                 bean.setOrg_office(request.getParameter("org_office").trim());
                 bean.setQuantity(0);
                 bean.setMonthly_limit(0);
+
+                MultiHashMap key_des_map = new MultiHashMap();
+                MultiHashMap key_des_maping = new MultiHashMap();
+
                 for (int i = 0; i < item_checkbox.length; i++) {
                     bean.setItem_name(item_checkbox[i]);
                     if (item_authorization_id == 0) {
-                        model.insertRecord(bean, des_checkbox);
+                        for (int j = 0; j < key_person_checkbox.length; j++) {
+                            String designation_person_id = model.getDesignationId(key_person_checkbox[j], request.getParameter("org_office").trim());
+                            String designation_person_id_arr[] = designation_person_id.split("&");
+
+                            String designation_person = model.getDesignationKeyPerson(key_person_checkbox[j], request.getParameter("org_office").trim());
+                            String designation_person_arr[] = designation_person.split("&");
+
+                            int designation_id = Integer.parseInt(designation_person_id_arr[0]);
+                            int key_person_id = Integer.parseInt(designation_person_id_arr[1]);
+
+                            String designation = designation_person_arr[0];
+                            String key_person = designation_person_arr[1];
+
+                            key_des_map.put(designation_id, key_person_id);
+                            key_des_maping.put(designation + "&" + designation_id, key_person + "&" + key_person_id);
+
+                        }
+                        model.insertRecord(bean, des_checkbox, key_des_map);
+
                     } else {
                         model.updateRecord(bean, item_authorization_id);
                     }
@@ -196,7 +224,7 @@ public class ItemAuthorizationController extends HttpServlet {
             }
 
 //            List<ItemAuthorization> list = model.showData(search_item_name, search_designation);
-            List<ItemName> list = model.getItemsList(logged_designation, search_org_office,search_item_name);
+            List<ItemName> list = model.getItemsList(logged_designation, search_org_office, search_item_name);
 
             request.setAttribute("list", list);
             request.setAttribute("search_item_name", search_item_name);

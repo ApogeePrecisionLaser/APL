@@ -36,14 +36,6 @@ public class ApproveOrdersController extends HttpServlet {
         int logged_org_office_id = 0;
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
-        String office_admin = "";
-        String search_by_date = "";
-        int last_indent_table_id = 0;
-        int counting = 100;
-        String indent_no = "";
-        String requested_by = "";
-        String requested_to = "";
-        String description = "";
         String loggedUser = "";
 
         HttpSession session = request.getSession();
@@ -112,14 +104,31 @@ public class ApproveOrdersController extends HttpServlet {
         }
 
         if (task.equals("sales_enquiry_list")) {
-            ArrayList<Enquiry> list = model.getAllEnquiries(loggedUser, logged_key_person_id);
+            String enquiry_source = request.getParameter("enquiry_source");
+            String status = request.getParameter("status");
+            if (enquiry_source == null) {
+                enquiry_source = "";
+            }
+            if (status == null) {
+                status = "";
+            }
+            ArrayList<Enquiry> list = model.getAllEnquiries(loggedUser, logged_key_person_id, enquiry_source, status);
             request.setAttribute("list", list);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("salesperson_sales_enquiry_list").forward(request, response);
         }
         if (task.equals("complaint_enquiry_list")) {
-            ArrayList<Enquiry> list = model.getAllComplaints(loggedUser, logged_key_person_id);
+
+            String enquiry_source = request.getParameter("enquiry_source");
+            String status = request.getParameter("status");
+            if (enquiry_source == null) {
+                enquiry_source = "";
+            }
+            if (status == null) {
+                status = "";
+            }
+            ArrayList<Enquiry> list = model.getAllComplaints(loggedUser, logged_key_person_id,enquiry_source, status);
             request.setAttribute("list", list);
             DBConnection.closeConncetion(model.getConnection());
 

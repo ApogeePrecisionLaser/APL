@@ -16,6 +16,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 public class CityController extends HttpServlet {
@@ -28,7 +29,11 @@ public class CityController extends HttpServlet {
         response.setContentType("text/html");
         ServletContext ctx = getServletContext();
         CityModel cityModel = new CityModel();
-
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             //       organisationNameModel.setConnection(DBConnection.getConnection(ctx, session));
             cityModel.setConnection(DBConnection.getConnectionForUtf(ctx));

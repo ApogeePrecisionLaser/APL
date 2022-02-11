@@ -74,10 +74,10 @@
 
                                                     <c:choose>  
                                                         <c:when test="${beanType.status == 'Pending'}">  
-                                                            <td class="fontFourteen"><i class="statusPending">${beanType.status}</i></td>
+                                                            <td class="fontFourteen"><i class="statusPending">Order Placed</i></td>
                                                             </c:when>   
                                                             <c:when test="${beanType.status == 'Approved'}">  
-                                                            <td class="fontFourteen"><i class="statusApprove">${beanType.status}</i></td>
+                                                            <td class="fontFourteen"><i class="statusApprove">Order Confirmed</i></td>
                                                             </c:when>  
                                                             <c:when test="${beanType.status == 'Denied'}">  
                                                             <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i></td>

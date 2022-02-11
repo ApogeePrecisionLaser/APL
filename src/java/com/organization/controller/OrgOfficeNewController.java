@@ -22,8 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
 public class OrgOfficeNewController extends HttpServlet {
-  
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
@@ -32,6 +31,12 @@ public class OrgOfficeNewController extends HttpServlet {
         OrgOfficeModel organisationModel = new OrgOfficeModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
+
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("logged_user_name") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        }
         try {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -51,7 +56,7 @@ public class OrgOfficeNewController extends HttpServlet {
             String office_name = (request.getParameter("office_name_search"));
             String mobile = (request.getParameter("searchmobile"));
             String searchgeneration = request.getParameter("searchgeneration");
-         //   String searchhierarchy = request.getParameter("searchhierarchy");
+            //   String searchhierarchy = request.getParameter("searchhierarchy");
 
             if (isOrgBasicStep != null && !isOrgBasicStep.isEmpty()) {
                 isOrgBasicStep = isOrgBasicStep.trim();
@@ -184,7 +189,7 @@ public class OrgOfficeNewController extends HttpServlet {
             } else if (task.equals("Save") || task.equals("Save AS New")) {
                 int org_office_id;
                 try {
-                    org_office_id = Integer.parseInt("0"+request.getParameter("org_office_id"));            // org_office_id may or may NOT be available i.e. it can be update or new record.
+                    org_office_id = Integer.parseInt("0" + request.getParameter("org_office_id"));            // org_office_id may or may NOT be available i.e. it can be update or new record.
                 } catch (Exception e) {
                     org_office_id = 0;
                 }
@@ -226,7 +231,7 @@ public class OrgOfficeNewController extends HttpServlet {
                 }
                 orgOffice.setSuperp(superp);
                 orgOffice.setP_org(p_org_office);
-              //  System.err.println("org_office_id----------------" + org_office_id);
+                //  System.err.println("org_office_id----------------" + org_office_id);
                 if (org_office_id == 0) {
                     // if org_office_id was not provided, that means insert new record.
 
@@ -243,12 +248,12 @@ public class OrgOfficeNewController extends HttpServlet {
                 String latitude = "";
                 String longitude = "";
                 String LatLong = organisationModel.getPointLatLong(point_id);
-               // System.out.println(LatLong);
+                // System.out.println(LatLong);
                 String[] words = LatLong.split("\\,");
                 for (int i = 0; i < words.length; i++) {
                     latitude = words[0];
                     longitude = words[1];
-                  //  System.out.println(latitude + "  " + longitude);
+                    //  System.out.println(latitude + "  " + longitude);
                 }
                 request.setAttribute("longi", longitude);
                 request.setAttribute("latti", latitude);
@@ -268,7 +273,7 @@ public class OrgOfficeNewController extends HttpServlet {
             serial_no = request.getParameter("searchDesignationCode");
             designation = request.getParameter("searchDesignation");
             searchgeneration = request.getParameter("searchgeneration");
-           // searchhierarchy = request.getParameter("searchhierarchy");
+            // searchhierarchy = request.getParameter("searchhierarchy");
 
             try {
 
@@ -309,7 +314,7 @@ public class OrgOfficeNewController extends HttpServlet {
                 designation = "";
                 searchgeneration = "";
                 mobile = "";
-               // searchhierarchy = "";
+                // searchhierarchy = "";
             }
 
             String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
