@@ -39,11 +39,13 @@ public class OrganisationNameController extends HttpServlet {
         int logged_org_name_id = 0;
         int logged_key_person_id = 0;
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("user_name") == null) {
-//            response.sendRedirect("beforelogin.jsp");
-//            return;
-            System.err.println("If null");
+        String loggedUser = "";
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
+            System.err.println("Session Not Active");
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
         } else {
+            loggedUser = session.getAttribute("user_role").toString();
             logged_user_name = session.getAttribute("logged_user_name").toString();
             logged_org_name = session.getAttribute("logged_org_name").toString();
             logged_designation = session.getAttribute("logged_designation").toString();

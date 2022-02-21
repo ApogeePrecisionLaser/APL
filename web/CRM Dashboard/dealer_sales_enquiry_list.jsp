@@ -1,6 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
+
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="">
@@ -14,7 +15,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="row mb-2 marginTop10">
+            <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
                         <!--                        <div>
@@ -31,7 +32,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Sales Enquiry List</li>
+                        <li class="breadcrumb-item active">Complaint Enquiry List</li>
                     </ol>
                 </div>
             </div>
@@ -44,7 +45,7 @@
                     <div class="card card-primary card-outline">            
                         <div class="card-body">
                             <div>
-                                <div class="table-responsive tableScrollWrap noWrapTable" >
+                                <div class="table-responsive tableScrollWrap" >
                                     <table class="table table-striped1 mainTable" id="mytable" >
                                         <thead>
                                             <tr>
@@ -77,7 +78,7 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen"><a href="tel:${beanType.sender_mob}">${beanType.sender_mob}</a></td>
+                                                    <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.product_name}</td>
@@ -85,18 +86,16 @@
                                                     <td class="fontFourteen">${beanType.enquiry_state}</td>
                                                     <!--<td class="fontFourteen">${beanType.description}</td>-->
                                                     <td class="fontFourteen">${beanType.enquiry_date_time}</td>
-
-
-
                                                     <td class="fontFourteen">
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To Dealer'}">
-                                                                <button class="btn inConversation fontFourteen" id="status${beanType.enquiry_table_id}" disabled>In Conversation</button>
+                                                                <button class="btn inConversation fontFourteen" id="status${beanType.enquiry_table_id}" disabled>Assigned To Dealer</button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
+                                                            <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
+                                                                            || beanType.status =='Purchased From Others'}">
                                                                 <button class="btn enquiryFailed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                            <c:when test="${beanType.status =='Sold'}">
                                                                 <button class="btn enquiryPassed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:otherwise>
@@ -105,26 +104,18 @@
                                                         </c:choose>
                                                     </td>
 
+                                                    <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
+                                                    <!--                                                    <td class="fontFourteen d-flex">
+                                                                                                            <div>
+                                                                                                                <a href="DealersOrderController?task=viewComplaintDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Complaint Detail"></a>
+                                                                                                            </div> 
+                                                                                                        </td>-->
+
+
                                                     <td class="fontFourteen d-flex">
                                                         <div>
-                                                            <a href="DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Enquiry Detail"></a>
+                                                            <a href="DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Complaint Detail"></a>
                                                         </div> 
-
-
-                                                        <select class="btn btn-primary myNewLinkBtn px-1 ml-3 fontFourteen" id="enquiry_status${beanType.enquiry_table_id}" name="item_status" style="width:100px" onchange="changeStatus('${beanType.enquiry_table_id}')">
-                                                            <c:if test="${beanType.status=='Enquiry Passed'}">
-                                                                <option  class="btn btn-primary actionEdit fontFourteen" value="Enquiry Passed" id="enquiry_status${beanType.enquiry_table_id}">Resolved</option>
-                                                            </c:if>
-                                                            <c:if test="${beanType.status=='Enquiry Failed'}">
-                                                                <option  class="btn btn-primary actionDelete fontFourteen" value="Enquiry Failed" id="enquiry_status${beanType.enquiry_table_id}">Unresolved</option>
-                                                            </c:if>
-
-                                                            <c:if test="${beanType.status=='Assigned To Dealer'}">
-                                                                <option class="btn btn-primary fontFourteen" id="enquiry_status${beanType.enquiry_table_id}">Select</option>
-                                                                <option class="btn btn-primary actionEdit fontFourteen" value="Enquiry Passed" id="enquiry_status${beanType.enquiry_table_id}">Resolved</option>
-                                                                <option class="btn btn-primary actionDelete fontFourteen" value="Enquiry Failed" id="enquiry_status${beanType.enquiry_table_id}">Unresolved</option>
-                                                            </c:if>
-                                                        </select>
                                                     </td>
                                                 </tr> 
                                             </c:forEach>
@@ -135,6 +126,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -188,52 +180,52 @@
     }
 
 
-    function changeStatus(enquiry_table_id) {
-        var enquiry_status = $('#enquiry_status' + enquiry_table_id).val();
-        if (enquiry_status == 'Select') {
-            alert("Please Select one of the status!...");
-            return false;
-        } else {
-            $.ajax({
-                url: "DealersOrderController",
-                dataType: "json",
-                data: {task: "changeStatus", enquiry_status: enquiry_status, enquiry_table_id: enquiry_table_id},
-                success: function (data) {
-                    console.log(data.msg);
-                    if (data.msg == 'Enquiry Passed') {
-                        $('#msg_success').show();
-                        $('#msg_danger').hide();
-                        $('#msg_success').html("Enquiry Resolved");
-                        $('#status' + enquiry_table_id).html(data.msg);
-                        $('#status' + enquiry_table_id).removeClass("inConversation");
-                        $('#status' + enquiry_table_id).addClass("enquiryPassed");
-
-//                        $('#enquiry_status' + enquiry_table_id).removeClass("inConversation");
-//                        $('#enquiry_status' + enquiry_table_id).addClass("actionEdit");
-                        $('#enquiry_status' + enquiry_table_id).val(data.msg);
-
-                    }
-                    if (data.msg == 'Enquiry Failed') {
-                        $('#msg_success').hide();
-                        $('#msg_danger').show();
-                        $('#msg_danger').html("Enquiry Not Resolved");
-                        $('#status' + enquiry_table_id).html(data.msg);
-                        $('#status' + enquiry_table_id).removeClass("inConversation");
-                        $('#status' + enquiry_table_id).addClass("actionDelete");
-                        $('#enquiry_status' + enquiry_table_id).val(data.msg);
-                    }
-                    setTimeout(function () {
-                        $('#msg_success').fadeOut('fast');
-                    }, 2000);
-                    setTimeout(function () {
-                        $('#msg_danger').fadeOut('fast');
-                    }, 2000);
-
-                }, error: function (error) {
-                    console.log(error.responseText);
-                }
-            });
-        }
-
-    }
+//    function changeStatus(enquiry_table_id) {
+//        var enquiry_status = $('#enquiry_status' + enquiry_table_id).val();
+//        if (enquiry_status == 'Select') {
+//            alert("Please Select one of the status!...");
+//            return false;
+//        } else {
+//            $.ajax({
+//                url: "DealersOrderController",
+//                dataType: "json",
+//                data: {task: "changeStatus", enquiry_status: enquiry_status, enquiry_table_id: enquiry_table_id},
+//                success: function (data) {
+//                    console.log(data.msg);
+//                    if (data.msg == 'Enquiry Passed') {
+//                        $('#msg_success').show();
+//                        $('#msg_danger').hide();
+//                        $('#msg_success').html("Enquiry Resolved");
+//                        $('#status' + enquiry_table_id).html(data.msg);
+//                        $('#status' + enquiry_table_id).removeClass("inConversation");
+//                        $('#status' + enquiry_table_id).addClass("enquiryPassed");
+//
+////                        $('#enquiry_status' + enquiry_table_id).removeClass("inConversation");
+////                        $('#enquiry_status' + enquiry_table_id).addClass("actionEdit");
+//                        $('#enquiry_status' + enquiry_table_id).val(data.msg);
+//
+//                    }
+//                    if (data.msg == 'Enquiry Failed') {
+//                        $('#msg_success').hide();
+//                        $('#msg_danger').show();
+//                        $('#msg_danger').html("Enquiry Not Resolved");
+//                        $('#status' + enquiry_table_id).html(data.msg);
+//                        $('#status' + enquiry_table_id).removeClass("inConversation");
+//                        $('#status' + enquiry_table_id).addClass("actionDelete");
+//                        $('#enquiry_status' + enquiry_table_id).val(data.msg);
+//                    }
+//                    setTimeout(function () {
+//                        $('#msg_success').fadeOut('fast');
+//                    }, 2000);
+//                    setTimeout(function () {
+//                        $('#msg_danger').fadeOut('fast');
+//                    }, 2000);
+//
+//                }, error: function (error) {
+//                    console.log(error.responseText);
+//                }
+//            });
+//        }
+//
+//    }
 </script>

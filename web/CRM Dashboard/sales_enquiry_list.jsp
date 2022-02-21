@@ -104,13 +104,14 @@
                                                                 <button class="btn assigneDealer fontFourteen" disabled>Assigned </button>
                                                             </c:when>
 
-                                                            <c:when test="${beanType.status =='In Conversation'}">
+                                                            <c:when test="${beanType.status =='Open' || beanType.status =='Call' ||  beanType.status =='Follow Up'}">
                                                                 <button class="btn inConversation fontFourteen" disabled>${beanType.status} </button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
-                                                                <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                            <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
+                                                                            || beanType.status =='Purchased From Others'}">
+                                                                    <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                            <c:when test="${beanType.status =='Sold'}">
                                                                 <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:otherwise>

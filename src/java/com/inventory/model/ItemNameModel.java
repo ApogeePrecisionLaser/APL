@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
+import static com.inventory.model.InventoryBasicModel.getStockQuantity;
 import com.inventory.tableClasses.ItemAuthorization;
 import com.inventory.tableClasses.ItemName;
 import com.inventory.tableClasses.ModelName;
@@ -38,6 +39,8 @@ public class ItemNameModel {
     private final String COLOR_OK = "#a2a220";
     private final String COLOR_ERROR = "red";
     int item_id = 0;
+    int global_key_person_id = 0;
+    int global_org_office_id = 0;
     int model_id = 0;
 
     public void setConnection(Connection con) {
@@ -553,8 +556,9 @@ public class ItemNameModel {
         String query = "INSERT INTO item_names(item_name,item_type_id,description,"
                 + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
-
+        String kkk = "";
         int rowsAffected = 0;
+        int rowsAffected3 = 0;
         int p_item_id = 0;
         int p_item_id_for_code = 0;
         int count = 0;
@@ -642,62 +646,16 @@ public class ItemNameModel {
                     ResultSet rs = pstmt.getGeneratedKeys();
                     while (rs.next()) {
                         item_id = rs.getInt(1);
-//                        for (int k = 0; k < des_list.size(); k++) {
-//                            int org_office_des_map_id = getOrgOfficeDesignationMapId(item_name.getOrg_office(), des_list.get(k));
-//                            
-//                            
-//                            
-//                            if (!des_list.get(k).equals("All") && !des_list.get(k).equals("")) {
-//                                int designation_id = getDesignationId(des_list.get(k));
-//                                String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
-//                                        + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id) "
-//                                        + " VALUES(?,?,?,?,?,?,?,?,?) ";
-//
-//                                String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
-//                                        + " item_names_id='" + item_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
-//                                        + " and active='Y'  ";
-//                                int auth_map_count = 0;
-//                                PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
-//                                ResultSet rs1 = pstmt1.executeQuery();
-//                                while (rs1.next()) {
-//                                    auth_map_count = rs1.getInt("count");
-//                                }
-//                                if (auth_map_count > 0) {
-//                                    message = "Designation has already mapped to this item!..";
-//                                    msgBgColor = COLOR_ERROR;
-//                                } else {
-//                                    PreparedStatement pstmt_auth = connection.prepareStatement(item_auth_query);
-//                                    pstmt_auth.setInt(1, item_id);
-//                                    pstmt_auth.setInt(2, designation_id);
-//                                    pstmt_auth.setString(3, "");
-//                                    pstmt_auth.setInt(4, itemAuthBean.getRevision_no());
-//                                    pstmt_auth.setString(5, "Y");
-//                                    pstmt_auth.setString(6, "OK");
-//                                    pstmt_auth.setInt(7, 0);
-//                                    pstmt_auth.setInt(8, 0);
-//                                    pstmt_auth.setInt(9, org_office_des_map_id);
-//                                    rowsAffected = pstmt_auth.executeUpdate();
-//                                }
-//
-//                            }
-//                        }
-
                         Iterator<Map.Entry<Integer, Integer>> itr_map = key_person_map.entrySet().iterator();
                         ArrayList list_key = new ArrayList();
                         ArrayList list_value = new ArrayList();
                         while (itr_map.hasNext()) {
                             Map.Entry<Integer, Integer> entry = itr_map.next();
-//                            System.out.println("Key = " + entry.getKey()
-//                                    + ", Value = " + entry.getValue());
-
                             list_key.add(entry.getKey());
                             list_value.add(entry.getValue());
 
                         }
 
-//                        System.err.println("list val --" + list_value.size());
-//                        System.err.println("list val at 1  --" + list_value.get(1));
-//                        System.err.println("list val at 1 string  --" + list_value.get(1).toString());
                         int designation_id = 0;
                         String key_person_id = "";
 
@@ -705,12 +663,13 @@ public class ItemNameModel {
                             designation_id = Integer.parseInt(list_key.get(k).toString());
                             key_person_id = list_value.get(k).toString().replaceAll("\\[", "").replaceAll("\\]", "");
                             ArrayList<String> key_p_list = new ArrayList<>(Arrays.asList(key_person_id.split(",")));
-                            //key_p_list.add(key_person_id);
-//                            System.err.println("key p list ---" + key_p_list.size());
-//                            System.err.println("key p list ---" + key_p_list.toString());
+
                             for (int l = 0; l < key_p_list.size(); l++) {
-                                String kkk = key_p_list.get(l).trim();
-//                                System.err.println("final val --- " + kkk);
+                                kkk = key_p_list.get(l).trim();
+                                if (designation_id == 5) {
+                                    global_org_office_id = getOrgOfficeId(item_name.getOrg_office());
+                                    global_key_person_id = Integer.parseInt(kkk);
+                                }
 
                                 int org_office_des_map_id = getOrgOfficeDesignationMapIdOO(item_name.getOrg_office(), designation_id);
                                 String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
@@ -828,6 +787,78 @@ public class ItemNameModel {
             }
             rowsAffected = insertImageRecord(rowsAffected, modelBean, itr, destination, model_id, image_name, j, item_name.getItem_name());
 
+            String ib_query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+                    + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
+
+            int inventory_basic_id = 0;
+
+            int model_id = getModelId(modelBean.getModel());
+//                int stock_quantity = getStockQuantity(item_name_id);
+
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+            String current_time = sdf.format(date);
+
+            int ib_map_count = 0;
+
+            String query4_ib = " SELECT count(*) as count FROM inventory_basic ib,inventory inv,model m WHERE "
+                    + " ib.item_names_id='" + item_id + "' and ib.org_office_id='" + global_org_office_id + "' "
+                    + " and inv.key_person_id='" + global_key_person_id + "' and ib.model_id='" + model_id + "' "
+                    + " and ib.active='Y' and inv.active='Y' and inv.inventory_basic_id=ib.inventory_basic_id and m.model_id=ib.model_id "
+                    + " and m.active='Y' ";
+
+            PreparedStatement pstmt1_ib = connection.prepareStatement(query4_ib);
+            ResultSet rs1_ib_inv = pstmt1_ib.executeQuery();
+            while (rs1_ib_inv.next()) {
+                ib_map_count = rs1_ib_inv.getInt("count");
+            }
+            if (ib_map_count > 0) {
+                message = "Item Model has already mapped with this Office and person!..";
+                msgBgColor = COLOR_ERROR;
+            } else {
+                PreparedStatement pstmt_inv = connection.prepareStatement(ib_query, Statement.RETURN_GENERATED_KEYS);
+                pstmt_inv.setInt(1, item_id);
+                pstmt_inv.setInt(2, global_org_office_id);
+                pstmt_inv.setString(3, item_name.getDescription());
+                pstmt_inv.setInt(4, 0);
+                pstmt_inv.setString(5, "Y");
+                pstmt_inv.setString(6, "OK");
+                pstmt_inv.setInt(7, 10);
+                pstmt_inv.setInt(8, 1);
+                pstmt_inv.setString(9, "10");
+                pstmt_inv.setInt(10, model_id);
+                rowsAffected = pstmt_inv.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    ResultSet rs_inv = pstmt_inv.getGeneratedKeys();
+                    while (rs_inv.next()) {
+                        inventory_basic_id = rs_inv.getInt(1);
+                    }
+
+                    String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
+                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                            + " reference_document_type,reference_document_id,stock_quantity) "
+                            + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
+
+                    PreparedStatement pstmt2_inv = connection.prepareStatement(query2_inv);
+                    pstmt2_inv.setInt(1, inventory_basic_id);
+                    pstmt2_inv.setInt(2, global_key_person_id);
+                    pstmt2_inv.setString(3, item_name.getDescription());
+                    pstmt2_inv.setInt(4, 0);
+                    pstmt2_inv.setString(5, "Y");
+                    pstmt2_inv.setString(6, "OK");
+                    pstmt2_inv.setInt(7, modelBean.getQty());
+                    pstmt2_inv.setInt(8, 0);
+                    pstmt2_inv.setString(9, current_time);
+                    pstmt2_inv.setString(10, "");
+                    pstmt2_inv.setString(11, "");
+                    pstmt2_inv.setInt(12, modelBean.getQty());
+                    rowsAffected3 = pstmt2_inv.executeUpdate();
+
+                }
+
+            }
+
             // rowsAffected = insertImageRecord(rowsAffected, item_name, itr, destination, item_id, image_name, image_count);
         } catch (Exception e) {
             System.out.println("ItemNameModel insertRecord() Error: " + e);
@@ -846,6 +877,35 @@ public class ItemNameModel {
             msgBgColor = COLOR_ERROR;
         }
         return rowsAffected;
+    }
+
+    public int getOrgOfficeId(String org_office) {
+
+        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("org_office_id");
+        } catch (Exception e) {
+            System.out.println("InventoryBasicModel getOrgOfficeId Error: " + e);
+        }
+        return id;
+    }
+
+    public int getModelId(String model_name) {
+        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        int id = 0;
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            id = rset.getInt("model_id");
+        } catch (Exception e) {
+            System.out.println("InventoryBasicModel getModelId Error: " + e);
+        }
+        return id;
     }
 
     public int insertImageRecord(int rowsAffected, ModelName model_name, Iterator itr, String destination, int model_id, String image_name,

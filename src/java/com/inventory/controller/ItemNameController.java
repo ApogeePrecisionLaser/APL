@@ -58,14 +58,15 @@ public class ItemNameController extends HttpServlet {
         List<String> des_list = new ArrayList<String>();
         List<String> des_id_list = new ArrayList<String>();
         List<String> key_person_list = new ArrayList<String>();
-
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        String loggedUser = "";
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
             System.err.println("Session Not Active");
             request.getRequestDispatcher("/").forward(request, response);
             return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
         }
 
-        String loggedUser = "";
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         String item_name = "";
@@ -111,7 +112,7 @@ public class ItemNameController extends HttpServlet {
         }
 
         try {
-            loggedUser = session.getAttribute("user_role").toString();
+
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
             model2.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -421,6 +422,7 @@ public class ItemNameController extends HttpServlet {
                             modelBean.setManufacturer_name(map.get("manufacturer_name_" + (j + 1)));
                             modelBean.setManufacturer_item_map_id(Integer.parseInt("0" + map.get("manufacturer_item_map_id_" + (j + 1))));
                             modelBean.setLead_time(Integer.parseInt("0" + map.get("lead_time_" + (j + 1)).trim()));
+                            modelBean.setQty(Integer.parseInt("0" + map.get("qty_" + (j + 1)).trim()));
                             modelBean.setBasic_price(map.get("basic_price_" + (j + 1)).trim());
                             if (map.get("model_no_" + (j + 1)) == null) {
                                 model_no = "";
@@ -458,45 +460,43 @@ public class ItemNameController extends HttpServlet {
                 request.setAttribute("parent_item", map.get("parent_item").trim());
                 request.setAttribute("super_child", map.get("super").trim());
                 request.setAttribute("HSNCode", map.get("HSNCode").trim());
-                List<String> des_list_new = new ArrayList<String>();
-                for (int k = 0; k < des_list.size(); k++) {
-
-                    String des = des_list.get(k) + "&" + des_id_list.get(k);
-                    des_list_new.add(des);
-                }
-
-                request.setAttribute("des_list", des_list_new);
-                request.setAttribute("count", map.get("count").trim());
-                request.setAttribute("description", map.get("description").trim());
-                request.setAttribute("org_office", map.get("org_office").trim());
-                if (des_list.get(0).equals("All")) {
-                    request.setAttribute("all_checked", "checked");
-                }
-
-                String org_office = map.get("org_office").trim();
-                List<String> all_des_list = new ArrayList<>();
-                List<String> desig_map_listAllFinal = new ArrayList<>();
-                List<String> desig_map_listUnmatched = new ArrayList<>();
-
-                all_des_list = model.getDesignationForList("", org_office);
-
-                desig_map_listAllFinal.addAll(all_des_list);
-
-                all_des_list.removeAll(des_list_new);
-
-                desig_map_listUnmatched.addAll(all_des_list);
-
-                desig_map_listAllFinal.removeAll(desig_map_listUnmatched);
 
                 List<String> lst2 = new ArrayList<>();
                 List<String> lst3 = new ArrayList<>();
                 List<String> lst4 = new ArrayList<>();
                 List<String> lst5 = new ArrayList<>();
                 List<String> lst6 = new ArrayList<>();
+                List<String> lst7 = new ArrayList<>();
                 if (superp.equals("Y")) {
-//                    if (count == 0) {
-//                        count = 1;
-//                    }
+                    List<String> des_list_new = new ArrayList<String>();
+                    for (int k = 0; k < des_list.size(); k++) {
+
+                        String des = des_list.get(k) + "&" + des_id_list.get(k);
+                        des_list_new.add(des);
+                    }
+
+                    request.setAttribute("des_list", des_list_new);
+                    request.setAttribute("count", map.get("count").trim());
+                    request.setAttribute("description", map.get("description").trim());
+                    request.setAttribute("org_office", map.get("org_office").trim());
+                    if (des_list.get(0).equals("All")) {
+                        request.setAttribute("all_checked", "checked");
+                    }
+
+                    String org_office = map.get("org_office").trim();
+                    List<String> all_des_list = new ArrayList<>();
+                    List<String> desig_map_listAllFinal = new ArrayList<>();
+                    List<String> desig_map_listUnmatched = new ArrayList<>();
+
+                    all_des_list = model.getDesignationForList("", org_office);
+
+                    desig_map_listAllFinal.addAll(all_des_list);
+
+                    all_des_list.removeAll(des_list_new);
+
+                    desig_map_listUnmatched.addAll(all_des_list);
+
+                    desig_map_listAllFinal.removeAll(desig_map_listUnmatched);
                     for (int k = 0; k < count; k++) {
                         lst.add(map.get("manufacturer_name_" + (k + 1)).trim());
                         lst2.add(map.get("model_" + (k + 1)).trim());
@@ -510,6 +510,8 @@ public class ItemNameController extends HttpServlet {
 
                         }
 
+                        lst7.add(map.get("qty_" + (k + 1)).trim());
+
                     }
 
                     request.setAttribute("lst", lst);
@@ -518,7 +520,7 @@ public class ItemNameController extends HttpServlet {
                     request.setAttribute("lst4", lst4);
                     request.setAttribute("lst5", lst5);
                     request.setAttribute("lst6", lst6);
-                    request.setAttribute("lst6", lst6);
+                    request.setAttribute("lst7", lst7);
                     request.setAttribute("desig_map_listAllFinal", desig_map_listAllFinal);
                     request.setAttribute("all_des_list", all_des_list);
                     request.setAttribute("multimap", key_des_maping);

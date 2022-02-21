@@ -32,6 +32,7 @@ public class ModelName {
     private int revision_no;
     private int daily_req;
     private int min_qty;
+    private int qty;
     private int lead_time;
     private String item_name;
     private String item_code;
@@ -339,6 +340,20 @@ public class ModelName {
      */
     public void setItem_code(String item_code) {
         this.item_code = item_code;
+    }
+
+    /**
+     * @return the qty
+     */
+    public int getQty() {
+        return qty;
+    }
+
+    /**
+     * @param qty the qty to set
+     */
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
    

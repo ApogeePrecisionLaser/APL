@@ -162,7 +162,13 @@ public class ModelNameModel {
                     manufacturer_item_map_id = rs3.getInt(1);
                 }
             }
-
+            String basic_price = model_name.getBasic_price();
+            if (basic_price == null) {
+                basic_price = "0";
+            }
+            if (basic_price.equals("")) {
+                basic_price = "0";
+            }
             PreparedStatement pstm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstm.setString(1, (model_name.getModel()));
             pstm.setInt(2, manufacturer_item_map_id);
@@ -173,7 +179,7 @@ public class ModelNameModel {
             pstm.setString(7, "OK");
             pstm.setString(8, model_name.getModel_no());
             pstm.setString(9, model_name.getPart_no());
-            pstm.setString(10, model_name.getBasic_price());
+            pstm.setString(10, basic_price);
             ResultSet rset = connection.prepareStatement(query2).executeQuery();
             int count = 0;
             while (rset.next()) {

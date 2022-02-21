@@ -64,7 +64,10 @@
                                                 <input type="hidden" name="document_name${loopCounter.count}" id="document_name${loopCounter.count}" value="${beanType.document_name}">
 
                                                 <c:if test="${beanType.document_name !=''}">
-                                                    <a class="btn fa fa-file actionEdit"  title="View Document" id="download" href="SupportMessagesController?task1=downloadFile&document_name=${beanType.document_name}" ></a>
+                                                    <a class="btn actionEdit"  title="View Document" id="download" 
+                                                       href="SupportMessagesController?task1=downloadFile&document_name=${beanType.document_name}" >
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
                                                 </c:if>
                                             </td>
                                         </tr>

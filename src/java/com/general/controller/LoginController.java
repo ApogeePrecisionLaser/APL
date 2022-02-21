@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +55,7 @@ public class LoginController extends HttpServlet {
         HttpSession session = request.getSession();
 
         if (session == null) {
+//            session.invalidate();
             request.getRequestDispatcher("/").forward(request, response);
         } else {
             LoginModel model = new LoginModel();
@@ -70,45 +72,29 @@ public class LoginController extends HttpServlet {
             dealersOrderModel.setConnection(DBConnection.getConnectionForUtf(ctx));
             enquiryModel.setConnection(DBConnection.getConnectionForUtf(ctx));
             helpModel.setConnection(DBConnection.getConnectionForUtf(ctx));
-
-//        HttpSession session = request.getSession();
-//
-//        if (session == null) {
-//            request.getRequestDispatcher("/").forward(request, response);
-//        }
             String task = request.getParameter("task");
+            int count = 0;
             if (task == null || task.isEmpty()) {
                 task = "";
             }
 
-//        try {
-//            model.setConnection((Connection) DBConnection.getConnectionForUtf(ctx));
-//        } catch (Exception e) {
-//            System.out.print(e);
-//        }     
             try {
                 System.out.println("conn -" + model);
 
                 if (task.equals("login")) {
-//                    String mobile = request.getParameter("mobile");
                     String email = request.getParameter("email");
-//                    if (mobile == null) {
-//                        mobile = "";
-//                    }
+
                     if (email == null) {
                         email = "";
                     }
 
-                    // String user_name = request.getParameter("user_name");
                     String user_name = "";
                     user_name = model.getUserName(email);
-//                user_name="jpss";
                     String password = request.getParameter("password");
 
+                    count = model.checkLogin(user_name, password);
+
                     model.setUserFullDetail(user_name, password);
-
-                    int count = model.checkLogin(user_name, password);
-
                     session.setAttribute("log_user", user_name);
                     session.setAttribute("log_email", email);
                     session.setAttribute("driverClass", ctx.getInitParameter("driverClass"));
@@ -129,13 +115,13 @@ public class LoginController extends HttpServlet {
                     }
 
                     int logged_key_person_id = model.getKeyPersonId(user_name, password);
+                    int user_id = model.getUserId(user_name, password);
                     int logged_org_name_id = model.getOrgNameId(user_name, password);
                     int logged_org_office_id = model.getOrgOfficeId(user_name, password);
                     String logged_org_name = model.getOrgName(user_name, password);
                     String logged_org_office = model.getOrgOffice(user_name, password);
                     String mobile = model.getMobile(user_name, password);
                     String office_admin = model.getOfficeAdmin(user_name, password, logged_org_office_id, designation);
-                    //  String office_embedded_dev = model.getOfficeEmbeddedDeveloper(user_name, password, logged_org_office_id);
 
                     if (count > 0) {
                         session.setAttribute("logged_user_name", user_name);
@@ -149,6 +135,39 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("log_mobile", mobile);
                         // session.setAttribute("office_embedded_dev", office_embedded_dev);
 
+                        int user_count = model.getCount(logged_key_person_id);
+
+                        if (user_count == 1) {
+                            int updaterows = model.updateUser(logged_key_person_id, user_name, password, user_id);
+                            request.setAttribute("mobile", mobile);
+                            request.getRequestDispatcher("recovery_password").forward(request, response);
+                        } else {
+                            String result = model.sendOTP(mobile);
+
+                            request.setAttribute("message", "OTP has been sent successfully on " + mobile);
+                            request.setAttribute("msgBgColor", "green");
+                            request.setAttribute("mobile", mobile);
+                            request.setAttribute("type", "login");
+                            request.setAttribute("otp", result);
+                            request.getRequestDispatcher("verify_mobile").forward(request, response);
+
+//                            if (result.equals("Success")) {
+//                                request.setAttribute("message", "OTP has been sent successfully on " + mobile);
+//                                request.setAttribute("msgBgColor", "green");
+//                                request.setAttribute("mobile", mobile);
+//                                request.setAttribute("type", "login");
+//                                request.getRequestDispatcher("verify_mobile").forward(request, response);
+//                            } else {
+//                                request.setAttribute("mobile", mobile);
+//                                request.setAttribute("message", "OTP has not been sent.Please Resend!..");
+//                                request.setAttribute("msgBgColor", "red");
+//                                request.setAttribute("type", "login");
+//                                request.getRequestDispatcher("verify_mobile").forward(request, response);
+//                            }
+                        }
+
+//                        request.setAttribute("mobile", mobile);
+//                        request.getRequestDispatcher("verify_mobile").forward(request, response);
                         if (session.getAttribute("user_role").equals("Admin")) {
                             ArrayList<DealersOrder> total_orders_list = dealersOrderModel.getAllHistoryOrders(user_name, session.getAttribute("user_role").toString());
                             List<Profile> dealers_list = profileModel.getAllDealers();
@@ -252,46 +271,118 @@ public class LoginController extends HttpServlet {
                         } else {
                             request.getRequestDispatcher("dashboard").forward(request, response);
                         }
-//                    request.getRequestDispatcher("dashboard").forward(request, response);
                     } else {
                         request.setAttribute("message", "Credentials mis-match!");
                         request.setAttribute("msgBgColor", "red");
                         request.getRequestDispatcher("/").forward(request, response);
                     }
-
-//                if (!designation.equals("")) {
-//
-//                    if (designation.equals("Supervisor1")) {
-//                        request.setAttribute("designation", designation);
-//                    } else if (designation.equals("Clerk")) {
-//                        request.setAttribute("designation", designation);
-//                    } else if (designation.equals("RWA")) {
-//                        request.setAttribute("designation", designation);
-//                    } else if (designation.equals("पब्लिक")) {
-//                        request.setAttribute("designation", designation);
-//                    }
-//                    //   request.getRequestDispatcher("index").forward(request, response);
-//                } else {
-//                    session.invalidate();
-//                    request.setAttribute("message", "UserName And Password Not Correct");
-//                    request.getRequestDispatcher("beforeLoginHomeView").forward(request, response);
-//                }
                 }
+
+                if (task.equals("VerifyOTP")) {
+                    String otp = request.getParameter("otp");
+                    String type = request.getParameter("verify_type");
+                    int i = 1;
+                    if (otp == null || otp.isEmpty()) {
+                        System.out.println("enter the mobile number");
+                    } else {
+                        String verify_OTP = model.verifyOTP(otp);
+                        System.out.println(verify_OTP);
+
+                        String mob = request.getParameter("mobile");
+                        request.setAttribute("mobile_no", mob);
+
+                        if (type.equals("login")) {
+                            if (verify_OTP.equals("success")) {
+                                if (session.getAttribute("user_role").toString().equals("Super Admin")) {
+                                    request.getRequestDispatcher("/view/dashboard.jsp").forward(request, response);
+                                } else if (session.getAttribute("user_role").toString().equals("Admin")
+                                        || session.getAttribute("user_role").toString().equals("Sales")
+                                        || session.getAttribute("user_role").toString().equals("Dealer")) {
+                                    request.getRequestDispatcher("CRMDashboardController").forward(request, response);
+                                } else {
+                                    request.getRequestDispatcher("/view/dashboard.jsp").forward(request, response);
+                                }
+                            } else {
+                                request.setAttribute("message", "OTP has not been Verified Please Enter Correct OTP or resend");
+                                request.setAttribute("msgBgColor", "red");
+                                request.setAttribute("mobile", mob);
+                                request.getRequestDispatcher("verify_mobile").forward(request, response);
+                            }
+                        }
+                        if (type.equals("new password")) {
+                            request.setAttribute("mobile", mob);
+                            request.getRequestDispatcher("recovery_password").forward(request, response);
+                        }
+
+                    }
+                }
+
+                if (task.equals("Request New Password")) {
+                    String mobile_no = request.getParameter("mobile");
+                    int mobile_count = model.verifyMobile(mobile_no);
+                    if (mobile_count > 0) {
+                        String result = model.sendOTP(mobile_no);
+//                        if (result.equals("Success")) {
+//                            request.setAttribute("message", "OTP has been sent successfully on " + mobile_no);
+//                            request.setAttribute("msgBgColor", "green");
+//                            request.setAttribute("mobile", mobile_no);
+//                            request.setAttribute("type", "new password");
+//                            request.getRequestDispatcher("verify_mobile").forward(request, response);
+//                        } else {
+//                            request.setAttribute("mobile", mobile_no);
+//                            request.setAttribute("message", "");
+//                            request.setAttribute("msgBgColor", "red");
+//                            request.setAttribute("type", "new password");
+//                            request.getRequestDispatcher("verify_mobile").forward(request, response);
+//                        }
+
+                        request.setAttribute("message", "OTP has been sent successfully on " + mobile_no);
+                        request.setAttribute("msgBgColor", "green");
+                        request.setAttribute("mobile", mobile_no);
+                        request.setAttribute("type", "new password");
+                        request.setAttribute("otp", result);
+                        request.getRequestDispatcher("verify_mobile").forward(request, response);
+
+                    } else {
+                        request.setAttribute("message", "Mobile No. does Not Exists..");
+                        request.setAttribute("msgBgColor", "red");
+                        request.getRequestDispatcher("forgot_password").forward(request, response);
+
+                    }
+                }
+
+                if (task.equals("Update Password")) {
+                    String newpassword = request.getParameter("new_password");
+                    String mobile = request.getParameter("mobile");
+                    int update_rows = model.updatePassword(mobile, newpassword);
+                    if (update_rows > 0) {
+                        request.getRequestDispatcher("/").forward(request, response);
+                    }
+                }
+
                 if (task.equals("logout")) {
                     session.invalidate();
                     request.getRequestDispatcher("/").forward(request, response);
+                    session.removeAttribute("log_user");
                 }
-                if (session.getAttribute("log_user").toString().equals("")) {
+
+//                if (task.equals("")) {
+//                    session.invalidate();
+//                    request.getRequestDispatcher("/").forward(request, response);
+//                    session.removeAttribute("log_user");
+//                }
+                if (task.equals("") && session.getAttribute("user_role") == null) {
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 }
-                if (!session.getAttribute("log_user").toString().equals("") && session.getAttribute("log_user").toString().equals("Super Admin")) {
+                if (session.getAttribute("user_role").toString().equals("Super Admin")) {
                     request.getRequestDispatcher("/view/dashboard.jsp").forward(request, response);
-                } else {
+                } else if (session.getAttribute("user_role").toString().equals("Admin")
+                        || session.getAttribute("user_role").toString().equals("Sales")
+                        || session.getAttribute("user_role").toString().equals("Dealer")) {
                     request.getRequestDispatcher("CRMDashboardController").forward(request, response);
+                } else {
+                    request.getRequestDispatcher("/view/dashboard.jsp").forward(request, response);
                 }
-//            if (!session.getAttribute("log_user").toString().equals("") && session.getAttribute("log_user").toString().equals("Admin")) {
-//                request.getRequestDispatcher("CRMDashboardController").forward(request, response);
-//            }
 
             } catch (Exception e) {
                 System.out.println(e);

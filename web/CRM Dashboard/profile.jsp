@@ -101,26 +101,26 @@
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Email:</small></p>
-                                        <p id="email"><strong>${email}</strong></p>
+                                        <p id="email"><strong><a href="mailTo:${email}">${email}</a></strong></p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Landline No:</small></p>
-                                        <p id="landline"><strong>${landline}</strong></p>
+                                        <p id="landline"><strong><a href="tel:${landline}">${landline}</a></strong></p>
                                     </div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Office Mobile:</small></p>
-                                        <p id="mobile1"><strong>${mobile1}</strong></p>
+                                        <p id="mobile1"><strong><a href="tel:${mobile1}">${mobile1}</a></strong></p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Person Mobile:</small></p>
-                                        <p id="mobile2"><strong>${mobile2}</strong></p>
+                                        <p id="mobile2"><strong><a href="tel:${mobile2}">${mobile2}</a></strong></p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">

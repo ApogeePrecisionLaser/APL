@@ -634,11 +634,33 @@
             success: function (data) {
                 sales_enquiries = data.sales_enquiries;
                 if (sales_enquiries.length > 0) {
-                    var total = parseInt(sales_enquiries[0]["resolved_enquiry_count"]) + parseInt(sales_enquiries[0]["unresolved_enquiry_count"])
-                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"]) + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
-                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
-                    var labels = ["Resolved" + "(" + sales_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + sales_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
-                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"], 0];
+                    var total = parseInt(sales_enquiries[0]["sold_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["unsold_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["open_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["call_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["follow_up_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
+
+                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d", "#6f42c1", "red", "yellow"];
+                    var labels = ["Sold" + "(" + sales_enquiries[0]["sold_enquiry_count"] + ")",
+                        "Unsold" + "(" + sales_enquiries[0]["unsold_enquiry_count"] + ")",
+                        "Open" + "(" + sales_enquiries[0]["open_enquiry_count"] + ")",
+                        "Call" + "(" + sales_enquiries[0]["call_enquiry_count"] + ")",
+                        "Follow Up" + "(" + sales_enquiries[0]["follow_up_enquiry_count"] + ")",
+                        "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")",
+                        "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")",
+                        "Total" + "(" + total + ")"];
+
+                    var datas = [sales_enquiries[0]["sold_enquiry_count"],
+                        sales_enquiries[0]["unsold_enquiry_count"],
+                        sales_enquiries[0]["open_enquiry_count"],
+                        sales_enquiries[0]["call_enquiry_count"],
+                        sales_enquiries[0]["follow_up_enquiry_count"],
+                        sales_enquiries[0]["assigned_enquiry_count"],
+                        sales_enquiries[0]["pending_enquiry_count"],
+                        0];
+
                     var pieData = {
                         labels: labels,
                         datasets: [
@@ -681,11 +703,39 @@
             success: function (data) {
                 sales_enquiries = data.sales_enquiries;
                 if (sales_enquiries.length > 0) {
-                    var total = parseInt(sales_enquiries[0]["resolved_enquiry_count"]) + parseInt(sales_enquiries[0]["unresolved_enquiry_count"])
-                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"]) + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
-                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
-                    var labels = ["Resolved" + "(" + sales_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + sales_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
-                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"], 0];
+//                    var total = parseInt(sales_enquiries[0]["resolved_enquiry_count"]) + parseInt(sales_enquiries[0]["unresolved_enquiry_count"])
+//                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"]) + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
+//                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
+//                    var labels = ["Resolved" + "(" + sales_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + sales_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
+//                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"], 0];
+
+
+                    var total = parseInt(sales_enquiries[0]["sold_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["unsold_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["open_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["call_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["follow_up_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"])
+                            + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
+
+                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d", "#6f42c1", "red", "yellow"];
+                    var labels = ["Sold" + "(" + sales_enquiries[0]["sold_enquiry_count"] + ")",
+                        "Unsold" + "(" + sales_enquiries[0]["unsold_enquiry_count"] + ")",
+                        "Open" + "(" + sales_enquiries[0]["open_enquiry_count"] + ")",
+                        "Call" + "(" + sales_enquiries[0]["call_enquiry_count"] + ")",
+                        "Follow Up" + "(" + sales_enquiries[0]["follow_up_enquiry_count"] + ")",
+                        "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")",
+                        "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")",
+                        "Total" + "(" + total + ")"];
+
+                    var datas = [sales_enquiries[0]["sold_enquiry_count"],
+                        sales_enquiries[0]["unsold_enquiry_count"],
+                        sales_enquiries[0]["open_enquiry_count"],
+                        sales_enquiries[0]["call_enquiry_count"],
+                        sales_enquiries[0]["follow_up_enquiry_count"],
+                        sales_enquiries[0]["assigned_enquiry_count"],
+                        sales_enquiries[0]["pending_enquiry_count"],
+                        0];
                     var pieData = {
                         labels: labels,
                         datasets: [
@@ -722,11 +772,40 @@
             success: function (data) {
                 complaint_enquiries = data.complaint_enquiries;
                 if (complaint_enquiries.length > 0) {
-                    var total = parseInt(complaint_enquiries[0]["resolved_enquiry_count"]) + parseInt(complaint_enquiries[0]["unresolved_enquiry_count"])
-                            + parseInt(complaint_enquiries[0]["assigned_enquiry_count"]) + parseInt(complaint_enquiries[0]["pending_enquiry_count"]);
-                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
-                    var labels = ["Resolved" + "(" + complaint_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + complaint_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + complaint_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + complaint_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
-                    var datas = [complaint_enquiries[0]["resolved_enquiry_count"], complaint_enquiries[0]["unresolved_enquiry_count"], complaint_enquiries[0]["assigned_enquiry_count"], complaint_enquiries[0]["pending_enquiry_count"], 0];
+//                    var total = parseInt(complaint_enquiries[0]["resolved_enquiry_count"]) + parseInt(complaint_enquiries[0]["unresolved_enquiry_count"])
+//                            + parseInt(complaint_enquiries[0]["assigned_enquiry_count"]) + parseInt(complaint_enquiries[0]["pending_enquiry_count"]);
+//                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
+//                    var labels = ["Resolved" + "(" + complaint_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + complaint_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + complaint_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + complaint_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
+//                    var datas = [complaint_enquiries[0]["resolved_enquiry_count"], complaint_enquiries[0]["unresolved_enquiry_count"], complaint_enquiries[0]["assigned_enquiry_count"], complaint_enquiries[0]["pending_enquiry_count"], 0];
+
+                    var total = parseInt(complaint_enquiries[0]["sold_enquiry_count"])
+                            + parseInt(complaint_enquiries[0]["unsold_enquiry_count"])
+                            + parseInt(complaint_enquiries[0]["open_enquiry_count"])
+                            + parseInt(complaint_enquiries[0]["call_enquiry_count"])
+                            + parseInt(complaint_enquiries[0]["follow_up_enquiry_count"])
+                            + parseInt(complaint_enquiries[0]["assigned_enquiry_count"])
+                            + parseInt(complaint_enquiries[0]["pending_enquiry_count"]);
+
+                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d", "#6f42c1", "red", "yellow"];
+                    var labels = ["Sold" + "(" + complaint_enquiries[0]["sold_enquiry_count"] + ")",
+                        "Unsold" + "(" + complaint_enquiries[0]["unsold_enquiry_count"] + ")",
+                        "Open" + "(" + complaint_enquiries[0]["open_enquiry_count"] + ")",
+                        "Call" + "(" + complaint_enquiries[0]["call_enquiry_count"] + ")",
+                        "Follow Up" + "(" + complaint_enquiries[0]["follow_up_enquiry_count"] + ")",
+                        "Assigned" + "(" + complaint_enquiries[0]["assigned_enquiry_count"] + ")",
+                        "Pending" + "(" + complaint_enquiries[0]["pending_enquiry_count"] + ")",
+                        "Total" + "(" + total + ")"];
+
+                    var datas = [complaint_enquiries[0]["sold_enquiry_count"],
+                        complaint_enquiries[0]["unsold_enquiry_count"],
+                        complaint_enquiries[0]["open_enquiry_count"],
+                        complaint_enquiries[0]["call_enquiry_count"],
+                        complaint_enquiries[0]["follow_up_enquiry_count"],
+                        complaint_enquiries[0]["assigned_enquiry_count"],
+                        complaint_enquiries[0]["pending_enquiry_count"],
+                        0];
+
+
                     var pieData = {
                         labels: labels,
                         datasets: [

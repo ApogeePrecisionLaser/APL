@@ -36,9 +36,13 @@ public class DesignationController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        String loggedUser = "";
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
+            System.err.println("Session Not Active");
             request.getRequestDispatcher("/").forward(request, response);
             return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
         }
         try {
             designationModel.setConnection(DBConnection.getConnectionForUtf(ctx));

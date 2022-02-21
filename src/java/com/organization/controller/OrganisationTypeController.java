@@ -37,6 +37,15 @@ public class OrganisationTypeController extends HttpServlet {
         OrganisationType organisationType = new OrganisationType();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
+        HttpSession session = request.getSession();
+        String loggedUser = "";
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
+            System.err.println("Session Not Active");
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
+        }
         try {
             orgTypeModel.setConnection(DBConnection.getConnectionForUtf(ctx));
         } catch (Exception e) {
@@ -81,7 +90,7 @@ public class OrganisationTypeController extends HttpServlet {
             }
             String searchOrgType = request.getParameter("searchOrgType");
             String searchgeneration = request.getParameter("searchgeneration");
-           // String searchhierarchy = request.getParameter("hierarchysearch");
+            // String searchhierarchy = request.getParameter("hierarchysearch");
 
             try {
                 if (searchOrgType == null) {
@@ -148,15 +157,14 @@ public class OrganisationTypeController extends HttpServlet {
                     // update existing record.
                     orgTypeModel.updateRecord(organisationType, organisation_type_id);
                 }
-            }   
+            }
 
             // Logic to show data in the table.
-            
             List<OrganisationType> orgTypeList = orgTypeModel.showData(searchOrgType, searchgeneration);
 
             request.setAttribute("searchOrgType", searchOrgType);
             request.setAttribute("searchgeneration", searchgeneration);
-           // request.setAttribute("hierarchysearch", searchhierarchy);
+            // request.setAttribute("hierarchysearch", searchhierarchy);
             request.setAttribute("orgTypeList", orgTypeList);
             request.setAttribute("message", orgTypeModel.getMessage());
             request.setAttribute("msgBgColor", orgTypeModel.getMsgBgColor());

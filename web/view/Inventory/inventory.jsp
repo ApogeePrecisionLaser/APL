@@ -574,7 +574,6 @@
                     <tbody>
                         <c:forEach var="beanType" items="${requestScope['list']}"
                                    varStatus="loopCounter">
-                            <!--openpopup-->
                             <c:choose>
                                 <c:when test="${beanType.stock_quantity==0 && beanType.is_super_child=='Y'}">
                                     <tr style="background-color: red;font-weight: bold;color:white" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
@@ -626,9 +625,6 @@
                                         <td></td>
                                     </c:otherwise>
                                 </c:choose>
-
-
-
                             </tr>
                         </c:forEach>
                     </tbody>

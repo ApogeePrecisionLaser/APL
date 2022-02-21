@@ -76,7 +76,7 @@ public class SalesEnquiryController extends HttpServlet {
                     list = model.getMarketingVertical(q);
                 }
                 if (JQstring.equals("getDistrict")) {
-                    list = model.getDistrict(q, loggedUser,logged_key_person_id);
+                    list = model.getDistrict(q, loggedUser, logged_key_person_id);
                 }
                 if (JQstring.equals("getCities")) {
                     list = model.getCities(q);
@@ -144,6 +144,7 @@ public class SalesEnquiryController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
             request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("sales_enquiry_details").forward(request, response);
@@ -152,6 +153,7 @@ public class SalesEnquiryController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
             request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("complaint_enquiry_details").forward(request, response);

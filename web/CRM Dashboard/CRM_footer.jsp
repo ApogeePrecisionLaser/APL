@@ -3,7 +3,7 @@
 <!-- /.content-wrapper -->
 <footer class="main-footer pl-3 position-relative">
 
-    <%= request.getRequestURL()%>
+    <%--<%= request.getRequestURL()%>--%>
     <c:set var="url" value="<%= request.getRequestURL()%>" />
     <c:if test="${(url != 'http://localhost:8080/APL/admin_dashboard') && (url != 'http://localhost:8080/APL/salesperson_dashboard') 
                   && (url != 'http://localhost:8080/APL/CRMDashboard') }">

@@ -145,6 +145,9 @@
                                         <a href="AttendanceController" class="dropdown-item">View Attendance</a>     
                                         <a href="CalendarController" class="dropdown-item">View Calendar</a>
                                         <a href="UserPrivilegeController" class="dropdown-item">User Privilege</a>
+                                        <a href="DealerSalemanMapController" class="dropdown-item">Dealer-Salesman-Mapping</a> 
+                                        <a href="SalesManagerStateMappingController" class="dropdown-item">SalesManager State Mapping</a> 
+                                        <a href="VendorItemMapController" class="dropdown-item">Vendor Item Map</a> 
                                     </div>
                                 </li>                              
 
@@ -156,39 +159,39 @@
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Incharge")) {
                                 %>
-<!--                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                        Order
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <%
-                                            if (session.getAttribute("user_role").equals("Super Admin")) {
-                                        %>
-                                        <a href="DealerSalemanMapController" class="dropdown-item">Dealer-Salesman-Mapping</a> 
-                                        <a href="SalesManagerStateMappingController" class="dropdown-item">SalesManager State Mapping</a> 
-                                        <%}%>
-                                        <%
-                                            if (session.getAttribute("user_role").equals("Dealer")) {
-                                        %>
-                                        <a href="OrderController" class="dropdown-item">OrderForm</a>
-                                        <%}%>
+                                <!--                                <li class="nav-item dropdown">
+                                                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                                                        Order
+                                                                    </a>
+                                                                    <div class="dropdown-menu">
+                                <%
+                                    if (session.getAttribute("user_role").equals("Super Admin")) {
+                                %>
+                                <a href="DealerSalemanMapController" class="dropdown-item">Dealer-Salesman-Mapping</a> 
+                                <a href="SalesManagerStateMappingController" class="dropdown-item">SalesManager State Mapping</a> 
+                                <%}%>
+                                <%
+                                    if (session.getAttribute("user_role").equals("Dealer")) {
+                                %>
+                                <a href="OrderController" class="dropdown-item">OrderForm</a>
+                                <%}%>
 
-                                        <%
-                                            if (session.getAttribute("user_role").equals("Sales")) {
-                                        %>
-                                        <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>  
-                                        <a class="dropdown-item" href="CRMDashboardController">Dashboard</a>
+                                <%
+                                    if (session.getAttribute("user_role").equals("Sales")) {
+                                %>
+                                <a href="ApproveOrderController" class="dropdown-item">Approve Order</a>  
+                                <a class="dropdown-item" href="CRMDashboardController">Dashboard</a>
 
-                                        <%}%>
+                                <%}%>
 
-                                        <%
-                                            if (session.getAttribute("user_role").equals("Incharge")) {
-                                        %>
-                                        <a href="CheckOrderInventoryController" class="dropdown-item">Check Order Inventory</a>     
-                                        <%}%>
+                                <%
+                                    if (session.getAttribute("user_role").equals("Incharge")) {
+                                %>
+                                <a href="CheckOrderInventoryController" class="dropdown-item">Check Order Inventory</a>     
+                                <%}%>
 
-                                    </div>
-                                </li>-->
+                            </div>
+                        </li>-->
                                 <%}%>
 
 

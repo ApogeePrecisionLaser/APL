@@ -92,6 +92,8 @@
                                                     <!-- <td class="fontFourteen">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</td> -->
                                                     <td  class="fontFourteen">
 
+
+
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Enquiry Generated'}">
                                                                 <a href="SalesEnquiryController?task=assignComplaintToSalesPerson&enquiry_table_id=${beanType.enquiry_table_id}&state=${beanType.enquiry_state}&city=${beanType.enquiry_city}" class="btn enquiryGenerated fontFourteen" title="Assigned To SalesManager">Assign</a>
@@ -103,13 +105,14 @@
                                                                 <button class="btn assigneDealer fontFourteen" disabled>Assigned </button>
                                                             </c:when>
 
-                                                            <c:when test="${beanType.status =='In Conversation'}">
+                                                            <c:when test="${beanType.status =='Open' || beanType.status =='Call' ||  beanType.status =='Follow Up'}">
                                                                 <button class="btn inConversation fontFourteen" disabled>${beanType.status} </button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
-                                                                <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                            <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
+                                                                            || beanType.status =='Purchased From Others'}">
+                                                                    <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                            <c:when test="${beanType.status =='Sold'}">
                                                                 <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:otherwise>

@@ -44,6 +44,9 @@ public class Enquiry {
     private String assigned_key_person;
     private String assigned_to_designation;
     private String product_name;
+    private String remark;
+    private String update_date_time;
+    private String update_time;
 
     /**
      * @return the enquiry_source_table_id
@@ -505,5 +508,47 @@ public class Enquiry {
      */
     public void setProduct_name(String product_name) {
         this.product_name = product_name;
+    }
+
+    /**
+     * @return the remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param remark the remark to set
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * @return the update_date_time
+     */
+    public String getUpdate_date_time() {
+        return update_date_time;
+    }
+
+    /**
+     * @param update_date_time the update_date_time to set
+     */
+    public void setUpdate_date_time(String update_date_time) {
+        this.update_date_time = update_date_time;
+    }
+
+    /**
+     * @return the update_time
+     */
+    public String getUpdate_time() {
+        return update_time;
+    }
+
+    /**
+     * @param update_time the update_time to set
+     */
+    public void setUpdate_time(String update_time) {
+        this.update_time = update_time;
     }
 }

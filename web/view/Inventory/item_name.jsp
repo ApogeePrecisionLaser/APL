@@ -580,7 +580,7 @@
                 $(".is_super_child_yes:last").after("<div class='is_super_child_yes row' id='superchilddiv_" + nextindex + "'></div>");
 
                 // Adding element to <div>
-                $("#superchilddiv_" + nextindex).append('<div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="hidden" id="model_id_' + nextindex + '" name="model_id_' + nextindex + '" value="" ><input class="form-control myInput" type="hidden" id="manufacturer_item_map_id_' + nextindex + '" name="manufacturer_item_map_id_' + nextindex + '" value="" ><input type="hidden" id="item_image_details_id_' + nextindex + '" name="item_image_details_id_' + nextindex + '" value="" size="28"   /><input class="form-control myInput myAutocompleteClass" type="text" id="manufacturer_name_' + nextindex + '" name="manufacturer_name_' + nextindex + '" value="" size="40"></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="model_' + nextindex + '" name="model_' + nextindex + '" value="" size="40"  onblur="getItemTypeForModelOrPart()"></div></div></div><div class="col-md-2 model_no_div" id="model_no_div" style="display: none"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="model_no_' + nextindex + '" name="model_no_' + nextindex + '" value="" size="40"></div></div></div><div class="col-md-2 part_no_div" id="part_no_div" style="display: none"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="part_no_' + nextindex + '" name="part_no_' + nextindex + '" value="" size="40"  ></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="lead_time_' + nextindex + '" name="lead_time_' + nextindex + '" value="0"  size="40"></div></div></div><div class="col-md-1"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="basic_price_' + nextindex + '" name="basic_price_' + nextindex + '" value="0" size="40" ></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="file" multiple id="item_image_' + nextindex + '" name="item_image"  size="30" value=""  onchange="readURL(this);"></div></div></div><input type="button" class="btn btn-danger remove" id="remove_' + nextindex + '" style="height:35px;" value="X">');
+                $("#superchilddiv_" + nextindex).append('<div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="hidden" id="model_id_' + nextindex + '" name="model_id_' + nextindex + '" value="" ><input class="form-control myInput" type="hidden" id="manufacturer_item_map_id_' + nextindex + '" name="manufacturer_item_map_id_' + nextindex + '" value="" ><input type="hidden" id="item_image_details_id_' + nextindex + '" name="item_image_details_id_' + nextindex + '" value="" size="28"   /><input class="form-control myInput myAutocompleteClass" type="text" id="manufacturer_name_' + nextindex + '" name="manufacturer_name_' + nextindex + '" value="" size="40"></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="model_' + nextindex + '" name="model_' + nextindex + '" value="" size="40"  onblur="getItemTypeForModelOrPart()"></div></div></div><div class="col-md-2 model_no_div" id="model_no_div" style="display: none"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="model_no_' + nextindex + '" name="model_no_' + nextindex + '" value="" size="40"></div></div></div><div class="col-md-2 part_no_div" id="part_no_div" style="display: none"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="part_no_' + nextindex + '" name="part_no_' + nextindex + '" value="" size="40"  ></div></div></div><div class="col-md-1"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="qty_' + nextindex + '" name="qty_' + nextindex + '" value="0"  size="40"></div></div></div><div class="col-md-1"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="lead_time_' + nextindex + '" name="lead_time_' + nextindex + '" value="0"  size="40"></div></div></div><div class="col-md-1"><div class=""><div class="form-group"><input class="form-control myInput" type="text" id="basic_price_' + nextindex + '" name="basic_price_' + nextindex + '" value="0" size="40" ></div></div></div><div class="col-md-2"><div class=""><div class="form-group"><input class="form-control myInput" type="file" multiple id="item_image_' + nextindex + '" name="item_image"  size="30" value=""  onchange="readURL(this);"></div></div></div><input type="button" class="btn btn-danger remove" id="remove_' + nextindex + '" style="height:35px;" value="X">');
 
             } else {
                 alert("Can't Add More Than 5 !.....");
@@ -1036,11 +1036,23 @@
 
 
 
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="">
                                 <div class="form-group">
                                     <c:if test="${loopCounter.count==1}">
-                                        <label>Lead Time in Days<span class="text-danger">*</span></label>           
+                                        <label>Quantity<span class="text-danger">*</span></label>           
+                                    </c:if>
+                                    <input class="form-control myInput" type="text" id="qty_${loopCounter.count}" name="qty_${loopCounter.count}" value="${lst7[loopCounter.count-1]}"
+                                           size="40">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="">
+                                <div class="form-group">
+                                    <c:if test="${loopCounter.count==1}">
+                                        <label>Lead Time<span class="text-danger">*</span></label>           
                                     </c:if>
                                     <input class="form-control myInput" type="text" id="lead_time_${loopCounter.count}" name="lead_time_${loopCounter.count}" value="${lst3[loopCounter.count-1]}"
                                            size="40">
@@ -1133,10 +1145,19 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div class="">
                             <div class="form-group">
-                                <label>Lead Time in Days<span class="text-danger">*</span></label>                            
+                                <label>Quantity<span class="text-danger">*</span></label>                            
+                                <input class="form-control myInput" type="text" id="qty_1" name="qty_1" value="0"
+                                       size="40">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="">
+                            <div class="form-group">
+                                <label>Lead Time<span class="text-danger">*</span></label>                            
                                 <input class="form-control myInput" type="text" id="lead_time_1" name="lead_time_1" value="0"
                                        size="40">
                             </div>

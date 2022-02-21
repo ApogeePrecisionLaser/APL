@@ -202,12 +202,14 @@ public class IndentController extends HttpServlet {
                             expected_date_time = (String) jsonObj.get("expected_date_time");
                         }
                         System.out.println(jsonObj);
-                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models,logged_org_office);
+                        list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name,
+                                expected_date_time, models,logged_org_office,logged_key_person_id);
 
                     }
 
                 } else {
-                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time, models,logged_org_office);
+                    list = model.getItemsList(logged_designation, checkedValue, req_qty, purpose, item_name, expected_date_time,
+                            models,logged_org_office,logged_key_person_id);
                 }
 
                 request.setAttribute("list", list);

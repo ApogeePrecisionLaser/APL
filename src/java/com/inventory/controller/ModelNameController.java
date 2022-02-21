@@ -53,12 +53,15 @@ public class ModelNameController extends HttpServlet {
         String ac = "ACTIVE RECORDS";
         String image_folder = "";
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        String loggedUser = "";
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
+            System.err.println("Session Not Active");
             request.getRequestDispatcher("/").forward(request, response);
             return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
         }
-        String loggedUser = "";
-        loggedUser = session.getAttribute("user_role").toString();
+
         String image_name = "";
         String active1 = request.getParameter("active");
         try {

@@ -169,6 +169,17 @@ public class DealersOrderController extends HttpServlet {
         if (task == null) {
             task = "";
         }
+
+        String update_enquiry = request.getParameter("update_enquiry");
+
+        if (update_enquiry == null) {
+            update_enquiry = "";
+        }
+        String update_complaint = request.getParameter("update_complaint");
+
+        if (update_complaint == null) {
+            update_complaint = "";
+        }
         if (task.equals("viewAll") || !search_model.equals("")) {
             String item_name = request.getParameter("item_name");
             ArrayList<DealersOrder> list = model.getAllModel(logged_org_office_id, item_name, search_model);
@@ -204,6 +215,74 @@ public class DealersOrderController extends HttpServlet {
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("product_details").forward(request, response);
+        }
+
+        if (update_enquiry.equals("Update")) {
+            String status = request.getParameter("status");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+//            String status2 = "";
+            if (status == null) {
+                status = "";
+            }
+            if (status.equals("UnSold")) {
+                status = request.getParameter("status2");
+            }
+
+            String date_time = request.getParameter("date_time");
+            String remark = request.getParameter("remark");
+
+            try {
+                model.updateEnquiryStatus(status, date_time, remark, enquiry_table_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String enquiry_source = request.getParameter("enquiry_source");
+
+//            request.getRequestDispatcher("salesperson_sales_enquiry_details").forward(request, response);
+            ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
+            request.setAttribute("status", status);
+            request.setAttribute("date_time", date_time);
+            request.setAttribute("remark", remark);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_sales_enquiry_details").forward(request, response);
+
+        }
+
+        if (update_complaint.equals("Update")) {
+            String status = request.getParameter("status");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+//            String status2 = "";
+            if (status == null) {
+                status = "";
+            }
+            if (status.equals("UnSold")) {
+                status = request.getParameter("status2");
+            }
+
+            String date_time = request.getParameter("date_time");
+            String remark = request.getParameter("remark");
+
+            try {
+                model.updateComplaintEnquiryStatus(status, date_time, remark, enquiry_table_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String enquiry_source = request.getParameter("enquiry_source");
+
+//            request.getRequestDispatcher("salesperson_sales_enquiry_details").forward(request, response);
+            ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
+            request.setAttribute("status", status);
+            request.setAttribute("date_time", date_time);
+            request.setAttribute("remark", remark);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("dealer_complaint_enquiry_details").forward(request, response);
+
         }
 
         if (task.equals("AddToCart")) {
@@ -379,6 +458,8 @@ public class DealersOrderController extends HttpServlet {
                     gson.put("list", cart_list.size());
                     String message = "";
                     if (cart_list.size() > 0) {
+                        message = "Product Successfully removed from Cart...";
+                    } else if (cart_list.size() == 0) {
                         message = "Product Successfully removed from Cart...";
                     } else {
                         message = "Something Went Wrong!...";
@@ -568,6 +649,7 @@ public class DealersOrderController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
             request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("dealer_sales_enquiry_details").forward(request, response);
@@ -576,6 +658,7 @@ public class DealersOrderController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
             request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("dealer_complaint_enquiry_details").forward(request, response);

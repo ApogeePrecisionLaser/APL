@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Apogee Precision</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-        <link rel="stylesheet" href="assets2/css/adminlte.min.css">
-        <link rel="stylesheet" href="assets2/css/myStyle.css">
-        <link rel="stylesheet" type="text/css" href="assets2/css/mobileResponsive.css">
+        <link rel="stylesheet" href="CRM Dashboard/plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="CRM Dashboard/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+        <link rel="stylesheet" href="CRM Dashboard/assets2/css/adminlte.min.css">
+        <link rel="stylesheet" href="CRM Dashboard/assets2/css/myStyle.css">
+        <link rel="stylesheet" type="text/css" href="CRM Dashboard/assets2/css/mobileResponsive.css">
     </head>
 
     <style>
@@ -28,10 +28,25 @@
                     <a href="https://www.apogeeprecision.com/" target="_blank" class="h1 text-uppercase" style="font-size: 36px;"><b>Apogee</b> Precision</a>
                 </div>
                 <div class="card-body">
-                    <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
-                    <form action="verify_mobile.php" method="post">
+
+                    <c:if test="${message!=''}">
+                        <c:if test="${msgBgColor=='green'}">
+                            <p class="login-box-msg text-success">${message}</p>
+
+                        </c:if>
+                        <c:if test="${msgBgColor=='red'}">
+                            <!--<p class="login-box-msg text-danger">OTP has been sent successfully on ${mobile}</p>-->
+                            <p class="login-box-msg text-danger">${message}</p>
+
+                        </c:if>
+                        <c:if test="${msgBgColor==''}">
+                            <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
+                        </c:if>
+                    </c:if>
+
+                    <form action="LoginController" method="post">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile No">
+                            <input type="text" class="form-control rounded-0 fontFourteen" name="mobile" placeholder="Mobile No">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-mobile-alt"></span>
@@ -40,14 +55,14 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn myThemeBtn btn-block">Request new password</button>
+                                <button type="submit" class="btn myThemeBtn btn-block" name="task" value="Request New Password">Request new password</button>
                             </div>
                         </div>
                     </form>
 
                     <div class="d-flex justify-content-between mt-3">
                         <p class="mb-1">
-                            <a href="login.php" class="fontFourteen">Go to Login</a>
+                            <a href="LoginController" class="fontFourteen">Go to Login</a>
                         </p>
                         <!-- <p class="mb-0">
                           <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
@@ -59,10 +74,10 @@
         </div>
 
 
-        <script src="plugins/jquery/jquery.min.js"></script>
+        <script src="CRM Dashboard/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
-        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="CRM Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
-        <script src="assets2/js/adminlte.min.js"></script>
+        <script src="CRM Dashboard/assets2/js/adminlte.min.js"></script>
     </body>
 </html>

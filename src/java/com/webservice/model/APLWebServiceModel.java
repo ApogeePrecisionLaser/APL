@@ -1175,7 +1175,7 @@ public class APLWebServiceModel {
         String query = "INSERT INTO enquiry_table(enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
                 + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to,product_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
 
         String query2 = " select count(*) as count from enquiry_table where enquiry_no='" + bean.getEnquiry_no() + "' and active='Y' ";
@@ -1257,6 +1257,7 @@ public class APLWebServiceModel {
                     product_name = "";
                 }
                 pstmt.setString(23, product_name);
+                pstmt.setInt(24, 0);
 //                pstmt.setString(23, bean.getProduct_name());
                 rowsAffected = pstmt.executeUpdate();
 
@@ -1365,14 +1366,16 @@ public class APLWebServiceModel {
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
                 + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to,product_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
 
         try {
-
             int assigned_to_salesperson = 0;
             List<Integer> assigned_to_salesperson_list = getSalesPersonId(state);
             if (district.equals("Others")) {
+                assigned_to_salesperson_list.add(168);
+            }
+            if (assigned_to_salesperson_list.size() == 0) {
                 assigned_to_salesperson_list.add(168);
             }
             if (assigned_to_salesperson_list.size() > 0) {
@@ -1435,6 +1438,7 @@ public class APLWebServiceModel {
                             psmt.setString(22, description);
                             psmt.setInt(23, assigned_to_salesperson);
                             psmt.setString(24, product_name);
+                            psmt.setInt(25, 129);
 
                             rowsAffected = psmt.executeUpdate();
                             if (rowsAffected > 0) {
@@ -1555,7 +1559,7 @@ public class APLWebServiceModel {
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
                 + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to,product_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int rowsAffected = 0;
 
         try {
@@ -1584,6 +1588,7 @@ public class APLWebServiceModel {
                     String sender_alternate_email = rs.getString("sender_alternate_email");
                     String sender_alternate_mob = rs.getString("sender_alternate_mob");
                     String description = rs.getString("description");
+                    int assigned_to = rs.getInt("assigned_to");
                     product_name = rs.getString("product_name");
 
                     PreparedStatement pstm = connection.prepareStatement(query2);
@@ -1618,6 +1623,7 @@ public class APLWebServiceModel {
                         psmt.setString(22, description);
                         psmt.setInt(23, assigned_to_dealer);
                         psmt.setString(24, product_name);
+                        psmt.setInt(25, assigned_to);
 
                         rowsAffected = psmt.executeUpdate();
                         if (rowsAffected > 0) {
@@ -1849,9 +1855,7 @@ public class APLWebServiceModel {
     public static int getRevisionno(String enquiry_table_id) {
         int revision = 0;
         try {
-
             String query = " SELECT max(revision_no) as revision_no FROM enquiry_table WHERE enquiry_table_id =" + enquiry_table_id + "  && active='Y';";
-
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
             ResultSet rset = pstmt.executeQuery();
@@ -1902,6 +1906,8 @@ public class APLWebServiceModel {
         }
         return id;
     }
+
+    
 
     public Connection getConnection() {
         return connection;

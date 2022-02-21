@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Enquiry Report" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="da52cf7b-c6b3-4bfb-a706-c22885c6ea07">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="current_date" class="java.lang.String"/>
+	<field name="total_query_of_current_date" class="java.lang.String"/>
+	<field name="total_query_till_date" class="java.lang.String"/>
+	<field name="open_query_of_current_date" class="java.lang.String"/>
+	<field name="open_query_till_date" class="java.lang.String"/>
+	<field name="closed_query_of_current_date" class="java.lang.String"/>
+	<field name="closed_query_till_date" class="java.lang.String"/>
+	<field name="sold_query_of_current_date" class="java.lang.String"/>
+	<field name="sold_query_till_date" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement x="169" y="0" width="184" height="41" forecolor="#006699" uuid="550433b3-9ad5-4527-b29b-82c3befb19e3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="24" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Sales report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="233" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="0" width="212" height="20" forecolor="#17A2B8" uuid="bb1427b7-cdf7-44cf-a6c4-1d0fdbce2b95"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Here is your sales report for the date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="31" width="412" height="20" forecolor="#FFFFFF" backcolor="#666666" uuid="462cce7f-5375-47bf-b293-b308df630f50"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Inquiry Received Today]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="51" width="412" height="17" forecolor="#000000" backcolor="#CCCCCC" uuid="e3454fd9-fc1a-4302-9396-8ba8632eff11"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Open]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="68" width="412" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="52ff7305-596a-4b2b-baa4-846082e42f8b"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Closed]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="88" width="412" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="910b36fd-4092-481c-867c-092a08345fd1"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Sold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="190" width="412" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="745f6ab4-5939-470f-8b1c-9744e5a8d54f"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Closed]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="210" width="412" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="114a7aba-5810-4beb-9689-ac167bc5238e"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Sold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="173" width="412" height="17" forecolor="#000000" backcolor="#CCCCCC" uuid="0f220486-8c7e-453b-870a-3a30e802c73c"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Open]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="153" width="412" height="20" forecolor="#FFFFFF" backcolor="#666666" uuid="d26e1e72-7f27-4b5b-b64c-5dbcdac2bbb6"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[   Total Number Of Inquiry Received]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="23" y="123" width="242" height="20" forecolor="#17A2B8" uuid="bb94a9f8-3bdb-4ad4-bb83-084901ccbef5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Here is your sales report till date. ]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="31" width="100" height="20" forecolor="#FFFFFF" backcolor="#666666" uuid="2482ae94-4b25-4f5b-bf8c-517251a11714"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_query_of_current_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="51" width="100" height="17" backcolor="#CCCCCC" uuid="33a2a715-8fa4-4572-82aa-9d9dba331094"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{open_query_of_current_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="88" width="100" height="20" backcolor="#CCCCCC" uuid="5dac4ba1-8312-4cf8-a1a0-8e2264186b09"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sold_query_of_current_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="68" width="100" height="20" backcolor="#FFFFFF" uuid="b3abd5ba-bd80-4119-90db-64c3841f0610"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{closed_query_of_current_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="239" y="0" width="268" height="20" forecolor="#17A2B8" backcolor="#FFFFFF" uuid="e4e92603-7988-45bd-9afc-1379402d8b3c"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="153" width="100" height="20" forecolor="#FFFFFF" backcolor="#666666" uuid="76f0c606-51c5-40f7-af5e-661f99115a44"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_query_till_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="173" width="100" height="17" backcolor="#CCCCCC" uuid="604dfc4f-347d-49bf-a42d-efdfd4bb201b"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{open_query_till_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="210" width="100" height="20" backcolor="#CCCCCC" uuid="486f0826-7240-4144-b7df-9c05e7e6efb2"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sold_query_till_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="435" y="190" width="100" height="20" backcolor="#FFFFFF" uuid="539e2a2b-3f9c-4dd1-8f35-6564aeca3ae8"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#333333"/>
+					<topPen lineWidth="0.25" lineColor="#333333"/>
+					<leftPen lineWidth="0.25" lineColor="#333333"/>
+					<bottomPen lineWidth="0.25" lineColor="#333333"/>
+					<rightPen lineWidth="0.25" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{closed_query_till_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

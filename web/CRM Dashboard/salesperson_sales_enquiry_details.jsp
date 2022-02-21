@@ -2,7 +2,6 @@
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 
-
 <div class="content-wrapper" id="contentWrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -46,6 +45,161 @@
                                                 <div><span class="text-danger fontFourteen">(${beanType.assigned_to})</span></div>
                                             </c:otherwise>
                                         </c:choose>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 px-0">
+                                    <div class="mt-3">
+                                        <form class="myForm" action="ApproveOrdersController">
+                                            <div class="row">                        
+                                                <div class="col-md-6">
+                                                    <!--<div class="dropdown multiDropDown">-->
+                                                    <!--                                                        <button class="btn myThemeBtn dropdown-toggle " type="button" data-toggle="dropdown">Status
+                                                                                                                <span class="caret"></span></button>-->
+                                                    <input type="hidden" name="enquiry_table_id" id="enquiry_table_id" value="${enquiry_table_id}">
+                                                    <select name="status" id="status" class="form-control">
+                                                        <c:if test="${beanType.status == 'Open'}">
+                                                            <option value="Open" selected="">Open</option>
+                                                        </c:if>
+                                                        <c:if test="${beanType.status == 'Call'}">
+                                                            <option value="Call" selected="">Call</option>
+                                                        </c:if>
+                                                        <c:if test="${beanType.status == 'Follow Up'}">
+                                                            <option value="Follow Up" selected="">Follow Up</option>
+                                                        </c:if>
+                                                        <c:if test="${beanType.status == 'Sold'}">
+                                                            <option value="Sold" selected="">Sold</option>
+                                                        </c:if>
+                                                        <c:if test="${beanType.status != 'Open' || beanType.status != 'Call'
+                                                                      || beanType.status != 'Follow Up' ||   beanType.status != 'Sold'}">
+                                                            <option value="">Select</option>
+                                                            <option value="Open">Open</option>
+                                                            <option value="Call">Call</option>
+                                                            <option value="Follow Up">Follow Up</option>
+                                                            <option value="Sold">Sold</option>
+                                                            <option value="UnSold">UnSold</option>
+                                                        </c:if>
+
+                                                        <c:if test="${beanType.status == 'Irrelevant' || beanType.status == 'Not Interested'
+                                                                      || beanType.status == 'Purchased From Others'}">
+                                                              <option value="UnSold" selected="">UnSold</option>
+
+                                                        </c:if>
+
+                                                    </select>
+                                                    <!--                                                        <ul class="dropdown-menu multiDropDownInner">
+                                                                                                                <li><a tabindex="-1" href="#">Open</a></li>
+                                                                                                                <li><a tabindex="-1" href="#">Call</a></li>
+                                                                                                                <li><a tabindex="-1" href="#">Follow Up</a></li>
+                                                                                                                <li><a tabindex="-1" href="#">Sold</a></li>
+                                                                                                                <li><a tabindex="-1" href="#">UnSold</a></li>-->
+                                                    <!--                                                            <li class="dropdown-submenu">
+                                                                                                                    <a class="test" tabindex="-1" href="#">Sold <span class="caret"></span></a>
+                                                                                                                    <ul class="dropdown-menu">
+                                                                                                                        <li><a tabindex="-1" href="#">Irrelevant</a></li>
+                                                                                                                        <li><a tabindex="-1" href="#">Not Intrested</a></li>
+                                                                                                                        <li><a tabindex="-1" href="#">Purchased From Other</a></li>                            
+                                                                                                                    </ul>
+                                                                                                                </li>
+                                                                                                                <li class="dropdown-submenu">
+                                                                                                                    <a class="test" tabindex="-1" href="#">Sold <span class="caret"></span></a>
+                                                                                                                    <ul class="dropdown-menu">
+                                                                                                                        <li><a tabindex="-1" href="#">Irrelevant 1</a></li>
+                                                                                                                        <li><a tabindex="-1" href="#">Not Intrested 2</a></li>
+                                                                                                                        <li><a tabindex="-1" href="#">Purchased From Other 3</a></li>                            
+                                                                                                                    </ul>
+                                                                                                                </li>-->
+                                                    <!--</ul>-->
+                                                    <!--</div>-->
+                                                </div>
+
+                                                <c:if test="${beanType.status == 'Irrelevant' || beanType.status == 'Not Interested'
+                                                              || beanType.status == 'Purchased From Others'}">
+                                                      <div class="col-md-6" id="unsold_status_div">
+                                                          <select name="status2" id="status2" class="form-control">
+                                                              <c:if test="${beanType.status == 'Irrelevant' || beanType.status == 'Not Interested'
+                                                                            || beanType.status == 'Purchased From Others'}">
+                                                                    <option value="">Select</option>
+                                                                    <option value="Irrelevant">Irrelevant</option>
+                                                                    <option value="Not Interested">Not Interested</option>
+                                                                    <option value="Purchased From Others">Purchased From Others</option>
+                                                              </c:if>
+                                                              <c:if test="${beanType.status == 'Irrelevant' }">
+
+                                                                  <option value="Irrelevant" selected="">Irrelevant</option>
+                                                              </c:if>
+                                                              <c:if test="${beanType.status == 'Not Interested' }">
+
+                                                                  <option value="Not Interested" selected="">Not Interested</option>
+                                                              </c:if>
+                                                              <c:if test="${beanType.status == 'Purchased From Others' }">
+
+                                                                  <option value="Purchased From Others" selected="">Purchased From Others</option>
+                                                              </c:if>
+
+                                                          </select>
+                                                      </div>
+                                                </c:if>
+
+                                                <div class="col-md-6" id="unsold_status_div" style="display: none">
+                                                    <select name="status2" id="status2" class="form-control">
+                                                        <option value="">Select</option>
+                                                        <option value="Irrelevant">Irrelevant</option>
+                                                        <option value="Not Interested">Not Interested</option>
+                                                        <option value="Purchased From Others">Purchased From Others</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <p class="mb-0"><small>Date:</small></p>
+                                                        <input type="date" class="form-control rounded-0" name="date_time" value="${beanType.update_date_time}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <p class="mb-0"><small>Time:</small></p>
+                                                        <input type="time" class="form-control rounded-0" name="time" value="${beanType.update_time}" disabled="">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <p class="mb-0"><small>Remark:</small></p>
+                                                        <textarea class="form-control rounded-0" name="remark">${beanType.remark}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group mb-0">
+                                                        <!--     <c:choose>
+                                                            <c:when test="${beanType.status == 'Assigned To Dealer' || beanType.status == 'Sold' 
+                                                                            || beanType.status == 'UnSold' ||  beanType.status == 'Irrelevant' || 
+                                                                            beanType.status == 'Not Interested' ||  beanType.status == 'Purchased From Others'}">
+                                                                    <input type="submit" class="btn myThemeBtn" name="update_enquiry" value="Update" disabled="">
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <input type="submit" class="btn myThemeBtn" name="update_enquiry" value="Update" >
+                                                            </c:otherwise>
+                                                        </c:choose> -->
+
+
+                                                        <c:choose>
+                                                            <c:when test="${beanType.status == 'Assigned To Dealer'}">
+                                                                <input type="submit" class="btn myThemeBtn" name="update_enquiry" value="Update" disabled="">
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <input type="submit" class="btn myThemeBtn" name="update_enquiry" value="Update" >
+                                                            </c:otherwise>
+                                                        </c:choose>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>    
                                     </div>
                                 </div>
 
@@ -161,4 +315,19 @@
         });
 
     }
+
+    $('#status').change(function () {
+        var status = $('#status').val();
+//        alert(status);
+        if (status == 'UnSold') {
+            $('#unsold_status_div').show();
+        } else {
+            $('#unsold_status_div').hide();
+        }
+    });
+
+//    $(function () {
+//        $('#datetimepicker1').datetimepicker();
+//    });
+
 </script>

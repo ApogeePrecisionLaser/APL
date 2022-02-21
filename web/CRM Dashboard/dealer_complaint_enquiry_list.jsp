@@ -88,12 +88,13 @@
                                                     <td class="fontFourteen">
                                                         <c:choose>
                                                             <c:when test="${beanType.status =='Assigned To Dealer'}">
-                                                                <button class="btn inConversation fontFourteen" id="status${beanType.enquiry_table_id}" disabled>In Conversation</button>
+                                                                <button class="btn inConversation fontFourteen" id="status${beanType.enquiry_table_id}" disabled>Assigned To Dealer</button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Failed'}">
+                                                            <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
+                                                                            || beanType.status =='Purchased From Others'}">
                                                                 <button class="btn enquiryFailed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
-                                                            <c:when test="${beanType.status =='Enquiry Passed'}">
+                                                            <c:when test="${beanType.status =='Sold'}">
                                                                 <button class="btn enquiryPassed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:otherwise>
@@ -114,22 +115,6 @@
                                                         <div>
                                                             <a href="DealersOrderController?task=viewComplaintDetails&enquiry_table_id=${beanType.enquiry_table_id}" class="btn far fa-eye actionEdit" title="View Complaint Detail"></a>
                                                         </div> 
-
-
-                                                        <select class="btn btn-primary myNewLinkBtn px-1 ml-3 fontFourteen" id="enquiry_status${beanType.enquiry_table_id}" name="item_status" style="width:100px" onchange="changeStatus('${beanType.enquiry_table_id}')">
-                                                            <c:if test="${beanType.status=='Enquiry Passed'}">
-                                                                <option  class="btn btn-primary actionEdit fontFourteen" value="Enquiry Passed" id="enquiry_status${beanType.enquiry_table_id}">Resolved</option>
-                                                            </c:if>
-                                                            <c:if test="${beanType.status=='Enquiry Failed'}">
-                                                                <option  class="btn btn-primary actionDelete fontFourteen" value="Enquiry Failed" id="enquiry_status${beanType.enquiry_table_id}">Unresolved</option>
-                                                            </c:if>
-
-                                                            <c:if test="${beanType.status=='Assigned To Dealer'}">
-                                                                <option class="btn btn-primary fontFourteen" id="enquiry_status${beanType.enquiry_table_id}">Select</option>
-                                                                <option class="btn btn-primary actionEdit fontFourteen" value="Enquiry Passed" id="enquiry_status${beanType.enquiry_table_id}">Resolved</option>
-                                                                <option class="btn btn-primary actionDelete fontFourteen" value="Enquiry Failed" id="enquiry_status${beanType.enquiry_table_id}">Unresolved</option>
-                                                            </c:if>
-                                                        </select>
                                                     </td>
                                                 </tr> 
                                             </c:forEach>

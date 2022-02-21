@@ -99,8 +99,16 @@ public class ApproveOrdersController extends HttpServlet {
         }
 
         String task = request.getParameter("task");
+        String update_enquiry = request.getParameter("update_enquiry");
+        String update_complaint = request.getParameter("update_complaint");
         if (task == null) {
             task = "";
+        }
+        if (update_enquiry == null) {
+            update_enquiry = "";
+        }
+        if (update_complaint == null) {
+            update_complaint = "";
         }
 
         if (task.equals("sales_enquiry_list")) {
@@ -128,7 +136,7 @@ public class ApproveOrdersController extends HttpServlet {
             if (status == null) {
                 status = "";
             }
-            ArrayList<Enquiry> list = model.getAllComplaints(loggedUser, logged_key_person_id,enquiry_source, status);
+            ArrayList<Enquiry> list = model.getAllComplaints(loggedUser, logged_key_person_id, enquiry_source, status);
             request.setAttribute("list", list);
             DBConnection.closeConncetion(model.getConnection());
 
@@ -139,6 +147,10 @@ public class ApproveOrdersController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
             request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
+//            request.setAttribute("status", status);
+//            request.setAttribute("date_time", date_time);
+//            request.setAttribute("remark", remark);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("salesperson_sales_enquiry_details").forward(request, response);
@@ -147,6 +159,7 @@ public class ApproveOrdersController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
             request.setAttribute("list", list);
+             request.setAttribute("enquiry_table_id", enquiry_table_id);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("salesperson_complaint_enquiry_details").forward(request, response);
@@ -177,6 +190,72 @@ public class ApproveOrdersController extends HttpServlet {
             DBConnection.closeConncetion(model.getConnection());
 
             return;
+        }
+
+        if (update_enquiry.equals("Update")) {
+            String status = request.getParameter("status");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+//            String status2 = "";
+            if (status == null) {
+                status = "";
+            }
+            if (status.equals("UnSold")) {
+                status = request.getParameter("status2");
+            }
+
+            String date_time = request.getParameter("date_time");
+            String remark = request.getParameter("remark");
+
+            try {
+                model.updateEnquiryStatus(status, date_time, remark, enquiry_table_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String enquiry_source = request.getParameter("enquiry_source");
+
+            ArrayList<Enquiry> list = model.getAllEnquiriesDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
+            request.setAttribute("status", status);
+            request.setAttribute("date_time", date_time);
+            request.setAttribute("remark", remark);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("salesperson_sales_enquiry_details").forward(request, response);
+
+        }
+        
+        if (update_complaint.equals("Update")) {
+            String status = request.getParameter("status");
+            String enquiry_table_id = request.getParameter("enquiry_table_id");
+//            String status2 = "";
+            if (status == null) {
+                status = "";
+            }
+            if (status.equals("UnSold")) {
+                status = request.getParameter("status2");
+            }
+
+            String date_time = request.getParameter("date_time");
+            String remark = request.getParameter("remark");
+
+            try {
+                model.updateComplaintEnquiryStatus(status, date_time, remark, enquiry_table_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String enquiry_source = request.getParameter("enquiry_source");
+
+            ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
+            request.setAttribute("list", list);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
+            request.setAttribute("status", status);
+            request.setAttribute("date_time", date_time);
+            request.setAttribute("remark", remark);
+            DBConnection.closeConncetion(model.getConnection());
+
+            request.getRequestDispatcher("salesperson_complaint_enquiry_details").forward(request, response);
+
         }
 
         if (task.equals("viewOrderDetails")) {
@@ -240,7 +319,7 @@ public class ApproveOrdersController extends HttpServlet {
                 bean.setDiscount_percent(String.valueOf(discounted_percent));
                 bean.setDiscount_price(String.valueOf(discounted_price));
                 try {
-                    String message = model.approveOrder(bean, order_item_id, order_table_id, i);
+                    String message = model.approveOrder(bean, order_item_id, order_table_id, i,order_item_id_arr.length);
                 } catch (SQLException ex) {
                     Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }

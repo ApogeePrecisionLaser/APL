@@ -116,12 +116,13 @@ public class InventoryBasicModel {
             String search_model, String searchKeyPerson, String search_by_date) throws SQLException {
         List<Integer> list = new ArrayList<>();
         List<Integer> list2 = new ArrayList<>();
-
+        String query = "";
         try {
-            String query = " select itn.item_names_id "
+
+            query = " select itn.item_names_id "
                     + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv, "
                     + " key_person kp,org_office oo,manufacturer mr "
-                    + " where itt.item_type_id=itn.item_type_id and mim.item_names_id=itn.item_names_id"
+                    + " where itt.item_type_id=itn.item_type_id and mim.item_names_id=itn.item_names_id "
                     + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                     + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                     + " and oo.org_office_id=ib.org_office_id "
@@ -148,6 +149,7 @@ public class InventoryBasicModel {
             if (!search_by_date.equals("") && search_by_date != null) {
                 query += " and inv.date_time='" + search_by_date + "' ";
             }
+
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
                 list2.add(rst.getInt(1));
@@ -417,7 +419,9 @@ public class InventoryBasicModel {
         int p_item_id = 0;
 
         try {
-            desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
+            if (!searchOrgOffice.equals("") || !searchKeyPerson.equals("")) {
+                desig_map_list = getIdList(searchItemName, searchOrgOffice, search_manufacturer, search_item_code, search_model, searchKeyPerson, search_by_date);
+            }
             ItemNameModel model = new ItemNameModel();
             List<ItemName> allIdList = model.showData(search_item_name, search_item_type, search_item_codee, search_super_child, search_generation);
             for (int k = 0; k < allIdList.size(); k++) {
@@ -439,9 +443,18 @@ public class InventoryBasicModel {
             String query = "  select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
                     + " itn.generation,itn.is_super_child,itn.prefix "
                     + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
-            query += "  and itn.item_names_id in(" + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
-                    + " order by field(itn.item_names_id," + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+//            query += "  and itn.item_names_id in(" + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+//                    + " order by field(itn.item_names_id," + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 //                    + "  limit 10  ";
+
+            if (!searchOrgOffice.equals("") || !searchKeyPerson.equals("")) {
+                query += "  and itn.item_names_id in(" + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                        + " order by field(itn.item_names_id," + desig_map_listAllFinal.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
+            } else {
+
+                query += "  and itn.item_names_id in(" + desig_map_listAll.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                        + " order by field(itn.item_names_id," + desig_map_listAll.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ")  ";
+            }
 
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -476,7 +489,6 @@ public class InventoryBasicModel {
 
                 String item_name = "";
                 if (is_super_child.equals("Y")) {
-
                     int item_id = rset.getInt("item_names_id");
                     String query2 = " select mr.manufacturer_name  "
                             + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
@@ -726,7 +738,22 @@ public class InventoryBasicModel {
         String item_name = bean.getItem_name();
         int item_name_id = getItemNamesId(item_name);
         int org_office_id = getOrgOfficeId(bean.getOrg_office());
-        int search_org_office_old_id = getOrgOfficeId(search_org_office_old);
+        int search_org_office_old_id = 0;
+        if (!search_org_office_old.equals("")) {
+            search_org_office_old_id = getOrgOfficeId(search_org_office_old);
+        }
+
+        int inventory_basic_id_map = 0;
+        int min_quantity = 0;
+        int daily_req = 0;
+        String opening_balance = "";
+        int model_id = 0;
+        String description = "";
+        int stock_quantity = 0;
+        int model_count = 0;
+//                    String date_time = "";
+        int org_office_id_old = 0;
+
 //        int model_id = getModelId(bean.getModel());
         int key_person_id = getKeyPersonId(bean.getKey_person());
 //        int stock_quantity = getStockQuantity(item_name_id);
@@ -736,6 +763,100 @@ public class InventoryBasicModel {
         String date_time = sdf.format(date);
         int map_count = 0;
         try {
+
+            if (search_org_office_old.equals("")) {
+                inventory_basic_id = 0;
+                min_quantity = 10;
+                daily_req = 1;
+                opening_balance = "10";
+
+                String ib_model_count = " select count(*) as count from model m,manufacturer mr,manufacturer_item_map mim,item_names itn "
+                        + " where m.active='Y' and mr.active='Y' and mim.active='Y' and itn.active='Y' and itn.item_names_id=mim.item_names_id "
+                        + " and mr.manufacturer_id=mim.manufacturer_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
+                        + " and itn.item_names_id='" + item_name_id + "' ";
+
+                PreparedStatement pstmt1_count = connection.prepareStatement(ib_model_count);
+                ResultSet rs1_ib_count = pstmt1_count.executeQuery();
+                while (rs1_ib_count.next()) {
+//                            String model = rs1_ib.getString("model");
+
+                    model_count = rs1_ib_count.getInt("count");
+                }
+                if (model_count > 0) {
+                    String ib_model = " select m.model_id from model m,manufacturer mr,manufacturer_item_map mim,item_names itn "
+                            + " where m.active='Y' and mr.active='Y' and mim.active='Y' and itn.active='Y' and itn.item_names_id=mim.item_names_id "
+                            + " and mr.manufacturer_id=mim.manufacturer_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
+                            + " and itn.item_names_id='" + item_name_id + "' ";
+
+                    PreparedStatement pstmt1 = connection.prepareStatement(ib_model);
+                    ResultSet rs1_ib = pstmt1.executeQuery();
+                    while (rs1_ib.next()) {
+//                            String model = rs1_ib.getString("model");
+
+                        model_id = rs1_ib.getInt("model_id");
+                        stock_quantity = 10;
+
+                        String query4 = " SELECT count(*) as count FROM inventory_basic ib,inventory inv,model m WHERE "
+                                + " ib.item_names_id='" + item_name_id + "' and ib.org_office_id='" + org_office_id + "' "
+                                + " and inv.key_person_id='" + key_person_id + "' and ib.model_id='" + model_id + "' "
+                                + " and ib.active='Y' and inv.active='Y' and inv.inventory_basic_id=ib.inventory_basic_id and m.model_id=ib.model_id "
+                                + " and m.active='Y' ";
+
+                        System.err.println("query4----------" + query4);
+
+                        PreparedStatement pstmt1_inv = connection.prepareStatement(query4);
+                        ResultSet rs1 = pstmt1_inv.executeQuery();
+                        while (rs1.next()) {
+                            map_count = rs1.getInt("count");
+                        }
+                        if (map_count > 0) {
+                            message = "Item Model has already mapped with this Office and person!..";
+                            msgBgColor = COLOR_ERROR;
+                        } else {
+                            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                            pstmt.setInt(1, item_name_id);
+                            pstmt.setInt(2, org_office_id);
+                            pstmt.setString(3, description);
+                            pstmt.setInt(4, 0);
+                            pstmt.setString(5, "Y");
+                            pstmt.setString(6, "OK");
+                            pstmt.setInt(7, min_quantity);
+                            pstmt.setInt(8, daily_req);
+                            pstmt.setString(9, opening_balance);
+                            pstmt.setInt(10, model_id);
+                            rowsAffected = pstmt.executeUpdate();
+
+                            if (rowsAffected > 0) {
+                                ResultSet rs = pstmt.getGeneratedKeys();
+                                while (rs.next()) {
+                                    inventory_basic_id = rs.getInt(1);
+                                }
+
+                                String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
+                                        + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                                        + " reference_document_type,reference_document_id,stock_quantity) "
+                                        + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
+
+                                PreparedStatement pstmt4 = connection.prepareStatement(query2);
+                                pstmt4.setInt(1, inventory_basic_id);
+                                pstmt4.setInt(2, key_person_id);
+                                pstmt4.setString(3, description);
+                                pstmt4.setInt(4, 0);
+                                pstmt4.setString(5, "Y");
+                                pstmt4.setString(6, "OK");
+                                pstmt4.setInt(7, stock_quantity);
+                                pstmt4.setInt(8, 0);
+                                pstmt4.setString(9, date_time);
+                                pstmt4.setString(10, "");
+                                pstmt4.setString(11, "");
+                                pstmt4.setInt(12, stock_quantity);
+                                rowsAffected2 = pstmt4.executeUpdate();
+
+                            }
+                        }
+                    }
+                }
+            }
             String query1 = " select  item_names_id, "
                     + " item_name, "
                     + " parent_id "
@@ -753,27 +874,25 @@ public class InventoryBasicModel {
                 item_names_id = rs2.getInt("item_names_id");
                 item_names_id_list.add(item_names_id);
             }
+
             for (int i = 0; i < item_names_id_list.size(); i++) {
+                String query3 = "";
                 if (item_names_id_list.size() != 0) {
-                    String query3 = " select ib.inventory_basic_id,ib.min_quantity,ib.daily_req,ib.opening_balance,ib.model_id,ib.description,"
+                    query3 = " select ib.inventory_basic_id,ib.min_quantity,ib.daily_req,ib.opening_balance,ib.model_id,ib.description,"
                             + " inv.stock_quantity,inv.date_time,ib.org_office_id "
                             + " from inventory inv,inventory_basic ib,manufacturer mr,model m,item_names itn,manufacturer_item_map mim "
                             + " where inv.active='Y' and ib.active='Y' and mr.active='Y' and m.active='Y' and itn.active='Y' and mim.active='Y' "
                             + " and itn.item_names_id=mim.item_names_id and mr.manufacturer_id=mim.manufacturer_id and m.model_id=ib.model_id "
                             + " and itn.item_names_id=ib.item_names_id and ib.inventory_basic_id=inv.inventory_basic_id "
-                            + " and itn.item_names_id='" + item_names_id_list.get(i) + "' and ib.org_office_id='" + search_org_office_old_id + "'  ";
+                            + " and itn.item_names_id='" + item_names_id_list.get(i) + "' ";
+
+                    if (!search_org_office_old.equals("")) {
+                        query3 += " and ib.org_office_id ='" + search_org_office_old_id + "'  ";
+
+                    }
+
                     PreparedStatement pstmt3 = connection.prepareStatement(query3);
                     ResultSet rs3 = pstmt3.executeQuery();
-
-                    int inventory_basic_id_map = 0;
-                    int min_quantity = 0;
-                    int daily_req = 0;
-                    String opening_balance = "";
-                    int model_id = 0;
-                    String description = "";
-                    int stock_quantity = 0;
-//                    String date_time = "";
-                    int org_office_id_old = 0;
 
                     while (rs3.next()) {
                         inventory_basic_id = rs3.getInt("inventory_basic_id");
@@ -863,6 +982,10 @@ public class InventoryBasicModel {
         if (map_count
                 > 0) {
             message = "Item Model has already mapped with this Office and person!..";
+            msgBgColor = COLOR_ERROR;
+        }
+        if (model_count == 0) {
+            message = "First Map this item to manufacturer and model.";
             msgBgColor = COLOR_ERROR;
         }
         return rowsAffected;

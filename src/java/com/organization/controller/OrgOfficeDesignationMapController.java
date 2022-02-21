@@ -35,13 +35,21 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ServletContext ctx = getServletContext();
- 
+
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         OrgOfficeDesignationMapModel organisationModel = new OrgOfficeDesignationMapModel();
         String active = "Y";
         String ac = "ACTIVE RECORDS";
-        
+        HttpSession session = request.getSession();
+        String loggedUser = "";
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
+            System.err.println("Session Not Active");
+            request.getRequestDispatcher("/").forward(request, response);
+            return;
+        } else {
+            loggedUser = session.getAttribute("user_role").toString();
+        }
         try {
             // organisationModel.setConnection(DBConnection.getConnection(ctx, session));
             organisationModel.setConnection(DBConnection.getConnectionForUtf(ctx));
@@ -67,7 +75,6 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
             } else {
                 searchDesignation = "";
             }
-           
 
             String requester = request.getParameter("requester");
             try {
@@ -157,7 +164,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                 orgOffice.setDesignation(request.getParameter("designation").trim());
                 orgOffice.setSerialnumber(request.getParameter("description").trim());
                 //String superr = request.getParameter("super");
-               // String p_designation = request.getParameter("p_designation");
+                // String p_designation = request.getParameter("p_designation");
 //                if (superr.equals(null) || p_designation.equals(null)) {
 //                    superr = "";
 //                    p_designation = "";
@@ -173,7 +180,7 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                     organisationModel.updateRecord(orgOffice, org_office_designation_map_id);
                 }
             }
-          
+
             String org_name = "";
             String office_code_search = "";
             String office_name_search = "";
@@ -199,7 +206,6 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                 if (searchDesignation == null) {
                     searchDesignation = "";
                 }
-               
 
             } catch (Exception e) {
             }
@@ -238,10 +244,10 @@ public class OrgOfficeDesignationMapController extends HttpServlet {
                     ac = "INACTIVE RECORDS";
                 }
             }
-          
+
             // Logic to show data in the table.
             List<OrganisationDesignationBean> organisationList = organisationModel.showData(searchOrgOffice, searchDesignation);
-       
+
             request.setAttribute("searchOrgOffice", searchOrgOffice);
             request.setAttribute("searchDesignation", searchDesignation);
             request.setAttribute("message", organisationModel.getMessage());

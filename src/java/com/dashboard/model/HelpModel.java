@@ -190,7 +190,7 @@ public class HelpModel {
     public static ArrayList<Help> getAllSupportMessages() {
         ArrayList<Help> list = new ArrayList<Help>();
         String query = " select * from dealer_help_messages dhm,key_person kp where dhm.active='Y' and kp.active='Y' "
-                + "  and dhm.dealer_id=kp.key_person_id ";
+                + "  and dhm.dealer_id=kp.key_person_id order by dealer_help_messages_id desc  ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();

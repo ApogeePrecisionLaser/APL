@@ -568,63 +568,63 @@
         var checkboxes = document.getElementsByTagName('input');
         var search_org_office = $('#search_org_office').val();
         $('#search_org_office_old').val(search_org_office);
-        if (search_org_office == "") {
-            alert("Please select Org Office and search records......");
-            $('#checkall').removeAttr("checked");
-            return false;
-        } else {
-            var val = null;
-            $('#map_another_office_div').show();
-            $('#save_all_details_div').hide();
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].type == 'checkbox') {
-                    if (val === null)
-                        val = checkboxes[i].checked;
-                    checkboxes[i].checked = val;
-                }
+//        if (search_org_office == "") {
+//            alert("Please select Org Office and search records......");
+//            $('#checkall').removeAttr("checked");
+//            return false;
+//        } else {
+        var val = null;
+        $('#map_another_office_div').show();
+        $('#save_all_details_div').hide();
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].type == 'checkbox') {
+                if (val === null)
+                    val = checkboxes[i].checked;
+                checkboxes[i].checked = val;
             }
         }
+//        }
     }
 
 
     function checkUncheck(item_names_id) {
         var search_org_office = $('#search_org_office').val();
         $('#search_org_office_old').val(search_org_office);
-        if (search_org_office == "") {
-            alert("Please select Org Office and search records......");
-            $('#checkall').removeAttr("checked");
-            return false;
+//        if (search_org_office == "") {
+//            alert("Please select Org Office and search records......");
+//            $('#checkall').removeAttr("checked");
+//            return false;
+//        } else {
+        $('#map_another_office_div').show();
+        $('#save_all_details_div').hide();
+        if ($('#check' + item_names_id).prop("checked") == true) {
+            $.ajax({
+                url: "ItemAuthorizationController",
+                dataType: "json",
+                data: {action1: "getAllChild", item_names_id: item_names_id},
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.list);
+                    for (var i = 0; i < data.list.length; i++) {
+                        $('#check' + data.list[i]).attr("checked", true);
+                    }
+                }
+            });
         } else {
-            $('#map_another_office_div').show();
-            $('#save_all_details_div').hide();
-            if ($('#check' + item_names_id).prop("checked") == true) {
-                $.ajax({
-                    url: "ItemAuthorizationController",
-                    dataType: "json",
-                    data: {action1: "getAllChild", item_names_id: item_names_id},
-                    success: function (data) {
-                        console.log(data);
-                        console.log(data.list);
-                        for (var i = 0; i < data.list.length; i++) {
-                            $('#check' + data.list[i]).attr("checked", true);
-                        }
+            $.ajax({
+                url: "ItemAuthorizationController",
+                dataType: "json",
+                data: {action1: "getAllChild", item_names_id: item_names_id},
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.list);
+                    for (var i = 0; i < data.list.length; i++) {
+                        $('#check' + data.list[i]).attr("checked", false);
                     }
-                });
-            } else {
-                $.ajax({
-                    url: "ItemAuthorizationController",
-                    dataType: "json",
-                    data: {action1: "getAllChild", item_names_id: item_names_id},
-                    success: function (data) {
-                        console.log(data);
-                        console.log(data.list);
-                        for (var i = 0; i < data.list.length; i++) {
-                            $('#check' + data.list[i]).attr("checked", false);
-                        }
-                    }
-                });
-            }
+                }
+            });
         }
+//        }
     }
 
 </script>

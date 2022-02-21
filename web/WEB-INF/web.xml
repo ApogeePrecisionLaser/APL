@@ -1960,6 +1960,16 @@
     <!-- end schedular for getting indiamart queries --> 
     
     
+     <!-- Start schedular for sending enqueries report --> 
+    <listener>
+        <listener-class>
+            com.webservice.controller.EnquiryReportSchedular
+        </listener-class>
+    </listener>
+    <!-- end schedular for sending enqueries report --> 
+    
+    
+    
     <!--Start Support Messages -->
     <servlet>
         <servlet-name>support_messages</servlet-name>
@@ -2008,4 +2018,88 @@
         <url-pattern>/page_not_found</url-pattern>
     </servlet-mapping>
     <!-- end page not found -->
+    
+    <!-- start recovery password -->
+    <servlet>
+        <servlet-name>recovery_password</servlet-name>
+        <jsp-file>/CRM Dashboard/recovery_password.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>recovery_password</servlet-name>
+        <url-pattern>/recovery_password</url-pattern>
+    </servlet-mapping>
+    <!-- end recovery password -->
+    
+    
+    
+    <!-- start verify mobile -->
+    <servlet>
+        <servlet-name>verify_mobile</servlet-name>
+        <jsp-file>/CRM Dashboard/verify_mobile.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>verify_mobile</servlet-name>
+        <url-pattern>/verify_mobile</url-pattern>
+    </servlet-mapping>
+    <!-- end verify mobile -->
+    
+    
+    <!-- start forgot password -->
+    <servlet>
+        <servlet-name>forgot_password</servlet-name>
+        <jsp-file>/CRM Dashboard/forgot_password.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>forgot_password</servlet-name>
+        <url-pattern>/forgot_password</url-pattern>
+    </servlet-mapping>
+    <!-- end forgot password -->
+    
+    
+    
+    
+    <!--Start Vendor Item Map -->
+    <servlet>
+        <servlet-name>VendorItemMapController</servlet-name>
+        <servlet-class>com.inventory.controller.VendorItemMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>VendorItemMapController</servlet-name>
+        <url-pattern>/VendorItemMapController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>vendor_item_map</servlet-name>
+        <jsp-file>/view/Inventory/vendor_item_map.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>vendor_item_map</servlet-name>
+        <url-pattern>/vendor_item_map</url-pattern>
+    </servlet-mapping>   
+    <!--End Vendor Item Map -->
+    
+    
+    
+    
+    <!--Start Enquiry Report -->
+    <servlet>
+        <servlet-name>DailyEnquiryReportController</servlet-name>
+        <servlet-class>com.report.controller.DailyEnquiryReportController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DailyEnquiryReportController</servlet-name>
+        <url-pattern>/DailyEnquiryReportController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>enquiry_report</servlet-name>
+        <jsp-file>/CRM Dashboard/enquiry_report.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>enquiry_report</servlet-name>
+        <url-pattern>/enquiry_report</url-pattern>
+    </servlet-mapping>   
+    <!--End Enquiry Report -->
+    
+    
 </web-app>

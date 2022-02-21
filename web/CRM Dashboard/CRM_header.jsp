@@ -398,6 +398,25 @@
                                 </ul>
 
                             </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon far fa-file-pdf"></i>
+                                    <p>
+                                        Report
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="DailyEnquiryReportController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Enquiry Report</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item">
                                 <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo">
                                     <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
@@ -533,6 +552,26 @@
                                         <a href="SupportMessagesController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Support Messages</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon far fa-file-pdf"></i>
+                                    <p>
+                                        Report
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="DailyEnquiryReportController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Enquiry Report</p>
                                         </a>
                                     </li>
                                 </ul>

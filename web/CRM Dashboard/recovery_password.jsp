@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Apogee Precision</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-        <link rel="stylesheet" href="assets2/css/adminlte.min.css">
-        <link rel="stylesheet" href="assets2/css/myStyle.css">
-        <link rel="stylesheet" type="text/css" href="assets2/css/mobileResponsive.css">
+        <link rel="stylesheet" href="CRM Dashboard/plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="CRM Dashboard/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+        <link rel="stylesheet" href="CRM Dashboard/assets2/css/adminlte.min.css">
+        <link rel="stylesheet" href="CRM Dashboard/assets2/css/myStyle.css">
+        <link rel="stylesheet" type="text/css" href="CRM Dashboard/assets2/css/mobileResponsive.css">
     </head>
 
     <style>
@@ -29,9 +29,10 @@
                 </div>
                 <div class="card-body">
                     <p class="login-box-msg">You are only one step a way from your new password, recover your password now..</p>
-                    <form action="verify_mobile.php" method="post">
+                    <form action="LoginController" method="post">
+                        <input type="hidden" name="mobile" value="${mobile}">
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control rounded-0 fontFourteen" placeholder="Password">
+                            <input type="password" class="form-control rounded-0 fontFourteen" placeholder="Password" name="new_password" id="new_password">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-lock"></span>
@@ -39,7 +40,8 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control rounded-0 fontFourteen" placeholder="Confirm Password">
+                            <input type="password" class="form-control rounded-0 fontFourteen" placeholder="Confirm Password"
+                                   name="confirm_password" id="confirm_password">
                             <div class="input-group-append">
                                 <div class="input-group-text rounded-0">
                                     <span class="fas fa-lock"></span>
@@ -48,14 +50,15 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn myThemeBtn btn-block">Update Password</button>
+                                <button type="submit" class="btn myThemeBtn btn-block" name="task" value="Update Password" 
+                                        onclick="matchPassword()">Update Password</button>
                             </div>
                         </div>
                     </form>
 
                     <div class="d-flex justify-content-between mt-3">
                         <p class="mb-1">
-                            <a href="login.php" class="fontFourteen">Go to Login</a>
+                            <a href="/LoginController" class="fontFourteen">Go to Login</a>
                         </p>
                         <!-- <p class="mb-0">
                           <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
@@ -67,10 +70,44 @@
         </div>
 
 
-        <script src="plugins/jquery/jquery.min.js"></script>
+        <script src="CRM Dashboard/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
-        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="CRM Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
-        <script src="assets2/js/adminlte.min.js"></script>
+        <script src="CRM Dashboard/assets2/js/adminlte.min.js"></script>
     </body>
 </html>
+
+<script>
+
+                                            function matchPassword() {
+                                                var pw1 = document.getElementById("new_password").value;
+                                                var pw2 = document.getElementById("confirm_password").value;
+                                                if (pw1 == '') {
+                                                    $('.login-box-msg').html("Please Enter New Password");
+                                                    $('.login-box-msg').addClass('text-danger');
+                                                    event.preventDefault();
+                                                    return false;
+                                                }
+                                                if (pw2 == '') {
+                                                    $('.login-box-msg').html("Please Enter Confirm Password");
+                                                    $('.login-box-msg').addClass('text-danger');
+                                                    event.preventDefault();
+                                                    return false;
+                                                }
+                                                if (pw1 != pw2)
+                                                {
+                                                    $('.login-box-msg').html("Password didn't match");
+                                                    $('.login-box-msg').addClass('text-danger');
+                                                    event.preventDefault();
+                                                    return false;
+                                                }
+                                                if (pw1.length < 6) {
+                                                    $('.login-box-msg').html("Please enter atleast 6 digit.");
+                                                    $('.login-box-msg').addClass('text-danger');
+                                                    event.preventDefault();
+                                                    return false;
+                                                }
+//                                              
+                                            }
+</script>

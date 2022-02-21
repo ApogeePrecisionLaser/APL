@@ -113,7 +113,7 @@
                                                                 <div class="value-button decrease_" id="" value="Decrease Value"
                                                                      onclick="removeFromcart('${beanType.model_id}', '${beanType.model}', '${beanType.basic_price}')">-</div>
 
-                                                                <input style="width:50px" type="text" class="inputIncDec" name="qty${beanType.model_id}" id="qty${beanType.model_id}" value="${beanType.quantity}" />
+                                                                <input style="width:50px" type="text" disabled="" class="inputIncDec" name="qty${beanType.model_id}" id="qty${beanType.model_id}" value="${beanType.quantity}" />
 
                                                                 <div class="value-button increase_" id="" value="Increase Value" 
                                                                      onclick="addTocart('${beanType.model_id}', '${beanType.model}', '${beanType.basic_price}')">+</div>
@@ -140,16 +140,16 @@
                     <div class="col-md-4">
                         <div class="_product-detail-content  border" style="background-color: #102f42;box-shadow: 2px 2px 7px #999;">
                             <p class="_p-name text-white"> Grand Total </p>
-<!--                            <div class="couponWrap mb-3">
-                                <form action="#" class="d-flex mb-1">
-                                    <div class="form-group mb-0 w-100">
-                                        <input type="text" class="form-control" placeholder="Coupon Code" id="email">
-                                    </div>
-                                    <button type="submit" class="btn bg-white border-white">Apply</button>
-                                </form>
-                                <p class="mb-0" style="color:#a1ff71;">Coupon Applied</p>
-                                 <p class="text-danger mb-0" style="color: #621c23;">Coupon Invalid</p> 
-                            </div>-->
+                            <!--                            <div class="couponWrap mb-3">
+                                                            <form action="#" class="d-flex mb-1">
+                                                                <div class="form-group mb-0 w-100">
+                                                                    <input type="text" class="form-control" placeholder="Coupon Code" id="email">
+                                                                </div>
+                                                                <button type="submit" class="btn bg-white border-white">Apply</button>
+                                                            </form>
+                                                            <p class="mb-0" style="color:#a1ff71;">Coupon Applied</p>
+                                                             <p class="text-danger mb-0" style="color: #621c23;">Coupon Invalid</p> 
+                                                        </div>-->
                             <div>
                                 <table class="table table-bordered mb-0 text-white">
                                     <tbody>
@@ -373,7 +373,7 @@
                             if (lastaddedmodel_id != '') {
                                 count = parseInt(data.list);
                                 $('#model_row' + model_id).remove();
-                                $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">' + lastaddedbasic_price + '</td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
+                                $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" disabled="" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">' + lastaddedbasic_price + '</td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
 
 //                                $('.img-fluid' + counting).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
                                 $('.img-fluid' + counting).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
@@ -427,7 +427,7 @@
 
 
 
-//                            window.location.reload();
+                            window.location.reload();
 
                             if (data.success_msg != '') {
                                 $('.counting').text(data.list);
@@ -534,6 +534,7 @@
                         data: {task: "removeAllFromcart", model_id: model_id, model_name: model, basic_price: basic_price, qty: qty},
                         success: function (data) {
                             console.log(data);
+
                             if (data.list > 0) {
                                 $('.counting').text(data.list);
                                 $('#msg_success').text(data.msg);
@@ -564,6 +565,8 @@
                                 setTimeout(function () {
                                     $('#msg_success').fadeOut('fast');
                                 }, 2000);
+                            } else if (data.list == 0) {
+                                window.location.reload();
                             } else {
                                 $('#msg_success').hide();
                                 $('#msg_danger').show();

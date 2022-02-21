@@ -108,7 +108,20 @@
                                                                     <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn actionEdit fontFourteen px-1" title="Assigned To Dealer"><i class="far fa-share-square"></i></a>
                                                                 </div>
                                                             </c:when>
+                                                            <c:when test="${beanType.status =='Assigned To Dealer'}">
+                                                                <button class="btn assigneDealer fontFourteen" disabled>Assigned </button>
+                                                            </c:when>
 
+                                                            <c:when test="${beanType.status =='Open' || beanType.status =='Call' ||  beanType.status =='Follow Up'}">
+                                                                <button class="btn inConversation fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
+                                                                            || beanType.status =='Purchased From Others'}">
+                                                                    <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
+                                                            <c:when test="${beanType.status =='Sold'}">
+                                                                <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
+                                                            </c:when>
                                                             <c:otherwise>
                                                                 <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                                             </c:otherwise>

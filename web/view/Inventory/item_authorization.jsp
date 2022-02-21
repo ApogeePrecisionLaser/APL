@@ -465,17 +465,37 @@
 
 
     function viewMappedDesignation(item_names_id, org_office) {
-        popupwin = openPopUp("Show Mapped Designation", 1000, 1000, item_names_id, org_office);
+        $('#designation_div' + item_names_id).empty();
+        $.ajax({
+            url: "ItemAuthorizationController",
+            dataType: "json",
+            data: {action1: "viewMappedDesignation", item_names_id: item_names_id, org_office: org_office},
+            success: function (data) {
+                console.log(data);
+                console.log(data.list);
+                if (data.list.length > 0) {
+                    $('#designation_div' + item_names_id).show();
+                } else {
+                    $('#designation_div' + item_names_id).hide();
+                }
+                for (var i = 0; i < data.list.length; i++) {
+
+                    $('#designation_div' + item_names_id).append('<li><a value="' + data.list[i] + '">' + data.list[i] + '</a></li>');
+                }
+            }
+        });
+
+//        popupwin = openPopUp("Show Mapped Designation", 1000, 1000, item_names_id, org_office);
     }
 
-    function openPopUp(window_name, popup_height, popup_width, item_names_id, org_office) {
-        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
-        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
-        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
-        var queryString = "task1=viewMappedDesignation&item_names_id=" + item_names_id + "&org_office=" + org_office;
-        var url = "ItemAuthorizationController?" + queryString;
-        return window.open(url, window_name, window_features);
-    }
+//    function openPopUp(window_name, popup_height, popup_width, item_names_id, org_office) {
+//        var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+//        var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+//        var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=no, scrollbars=yes, status=no, dialog=yes, dependent=yes";
+//        var queryString = "task1=viewMappedDesignation&item_names_id=" + item_names_id + "&org_office=" + org_office;
+//        var url = "ItemAuthorizationController?" + queryString;
+//        return window.open(url, window_name, window_features);
+//    }
 
 //    if (!document.all) {
 //        document.captureEvents(Event.CLICK);
@@ -528,12 +548,6 @@
                     </div>
                 </div>
 
-                <!--                <div class="col-md-4">
-                                    <div class="form-group mb-md-0">
-                                        <label>Designation</label>
-                                        <input type="text" Placeholder="Designation" name="search_designation" id="search_designation" value="${search_designation}" class="form-control myInput searchInput1 w-100">
-                                    </div>
-                                </div>        -->
             </div>
             <hr>
             <div class="row">
@@ -560,7 +574,7 @@
                         <th><input type="checkbox" onchange="checkAll()" name="chk[]" id="checkall" /></th>
                         <th>Item Name</th>
                         <th >Org Office</th>
-                        <!--<th >Designation</th>-->
+                        <th >Designation & Key Person</th>
                     </tr>
                     <tbody>
                         <c:forEach var="beanType" items="${requestScope['list']}"
@@ -577,26 +591,21 @@
                                         <div class="scrollable">
                                             <c:forTokens items="${beanType.org_office}" delims="," var="mySplit">
                                                 <li>  
-                                                    <a href="" onclick="viewMappedDesignation('${beanType.item_names_id }', '${mySplit}')" value="${mySplit}">${mySplit}</a>
+                                                    <u style="color:blue">
+                                                        <a style="color:blue" onclick="viewMappedDesignation('${beanType.item_names_id }', '${mySplit}')" value="${mySplit}">${mySplit}</a>
+                                                    </u>
                                                     </br>
                                                 </li>
                                             </c:forTokens>
                                         </div>
                                     </c:if>
                                 </td>
-                                <!--                                <td> 
-                                <c:if test="${beanType.designation!=''}">
-                                    <div class="scrollable">
-                                    <c:forTokens items="${beanType.designation}" delims="," var="mySplit2">
-                                        <li>  
-                                            <a href="" value="${mySplit2}">${mySplit2}</a>
-                                            </br>
-                                        </li>
-                                    </c:forTokens>
-                                </div>
-                                </c:if>
+                                <td id="des_${beanType.item_names_id}">
+                                    <div class="scrollable" id="designation_div${beanType.item_names_id}" style="display:none"> 
 
-                            </td>-->
+                                    </div>
+                                </td>
+
                             </tr>
 
                         </c:forEach>
@@ -695,7 +704,7 @@
                     </c:if>
 
                     <c:if test="${myfn:isContainPrivileges2(loggedUser,'ItemAuthorizationController','delete') eq 'True'}">
-                        <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled="">
+                        <input type="submit" class="btn normalBtn" name="task" id="delete" value="Delete" onclick="setStatus(id)">
                     </c:if>
                 </div>
             </div>
