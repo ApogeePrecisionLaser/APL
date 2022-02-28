@@ -211,10 +211,10 @@ public class SalesEnquiryController extends HttpServlet {
             if (enquiry_type == null) {
                 enquiry_type = "";
             }
-
             Enquiry bean = new Enquiry();
             bean.setEnquiry_type(enquiry_type);
             bean.setEnquiry_table_id(enquiry_table_id);
+            bean.setProduct_name(request.getParameter("product_name"));
             bean.setEnquiry_source(request.getParameter("enquiry_source"));
             bean.setMarketing_vertical_name(request.getParameter("marketing_vertical"));
             bean.setEnquiry_no(request.getParameter("enquiry_no"));

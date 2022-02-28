@@ -49,7 +49,7 @@ public class InventoryReportController extends HttpServlet {
         ServletContext ctx = getServletContext();
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         }

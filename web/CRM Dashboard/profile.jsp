@@ -101,7 +101,7 @@
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Email:</small></p>
-                                        <p id="email"><strong><a href="mailTo:${email}">${email}</a></strong></p>
+                                        <p id="email"><strong><a href="mailTo:${email}"><i class="far fa-envelope"></i> ${email}</a></strong></p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -114,16 +114,16 @@
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Office Mobile:</small></p>
-                                        <p id="mobile1"><strong><a href="tel:${mobile1}">${mobile1}</a></strong></p>
+                                        <p id="mobile1"><strong><a href="tel:${mobile1}"><i class="fas fa-mobile-alt"></i> ${mobile1}</a></strong></p>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div>
                                         <p class="mb-0"><small>Person Mobile:</small></p>
-                                        <p id="mobile2"><strong><a href="tel:${mobile2}">${mobile2}</a></strong></p>
+                                        <p id="mobile2"><strong><a href="tel:${mobile2}"><i class="fas fa-mobile-alt"></i> ${mobile2}</a></strong></p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="display: none">
                                     <div>
                                         <p class="mb-0"><small>GST No:</small></p>
                                         <p id="gst"><strong>${gst}</strong></p>

@@ -38,6 +38,10 @@
                                 <h5 class="mt-3">Your Order No.-<B> ${order_no}</B> </h5>
                             </div>
                             <br>
+                            <div class="text-center">
+                                <a href="PendingOrdersController" class="btn myThemeBtn">Manage your order</a>
+                            </div>
+                            <br>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="boxOne" style="">
@@ -56,7 +60,7 @@
                                     <div class="boxOne" style="">
                                         <h3>Visit Our Website</h3>
                                         <div class="SocialIconList">
-                                            <a href="http://apogeeprecision.com" class="btn myThemeBtn" target="_blank">Visit Website</a>
+                                            <a href="https://www.apogeeleveller.com/" class="btn myThemeBtn" target="_blank">Visit Website</a>
                                         </div>
                                     </div>
                                 </div>

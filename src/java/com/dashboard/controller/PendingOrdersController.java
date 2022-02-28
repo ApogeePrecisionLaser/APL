@@ -39,7 +39,7 @@ public class PendingOrdersController extends HttpServlet {
         String loggedUser = "";
 
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        if (session == null || session.getAttribute("logged_user_name") == null)  {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {
@@ -93,7 +93,13 @@ public class PendingOrdersController extends HttpServlet {
             request.setAttribute("order_no", order_no);
             request.setAttribute("total_discount_price", total_discount_price);
             request.setAttribute("total_approved_price", total_approved_price);
-            request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+            if (total_discount_price == 0.0 && total_approved_price == 0.0) {
+                request.setAttribute("total_discount_percent", 0);
+
+            } else {
+                request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+
+            }
 
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());

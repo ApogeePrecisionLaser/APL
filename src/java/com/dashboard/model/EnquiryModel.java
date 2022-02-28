@@ -538,16 +538,20 @@ public class EnquiryModel {
 
         List<Integer> assigned_to_list = new ArrayList<>();
         List<Integer> enquiry_status_id_list = new ArrayList<>();
+        List<Integer> assigned_by_list = new ArrayList<>();
         if (user_role.equals("Sales")) {
             assigned_to_list.add(129);
             assigned_to_list.add(logged_key_person_id);
+
+            assigned_by_list.add(0);
+            assigned_by_list.add(129);
 
             enquiry_status_id_list.add(1);
             enquiry_status_id_list.add(2);
 //            enquiry_status_id = 2;
         } else {
             assigned_to_list.add(129);
-
+            assigned_by_list.add(0);
             enquiry_status_id_list.add(1);
         }
 
@@ -620,6 +624,7 @@ public class EnquiryModel {
                 if (enquiry_call_duration == null) {
                     enquiry_call_duration = "";
                 }
+
                 pstmt.setString(15, enquiry_call_duration);
                 String enquiry_reciever_mob = "";
                 enquiry_reciever_mob = bean.getEnquiry_reciever_mob();
@@ -641,7 +646,7 @@ public class EnquiryModel {
                     product_name = "";
                 }
                 pstmt.setString(23, product_name);
-                pstmt.setString(24, "0");
+                pstmt.setInt(24, assigned_by_list.get(i));
 
                 rowsAffected = pstmt.executeUpdate();
                 if (rowsAffected > 0) {
@@ -1476,6 +1481,159 @@ public class EnquiryModel {
             if (!status.equals("") && status != null) {
                 query += " and es.status='" + status + "' ";
             }
+            query += " group by et.complaint_table_id  ";
+            query += " order by et.complaint_table_id desc  ";
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                Enquiry bean = new Enquiry();
+                bean.setEnquiry_table_id(rst.getInt("complaint_table_id"));
+//                bean.setEnquiry_source(rst.getString("enquiry_source"));
+//                bean.setMarketing_vertical_name(rst.getString("marketing_vertical_name"));
+                bean.setStatus(rst.getString("status"));
+                bean.setEnquiry_no(rst.getString("enquiry_no"));
+                bean.setSender_name(rst.getString("sender_name"));
+                bean.setSender_email(rst.getString("sender_email"));
+                bean.setSender_mob(rst.getString("sender_mob"));
+                bean.setSender_company_name(rst.getString("sender_company_name"));
+                bean.setEnquiry_address(rst.getString("enquiry_address"));
+                bean.setEnquiry_city(rst.getString("enquiry_city"));
+                bean.setEnquiry_state(rst.getString("enquiry_state"));
+                bean.setCountry(rst.getString("country"));
+                bean.setEnquiry_message(rst.getString("enquiry_message"));
+//                bean.setEnquiry_date_time(rst.getString("enquiry_date_time"));
+                bean.setEnquiry_call_duration(rst.getString("enquiry_call_duration"));
+                bean.setEnquiry_reciever_mob(rst.getString("enquiry_reciever_mob"));
+                bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
+                bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
+                bean.setDescription(rst.getString("description"));
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                    bean.setAssigned_to_designation("SalesManager");
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                    bean.setAssigned_to_designation("Dealer");
+                }
+
+                String enquiry_date_time = rst.getString("enquiry_date_time");
+//                String split_arr[] = enquiry_date_time.split(" ");
+//                enquiry_date_time = split_arr[0] + " " + split_arr[1];
+
+//                SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
+                Date date = new Date();
+                String currentDateString = dateFormatter.format(date);
+                Date currentDate = dateFormatter.parse(currentDateString);
+                String pastTimeInSecond = enquiry_date_time;
+                Date pastDate = dateFormatter.parse(pastTimeInSecond);
+                String time_ago = timeAgo(currentDate, pastDate);
+                bean.setEnquiry_date_time(time_ago);
+                bean.setProduct_name(rst.getString("product_name"));
+
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.err.println("getAllComplaints Exception------------" + e);
+        }
+        return list;
+    }
+
+    public static ArrayList<Enquiry> getAllPendingEnquiries(String enquiry_source, String status) {
+        ArrayList<Enquiry> list = new ArrayList<Enquiry>();
+        try {
+            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
+                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
+                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
+                    + " group_concat(distinct kp.key_person_name) as key_person_name,oo.org_office_name,et.product_name from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " key_person kp,org_office oo,enquiry_source_table est  "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
+                    + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id and est.active='Y' "
+                    + " and et.enquiry_source_table_id=est.enquiry_source_table_id and et.enquiry_status_id not in(16,17,18,19,20) "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+                    + " and es.active='Y' ";
+            if (!enquiry_source.equals("") && enquiry_source != null) {
+                query += " and est.enquiry_source='" + enquiry_source + "' ";
+            }
+
+            query += " group by et.enquiry_table_id  ";
+            query += " order by et.enquiry_table_id desc  ";
+            ResultSet rst = connection.prepareStatement(query).executeQuery();
+            while (rst.next()) {
+                Enquiry bean = new Enquiry();
+                bean.setEnquiry_table_id(rst.getInt("enquiry_table_id"));
+//                bean.setEnquiry_source(rst.getString("enquiry_source"));
+//                bean.setMarketing_vertical_name(rst.getString("marketing_vertical_name"));
+                bean.setStatus(rst.getString("status"));
+                bean.setEnquiry_no(rst.getString("enquiry_no"));
+                bean.setSender_name(rst.getString("sender_name"));
+                bean.setSender_email(rst.getString("sender_email"));
+                bean.setSender_mob(rst.getString("sender_mob"));
+                bean.setSender_company_name(rst.getString("sender_company_name"));
+                bean.setEnquiry_address(rst.getString("enquiry_address"));
+                bean.setEnquiry_city(rst.getString("enquiry_city"));
+                bean.setEnquiry_state(rst.getString("enquiry_state"));
+                bean.setCountry(rst.getString("country"));
+                bean.setEnquiry_message(rst.getString("enquiry_message"));
+//                bean.setEnquiry_date_time(rst.getString("enquiry_date_time"));
+                bean.setEnquiry_call_duration(rst.getString("enquiry_call_duration"));
+                bean.setEnquiry_reciever_mob(rst.getString("enquiry_reciever_mob"));
+                bean.setSender_alternate_email(rst.getString("sender_alternate_email"));
+                bean.setSender_alternate_mob(rst.getString("sender_alternate_mob"));
+                bean.setDescription(rst.getString("description"));
+                bean.setProduct_name(rst.getString("product_name"));
+
+                if (rst.getString("status").equals("Assigned To SalesManager")) {
+                    bean.setAssigned_to(rst.getString("key_person_name"));
+                    bean.setAssigned_to_designation("SalesManager");
+                }
+                if (rst.getString("status").equals("Assigned To Dealer")) {
+                    bean.setAssigned_to(rst.getString("org_office_name"));
+                    bean.setAssigned_to_designation("Dealer");
+
+                }
+
+                String enquiry_date_time = rst.getString("enquiry_date_time");
+//                String split_arr[] = enquiry_date_time.split(" ");
+//                enquiry_date_time = split_arr[0] + " " + split_arr[1];
+
+//                SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
+                Date date = new Date();
+                String currentDateString = dateFormatter.format(date);
+                Date currentDate = dateFormatter.parse(currentDateString);
+                String pastTimeInSecond = enquiry_date_time;
+                Date pastDate = dateFormatter.parse(pastTimeInSecond);
+                String time_ago = timeAgo(currentDate, pastDate);
+                bean.setEnquiry_date_time(time_ago);
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.err.println("getAllEnquiries Exception------------" + e);
+        }
+
+        return list;
+    }
+
+    public static ArrayList<Enquiry> getAllPendingComplaints(String enquiry_source, String status) {
+        ArrayList<Enquiry> list = new ArrayList<Enquiry>();
+        try {
+            String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
+                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
+                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
+                    + " kp.key_person_name,oo.org_office_name,et.product_name  from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " key_person kp,org_office oo,enquiry_source_table est  "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
+                    + " and kp.active='Y' and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id "
+                    + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and "
+                    + " dt.division_id=dv.division_id and dv.state_id=st.state_id and est.active='Y' "
+                    + " and et.enquiry_source_table_id=est.enquiry_source_table_id and et.enquiry_status_id not in(16,17,18,19,20) "
+                    + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') ";
+            if (!enquiry_source.equals("") && enquiry_source != null) {
+                query += " and est.enquiry_source='" + enquiry_source + "' ";
+            }
+
             query += " group by et.complaint_table_id  ";
             query += " order by et.complaint_table_id desc  ";
             ResultSet rst = connection.prepareStatement(query).executeQuery();

@@ -82,12 +82,12 @@
                                 if (session.getAttribute("user_role").equals("Admin")) {
                             %>
                             <a href="SalesEnquiryController?task=sales_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("sales_enquiries")%> Sales Enquiry
+                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="SalesEnquiryController?task=complaint_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
+                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <!--                            <div class="dropdown-divider"></div>
@@ -100,12 +100,12 @@
                                 if (session.getAttribute("user_role").equals("Dealer")) {
                             %>
                             <a href="DealersOrderController?task=sales_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("sales_enquiries")%> Sales Enquiry
+                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="DealersOrderController?task=complaint_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
+                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <div class="dropdown-divider"></div>
@@ -118,12 +118,12 @@
                                 if (session.getAttribute("user_role").equals("Sales")) {
                             %>
                             <a href="ApproveOrdersController?task=sales_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("sales_enquiries")%> Sales Enquiry
+                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="ApproveOrdersController?task=complaint_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("complaint_enquiries")%> Complaint Enquiry
+                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <!--                            <div class="dropdown-divider"></div>
@@ -257,14 +257,14 @@
                                     <li class="nav-item">
                                         <a href="DealersOrderController?task=sales_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Sales Enquiry List<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("sales_enquiries")%></sup></p>
+                                            <p>Sales Enquiry List<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_sales_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
                                         <a href="DealersOrderController?task=complaint_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Complaint Enquiry List<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("complaint_enquiries")%></sup></p>
+                                            <p>Complaint Enquiry List<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_complaint_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
@@ -384,14 +384,14 @@
                                     <li class="nav-item">
                                         <a href="ApproveOrdersController?task=sales_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Sales Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("sales_enquiries")%></sup></p>
+                                            <p>Sales Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_sales_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
                                         <a href="ApproveOrdersController?task=complaint_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("complaint_enquiries")%></sup></p>
+                                            <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_complaint_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
@@ -522,19 +522,53 @@
                                     <li class="nav-item">
                                         <a href="SalesEnquiryController?task=sales_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Sales Enquiry List  <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("sales_enquiries")%></sup></p>
+                                            <p>Sales Enquiry List  <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_sales_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
                                         <a href="SalesEnquiryController?task=complaint_enquiry_list" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("complaint_enquiries")%></sup></p>
+                                            <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_complaint_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                 </ul>
 
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Purchase Management
+                                        <i class="fas fa-angle-left right"></i>
+
+                                        <!--<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("total_notification")%></sup>-->
+
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Purchase Orders</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController?task=new order" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Make Purchase Order</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Alerts</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
 

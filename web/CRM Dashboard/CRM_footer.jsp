@@ -4,17 +4,17 @@
 <footer class="main-footer pl-3 position-relative">
 
     <%--<%= request.getRequestURL()%>--%>
-    <c:set var="url" value="<%= request.getRequestURL()%>" />
+    <!--  <c:set var="url" value="<%= request.getRequestURL()%>" />
     <c:if test="${(url != 'http://localhost:8080/APL/admin_dashboard') && (url != 'http://localhost:8080/APL/salesperson_dashboard') 
                   && (url != 'http://localhost:8080/APL/CRMDashboard') }">
           <div class="backBtnAllPage d-block d-md-none d-lg-none d-xl-none">
               <a href="#" onclick="history.back()"><img src="CRM Dashboard/assets2/img/product/backIcon.png" width="25"></a>
           </div>
-    </c:if>
+    </c:if> -->
 
 
 
-    <strong>Copyright &copy; 2021 <a href="http://apogeeprecision.com/" target="_blank">Apogee Precision LLP</a>.</strong>
+    <strong>Copyright &copy; 2021 <a href="https://www.apogeeleveller.com/" target="_blank">Apogee Precision Lasers</a>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
         <!-- <b>Version</b> 3.1.0 -->
@@ -44,18 +44,18 @@
 </html>
 
 <script type="text/javascript">
-                  function googleTranslateElementInit() {
-                      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-                  }
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
 </script>
 
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
 <script>
-                  $(document).ready(function () {
-                      $('#mytable').DataTable();
-                  });
+    $(document).ready(function () {
+        $('#mytable').DataTable();
+    });
 </script>
 
 <script>

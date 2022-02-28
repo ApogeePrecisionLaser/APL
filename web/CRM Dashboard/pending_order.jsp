@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 
@@ -16,8 +18,8 @@
                         </c:if>
                         <c:if test="${user_role=='Admin'}">
                             <div>
-                                 <h1>Pending Order</h1>
-                             </div>
+                                <h1>Pending Order</h1>
+                            </div>
                         </c:if>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
@@ -69,7 +71,8 @@
                                                     <c:if test="${user_role=='Admin'}">
                                                         <td class="fontFourteen">${beanType.requested_by}</td>
                                                     </c:if>
-                                                    <td class="fontFourteen">Rs.${beanType.basic_price}</td>
+                                                    <td class="fontFourteen"><i class="fas fa-rupee-sign fontTen"></i> <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                                      value =  "${beanType.basic_price}" /></td>
                                                     <td class="fontFourteen">${beanType.date_time}</td>
 
                                                     <c:choose>  

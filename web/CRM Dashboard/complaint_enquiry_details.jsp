@@ -56,7 +56,7 @@
                                                     <!--                                                        <button class="btn myThemeBtn dropdown-toggle " type="button" data-toggle="dropdown">Status
                                                                                                                 <span class="caret"></span></button>-->
                                                     <input type="hidden" name="enquiry_table_id" id="enquiry_table_id" value="${enquiry_table_id}">
-                                                    <select name="status" id="status" class="form-control" disabled="">
+                                                    <select name="status" id="status" class="form-control mb-2" disabled="">
                                                         <c:if test="${beanType.status == 'Open'}">
                                                             <option value="Open" selected="">Open</option>
                                                         </c:if>
@@ -75,7 +75,7 @@
                                                         <c:if test="${beanType.status != 'Open' || beanType.status != 'Call'
                                                                       || beanType.status != 'Follow Up' ||   beanType.status != 'Sold' 
                                                                       || beanType.status != 'UnSold'}">
-                                                              <option value="">Select</option>
+                                                              <option disabled="">Select</option>
                                                               <option value="Open">Open</option>
                                                               <option value="Call">Call</option>
                                                               <option value="Follow Up">Follow Up</option>
@@ -96,10 +96,10 @@
                                                 <c:if test="${beanType.status == 'Irrelevant' || beanType.status == 'Not Intrested'
                                                               || beanType.status == 'Purchased From Other'}">
                                                       <div class="col-md-6" id="unsold_status_div">
-                                                          <select name="status2" id="status2" class="form-control" disabled="">
+                                                          <select name="status2" id="status2" class="form-control mb-2" disabled="">
                                                               <c:if test="${beanType.status == 'Irrelevant' || beanType.status == 'Not Interested'
                                                                             || beanType.status == 'Purchased From Others'}">
-                                                                    <option value="">Select</option>
+                                                                    <option disabled="">Select</option>
                                                                     <option value="Irrelevant">Irrelevant</option>
                                                                     <option value="Not Interested">Not Interested</option>
                                                                     <option value="Purchased From Other">Purchased From Other</option>
@@ -122,8 +122,8 @@
                                                 </c:if>
 
                                                 <div class="col-md-6" id="unsold_status_div" style="display: none">
-                                                    <select name="status2" id="status2" class="form-control">
-                                                        <option value="">Select</option>
+                                                    <select name="status2" id="status2" class="form-control mb-2">
+                                                        <option disabled="">Select</option>
                                                         <option value="Irrelevant">Irrelevant</option>
                                                         <option value="Not Interested">Not Interested</option>
                                                         <option value="Purchased From Others">Purchased From Others</option>
@@ -201,13 +201,13 @@
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Sender Email:</small></p>
-                                            <p><strong>${beanType.sender_email}</strong></p>
+                                            <p><strong><a href="mailTo:${beanType.sender_email}"><i class="far fa-envelope"></i> ${beanType.sender_email}</a></strong></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Sender Mobile:</small></p>
-                                            <p><strong>${beanType.sender_mob}</strong></p>
+                                            <p><strong><a href="tel:+${beanType.sender_mob}"><i class="fas fa-mobile-alt"></i> ${beanType.sender_mob}</a></strong></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -252,6 +252,12 @@
                                             <p><strong>${beanType.enquiry_date_time}</strong></p>
                                         </div>
                                     </div> 
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="mb-0"><small>Product Name:</small></p>
+                                            <p><strong>${beanType.product_name}</strong></p>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <div>
                                             <p class="mb-0"><small>Enquiry Message:</small></p>

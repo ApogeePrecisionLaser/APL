@@ -120,7 +120,12 @@
                                     </div>
                                 </div>
                                 <div class="row" style="display:none" id="add_info_div">
-
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Product Name:</label>
+                                            <input type="text" class="form-control"  name="product_name" id="product_name">
+                                        </div>
+                                    </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Enquiry Source:</label>

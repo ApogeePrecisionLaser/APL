@@ -23,7 +23,12 @@
 
     <body class="hold-transition login-page myLoginPage">
 
-      
+        <%
+            session = request.getSession(false);
+            if (session.getAttribute("user_role") != null) {
+                response.sendRedirect("LoginController");
+            }
+        %>
         <div class="login-box">
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">

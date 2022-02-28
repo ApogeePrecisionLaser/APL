@@ -165,7 +165,10 @@
                                             <label for="inputName">Longitude:</label>
                                             <div class="d-flex">
                                                 <input class="form-control" type="text" id="longitude" name="longitude" value="" size="20" >
-                                                <input class="btn myThemeBtn rounded-0 px-2" type="button" id="get_cordinate" value="Get Cordinate" onclick="openMapForCord()">
+                                                <input class="btn myThemeBtn rounded-0 px-2" type="button" id="get_cordinate" 
+                                                       value="Get Cordinate"  data-toggle="modal" 
+                                                       data-target="#myPopModal">
+                                                <!--onclick="openMapForCord()"-->
                                             </div>
                                         </div>
                                     </div>
@@ -240,19 +243,37 @@
 
 </div>
 
+<div class="modal myPopup cordinatePopup" id="myPopModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header rounded-0">
+                <div>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="map" class="getCoordinate" ></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDOT5yBi-LAmh9P2X0jQmm4y7zOUaWRXI0"></script>
+
 <script>
-    var modal = document.getElementById("myModal");
-    var img = document.getElementById("myIDImgPopUp");
-    var modalImg = document.getElementById("img01");
-    img.onclick = function () {
-        modal.style.display = "block";
-        modalImg.src = this.src;
-    }
-    // var span = document.getElementsByClassName("close")[0];
-    $('#close_modal').click(function () {
-        modal.style.display = "none";
-    })
+                                                    var modal = document.getElementById("myModal");
+                                                    var img = document.getElementById("myIDImgPopUp");
+                                                    var modalImg = document.getElementById("img01");
+                                                    img.onclick = function () {
+                                                        modal.style.display = "block";
+                                                        modalImg.src = this.src;
+                                                    }
+                                                    // var span = document.getElementsByClassName("close")[0];
+                                                    $('#close_modal').click(function () {
+                                                        modal.style.display = "none";
+                                                    })
 
 </script>
 
@@ -386,15 +407,50 @@
     });
 
 
-//    function validate() {
-//        var gst = $('#gst_number').val();
-//
-//        if (gst == '') {
-//            alert("Please enter GST number if not add ID proof !...");
-//            return false;
-//        }
-//    }
+    var data = [];
+    window.onload = function ()
+    {
+        map();
+    };
+    function map()
+    {
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        //var cen = new google.maps.LatLng(41.850033, -87.6500523);
+        var cen = new google.maps.LatLng(28.612776, 77.386388); // 28.6126823,77.37714   // 28.6266395,77.3755757
+        var mapOptions = {
+            zoom: 7,
+            center: cen
+        }
+        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        directionsRenderer.setMap(map);
 
+        let infoWindow = new google.maps.InfoWindow({
+            content: "Click the map to get Lat/Lng!",
+            position: cen,
+        });
+        infoWindow.open(map);
+        map.addListener("click", (mapsMouseEvent) => {
+            infoWindow.close();
+            infoWindow = new google.maps.InfoWindow({
+                position: mapsMouseEvent.latLng,
+            });
 
+            var lat_long = mapsMouseEvent.latLng.toString().replace(/"/g, "").replace(/'/g, "").replace(/\(|\)/g, "");
+            var array = lat_long.split(",");
+            var lat = array[0];
+            var long = array[1];
+
+            $('#latitude').val(lat);
+            $('#longitude').val(long);
+            $('#myPopModal').modal('hide');
+//            opener.document.getElementById("latitude").value = lat;
+//            opener.document.getElementById("longitude").value = long;
+
+//            alert('Location selected');
+//            infoWindow.open(map);
+        });
+
+    }
 </script>
 

@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 <!-- Content Wrapper. Contains page content -->
@@ -133,8 +135,8 @@
                                             <tr>
                                                 <td><a href="OrdersHistoryController?task=viewOrderDetails&order_table_id=${beanType.order_table_id}">${beanType.order_no}</a></td>
                                                 <td>${beanType.org_office}</td>
-                                                <td><a href="tel:+${beanType.requested_by_mobile}">${beanType.requested_by_mobile}</a></td>
-                                                <td>${beanType.basic_price}</td>
+                                                <td><a href="tel:+${beanType.requested_by_mobile}"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.requested_by_mobile}</a></td>
+                                                <td><fmt:formatNumber type = "number"  maxFractionDigits = "3"  value =  "${beanType.basic_price}" /></td>
                                                 <td>${beanType.date_time}</td>
 
                                                 <td>
@@ -291,22 +293,22 @@
                             </div>
                         </a>
                     </div>
-                    <div class="card card-primary card-outline dashboardBoxShadow">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="far fa-chart-bar"></i>
-                                Monthly Sales Graph
-                            </h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="bar-chart" style="height: 300px;"></div>
-                        </div>
-                    </div>
+                    <!--                    <div class="card card-primary card-outline dashboardBoxShadow">
+                                            <div class="card-header">
+                                                <h3 class="card-title">
+                                                    <i class="far fa-chart-bar"></i>
+                                                    Monthly Sales Graph
+                                                </h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div id="bar-chart" style="height: 300px;"></div>
+                                            </div>
+                                        </div>-->
 
 
                     <div class="card dashboardBoxShadow">

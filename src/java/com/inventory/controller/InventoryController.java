@@ -69,7 +69,8 @@ public class InventoryController extends HttpServlet {
         int logged_key_person_id = 0;
 
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")
+                || !session.getAttribute("user_role").equals("Incharge")) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {
@@ -148,7 +149,7 @@ public class InventoryController extends HttpServlet {
                         if (!loggedUser.equals("Super Admin")) {
                             search_org_office = logged_org_office;
                         }
-                        list = model.getItemCode(q, manufacturer, search_org_office, logged_user_name,loggedUser);
+                        list = model.getItemCode(q, manufacturer, search_org_office, logged_user_name, loggedUser);
                     }
 
                     if (JQstring.equals("getModelName")) {

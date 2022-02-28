@@ -217,7 +217,7 @@ public class ProfileModel {
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
                 + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
-                + " and oo.office_type_id=3  ORDER BY kp.created_at desc limit 10 ";
+                + " and oo.office_type_id=3  ORDER BY kp.created_at desc limit 12 ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();

@@ -203,7 +203,7 @@ public class HelpModel {
                 bean.setDocument_name(rset.getString("document_name"));
                 bean.setDealer_name(rset.getString("key_person_name"));
                 bean.setContact_no(rset.getString("mobile_no1"));
-                String date_time = rset.getString("date_time");
+                String date_time = rset.getString("date_time"); 
 
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
                 Date date = new Date();
@@ -215,14 +215,10 @@ public class HelpModel {
                 bean.setTime_ago(time_ago);
 
                 list.add(bean);
-
             }
-
         } catch (Exception e) {
             System.out.println("Error in ProfileModel getData -- " + e);
-
         }
-
         return list;
     }
 

@@ -42,7 +42,7 @@
                         </c:if>
 
                     </c:if>
-
+                    <p class="login-box-msg text-success" id="otpValue" style="display:none"></p>
                     <form action="LoginController" method="post">
                         <input type="hidden" name="verify_type" value="${type}">
                         <input type="hidden" name="mobile" value="${mobile}">
@@ -57,7 +57,8 @@
                             </div>
                         </div>
                         <div class="mb-2">
-                            <a  href="javascript:history.go(0)" class="fontFourteen">Resend OTP</a>
+                            <!--<a  href="javascript:history.go(0)" class="fontFourteen">Resend OTP</a>-->
+                            <a  href="LoginController?task=Resend&mobile=${mobile}" class="fontFourteen">Resend OTP</a>
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -92,7 +93,9 @@
     $(document).ready(function () {
         var otp = $('#otp_value').val();
         if (otp != '') {
-            alert("Your OTP is----" + otp);
+//            alert("Your OTP is----" + otp);
+            $('#otpValue').show();
+            $('#otpValue').html('Your OTP is--' + otp);
         }
     })
 

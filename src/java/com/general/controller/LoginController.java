@@ -133,6 +133,7 @@ public class LoginController extends HttpServlet {
                         session.setAttribute("logged_key_person_id", logged_key_person_id);
                         session.setAttribute("office_admin", office_admin);
                         session.setAttribute("log_mobile", mobile);
+                        session.setAttribute("user_id", user_id);
                         // session.setAttribute("office_embedded_dev", office_embedded_dev);
 
                         int user_count = model.getCount(logged_key_person_id);
@@ -142,7 +143,7 @@ public class LoginController extends HttpServlet {
                             request.setAttribute("mobile", mobile);
                             request.getRequestDispatcher("recovery_password").forward(request, response);
                         } else {
-                            String result = model.sendOTP(mobile);
+                            String result = model.sendOTP(mobile, session.getAttribute("user_id").toString());
 
                             request.setAttribute("message", "OTP has been sent successfully on " + mobile);
                             request.setAttribute("msgBgColor", "green");
@@ -166,13 +167,15 @@ public class LoginController extends HttpServlet {
 //                            }
                         }
 
-//                        request.setAttribute("mobile", mobile);
-//                        request.getRequestDispatcher("verify_mobile").forward(request, response);
                         if (session.getAttribute("user_role").equals("Admin")) {
                             ArrayList<DealersOrder> total_orders_list = dealersOrderModel.getAllHistoryOrders(user_name, session.getAttribute("user_role").toString());
                             List<Profile> dealers_list = profileModel.getAllDealers();
                             ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries("", "");
                             ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints("", "");
+
+                            ArrayList<Enquiry> pending_enquiries_list = enquiryModel.getAllPendingEnquiries("", "");
+                            ArrayList<Enquiry> pending_complaint_list = enquiryModel.getAllPendingComplaints("", "");
+
                             ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
                             List<Profile> latest_dealers = profileModel.getAllLatestDealers();
                             List<Help> supportMessages = helpModel.getAllSupportMessages();
@@ -180,11 +183,11 @@ public class LoginController extends HttpServlet {
                             String last_time_of_complaint = "";
                             ArrayList<DealersOrder> allModels = dealersOrderModel.getAllLatestItems(String.valueOf(logged_org_office_id));
                             for (int j = 0; j < 1; j++) {
-                                if (total_enquiries_list.size() > 0) {
-                                    last_time_of_enquiry = total_enquiries_list.get(j).getEnquiry_date_time().toString();
+                                if (pending_enquiries_list.size() > 0) {
+                                    last_time_of_enquiry = pending_enquiries_list.get(j).getEnquiry_date_time().toString();
                                 }
-                                if (total_complaint_list.size() > 0) {
-                                    last_time_of_complaint = total_complaint_list.get(j).getEnquiry_date_time().toString();
+                                if (pending_complaint_list.size() > 0) {
+                                    last_time_of_complaint = pending_complaint_list.get(j).getEnquiry_date_time().toString();
                                 }
                             }
 
@@ -194,12 +197,14 @@ public class LoginController extends HttpServlet {
                             session.setAttribute("supportMessages", supportMessages.size());
                             request.setAttribute("latest_dealers", latest_dealers);
                             session.setAttribute("sales_enquiries", total_enquiries_list.size());
+                            session.setAttribute("pending_sales_enquiries", pending_enquiries_list.size());
                             session.setAttribute("total_dealers", dealers_list.size());
                             session.setAttribute("complaint_enquiries", total_complaint_list.size());
+                            session.setAttribute("pending_complaint_enquiries", pending_complaint_list.size());
                             session.setAttribute("total_orders", total_orders_list.size());
                             session.setAttribute("last_time_of_complaint", last_time_of_complaint);
                             session.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
-                            session.setAttribute("total_notification", ((total_enquiries_list.size()) + (total_complaint_list.size())));
+                            session.setAttribute("total_notification", ((pending_enquiries_list.size()) + (pending_complaint_list.size())));
 
                             DBConnection.closeConncetion(model.getConnection());
                             DBConnection.closeConncetion(profileModel.getConnection());
@@ -213,14 +218,16 @@ public class LoginController extends HttpServlet {
                             ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaintForDealer(logged_key_person_id);
                             ArrayList<DealersOrder> dashboard_pending_orders = dealersOrderModel.getAllDashboardOrders(user_name, session.getAttribute("user_role").toString());
 
+                            ArrayList<Enquiry> pending_sales_enquiry_list = dealersOrderModel.getPendingEnquiriesForDealer(logged_key_person_id);
+                            ArrayList<Enquiry> pending_complaint_enquiry_list = dealersOrderModel.getPendingComplaintForDealer(logged_key_person_id);
                             String last_time_of_enquiry = "";
                             String last_time_of_complaint = "";
                             for (int j = 0; j < 1; j++) {
-                                if (sales_enquiry_list.size() > 0) {
-                                    last_time_of_enquiry = sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                                if (pending_sales_enquiry_list.size() > 0) {
+                                    last_time_of_enquiry = pending_sales_enquiry_list.get(j).getEnquiry_date_time().toString();
                                 }
-                                if (complaint_enquiry_list.size() > 0) {
-                                    last_time_of_complaint = complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                                if (pending_complaint_enquiry_list.size() > 0) {
+                                    last_time_of_complaint = pending_complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
                                 }
                             }
 
@@ -229,8 +236,10 @@ public class LoginController extends HttpServlet {
                             session.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
                             session.setAttribute("sales_enquiries", sales_enquiry_list.size());
                             session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
+                            session.setAttribute("pending_sales_enquiries", pending_sales_enquiry_list.size());
+                            session.setAttribute("pending_complaint_enquiries", pending_complaint_enquiry_list.size());
                             session.setAttribute("pending_orders", pending_orders_list.size());
-                            session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size())));
+                            session.setAttribute("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())));
 
                             DBConnection.closeConncetion(model.getConnection());
                             DBConnection.closeConncetion(profileModel.getConnection());
@@ -238,32 +247,37 @@ public class LoginController extends HttpServlet {
                             request.getRequestDispatcher("CRMDashboard").forward(request, response);
                         }
                         if (session.getAttribute("user_role").equals("Sales")) {
-                            ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Pending");
-                            ArrayList<DealersOrder> approved_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Approved");
-                            ArrayList<DealersOrder> denied_orders_list = dealersOrderModel.getAllPendingOrders(user_name, session.getAttribute("user_role").toString(), "Denied");
+                            ArrayList<DealersOrder> pending_orders_list = dealersOrderModel.getAllApprovedOrders(user_name, session.getAttribute("user_role").toString(), "Pending");
+                            ArrayList<DealersOrder> approved_orders_list = dealersOrderModel.getAllApprovedOrders(user_name, session.getAttribute("user_role").toString(), "Approved");
+                            ArrayList<DealersOrder> denied_orders_list = dealersOrderModel.getAllApprovedOrders(user_name, session.getAttribute("user_role").toString(), "Denied");
                             ArrayList<Enquiry> sales_enquiry_list = dealersOrderModel.getAllEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id, "", "");
                             ArrayList<Enquiry> complaint_enquiry_list = dealersOrderModel.getAllComplaints(session.getAttribute("user_role").toString(), logged_key_person_id, "", "");
 
+                            ArrayList<Enquiry> pending_sales_enquiry_list = dealersOrderModel.getAllPendingEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id, "", "Pending");
+                            ArrayList<Enquiry> pending_complaint_enquiry_list = dealersOrderModel.getAllPendingComplaints(session.getAttribute("user_role").toString(), logged_key_person_id, "", "Pending");
+
                             String last_time_of_enquiry = "";
                             String last_time_of_complaint = "";
+
                             for (int j = 0; j < 1; j++) {
                                 if (sales_enquiry_list.size() > 0) {
-                                    last_time_of_enquiry = sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                                    last_time_of_enquiry = pending_sales_enquiry_list.get(j).getEnquiry_date_time().toString();
                                 }
                                 if (complaint_enquiry_list.size() > 0) {
-                                    last_time_of_complaint = complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                                    last_time_of_complaint = pending_complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
                                 }
                             }
 
                             session.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
                             session.setAttribute("last_time_of_complaint", last_time_of_complaint);
-
                             session.setAttribute("sales_enquiries", sales_enquiry_list.size());
                             session.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
+                            session.setAttribute("pending_sales_enquiries", pending_sales_enquiry_list.size());
+                            session.setAttribute("pending_complaint_enquiries", pending_complaint_enquiry_list.size());
                             session.setAttribute("pending_orders", pending_orders_list.size());
                             session.setAttribute("approved_orders", approved_orders_list.size());
-                            session.setAttribute("total_notification", ((sales_enquiry_list.size()) + (complaint_enquiry_list.size())));
-
+                            session.setAttribute("denied_orders", denied_orders_list.size());
+                            session.setAttribute("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())));
                             DBConnection.closeConncetion(model.getConnection());
                             DBConnection.closeConncetion(profileModel.getConnection());
                             DBConnection.closeConncetion(enquiryModel.getConnection());
@@ -277,7 +291,6 @@ public class LoginController extends HttpServlet {
                         request.getRequestDispatcher("/").forward(request, response);
                     }
                 }
-
                 if (task.equals("VerifyOTP")) {
                     String otp = request.getParameter("otp");
                     String type = request.getParameter("verify_type");
@@ -285,7 +298,7 @@ public class LoginController extends HttpServlet {
                     if (otp == null || otp.isEmpty()) {
                         System.out.println("enter the mobile number");
                     } else {
-                        String verify_OTP = model.verifyOTP(otp);
+                        String verify_OTP = model.verifyOTP(otp, session.getAttribute("user_id").toString());
                         System.out.println(verify_OTP);
 
                         String mob = request.getParameter("mobile");
@@ -302,6 +315,11 @@ public class LoginController extends HttpServlet {
                                 } else {
                                     request.getRequestDispatcher("/view/dashboard.jsp").forward(request, response);
                                 }
+                            } else if (verify_OTP.equals("OTP Expired. Please resend the OTP.")) {
+                                request.setAttribute("message", verify_OTP);
+                                request.setAttribute("msgBgColor", "red");
+                                request.setAttribute("mobile", mob);
+                                request.getRequestDispatcher("verify_mobile").forward(request, response);
                             } else {
                                 request.setAttribute("message", "OTP has not been Verified Please Enter Correct OTP or resend");
                                 request.setAttribute("msgBgColor", "red");
@@ -317,11 +335,40 @@ public class LoginController extends HttpServlet {
                     }
                 }
 
+                if (task.equals("Resend")) {
+                    String mobile_no = request.getParameter("mobile");
+                    int mobile_count = model.verifyMobile(mobile_no);
+                    if (mobile_count > 0) {
+                        String result = model.sendOTP(mobile_no, session.getAttribute("user_id").toString());
+//                        if (result.equals("Success")) {
+//                            request.setAttribute("message", "OTP has been sent successfully on " + mobile_no);
+//                            request.setAttribute("msgBgColor", "green");
+//                            request.setAttribute("mobile", mobile_no);
+//                            request.setAttribute("type", "new password");
+//                            request.getRequestDispatcher("verify_mobile").forward(request, response);
+//                        } else {
+//                            request.setAttribute("mobile", mobile_no);
+//                            request.setAttribute("message", "");
+//                            request.setAttribute("msgBgColor", "red");
+//                            request.setAttribute("type", "new password");
+//                            request.getRequestDispatcher("verify_mobile").forward(request, response);
+//                        }
+
+                        request.setAttribute("message", "OTP has been sent successfully on " + mobile_no);
+                        request.setAttribute("msgBgColor", "green");
+                        request.setAttribute("mobile", mobile_no);
+                        request.setAttribute("type", "login");
+                        request.setAttribute("otp", result);
+                        request.getRequestDispatcher("verify_mobile").forward(request, response);
+
+                    }
+                }
+
                 if (task.equals("Request New Password")) {
                     String mobile_no = request.getParameter("mobile");
                     int mobile_count = model.verifyMobile(mobile_no);
                     if (mobile_count > 0) {
-                        String result = model.sendOTP(mobile_no);
+                        String result = model.sendOTP(mobile_no, session.getAttribute("user_id").toString());
 //                        if (result.equals("Success")) {
 //                            request.setAttribute("message", "OTP has been sent successfully on " + mobile_no);
 //                            request.setAttribute("msgBgColor", "green");

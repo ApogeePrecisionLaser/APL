@@ -7,33 +7,46 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2 marginTop10">
-                <div class="col-sm-6">
-                    <div class="d-flex">
-                        <div class="mr-2">
+                <div class="col-sm-9">
+                    <div class="d-flex main_searchWrap">
+                        <div class="mr-3 mb-2">
                             <a href="SalesEnquiryController" class="btn btn-primary myNewLinkBtn fontFourteen">Add New Enquiry</a>
                         </div>
-
-                        <form name="my-form" method="post" action="ApproveOrdersController?task=complaint_enquiry_list" class="d-flex">
-                            <div class="mr-2 selectEnquiryWrap">
-                                <input type="text" name="enquiry_source" id="enquiry_source" class="form-control" value="${enquiry_source}"> 
-                            </div>
-                            <div class="mr-2 selectEnquiryWrap">
-                                <input type="text" name="status" id="status" class="form-control" value="${status}"> 
-                            </div>
-                            <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
-                                <input type="submit" value="Search"
-                                       class="btn btn-primary myNewLinkBtn fontFourteen" name="search" id="search" class="form-control"> 
-                            </div>
-                        </form>
+                        <div class="enquirySearchWrap">
+                            <form name="my-form" method="post" action="ApproveOrdersController?task=complaint_enquiry_list" class="d-flex">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12 mb-2">
+                                        <div class="">
+                                            <input type="text" name="enquiry_source" id="enquiry_source" class="form-control" value="${enquiry_source}"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 mb-0">
+                                        <div class="">
+                                            <input type="text" name="status" id="status" class="form-control" value="${status}"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 mb-2">
+                                        <div class="mr-2 enqStatusBtnWrap" id="enqStatusBtnWrap">
+                                            <input type="submit" value="Search"
+                                                   class="btn btn-primary myNewLinkBtn fontFourteen" name="search" id="search" class="form-control"> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <div class="position-relative">
                             <div class="alert alert-success alert-dismissible myAlertBox" style="display:none">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong> Indicates a successful or positive action.
+                            </div>
+                            <div class="alert alert-danger alert-dismissible myAlertBox" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <strong>Success!</strong> Indicates a successful or positive action.
                             </div>
                         </div>
                     </div>  
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
                         <li class="breadcrumb-item active">Complaint Enquiry List</li>
@@ -83,7 +96,7 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
+                                                    <td class="fontFourteen"><a href="tel:+91- ${beanType.sender_mob}"><i class="fas fa-mobile-alt"></i> ${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.product_name}</td>
@@ -215,23 +228,33 @@
 
     function assignComplaintToDealer(enquiry_table_id) {
         var dealer_name = $('#dealers' + enquiry_table_id).val();
-        $.ajax({
-            url: "ApproveOrdersController",
-            dataType: "json",
-            data: {task: "assignComplaintToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
-            success: function (data) {
-                if (data.message != '') {
-                    $('#msg').text(data.message);
-                    $('.myAlertBox').show();
-                    setTimeout(function () {
-                        $('#msg').fadeOut('fast');
-                    }, 1000);
-                    window.location.reload();
-                } else {
-                    $('.myAlertBox').hide();
+        if (dealer_name != '') {
+            $.ajax({
+                url: "ApproveOrdersController",
+                dataType: "json",
+                data: {task: "assignComplaintToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
+                success: function (data) {
+                    if (data.message != '') {
+                        $('#msg').text(data.message);
+                        $('.alert-success').show();
+                        setTimeout(function () {
+                            $('#msg').fadeOut('fast');
+                        }, 2000);
+                        window.location.reload();
+                    } else {
+                        $('.alert-success').hide();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            $('.alert-danger').show();
+            $('.alert-danger').html('Please Select a dealer!..');
+
+            setTimeout(function () {
+                $('.alert-danger').fadeOut('fast');
+            }, 2000);
+            return false;
+        }
     }
 
     $(function () {

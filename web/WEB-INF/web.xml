@@ -1960,12 +1960,12 @@
     <!-- end schedular for getting indiamart queries --> 
     
     
-     <!-- Start schedular for sending enqueries report --> 
-    <listener>
+    <!-- Start schedular for sending enqueries report --> 
+    <!--    <listener>
         <listener-class>
             com.webservice.controller.EnquiryReportSchedular
         </listener-class>
-    </listener>
+    </listener>-->
     <!-- end schedular for sending enqueries report --> 
     
     
@@ -2100,6 +2100,49 @@
         <url-pattern>/enquiry_report</url-pattern>
     </servlet-mapping>   
     <!--End Enquiry Report -->
+    
+    
+    
+    <!--Start Purchase order module -->
+    <servlet>
+        <servlet-name>PurchaseOrdersController</servlet-name>
+        <servlet-class>com.purchase.module.PurchaseOrdersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PurchaseOrdersController</servlet-name>
+        <url-pattern>/PurchaseOrdersController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>existing_orders</servlet-name>
+        <jsp-file>/CRM Dashboard/existing_orders.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>existing_orders</servlet-name>
+        <url-pattern>/existing_orders</url-pattern>
+    </servlet-mapping>  
+     
+    <servlet>
+        <servlet-name>new_purchase_order</servlet-name>
+        <jsp-file>/CRM Dashboard/new_purchase_order.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>new_purchase_order</servlet-name>
+        <url-pattern>/new_purchase_order</url-pattern>
+    </servlet-mapping> 
+      
+    <servlet>
+        <servlet-name>purchase_order_detail</servlet-name>
+        <jsp-file>/CRM Dashboard/purchase_order_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>purchase_order_detail</servlet-name>
+        <url-pattern>/purchase_order_detail</url-pattern>
+    </servlet-mapping>   
+    
+    
+    
+    <!--End Purchase order module -->
     
     
 </web-app>

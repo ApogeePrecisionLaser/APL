@@ -31,24 +31,24 @@
                     <div class="card-body">
                         <div class="col-md-12 px-0">
                             <form class="" action="">
-                                <div class="d-flex">
+                                <div class="d-flex flexColumnMob">
                                     <div class="mr-2">
                                         <label for="email">From Date:</label>
                                         <input type="date" class="form-control rounded-0" placeholder="From Date" 
                                                name="from_date" id="from_date" value="${from_date}">
                                     </div>
-                                    <div class="mr-2">
+                                    <div class="mr-2 mb-3">
                                         <label for="pwd">To Date:</label>
                                         <input type="date" class="form-control rounded-0" placeholder="To Date" 
                                                value="${to_date}" name="to_date" id="to_date">
                                     </div>
                                     <div class="mt-2">
-                                        <label for="pwd"></label>
-                                        <button type="submit" class="btn myThemeBtn rounded-0 d-table">Search</button>
+                                        <label for="pwd" class="mobileDisplayNone"></label>
+                                        <button type="submit" class="btn myThemeBtn rounded-0 d-table btn100">Search</button>
                                     </div>
-                                    <div class="mt-2  ml-2">
-                                        <label for="pwd"></label>
-                                        <button type="button" class="btn myThemeBtn rounded-0 d-table" onclick="viewReport()">View Report</button>
+                                    <div class="ml-0 ml-sm-2 mt-2">
+                                        <label for="pwd" class="mobileDisplayNone"></label>
+                                        <button type="button" class="btn myThemeBtn rounded-0 d-table btn100" onclick="viewReport()">View Report</button>
                                     </div>
                                 </div>
                             </form>

@@ -88,71 +88,71 @@
             </div>
             <!-- /.row -->
             <!-- Main row -->
-            <div class="row">
-                <!-- Left col -->
-                <section class="col-lg-7 connectedSortable ui-sortable d-none">
-                    <div class="card">
-                        <div class="card-header ui-sortable-handle" style="cursor: move;">
-                            <h3 class="card-title">
-                                <i class="fas fa-chart-pie mr-1"></i>
-                                Sales
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content p-0">
-                                <div class="" id="revenue-chart" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                    <canvas id="revenue-chart-canvas" height="300" style="height: 300px; display: block; width: 577px;" width="577" class="chartjs-render-monitor"></canvas>                         
-                                </div>
-                                <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                                    <canvas id="sales-chart-canvas" height="0" style="height: 0px; display: block; width: 0px;" class="chartjs-render-monitor" width="0"></canvas>                         
-                                </div>  
-                            </div>
-                        </div>
-                    </div>        
-                </section>
-
-
-                <section class="col-lg-6 connectedSortable ui-sortable"> 
-                    <div class="card bg-gradient-info">
-                        <div class="card-header border-0">
-                            <h3 class="card-title">
-                                <i class="fas fa-th mr-1"></i>
-                                Sales Graph
-                            </h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn bg-info btn-sm d-none" data-card-widget="remove">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                        </div>              
-                    </div>
-                    <!-- /.card -->
-
-                </section>
-
-                <!--                <section class="col-lg-6  content">
-                                    <div class="container-fluid">  
-                                        <div class="card-header border-0">
-                                            <h3 class="card-title">
-                                                <i class="fas fa-th mr-1"></i>
-                                                Dealer Location
-                                            </h3>
-                
-                                        </div>
-                                        <div class="card-body">
-                                            <div id="map" style="height: 280px; width: auto;"></div>
-                
+            <!--            <div class="row">
+                             Left col 
+                            <section class="col-lg-7 connectedSortable ui-sortable d-none">
+                                <div class="card">
+                                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                                        <h3 class="card-title">
+                                            <i class="fas fa-chart-pie mr-1"></i>
+                                            Sales
+                                        </h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content p-0">
+                                            <div class="" id="revenue-chart" style="position: relative; height: 300px;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                                <canvas id="revenue-chart-canvas" height="300" style="height: 300px; display: block; width: 577px;" width="577" class="chartjs-render-monitor"></canvas>                         
+                                            </div>
+                                            <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
+                                                <canvas id="sales-chart-canvas" height="0" style="height: 0px; display: block; width: 0px;" class="chartjs-render-monitor" width="0"></canvas>                         
+                                            </div>  
                                         </div>
                                     </div>
-                                </section>-->
-                <!-- right col -->
-            </div>
+                                </div>        
+                            </section>
+            
+            
+                            <section class="col-lg-6 connectedSortable ui-sortable"> 
+                                <div class="card bg-gradient-info">
+                                    <div class="card-header border-0">
+                                        <h3 class="card-title">
+                                            <i class="fas fa-th mr-1"></i>
+                                            Sales Graph
+                                        </h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn bg-info btn-sm d-none" data-card-widget="remove">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    </div>              
+                                </div>
+                                 /.card 
+            
+                            </section>
+            
+                                            <section class="col-lg-6  content">
+                                                <div class="container-fluid">  
+                                                    <div class="card-header border-0">
+                                                        <h3 class="card-title">
+                                                            <i class="fas fa-th mr-1"></i>
+                                                            Dealer Location
+                                                        </h3>
+                            
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div id="map" style="height: 280px; width: auto;"></div>
+                            
+                                                    </div>
+                                                </div>
+                                            </section>
+                             right col 
+                        </div>-->
         </div>
 </div>
 </section>

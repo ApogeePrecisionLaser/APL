@@ -64,10 +64,10 @@
                                                     <td>${beanType.gst_number}</td>
                                                     <!--<td>${beanType.off_address_line1}</td>-->
                                                     <!--<td>${beanType.off_email_id1}</td>-->
-                                                    <td>${beanType.off_mobile_no1}</td>
+                                                    <td><a href="tel:+${beanType.off_mobile_no1}"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.off_mobile_no1}</a></td>
                                                     <td>${beanType.key_person_name}</td>
                                                     <!--<td>${beanType.kp_address_line1}</td>-->
-                                                    <td>${beanType.kp_mobile_no1}</td>
+                                                    <td><a href="tel:+${beanType.off_mobile_no1}"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.kp_mobile_no1}</a></td>
                                                     <!--<td>${beanType.kp_email_id1}</td>-->
 <!--                                            <input type="hidden" name="org_office_id" id="org_office_id${beanType.org_office_name}" value="${beanType.org_office_id}">
                                             <input type="hidden" name="key_person_id" id="key_person_id${beanType.org_office_name}" value="${beanType.key_person_id}">-->

@@ -48,18 +48,17 @@
                                                 <input type="hidden" name="subject${loopCounter.count}" id="subject${loopCounter.count}" value="${beanType.subject}">
                                             </td>
                                             <td class="fontFourteen">${beanType.dealer_name}</td>
-                                            <td class="fontFourteen"><a href="tel:+91 ${beanType.contact_no}">+91 ${beanType.contact_no}</a></td>
+                                            <td class="fontFourteen"><a href="tel:+91- ${beanType.contact_no}"><i class="fas fa-mobile-alt"></i> +91- ${beanType.contact_no}</a></td>
                                             <td class="fontFourteen">
-                                                <a href="" data-toggle="modal" 
-                                                   data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')">
-                                                    ${beanType.subject}
-                                                </a>
+
+                                                ${beanType.subject}
+
                                             </td>
                                             <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
                                             <td class=""><i class="statusPending fontThirteen">${beanType.status}</i></td>
                                             <td class="fontFourteen">${beanType.time_ago}</td>
                                             <td>
-                                                <!--<a  class="btn far fa-eye actionEdit" title="See Message" data-toggle="modal" data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')"></a>-->
+                                                <a  class="btn far fa-eye actionEdit" title="See Message" data-toggle="modal" data-target="#myPopModal" onclick="showMessage('${loopCounter.count}')"></a>
                                                 <!--<a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>-->
                                                 <input type="hidden" name="document_name${loopCounter.count}" id="document_name${loopCounter.count}" value="${beanType.document_name}">
 
@@ -107,42 +106,4 @@
         $('.modal-title').html($('#subject' + count).val());
     }
 
-//    function downloadFile(path, fileName, count) {
-//        //Set the File URL.
-//        path = "C:/ssadvt_repository/APL/help_doc/";
-//        path = path.replace(/\\/g, "\\\\");
-//        var url = path + fileName;
-////        alert(path.replace(/\\/g, "\\\\"));
-//        alert(url);
-//        //Create XMLHTTP Request.
-//        var req = new XMLHttpRequest();
-//        req.open("GET", url, true);
-//        req.responseType = "blob";
-//        req.onload = function () {
-//            //Convert the Byte Data to BLOB object.
-//            var blob = new Blob([req.response], {type: "application/octetstream"});
-//            //Check the Browser type and download the File.
-//            var isIE = false || !!document.documentMode;
-//            if (isIE) {
-//                window.navigator.msSaveBlob(blob, fileName);
-//            } else {
-//                var url = window.URL || window.webkitURL;
-//                link = url.createObjectURL(blob);
-//                var a = document.createElement("a");
-//                a.setAttribute("download", fileName);
-//                a.setAttribute("href", link);
-//                document.body.appendChild(a);
-//                a.click();
-//                document.body.removeChild(a);
-//            }
-//        };
-//        req.send();
-//    }
-
-//    function downloadFile(path, fileName, count)
-//    {
-//        this.filePath = "C:\ssadvt_repository\APL\help_doc\60_15-01 09-55-38.png";
-//        document.location.href = this.filePath;
-//
-//    }
 </script>

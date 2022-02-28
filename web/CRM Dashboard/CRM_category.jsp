@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 <div class="content-wrapper" id="contentWrapper">
@@ -85,7 +87,8 @@
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex priceBox">
-                                            <h2 class="mb-0 mt-1">Rs. ${beanType1.basic_price}</h2> &nbsp&nbsp
+                                            <h2 class="mb-0 mt-1">Rs. <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                              value =  "${beanType1.basic_price}" /></h2> &nbsp&nbsp
                                             <!--<h3 style=""> <del>₹110.8</del></h3>-->
                                             <!--<div id="msg_div${loopCounter.count }" style="color:red;display: none;margin-left: 50px"> <b>Out Of Stock</b></div>-->
 

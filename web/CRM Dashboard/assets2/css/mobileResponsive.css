@@ -191,7 +191,30 @@
     .enqStatusBtnWrap{
         margin-top: 8px;
     }
+    .salesComplaintFilter input[type=radio] {
+        margin-top: 5.97px;
+        margin-left: -1.1rem;
+    }
 
 
 
+    .main_searchWrap{
+        flex-direction: column;
+    }
+    .enquirySearchWrap .enqStatusBtnWrap input{
+        width: 100%
+    }
+    .getCoordinate{
+        width: 100%;
+        height: 400px;
+    }
+    .flexColumnMob{
+        flex-direction: column;
+    }
+    .flexColumnMob .btn100{
+        width: 100%;
+    }
+    .mobileDisplayNone{
+        display: none;
+    }
 }

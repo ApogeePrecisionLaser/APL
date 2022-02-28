@@ -34,7 +34,7 @@ public class SalesManagerStateMappingController extends HttpServlet {
         String active = "Y";
         String ac = "ACTIVE RECORDS";
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null) {
+        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         }

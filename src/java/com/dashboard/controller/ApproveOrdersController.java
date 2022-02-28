@@ -159,7 +159,7 @@ public class ApproveOrdersController extends HttpServlet {
             String enquiry_table_id = request.getParameter("enquiry_table_id");
             ArrayList<Enquiry> list = model.getAllComplaintDetails(enquiry_table_id);
             request.setAttribute("list", list);
-             request.setAttribute("enquiry_table_id", enquiry_table_id);
+            request.setAttribute("enquiry_table_id", enquiry_table_id);
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("salesperson_complaint_enquiry_details").forward(request, response);
@@ -224,7 +224,7 @@ public class ApproveOrdersController extends HttpServlet {
             request.getRequestDispatcher("salesperson_sales_enquiry_details").forward(request, response);
 
         }
-        
+
         if (update_complaint.equals("Update")) {
             String status = request.getParameter("status");
             String enquiry_table_id = request.getParameter("enquiry_table_id");
@@ -282,7 +282,13 @@ public class ApproveOrdersController extends HttpServlet {
             request.setAttribute("order_no", order_no);
             request.setAttribute("total_discount_price", total_discount_price);
             request.setAttribute("total_approved_price", total_approved_price);
-            request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+            if (total_discount_price == 0.0 && total_approved_price == 0.0) {
+                request.setAttribute("total_discount_percent", 0);
+
+            } else {
+                request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+
+            }
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
             request.getRequestDispatcher("approve_order_details").forward(request, response);
@@ -319,14 +325,14 @@ public class ApproveOrdersController extends HttpServlet {
                 bean.setDiscount_percent(String.valueOf(discounted_percent));
                 bean.setDiscount_price(String.valueOf(discounted_price));
                 try {
-                    String message = model.approveOrder(bean, order_item_id, order_table_id, i,order_item_id_arr.length);
+                    String message = model.approveOrder(bean, order_item_id, order_table_id, i, order_item_id_arr.length);
                 } catch (SQLException ex) {
                     Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
 
-            ArrayList<DealersOrder> list = model.getAllOrders(logged_user_name, loggedUser);
+            ArrayList<DealersOrder> list = model.getAllApprovedOrders(logged_user_name, loggedUser, "");
 
             DBConnection.closeConncetion(model.getConnection());
 
@@ -336,7 +342,7 @@ public class ApproveOrdersController extends HttpServlet {
             return;
         }
 
-        ArrayList<DealersOrder> list = model.getAllOrders(logged_user_name, loggedUser);
+        ArrayList<DealersOrder> list = model.getAllApprovedOrders(logged_user_name, loggedUser, "");
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());
         request.setAttribute("list", list);

@@ -342,7 +342,6 @@ public class LoginModel {
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and orgn.organisation_id=oo.organisation_id "
                 + " and oo.active='Y' and orgn.active='Y' ";
-        System.err.println("query" + query);
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -361,7 +360,6 @@ public class LoginModel {
         PreparedStatement pstmt;
         ResultSet rst;
         String query = " select count(*) as count from user where key_person_id='" + logged_key_person_id + "' ";
-        System.err.println("query" + query);
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -391,6 +389,27 @@ public class LoginModel {
             }
         } catch (Exception e) {
             System.out.println("LoginModel getRevisionno error: " + e);
+
+        }
+        return revision;
+    }
+
+    public static int getOtpRevisionno(String user_id) {
+        int revision = 0;
+        try {
+
+            String query = " SELECT max(rev_no) as rev_no FROM otp WHERE user_id =" + user_id + "  && active='Y';";
+
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+
+            while (rset.next()) {
+                revision = rset.getInt("rev_no");
+
+            }
+        } catch (Exception e) {
+            System.out.println("LoginModel getOtpRevisionno error: " + e);
 
         }
         return revision;
@@ -464,18 +483,75 @@ public class LoginModel {
         return updateRowsAffected;
     }
 
-    public String sendOTP(String mobile_no) throws Exception {
+    public String sendOTP(String mobile_no, String user_id) throws Exception {
         String result = "";
-        System.out.println("UserAppWebServices...");
         String otp = "";
         otp = random(6);
         otpMap = (otp);
+        int rowsAffected = 0;
+        int updateRowsAffected = 0;
+        int count = 0;
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
         System.err.println("your otp is----" + otpMap);
-        
-        result=otpMap;
+        try {
+            connection.setAutoCommit(false);
+
+            int revision = getOtpRevisionno(user_id);
+
+            String query1 = " SELECT max(rev_no) rev_no,count(*) as count  FROM otp WHERE user_id = " + user_id + "  && active=? ";
+            String query2 = " UPDATE otp SET active=? WHERE user_id=? and rev_no=? ";
+            String query_insert = " insert into otp(user_id,otp,active,rev_no) values(?,?,?,?) ";
+
+            psmt = connection.prepareStatement(query1);
+            psmt.setString(1, "Y");
+            rs = psmt.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("count");
+
+                if (count > 0) {
+                    PreparedStatement pstm = connection.prepareStatement(query2);
+                    pstm.setString(1, "n");
+                    pstm.setString(2, user_id);
+                    pstm.setInt(3, revision);
+                    updateRowsAffected = pstm.executeUpdate();
+                    if (updateRowsAffected >= 1) {
+                        revision = rs.getInt("rev_no") + 1;
+                        psmt = null;
+                        psmt = (PreparedStatement) connection.prepareStatement(query_insert);
+                        psmt.setString(1, user_id);
+                        psmt.setString(2, otp);
+                        psmt.setString(3, "Y");
+                        psmt.setInt(4, revision);
+
+                        rowsAffected = psmt.executeUpdate();
+                    }
+
+                } else {
+                    psmt = null;
+                    psmt = (PreparedStatement) connection.prepareStatement(query_insert);
+                    psmt.setString(1, user_id);
+                    psmt.setString(2, otp);
+                    psmt.setString(3, "Y");
+                    psmt.setInt(4, 0);
+
+                    rowsAffected = psmt.executeUpdate();
+                }
+            }
+            if (rowsAffected > 0) {
+                result = otpMap;
+                connection.commit();
+            } else {
+                connection.rollback();
+            }
+        } catch (Exception e) {
+            System.err.println("exception---" + e);
+        }
+
+//        result = otpMap;
 //        result = callURL(mobile_no, "Your OTP is:" + otp);
         System.out.println("Data Retrived : " + mobile_no);
-        return result ;
+        return result;
     }
 
     public String random(int size) {
@@ -493,27 +569,6 @@ public class LoginModel {
         return generatedToken.toString();
     }
 
-//    public String sendSmsToAssignedFor(String numberStr1, String messageStr1) {
-//        String result = "";
-//        try {
-//            String host_url = "https://www.smsgatewayhub.com/api/mt/SendSMS?";//"http://api.mVaayoo.com/mvaayooapi/MessageCompose?";
-//            String tempMessage = messageStr1;
-//            String sender_id = java.net.URLEncoder.encode("TEST SMS", "UTF-8");         // e.g. "TEST+SMS"
-//            System.out.println("messageStr1 is = " + messageStr1);
-////            messageStr1 = java.net.URLEncoder.encode(messageStr1, "UTF-8");
-//
-//            String queryString = "APIKey=WIOg7OdIzkmYTrqTsw262w&senderid=JPSCRM&channel=2&DCS=0&flashsms=0"
-//                    + "&number=" + numberStr1 + "&text=JP SAFTEK SYSTEMS: Dear Partner, This is the confirmation message of your query."
-//                    + messageStr1 + "&route=1";
-//            String url = host_url + queryString;
-//            result = callURL(url, numberStr1, messageStr1);
-//            System.out.println("SMS URL: " + url);
-//        } catch (Exception e) {
-//            result = e.toString();
-//            System.out.println("SMSModel sendSMS() Error: " + e);
-//        }
-//        return result;
-//    }
     private String callURL(String numberStr1, String messageStr1) {
         String status = "";
 
@@ -561,27 +616,47 @@ public class LoginModel {
         return status;
     }
 
-    public String verifyOTP(String mobile_no_otp) throws Exception {
-
+    public String verifyOTP(String mobile_no_otp, String user_id) throws Exception {
         org.codehaus.jettison.json.JSONObject jsonObj = new org.codehaus.jettison.json.JSONObject();
-
         String result = "";
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String current_date_time = sdf.format(date);
+        String otp = "";
+        String created_date = "";
 
-        System.out.println("RideWebServices...verifyOTP...");
-        String mobile_no = mobile_no_otp.split("_")[0];
-        if (mobile_no.equals(otpMap)) {
-//            jsonObj.put("result", "success");
-            result = "success";
-
-        } else {
-//            jsonObj.put("result", "fail");
-            result = "fail";
-
+        String query = " select otp,created_date from otp where active='Y' and user_id='" + user_id + "' ";
+        PreparedStatement psmt = connection.prepareStatement(query);
+        ResultSet rs = psmt.executeQuery();
+        while (rs.next()) {
+            otp = rs.getString("otp");
+            created_date = rs.getString("created_date");
         }
+        int minutes = 0;
+        psmt = null;
+        rs = null;
+
+        String query1 = " SELECT TIMESTAMPDIFF(MINUTE, '" + created_date + "', '" + current_date_time + "') as minutes";
+        psmt = connection.prepareStatement(query1);
+        rs = psmt.executeQuery();
+        while (rs.next()) {
+            minutes = rs.getInt("minutes");
+        }
+
+        if (minutes > 3) {
+            result = "OTP Expired. Please resend the OTP.";
+        } else {
+            String mobile_no = mobile_no_otp.split("_")[0];
+//        if (mobile_no.equals(otpMap)) {
+            if (mobile_no.equals(otp)) {
+                result = "success";
+            } else {
+                result = "fail";
+            }
+        }
+
         System.out.println("Data Retrived : " + jsonObj);
         return result;
-
-        // return (JSONObject) i;
     }
 
     public int verifyMobile(String mobile) {

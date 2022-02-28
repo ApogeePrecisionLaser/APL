@@ -78,26 +78,26 @@
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Office Email:</small></p>
-                                            <p id="email"><strong>${beanType.off_email_id1}</strong></p>
+                                            <p id="email"><strong><a href="mailTo:${beanType.off_email_id1}"><i class="far fa-envelope"></i> ${beanType.off_email_id1}</a></strong></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Office Mobile:</small></p>
-                                            <p id="mobile1"><strong>${beanType.off_mobile_no1}</strong></p>
+                                            <p id="mobile1"><strong><a href="tel:+${beanType.off_mobile_no1}"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.off_mobile_no1}</a></strong></p>
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Person Mobile No:</small></p>
-                                            <p id="mobile2"><strong>${beanType.kp_mobile_no1}</strong></p>
+                                            <p id="mobile2"><strong><a href="tel:+${beanType.off_mobile_no1}"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.kp_mobile_no1}</a></strong></p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div>
                                             <p class="mb-0"><small>Person Email:</small></p>
-                                            <p><strong>${beanType.kp_email_id1}</strong></p>
+                                            <p><strong><a href="mailTo:${beanType.kp_email_id1}"><i class="far fa-envelope"></i> ${beanType.kp_email_id1}</a></strong></p>
                                         </div>
                                     </div>
 

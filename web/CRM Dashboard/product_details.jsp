@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 
@@ -81,7 +83,8 @@
                                 <div class="_p-price-box">
                                     <div class="p-list">
                                         <span> M.R.P. : <i class="fa fa-inr"></i> <del> Rs. ${beanType.basic_price}  </del>   </span>
-                                        <span class="price"> Rs. ${beanType.basic_price} </span>
+                                        <span class="price"> Rs. <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                          value =  "${beanType.basic_price}" />  </span>
                                     </div>
                                     <div class="_p-add-cart">
                                         <!--                                        <div class="_p-qty">
@@ -160,7 +163,8 @@
                                         <h4 class="mb-1"> <a href="DealersOrderController?task=viewDetail&model_id=${beanType3.model_id}"> ${beanType3.model} </a> </h4>
                                         <div class="price-box mb-2">
                                             <!--<span class="price"> Price <i class="fa fa-inr"></i> Rs. ${beanType3.basic_price} </span>-->
-                                            <span class="offer-price"> Offer Price <i class="fa fa-inr"></i> Rs. ${beanType3.basic_price} </span>
+                                            <span class="offer-price"> Offer Price <i class="fa fa-inr"></i> Rs.  <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                              value =  "${beanType3.basic_price}" />  </span>
                                         </div>
                                         <div class="btn-box text-center">
                                             <a href="javascript:void(0);">
@@ -320,7 +324,7 @@
             if (image != "") {
                 image = image.replace(/\\/g, "/");
             }
-            $('.my_img' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
+            $('.my_img' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
         }
     });
 
@@ -334,7 +338,7 @@
             if (image2 != "") {
                 image2 = image2.replace(/\\/g, "/");
             }
-            $('.my_img2' + (k + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image2 + "");
+            $('.my_img2' + (k + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image2 + "");
         }
     });
 
@@ -358,7 +362,7 @@
             if (image3 != "") {
                 image3 = image3.replace(/\\/g, "/");
             }
-            $('.my_img3' + (l + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image3 + "");
+            $('.my_img3' + (l + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image3 + "");
         }
     });
 

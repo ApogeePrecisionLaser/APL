@@ -1413,6 +1413,16 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     margin-left: -1rem;
 }
 
+
+.enquirySearchWrap input{
+    height: 34px;
+    padding: 4px 3px;
+    border-radius: 0;
+}
+.enquirySearchWrap .enqStatusBtnWrap input{
+    padding: 0px 17px;
+}
+
 .ui-menu-item-wrapper{
     font-size: 14px;
 }
@@ -1429,6 +1439,7 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     box-shadow: 2px 2px 9px #999;
     border-radius: 50%;
     padding: 7px 9px;
+    z-index: 9999;
 }
 
 .deleteAlertModel .cancelbtn, .deleteAlertModel .deletebtn {
@@ -1575,4 +1586,11 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
 }
 .multiDropDown .dropdown-toggle::after{
     display: none;
+}
+.getCoordinate{
+    width: 100%;
+    height: 400px;
+}
+.cordinatePopup{
+    z-index: 9999!important;
 }

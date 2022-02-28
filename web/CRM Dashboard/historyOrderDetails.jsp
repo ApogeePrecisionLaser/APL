@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 
@@ -39,7 +41,7 @@
                                             <th>S.No.</th>
                                             <th>Image</th>
                                             <th>Name</th>
-                                            <th>Category</th>
+                                            <!--<th>Category</th>-->
                                             <th>Req Qty</th>
                                             <th>Approved Qty</th>
                                             <th>Delivered Qty</th>
@@ -61,15 +63,21 @@
                                             <img class="orderImg img-fluid${loopCounter.count}" 
                                                  src="" width="50px" height="55px">
                                         </td>
-                                        <td>${beanType.model}</td>
-                                        <td>${beanType.item_name}</td>
+<!--                                        <td>${beanType.model}</td>
+                                        <td>${beanType.item_name}</td>-->
+                                        <td><p class="mb-0">${beanType.model}</p>
+                                            <small>(${beanType.item_name})</small></td>
+
                                         <td>${beanType.required_qty}</td>
                                         <td>${beanType.approved_qty}</td>
                                         <td>${beanType.delivered_qty}</td>
-                                        <td>${beanType.basic_price}</td>
-                                        <td>${beanType.approved_price}</td>
+                                        <td><fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                          value =  "${beanType.basic_price}" /></td>
+                                        <td><fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                          value =  "${beanType.approved_price}" /></td>
                                         <td>${beanType.discount_percent}</td>
-                                        <td>${beanType.discount_price}</td>                        
+                                        <td><fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                          value =  "${beanType.discount_price}" /></td>                        
                                         </tr>
                                     </c:forEach>
 
@@ -79,12 +87,18 @@
                                                                                 <td class="font-weight-bold fontSeventeen">?50,000</td>                    
                                                                             </tr>-->
                                     <tr class="darkBlueBg">
-                                        <td colspan="6"></td>
+                                        <td colspan="5"></td>
                                         <td class="totalValue text-white py-2">Total Amount</td>
-                                        <td class="totalValue text-white py-2">${total_amount}</td>                    
-                                        <td class="totalValue text-white py-2">${total_approved_price}</td>                    
+                                        <td class="totalValue text-white py-2">
+                                            <fmt:formatNumber type = "number"  maxFractionDigits = "3" value =  "${total_amount}" />
+
+                                        </td>                    
+                                        <td class="totalValue text-white py-2">
+                                            <fmt:formatNumber type = "number"  maxFractionDigits = "3"  value =  "${total_approved_price}" />
+                                        </td>                    
                                         <td class="totalValue text-white py-2">${total_discount_percent}</td>                    
-                                        <td class="totalValue text-white py-2">${total_discount_price}</td>                    
+                                        <td class="totalValue text-white py-2"><fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                          value =  "${total_discount_price}" /></td>                    
                                     </tr>                    
                                     </tbody>
                                 </table>
@@ -114,7 +128,7 @@
             if (image != "") {
                 image = image.replace(/\\/g, "/");
             }
-            $('.img-fluid' + (j + 1)).attr("src", "http://"+IMAGE_URL+"/APL/DealersOrderController?getImage=" + image + "");
+            $('.img-fluid' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
 
         }
 

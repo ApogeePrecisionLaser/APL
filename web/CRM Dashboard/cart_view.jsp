@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 <div class="content-wrapper" id="contentWrapper">
@@ -78,8 +79,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Quantity</th>
                                                 <th>Rate <small>(<i class="fas fa-rupee-sign curruncyIcon"></i>)</small></th>
+                                                <th>Quantity</th>
                                                 <th>Price <small>(<i class="fas fa-rupee-sign curruncyIcon"></i>)</small></th>
                                                 <!--                                                <th>Rate (Rs.)</th>
                                                                                                 <th>Price (Rs.)</th>-->
@@ -108,6 +109,11 @@
                                                         </div>                              
                                                     </td>
                                                     <td>
+
+                                                        <input type="hidden" name="rate${beanType.model_id}" id="rate${beanType.model_id}" value="${beanType.basic_price}">
+                                                        <fmt:formatNumber type = "number"
+                                                                          maxFractionDigits = "3" value = "${beanType.basic_price}" /></td>
+                                                    <td>
                                                         <div class="_p-add-cart mb-0">
                                                             <div class="_p-qty">
                                                                 <div class="value-button decrease_" id="" value="Decrease Value"
@@ -120,12 +126,12 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>
-                                                        <input type="hidden" name="rate${beanType.model_id}" id="rate${beanType.model_id}" value="${beanType.basic_price}">
-                                                        ${beanType.basic_price}</td>
+
                                                     <td id="price_div${beanType.model_id}">
-                                                        <input type="hidden" name="basic_price${beanType.model_id}" id="basic_price${beanType.model_id}" value="${beanType.basic_price * beanType.quantity}">
-                                                        ${beanType.basic_price * beanType.quantity}</td>
+                                                        <input type="hidden" name="basic_price${beanType.model_id}" id="basic_price${beanType.model_id}"
+                                                               value="${beanType.basic_price * beanType.quantity}">
+                                                        <fmt:formatNumber type = "number"
+                                                                          maxFractionDigits = "3" value =  "${beanType.basic_price * beanType.quantity}" /></td>
                                                     <td>
                                                         <a class="removeCart" 
                                                            onclick="removeAllFromcart('${beanType.model_id}', '${beanType.model}', '${beanType.basic_price}')"><i class="fas fa-trash-alt"></i></a> </td>
@@ -162,7 +168,7 @@
                                             <td id="delivery_charge">0</td>
                                         </tr>
                                         <tr>
-                                            <td>Delivery Charge</td>
+                                            <td>Coupon Discount</td>
                                             <td id="coupon_discount">0</td>
                                         </tr>
                                         <tr>
@@ -217,7 +223,8 @@
                                         </div>
                                         <h4 class="mb-1"> <a href="DealersOrderController?task=viewDetail&model_id=${beanType2.model_id}"> ${beanType2.model} </a> </h4>
                                         <div class="price-box mb-2">
-                                            <span class="offer-price"> Price   ${beanType2.basic_price} </span>
+                                            <span class="offer-price"> Price   <fmt:formatNumber type = "number"
+                                                              maxFractionDigits = "3" value =  "${beanType2.basic_price}" />  </span>
                                             <!--<span class="offer-price"> Offer Price <i class="fa fa-inr"></i> 120 </span>-->
                                         </div>
                                         <div class="btn-box text-center">
@@ -239,6 +246,9 @@
         <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
         <script>
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
             $(function () {
                 var count = $('#count').val();
                 var total_price = 0;
@@ -249,7 +259,7 @@
                     var price = $('#price' + (j + 1)).val();
                     total_price = parseInt(total_price) + parseInt(price);
                     // alert(total_price);
-                    $('#subtotal').text(total_price);
+                    $('#subtotal').text(numberWithCommas(total_price));
                     var image = image_path + image_name;
                     if (image != "") {
                         image = image.replace(/\\/g, "/");
@@ -262,7 +272,7 @@
                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
+                $('#total_amount').text("Rs. " + numberWithCommas(total_price + delivery_charge + coupon_discount));
 
             });
 
@@ -373,7 +383,7 @@
                             if (lastaddedmodel_id != '') {
                                 count = parseInt(data.list);
                                 $('#model_row' + model_id).remove();
-                                $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" disabled="" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">' + lastaddedbasic_price + '</td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
+                                $('#tbody').append('<tr id="model_row' + lastaddedmodel_id + '"><td class="d-flex"><div><input type="hidden" name="cart_table_id" id="cart_table_id' + counting + '" value="' + lastaddedcart_table_id + '"><input type="hidden" name="image_path" id="image_path' + counting + '" value="' + lastaddedimage_path + '"><input type="hidden" name="image_name" id="image_name' + counting + '" value="' + lastaddedimage_name + '"><input type="hidden" name="count" id="count" value="' + counting + '"><input type="hidden" name="price" id="price' + counting + '" value=" ' + lastaddedbasic_price * lastaddedquantity + '"><input type="hidden" name="model_id" id="model_id' + counting + '" value="' + lastaddedmodel_id + '"><img src="https://s.fotorama.io/1.jpg" class="img-fluid' + counting + '"></div><div class="ml-2"><p class="proName">' + lastaddedmodel + '</p><p class="catName mb-0">' + lastaddeditem_name + '</p></div></td><td><input type="hidden" name="rate' + lastaddedmodel_id + '" id="rate' + lastaddedmodel_id + '" value="' + lastaddedbasic_price + '">' + lastaddedbasic_price + '</td><td><div class="_p-add-cart mb-0"><div class="_p-qty"><div class="value-button decrease_" id="" value="Decrease Value" onclick="removeFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">-</div><input style="width:50px" type="text" disabled="" class="inputIncDec" name="qty' + lastaddedmodel_id + '" id="qty' + lastaddedmodel_id + '" value="' + lastaddedquantity + '" /><div class="value-button increase_" id="" value="Increase Value" onclick="addTocart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')">+</div></div></div></td><td id="price_div' + lastaddedmodel_id + '"><input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + lastaddedbasic_price * lastaddedquantity + '">' + lastaddedbasic_price * lastaddedquantity + '</td><td><a class="removeCart" onclick="removeAllFromcart(\'' + lastaddedmodel_id + '\', \'' + lastaddedmodel + '\', \'' + lastaddedbasic_price + '\')"><i class="fas fa-trash-alt"></i></a> </td></tr>');
 
 //                                $('.img-fluid' + counting).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
                                 $('.img-fluid' + counting).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + lastaddeddimage + "");
@@ -391,13 +401,12 @@
                                         price = 0;
                                     }
                                     total_price = parseInt(total_price) + parseInt(price);
-                                    $('#subtotal').text(total_price);
+                                    $('#subtotal').text(numberWithCommas(total_price));
                                 }
                                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
-
+                                $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
                             } else {
                                 //  alert("else");
                                 count = data.list;
@@ -417,12 +426,12 @@
                                     }
                                     total_price = parseInt(total_price) + parseInt(price);
                                     //  alert(total_price);
-                                    $('#subtotal').text(total_price);
+                                    $('#subtotal').text(numberWithCommas(total_price));
                                 }
                                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
+                                $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
                             }
 
 
@@ -496,12 +505,12 @@
                                     price = 0;
                                 }
                                 total_price = parseInt(total_price) + parseInt(price);
-                                $('#subtotal').text(total_price);
+                                $('#subtotal').text(numberWithCommas(total_price));
                             }
                             var delivery_charge = parseInt(($('#delivery_charge').text()));
                             var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                            $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
+                            $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
 
 //                            window.location.reload();
 
@@ -553,12 +562,12 @@
 
                                     total_price = parseInt(total_price) + parseInt(price);
 
-                                    $('#subtotal').text(total_price);
+                                    $('#subtotal').text(numberWithCommas(total_price));
                                 }
                                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                $('#total_amount').text("Rs. " + (total_price + delivery_charge + coupon_discount));
+                                $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
 
                                 window.location.reload();
 

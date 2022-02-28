@@ -77,7 +77,7 @@
                                                     <!--<td class="fontFourteen">${beanType.enquiry_no}</td>--> 
                                                     <td class="fontFourteen">${beanType.sender_name}</td>
                                                     <!--<td class="fontFourteen">${beanType.sender_email}</td>-->
-                                                    <td class="fontFourteen"><a href="tel:+${beanType.sender_mob}">${beanType.sender_mob}</a></td>
+                                                    <td class="fontFourteen"><a href="tel:+91- ${beanType.sender_mob}"><i class="fas fa-mobile-alt"></i> ${beanType.sender_mob}</a></td>
                                                     <!-- <td class="fontFourteen">ABC Ltd</td> -->
                                                     <!-- <td class="fontFourteen">80/3 Harinagar, Jaitpur, Badarpur, New Delhi 110044</td> -->
                                                     <td class="fontFourteen">${beanType.product_name}</td>
@@ -92,7 +92,7 @@
                                                             </c:when>
                                                             <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
                                                                             || beanType.status =='Purchased From Others'}">
-                                                                <button class="btn enquiryFailed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
+                                                                    <button class="btn enquiryFailed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
                                                             </c:when>
                                                             <c:when test="${beanType.status =='Sold'}">
                                                                 <button class="btn enquiryPassed fontFourteen"  id="status${beanType.enquiry_table_id}" disabled>${beanType.status} </button>
