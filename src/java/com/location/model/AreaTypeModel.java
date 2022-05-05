@@ -110,9 +110,9 @@ public class AreaTypeModel {
         PreparedStatement pstmt;
         zone_name = (zone_name);
         String query = " SELECT w.ward_name  FROM ward AS w, zone AS z "
-                + "WHERE   w.zone_id = z.zone_id "
-                + "AND IF('" + zone_name + "'='', zone_name like '%%', zone_name ='" + zone_name + "') "
-                + "Group by ward_name ";
+                + " WHERE   w.zone_id = z.zone_id "
+                + " AND IF('" + zone_name + "'='', zone_name like '%%', zone_name ='" + zone_name + "') "
+                + " Group by ward_name ";
         try {
             pstmt = (PreparedStatement) connection.prepareStatement(query);
             // pstmt.setString(1, zone_name);
@@ -140,12 +140,12 @@ public class AreaTypeModel {
         List<String> list = new ArrayList<String>();
 
         String query = " SELECT a.area_name "
-                + "FROM area AS a ,ward AS w, zone AS z "
-                + "WHERE a.ward_id = w.ward_id "
-                + "AND w.zone_id = z.zone_id "
+                + " FROM area AS a ,ward AS w, zone AS z "
+                + " WHERE a.ward_id = w.ward_id "
+                + " AND w.zone_id = z.zone_id "
                 //+  "AND IF('" + ward_name + "'='', ward_name like '%%', ward_name =?) "
                 // +  "AND IF('" + zone_name + "'='', zone_name like '%%', zone_name =?) "
-                + "Group by area_name";
+                + " Group by area_name ";
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, ward_name);
@@ -172,7 +172,7 @@ public class AreaTypeModel {
     public int getWardId(String ward_name) {
         int ward_id = 0;
         ward_name = (ward_name);
-        String query = " SELECT ward_id FROM ward WHERE ward_name ='" + ward_name + "'";
+        String query = " SELECT ward_id FROM ward WHERE ward_name ='" + ward_name + "' ";
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, ward_no);
@@ -204,7 +204,7 @@ public class AreaTypeModel {
 
     public int getWard_rev_no(String ward_no) {
         int ward_rev_no = 0;
-        String query = " SELECT ward_rev_no FROM ward WHERE ward_no =?  and active='Active'";
+        String query = " SELECT ward_rev_no FROM ward WHERE ward_no =?  and active='Active' ";
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, ward_no);
@@ -279,7 +279,7 @@ public class AreaTypeModel {
 
         String query = " SELECT a.area_id,z.zone_name,w.ward_name,a.area_name,a.area_no,a.remark FROM area as a,ward as w,zone as z "
                 + " where a.ward_id=w.ward_id and w.zone_id=z.zone_id and a.active='Y' and w.active='Y' and z.active='Y' "
-                + " and IF('" + area_name + "'='',a.area_name LIKE '%%',a.area_name=?)  "
+                + " and IF('" + area_name + "'='',a.area_name LIKE '%%',a.area_name=?) "
                 + " and IF('" + ward + "'='',w.ward_name LIKE '%%',w.ward_name =?) "
                 + " and IF('" + zone + "'='',z.zone_name LIKE '%%',z.zone_name=?) order by zone_name,ward_name,area_no "
                 + " LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
@@ -312,7 +312,7 @@ public class AreaTypeModel {
         zone = ku.convert_to_unicode(zone);
         List<AreaTypeBean> list = new ArrayList<AreaTypeBean>();
         String query = " select z.zone_name,w.ward_name,a.area_name,a.area_no,a.description FROM area as a,ward as w,zone as z "
-                + "    where a.ward_id=w.ward_id and w.zone_id=z.zone_id "
+                + " where a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                 + " and IF('" + area_name + "'='',a.area_name LIKE '%%',a.area_name=?)  "
                 + " and IF('" + ward + "'='',w.ward_name LIKE '%%',w.ward_name =?) "
                 + " and IF('" + zone + "'='',z.zone_name LIKE '%%',z.zone_name=?) ";

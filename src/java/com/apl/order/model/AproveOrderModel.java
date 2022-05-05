@@ -1,4 +1,3 @@
-
 package com.apl.order.model;
 
 import java.io.ByteArrayOutputStream;
@@ -34,7 +33,7 @@ import org.json.simple.JSONArray;
 
 /**
  *
- * @author Komal
+ * @author Akash
  */
 public class AproveOrderModel {
 
@@ -103,7 +102,7 @@ public class AproveOrderModel {
     public List<ApproveIndent> getStatus() {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status  order by status ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -132,10 +131,10 @@ public class AproveOrderModel {
 //                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and indi.model_id=m.model_id and pm.order_id=indt.order_table_id and mim.active='Y' \n"
 //                + " and m.active='Y'  and indt.status_id=s1.status_id  and indi.status_id=s2.status_id and indt.active='Y'  and indi.active='Y' and itn.active='Y' \n"
 //                + " and indt.order_table_id='" + indent_table_id + "' ";
-        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty, s1.status as indent_status,"
-                + "s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity, indi.deliver_qty,indt.requested_by,"
+        String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty, s1.status as indent_status, "
+                + " s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity, indi.deliver_qty,indt.requested_by, "
                 + "  indt.requested_to,m.model,pm.payment_mode "
-                + " from order_table indt,order_item indi, item_names itn,payment_mode pm,  status s1,status s2,inventory inv,"
+                + " from order_table indt,order_item indi, item_names itn,payment_mode pm,  status s1,status s2,inventory inv, "
                 + " inventory_basic ib,model m,  manufacturer_item_map mim,  "
                 + " key_person kp where indt.order_table_id=indi.order_table_id and indi.item_names_id=itn.item_names_id  "
                 + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and mim.item_names_id=itn.item_names_id  "
@@ -229,7 +228,7 @@ public class AproveOrderModel {
     public String insertPrice(int orderid, int orderitemid, String price) {
         int updateRowsAffected = 0;
         String status = "error";
-        String query2 = "insert into orders_sales_pricing (order_id,order_item_id,prices) values(?,?,?) ";
+        String query2 = " insert into orders_sales_pricing (order_id,order_item_id,prices) values(?,?,?) ";
         try {
             PreparedStatement pstm = connection.prepareStatement(query2);
             pstm.setInt(1, orderid);
@@ -249,7 +248,7 @@ public class AproveOrderModel {
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -264,7 +263,7 @@ public class AproveOrderModel {
 
     public int getStatusId(String status) {
 
-        String query = "SELECT status_id FROM status WHERE status = '" + status + "' ";
+        String query = " SELECT status_id FROM status WHERE status = '" + status + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -279,7 +278,7 @@ public class AproveOrderModel {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -294,7 +293,7 @@ public class AproveOrderModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status WHERE status_id in(3,6) ";
+        String query = " SELECT status from status WHERE status_id in(3,6) ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -318,7 +317,7 @@ public class AproveOrderModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -342,7 +341,7 @@ public class AproveOrderModel {
 
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
+        String query = " SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

@@ -2,15 +2,13 @@ package com.dashboard.model;
 
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.bean.Enquiry;
+import com.dashboard.bean.EventBean;
 import static com.dashboard.model.EnquiryModel.timeAgo;
 import com.google.gson.Gson;
-import com.inventory.tableClasses.Indent;
-import com.organization.model.OrganisationTypeModel;
-import com.organization.tableClasses.OrganisationType;
 import static com.webservice.model.APLWebServiceModel.sendMail;
+import static com.webservice.model.APLWebServiceModel.sendNotification;
 import static com.webservice.model.APLWebServiceModel.sendTelegramMessage;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -18,18 +16,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -44,18 +34,15 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpSession;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.util.Date;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class DealersOrderModel {
 
     static private Connection connection;
@@ -148,7 +135,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllItems() Exception------------" + e);
         }
 
         return list;
@@ -172,16 +159,16 @@ public class DealersOrderModel {
 //                            + " d.designation_id=ia.designation_id ";
                     String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
                             + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
-                            + " designation d,manufacturer mr,"
+                            + " designation d,manufacturer mr, "
                             + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo,dealer_item_map dim, "
-                            + " org_office_designation_map oodm  "
+                            + " org_office_designation_map oodm "
                             + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
                             + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
                             + " and inv.active='Y'  and ia.active='Y' and oodm.active='Y' and oodm.designation_id=d.designation_id and "
                             + " oodm.org_office_id=oo.org_office_id and d.designation='Owner' "
                             + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                             + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
-                            + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
+                            + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y' "
                             + "  and  d.designation_id=ia.designation_id and oodm.org_office_designation_map_id=ia.org_office_designation_map_id "
                             + " and dim.org_office_id=oo.org_office_id and dim.active='Y' and dim.model_id=m.model_id "
                             + " and dim.item_authorization_id=ia.item_authorization_id and oo.org_office_id='" + logged_org_office_id + "' ";
@@ -211,7 +198,7 @@ public class DealersOrderModel {
                     }
 
                 } catch (Exception e) {
-                    System.err.println("Exception------------" + e);
+                    System.err.println("DealersOrderModel getAllModels() Exception------------" + e);
                 }
 
             }
@@ -226,7 +213,7 @@ public class DealersOrderModel {
 
             String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
                     + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
-                    + " designation d,manufacturer mr,"
+                    + " designation d,manufacturer mr, "
                     + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo,dealer_item_map dim  "
                     + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
                     + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
@@ -234,7 +221,7 @@ public class DealersOrderModel {
                     + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                     + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
                     + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
-                    + "  and  d.designation_id=ia.designation_id "
+                    + " and  d.designation_id=ia.designation_id "
                     + " and dim.org_office_id=oo.org_office_id and dim.active='Y' and dim.model_id=m.model_id "
                     + " and dim.item_authorization_id=ia.item_authorization_id and oo.org_office_id='" + logged_org_office_id + "' ";
 
@@ -242,7 +229,7 @@ public class DealersOrderModel {
                 query += " and m.model='" + search_model + "' ";
             }
 
-            query += " and itn.item_name='" + item_name + "' group by m.model";
+            query += " and itn.item_name='" + item_name + "' group by m.model ";
 
             ResultSet rst = connection.prepareStatement(query).executeQuery();
             while (rst.next()) {
@@ -267,7 +254,7 @@ public class DealersOrderModel {
             }
 
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllModel() Exception------------" + e);
 
         }
         return list;
@@ -290,11 +277,11 @@ public class DealersOrderModel {
 //            query += " and m.model_id='" + model_id + "' group by m.model";
             String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
                     + " ,m.basic_price,inv.stock_quantity "
-                    + " from item_names itn, manufacturer_item_map mim,model m,item_authorization ia,designation d,manufacturer mr,"
+                    + " from item_names itn, manufacturer_item_map mim,model m,item_authorization ia,designation d,manufacturer mr, "
                     + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo "
                     + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' and iid.active='Y' "
                     + " and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' and inv.active='Y' "
-                    + " and ia.active='Y' and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id"
+                    + " and ia.active='Y' and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                     + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
                     + " and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y' and oo.org_office_id=ib.org_office_id and "
                     + " d.designation_id=ia.designation_id ";
@@ -324,7 +311,7 @@ public class DealersOrderModel {
             }
 
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllDetails() Exception------------" + e);
 
         }
         return list;
@@ -337,17 +324,17 @@ public class DealersOrderModel {
             int item_id = getItemId(model_id);
             String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
                     + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
-                    + " designation d,manufacturer mr,"
-                    + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo,dealer_item_map dim  "
+                    + " designation d,manufacturer mr, "
+                    + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo,dealer_item_map dim "
                     + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
                     + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
                     + " and inv.active='Y'  and ia.active='Y' "
                     + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                     + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
                     + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
-                    + "  and  d.designation_id=ia.designation_id "
+                    + " and  d.designation_id=ia.designation_id "
                     + " and dim.org_office_id=oo.org_office_id and dim.active='Y' and dim.model_id=m.model_id "
-                    + " and dim.item_authorization_id=ia.item_authorization_id and oo.org_office_id='" + logged_org_office_id + "'  ";
+                    + " and dim.item_authorization_id=ia.item_authorization_id and oo.org_office_id='" + logged_org_office_id + "' ";
             query += " and itn.item_names_id='" + item_id + "' and m.model_id!='" + model_id + "' group by m.model ";
 
             ResultSet rst = connection.prepareStatement(query).executeQuery();
@@ -371,7 +358,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllSimilarProducts() Exception------------" + e);
 
         }
 
@@ -385,11 +372,12 @@ public class DealersOrderModel {
                 try {
 
                     String query = " select iid.image_path,iid.image_name "
-                            + " from item_names itn, manufacturer_item_map mim,model m,item_authorization ia,designation d,manufacturer mr,"
+                            + " from item_names itn, manufacturer_item_map mim,model m,item_authorization ia,designation d,manufacturer mr, "
                             + " item_image_details iid "
                             + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' and iid.active='Y' "
                             + " and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id "
-                            + " and ia.active='Y' and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id"
+                            + " and ia.active='Y' and itn.item_names_id= mim.item_names_id "
+                            + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                             + " and ia.item_names_id=itn.item_names_id and "
                             + " d.designation_id=ia.designation_id ";
                     query += " and m.model_id='" + list2.get(i).getModel_id() + "' group by iid.image_name ";
@@ -404,7 +392,7 @@ public class DealersOrderModel {
                         list.add(bean);
                     }
                 } catch (Exception e) {
-                    System.err.println("Exception------------" + e);
+                    System.err.println("DealersOrderModel getAllImages() Exception------------" + e);
 
                 }
             }
@@ -414,9 +402,9 @@ public class DealersOrderModel {
 
     public List<String> getItemName(String q, String logged_designation) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_name FROM item_names itn,item_authorization ia,designation d where "
+        String query = " SELECT itn.item_name FROM item_names itn,item_authorization ia,designation d where "
                 + " itn.active='Y' and d.active='Y' and ia.active='Y' and d.designation_id=ia.designation_id "
-                + " and ia.item_names_id=itn.item_names_id   ";
+                + " and ia.item_names_id=itn.item_names_id ";
         if (!logged_designation.equals("") && logged_designation != null) {
             query += " and d.designation='" + logged_designation + "' ";
         }
@@ -502,7 +490,7 @@ public class DealersOrderModel {
 
     public int getItemId(String model_id) {
 
-        String query = "SELECT itn.item_names_id FROM item_names itn,manufacturer mr,manufacturer_item_map mim,model m "
+        String query = " SELECT itn.item_names_id FROM item_names itn,manufacturer mr,manufacturer_item_map mim,model m "
                 + " WHERE itn.active='Y' and mr.active='Y' and mim.active='Y' and m.active='Y' and itn.item_names_id=mim.item_names_id "
                 + " and mr.manufacturer_id=mim.manufacturer_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id ";
         if (!model_id.equals("") && model_id != null) {
@@ -515,13 +503,13 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("DealersOrderModel getItemId Error: " + e);
+            System.out.println("DealersOrderModel getItemId() Error: " + e);
         }
         return id;
     }
 
     public int addToCart(DealersOrder bean, int logged_key_person_id) throws SQLException {
-        String query = "INSERT INTO cart_table(key_person_id,model_id,item_names_id,"
+        String query = " INSERT INTO cart_table(key_person_id,model_id,item_names_id, "
                 + " cart_status_id,quantity,price,active,description,revision_no,remark) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
@@ -543,7 +531,7 @@ public class DealersOrderModel {
             }
 
             if (old_quantity > 0) {
-                String query1 = "SELECT max(revision_no) as revision_no FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
+                String query1 = " SELECT max(revision_no) as revision_no FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
                         + " and model_id='" + bean.getModel_id() + "' "
                         + " and item_names_id='" + item_id + "' and cart_status_id=1 and active='Y' ";
 
@@ -606,14 +594,14 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("Exception---" + e);
+            System.err.println("DealersOrderModel addToCart() Exception---" + e);
         }
 
         return rowsAffected;
     }
 
     public int removeFromcart(DealersOrder bean, int logged_key_person_id) throws SQLException {
-        String query = " INSERT INTO cart_table(key_person_id,model_id,item_names_id,"
+        String query = " INSERT INTO cart_table(key_person_id,model_id,item_names_id, "
                 + " cart_status_id,quantity,price,active,description,revision_no,remark) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
@@ -635,7 +623,7 @@ public class DealersOrderModel {
             }
 
             if (old_quantity > 0) {
-                String query1 = "SELECT max(revision_no) as revision_no FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
+                String query1 = " SELECT max(revision_no) as revision_no FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
                         + " and model_id='" + bean.getModel_id() + "' "
                         + " and item_names_id='" + item_id + "' and cart_status_id=1 and active='Y' ";
 
@@ -698,7 +686,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("Exception---" + e);
+            System.err.println("DealersOrderModel removeFromcart() Exception---" + e);
         }
 
         return rowsAffected;
@@ -714,7 +702,7 @@ public class DealersOrderModel {
         int revision = DealersOrderModel.getRevisionno(bean, logged_key_person_id, item_id);
 
         try {
-            String query1 = "SELECT max(revision_no) as revision_no FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
+            String query1 = " SELECT max(revision_no) as revision_no FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
                     + " and model_id='" + bean.getModel_id() + "' "
                     + " and item_names_id='" + item_id + "' and cart_status_id=1 and active='Y' ";
 
@@ -746,7 +734,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("Exception---" + e);
+            System.err.println("DealersOrderModel removeAllFromcart() Exception---" + e);
         }
 
         return updateRowsAffected;
@@ -770,7 +758,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("DealersOrderModel getRevisionno error--------" + e);
+            System.err.println("DealersOrderModel getRevisionno() error--------" + e);
         }
         return revision;
     }
@@ -812,7 +800,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel viewCart() Exception------------" + e);
         }
 
         return list;
@@ -855,7 +843,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getLastAddedProduct() Exception------------" + e);
         }
 
         return list;
@@ -879,7 +867,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("DealersOrderModel getRevisionno error--------" + e);
+            System.err.println("DealersOrderModel getCurrentQuantity() error--------" + e);
         }
         return current_qty;
     }
@@ -900,7 +888,7 @@ public class DealersOrderModel {
                 counting = count;
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getCounting in DealersOrderModel : " + ex);
+            System.out.println("ERROR: in getCounting() in DealersOrderModel : " + ex);
         }
         return counting + 1;
     }
@@ -908,8 +896,10 @@ public class DealersOrderModel {
     public String getRequestedToKeyPersonorder(String q, String requested_by) {
         int loc_of_dealer = getRequestedKeyPersondegId(requested_by);
         String key_person_name = "";
-        String query = "Select kp2.key_person_name from dealer_salesmanager_mapping as dsm,key_person as kp1,key_person as kp2 where kp1.key_person_id=dsm.dealer_id\n"
-                + " and  kp2.key_person_id=dsm.salesman_id and dsm.dealer_id='" + loc_of_dealer + "' and  kp1.active='y' and dsm.active='Y' and kp2.active='Y'";
+        String query = "Select kp2.key_person_name from dealer_salesmanager_mapping as dsm,key_person as kp1,key_person as kp2 "
+                + " where kp1.key_person_id=dsm.dealer_id "
+                + " and  kp2.key_person_id=dsm.salesman_id and dsm.dealer_id='" + loc_of_dealer + "' and  kp1.active='y' "
+                + " and dsm.active='Y' and kp2.active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -919,14 +909,14 @@ public class DealersOrderModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:OrderModel--getRequestedToKeyPersonorder()-- " + e);
+            System.out.println("Error:DealersOrderModel--getRequestedToKeyPersonorder()-- " + e);
         }
 
         return key_person_name;
     }
 
     public int getRequestedKeyPersondegId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -934,13 +924,13 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println(" In OrderModel getRequestedKeyPersondegId Error: " + e);
+            System.out.println(" In DealersOrderModel getRequestedKeyPersondegId Error: " + e);
         }
         return id;
     }
 
     public int insertRecord(DealersOrder bean, String logged_user_name, int i, int logged_key_person_id) throws SQLException {
-        String query = "INSERT INTO order_table(order_no,requested_by,requested_to,"
+        String query = " INSERT INTO order_table(order_no,requested_by,requested_to, "
                 + " status_id,active,remark,date_time,description,revision_no) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
@@ -950,12 +940,12 @@ public class DealersOrderModel {
         int requested_to_id = getRequestedKeyPersonId(bean.getRequested_to());
         int count = 0;
         java.util.Date date = new java.util.Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
         String date_time = sdf.format(date);
 
         try {
             if (i == 0) {
-                String query4 = "SELECT count(*) as count FROM order_table WHERE "
+                String query4 = " SELECT count(*) as count FROM order_table WHERE "
                         + " order_no='" + bean.getOrder_no() + "' "
                         + " and active='Y'  ";
 
@@ -993,7 +983,7 @@ public class DealersOrderModel {
                     }
                 }
             }
-            String query2 = "INSERT INTO order_item(order_table_id,item_names_id, required_qty,"
+            String query2 = " INSERT INTO order_item(order_table_id,item_names_id, required_qty, "
                     + " status_id,active,remark,expected_date_time,description,revision_no,delivered_date_time,model_id) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -1032,7 +1022,7 @@ public class DealersOrderModel {
 
                 int revision = DealersOrderModel.getRevisionno(bean, logged_key_person_id, item_names_id2);
 
-                String query1 = "SELECT max(revision_no) as revision_no,quantity,price "
+                String query1 = " SELECT max(revision_no) as revision_no,quantity,price "
                         + " FROM cart_table WHERE key_person_id='" + logged_key_person_id + "' "
                         + " and model_id='" + bean.getModel_id() + "' "
                         + " and item_names_id='" + item_names_id2 + "' and cart_status_id=1 and active='Y' ";
@@ -1080,7 +1070,7 @@ public class DealersOrderModel {
             }
 
         } catch (Exception e) {
-            System.out.println("OrderModel insertRecord() Error: " + e);
+            System.out.println("DealersOrderModel insertRecord() Error: " + e);
         }
         if (rowsAffected2 > 0) {
             message = "Record saved successfully.";
@@ -1109,13 +1099,13 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("item_names_id");
         } catch (Exception e) {
-            System.out.println("OrderModel getItemNameId Error: " + e);
+            System.out.println("DealersOrderModel getItemNameId Error: " + e);
         }
         return id;
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1123,7 +1113,7 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("In OrderModel getRequestedByKeyPersonId Error: " + e);
+            System.out.println("In DealersOrderModel getRequestedByKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -1131,12 +1121,12 @@ public class DealersOrderModel {
     public ArrayList<DealersOrder> getAllOrders(String logged_key_person, String user_role) {
         ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
 
-        String query = " select odt.order_no,odt.date_time,odt.description  ,s.status,kp2.key_person_name as requested_to,odt.order_table_id ,"
+        String query = " select odt.order_no,odt.date_time,odt.description  ,s.status,kp2.key_person_name as requested_to,odt.order_table_id, "
                 + " SUM(osp.prices) as prices,kp1.key_person_name as requested_by  "
                 + " from  order_table odt,key_person kp1,key_person kp2,  status s,order_item odi,payment_mode pm,orders_sales_pricing osp, "
                 + " dealer_salesmanager_mapping dsm "
-                + " where odt.requested_to=kp2.key_person_id  and odt.requested_by=kp1.key_person_id   and odt.status_id not in(7,10,12)"
-                + " and odi.status_id not in (7,10,12) "
+                + " where odt.requested_to=kp2.key_person_id  and odt.requested_by=kp1.key_person_id   and odt.status_id not in(7,3,10,12)"
+                + " and odi.status_id not in (7,3,10,12) "
                 + " and odt.status_id=s.status_id and odt.active='Y' and kp1.active='Y' and kp2.active='Y'  and odi.active='Y' "
                 + " and pm.active='Y' and odt.order_table_id=odi.order_table_id and pm.order_id=odt.order_table_id and "
                 + " osp.order_id=odt.order_table_id and dsm.dealer_id=kp1.key_person_id "
@@ -1225,13 +1215,15 @@ public class DealersOrderModel {
                 bean.setDescription(rset.getString("description"));
                 bean.setOrder_table_id(rset.getInt("order_table_id"));
                 bean.setRequested_by(rset.getString("requested_by"));
-//                prices = prices + (rset.getInt("prices"));
 
+//                Format format = com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+//                bean.setBasic_price(format.format(new BigDecimal(rset.getString("prices"))));
                 bean.setBasic_price(rset.getString("prices"));
+
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrderModel showdata-" + e);
+            System.out.println("Error: DealersOrderModel getAllOrders()-" + e);
         }
         return list;
     }
@@ -1239,11 +1231,14 @@ public class DealersOrderModel {
     public ArrayList<DealersOrder> getAllApprovedOrders(String logged_key_person, String user_role, String order_status) {
         ArrayList<DealersOrder> list = new ArrayList<DealersOrder>();
 
-        String query = " select odt.order_no,odt.date_time,odt.description  ,s.status,kp2.key_person_name as requested_to,odt.order_table_id ,"
-                + " SUM(osp.prices) as prices,kp1.key_person_name as requested_by  "
+        if (order_status.equals("")) {
+            order_status = "Pending";
+        }
+        String query = " select odt.order_no,odt.date_time,odt.description  ,s.status,kp2.key_person_name as requested_to,odt.order_table_id, "
+                + " SUM(osp.prices) as prices,kp1.key_person_name as requested_by "
                 + " from  order_table odt,key_person kp1,key_person kp2,  status s,order_item odi,payment_mode pm,orders_sales_pricing osp, "
                 + " dealer_salesmanager_mapping dsm "
-                + " where odt.requested_to=kp2.key_person_id  and odt.requested_by=kp1.key_person_id   and odt.status_id not in(7,10,12,13)"
+                + " where odt.requested_to=kp2.key_person_id  and odt.requested_by=kp1.key_person_id   and odt.status_id not in(7,10,12,13) "
                 + " and odi.status_id not in (7,10,12,13) "
                 + " and odt.status_id=s.status_id and odt.active='Y' and kp1.active='Y' and kp2.active='Y'  and odi.active='Y' "
                 + " and pm.active='Y' and odt.order_table_id=odi.order_table_id and pm.order_id=odt.order_table_id and "
@@ -1260,9 +1255,13 @@ public class DealersOrderModel {
                 query += " and kp2.key_person_name='" + logged_key_person + "' ";
             }
         }
-        if (!order_status.equals("") && order_status != null) {
-            query += " and s.status='" + order_status + "' ";
+        if (!order_status.equals("") && order_status != null && order_status.equals("Approved")) {
+            query += " and s.status in ('" + order_status + "','Denied ') ";
         }
+        if (!order_status.equals("") && order_status != null && !order_status.equals("Approved")) {
+            query += " and s.status ='" + order_status + "' ";
+        }
+
         query += " group by odt.order_table_id order by odt.order_table_id desc ";
         int prices = 0;
         try {
@@ -1342,7 +1341,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrderModel showdata-" + e);
+            System.out.println("Error: DealersOrderModel getAllApprovedOrders()-" + e);
         }
         return list;
     }
@@ -1357,7 +1356,7 @@ public class DealersOrderModel {
                 + " and odt.status_id=s.status_id and odt.active='Y' and kp1.active='Y' and kp2.active='Y'  and odi.active='Y' "
                 + " and pm.active='Y' and odt.order_table_id=odi.order_table_id and pm.order_id=odt.order_table_id and "
                 + " osp.order_id=odt.order_table_id "
-                + " and osp.order_item_id =odi.order_item_id and s.status!='Delivered' ";
+                + " and osp.order_item_id =odi.order_item_id and s.status not in('Delivered','Denied') ";
         if (!user_role.equals("Admin")) {
             if (!logged_key_person.equals("") && logged_key_person != null) {
                 query += " and kp1.key_person_name='" + logged_key_person + "' ";
@@ -1417,18 +1416,18 @@ public class DealersOrderModel {
                 String day_time_arr[] = day_time.split(" ");
                 String day = day_time_arr[0];
                 String time = day_time_arr[1];
+                String ampm = day_time_arr[2];
 
-                String new_order_date = day + "-" + month + "-" + year + " " + time;
+                String new_order_date = day + "-" + month + "-" + year + " " + time + " " + ampm;
 //                System.out.println(new_order_date);
 
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
                 java.util.Date date = new java.util.Date();
                 String currentDateString = dateFormatter.format(date);
                 java.util.Date currentDate = dateFormatter.parse(currentDateString);
                 java.util.Date past_date = dateFormatter.parse(new_order_date);
 
                 String time_ago = timeAgo(currentDate, past_date);
-
                 bean.setDate_time(time_ago);
 
                 String status = rset.getString("status");
@@ -1446,7 +1445,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrderModel showdata-" + e);
+            System.out.println("Error: DealersOrderModel getAllDashboardOrders()-" + e);
         }
         return list;
     }
@@ -1470,10 +1469,11 @@ public class DealersOrderModel {
 //                + " and iid.model_id=odi.model_id and osp.order_id=odt.order_table_id  and osp.order_item_id =odi.order_item_id "
 //                + " and kp.active='Y'  and kp.key_person_id=inv.key_person_id "
 //                + " and odi.model_id=m.model_id and inv.key_person_id=115 group by m.model_id ";
-        String query = " select odt.order_no,itn.item_name,odi.required_qty,odi.expected_date_time,odi.approved_qty, s1.status as order_status,"
-                + " s2.status as item_status,odi.order_item_id,odt.order_table_id,inv.stock_quantity, odi.deliver_qty,odt.requested_by,"
-                + "  odt.requested_to,m.model,pm.payment_mode,iid.image_path,iid.image_name,m.basic_price,osp.discount_percent,osp.prices,osp.approved_price "
-                + " from order_table odt,order_item odi, item_names itn,payment_mode pm,  status s1,status s2,inventory inv,"
+        String query = " select odt.order_no,itn.item_name,odi.required_qty,odi.expected_date_time,odi.approved_qty, s1.status as order_status, "
+                + " s2.status as item_status,odi.order_item_id,odt.order_table_id,inv.stock_quantity, odi.deliver_qty,odt.requested_by, "
+                + " odt.requested_to,m.model,pm.payment_mode,iid.image_path,iid.image_name,m.basic_price,osp.discount_percent,osp.prices, "
+                + " osp.approved_price "
+                + " from order_table odt,order_item odi, item_names itn,payment_mode pm,  status s1,status s2,inventory inv, "
                 + " inventory_basic ib,model m,  manufacturer_item_map mim,item_image_details iid, "
                 + " key_person kp,orders_sales_pricing osp where odt.order_table_id=odi.order_table_id and odi.item_names_id=itn.item_names_id  "
                 + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and mim.item_names_id=itn.item_names_id  "
@@ -1484,7 +1484,8 @@ public class DealersOrderModel {
                 + " and odi.active='Y' and itn.active='Y' "
                 + " and odt.order_table_id='" + order_table_id + "' and ib.model_id=m.model_id and iid.active='Y' and iid.model_id=m.model_id "
                 + " and iid.model_id=odi.model_id "
-                + " and kp.active='Y'  and kp.key_person_id=inv.key_person_id and osp.order_id=odt.order_table_id  and osp.order_item_id =odi.order_item_id "
+                + " and kp.active='Y'  and kp.key_person_id=inv.key_person_id and osp.order_id=odt.order_table_id "
+                + " and osp.order_item_id =odi.order_item_id "
                 + " and odi.model_id=m.model_id and inv.key_person_id=115 group by m.model_id ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -1540,7 +1541,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrderModel getIndentItems-" + e);
+            System.out.println("Error: DealersOrderModel getAllOrderItems()-" + e);
         }
         return list;
     }
@@ -1587,7 +1588,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("Exception---" + e);
+            System.err.println("DealersOrderModel deleteOrder() Exception---" + e);
         }
 
         return updateRowsAffected1;
@@ -1605,7 +1606,7 @@ public class DealersOrderModel {
                 + " and osp.order_item_id =odi.order_item_id ";
         if (!user_role.equals("Admin")) {
             if (!logged_key_person.equals("") && logged_key_person != null) {
-                query += " and kp1.key_person_name='" + logged_key_person + "' and odt.status_id=7 ";
+                query += " and kp1.key_person_name='" + logged_key_person + "' ";
             }
         }
         query += " group by odt.order_table_id order by odt.order_table_id desc ";
@@ -1687,7 +1688,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrderModel showdata-" + e);
+            System.out.println("Error: DealersOrderModel getAllHistoryOrders()-" + e);
         }
         return list;
     }
@@ -1708,7 +1709,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("DealersOrderModel getRevisionno error--------" + e);
+            System.err.println("DealersOrderModel getRevisionnoForOrder() error--------" + e);
         }
         return revision;
     }
@@ -1729,7 +1730,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("DealersOrderModel getOrderNo error--------" + e);
+            System.err.println("DealersOrderModel getOrderNo() error--------" + e);
         }
         return order_no;
     }
@@ -1750,7 +1751,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.err.println("DealersOrderModel getOrderNo error--------" + e);
+            System.err.println("DealersOrderModel getOrgOfficeName() error--------" + e);
         }
         return org_office_name;
     }
@@ -1772,7 +1773,7 @@ public class DealersOrderModel {
                 + " WHERE dp.image_destination_id=gid.image_destination_id AND iuf.image_uploaded_for_id=dp.image_uploaded_for_id "
                 + " AND iuf.image_uploaded_for='" + uploadedFor + "' AND gid.key_person_id=" + key_person_id + " "
                 + " and gid.active='Y' and dp.active='Y' and iuf.active='Y' "
-                + " ORDER BY general_image_details_id DESC";
+                + " ORDER BY general_image_details_id DESC ";
         try {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
             if (rs.next()) {
@@ -1782,7 +1783,7 @@ public class DealersOrderModel {
             //String[] img_path = img_name.split("-");
             destination_path = destination_path + img_name;
         } catch (Exception ex) {
-            System.out.println("ERROR: in getImagePath in DealersOrderModel : " + ex);
+            System.out.println("ERROR: in getImagePath() in DealersOrderModel : " + ex);
         }
         return destination_path;
     }
@@ -1790,14 +1791,17 @@ public class DealersOrderModel {
     public String approveOrder(DealersOrder bean, int order_item_id, int order_table_id, int i, int size) throws SQLException {
         int updateRowsAffected = 0;
         String status = bean.getStatus();
-        if (status.equals("Approve")) {
+        if (status.equals("Confirm")) {
             status = "Approved";
+        }
+        if (status.equals("Denied All")) {
+            status = "Denied";
         }
         String item_status = bean.getItem_status();
 
         int status_id = getStatusId(status);
         int item_status_id = getStatusId(item_status);
-        String orderDetail = "   select kp.key_person_name,kp.mobile_no1,kp.email_id1,odt.order_no,osp.prices "
+        String orderDetail = " select kp.key_person_name,kp.mobile_no1,kp.email_id1,odt.order_no,osp.prices "
                 + " from order_table odt,order_item odi,orders_sales_pricing osp,key_person kp "
                 + " where odt.active='Y' and kp.active='Y' and odi.active='Y' and odi.order_table_id=odt.order_table_id "
                 + " and odi.order_item_id=osp.order_item_id "
@@ -1832,8 +1836,8 @@ public class DealersOrderModel {
                 PreparedStatement pstm3 = connection.prepareStatement(query_update);
                 updateRowsAffected3 = pstm3.executeUpdate();
             }
-            PreparedStatement pay2 = connection.prepareStatement("insert into orders_sales_pricing(order_id,order_item_id,discount_percent,prices,approved_price)"
-                    + " values(?,?,?,?,?)");
+            PreparedStatement pay2 = connection.prepareStatement(" insert into orders_sales_pricing(order_id,order_item_id,discount_percent,prices,approved_price) "
+                    + " values(?,?,?,?,?) ");
             pay2.setInt(1, order_table_id);
             pay2.setInt(2, order_item_id);
             pay2.setString(3, bean.getDiscount_percent());
@@ -1867,8 +1871,10 @@ public class DealersOrderModel {
             }
 
             if (i == (size - 1)) {
-                String message = sendTelegramMessageForOrder(order_no, key_person_name, email_id, mobile_no, String.valueOf(order_table_id), String.valueOf(total_approved_price));
-                String message2 = sendMailForOrder(order_no, key_person_name, email_id, mobile_no, String.valueOf(order_table_id), String.valueOf(total_approved_price));
+                String message = sendTelegramMessageForOrder(order_no, key_person_name, email_id, mobile_no,
+                        String.valueOf(order_table_id), String.valueOf(total_approved_price), status);
+                String message2 = sendMailForOrder(order_no, key_person_name, email_id, mobile_no,
+                        String.valueOf(order_table_id), String.valueOf(total_approved_price), status);
             }
         } else {
             message = "Cannot update the record, some error.";
@@ -1878,14 +1884,19 @@ public class DealersOrderModel {
     }
 
     public static String sendTelegramMessageForOrder(String order_no, String key_person_name, String email_id,
-            String mobile_no, String order_table_id, String prices) {
+            String mobile_no, String order_table_id, String prices, String status) {
         String result = "";
         String msg = "";
 
         try {
 //            msg = "Assigned enquiry of '" + msg + "' ";
-            msg = "Hey,<br/>"
-                    + "Your order has been Approved.<br/><br/><br/>";
+            if (status.equals("Approved")) {
+                msg = "Hey,<br/>"
+                        + "Your order has been Approved.<br/><br/><br/>";
+            } else {
+                msg = "Hey,<br/>"
+                        + "Your order has been Denied.<br/><br/><br/>";
+            }
 
             String jsonPayload = "";
             URL url = null;
@@ -1922,14 +1933,14 @@ public class DealersOrderModel {
             conn.disconnect();
 
         } catch (Exception e) {
-            System.err.println("Exception-----" + e);
+            System.err.println("sendTelegramMessageForOrder() Exception-----" + e);
         }
 
         return result;
     }
 
     public static String sendMailForOrder(String order_no, String key_person_name, String email_id,
-            String mobile_no, String order_table_id, String prices) {
+            String mobile_no, String order_table_id, String prices, String status) {
         String host = "smtp.gmail.com";
         String port = "587";
         String mailFrom = "smartmeter.apogee@gmail.com";
@@ -1947,7 +1958,7 @@ public class DealersOrderModel {
 
         try {
             mailer.sendPlainTextEmail(host, port, mailFrom, password, mailTo,
-                    subject, message, order_no, key_person_name, email_id, mobile_no, order_table_id, prices);
+                    subject, message, order_no, key_person_name, email_id, mobile_no, order_table_id, prices, status);
             System.out.println("Email sent.");
 
         } catch (Exception ex) {
@@ -1960,7 +1971,7 @@ public class DealersOrderModel {
     public static void sendPlainTextEmail(String host, String port,
             final String userName, final String password, String toAddress,
             String subject, String message, String order_no, String key_person_name,
-            String email_id, String mobile_no, String order_table_id, String prices) throws AddressException,
+            String email_id, String mobile_no, String order_table_id, String prices, String status) throws AddressException,
             MessagingException {
 
         // sets SMTP server properties
@@ -1986,18 +1997,32 @@ public class DealersOrderModel {
             msg.setSubject(subject);
 
             BodyPart messageBodyPart1 = new MimeBodyPart();
-            messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
-                    + "Your Order has been approved, kindly see your CRM, and checkout the order.<br />"
-                    + "<a href='http://localhost:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
-                    //                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
-                    + "Click On this For checkout.</a><br/><br/>"
-                    + "Order No: <b>" + order_no + "</b> <br/>"
-                    + "Price: <b>" + prices + "</b> <br/><br/>"
-                    + "Thanks & Regards,<br/>"
-                    + "<b>Apogee Precision Lasers.</b><br/>"
-                    + "<img src='https://www.apogeeleveller.com/assets/images/logo.png'>", "text/html");
-//            messageBodyPart1.setText(message);
 
+            if (status.equals("Approved")) {
+                messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
+                        + "Your Order has been approved, kindly see your CRM, and checkout the order.<br />"
+                        + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
+                        //                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
+                        + "Click On this For checkout.</a><br/><br/>"
+                        + "Order No: <b>" + order_no + "</b> <br/>"
+                        + "Price: <b>" + prices + "</b> <br/><br/>"
+                        + "Thanks & Regards,<br/>"
+                        + "<b>Apogee Precision Lasers.</b><br/>"
+                        + "<img src='https://www.apogeeleveller.com/assets/images/logo.png'>", "text/html");
+            } else {
+                messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
+                        + "Your Order has been Denied, kindly see your CRM.<br />"
+                        + "<a href='http://120.138.10.146:8080/APL/PendingOrdersController?task=viewOrderDetails&order_table_id=" + order_table_id + "'>"
+                        //                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=checkout&order_table_id=" + order_table_id + "'>"
+                        + "Click On this For check details.</a><br/><br/>"
+                        + "Order No: <b>" + order_no + "</b> <br/>"
+                        + "Price: <b>" + prices + "</b> <br/><br/>"
+                        + "Thanks & Regards,<br/>"
+                        + "<b>Apogee Precision Lasers.</b><br/>"
+                        + "<img src='https://www.apogeeleveller.com/assets/images/logo.png'>", "text/html");
+            }
+
+//            messageBodyPart1.setText(message);
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart1);
 
@@ -2023,7 +2048,7 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("status_id");
         } catch (Exception e) {
-            System.out.println("ApproveIndentModel getStatusId Error: " + e);
+            System.out.println("DealersOrderModel getStatusId Error: " + e);
         }
         return id;
     }
@@ -2038,9 +2063,10 @@ public class DealersOrderModel {
                 + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
                 + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
                 + " oo.mobile_no1,oo.org_office_code,oo.org_office_id, "
-                + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.latitude,oo.longitude "
+                + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no, "
+                + " oo.latitude,oo.longitude "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
@@ -2076,7 +2102,7 @@ public class DealersOrderModel {
                 arrayObj.add(jsonObj);
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("DealersOrderModel getDealerLocation() error" + e);
         }
 
         return arrayObj;
@@ -2085,19 +2111,23 @@ public class DealersOrderModel {
     public static ArrayList<Enquiry> getAllEnquiries(String user_role, int logged_key_person_id, String enquiry_source, String status) {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
-            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
-                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
-                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-                    + " kp.key_person_name,oo.org_office_name,et.product_name "
-                    + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st,salesmanager_state_mapping ssm,key_person kp, "
+            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob, "
+                    + " et.sender_company_name,et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message, "
+                    + " et.enquiry_date_time,et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email, "
+                    + " et.sender_alternate_mob,et.description,kp.key_person_name,oo.org_office_name,et.product_name "
+                    + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " salesmanager_state_mapping ssm,key_person kp, "
                     + " org_office oo,enquiry_source_table est  "
-                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
-                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y' "
+                    + " and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
+                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id "
+                    + " and ssm.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
                     + " and es.active='Y' and oo.active='Y' "
                     + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
                     //                    + " and et.enquiry_status_id!=1 and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
-                    + " and et.enquiry_status_id!=1 and (ssm.salesman_id=et.assigned_by or ssm.salesman_id=et.assigned_to) and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
+                    + " and et.enquiry_status_id!=1 and (ssm.salesman_id=et.assigned_by or ssm.salesman_id=et.assigned_to) "
+                    + " and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
             if (user_role.equals("Sales")) {
                 query += " and ssm.salesman_id='" + logged_key_person_id + "' ";
             }
@@ -2159,7 +2189,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllEnquiries() Exception------------" + e);
         }
 
         return list;
@@ -2168,14 +2198,17 @@ public class DealersOrderModel {
     public static ArrayList<Enquiry> getAllPendingEnquiries(String user_role, int logged_key_person_id, String enquiry_source, String status) {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
-            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
-                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
-                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-                    + " kp.key_person_name,oo.org_office_name,et.product_name "
-                    + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st,salesmanager_state_mapping ssm,key_person kp, "
+            String query = " select et.enquiry_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob, "
+                    + " et.sender_company_name, et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message, "
+                    + " et.enquiry_date_time,et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email, "
+                    + " et.sender_alternate_mob,et.description,kp.key_person_name,oo.org_office_name,et.product_name "
+                    + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " salesmanager_state_mapping ssm,key_person kp, "
                     + " org_office oo,enquiry_source_table est  "
-                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
-                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y' "
+                    + " and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
+                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id "
+                    + " and ssm.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
                     + " and es.active='Y' and oo.active='Y' "
                     + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
@@ -2240,7 +2273,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllPendingEnquiries() Exception------------" + e);
         }
 
         return list;
@@ -2250,14 +2283,17 @@ public class DealersOrderModel {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
 
-            String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
-                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
-                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
-                    + " kp.key_person_name,oo.org_office_name,et.product_name "
-                    + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st,salesmanager_state_mapping ssm,key_person kp, "
+            String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob, "
+                    + " et.sender_company_name, et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message, "
+                    + " et.enquiry_date_time, et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email, "
+                    + " et.sender_alternate_mob,et.description,kp.key_person_name,oo.org_office_name,et.product_name "
+                    + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " salesmanager_state_mapping ssm,key_person kp, "
                     + " org_office oo,enquiry_source_table est  "
-                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
-                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y' "
+                    + " and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
+                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id "
+                    + " and ssm.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
                     + " and es.active='Y' and oo.active='Y' "
                     + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
@@ -2322,7 +2358,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllComplaints() Exception------------" + e);
         }
 
         return list;
@@ -2332,18 +2368,23 @@ public class DealersOrderModel {
         ArrayList<Enquiry> list = new ArrayList<Enquiry>();
         try {
 
-            String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob,et.sender_company_name, "
-                    + " et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message,et.enquiry_date_time,  "
-                    + " et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email,  et.sender_alternate_mob,et.description, "
+            String query = " select et.complaint_table_id,es.status,et.enquiry_no, et.sender_name,et.sender_email,et.sender_mob, "
+                    + " et.sender_company_name,et.enquiry_address,et.enquiry_city,et.enquiry_state,et.country,et.enquiry_message, "
+                    + " et.enquiry_date_time,et.enquiry_call_duration,et.enquiry_reciever_mob,et.sender_alternate_email, "
+                    + " et.sender_alternate_mob,et.description, "
                     + " kp.key_person_name,oo.org_office_name,et.product_name "
-                    + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st,salesmanager_state_mapping ssm,key_person kp, "
+                    + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                    + " salesmanager_state_mapping ssm,key_person kp, "
                     + " org_office oo,enquiry_source_table est  "
-                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
-                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
+                    + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y' "
+                    + " and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
+                    + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id  "
+                    + " and ssm.state_id=st.state_id "
                     + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
                     + " and es.active='Y' and oo.active='Y' "
                     + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
-                    + " and et.enquiry_status_id not in(16,17,18,19,20) and (ssm.salesman_id=et.assigned_by or ssm.salesman_id=et.assigned_to) and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
+                    + " and et.enquiry_status_id not in(16,17,18,19,20) and (ssm.salesman_id=et.assigned_by or ssm.salesman_id=et.assigned_to) "
+                    + " and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
             if (user_role.equals("Sales")) {
                 query += " and ssm.salesman_id='" + logged_key_person_id + "' ";
             }
@@ -2392,7 +2433,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllPendingComplaints() Exception------------" + e);
         }
 
         return list;
@@ -2466,7 +2507,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllEnquiriesDetails() Exception------------" + e);
         }
 
         return list;
@@ -2540,7 +2581,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllComplaintDetails() Exception------------" + e);
         }
 
         return list;
@@ -2610,7 +2651,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllEnquiriesForDealer() Exception------------" + e);
         }
 
         return list;
@@ -2680,7 +2721,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getPendingEnquiriesForDealer() Exception------------" + e);
         }
 
         return list;
@@ -2749,7 +2790,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllComplaintForDealer() Exception------------" + e);
         }
 
         return list;
@@ -2818,7 +2859,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getPendingComplaintForDealer() Exception------------" + e);
         }
 
         return list;
@@ -2914,7 +2955,7 @@ public class DealersOrderModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel--getDealersStateWise()-- " + e);
+            System.out.println("Error:DealersOrderModel--getDealersStateWise()-- " + e);
         }
         return list;
     }
@@ -2999,9 +3040,11 @@ public class DealersOrderModel {
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
-                        String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no,
-                                product_name, assigned_to_dealer, "sales", "dealer");
-                        String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                        String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                product_name, assigned_to_dealer, "sales", "dealer");
+//                        String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                product_name, enquiry_table_id, assigned_to_dealer, "sales", "dealer");
+                        String result = sendNotification(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
                                 product_name, enquiry_table_id, assigned_to_dealer, "sales", "dealer");
                     } else {
                         status = false;
@@ -3010,7 +3053,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:DealersOrderModel assignToDealer-" + e);
         }
         if (rowsAffected > 0) {
             message = " Your Enquiry successfully assigend !.";
@@ -3103,9 +3146,11 @@ public class DealersOrderModel {
                     rowsAffected = psmt.executeUpdate();
                     if (rowsAffected > 0) {
                         status = true;
-                        String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name,
-                                assigned_to_dealer, "complaint", "dealer");
-                        String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                        String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name,
+//                                assigned_to_dealer, "complaint", "dealer");
+//                        String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                product_name, complaint_table_id, assigned_to_dealer, "complaint", "dealer");
+                        String result = sendNotification(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
                                 product_name, complaint_table_id, assigned_to_dealer, "complaint", "dealer");
                     } else {
                         status = false;
@@ -3113,7 +3158,7 @@ public class DealersOrderModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignComplaintToSalesPerson-" + e);
+            System.out.println("Error:DealersOrderModel assignComplaintToDealer()-" + e);
         }
         if (rowsAffected > 0) {
             message = " Your Enquiry successfully assigend !.";
@@ -3137,7 +3182,7 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("EnquiryModel getKeyPersonId Error: " + e);
+            System.out.println("DealersOrderModel getKeyPersonId Error: " + e);
         }
         return id;
     }
@@ -3152,7 +3197,7 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("order_table_id");
         } catch (Exception e) {
-            System.out.println("EnquiryModel getOrderTableId Error: " + e);
+            System.out.println("DealersOrderModel getOrderTableId Error: " + e);
         }
         return id;
     }
@@ -3167,7 +3212,7 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("payment_type_id");
         } catch (Exception e) {
-            System.out.println("EnquiryModel getPaymentTypeId Error: " + e);
+            System.out.println("DealersOrderModel getPaymentTypeId Error: " + e);
         }
         return id;
     }
@@ -3220,14 +3265,14 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error: OrderModel showdata-" + e);
+            System.out.println("Error: DealersOrderModel getAllPendingOrders()-" + e);
         }
         return list;
     }
 
     public int orderCheckout(DealersOrder bean, String logged_user_name, int logged_key_person_id) throws SQLException {
-        String query = "INSERT INTO order_checkout(order_table_id,key_person_id,payment_type_id,"
-                + " transaction_no,mobile_no,billing_address,shipping_address,total_amount,total_discount,discounted_amount,"
+        String query = " INSERT INTO order_checkout(order_table_id,key_person_id,payment_type_id, "
+                + " transaction_no,mobile_no,billing_address,shipping_address,total_amount,total_discount,discounted_amount, "
                 + " active,remark,date_time,revision_no) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
@@ -3239,7 +3284,7 @@ public class DealersOrderModel {
         int payment_type_id = getPaymentTypeId(bean.getPayment_type());
         int count = 0;
         java.util.Date date = new java.util.Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
         String date_time = sdf.format(date);
 
         try {
@@ -3274,21 +3319,26 @@ public class DealersOrderModel {
                 rowsAffected = pstmt.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    String query4 = " select approved_qty,order_item_id from order_table odt,order_item odi where odt.order_table_id=odi.order_table_id "
+                    String query4 = " select approved_qty,order_item_id,odi.status_id from order_table odt,order_item odi "
+                            + " where odt.order_table_id=odi.order_table_id "
                             + " and odt.active='Y' and odi.active='Y' and odt.order_table_id='" + order_table_id + "' ";
 
                     PreparedStatement pstmt4 = connection.prepareStatement(query4);
                     ResultSet rst4 = pstmt4.executeQuery();
                     int approved_qty = 0;
                     int order_item_id = 0;
+                    int status_id = 0;
                     while (rst4.next()) {
                         approved_qty = rst4.getInt("approved_qty");
                         order_item_id = rst4.getInt("order_item_id");
-
+                        status_id = rst4.getInt("status_id");
+                        if (status_id != 3) {
+                            status_id = 13;
+                        }
                         String query2 = " UPDATE order_item SET status_id=?,deliver_qty=? WHERE order_table_id=? and order_item_id=? ";
 
                         PreparedStatement pstm2 = connection.prepareStatement(query2);
-                        pstm2.setInt(1, 13);
+                        pstm2.setInt(1, status_id);
                         pstm2.setInt(2, approved_qty);
                         pstm2.setInt(3, order_table_id);
                         pstm2.setInt(4, order_item_id);
@@ -3304,7 +3354,7 @@ public class DealersOrderModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("OrderModel orderCheckout() Error: " + e);
+            System.out.println("DealersOrderModel orderCheckout() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -3421,7 +3471,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:DealersOrderModel changeEnquiryStatus()-" + e);
         }
         if (rowsAffected > 0) {
             message = " Your Enquiry successfully assigend !.";
@@ -3442,11 +3492,11 @@ public class DealersOrderModel {
                 + " enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to,product_name,assigned_by "
                 + " FROM complaint_table WHERE complaint_table_id = " + complaint_table_id + "  && active=? ";
-        String query2 = " UPDATE complaint_table SET active=? WHERE complaint_table_id=? and revision_no=?";
+        String query2 = " UPDATE complaint_table SET active=? WHERE complaint_table_id=? and revision_no=? ";
         String query3 = " INSERT INTO complaint_table(complaint_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
-                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
 //        int assigned_to = getKeyPersonId(dealer_name);
         try {
@@ -3529,7 +3579,7 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:DealersOrderModel changeComplaintEnquiryStatus()-" + e);
         }
         if (rowsAffected > 0) {
             message = " Your Enquiry successfully assigend !.";
@@ -3551,7 +3601,7 @@ public class DealersOrderModel {
             rset.next();
             id = rset.getInt("enquiry_status_id");
         } catch (Exception e) {
-            System.out.println("EnquiryModel getEnquiryStatusId Error: " + e);
+            System.out.println("DealersOrderModel getEnquiryStatusId Error: " + e);
         }
         return id;
     }
@@ -3565,9 +3615,9 @@ public class DealersOrderModel {
                 + " enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to,product_name,assigned_by "
                 + " FROM enquiry_table WHERE enquiry_table_id = " + enquiry_table_id + "  && active=? ";
-        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=?";
+        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=? ";
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
-                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
                 + " revision_no,active,description,assigned_to,product_name,assigned_by,remark,updated_date_time) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -3652,16 +3702,16 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:DealersOrderModel updateEnquiryStatus()-" + e);
         }
         if (rowsAffected > 0) {
-            message = " Your Enquiry successfully assigend !.";
+            message = " Your Enquiry successfully Updated !.";
             messageBGColor = COLOR_OK;
         } else {
             message = "Cannot update the record, some error.";
             messageBGColor = COLOR_ERROR;
         }
-        return enquiry_status;
+        return message;
     }
 
     public String updateComplaintEnquiryStatus(String enquiry_status, String date_time, String remark, String enquiry_table_id) throws SQLException {
@@ -3675,7 +3725,7 @@ public class DealersOrderModel {
                 + " FROM complaint_table WHERE complaint_table_id = " + enquiry_table_id + "  && active=? ";
         String query2 = " UPDATE complaint_table SET active=? WHERE complaint_table_id=? and revision_no=?";
         String query3 = " INSERT INTO complaint_table(complaint_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
-                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
                 + " revision_no,active,description,assigned_to,product_name,assigned_by,remark,updated_date_time) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -3760,16 +3810,16 @@ public class DealersOrderModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:DealersOrderModel updateComplaintEnquiryStatus()-" + e);
         }
         if (rowsAffected > 0) {
-            message = " Your Enquiry successfully assigend !.";
+            message = " Your Enquiry successfully Updated !.";
             messageBGColor = COLOR_OK;
         } else {
             message = "Cannot update the record, some error.";
             messageBGColor = COLOR_ERROR;
         }
-        return enquiry_status;
+        return message;
     }
 
     public JSONArray getAllSalesEnquiries(String sales_enquiry_source) {
@@ -3785,16 +3835,137 @@ public class DealersOrderModel {
         if (sales_enquiry_source.equals("Other")) {
             enquiry_source_id = 13;
         }
+//        String sold_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (16) "
+//                + " and es.active='Y' ";
+//
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            sold_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            sold_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        sold_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
+//
+//        String unsold_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (17,18,19,20) "
+//                + " and es.active='Y' ";
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            unsold_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            unsold_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        unsold_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
+//
+//        String open_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (13) "
+//                + " and es.active='Y' ";
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            open_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            open_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        open_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
+//
+//        String call_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (14) "
+//                + " and es.active='Y' ";
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            call_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            call_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        call_query += "   group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
+//
+//        String follow_up_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (15) "
+//                + " and es.active='Y' ";
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            follow_up_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            follow_up_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        follow_up_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
+//
+//        String assigned_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (2,3,4) "
+//                + " and es.active='Y'  ";
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            assigned_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            assigned_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        assigned_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
+//
+//        String pending_query = " select * "
+//                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+//                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
+//                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
+//                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
+//                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
+//                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
+//                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+//                + " and et.enquiry_status_id in (1) "
+//                + " and es.active='Y' ";
+//        if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
+//            pending_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
+//        }
+//        if (sales_enquiry_source.equals("") || sales_enquiry_source.equals("All")) {
+//            pending_query += " and et.enquiry_source_table_id in(1,2,3,4,13,14,15,16,17,18,19,20) ";
+//        }
+//        pending_query += " group by et.enquiry_table_id   order by et.enquiry_table_id desc ";
+
         String sold_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (16) "
-                + " and es.active='Y' ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (16) "
+                + " and et.active='Y' ";
 
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             sold_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
@@ -3805,15 +3976,9 @@ public class DealersOrderModel {
         sold_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
 
         String unsold_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (17,18,19,20) "
-                + " and es.active='Y' ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (17,18,19,20) "
+                + " and et.active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             unsold_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
@@ -3823,15 +3988,9 @@ public class DealersOrderModel {
         unsold_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
 
         String open_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (13) "
-                + " and es.active='Y' ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (13) "
+                + " and et.active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             open_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
@@ -3841,15 +4000,9 @@ public class DealersOrderModel {
         open_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
 
         String call_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (14) "
-                + " and es.active='Y' ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (14) "
+                + " and et.active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             call_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
@@ -3859,15 +4012,9 @@ public class DealersOrderModel {
         call_query += "   group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
 
         String follow_up_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (15) "
-                + " and es.active='Y' ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (15) "
+                + " and et.active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             follow_up_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
@@ -3877,15 +4024,9 @@ public class DealersOrderModel {
         follow_up_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
 
         String assigned_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (2,3,4) "
-                + " and es.active='Y'  ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (2,3,4) "
+                + " and et.active='Y'  ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             assigned_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
@@ -3895,15 +4036,9 @@ public class DealersOrderModel {
         assigned_query += "  group by et.enquiry_table_id  order by et.enquiry_table_id desc ";
 
         String pending_query = " select * "
-                + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (1) "
-                + " and es.active='Y' ";
+                + " from enquiry_table et "
+                + " where et.enquiry_status_id in (1) "
+                + " and et.active='Y' ";
         if (sales_enquiry_source.equals("IndiaMART") || sales_enquiry_source.equals("Other")) {
             pending_query += " and et.enquiry_source_table_id in('" + enquiry_source_id + "') ";
         }
@@ -3986,161 +4121,59 @@ public class DealersOrderModel {
 
             arrayObj.add(jsonObj);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("DealersOrderModel getAllSalesEnquiries() error--" + e);
         }
         return arrayObj;
     }
 
     public JSONArray getAllComplaintEnquiries() {
-
-//        PreparedStatement pstmt = null;
-//        ResultSet rset = null;
-//        JSONObject obj = new JSONObject();
-//        JSONArray arrayObj = new JSONArray();
-//        String resolved_query = " select count(*) as count  from complaint_table where enquiry_status_id in(6) and active='Y' ";
-//        String unresolved_query = " select count(*) as count from complaint_table where enquiry_status_id in(5) and active='Y' ";
-//        String assigned_query = " select count(*) as count from complaint_table where enquiry_status_id in(2,3,4) and active='Y' ";
-//        String pending_query = " select count(*) as count from complaint_table where enquiry_status_id in(1) and active='Y' ";
-//
-//        int resolved_enquiry_count = 0;
-//        int unresolved_enquiry_count = 0;
-//        int assigned_enquiry_count = 0;
-//        int pending_enquiry_count = 0;
-//        try {
-//            pstmt = connection.prepareStatement(resolved_query);
-//            rset = pstmt.executeQuery();
-//            while (rset.next()) {
-//                resolved_enquiry_count = rset.getInt("count");
-//            }
-//
-//            pstmt = null;
-//            rset = null;
-//            pstmt = connection.prepareStatement(unresolved_query);
-//            rset = pstmt.executeQuery();
-//            while (rset.next()) {
-//                unresolved_enquiry_count = rset.getInt("count");
-//            }
-//
-//            pstmt = null;
-//            rset = null;
-//            pstmt = connection.prepareStatement(assigned_query);
-//            rset = pstmt.executeQuery();
-//            while (rset.next()) {
-//                assigned_enquiry_count = rset.getInt("count");
-//            }
-//
-//            pstmt = null;
-//            rset = null;
-//            pstmt = connection.prepareStatement(pending_query);
-//            rset = pstmt.executeQuery();
-//            while (rset.next()) {
-//                pending_enquiry_count = rset.getInt("count");
-//            }
-//            JSONObject jsonObj = new JSONObject();
-//            jsonObj.put("resolved_enquiry_count", resolved_enquiry_count);
-//            jsonObj.put("unresolved_enquiry_count", unresolved_enquiry_count);
-//            jsonObj.put("assigned_enquiry_count", assigned_enquiry_count);
-//            jsonObj.put("pending_enquiry_count", pending_enquiry_count);
-//
-//            arrayObj.add(jsonObj);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return arrayObj;
         PreparedStatement pstmt = null;
         ResultSet rset = null;
         int enquiry_source_id = 0;
         JSONObject obj = new JSONObject();
         JSONArray arrayObj = new JSONArray();
+
         String sold_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (16) "
-                + " and es.active='Y' ";
+                + " from complaint_table et where et.active='Y' "
+                + " and et.enquiry_status_id in (16) ";
 
         sold_query += "  group by et.complaint_table_id  order by et.complaint_table_id desc ";
 
         String unsold_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (17,18,19,20) "
-                + " and es.active='Y' ";
+                + " from complaint_table et where et.active='Y' "
+                + " and et.enquiry_status_id in (17,18,19,20) ";
 
         unsold_query += "  group by et.complaint_table_id  order by et.complaint_table_id desc ";
 
         String open_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (13) "
-                + " and es.active='Y' ";
+                + " from complaint_table et where et.active='Y' "
+                + " and et.enquiry_status_id in (13) ";
 
         open_query += "  group by et.complaint_table_id  order by et.complaint_table_id desc ";
 
         String call_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (14) "
-                + " and es.active='Y' ";
+                + " from complaint_table et where et.active='Y' "
+                + " and et.enquiry_status_id in (14) ";
 
         call_query += "   group by et.complaint_table_id  order by et.complaint_table_id desc ";
 
         String follow_up_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (15) "
-                + " and es.active='Y' ";
+                + " from complaint_table et where et.active='Y' "
+                + " and et.enquiry_status_id in (15) ";
 
         follow_up_query += "  group by et.complaint_table_id  order by et.complaint_table_id desc ";
 
         String assigned_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (2,3,4) "
-                + " and es.active='Y'  ";
+                + " from complaint_table et "
+                + " where et.enquiry_status_id in (2,3,4) "
+                + " and et.active='Y'  ";
 
         assigned_query += "  group by et.complaint_table_id  order by et.complaint_table_id desc ";
 
         String pending_query = " select * "
-                + " from complaint_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
-                + " key_person kp,org_office oo,enquiry_source_table est   where et.active='Y' and ct.active='Y' "
-                + " and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y'  and kp.active='Y' "
-                + " and kp.key_person_id=et.assigned_to and oo.active='Y' and kp.org_office_id=oo.org_office_id  "
-                + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and  dt.division_id=dv.division_id "
-                + " and dv.state_id=st.state_id and est.active='Y'  and et.enquiry_source_table_id=est.enquiry_source_table_id "
-                + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
-                + " and et.enquiry_status_id in (1) "
-                + " and es.active='Y' ";
-
+                + " from complaint_table et "
+                + " where et.enquiry_status_id in (1) "
+                + " and et.active='Y' ";
         pending_query += " group by et.complaint_table_id   order by et.complaint_table_id desc ";
 
         int sold_enquiry_count = 0;
@@ -4217,7 +4250,7 @@ public class DealersOrderModel {
 
             arrayObj.add(jsonObj);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("DealersOrderModel getAllComplaintEnquiries() error" + e);
         }
         return arrayObj;
 
@@ -4261,7 +4294,7 @@ public class DealersOrderModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("DealersOrderModel getAllLatestItems() Exception------------" + e);
         }
 
         return list;
@@ -4332,6 +4365,39 @@ public class DealersOrderModel {
 //        }
 //        return list;
 //    }
+    public static ArrayList<EventBean> getEvents(int logged_key_person_id, String user_role) {
+        ArrayList<EventBean> list = new ArrayList<EventBean>();
+        String query = " select kp.key_person_name,kp.key_person_id,oo.org_office_id,oo.org_office_name,de.date_time,"
+                + " ev.title,ev.description,ev.document_name "
+                + " from key_person kp,dealer_events de,org_office oo,events ev where de.active='Y' and kp.active='Y' and oo.active='Y' "
+                + " and ev.active='Y' and ev.events_id=de.events_id "
+                + "  and kp.key_person_id=de.dealer_id and oo.org_office_id=kp.org_office_id ";
+        if (!user_role.equals("Admin")) {
+            query += " and de.dealer_id='" + logged_key_person_id + "' ";
+        }
+
+        query += " order by ev.events_id desc  ";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                EventBean bean = new EventBean();
+                bean.setKey_person(rset.getString("key_person_name"));
+                bean.setOrg_office(rset.getString("org_office_name"));
+                bean.setOrg_office_id(rset.getInt("org_office_id"));
+                bean.setKey_person_id(rset.getInt("key_person_id"));
+                bean.setDate_time(rset.getString("date_time"));
+                bean.setTitle(rset.getString("title"));
+                bean.setDescription(rset.getString("description"));
+                bean.setDocument_name(rset.getString("document_name"));
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in DealersOrderModel getEvents -- " + e);
+        }
+        return list;
+    }
+
     public void closeConnection() {
         try {
             connection.close();

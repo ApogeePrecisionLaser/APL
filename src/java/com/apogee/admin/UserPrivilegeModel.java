@@ -76,7 +76,7 @@ public class UserPrivilegeModel {
                 + " AND IF('" + role_nameSearch + "'='', ur.role_name LIKE '%%', ur.role_name='" + role_nameSearch + "') "
                 + " AND IF('" + u_urlSearch + "'='', uu.u_url LIKE '%%', uu.u_url='" + u_urlSearch + "') "
                 + " order by uup.u_url_privilege_id ";
-                //+ " order by ur.priority ";
+        //+ " order by ur.priority ";
         try {
             System.err.println("user privilege query -" + query);
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -106,8 +106,8 @@ public class UserPrivilegeModel {
         PreparedStatement pstmt = null;
         String[] role_blocks = userUrlPrivilege.getRole_nameM();
         String[] u_url_privilege_id = userUrlPrivilege.getU_url_privilege_idM();
-        String query = "INSERT INTO u_url_privilege"
-                + " (u_role_url_privilege_id, url_detail_id, privilege, active, remark) values (?,?,?,?,?)";
+        String query = " INSERT INTO u_url_privilege "
+                + " (u_role_url_privilege_id, url_detail_id, privilege, active, remark) values (?,?,?,?,?) ";
         try {
             for (int i = 0; i < u_url_privilege_id.length; i++) {
                 if (userUrlPrivilege.getU_url_privilege_idM()[i].equals("1")) {
@@ -165,7 +165,7 @@ public class UserPrivilegeModel {
     }
 
     public int updatePrivilegeInBulk(UserPrivilegeBean userUrlPrivilege) {
-        String query = "UPDATE u_url_privilege SET privilege = ? WHERE u_url_privilege_id = ? ";
+        String query = " UPDATE u_url_privilege SET privilege = ? WHERE u_url_privilege_id = ? ";
         String[] url_PrivID = userUrlPrivilege.getUrl_privID();
         String[] priv = userUrlPrivilege.getPrivilegeM();
         int rowsAffected = 0;
@@ -206,8 +206,8 @@ public class UserPrivilegeModel {
                     + " urup.u_role_url_privilege_id=uup.u_role_url_privilege_id "
                     + " and uu.u_url=? and ur.role_name=? and p.privilege_type=? ";
 
-            String query = "UPDATE u_url_privilege SET privilege =?, remark=? "
-                    + " WHERE u_url_privilege_id=?";
+            String query = " UPDATE u_url_privilege SET privilege =?, remark=? "
+                    + " WHERE u_url_privilege_id=? ";
 
             try {
 
@@ -250,8 +250,8 @@ public class UserPrivilegeModel {
                     + " urup.u_role_url_privilege_id=uup.u_role_url_privilege_id "
                     + " and uu.u_url=? and ur.role_name=? ";
 
-            String query = "UPDATE u_url_privilege SET privilege =?, remark=? "
-                    + " WHERE u_url_privilege_id=?";
+            String query = " UPDATE u_url_privilege SET privilege =?, remark=? "
+                    + " WHERE u_url_privilege_id=? ";
 
             try {
 
@@ -290,7 +290,7 @@ public class UserPrivilegeModel {
     }
 
     public int deleteRecord(int u_url_privilege_id) {
-        String query = "DELETE FROM u_url_privilege WHERE u_url_privilege_id=" + u_url_privilege_id;
+        String query = " DELETE FROM u_url_privilege WHERE u_url_privilege_id=" + u_url_privilege_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -309,7 +309,7 @@ public class UserPrivilegeModel {
 
     public List<String> getRoleName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT role_name FROM user_roles GROUP BY role_name ORDER BY role_name ";
+        String query = " SELECT role_name FROM user_roles GROUP BY role_name ORDER BY role_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -333,7 +333,7 @@ public class UserPrivilegeModel {
     public List<String> getPrivilegeType(String q, String url) {
         String qq = null;
         List<String> list = new ArrayList<String>();
-        String query = "SELECT privilege_type FROM url_Detail WHERE url_id=(SELECT u_url_id FROM u_url WHERE u_url=?) GROUP BY privilege_type ORDER BY privilege_type";
+        String query = " SELECT privilege_type FROM url_Detail WHERE url_id=(SELECT u_url_id FROM u_url WHERE u_url=?) GROUP BY privilege_type ORDER BY privilege_type ";
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, url);
@@ -359,7 +359,7 @@ public class UserPrivilegeModel {
     public List<String> getU_Url(String q) {
         String qq = null;
         List<String> list = new ArrayList<String>();
-        String query = "SELECT u_url FROM u_url uu, u_role_url_privilege urp WHERE urp.u_url_id = uu.u_url_id  GROUP BY  u_url ORDER BY u_url ";
+        String query = " SELECT u_url FROM u_url uu, u_role_url_privilege urp WHERE urp.u_url_id = uu.u_url_id  GROUP BY  u_url ORDER BY u_url ";
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
@@ -382,8 +382,8 @@ public class UserPrivilegeModel {
     }
 
     public int getRoleUrlPrivilegeID(String role_name, String u_url) {
-        String query = "SELECT u_role_url_privilege_id "
-                + " FROM u_role_url_privilege AS a, user_roles AS b, u_url AS c"
+        String query = " SELECT u_role_url_privilege_id "
+                + " FROM u_role_url_privilege AS a, user_roles AS b, u_url AS c "
                 + " WHERE a.user_role_id = b.user_role_id "
                 + " AND a.u_url_id = c.u_url_id "
                 + " AND b.role_name='" + role_name + "' "
@@ -405,9 +405,9 @@ public class UserPrivilegeModel {
     public int getUrl_Detail_ID(String url, String privilege_type) {
         int id = 0;
         PreparedStatement pstmt = null;
-        String query = "SELECT url_detail_id FROM url_detail WHERE "
-                + " privilege_type =?"
-                + " AND url_id=(SELECT u_url_id from u_url WHERE u_url=?)";
+        String query = " SELECT url_detail_id FROM url_detail WHERE "
+                + " privilege_type =? "
+                + " AND url_id=(SELECT u_url_id from u_url WHERE u_url=?) ";
         try {
             pstmt = connection.prepareStatement(query);
             pstmt.setString(1, privilege_type);
@@ -427,9 +427,9 @@ public class UserPrivilegeModel {
     public int getU_Role_Url_Privilege_ID(String role, String url) throws Exception {
         int id = 0;
         PreparedStatement pstmt = null;
-        String query = "SELECT u_role_url_privilege_id FROM u_role_url_privilege WHERE "
-                + " user_role_id =(SELECT user_role_id FROM user_roles WHERE role_name=?)"
-                + " AND u_url_id=(SELECT u_url_id from u_url WHERE u_url=?)";
+        String query = " SELECT u_role_url_privilege_id FROM u_role_url_privilege WHERE "
+                + " user_role_id =(SELECT user_role_id FROM user_roles WHERE role_name=?) "
+                + " AND u_url_id=(SELECT u_url_id from u_url WHERE u_url=?) ";
         pstmt = connection.prepareStatement(query);
         pstmt.setString(1, role);
         pstmt.setString(2, url);
@@ -486,38 +486,29 @@ public class UserPrivilegeModel {
             System.out.println("UserRoleModel closeConnection() Error: " + e);
         }
     }
-    
-    
-    
-    
-    public void insertData(){
+
+    public void insertData() {
         PreparedStatement psmt;
         ResultSet rst;
-        int count=0;
-        String query="";
-        try{
+        int count = 0;
+        String query = "";
+        try {
             connection.setAutoCommit(false);
-            for(int k=1;k<=96;k++){
-                for(int l=1;l<=120;l++){
-                    query=" insert into apl_test.u_url_privilege(url_detail_id,u_role_url_privilege_id) values(?,?) ";
-                    psmt=connection.prepareStatement(query);
+            for (int k = 1; k <= 96; k++) {
+                for (int l = 1; l <= 120; l++) {
+                    query = " insert into apl_test.u_url_privilege(url_detail_id,u_role_url_privilege_id) values(?,?) ";
+                    psmt = connection.prepareStatement(query);
                     psmt.setInt(1, l);
                     psmt.setInt(2, k);
-                    count=psmt.executeUpdate();
-                    if(count>0){
+                    count = psmt.executeUpdate();
+                    if (count > 0) {
                         connection.commit();
                     }
                 }
             }
-        }catch(Exception e){
-            System.out.println("com.apogee.admin.UserPrivilegeModel.insertData() -"+e);
+        } catch (Exception e) {
+            System.out.println("com.apogee.admin.UserPrivilegeModel.insertData() -" + e);
         }
     }
-    
-    
-    
-    
-    
-    
-    
+
 }

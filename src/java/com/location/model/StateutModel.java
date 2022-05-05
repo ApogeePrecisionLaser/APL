@@ -61,8 +61,8 @@ public class StateutModel {
 
     public List<StateutBean> showAllData(String stateutName) {
         ArrayList<StateutBean> list = new ArrayList<StateutBean>();
-        String query1 = "select state_name,ut_name,stateut_description,zone_name,country_name from state, zone,country"
-                + " where state.zone_id = zone.zone_id and state.country_id=country.country_id and if('" + stateutName + "'='',state_name LIKE '%%',state_name='" + stateutName + "')";
+        String query1 = " select state_name,ut_name,stateut_description,zone_name,country_name from state, zone,country "
+                + " where state.zone_id = zone.zone_id and state.country_id=country.country_id and if('" + stateutName + "'='',state_name LIKE '%%',state_name='" + stateutName + "') ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             ResultSet rset = pstmt.executeQuery();
@@ -197,27 +197,27 @@ public class StateutModel {
             String state_name = krutiToUnicode.convert_to_unicode(stateName);
             String ut_name = krutiToUnicode.convert_to_unicode(utName);
             String stateut_description = krutiToUnicode.convert_to_unicode(stateutDescription);
-            String countryQuery = "select count(*) from country where country_name='" + countryName + "'";
+            String countryQuery = " select count(*) from country where country_name='" + countryName + "' ";
             prestaCountry = connection.prepareStatement(countryQuery);
             ResultSet resultCountry = prestaCountry.executeQuery();
             resultCountry.next();
             int countryNo = resultCountry.getInt(1);
             if (countryNo == 1) {
-                String zoneQuery = "select count(*) from zone where zone_name='" + zoneName.trim() + "'";
+                String zoneQuery = " select count(*) from zone where zone_name='" + zoneName.trim() + "' ";
                 prestaZone = connection.prepareStatement(zoneQuery);
                 ResultSet resultZone = prestaZone.executeQuery();
                 resultZone.next();
                 int zoneNo = resultZone.getInt(1);
                 if (zoneNo == 1) {
-                    String stateQuery = "select count(*) from state where state_name='" + state_name + "'";
+                    String stateQuery = " select count(*) from state where state_name='" + state_name + "' ";
                     prestaState = connection.prepareStatement(stateQuery);
                     ResultSet resultState = prestaState.executeQuery();
                     resultState.next();
                     int stateNo = stateNo = resultState.getInt(1);
-                    String query = "update state set state_name='" + state_name.trim() + "',ut_name='" + ut_name.trim() + "',stateut_description='" + stateut_description.trim() + "',"
-                            + "zone_id=(select zone_id from zone where '" + zoneName.trim() + "'=zone.zone_name),"
-                            + "country_id=(select country_id from country where '" + countryName.trim() + "'=country.country_name)"
-                            + "where state_id=" + Integer.parseInt(stateutId.trim());
+                    String query = " update state set state_name='" + state_name.trim() + "',ut_name='" + ut_name.trim() + "',stateut_description='" + stateut_description.trim() + "', "
+                            + " zone_id=(select zone_id from zone where '" + zoneName.trim() + "'=zone.zone_name), "
+                            + " country_id=(select country_id from country where '" + countryName.trim() + "'=country.country_name) "
+                            + " where state_id=" + Integer.parseInt(stateutId.trim());
                     presta = connection.prepareStatement(query);
                     int i = presta.executeUpdate();
                     if (i > 0) {
@@ -244,7 +244,7 @@ public class StateutModel {
     public void deleteRecord(int stateut_id) {
         PreparedStatement presta = null;
         try {
-            presta = connection.prepareStatement("delete from state where state_id=?");
+            presta = connection.prepareStatement(" delete from state where state_id=? ");
             presta.setInt(1, stateut_id);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -264,9 +264,9 @@ public class StateutModel {
         String query = null;
         searchStateut = (searchStateut);
         if (searchStateut.equals("")) {
-            query = "select state_id,state_name,ut_name,stateut_description,country_name from state,country where  state.country_id=country.country_id order by state_name limit " + lowerLimit + "," + noOfRowsToDisplay + "";
+            query = " select state_id,state_name,ut_name,stateut_description,country_name from state,country where  state.country_id=country.country_id order by state_name limit " + lowerLimit + "," + noOfRowsToDisplay + " ";
         } else {
-            query = "select state_id,state_name,ut_name,stateut_description,country_name from state,country where (state.country_id=country.country_id) and ((state_name='" + searchStateut + "')or(ut_name='" + searchStateut + "')) limit " + lowerLimit + "," + noOfRowsToDisplay + "";
+            query = " select state_id,state_name,ut_name,stateut_description,country_name from state,country where (state.country_id=country.country_id) and ((state_name='" + searchStateut + "')or(ut_name='" + searchStateut + "')) limit " + lowerLimit + "," + noOfRowsToDisplay + " ";
         }
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -293,9 +293,9 @@ public class StateutModel {
         String query;
         searchStateut = searchStateut;
         if (!searchStateut.equals("")) {
-            query = "select count(*) from state where state_name='" + searchStateut + "' or ut_name='" + searchStateut + "'";
+            query = " select count(*) from state where state_name='" + searchStateut + "' or ut_name='" + searchStateut + "' ";
         } else {
-            query = "select count(*) from state";
+            query = " select count(*) from state ";
         }
         int noOfRows = 0;
         try {
@@ -383,7 +383,7 @@ public class StateutModel {
 //    }  
     public int getCountryId(String country_name) {
         int country_id = 0;
-        String query = "select country_id from country where country_name= '" + country_name + "' ";
+        String query = " select country_id from country where country_name= '" + country_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -398,7 +398,7 @@ public class StateutModel {
 
     public int insertRecord(StateutBean Bean) {
 
-        String query = "INSERT INTO state(state_name, ut_name, stateut_description, country_id,revision_no,active ) VALUES( ?,?,?,?,?,?)";
+        String query = " INSERT INTO state(state_name, ut_name, stateut_description, country_id,revision_no,active ) VALUES( ?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -425,7 +425,7 @@ public class StateutModel {
     }
 
     public int updateRecord(StateutBean Bean, int stateutId) {
-        String query = "UPDATE state SET state_name=?, ut_name=?, stateut_description=?  WHERE state_id=?";
+        String query = " UPDATE state SET state_name=?, ut_name=?, stateut_description=?  WHERE state_id=? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);

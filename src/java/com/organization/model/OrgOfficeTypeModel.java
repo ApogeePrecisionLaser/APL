@@ -105,7 +105,7 @@ public class OrgOfficeTypeModel {
     }
 
     public int insertRecord(OrgOfficeType org_office_type) {
-        String query = "INSERT INTO org_office_type(office_type, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
+        String query = " INSERT INTO org_office_type(office_type, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -133,9 +133,9 @@ public class OrgOfficeTypeModel {
         int revision = OrgOfficeTypeModel.getRevisionno(org_office_type, office_type_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM org_office_type WHERE office_type_id = " + office_type_id + "  && active=? ";
-        String query2 = "UPDATE org_office_type SET active =? WHERE office_type_id =? and revision_no=? ";
-        String query3 = "INSERT INTO org_office_type(office_type_id,office_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM org_office_type WHERE office_type_id = " + office_type_id + "  && active=? ";
+        String query2 = " UPDATE org_office_type SET active =? WHERE office_type_id =? and revision_no=? ";
+        String query3 = " INSERT INTO org_office_type(office_type_id,office_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -185,7 +185,7 @@ public class OrgOfficeTypeModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM org_office_type WHERE office_type_id =" + office_type_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM org_office_type WHERE office_type_id =" + office_type_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -203,7 +203,7 @@ public class OrgOfficeTypeModel {
     }
 
     public int deleteRecord(int office_type_id) {
-        String query = "DELETE FROM org_office_type WHERE active='Y' and office_type_id = " + office_type_id;
+        String query = " DELETE FROM org_office_type WHERE active='Y' and office_type_id = " + office_type_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();

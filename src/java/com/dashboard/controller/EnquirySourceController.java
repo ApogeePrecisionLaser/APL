@@ -2,11 +2,7 @@ package com.dashboard.controller;
 
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.Enquiry;
-import com.dashboard.bean.Profile;
 import com.dashboard.model.EnquiryModel;
-import com.dashboard.model.ProfileModel;
-import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,6 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class EnquirySourceController extends HttpServlet {
 
     @Override

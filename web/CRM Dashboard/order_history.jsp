@@ -46,7 +46,7 @@
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive tableScrollWrap noWrapTable" >
-                                    <table class="table table-striped1 mainTable" id="mytable" >
+                                    <table class="table table-striped1 mainTable" id="mytable1" >
                                         <thead>
                                             <tr>
                                                 <th class="fontFourteen">S.No.</th>
@@ -54,7 +54,11 @@
                                                     <c:if test="${user_role=='Admin'}">
                                                     <th class="fontFourteen">Requested By</th>
                                                     </c:if>
-                                                <th class="fontFourteen">Price</th>
+                                                    <c:if test="${user_role!='Admin'}">
+                                                    <th class="fontFourteen" style="display: none"></th>
+                                                    </c:if>
+
+                                                <th class="fontFourteen">Price (<i class="fas fa-rupee-sign fontTen"></i>)</th>
                                                 <th class="fontFourteen">Date</th>
                                                 <th class="fontFourteen">Status</th>
                                                 <th class="fontFourteen">Action</th>
@@ -67,12 +71,15 @@
                                                 <tr>
                                                     <td class="fontFourteen">${loopCounter.count}</td>
                                                     <td class="fontFourteen">${beanType.order_no}</td>
+
                                                     <c:if test="${user_role=='Admin'}">
                                                         <td class="fontFourteen">${beanType.requested_by}</td>
                                                     </c:if>
+                                                    <c:if test="${user_role!='Admin'}">
+                                                        <td class="fontFourteen" style="display: none"></td>
+                                                    </c:if>
 
-                                                    <td class="fontFourteen"><i class="fas fa-rupee-sign fontTen"></i> <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
-                                                                      value =  "${beanType.basic_price}" /></td>
+                                                    <td class="fontFourteen"> ${beanType.basic_price}</td>
                                                     <td class="fontFourteen">${beanType.date_time}</td>
 
                                                     <c:choose>  
@@ -84,6 +91,9 @@
                                                         </c:when>  
                                                         <c:when test="${beanType.status == 'Denied'}">  
                                                             <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i></td>
+                                                            </c:when> 
+                                                            <c:when test="${beanType.status == 'Payment Done'}">  
+                                                            <td class="fontFourteen"><i class="statusPaymentDone">${beanType.status}</i></td>
                                                             </c:when> 
                                                             <c:when test="${beanType.status == 'Delivered'}">  
                                                             <td class="fontFourteen"><i class="statusDelivered">${beanType.status}</i></td>
@@ -132,4 +142,22 @@
             }
         });
     }
+
+    $(document).ready(function () {
+        var table = $('#mytable1').DataTable({
+//            data: table_data,
+            "scrollY": "400px",
+            "scrollCollapse": true,
+            "columnDefs": [{
+                    "targets": [3],
+                    "render": function (data, type, row) {
+                        return Number(data).toLocaleString('en-IN', {
+                            maximumFractionDigits: 2,
+                            style: 'currency',
+                            currency: 'INR'
+                        });
+                    }
+                }]
+        });
+    })
 </script>

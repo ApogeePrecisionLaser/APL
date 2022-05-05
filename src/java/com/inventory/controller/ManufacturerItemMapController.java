@@ -26,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+/**
+ *
+ * @author Komal
+ */
 public class ManufacturerItemMapController extends HttpServlet {
 
     @Override

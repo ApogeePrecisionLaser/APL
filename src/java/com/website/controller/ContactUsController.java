@@ -5,8 +5,6 @@
 package com.website.controller;
 
 import com.DBConnection.DBConnection;
-import com.general.model.GeneralModel;
-import com.organization.tableClasses.Designation;
 import com.website.model.ContactUsModel;
 import java.io.IOException;
 import java.io.PrintWriter;

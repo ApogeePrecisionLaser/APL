@@ -87,8 +87,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex priceBox">
-                                            <h2 class="mb-0 mt-1">Rs. <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
-                                                              value =  "${beanType1.basic_price}" /></h2> &nbsp&nbsp
+                                            <h2 class="mb-0 mt-1"><small> <i class="fas fa-rupee-sign curruncyIcon"></i></small> </h2> <h2 class="mb-0 mt-1" id="price${loopCounter.count}"> ${beanType1.basic_price}</h2> &nbsp&nbsp
                                             <!--<h3 style=""> <del>₹110.8</del></h3>-->
                                             <!--<div id="msg_div${loopCounter.count }" style="color:red;display: none;margin-left: 50px"> <b>Out Of Stock</b></div>-->
 
@@ -169,6 +168,11 @@
                                                                     // alert("http://localhost:8080/APL/DealersOrderController?getImage=" + image + "");
 //                                                                    $('.img-fluid' + (j + 1)).attr("src", "http://120.138.10.146:8080/APL/DealersOrderController?getImage=" + image + "");
                                                                     $('.img-fluid' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
+
+                                                                    var price = $('#price' + (j + 1)).text();
+                                                                    var price1 = convertToCommaSeperate(price);
+                                                                    $('#price' + (j + 1)).text(price1);
+
                                                                 }
                                                             });
 
@@ -206,5 +210,21 @@
                                                                         response(error.responseText);
                                                                     }
                                                                 });
+                                                            }
+
+                                                            function convertToCommaSeperate(x) {
+                                                                x = x.toString();
+                                                                var afterPoint = '';
+                                                                if (x.indexOf('.') > 0)
+                                                                    afterPoint = x.substring(x.indexOf('.'), x.length);
+                                                                x = Math.floor(x);
+                                                                x = x.toString();
+                                                                var lastThree = x.substring(x.length - 3);
+                                                                var otherNumbers = x.substring(0, x.length - 3);
+                                                                if (otherNumbers != '')
+                                                                    lastThree = ',' + lastThree;
+                                                                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+
+                                                                return res;
                                                             }
 </script>

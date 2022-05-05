@@ -1,17 +1,12 @@
 package com.dashboard.controller;
 
-import com.location.model.CityModel;
-import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.model.DealersOrderModel;
-import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,11 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class PendingOrdersController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+        System.err.println("Wegerhrthytj----------------");
         String logged_user_name = "";
         String logged_designation = "";
         String logged_org_name = "";
@@ -39,7 +40,7 @@ public class PendingOrdersController extends HttpServlet {
         String loggedUser = "";
 
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null)  {
+        if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {
@@ -81,10 +82,12 @@ public class PendingOrdersController extends HttpServlet {
             float total_approved_price = 0;
 
             for (int i = 0; i < list.size(); i++) {
-                total_amount = total_amount + Float.parseFloat(list.get(i).getBasic_price());
-                total_discount_price = total_discount_price + Float.parseFloat(list.get(i).getDiscount_price());
-                total_discount_percent = total_discount_percent + Float.parseFloat(list.get(i).getDiscount_percent());
-                total_approved_price = total_approved_price + Float.parseFloat(list.get(i).getApproved_price());
+                if (!list.get(i).getItem_status().equals("Denied")) {
+                    total_amount = total_amount + Float.parseFloat(list.get(i).getBasic_price());
+                    total_discount_price = total_discount_price + Float.parseFloat(list.get(i).getDiscount_price());
+                    total_discount_percent = total_discount_percent + Float.parseFloat(list.get(i).getDiscount_percent());
+                    total_approved_price = total_approved_price + Float.parseFloat(list.get(i).getApproved_price());
+                }
             }
 
             DBConnection.closeConncetion(model.getConnection());
@@ -142,6 +145,7 @@ public class PendingOrdersController extends HttpServlet {
         request.setAttribute("msgBgColor", model.getMessageBGColor());
         request.setAttribute("list", list);
         request.setAttribute("user_role", loggedUser);
+        request.setAttribute("count", list.size());
         DBConnection.closeConncetion(model.getConnection());
 
         request.getRequestDispatcher("pending_order").forward(request, response);

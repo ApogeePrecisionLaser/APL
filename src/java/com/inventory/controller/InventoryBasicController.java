@@ -9,19 +9,13 @@ import com.DBConnection.DBConnection;
 import com.inventory.model.InventoryBasicModel;
 import com.inventory.model.ItemNameModel;
 import com.inventory.tableClasses.InventoryBasic;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -29,9 +23,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -61,8 +52,8 @@ public class InventoryBasicController extends HttpServlet {
         int logged_key_person_id = 0;
 
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")
-                || !session.getAttribute("user_role").equals("Incharge")) {
+        if (session == null || session.getAttribute("logged_user_name") == null || (!session.getAttribute("user_role").equals("Super Admin")
+                && !session.getAttribute("user_role").equals("Incharge"))) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {

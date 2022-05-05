@@ -45,6 +45,7 @@ public class Inventory {
     private String parent_item_id;
     private int generation;
     private String popupval;
+    private String user_role;
     private String is_super_child;
     private String delivery_challan_img;
 
@@ -522,6 +523,20 @@ public class Inventory {
      */
     public void setIs_super_child(String is_super_child) {
         this.is_super_child = is_super_child;
+    }
+
+    /**
+     * @return the user_role
+     */
+    public String getUser_role() {
+        return user_role;
+    }
+
+    /**
+     * @param user_role the user_role to set
+     */
+    public void setUser_role(String user_role) {
+        this.user_role = user_role;
     }
 
 }

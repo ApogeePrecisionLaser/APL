@@ -9,15 +9,12 @@ import com.general.tableClasses.CityBean;
 import com.general.tableClasses.GenralBean;
 import com.general.tableClasses.MobileDao;
 import com.general.tableClasses.imgbean;
-import com.organization.model.KeypersonModel;
 import com.organization.tableClasses.KeyPerson;
 import com.organization.tableClasses.Org_Office;
-import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
@@ -35,21 +32,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.print.Doc;
 import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintException;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.attribute.AttributeSet;
 import javax.print.attribute.HashAttributeSet;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.ColorSupported;
-import javax.print.attribute.standard.Copies;
-import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.PrinterName;
-import javax.print.attribute.standard.Sides;
 import javax.servlet.ServletContext;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -150,7 +139,7 @@ public class GeneralModel {
     }
 
     public void print(JasperPrint jsprPrint, String fileName) {
-        String query = "SELECT printer_name, printer_path, no_of_copies FROM printer_detail";
+        String query = " SELECT printer_name, printer_path, no_of_copies FROM printer_detail ";
         try {
             JasperPrint jasperPrint = jsprPrint;//getJasperPrint();
             ResultSet rs = connection.prepareStatement(query).executeQuery();
@@ -1287,7 +1276,7 @@ public class GeneralModel {
     public KeyPerson authorize(String number, String password) {
 
         KeyPerson b2 = null;
-        String query = "select * from  key_person  where mobile_no1=? and active=? and password=?";
+        String query = " select * from  key_person  where mobile_no1=? and active=? and password=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, number);
@@ -1341,7 +1330,7 @@ public class GeneralModel {
     }
 
     public int getOrganisationType_id(String office_type) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE  organisation_name = ?  and active=? ";
+        String query = " SELECT organisation_id FROM organisation_name WHERE  organisation_name = ?  and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1361,7 +1350,7 @@ public class GeneralModel {
 
         int orgnameid = getOrganisationType_id("Family");
         Org_Office b2 = null;
-        String query = "select * from org_office  where mobile_no1=? and active=?";
+        String query = " select * from org_office  where mobile_no1=? and active=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, number);
@@ -1397,7 +1386,7 @@ public class GeneralModel {
 
         int orgnameid = getOrganisationType_id("Family");
         Org_Office b2 = null;
-        String query = "select * from org_office  where mobile_no1=? and active=?";
+        String query = " select * from org_office  where mobile_no1=? and active=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, number);
@@ -1432,7 +1421,7 @@ public class GeneralModel {
     public Org_Office getOfficeByID(int number) {
 
         Org_Office b2 = null;
-        String query = "select * from org_office  where org_office_id=? and active=?";
+        String query = " select * from org_office  where org_office_id=? and active=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setInt(1, number);
@@ -1466,7 +1455,7 @@ public class GeneralModel {
 
         KeyPerson b2 = null;
 
-        String query = "select * from key_person  where mobile_no1=? and active=?";
+        String query = " select * from key_person  where mobile_no1=? and active=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, number);
@@ -1503,7 +1492,7 @@ public class GeneralModel {
 
     public boolean insertimgdetails(String imagename, int destid, int kpid) {
         Boolean status = false;
-        String query = "insert into general_image_details(image_name,image_destination_id,key_person_id) values(?,?,?)";
+        String query = " insert into general_image_details(image_name,image_destination_id,key_person_id) values(?,?,?) ";
 
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
@@ -1525,7 +1514,7 @@ public class GeneralModel {
     public boolean insertRecord(MobileDao propertiesBean) {
 
         boolean b = false;
-        String query = "insert into key_person (key_person_name,mobile_no1,remark,email_id1,gender,password,bloodgroup,isVarified,emergency_contact_name,emergency_contact_mobile,latitude,longitude,city_id,address_line1,org_office_id,designation_id,father_name,date_of_birth,relation,family_office,family_designation) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query = " insert into key_person (key_person_name,mobile_no1,remark,email_id1,gender,password,bloodgroup,isVarified,emergency_contact_name,emergency_contact_mobile,latitude,longitude,city_id,address_line1,org_office_id,designation_id,father_name,date_of_birth,relation,family_office,family_designation) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, propertiesBean.getName());
@@ -1577,7 +1566,7 @@ public class GeneralModel {
 
     public boolean UpdateRecord(String number, int id) {
         boolean b = false;
-        String query = "update key_person set isVarified='Yes' where mobile_no1=" + number + " and key_person_id=? and active='Y'";
+        String query = " update key_person set isVarified='Yes' where mobile_no1=" + number + " and key_person_id=? and active='Y' ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -1601,7 +1590,7 @@ public class GeneralModel {
 
     public boolean UpdateKp(int id, int typeid, String idnumber) {
         boolean b = false;
-        String query = "update key_person set id_type_id=?,id_no=?  where key_person_id=? and active=?";
+        String query = " update key_person set id_type_id=?,id_no=?  where key_person_id=? and active=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setInt(1, typeid);
@@ -1702,11 +1691,11 @@ public class GeneralModel {
 
         int parent_org_id = 0;
 
-        String query = "select ot.org_type_name,ot.organisation_type_id,ot.parent_org_id,d.designation"
-                + " from organisation_type ot,"
-                + " designation d, designation_organisation_type_map dotm"
-                + " where ot.organisation_type_id = " + org_type_id + " and dotm.organisation_type_id = ot.organisation_type_id and dotm.designation_id = d.designation_id"
-                + " and ot.active='Y' and dotm.active='Y' and d.active='Y' ;";
+        String query = " select ot.org_type_name,ot.organisation_type_id,ot.parent_org_id,d.designation "
+                + " from organisation_type ot ,"
+                + " designation d, designation_organisation_type_map dotm "
+                + " where ot.organisation_type_id = " + org_type_id + " and dotm.organisation_type_id = ot.organisation_type_id and dotm.designation_id = d.designation_id "
+                + " and ot.active='Y' and dotm.active='Y' and d.active='Y' ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1752,7 +1741,7 @@ public class GeneralModel {
     public int getParentName(int code) {
         int parent_org_id = 0;
 
-        String query = "select ot.parent_org_id from organisation_type ot where organisation_type_id=" + code;
+        String query = " select ot.parent_org_id from organisation_type ot where organisation_type_id=" + code;
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);

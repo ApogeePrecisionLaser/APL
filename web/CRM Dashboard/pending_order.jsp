@@ -32,7 +32,9 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="CRMDashboardController">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Pending Order</li>
+                        <li class="breadcrumb-item active">Pending Order
+                            <input type="hidden" name="count" id="count" value="${count}">
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -46,7 +48,7 @@
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive tableScrollWrap noWrapTable" >
-                                    <table class="table table-striped1 mainTable" id="mytable" >
+                                    <table class="table table-striped1 mainTable" id="mytable1" >
                                         <thead>
                                             <tr>
                                                 <th class="fontFourteen">S.No.</th>
@@ -54,8 +56,11 @@
                                                     <c:if test="${user_role=='Admin'}">
                                                     <th class="fontFourteen">Requested By</th>
                                                     </c:if>
+                                                    <c:if test="${user_role!='Admin'}">
+                                                    <th class="fontFourteen" style="display: none"></th>
+                                                    </c:if>
 
-                                                <th class="fontFourteen">Price</th>
+                                                <th class="fontFourteen">Price (<i class="fas fa-rupee-sign fontTen"></i>)</th>
                                                 <th class="fontFourteen">Date</th>
                                                 <th class="fontFourteen">Status</th>
                                                 <th class="fontFourteen">Action</th>
@@ -71,8 +76,13 @@
                                                     <c:if test="${user_role=='Admin'}">
                                                         <td class="fontFourteen">${beanType.requested_by}</td>
                                                     </c:if>
-                                                    <td class="fontFourteen"><i class="fas fa-rupee-sign fontTen"></i> <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
-                                                                      value =  "${beanType.basic_price}" /></td>
+                                                    <c:if test="${user_role!='Admin'}">
+                                                        <td class="fontFourteen" style="display: none"></td>
+                                                    </c:if>
+                                                    <td class="fontFourteen ">${beanType.basic_price}</td>
+                                                    <!--                                                    <td class="fontFourteen"> <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
+                                                                      value =  "${beanType.basic_price}" /></td>-->
+
                                                     <td class="fontFourteen">${beanType.date_time}</td>
 
                                                     <c:choose>  
@@ -82,6 +92,14 @@
                                                         </c:when>   
                                                         <c:when test="${beanType.status == 'Approved'}">  
                                                             <td class="fontFourteen"><i class="statusApprove">Order Confirmed</i></td>
+
+                                                        </c:when>  
+                                                        <c:when test="${beanType.status == 'Denied'}">  
+                                                            <td class="fontFourteen"><i class="statusDisapprove">Denied</i></td>
+
+                                                        </c:when>  
+                                                        <c:when test="${beanType.status == 'Payment Done'}">  
+                                                            <td class="fontFourteen"><i class="statusPaymentDone">Payment Done</i></td>
 
                                                         </c:when>  
                                                         <c:otherwise>  
@@ -108,7 +126,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -117,6 +134,27 @@
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
 <script>
+
+    $(document).ready(function () {
+
+
+        var table = $('#mytable1').DataTable({
+//            data: table_data,
+            "scrollY": "400px",
+            "scrollCollapse": true,
+            "columnDefs": [{
+                    "targets": [3],
+                    "render": function (data, type, row) {
+                        return Number(data).toLocaleString('en-IN', {
+                            maximumFractionDigits: 2,
+                            style: 'currency',
+                            currency: 'INR'
+                        });
+                    }
+                }]
+        });
+    })
+
     function deleteOrder(order_table_id) {
         confirm('Are you sure you want to cancel this order?');
         $.ajax({
@@ -132,6 +170,5 @@
             }
         });
     }
-
-
 </script>
+

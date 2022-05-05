@@ -1969,7 +1969,7 @@
     <!-- end schedular for sending enqueries report --> 
     
     
-    
+   
     <!--Start Support Messages -->
     <servlet>
         <servlet-name>support_messages</servlet-name>
@@ -2114,12 +2114,29 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>ApprovePurchaseOrdersController</servlet-name>
+        <servlet-class>com.purchase.module.ApprovePurchaseOrdersController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApprovePurchaseOrdersController</servlet-name>
+        <url-pattern>/ApprovePurchaseOrdersController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>existing_orders</servlet-name>
         <jsp-file>/CRM Dashboard/existing_orders.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>existing_orders</servlet-name>
         <url-pattern>/existing_orders</url-pattern>
+    </servlet-mapping>  
+    <servlet>
+        <servlet-name>approve_purchase_orders</servlet-name>
+        <jsp-file>/CRM Dashboard/approve_purchase_orders.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approve_purchase_orders</servlet-name>
+        <url-pattern>/approve_purchase_orders</url-pattern>
     </servlet-mapping>  
      
     <servlet>
@@ -2130,6 +2147,31 @@
         <servlet-name>new_purchase_order</servlet-name>
         <url-pattern>/new_purchase_order</url-pattern>
     </servlet-mapping> 
+    <servlet>
+        <servlet-name>new_purchase_order_by_vendor</servlet-name>
+        <jsp-file>/CRM Dashboard/new_purchase_order_by_vendor.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>new_purchase_order_by_vendor</servlet-name>
+        <url-pattern>/new_purchase_order_by_vendor</url-pattern>
+    </servlet-mapping> 
+    <servlet>
+        <servlet-name>purchase_order_cart</servlet-name>
+        <jsp-file>/CRM Dashboard/purchase_order_cart.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>purchase_order_cart</servlet-name>
+        <url-pattern>/purchase_order_cart</url-pattern>
+    </servlet-mapping> 
+    <servlet>
+        <servlet-name>purchase_order_placed_item</servlet-name>
+        <jsp-file>/CRM Dashboard/purchase_order_placed_item.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>purchase_order_placed_item</servlet-name>
+        <url-pattern>/purchase_order_placed_item</url-pattern>
+    </servlet-mapping> 
+    
       
     <servlet>
         <servlet-name>purchase_order_detail</servlet-name>
@@ -2139,10 +2181,97 @@
         <servlet-name>purchase_order_detail</servlet-name>
         <url-pattern>/purchase_order_detail</url-pattern>
     </servlet-mapping>   
+    <servlet>
+        <servlet-name>approve_purchase_order_detail</servlet-name>
+        <jsp-file>/CRM Dashboard/approve_purchase_order_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>approve_purchase_order_detail</servlet-name>
+        <url-pattern>/approve_purchase_order_detail</url-pattern>
+    </servlet-mapping>  
     
+    <servlet>
+        <servlet-name>DemandNoteController</servlet-name>
+        <servlet-class>com.purchase.module.DemandNoteController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DemandNoteController</servlet-name>
+        <url-pattern>/DemandNoteController</url-pattern>
+    </servlet-mapping>
     
+    <servlet>
+        <servlet-name>new_demand_note</servlet-name>
+        <jsp-file>/CRM Dashboard/new_demand_note.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>new_demand_note</servlet-name>
+        <url-pattern>/new_demand_note</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>demand_notes</servlet-name>
+        <jsp-file>/CRM Dashboard/demand_notes.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>demand_notes</servlet-name>
+        <url-pattern>/demand_notes</url-pattern>
+    </servlet-mapping> 
     
     <!--End Purchase order module -->
     
     
+    
+    
+    
+    
+    
+    <!--Start event -->
+    <servlet>
+        <servlet-name>EventController</servlet-name>
+        <servlet-class>com.dashboard.controller.EventController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EventController</servlet-name>
+        <url-pattern>/EventController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>event_list</servlet-name>
+        <jsp-file>/CRM Dashboard/event_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>event_list</servlet-name>
+        <url-pattern>/event_list</url-pattern>
+    </servlet-mapping>   
+    
+    <servlet>
+        <servlet-name>event_add</servlet-name>
+        <jsp-file>/CRM Dashboard/event_add.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>event_add</servlet-name>
+        <url-pattern>/event_add</url-pattern>
+    </servlet-mapping>   
+    
+    <servlet>
+        <servlet-name>dealers_list</servlet-name>
+        <jsp-file>/CRM Dashboard/dealers_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dealers_list</servlet-name>
+        <url-pattern>/dealers_list</url-pattern>
+    </servlet-mapping>    
+    
+    <servlet>
+        <servlet-name>event_detail</servlet-name>
+        <jsp-file>/CRM Dashboard/event_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>event_detail</servlet-name>
+        <url-pattern>/event_detail</url-pattern>
+    </servlet-mapping>    
+    
+    
+    <!--End event -->
+ 
 </web-app>

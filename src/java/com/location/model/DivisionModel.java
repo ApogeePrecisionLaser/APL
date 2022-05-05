@@ -58,7 +58,7 @@ public class DivisionModel {
     public List<DivisionBean> showAllData(String divisionName) {
         divisionName = krutiToUnicode.convert_to_unicode(divisionName);
         ArrayList<DivisionBean> list = new ArrayList<DivisionBean>();
-        String query = "select division_name,division_description,state_name,ut_name,zone_name from division,state,zone where division.active='Y' and division.state_id=state.state_id and division.zone_id=zone.zone_id and if('" + divisionName + "'='',division_name LIKE '%%',division_name='" + divisionName + "')";
+        String query = " select division_name,division_description,state_name,ut_name,zone_name from division,state,zone where division.active='Y' and division.state_id=state.state_id and division.zone_id=zone.zone_id and if('" + divisionName + "'='',division_name LIKE '%%',division_name='" + divisionName + "') ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -180,7 +180,7 @@ public class DivisionModel {
 
     public List<String> getUtName(String q, String zoneName) {
         List<String> list = new ArrayList<String>();
-        String query = "select ut_name from state where state.zone_id=(select zone.zone_id from zone where zone_name='" + zoneName + "') ";
+        String query = " select ut_name from state where state.zone_id=(select zone.zone_id from zone where zone_name='" + zoneName + "') ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -280,7 +280,7 @@ public class DivisionModel {
     public void deleteRecord(int divisionId) {
         PreparedStatement presta = null;
         try {
-            presta = connection.prepareStatement("delete from division where division_id=?");
+            presta = connection.prepareStatement(" delete from division where division_id=? ");
             presta.setInt(1, divisionId);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -300,10 +300,10 @@ public class DivisionModel {
     public ArrayList<DivisionBean> getAllRecords(int lowerLimit, int noOfRowsToDisplay, String searchDivision) {
         ArrayList<DivisionBean> list = new ArrayList<DivisionBean>();
         searchDivision = searchDivision;
-        String query = "SELECT division_id,division_name,division_description,state_name,ut_name "
-                + "FROM division,state "
-                + "WHERE division.active='Y' and IF('" + searchDivision + "'='',division_name LIKE '%%',division_name=?) and division.state_id=state.state_id "
-                + "order by division_name limit " + lowerLimit + "," + noOfRowsToDisplay;
+        String query = " SELECT division_id,division_name,division_description,state_name,ut_name "
+                + " FROM division,state "
+                + " WHERE division.active='Y' and IF('" + searchDivision + "'='',division_name LIKE '%%',division_name=?) and division.state_id=state.state_id "
+                + " order by division_name limit " + lowerLimit + "," + noOfRowsToDisplay;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchDivision);
@@ -424,7 +424,7 @@ public class DivisionModel {
 //}
     public static int getStateID(String state_name) {
         state_name = (state_name);
-        String query = "SELECT state_id FROM state WHERE state_name = ?";
+        String query = " SELECT state_id FROM state WHERE state_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -440,8 +440,8 @@ public class DivisionModel {
 
     public int insertRecord(DivisionBean bean) {
 
-        String query = "INSERT INTO division( division_name, division_description,state_id,revision_no,active)"
-                + "VALUES(?, ?,?,?,?)";
+        String query = " INSERT INTO division( division_name, division_description,state_id,revision_no,active) "
+                + " VALUES(?, ?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -469,10 +469,10 @@ public class DivisionModel {
         int revision = DivisionModel.getRevisionno(bean, division_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM division WHERE division_id = " + division_id + "  && active=? ";
-        String query2 = "UPDATE division SET active=? WHERE division_id=? and revision_no=?";
-        String query3 = "INSERT INTO division(division_id ,division_name, division_description,state_id,revision_no,active)"
-                + "VALUES(?, ?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM division WHERE division_id = " + division_id + "  && active=? ";
+        String query2 = " UPDATE division SET active=? WHERE division_id=? and revision_no=? ";
+        String query3 = " INSERT INTO division(division_id ,division_name, division_description,state_id,revision_no,active) "
+                + " VALUES(?, ?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -523,7 +523,7 @@ public class DivisionModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM division WHERE division_id =" + division_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM division WHERE division_id =" + division_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -540,7 +540,7 @@ public class DivisionModel {
 
     public int getStateId(String state_name, String ut_name) {
         int state_id = 0;
-        String query = "select state_id from state where state_name= '" + state_name + "' and ut_name='" + ut_name + "'";
+        String query = " select state_id from state where state_name= '" + state_name + "' and ut_name='" + ut_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {

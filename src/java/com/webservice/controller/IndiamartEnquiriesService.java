@@ -4,13 +4,8 @@
  */
 package com.webservice.controller;
 
-import com.organization.tableClasses.KeyPerson;
 import com.webservice.model.APLWebServiceModel;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -19,8 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.codehaus.jettison.json.JSONException;
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.Enquiry;
 import java.io.BufferedReader;
@@ -28,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimerTask;
@@ -40,6 +34,12 @@ import org.codehaus.jettison.json.JSONObject;
 import java.util.*;
 import javax.servlet.ServletContext;
 
+
+
+/**
+ *
+ * @author komal
+ */
 public class IndiamartEnquiriesService implements ServletContextListener {
 
     int scheduler_count = 0;
@@ -62,7 +62,7 @@ public class IndiamartEnquiriesService implements ServletContextListener {
 
         Date date = new Date();
 
-        timer.schedule(vodTimer, 20 * 1000, (6 * 60 * 60 * 1000));
+        timer.schedule(vodTimer, 20 * 1000, (1 * 60 * 60 * 1000));
 //        timer.schedule(vodTimer, 20 * 1000, (6 * 60 * 1000));
 
     }
@@ -73,7 +73,7 @@ public class IndiamartEnquiriesService implements ServletContextListener {
         @Path("/getEnquiriesFromIndiaMart")
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_JSON)
-        public String getEnquiriesFromIndiaMart() throws JSONException {
+        public String getEnquiriesFromIndiaMart() throws JSONException, SQLException {
             APLWebServiceModel model = new APLWebServiceModel();
             String msg = "";
             try {
@@ -115,7 +115,8 @@ public class IndiamartEnquiriesService implements ServletContextListener {
 
                     result = response.toString();
                 }
-
+               
+                
                 JSONArray jsonArr = new JSONArray(result);
                 for (int i = jsonArr.length() - 1; i >= 0; i--) {
                     JSONObject jsonObj = jsonArr.getJSONObject(i);
@@ -143,7 +144,6 @@ public class IndiamartEnquiriesService implements ServletContextListener {
                     if (enquiry_table_id == 0) {
                         model.insertEnquiries(bean);
                     }
-
                 }
 
             } catch (MalformedURLException e) {

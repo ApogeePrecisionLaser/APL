@@ -1,20 +1,16 @@
 package com.inventory.model;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
-import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.InventoryBasic;
 import com.inventory.tableClasses.ItemName;
 import com.report.bean.InventoryReport;
-import java.io.File;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
@@ -491,14 +487,14 @@ public class InventoryBasicModel {
                 if (is_super_child.equals("Y")) {
                     int item_id = rset.getInt("item_names_id");
                     String query2 = " select mr.manufacturer_name  "
-                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
+                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp, "
                             + " org_office oo,manufacturer mr "
                             + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
                             + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                             + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                             + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
                             + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and"
+                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and "
                             + " itn.item_names_id='" + item_id + "'  ";
 
                     if (!search_item_code.equals("") && search_item_code != null) {
@@ -556,11 +552,11 @@ public class InventoryBasicModel {
                         String query3 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itn.quantity,itn.parent_id, "
                                 + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name, "
                                 + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
-                                + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name,m.model_no,m.part_no,ib.daily_req,"
+                                + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name,m.model_no,m.part_no,ib.daily_req, "
                                 + " ib.opening_balance "
                                 + " ,ib.min_quantity "
-                                + " from model m,manufacturer_item_map mim,manufacturer mr,item_names itn,inventory inv,inventory_basic ib,"
-                                + " key_person kp,"
+                                + " from model m,manufacturer_item_map mim,manufacturer mr,item_names itn,inventory inv,inventory_basic ib, "
+                                + " key_person kp, "
                                 + " org_office oo "
                                 + " where ib.inventory_basic_id=inv.inventory_basic_id and "
                                 + " ib.model_id=m.model_id and ib.item_names_id=itn.item_names_id and ib.active='Y' and inv.active='Y' "
@@ -628,7 +624,7 @@ public class InventoryBasicModel {
     }
 
     public int insertRecord(InventoryBasic bean) throws SQLException {
-        String query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+        String query = " INSERT INTO inventory_basic(item_names_id,org_office_id,description, "
                 + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
         int rowsAffected = 0;
@@ -689,8 +685,8 @@ public class InventoryBasicModel {
                         inventory_basic_id = rs.getInt(1);
                     }
 
-                    String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                    String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                             + " reference_document_type,reference_document_id,stock_quantity) "
                             + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -730,7 +726,7 @@ public class InventoryBasicModel {
     }
 
     public int insertMapRecord(InventoryBasic bean, String search_org_office_old) throws SQLException {
-        String query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+        String query = " INSERT INTO inventory_basic(item_names_id,org_office_id,description, "
                 + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
         int rowsAffected = 0;
@@ -832,8 +828,8 @@ public class InventoryBasicModel {
                                     inventory_basic_id = rs.getInt(1);
                                 }
 
-                                String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                                        + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                                String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                                        + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                                         + " reference_document_type,reference_document_id,stock_quantity) "
                                         + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -860,7 +856,7 @@ public class InventoryBasicModel {
             String query1 = " select  item_names_id, "
                     + " item_name, "
                     + " parent_id "
-                    + "from (select * from item_names where active='Y' "
+                    + " from (select * from item_names where active='Y' "
                     + " order by parent_id, item_names_id ) item_names, "
                     + " (select @pv := '" + item_name_id + "') initialisation "
                     + " where   find_in_set(parent_id, @pv) > 0 "
@@ -878,7 +874,7 @@ public class InventoryBasicModel {
             for (int i = 0; i < item_names_id_list.size(); i++) {
                 String query3 = "";
                 if (item_names_id_list.size() != 0) {
-                    query3 = " select ib.inventory_basic_id,ib.min_quantity,ib.daily_req,ib.opening_balance,ib.model_id,ib.description,"
+                    query3 = " select ib.inventory_basic_id,ib.min_quantity,ib.daily_req,ib.opening_balance,ib.model_id,ib.description, "
                             + " inv.stock_quantity,inv.date_time,ib.org_office_id "
                             + " from inventory inv,inventory_basic ib,manufacturer mr,model m,item_names itn,manufacturer_item_map mim "
                             + " where inv.active='Y' and ib.active='Y' and mr.active='Y' and m.active='Y' and itn.active='Y' and mim.active='Y' "
@@ -941,8 +937,8 @@ public class InventoryBasicModel {
                                     inventory_basic_id = rs.getInt(1);
                                 }
 
-                                String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                                        + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                                String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                                        + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                                         + " reference_document_type,reference_document_id,stock_quantity) "
                                         + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -993,7 +989,7 @@ public class InventoryBasicModel {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1050,16 +1046,16 @@ public class InventoryBasicModel {
         int stock_quantity = getStockQuantity(item_name_id);
 
         int map_count = 0;
-        String query1 = "SELECT max(revision_no) revision_no FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id + "  && active='Y' ";
-        String query2 = "UPDATE inventory_basic SET active=? WHERE inventory_basic_id=? and revision_no=? ";
-        String query3 = "INSERT INTO inventory_basic(inventory_basic_id,item_names_id,org_office_id,description,"
+        String query1 = " SELECT max(revision_no) revision_no FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id + "  && active='Y' ";
+        String query2 = " UPDATE inventory_basic SET active=? WHERE inventory_basic_id=? and revision_no=? ";
+        String query3 = " INSERT INTO inventory_basic(inventory_basic_id,item_names_id,org_office_id,description,"
                 + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
         int rowsAffected = 0;
         int rowsAffected2 = 0;
         try {
             String query4 = " SELECT count(*) as count FROM inventory_basic ib,inventory inv,model m WHERE "
-                    + " ib.item_names_id='" + item_name_id + "' and ib.org_office_id='" + org_office_id + "'"
+                    + " ib.item_names_id='" + item_name_id + "' and ib.org_office_id='" + org_office_id + "' "
                     + " and ib.model_id='" + model_id + "' and inv.key_person_id='" + key_person_id + "' and ib.model_id='" + model_id + "' "
                     + " and ib.active='Y' and inv.active='Y' and ib.inventory_basic_id=inv.inventory_basic_id and m.model_id=ib.model_id "
                     + " and m.active='Y' ";
@@ -1102,11 +1098,11 @@ public class InventoryBasicModel {
                 }
             }
 
-            String query1_inventory = "SELECT max(revision_no) revision_no FROM inventory WHERE inventory_id = " + inventory_id + "  and active='Y' ";
-            String query2_inventory = "UPDATE inventory SET active=? WHERE inventory_id=? and revision_no=? ";
-            String query3_inventory = "INSERT INTO inventory(inventory_id,inventory_basic_id,key_person_id,description,"
+            String query1_inventory = " SELECT max(revision_no) revision_no FROM inventory WHERE inventory_id = " + inventory_id + "  and active='Y' ";
+            String query2_inventory = " UPDATE inventory SET active=? WHERE inventory_id=? and revision_no=? ";
+            String query3_inventory = " INSERT INTO inventory(inventory_id,inventory_basic_id,key_person_id,description, "
                     + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
-                    + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
             PreparedStatement pstmt2 = connection.prepareStatement(query1_inventory);
             ResultSet rs_inventory = pstmt2.executeQuery();
             if (rs_inventory.next()) {
@@ -1186,7 +1182,7 @@ public class InventoryBasicModel {
     }
 
     public int deleteRecord(int inventory_basic_id) {
-        String query = "DELETE FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id;
+        String query = " DELETE FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id;
         int child_item_count = 0;
         int rowsAffected = 0;
         try {
@@ -1208,7 +1204,7 @@ public class InventoryBasicModel {
     }
 
     public int getItemNamesId(String item_name) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y' ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1223,7 +1219,7 @@ public class InventoryBasicModel {
 
     public int getOrgOfficeId(String org_office) {
 
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1237,7 +1233,7 @@ public class InventoryBasicModel {
     }
 
     public int getModelId(String model_name) {
-        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1251,7 +1247,7 @@ public class InventoryBasicModel {
     }
 
     public String getItemName(int item_name_id) {
-        String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
+        String query = " SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1267,7 +1263,7 @@ public class InventoryBasicModel {
 
     public List<String> getItemName(String q, String manufacturer) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_name FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+        String query = " SELECT itn.item_name FROM item_names itn,manufacturer mr,manufacturer_item_map mim where "
                 + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
                 + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
 
@@ -1300,7 +1296,7 @@ public class InventoryBasicModel {
         String query = "";
 
         if (user_role.equals("Super Admin")) {
-            query = " SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+            query = " SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where "
                     + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
                     + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
 
@@ -1401,11 +1397,11 @@ public class InventoryBasicModel {
             list.add(search_org_office);
         } else {
 
-            String query = " SELECT oo.org_office_name FROM org_office oo where"
+            String query = " SELECT oo.org_office_name FROM org_office oo where "
                     + " oo.active='Y' ";
 
             if (!search_org_office.equals("") && search_org_office != null) {
-                query += " and  oo.org_office_name!='" + search_org_office + "' ";
+                query += " and oo.org_office_name!='" + search_org_office + "' ";
             }
             query += " group by oo.org_office_name ORDER BY oo.org_office_name ";
             try {
@@ -1431,7 +1427,7 @@ public class InventoryBasicModel {
 
     public List<String> getManufacturer(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT manufacturer_name FROM manufacturer where"
+        String query = " SELECT manufacturer_name FROM manufacturer where "
                 + " active='Y' ";
 
         query += " group by manufacturer_name ORDER BY manufacturer_name ";
@@ -1466,7 +1462,7 @@ public class InventoryBasicModel {
 
         String query = " select m.model from manufacturer_item_map mim,model m,manufacturer mr,item_names itn "
                 + " where mim.manufacturer_item_map_id=m.manufacturer_item_map_id and "
-                + "mr.manufacturer_id=mim.manufacturer_id and mim.item_names_id=itn.item_names_id and mim.active='Y' and mr.active='Y' "
+                + " mr.manufacturer_id=mim.manufacturer_id and mim.item_names_id=itn.item_names_id and mim.active='Y' and mr.active='Y' "
                 + " and m.active='Y' and itn.active='Y' ";
 
         if (!manufacturer_name.equals("") && manufacturer_name != null) {
@@ -1506,7 +1502,7 @@ public class InventoryBasicModel {
         if (!user_role.equals("Super Admin")) {
             list.add(logged_key_person);
         } else {
-            String query = "SELECT kp.key_person_name FROM key_person kp,org_office oo where"
+            String query = " SELECT kp.key_person_name FROM key_person kp,org_office oo where "
                     + " kp.org_office_id=oo.org_office_id and kp.active='Y' and oo.active='Y' and kp.designation_id=5 ";
 
             if (!org_office.equals("") && org_office != null) {

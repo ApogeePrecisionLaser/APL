@@ -11,7 +11,6 @@ import com.inventory.model.InventoryModel;
 import com.inventory.tableClasses.Inventory;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -29,10 +26,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -50,6 +43,8 @@ public class InventoryController extends HttpServlet {
         response.setHeader("Content-Type", "text/plain; charset=UTF-8");
         InventoryModel model = new InventoryModel();
         ItemNameModel model2 = new ItemNameModel();
+        int counting = 100000;
+        String autogenerate_order_no = "";
 
         String search_key_person = "";
         String search_item_name = "";
@@ -69,8 +64,8 @@ public class InventoryController extends HttpServlet {
         int logged_key_person_id = 0;
 
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null || !session.getAttribute("user_role").equals("Super Admin")
-                || !session.getAttribute("user_role").equals("Incharge")) {
+        if (session == null || session.getAttribute("logged_user_name") == null || (!session.getAttribute("user_role").equals("Super Admin")
+                && !session.getAttribute("user_role").equals("Incharge"))) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {
@@ -151,6 +146,14 @@ public class InventoryController extends HttpServlet {
                         }
                         list = model.getItemCode(q, manufacturer, search_org_office, logged_user_name, loggedUser);
                     }
+                    if (JQstring.equals("getParameter")) {
+                        String type = request.getParameter("type");
+                        if (type.equals("Product")) {
+                            list = model.getItem(q, "", search_org_office, logged_user_name, loggedUser);
+                        } else if (type.equals("Vendor")) {
+                            list = model.getAllVendorName(q);
+                        }
+                    }
 
                     if (JQstring.equals("getModelName")) {
                         String manufacturer_name = request.getParameter("manufacturer_name");
@@ -168,8 +171,12 @@ public class InventoryController extends HttpServlet {
                         list = model.getKeyPerson(q, str2, logged_user_name, loggedUser);
                     }
 
-                    if (json != null) {
+                    if (JQstring.equals("getVendorName")) {
+                        String item_name = request.getParameter("item_name");
+                        list = model.getVendorName(item_name);
+                    }
 
+                    if (json != null) {
                         out.println(json);
                     } else {
                         Iterator<String> iter = list.iterator();
@@ -194,7 +201,6 @@ public class InventoryController extends HttpServlet {
             }
             if (task1.equals("viewImage")) {
                 try {
-
                     String destinationPath = "";
                     String inventory_id = request.getParameter("inventory_id");
                     String type = request.getParameter("type");
@@ -253,7 +259,7 @@ public class InventoryController extends HttpServlet {
                 List<Inventory> list = null;
 
                 int item_names_id = Integer.parseInt(request.getParameter("item_names_id").trim());
-                list = model.getAllDetails(item_names_id);
+                list = model.getAllDetails(item_names_id, logged_key_person_id, loggedUser);
 
                 request.setAttribute("list", list);
                 request.getRequestDispatcher("itemAllDetails").forward(request, response);
@@ -295,10 +301,12 @@ public class InventoryController extends HttpServlet {
                 search_key_person = logged_user_name;
                 request.setAttribute("org_office", logged_org_office);
                 request.setAttribute("key_person", logged_user_name);
-
             }
+            counting = model.getCounting();
+            autogenerate_order_no = "ORDER" + counting;
+
             List<Inventory> list = model.showData(search_item_name, search_org_office, search_manufacturer, search_item_code, search_model,
-                    search_key_person, search_by_date);
+                    search_key_person, search_by_date, loggedUser);
             request.setAttribute("list", list);
             if (!search_item_code.equals("")) {
                 request.setAttribute("search_item_code", search_item_name + " - " + search_item_code);
@@ -311,6 +319,7 @@ public class InventoryController extends HttpServlet {
             request.setAttribute("message", model.getMessage());
             request.setAttribute("msgBgColor", model.getMsgBgColor());
             request.setAttribute("loggedUser", loggedUser);
+            request.setAttribute("autogenerate_order_no", autogenerate_order_no);
 
             DBConnection.closeConncetion(model.getConnection());
             DBConnection.closeConncetion(model2.getConnection());

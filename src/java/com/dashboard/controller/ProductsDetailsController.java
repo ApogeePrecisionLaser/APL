@@ -1,10 +1,6 @@
 package com.dashboard.controller;
 
-import com.location.model.CityModel;
-import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
-import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,6 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class ProductsDetailsController extends HttpServlet {
 
     @Override

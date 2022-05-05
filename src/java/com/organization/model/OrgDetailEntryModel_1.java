@@ -32,6 +32,7 @@ public class OrgDetailEntryModel_1 {
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
     private final String COLOR_ERROR = "red";
+
     public void setConnection(Connection con) {
         try {
 
@@ -44,17 +45,17 @@ public class OrgDetailEntryModel_1 {
     public OrgDetailEntry showData(String organisation) {
         organisation = organisation;
         OrgDetailEntry orgDE = new OrgDetailEntry();
-        String query = "SELECT org.organisation_id, organisation_name, org_type_name ,organisation_sub_type_name, om.org_map_id , "
+        String query = " SELECT org.organisation_id, organisation_name, org_type_name ,organisation_sub_type_name, om.org_map_id , "
                 + " of.org_office_id ,org_office_code,of.org_office_name, office_type ,c.city_name AS officeCity , of.address_line1, of.address_line2, of.email_id1, of.email_id2, of.mobile_no1, of.mobile_no2, of.landline_no1, of.landline_no2, "
                 + " emp_code, salutation, k.key_person_id, key_person_name , d.designation ,ck.city_name AS personCity, k.address_line1, k.address_line2, k.father_name,k.age,k.email_id1, k.email_id2 ,k.mobile_no1, k.mobile_no2, k.landline_no1, k.landline_no2 "
                 + " FROM organisation_name AS org "
                 + " LEFT JOIN (org_office AS of LEFT JOIN ( key_person AS k) ON  k.org_office_id = of.org_office_id) ON of.organisation_id = org.organisation_id "
                 + " LEFT JOIN (city AS c) ON c.city_id = of.city_id "
                 + " LEFT JOIN ( city AS ck ) ON ck.city_id = k.city_id "
-                + " LEFT JOIN ( org_office_type AS oft ) ON oft.office_type_id = of.office_type_id"
-                + " LEFT JOIN ( designation AS d ) ON k.designation_id = d.designation_id"
+                + " LEFT JOIN ( org_office_type AS oft ) ON oft.office_type_id = of.office_type_id "
+                + " LEFT JOIN ( designation AS d ) ON k.designation_id = d.designation_id "
                 + " LEFT JOIN ( organisation_map AS om, organisation_sub_type AS ost, organisation_type AS ot )ON org.organisation_id = om.organisation_id AND om.organisation_sub_type_id = ost.organisation_sub_type_id "
-                + "  AND ost.organisation_type_id = ot.organisation_type_id "//AND om.organisation_type_id = ot.organisation_type_id
+                + " AND ost.organisation_type_id = ot.organisation_type_id "//AND om.organisation_type_id = ot.organisation_type_id
                 + " WHERE organisation_name = ? "
                 + " GROUP BY org.organisation_id ORDER BY organisation_name, org_office_name, key_person_name ";
         try {
@@ -93,7 +94,7 @@ public class OrgDetailEntryModel_1 {
                 orgDE.setFather_name(rset.getString("k.father_name"));
                 //orgDE.setAge(rset.getInt("k.age"));
                 orgDE.setPerson_address1(rset.getString("k.address_line1"));
-                 orgDE.setPerson_address2(rset.getString("k.address_line2"));     
+                orgDE.setPerson_address2(rset.getString("k.address_line2"));
                 orgDE.setPerson_mail_id1(rset.getString("k.email_id1"));
                 orgDE.setPerson_mail_id2(rset.getString("k.email_id2"));
                 orgDE.setPerson_mobile1(rset.getString("k.mobile_no1"));
@@ -111,10 +112,10 @@ public class OrgDetailEntryModel_1 {
     public Map<Integer, String> getOrgOfficeList(int orgId) {
         Map<Integer, String> orgOfficeList = new LinkedHashMap<Integer, String>();
         try {
-            String query = "SELECT oo.org_office_id, oo.org_office_name "
-                    + "FROM org_office AS oo, organisation_name AS orgN "
-                    + "WHERE oo.organisation_id = orgN.organisation_id AND orgN.organisation_id = ? "
-                    + "ORDER BY oo.org_office_name ";
+            String query = " SELECT oo.org_office_id, oo.org_office_name "
+                    + " FROM org_office AS oo, organisation_name AS orgN "
+                    + " WHERE oo.organisation_id = orgN.organisation_id AND orgN.organisation_id = ? "
+                    + " ORDER BY oo.org_office_name ";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, orgId);
             ResultSet rset = pstmt.executeQuery();
@@ -132,7 +133,7 @@ public class OrgDetailEntryModel_1 {
         String query = " SELECT k.key_person_id, key_person_name FROM key_person AS k, org_office AS of, organisation_name As org "
                 + " WHERE k.org_office_id = of.org_office_id AND of.organisation_id = org.organisation_id "
                 + " AND org.organisation_id  = ? AND of.org_office_id = ?  "
-                + "  ORDER BY key_person_name ";
+                + " ORDER BY key_person_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, orgId);
@@ -224,7 +225,7 @@ public class OrgDetailEntryModel_1 {
                 jSON_format = jSON_format + "\"p_landline_no1\"" + ": " + "\"" + "" + "\", ";
                 jSON_format = jSON_format + "\"p_landline_no2\"" + ": " + "\"" + "" + "\" ";
                 jSON_format = jSON_format + "\"p_emp_code\"" + ": " + "\"" + rset.getString("k.emp_code") + "\"";
-              //  jSON_format = jSON_format + "\"p_general_image_details_id\"" + ": " + "\"" + rset.getString("k.general_image_details_id") + "\" ";
+                //  jSON_format = jSON_format + "\"p_general_image_details_id\"" + ": " + "\"" + rset.getString("k.general_image_details_id") + "\" ";
                 jSON_format = jSON_format + "}";
             }
         } catch (Exception e) {
@@ -236,9 +237,9 @@ public class OrgDetailEntryModel_1 {
     public String getPersonDetail(int organisation_id, int office_id, int person_id) {
         String jSON_format = "";
         String query = " SELECT salutation, key_person_name , d.designation ,c.city_name AS personCity, k.address_line1, k.address_line2, "
-                + "  k.email_id1, k.email_id2 ,k.mobile_no1, k.mobile_no2, k.landline_no1, k.landline_no2,k.emp_code  "
+                + " k.email_id1, k.email_id2 ,k.mobile_no1, k.mobile_no2, k.landline_no1, k.landline_no2,k.emp_code  "
                 + " FROM organisation_name AS org, org_office AS of , key_person AS k, city AS c, designation AS d "
-                + " WHERE   k.org_office_id = of.org_office_id AND of.organisation_id = org.organisation_id "
+                + " WHERE k.org_office_id = of.org_office_id AND of.organisation_id = org.organisation_id "
                 + " AND c.city_id = k.city_id AND k.designation_id = d.designation_id "
                 + " AND org.organisation_id = ? AND of.org_office_id = ? AND k.key_person_id = ? "
                 + " GROUP BY org.organisation_id ORDER BY organisation_name, org_office_name, key_person_name LIMIT 1 ";
@@ -282,7 +283,7 @@ public class OrgDetailEntryModel_1 {
                 jSON_format = jSON_format + "\"p_landline_no1\"" + ": " + "\"" + "" + "\", ";
                 jSON_format = jSON_format + "\"p_landline_no2\"" + ": " + "\"" + "" + "\", ";
                 jSON_format = jSON_format + "\"p_emp_code\"" + ": " + "\"" + "" + "\" ";
-               // jSON_format = jSON_format + "\"p_general_image_details_id\"" + ": " + "\"" + "" + "\" ";
+                // jSON_format = jSON_format + "\"p_general_image_details_id\"" + ": " + "\"" + "" + "\" ";
                 jSON_format = jSON_format + "}";
             }
         } catch (Exception e) {
@@ -293,8 +294,8 @@ public class OrgDetailEntryModel_1 {
 
     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     public int getofficeType_id(String office_type) {
-         office_type = office_type;
-        String query = "SELECT office_type_id FROM org_office_type WHERE office_type = ? ";
+        office_type = office_type;
+        String query = " SELECT office_type_id FROM org_office_type WHERE office_type = ? ";
         int office_type_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -309,11 +310,11 @@ public class OrgDetailEntryModel_1 {
     }
 
     public List<String> getOfficeCode(String q, String office_type) {
-         office_type =office_type;
+        office_type = office_type;
         List<String> list = new ArrayList<String>();
         int count = 0;
         try {
-            String query = "Select org_office_code from org_office where office_type_id = (select org_office_type.office_type_id from org_office_type where org_office_type.office_type='" + office_type + "')";
+            String query = " Select org_office_code from org_office where office_type_id = (select org_office_type.office_type_id from org_office_type where org_office_type.office_type='" + office_type + "') ";
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
                 list.add(rset.getString("org_office_code"));
@@ -330,7 +331,7 @@ public class OrgDetailEntryModel_1 {
 
     public List<String> getOrgOfficeType(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org.office_type FROM org_office_type AS org ORDER BY office_type ";
+        String query = " SELECT org.office_type FROM org_office_type AS org ORDER BY office_type ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -352,7 +353,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = ? ";
+        String query = " SELECT city_id FROM city WHERE city_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -367,7 +368,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public boolean isOrganisationExist(String organisation) {
-        String query = "select count(*) from organisation_name where organisation_name= ? ";
+        String query = " select count(*) from organisation_name where organisation_name= ? ";
         int count = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -388,7 +389,7 @@ public class OrgDetailEntryModel_1 {
 
     public List<String> getOrganisationList(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select organisation_name from organisation_name ORDER BY organisation_name ";
+        String query = " select organisation_name from organisation_name ORDER BY organisation_name ";
         try {
             int count = 0;
             q = q.trim();
@@ -411,8 +412,8 @@ public class OrgDetailEntryModel_1 {
 
     public List<String> getCityName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT city_name FROM city AS c  "
-                + "  ORDER BY city_name";
+        String query = " SELECT city_name FROM city AS c  "
+                + " ORDER BY city_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -436,7 +437,7 @@ public class OrgDetailEntryModel_1 {
 
     public List<String> getDesignation(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select  designation from designation  ";
+        String query = " select  designation from designation  ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -459,8 +460,8 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int getOrgOffice_id(String org_office_name, String organisation_name) {
-        String query = "SELECT of.org_office_id FROM org_office AS of,organisation_name AS o "
-                + "WHERE o.organisation_id=of.organisation_id AND of.org_office_name = ? AND o.organisation_name = ? ";
+        String query = " SELECT of.org_office_id FROM org_office AS of,organisation_name AS o "
+                + " WHERE o.organisation_id=of.organisation_id AND of.org_office_name = ? AND o.organisation_name = ? ";
         int org_office_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -476,7 +477,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int getOrganisation_id(String organisation_name) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -491,7 +492,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int getDegination_id(String designation) {
-        String query = "SELECT designation_id FROM designation WHERE designation ='" + designation + "'";
+        String query = " SELECT designation_id FROM designation WHERE designation ='" + designation + "' ";
         int designation_id = 0;
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -506,7 +507,7 @@ public class OrgDetailEntryModel_1 {
 
     public List<String> getOrgTypeNameList(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org_type_name FROM organisation_type ORDER BY org_type_name";
+        String query = " SELECT org_type_name FROM organisation_type ORDER BY org_type_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -529,10 +530,10 @@ public class OrgDetailEntryModel_1 {
 
     public List<String> getOrganisation_subType_Name(String q, String org_type_name) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT ost.organisation_sub_type_name "
-                + "FROM organisation_sub_type AS ost ,organisation_type AS ot "
-                + "WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name=? "
-                + "ORDER BY organisation_sub_type_name ";
+        String query = " SELECT ost.organisation_sub_type_name "
+                + " FROM organisation_sub_type AS ost ,organisation_type AS ot "
+                + " WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name=? "
+                + " ORDER BY organisation_sub_type_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, org_type_name);
@@ -557,7 +558,7 @@ public class OrgDetailEntryModel_1 {
 
     public List<Integer> getOrgTypeSubTypeId(String org_type, String org_sub_type) {
         List<Integer> list = new ArrayList<Integer>();
-        String query = "SELECT o.organisation_type_id, os.organisation_sub_type_id FROM organisation_type o , "
+        String query = " SELECT o.organisation_type_id, os.organisation_sub_type_id FROM organisation_type o, "
                 + " organisation_sub_type  os "
                 + " where os.organisation_type_id =o.organisation_type_id and  org_type_name= ? "
                 + " and organisation_sub_type_name = ? limit 1 ";
@@ -579,19 +580,19 @@ public class OrgDetailEntryModel_1 {
 
     public boolean createOrganisation(OrgDetailEntry createorgn) {
         boolean result = false;
-        String orgDetail = " insert into organisation_name (organisation_name) value(?)";
+        String orgDetail = " insert into organisation_name (organisation_name) value(?) ";
 
-        String orgn_mapquery = "insert into organisation_map "
-                + "(organisation_id,organisation_type_id ,organisation_sub_type_id)"
-                + "values( ?, ?, ?)";
+        String orgn_mapquery = " insert into organisation_map "
+                + " (organisation_id,organisation_type_id ,organisation_sub_type_id) "
+                + " values( ?, ?, ?) ";
 
-        String office_query = "insert into org_office(org_office_code,org_office_name ,organisation_id , office_type_id , city_id, "
-                + "address_line1 , address_line2 , mobile_no1, mobile_no2 ,email_id1 ,email_id2, landline_no1, landline_no2  )"
-                + "values(?,? ,? , ?, ?, ? , ? , ? , ?, ?, ?, ?, ? )";
+        String office_query = " insert into org_office(org_office_code,org_office_name ,organisation_id , office_type_id , city_id, "
+                + " address_line1 , address_line2 , mobile_no1, mobile_no2 ,email_id1 ,email_id2, landline_no1, landline_no2) "
+                + " values(?,? ,? , ?, ?, ? , ? , ? , ?, ?, ?, ?, ? ) ";
 
-        String keyperson_query = "insert into key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, address_line2,  "
-                + " mobile_no1, mobile_no2, email_id1, email_id2 , landline_no1, landline_no2,emp_code,father_name,age)"
-                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?,?,?)";
+        String keyperson_query = " insert into key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, address_line2,  "
+                + " mobile_no1, mobile_no2, email_id1, email_id2 , landline_no1, landline_no2,emp_code,father_name,age) "
+                + " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?,?,?) ";
         int rowsAffected = 0;
         boolean errorOccured = false;
 
@@ -619,8 +620,8 @@ public class OrgDetailEntryModel_1 {
                         pstmt.setInt(3, createorgn.getOrganisation_id());
                         pstmt.setInt(4, createorgn.getOffice_type_id());
                         pstmt.setInt(5, createorgn.getOffice_city_id());
-                        pstmt.setString(6,  createorgn.getOffice_address1());
-                        pstmt.setString(7,  createorgn.getOffice_address2());
+                        pstmt.setString(6, createorgn.getOffice_address1());
+                        pstmt.setString(7, createorgn.getOffice_address2());
                         pstmt.setString(8, createorgn.getOffice_mobile1());
                         pstmt.setString(9, createorgn.getOffice_mobile2());
                         pstmt.setString(10, createorgn.getOffice_mail_id1());
@@ -637,8 +638,8 @@ public class OrgDetailEntryModel_1 {
                             pstmt.setInt(3, createorgn.getDesiganition_id());
                             pstmt.setInt(4, createorgn.getOffice_id());
                             pstmt.setInt(5, createorgn.getPerson_city_id());
-                            pstmt.setString(6,  createorgn.getPerson_address1());
-                            pstmt.setString(7,  createorgn.getPerson_address2());
+                            pstmt.setString(6, createorgn.getPerson_address1());
+                            pstmt.setString(7, createorgn.getPerson_address2());
                             pstmt.setString(8, createorgn.getPerson_mobile1());
                             pstmt.setString(9, createorgn.getPerson_mobile2());
                             pstmt.setString(10, createorgn.getPerson_mail_id1());
@@ -689,7 +690,7 @@ public class OrgDetailEntryModel_1 {
     // ORGANISATION
 
     public int deleteRecordOrgMap(int organisation_id) {
-        String query = "DELETE FROM organisation_map WHERE organisation_id = " + organisation_id;
+        String query = " DELETE FROM organisation_map WHERE organisation_id = " + organisation_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -710,7 +711,7 @@ public class OrgDetailEntryModel_1 {
     public int deleteRecordOrgOffice(int organisation_id) {
         int rowsAffected = 0;
         if (deleteRecordOfficePerson(organisation_id) > 0) {
-            String query = "DELETE FROM org_office WHERE organisation_id = " + organisation_id;
+            String query = " DELETE FROM org_office WHERE organisation_id = " + organisation_id;
             try {
                 rowsAffected = connection.prepareStatement(query).executeUpdate();
                 rowsAffected = 1;
@@ -732,7 +733,7 @@ public class OrgDetailEntryModel_1 {
     public int deleteRecordOrg(int organisation_id) {
         int rowsAffected = 0;
         if (deleteRecordOrgMap(organisation_id) > 0 && deleteRecordOrgOffice(organisation_id) > 0) {
-            String query = "DELETE FROM organisation_name WHERE organisation_id = " + organisation_id;
+            String query = " DELETE FROM organisation_name WHERE organisation_id = " + organisation_id;
             try {
                 rowsAffected = connection.prepareStatement(query).executeUpdate();
             } catch (Exception e) {
@@ -751,7 +752,7 @@ public class OrgDetailEntryModel_1 {
 
     //  ********************************* Organisation Mapping *************************************************
     public int insertRecordOrgMap(OrgDetailEntry OrganisationMap) {
-        String query = "INSERT INTO organisation_map (organisation_id, organisation_type_id, organisation_sub_type_id ) "
+        String query = " INSERT INTO organisation_map (organisation_id, organisation_type_id, organisation_sub_type_id ) "
                 + " VALUES(?, ?, ? ) ";
         int rowsAffected = 0;
         try {
@@ -774,7 +775,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int updateRecordOrgMap(OrgDetailEntry OrganisationMap) {
-        String query = "UPDATE organisation_map SET organisation_id=?, organisation_type_id=?, organisation_sub_type_id=?  WHERE org_map_id=? ";
+        String query = " UPDATE organisation_map SET organisation_id=?, organisation_type_id=?, organisation_sub_type_id=?  WHERE org_map_id=? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -799,9 +800,9 @@ public class OrgDetailEntryModel_1 {
 
     // ###############################################  Office Detail #################################
     public int insertRecordOffice(OrgDetailEntry orgOffice) {
-        String query = "INSERT INTO "
-                + "org_office(organisation_id,org_office_code, org_office_name, office_type_id, address_line1, address_line2, city_id, email_id1, email_id2, mobile_no1, mobile_no2, landline_no1, landline_no2 ) "
-                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?)";
+        String query = " INSERT INTO "
+                + " org_office(organisation_id,org_office_code, org_office_name, office_type_id, address_line1, address_line2, city_id, email_id1, email_id2, mobile_no1, mobile_no2, landline_no1, landline_no2 ) "
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -810,7 +811,7 @@ public class OrgDetailEntryModel_1 {
             pstmt.setString(3, orgOffice.getOffice_name());
             pstmt.setInt(4, orgOffice.getOffice_type_id());
             pstmt.setString(5, orgOffice.getOffice_address1());
-            pstmt.setString(6,  orgOffice.getOffice_address2());
+            pstmt.setString(6, orgOffice.getOffice_address2());
             pstmt.setInt(7, orgOffice.getOffice_city_id());
             pstmt.setString(8, orgOffice.getOffice_mail_id1());
             pstmt.setString(9, orgOffice.getOffice_mail_id2());
@@ -833,10 +834,10 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int updateRecordOffice(OrgDetailEntry orgOffice) {
-        String query = "UPDATE org_office SET organisation_id = ?, org_office_code = ?, org_office_name = ?, office_type_id = ?, address_line1 = ?, "
+        String query = " UPDATE org_office SET organisation_id = ?, org_office_code = ?, org_office_name = ?, office_type_id = ?, address_line1 = ?, "
                 + " address_line2 = ?, city_id =?, email_id1 = ?, email_id2 = ?, mobile_no1 = ?, "
                 + " mobile_no2 = ?, landline_no1 = ?, landline_no2 = ?  "
-                + "WHERE org_office_id = ? ";
+                + " WHERE org_office_id = ? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -844,8 +845,8 @@ public class OrgDetailEntryModel_1 {
             pstmt.setString(2, orgOffice.getOffice_code());
             pstmt.setString(3, orgOffice.getOffice_name());
             pstmt.setInt(4, orgOffice.getOffice_type_id());
-            pstmt.setString(5,  orgOffice.getOffice_address1());
-            pstmt.setString(6,  orgOffice.getOffice_address2());
+            pstmt.setString(5, orgOffice.getOffice_address1());
+            pstmt.setString(6, orgOffice.getOffice_address2());
             pstmt.setInt(7, orgOffice.getOffice_city_id());
             pstmt.setString(8, orgOffice.getOffice_mail_id1());
             pstmt.setString(9, orgOffice.getOffice_mail_id2());
@@ -871,7 +872,7 @@ public class OrgDetailEntryModel_1 {
     public int deleteRecordOffice(int org_office_id) {
         int rowsAffected = 0;
         if (deleteRecordOfficePerson(org_office_id) > 0) {
-            String query = "DELETE FROM org_office WHERE org_office_id = " + org_office_id;
+            String query = " DELETE FROM org_office WHERE org_office_id = " + org_office_id;
             try {
                 rowsAffected = connection.prepareStatement(query).executeUpdate();
             } catch (Exception e) {
@@ -890,7 +891,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int deleteRecordOfficePerson(int org_office_id) {
-        String query = "DELETE FROM key_person WHERE org_office_id = " + org_office_id;
+        String query = " DELETE FROM key_person WHERE org_office_id = " + org_office_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -910,18 +911,18 @@ public class OrgDetailEntryModel_1 {
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Key Person Alteration @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     public int insertRecordPerson(OrgDetailEntry orgKp) {
-        String query = "INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, address_line2, "
-                + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code,father_name,age) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?,?,?)";
+        String query = " INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, address_line2, "
+                + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code,father_name,age) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, orgKp.getSalutation());
-            pstmt.setString(2,  orgKp.getKeyperson());
+            pstmt.setString(2, orgKp.getKeyperson());
             pstmt.setInt(3, orgKp.getDesiganition_id());
             pstmt.setInt(4, orgKp.getOffice_id());
             pstmt.setInt(5, orgKp.getPerson_city_id());
-            pstmt.setString(6,  orgKp.getPerson_address1());
-            pstmt.setString(7,  orgKp.getPerson_address2());
+            pstmt.setString(6, orgKp.getPerson_address1());
+            pstmt.setString(7, orgKp.getPerson_address2());
             pstmt.setString(8, orgKp.getPerson_mobile1());
             pstmt.setString(9, orgKp.getPerson_mobile2());
             pstmt.setString(10, orgKp.getPerson_landLine1());
@@ -946,9 +947,9 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int updateRecordPerson(OrgDetailEntry orgKp) {
-        String query = "UPDATE key_person SET  salutation=?, key_person_name=?, designation_id=?, org_office_id=?, city_id=?, address_line1=?, address_line2=?, "
+        String query = " UPDATE key_person SET  salutation=?, key_person_name=?, designation_id=?, org_office_id=?, city_id=?, address_line1=?, address_line2=?, "
                 + " mobile_no1=?, mobile_no2=?, landline_no1=?, landline_no2=?, email_id1=?, email_id2=?, father_name=?, age=? "
-                + "WHERE key_person_id=? ";
+                + " WHERE key_person_id=? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -959,7 +960,7 @@ public class OrgDetailEntryModel_1 {
             pstmt.setInt(4, orgKp.getOffice_id());
             pstmt.setInt(5, orgKp.getPerson_city_id());
             pstmt.setString(6, orgKp.getPerson_address1());
-            pstmt.setString(7,  orgKp.getPerson_address2());
+            pstmt.setString(7, orgKp.getPerson_address2());
             pstmt.setString(8, orgKp.getPerson_mobile1());
             pstmt.setString(9, orgKp.getPerson_mobile2());
             pstmt.setString(10, orgKp.getPerson_landLine1());
@@ -974,8 +975,8 @@ public class OrgDetailEntryModel_1 {
             System.out.println("Error:OrgDetailEntryModel-updateRecord-- " + e);
         }
         if (rowsAffected > 0) {
-                message = "Record updated successfully.";
-                msgBgColor = COLOR_OK;
+            message = "Record updated successfully.";
+            msgBgColor = COLOR_OK;
         } else {
             message = "Cannot update the record, some error.";
             msgBgColor = COLOR_ERROR;
@@ -984,7 +985,7 @@ public class OrgDetailEntryModel_1 {
     }
 
     public int deleteRecordPerson(int key_person_id) {
-        String query = "DELETE FROM key_person WHERE key_person_id=" + key_person_id;
+        String query = " DELETE FROM key_person WHERE key_person_id=" + key_person_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();

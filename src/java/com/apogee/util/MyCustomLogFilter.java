@@ -40,9 +40,8 @@ public class MyCustomLogFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
         try {
-            
-          //  System.err.println("---------------------------------- Log Filter ---------------------------------------------");
-            
+
+            //  System.err.println("---------------------------------- Log Filter ---------------------------------------------");
             HttpServletRequest request = (HttpServletRequest) req;
             HttpServletResponse response = (HttpServletResponse) res;
             ServletContext ctx = getFilterConfig().getServletContext();
@@ -56,26 +55,26 @@ public class MyCustomLogFilter implements Filter {
                 try {//                    System.out.println("urlExtention-" + url);
                     //String urlExtention = url.substring((url.lastIndexOf('.') + 1), url.length());
                     //if (urlExtention.equals("do")) {
-                        isSelect = "Y";
-                        isRedirection = false;
-                        try {
-                            //if (!(null == session || session.getAttribute("user_id") == null)) {
-                                connection = DBConnection.getConnection(ctx, session);
-                                List<UrlPrivileges> privilegeList = getUrlPrivileges(url, (String) session.getAttribute("user_role"));
-                                req.setAttribute("privilegeList", privilegeList);
-                                req.setAttribute("isSelectPriv", isSelect2);
-                                DBConnection.closeConncetion(connection);
-                            //}
-                        } catch (Exception e) {
-                            //session.invalidate();
-                            response.sendRedirect("/");
-                            return;
-                        }
-                        if(isRedirection){
-                            response.sendRedirect("UserNoPrivilegeController");
-                            return;
-                        }
-                   // }
+                    isSelect = "Y";
+                    isRedirection = false;
+                    try {
+                        //if (!(null == session || session.getAttribute("user_id") == null)) {
+                        connection = DBConnection.getConnection(ctx, session);
+                        List<UrlPrivileges> privilegeList = getUrlPrivileges(url, (String) session.getAttribute("user_role"));
+                        req.setAttribute("privilegeList", privilegeList);
+                        req.setAttribute("isSelectPriv", isSelect2);
+                        DBConnection.closeConncetion(connection);
+                        //}
+                    } catch (Exception e) {
+                        //session.invalidate();
+                        response.sendRedirect("/");
+                        return;
+                    }
+                    if (isRedirection) {
+                        response.sendRedirect("UserNoPrivilegeController");
+                        return;
+                    }
+                    // }
 
                 } catch (Exception e) {
                     System.out.println("Error Inner Try LogFiletr" + e);
@@ -92,7 +91,6 @@ public class MyCustomLogFilter implements Filter {
             // System.out.println("ERROR -LogFilter-doFilter " + ex);
         }
     }
-    
 
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
@@ -149,40 +147,38 @@ public class MyCustomLogFilter implements Filter {
             while (rst.next()) {
                 privilege = rst.getString("privilege");
                 //if (privilege.equals("Y")) {
-                    //if (rst.getString("privilege_type").equals("Select")) {
-                    if (rst.getString("privilege_type").equals("Full")) {
-                        isSelect = rst.getString("privilege");
-                    }
-                    
-                    if (rst.getString("privilege_type").equals("Select")) {
-                        isSelect2 = rst.getString("privilege");
-                    }
-                    
-                    
+                //if (rst.getString("privilege_type").equals("Select")) {
+                if (rst.getString("privilege_type").equals("Full")) {
+                    isSelect = rst.getString("privilege");
+                }
+
+                if (rst.getString("privilege_type").equals("Select")) {
+                    isSelect2 = rst.getString("privilege");
+                }
+
 //                    privilegeTypeId = rst.getString("privilege_type_id").split("&&");
 //                    privilegeTypeValue = rst.getString("privilege_type_value").split("&&");
 //                    for (int i = 0; i < privilegeTypeId.length; i++) {
-                        if (isSelect.equals("N")) {  // In order to hide Data Entry form fully
-                            continue;
-                        } else {
-                            UrlPrivileges urlPriv = new UrlPrivileges();
-                            urlPriv.setPrivilegeType(rst.getString("privilege_type"));
-                            urlPriv.setPrivilegeTypeId(rst.getString(3));
-                            urlPriv.setPrivilegeTypeValue(rst.getString(4));
-                            urlPriv.setPrivilege(rst.getString("privilege"));
-                            privilegeList.add(urlPriv);
-                        }
-                    //}
+                if (isSelect.equals("N")) {  // In order to hide Data Entry form fully
+                    continue;
+                } else {
+                    UrlPrivileges urlPriv = new UrlPrivileges();
+                    urlPriv.setPrivilegeType(rst.getString("privilege_type"));
+                    urlPriv.setPrivilegeTypeId(rst.getString(3));
+                    urlPriv.setPrivilegeTypeValue(rst.getString(4));
+                    urlPriv.setPrivilege(rst.getString("privilege"));
+                    privilegeList.add(urlPriv);
+                }
+                //}
                 //}
             }
             if (!privilege.isEmpty() && (privilegeList.size() < 1 && isSelect.equals("N"))) {
                 isRedirection = true;
             }
-            
+
 //            if (isSelect.equals("N")) {
 //                isRedirection = true;
 //            }
-            
         } catch (Exception e) {
             System.out.println("Error Filter getUrlPrivileges:- " + e);
         }

@@ -50,6 +50,14 @@
                                         <label for="pwd" class="mobileDisplayNone"></label>
                                         <button type="button" class="btn myThemeBtn rounded-0 d-table btn100" onclick="viewReport()">View Report</button>
                                     </div>
+
+                                    <!--Start Dynamic multiple images in jasper report-->
+                                    <div class="ml-0 ml-sm-2 mt-2">
+                                        <label for="pwd" class="mobileDisplayNone"></label>
+                                        <button type="button" class="btn myThemeBtn rounded-0 d-table btn100" onclick="viewMultipleImagesReport()">View Multiple Images Report</button>
+                                    </div>
+                                    <!--End Dynamic multiple images in jasper report-->
+
                                 </div>
                             </form>
                         </div>
@@ -148,6 +156,14 @@
         queryString = "task=View Report&from_date=" + from_date + "&to_date=" + to_date;
         var url = "DailyEnquiryReportController?" + queryString;
         popupwin = openPopUp1(url, "Division List", 600, 1000);
+    }
+    function viewMultipleImagesReport() {
+        var queryString;
+        var from_date = $('#from_date').val();
+        var to_date = $('#to_date').val();
+        queryString = "task=viewMultipleImagesReport";
+        var url = "DailyEnquiryReportController?" + queryString;
+        popupwin = openPopUp1(url, "Multiple Images", 600, 1000);
     }
 
     function openPopUp1(url, window_name, popup_height, popup_width) {

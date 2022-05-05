@@ -55,6 +55,7 @@
 <script>
     $(document).ready(function () {
         $('#mytable').DataTable();
+
     });
 </script>
 
@@ -84,7 +85,11 @@
 
     })
 </script>
-
+<script>
+    $(window).on('load', function () {
+        $('#loading').hide();
+    })
+</script>
 
 
 

@@ -39,7 +39,7 @@
                                                 <th>Name</th>
                                                 <!--<th>Category</th>-->
                                                 <th>Req Qty</th>
-                                                <th>Stock Qty</th>
+                                                <!--<th>Stock Qty</th>-->
                                                 <!--<th>Approved Qty</th>-->
                                                 <th>MRP (<small class="fas fa-rupee-sign"></small>)</th>
                                                 <!--<th>Approved (<small class="fas fa-rupee-sign"></small>)</th>-->
@@ -80,8 +80,22 @@
                                             <td><p class="mb-0">${beanType.model}</p>
                                                 <small>(${beanType.item_name})</small></td>
                                             <td>${beanType.required_qty}</td>
-                                            <td>${beanType.stock_quantity}</td>
-                                            <td>${beanType.basic_price}</td>
+
+<!--<td>${beanType.stock_quantity}</td>-->
+
+
+                                            <!--<td id="basic_price_col${beanType.order_item_id}">${beanType.basic_price}</td>-->
+
+
+                                            <c:if test="${beanType.item_status=='Denied'}">
+                                                <td id="basic_price_col${beanType.order_item_id}">0</td>
+
+                                            </c:if>
+                                            <c:if test="${beanType.item_status!='Denied'}">
+                                                <td id="basic_price_col${beanType.order_item_id}">${beanType.basic_price}</td>
+
+                                            </c:if>
+
 
                                             <td>
                                                 <c:if test="${beanType.order_status=='Pending'}">
@@ -106,7 +120,7 @@
                                             </td>
                                             <td>
                                                 <select class="btn btn-primary myNewLinkBtn px-1 ml-3 fontFourteen" style="width:100px" value="${beanType.item_status}"
-                                                        name="item_status${beanType.order_item_id}" onchange="validate(this.value, '${beanType.order_item_id}')">
+                                                        name="item_status${beanType.order_item_id}"  id="item_status${beanType.order_item_id}" onchange="validate(this.value, '${beanType.order_item_id}')">
                                                     <!--                                                    <option  class="btn btn-primary">Select</option>-->
                                                     <c:if test="${beanType.item_status=='Approved'}">
                                                         <option  class="btn btn-primary actionEdit fontFourteen" value="${beanType.item_status}">Approved</option>
@@ -126,16 +140,16 @@
                                         </c:forEach>
 
                                         <tr class="darkBlueBg">
-                                            <td colspan="4"></td>
+                                            <td colspan="3"></td>
                                             <td  class="totalValue text-white">Total Amount</td>
                                             <!--<td class="totalValue text-white" id="total_approved_qty"></td>-->
-                                            <td class="totalValue text-white">${total_amount}</td>  
+                                            <td class="totalValue text-white" id="total_amount">${total_amount}</td>  
 <!--                                            <td class="totalValue text-white" id="total_approved_price">${total_approved_price}</td>  -->
                                             <td class="totalValue text-white" id="total_percent">${total_discount_percent}</td>
                                             <td class="totalValue text-white" id="total_discounted_price">${total_discount_price}</td>
                                             <td class="totalValue text-white py-2">
-                                                <input type="submit" name="task"  class="btn actionEdit fontFourteen" id="approved" value="Approve">
-                                                <input type="submit" name="task"  class="btn actionDelete fontFourteen" id="denied" value="Denied">
+                                                <input type="submit" name="task" onclick="checkStatus(this.value)" class="btn actionEdit fontFourteen " id="approved" value="Confirm">
+                                                <input type="submit" name="task" onclick="checkStatus(this.value)" class="btn actionDelete fontFourteen " id="denied" value="Denied All">
                                             </td>   
                                         </tr>                    
                                         </tbody>
@@ -148,8 +162,7 @@
             </div>
 
         </div>
-</div>
-</section>
+    </section>
 </div>
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 <script>
@@ -181,60 +194,29 @@
 
 
         }
-
     });
 
-//    function checkValidationForQty(approve_qty, req_qty, basic_price, order_item_id) {
-//        if (approve_qty > req_qty) {
-//            alert("Please enter valid quantity!...");
-//            return false;
-//        } else {
-//            var discounted_percent = $('#discounted_percent' + order_item_id).val();
-//            var numVal1 = basic_price;
-//            var numVal2 = discounted_percent / 100;
-////            var approved_qty = $('#approved_qty' + order_item_id).val();
-//            var required_qty = $('#required_qty' + order_item_id).val();
-////            if (approved_qty == '') {
-////                alert("Please enter approved qty!...");
-////                $('#discounted_percent' + order_item_id).val("");
-////                return false;
-////            }
-//            numVal1 = (basic_price / required_qty) * required_qty;
-//            var totalValue = numVal1 - (numVal1 * numVal2)
-//            $('#discounted_price' + order_item_id).val(totalValue);
-//            if (parseInt(totalValue) > parseInt(basic_price)) {
-//                alert("Please enter valid Price!...");
-//                return false;
-//            }
-//            $('#approved_price' + order_item_id).html(parseInt(basic_price / required_qty * required_qty));
-//            $('.approved_price' + order_item_id).val(parseInt(basic_price / required_qty * required_qty));
-//
-//            // $('#total_percent').html(parseInt(discounted_percent));
-//            var count = $('#count').val();
-////            var total_approved_qty = 0;
-//            var total_discounted_percent = 0;
-//            var total_discounted_price = 0;
-//            var total_approved_price = 0;
-//            for (var k = 0; k < count; k++) {
-//                var order_item_ids = $('#order_item_id' + (k + 1)).val();
-////                total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
-////                total_discounted_percent = total_discounted_percent + parseInt($('#discounted_percent' + order_item_ids).val());
-//                total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
-//
-//                total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).html());
-//
-//            }
-//            total_discounted_percent = (total_approved_price - total_discounted_price) / total_approved_price * 100;
-//
-////            $('#total_approved_qty').html(parseInt(total_approved_qty));
-//            $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
-//            $('#total_discounted_price').html(parseInt(total_discounted_price));
-//            $('#total_approved_price').html(parseInt(total_approved_price));
-//
-//        }
-//
-//
-//    }
+    function  checkStatus(btnstatus) {
+        var count = $('#count').val();
+
+//        alert(btnstatus);
+        if (btnstatus == 'Confirm') {
+            for (var k = 0; k < count; k++) {
+                var order_item_ids = $('#order_item_id' + (k + 1)).val();
+                var item_status = $('#item_status' + order_item_ids).val();
+
+//            alert(item_status);
+                if (item_status == 'Select' || item_status == '') {
+                    alert("Please Select Status ");
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 
     function checkValidationForPrice(discounted_percent, basic_price, order_item_id) {
         var numVal1 = basic_price;
@@ -281,7 +263,7 @@
 
 
     function validate(value, order_item_id) {
-        if (value == 'Denied' || value=='Select') {
+        if (value == 'Denied' || value == 'Select') {
             $('#discounted_price' + order_item_id).val(0);
             $('#discounted_percent' + order_item_id).val(0);
             var count = $('#count').val();
@@ -289,25 +271,30 @@
             var total_discounted_percent = 0;
             var total_discounted_price = 0;
             var total_approved_price = 0;
+            var total_amount = 0;
             $('#approved_qty' + order_item_id).val(0);
             $('#approved_price' + order_item_id).val(0);
+            $('#basic_price_col' + order_item_id).html(0);
             for (var k = 0; k < count; k++) {
                 var order_item_ids = $('#order_item_id' + (k + 1)).val();
                 total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
                 total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
                 total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).val());
-
+                total_amount = total_amount + parseInt($('#basic_price_col' + order_item_ids).html());
             }
             total_discounted_percent = 0;
 
             $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
             $('#total_discounted_price').html(parseInt(total_discounted_price));
+            $('#total_amount').html(parseInt(total_amount));
+
         } else if (value == 'Approved') {
             var count = $('#count').val();
             var total_approved_qty = 0;
             var total_discounted_percent = 0;
             var total_discounted_price = 0;
             var total_approved_price = 0;
+            var total_amount = 0;
             var approved_qty = 0;
             var approved_price = 0;
             var stock_qty = parseInt($('#stock_qty' + order_item_id).val());
@@ -321,22 +308,36 @@
                 approved_qty = required_qty;
                 approved_price = basic_price;
             }
-            $('#approved_qty' + order_item_id).val(approved_qty);
-            $('#discounted_price' + order_item_id).val(basic_price);
-            $('#approved_price' + order_item_id).val(approved_price);
+            if ($('#discounted_percent' + order_item_id).val() == 0) {
+                $('#approved_qty' + order_item_id).val(approved_qty);
+                $('#discounted_price' + order_item_id).val(basic_price);
+                $('#basic_price_col' + order_item_id).html(basic_price);
+                $('#approved_price' + order_item_id).val(approved_price);
+            } else {
+                var numVal1 = basic_price;
+                var numVal2 = $('#discounted_percent' + order_item_id).val() / 100;
+                $('#approved_qty' + order_item_id).val(approved_qty);
+                numVal1 = (basic_price / required_qty) * approved_qty;
+                var totalValue = numVal1 - (numVal1 * numVal2)
+                $('#discounted_price' + order_item_id).val(totalValue);
+                $('#discounted_price' + order_item_id).val(totalValue);
+                $('#basic_price_col' + order_item_id).html(basic_price);
+                $('#approved_price' + order_item_id).val(approved_price);
+            }
 
             for (var k = 0; k < count; k++) {
                 var order_item_ids = $('#order_item_id' + (k + 1)).val();
                 total_approved_qty = total_approved_qty + parseInt($('#approved_qty' + order_item_ids).val());
                 total_discounted_price = total_discounted_price + parseInt($('#discounted_price' + order_item_ids).val());
                 total_approved_price = total_approved_price + parseInt($('#approved_price' + order_item_ids).val());
+                total_amount = total_amount + parseInt($('#basic_price_col' + order_item_ids).html());
             }
 
-
-//            total_discounted_percent = ((total_approved_price - total_discounted_price) / total_approved_price) * 100;
+            total_discounted_percent = ((total_approved_price - total_discounted_price) / total_approved_price) * 100;
 //
-//            $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
+            $('#total_percent').html(parseFloat(total_discounted_percent).toFixed(2));
             $('#total_discounted_price').html(parseInt(total_discounted_price));
+            $('#total_amount').html(parseInt(total_amount));
         }
     }
 </script>

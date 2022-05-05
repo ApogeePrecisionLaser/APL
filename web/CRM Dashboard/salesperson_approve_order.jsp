@@ -36,14 +36,14 @@
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive tableScrollWrap noWrapTable" >
-                                    <table class="table table-striped1 mainTable" id="mytable" >
+                                    <table class="table table-striped1 mainTable" id="mytable1" >
                                         <thead>
                                             <tr>
                                                 <th class="fontFourteen">S.No.</th>
                                                 <th class="fontFourteen">Order No</th>
                                                 <th class="fontFourteen">Requested By</th>
                                                 <th class="fontFourteen">Status</th>
-                                                <th class="fontFourteen">Price</th>
+                                                <th class="fontFourteen">Price (<i class="fas fa-rupee-sign fontTen"></i>)</th>
                                                 <th class="fontFourteen">Date</th>
                                                 <th class="fontFourteen">Action</th>
                                             </tr>
@@ -67,8 +67,8 @@
                                                         </c:otherwise>  
                                                     </c:choose>  
 
-                                                <td class="fontFourteen"><i class="fas fa-rupee-sign fontTen"></i>  
-                                                    <fmt:formatNumber type = "number"  maxFractionDigits = "3"  value =  "${beanType.basic_price}" />
+                                                <td class="fontFourteen">  
+                                                    ${beanType.basic_price}
                                                 </td>
                                                 <td class="fontFourteen">${beanType.date_time}</td>
 
@@ -94,3 +94,25 @@
 </div>
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
+
+<script>
+    $(document).ready(function () {
+
+
+        var table = $('#mytable1').DataTable({
+//            data: table_data,
+            "scrollY": "400px",
+            "scrollCollapse": true,
+            "columnDefs": [{
+                    "targets": [4],
+                    "render": function (data, type, row) {
+                        return Number(data).toLocaleString('en-IN', {
+                            maximumFractionDigits: 2,
+                            style: 'currency',
+                            currency: 'INR'
+                        });
+                    }
+                }]
+        });
+    })
+</script>

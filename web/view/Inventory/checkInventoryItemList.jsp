@@ -191,7 +191,9 @@
                         <table class="table table-striped table-bordered" id="mytable" style="width:100%" data-page-length='6'>
                             <thead>
                                 <tr>
-                                    <th>S.No.</th>
+                                    <!--                                    <th> <a class="nav-link" href="" role="button" data-toggle="modal" data-target="#myModal">
+                                                                                <img src="CRM Dashboard/assets2/img/product/addOrder.png" width="20">
+                                                                            </a></th>-->
                                     <th style="display:none"></th>
                                     <!--<th>Indent No.</th>-->
                                     <th>Item Name</th>
@@ -211,25 +213,25 @@
                                            varStatus="loopCounter">
 
                                     <tr onclick="openPopUpForItems(${beanType.indent_item_id})">
-                                        <td>${loopCounter.count }
 
-                                            <input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}">
-                                            <input type="hidden" name="requested_by" id="requested_by" value="${beanType.requested_by}">
-                                            <input type="hidden" name="requested_to" id="requested_to" value="${beanType.requested_to}">
-                                            <input type="hidden" name="item_name${beanType.indent_item_id}" id="item_name" value="${beanType.item_name}">
-                                            <input type="hidden" name="status" id="status" value="${beanType.status}">
+                                        <!--<td>-->
+                                        <!--<input type="checkbox" >-->
+                                <input type="hidden" name="indent_table_id" id="indent_table_id" value="${beanType.indent_table_id}">
+                                <input type="hidden" name="requested_by" id="requested_by" value="${beanType.requested_by}">
+                                <input type="hidden" name="requested_to" id="requested_to" value="${beanType.requested_to}">
+                                <input type="hidden" name="item_name${beanType.indent_item_id}" id="item_name" value="${beanType.item_name}">
+                                <input type="hidden" name="status" id="status" value="${beanType.status}">
+                                <!--</td>-->
 
-                                        </td>
-                                        <td style="display:none"><input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}"></td>
+                                <td style="display:none"><input type="hidden" name="indent_item_id" id="indent_item_id" value="${beanType.indent_item_id}"></td>
+                                <td id="${loopCounter.count }">${beanType.item_name}</td>
+                                <td id="${loopCounter.count }">${beanType.model}</td>
+                                <td id="${loopCounter.count }">${beanType.required_qty}</td>
 
-                                        <td id="${loopCounter.count }">${beanType.item_name}</td>
-                                        <td id="${loopCounter.count }">${beanType.model}</td>
-                                        <td id="${loopCounter.count }">${beanType.required_qty}</td>
+                                <td id="${loopCounter.count }">${beanType.approved_qty}</td>
 
-                                        <td id="${loopCounter.count }">${beanType.approved_qty}</td>
-
-                                        <td>${beanType.stock_qty}</td>
-                                        <c:if test="${beanType.stock_qty == 0}">
+                                <td>${beanType.stock_qty}</td>
+                                <c:if test="${beanType.stock_qty == 0}">
                                     <input type="hidden" id="disable_less_stock_btn" name="disable_less_stock_btn" value="disable">
 
                                 </c:if>
@@ -300,5 +302,139 @@
     </div>
 </section>
 
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-xl" style="width:1100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Purchase</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
 
+
+
+                <div class="container-fluid">              
+                    <div class="row mt-0">
+                        <div class="col-md-12">
+                            <div class="card card-primary card-outline rounded-0">
+                                <div class="card-body rounded-0">
+                                    <div>
+                                        <form class="myForm1">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputName" class="fontFourteen">Order No:<sup class="text-danger">*</sup></label>
+                                                        <input type="text" class="form-control rounded-0">
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-md-3">
+                                                  <div class="form-group">
+                                                    <label for="inputName" class="fontFourteen">Vendor Name:</label>
+                                                    <input type="text" class="form-control rounded-0">
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                  <div class="form-group">
+                                                    <label for="inputName" class="fontFourteen">Contact Person:<sup class="text-danger">*</sup></label>
+                                                    <input type="text" class="form-control rounded-0">
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                  <div class="form-group">
+                                                    <label for="inputName" class="fontFourteen">Mobile No:<sup class="text-danger">*</sup></label>
+                                                    <input type="text" class="form-control rounded-0">
+                                                  </div>
+                                                </div> -->
+                                                <div class="col-md-12">
+                                                    <div class="">
+                                                        <div class="text-right">
+                                                            <input id='add-row' class='btn btn-primary rounded-0 btn-sm' type='button' value='Add Product' />
+                                                        </div>                        
+                                                        <div class="mt-3">
+                                                            <div class="table-responsive">
+                                                                <table id="test-table121121" class="table table-condensed w-100" style="min-width: 800px;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="pl-0 fontFourteen">Product Name</th>
+                                                                            <th class="pl-0 fontFourteen">Model Name</th>
+                                                                            <th class="pl-0 fontFourteen">Model No</th>
+                                                                            <th class="pl-0 fontFourteen">Quantity</th>
+                                                                            <th class="pl-0 fontFourteen">Vendor Name</th>
+
+                                                                            <!-- <th class="pl-0 fontFourteen">Vendor Name</th> -->
+                                                                            <!-- <th class="pl-0 fontFourteen">Price</th>
+                                                                            <th class="pl-0 fontFourteen">Price</th> -->
+
+                                                                            <th class="pl-0 fontFourteen"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="test-body">
+                                                                        <tr id="row0">
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_name0' value='Receiver' type='text' class='form-control rounded-0' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_modelName0' value='APL002' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_model0' value='RL-600' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_qty0' value='150' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_vendor0' value='Ram Krishna' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <button class='delete-row btn btn-sm rounded-0 btn-danger '><i class="fa fa-trash"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group mb-0 mt-0">
+                                                        <button class="btn btn btn-primary rounded-0 btn-sm">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    var row = 1;
+    $(document).on("click", "#add-row", function () {
+        var new_row = '<tr id="row' + row + '"><td class="pl-0"><input name="pr_name' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_modelName' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_model' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_qty' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_vendor' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><button class="delete-row btn btn-sm rounded-0 btn-danger"><i class="fa fa-trash"></i></button></td></tr>';
+        // alert(new_row);
+        $('#test-body').append(new_row);
+        row++;
+        return false;
+    });
+    $(document).on("click", ".delete-row", function () {
+        if (row > 1) {
+            $(this).closest('tr').remove();
+            row--;
+        }
+        return false;
+    });
+
+</script>
 

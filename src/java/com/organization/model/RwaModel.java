@@ -30,8 +30,8 @@ public class RwaModel {
     public static int getNoOfRows() {
         int noOfRows = 0;
         try {
-            String query = "select count(rwa_id) from rwa "
-                    + " where r.active='Y'";
+            String query = " select count(rwa_id) from rwa "
+                    + " where r.active='Y' ";
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             rset.next();
@@ -50,7 +50,7 @@ public class RwaModel {
         if (lowerLimit == -1) {
             addQuery = "";
         }
-        String query = "select * from rwa as r,payment_schedule as ps where r.payment_schedule_id=ps.payment_schedule_id "
+        String query = " select * from rwa as r,payment_schedule as ps where r.payment_schedule_id=ps.payment_schedule_id "
                 + " and r.active='Y' "
                 + addQuery;
         try {
@@ -94,7 +94,7 @@ public class RwaModel {
         String key_person_name = "";
         try {
 
-            String query = "select key_person_name,emp_code from key_person"
+            String query = " select key_person_name,emp_code from key_person "
                     + " where key_person_id=" + id;
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -116,7 +116,7 @@ public class RwaModel {
         try {
             int rwa_id = bean.getRwa_id();
             if (rwa_id == 0) {
-                query = "insert into rwa (president_id,secretary_id,tresrar_id,working_1,working_2,working_3,rwa_name,monthly_fees,payment_schedule_id,remark,designation_id) values(?,?,?,?,?,?,?,?,?,?,?)";
+                query = " insert into rwa (president_id,secretary_id,tresrar_id,working_1,working_2,working_3,rwa_name,monthly_fees,payment_schedule_id,remark,designation_id) values(?,?,?,?,?,?,?,?,?,?,?) ";
             }
 //          if(rwa_id>0)
 //         query="update rwa set president_id=?,secretary_id=?,tresrar_id=?,working_1=?,working_2=?,working_3=?,rwa_name=?,monthly_fees=?,payment_schedule_id=?,remark=?,designation_id=? where rwa_id=?" ;
@@ -193,9 +193,9 @@ public class RwaModel {
         int rwa_id = bean.getRwa_id();
         int persident_empCode = bean.getEmp_code1();
         int designation_id = getDesignation_id(persident_empCode);
-        String query1 = "SELECT max(rev_no) rev_no FROM rwa WHERE rwa_id = " + rwa_id + " && active='Y' ORDER BY rev_no DESC";
+        String query1 = " SELECT max(rev_no) rev_no FROM rwa WHERE rwa_id = " + rwa_id + " && active='Y' ORDER BY rev_no DESC ";
         String query2 = " UPDATE rwa SET active=? WHERE rwa_id = ? && rev_no = ? ";
-        String query3 = "insert into rwa (rwa_id,president_id,secretary_id,tresrar_id,working_1,working_2,working_3,rwa_name,monthly_fees,payment_schedule_id,remark,designation_id,rev_no,active) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query3 = " insert into rwa (rwa_id,president_id,secretary_id,tresrar_id,working_1,working_2,working_3,rwa_name,monthly_fees,payment_schedule_id,remark,designation_id,rev_no,active) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int updateRowsAffected = 0;
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query1);
@@ -279,7 +279,7 @@ public class RwaModel {
 
     public int getDesignation_id(int persident_empCode) {
         int code = 0;
-        String query = "select designation_id "
+        String query = " select designation_id "
                 + " from key_person kp "
                 + " where kp.emp_code=" + persident_empCode;
         try {
@@ -298,7 +298,7 @@ public class RwaModel {
         boolean status = false;
         int rowsAffected = 0;
         try {
-            rowsAffected = connection.prepareStatement("Delete from rwa where rwa_id=" + rwa_id + " ").executeUpdate();
+            rowsAffected = connection.prepareStatement(" Delete from rwa where rwa_id=" + rwa_id + " ").executeUpdate();
             if (rowsAffected > 0) {
                 status = true;
             } else {
@@ -339,7 +339,7 @@ public class RwaModel {
         List<String> list = new ArrayList<String>();
         String query = " select key_person_name from key_person "
                 + " where IF('" + emp_code + "'='', emp_code like '%%', emp_code ='" + emp_code + "') "
-                + "Group by key_person_name";
+                + " Group by key_person_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -387,7 +387,7 @@ public class RwaModel {
 
     public Map<Integer, String> getPayment_type() {
         Map<Integer, String> map = new LinkedHashMap<Integer, String>();
-        String query = "SELECT payment_schedule_id,payment_schedule_name FROM payment_schedule ";
+        String query = " SELECT payment_schedule_id,payment_schedule_name FROM payment_schedule ";
         PreparedStatement pstmt;
         try {
             pstmt = (PreparedStatement) connection.prepareStatement(query);

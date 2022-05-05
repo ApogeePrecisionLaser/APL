@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author Komal
+ * @author Akash
  */
 public class CheckOrderInventoryModel {
 
@@ -54,11 +54,11 @@ public class CheckOrderInventoryModel {
         if (logged_designation.equals("Store Incharge")) {
             query = " select indt.order_no,indt.date_time,indt.description "
                     + " ,s.status,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to,indt.order_table_id "
-                    + " from order_table indt,key_person kp1,key_person kp2,"
+                    + " from order_table indt,key_person kp1,key_person kp2, "
                     + " status s,designation d where indt.requested_to=kp2.key_person_id "
                     + " and indt.requested_by=kp1.key_person_id "
                     + " and indt.status_id=s.status_id and indt.active='Y' "
-                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3,11,13,14) and d.designation_id='5'";
+                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3,11,13,14) and d.designation_id='5' ";
             if (!indent_status.equals("") && indent_status != null) {
                 query += " and s.status='" + indent_status + "' ";
             }
@@ -93,7 +93,7 @@ public class CheckOrderInventoryModel {
     public List<CheckInventory> getStatus() {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select status,status_id from status order by status";
+        String query = " select status,status_id from status order by status ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -170,7 +170,7 @@ public class CheckOrderInventoryModel {
 //                + " and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
 //                + " and indt.order_table_id='" + indent_table_id + "' ";
         String query = " select indt.order_no,itn.item_name,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity,"
+                + " ,s1.status as indent_status,s2.status as item_status,indi.order_item_id,indt.order_table_id,inv.stock_quantity, "
                 + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
                 + " from order_table indt,order_item indi, item_names itn, "
                 + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
@@ -333,7 +333,7 @@ public class CheckOrderInventoryModel {
     public String getIndentNo(int indent_table_id) {
         String indent_no = "";
 
-        String query = "SELECT indt.order_no,s.status FROM order_table indt,status s WHERE indt.status_id=s.status_id and"
+        String query = " SELECT indt.order_no,s.status FROM order_table indt,status s WHERE indt.status_id=s.status_id and "
                 + " indt.order_table_id = '" + indent_table_id + "' and indt.active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -350,7 +350,7 @@ public class CheckOrderInventoryModel {
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -365,7 +365,7 @@ public class CheckOrderInventoryModel {
 
     public int getStatusId(String status) {
 
-        String query = "SELECT status_id FROM status WHERE status = '" + status + "' ";
+        String query = " SELECT status_id FROM status WHERE status = '" + status + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -380,7 +380,7 @@ public class CheckOrderInventoryModel {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -395,7 +395,7 @@ public class CheckOrderInventoryModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status WHERE status_id in(11,12,10) ";
+        String query = " SELECT status from status WHERE status_id in(11,12,10) ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -419,7 +419,7 @@ public class CheckOrderInventoryModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -443,7 +443,7 @@ public class CheckOrderInventoryModel {
 
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
+        String query = " SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

@@ -9,10 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -61,11 +58,11 @@ public class ContactUsModel {
         String dealer_name = "";
         try {
 //            String query = " SELECT org_office_name from org_office where office_type_id=3 group by org_office_name order by org_office_name";
-            String query = " SELECT org_office_id, org_office_name, latitude, longitude,"
+            String query = " SELECT org_office_id, org_office_name, latitude, longitude, "
                     + " 111.045 * DEGREES(ACOS(COS(RADIANS(" + latitude + ")) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(" + longitude + ")) + SIN(RADIANS(" + latitude + ")) * SIN(RADIANS(latitude)))) "
                     + " AS distance_in_km "
                     + " FROM org_office where active='Y' "
-                    + " ORDER BY distance_in_km ASC limit 10";
+                    + " ORDER BY distance_in_km ASC limit 10 ";
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
 

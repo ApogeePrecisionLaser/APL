@@ -78,7 +78,7 @@ public class WardModel {
     }
 
     public int insertRecord(WardTypeBean wardTypeBean) {
-        String query = "INSERT INTO ward(ward_name,ward_no,remark,zone_id,active,revision_no) VALUES (?,?,?,?,?,?) ";
+        String query = " INSERT INTO ward(ward_name,ward_no,remark,zone_id,active,revision_no) VALUES (?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
@@ -108,9 +108,9 @@ public class WardModel {
         int revision = WardModel.getRevisionno(bean, ward_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM ward WHERE ward_id = " + ward_id + "  && active=? ";
-        String query2 = "UPDATE ward SET active=? WHERE ward_id=? and revision_no=?";
-        String query3 = "INSERT INTO ward(ward_id,ward_name,ward_no,remark,zone_id,active,revision_no) VALUES( ?,?, ?, ?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM ward WHERE ward_id = " + ward_id + "  && active=? ";
+        String query2 = " UPDATE ward SET active=? WHERE ward_id=? and revision_no=? ";
+        String query3 = " INSERT INTO ward(ward_id,ward_name,ward_no,remark,zone_id,active,revision_no) VALUES( ?,?, ?, ?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -164,7 +164,7 @@ public class WardModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM ward WHERE ward_id =" + zone_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM ward WHERE ward_id =" + zone_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -349,7 +349,7 @@ public class WardModel {
     }
 
     public int deleteRecord(int ward_id_m) {
-        String query = "DELETE FROM ward WHERE ward_id=" + ward_id_m;
+        String query = " DELETE FROM ward WHERE ward_id=" + ward_id_m;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();

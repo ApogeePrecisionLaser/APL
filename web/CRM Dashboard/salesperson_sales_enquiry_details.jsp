@@ -15,7 +15,23 @@
                         <li class="breadcrumb-item active">Sales Enquiry Detail</li>
                     </ol>
                 </div>
+                <c:if test="${not empty message}">
+                    <c:if test="${msgBgColor=='green'}">
+                        <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Success!</strong> ${message}
+
+                        </div>
+                    </c:if>
+                    <c:if test="${msgBgColor=='red'}">
+                        <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" >
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>OOps!</strong> ${message}
+                        </div>
+                    </c:if>
+                </c:if>
             </div>
+
         </div><!-- /.container-fluid -->
     </section>
 
@@ -34,17 +50,34 @@
                                     </div>
                                     <div class="text-right">
 
+
                                         <c:choose>
-                                            <c:when test="${beanType.status =='Enquiry Generated'}">
-                                                <a onclick="assignToDealer('${beanType.enquiry_table_id}')"
-                                                   class="btn myThemeBtn text-right">Assign to Dealer</a>                                        
+                                            <c:when test="${beanType.status =='Assigned To SalesManager'}">
+                                                <div class="salesManAppInputWrap">
+                                                    <input type="text" name="dealers" class="dealers form-control" id="dealers${beanType.enquiry_table_id}">
+                                                    <a onclick="assignToDealer('${beanType.enquiry_table_id}')" class="btn actionEdit fontFourteen px-1" title="Assigned To Dealer"><i class="far fa-share-square"></i></a>
+                                                </div>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Assigned To Dealer'}">
+                                                <button class="btn assigneDealer fontFourteen" disabled>${beanType.assigned_to} </button>
                                             </c:when>
 
+                                            <c:when test="${beanType.status =='Open' || beanType.status =='Call' ||  beanType.status =='Follow Up'}">
+                                                <button class="btn inConversation fontFourteen" disabled>${beanType.status} </button>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Irrelevant' || beanType.status =='Not Interested'
+                                                            || beanType.status =='Purchased From Others'}">
+                                                    <button class="btn enquiryFailed fontFourteen" disabled>${beanType.status} </button>
+                                            </c:when>
+                                            <c:when test="${beanType.status =='Sold'}">
+                                                <button class="btn enquiryPassed fontFourteen" disabled>${beanType.status} </button>
+                                            </c:when>
                                             <c:otherwise>
-                                                <button class="btn myThemeBtn fontFourteen " disabled>${beanType.status}</button>
-                                                <div><span class="text-danger fontFourteen">(${beanType.assigned_to})</span></div>
+                                                <button class="btn myBtnDanger fontFourteen" disabled>${beanType.status} </button>
                                             </c:otherwise>
                                         </c:choose>
+
+
                                     </div>
                                 </div>
 
@@ -308,18 +341,57 @@
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 <script>
-
+    $(function () {
+        setTimeout(function () {
+            $('.myAlertBox').fadeOut('fast');
+        }, 3000);
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('fast');
+        }, 4000);
+    });
+//    function assignToDealer(enquiry_table_id) {
+//        var dealer_name = $('#dealers' + enquiry_table_id).val();
+//        $.ajax({
+//            url: "ApproveOrdersController",
+//            dataType: "json",
+//            data: {task: "assignToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
+//            success: function (data) {
+//                // alert(data.message);
+//                window.location.reload();
+//            }
+//        });
+//    }
+//    
     function assignToDealer(enquiry_table_id) {
         var dealer_name = $('#dealers' + enquiry_table_id).val();
-        $.ajax({
-            url: "ApproveOrdersController",
-            dataType: "json",
-            data: {task: "assignToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
-            success: function (data) {
-                // alert(data.message);
-            }
-        });
+        if (dealer_name != '') {
+            $.ajax({
+                url: "ApproveOrdersController",
+                dataType: "json",
+                data: {task: "assignToDealer", enquiry_table_id: enquiry_table_id, dealer_name: dealer_name},
+                success: function (data) {
+                    if (data.message != '') {
+                        $('#msg').text(data.message);
+                        $('.alert-success').show();
 
+                        setTimeout(function () {
+                            $('#msg').fadeOut('fast');
+                        }, 2000);
+                        window.location.reload();
+                    } else {
+                        $('.alert-success').hide();
+                    }
+                }
+            });
+        } else {
+            $('.alert-danger').show();
+            $('.alert-danger').html('Please Select a dealer!..');
+
+            setTimeout(function () {
+                $('.alert-danger').fadeOut('fast');
+            }, 2000);
+            return false;
+        }
     }
 
     $('#status').change(function () {
@@ -331,9 +403,47 @@
             $('#unsold_status_div').hide();
         }
     });
-
 //    $(function () {
 //        $('#datetimepicker1').datetimepicker();
 //    });
 
+
+
+    $(function () {
+        $(document).on('keydown', '.dealers', function () {
+            var id = this.id;
+            var random = this.value;
+            var district = $('#district' + id.substring(7)).val();
+            var city = $('#city' + id.substring(7)).val();
+            var state = $('#state' + id.substring(7)).val();
+            $('#' + id).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "ApproveOrdersController",
+                        dataType: "json",
+                        data: {
+                            action1: "getDealersStateWise",
+                            str: random,
+                            district: district,
+                            city: city,
+                            state: state
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            response(data.list);
+                        },
+                        error: function (error) {
+                            console.log(error.responseText);
+                            response(error.responseText);
+                        }
+                    });
+                },
+                select: function (events, ui) {
+                    console.log(ui);
+                    $(this).val(ui.item.label); // display the selected text
+                    return false;
+                }
+            });
+        });
+    });
 </script>

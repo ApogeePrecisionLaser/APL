@@ -7,7 +7,6 @@ package com.organization.controller;
 import com.organization.model.OrgOfficeModel;
 import com.DBConnection.DBConnection;
 import com.organization.tableClasses.Org_Office;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -21,6 +20,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+
+
+/**
+ *
+ * @author komal
+ */
 public class OrgOfficeNewController extends HttpServlet {
 
     @Override

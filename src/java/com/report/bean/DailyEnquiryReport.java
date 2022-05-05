@@ -5,14 +5,17 @@
  */
 package com.report.bean;
 
+import java.io.InputStream;
+
 /**
  *
- * @author Apogee
+ * @author komal
  */
 public class DailyEnquiryReport {
 
     private String current_date, total_query_of_current_date, total_query_till_date, open_query_of_current_date, open_query_till_date,
             closed_query_of_current_date, closed_query_till_date, sold_query_of_current_date, sold_query_till_date;
+    private InputStream images;
 
     /**
      * @return the current_date
@@ -139,5 +142,19 @@ public class DailyEnquiryReport {
      */
     public void setSold_query_till_date(String sold_query_till_date) {
         this.sold_query_till_date = sold_query_till_date;
+    }
+
+    /**
+     * @return the images
+     */
+    public InputStream getImages() {
+        return images;
+    }
+
+    /**
+     * @param images the images to set
+     */
+    public void setImages(InputStream images) {
+        this.images = images;
     }
 }

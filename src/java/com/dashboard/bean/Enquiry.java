@@ -7,7 +7,7 @@ package com.dashboard.bean;
 
 /**
  *
- * @author DELL
+ * @author Komal
  */
 public class Enquiry {
 

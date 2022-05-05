@@ -217,4 +217,11 @@
     .mobileDisplayNone{
         display: none;
     }
+
+    .cartSection .cartTable .table thead th:nth-child(3){
+        min-width: 110px;
+    }
+    .dashboardTbl table tbody td{
+        white-space: nowrap;
+    }
 }

@@ -87,6 +87,7 @@
                                         <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
                                         <a href="InventoryController" class="dropdown-item">Inventory</a>
                                         <a href="ItemAuthorizationController" class="dropdown-item">Item Authorization</a>
+
                                         <%}%>
                                         <%
                                             if (session.getAttribute("user_role").equals("Employee")) {
@@ -104,6 +105,8 @@
                                         <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
                                         <a href="InventoryController" class="dropdown-item">Inventory</a>
                                         <a href="CheckInventoryController" class="dropdown-item">Check Inventory & Generate Delivery Challan</a>
+                                        <a href="PurchaseOrdersController?task=new order" class="dropdown-item">Make Purchase Order</a>
+
                                         <%}%>
                                         <!--                                        <a href="DeliverItemController" class="dropdown-item">Delivery Chalan</a>-->
                                     </div> 
@@ -229,6 +232,10 @@
                                     <div class="dropdown-menu">
                                         <a href="Flow?nxt=1" class="dropdown-item">Flow</a>                                             
                                     </div>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="PurchaseOrdersController?task=new order" class="nav-link">Make Purchase Order</a>
                                 </li>
                                 <%}%>
 

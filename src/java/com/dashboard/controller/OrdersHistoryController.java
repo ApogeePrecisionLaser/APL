@@ -1,20 +1,12 @@
 package com.dashboard.controller;
 
-import com.location.model.CityModel;
-import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.model.DealersOrderModel;
-import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -24,6 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class OrdersHistoryController extends HttpServlet {
 
     @Override
@@ -83,10 +80,12 @@ public class OrdersHistoryController extends HttpServlet {
             float total_approved_price = 0;
 
             for (int i = 0; i < list.size(); i++) {
-                total_amount = total_amount + Float.parseFloat(list.get(i).getBasic_price());
-                total_discount_price = total_discount_price + Float.parseFloat(list.get(i).getDiscount_price());
-                total_discount_percent = total_discount_percent + Float.parseFloat(list.get(i).getDiscount_percent());
-                total_approved_price = total_approved_price + Float.parseFloat(list.get(i).getApproved_price());
+                if (!list.get(i).getItem_status().equals("Denied")) {
+                    total_amount = total_amount + Float.parseFloat(list.get(i).getBasic_price());
+                    total_discount_price = total_discount_price + Float.parseFloat(list.get(i).getDiscount_price());
+                    total_discount_percent = total_discount_percent + Float.parseFloat(list.get(i).getDiscount_percent());
+                    total_approved_price = total_approved_price + Float.parseFloat(list.get(i).getApproved_price());
+                }
             }
 
             DBConnection.closeConncetion(model.getConnection());
@@ -95,14 +94,18 @@ public class OrdersHistoryController extends HttpServlet {
             request.setAttribute("order_no", order_no);
             request.setAttribute("total_discount_price", total_discount_price);
             request.setAttribute("total_approved_price", total_approved_price);
-            request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+            if (total_discount_price == 0.0 && total_approved_price == 0.0) {
+                request.setAttribute("total_discount_percent", 0);
+
+            } else {
+                request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+
+            }
 
             request.setAttribute("list", list);
             request.setAttribute("count", list.size());
             request.getRequestDispatcher("historyOrderDetails").forward(request, response);
-
         }
-
         ArrayList<DealersOrder> list = model.getAllHistoryOrders(logged_user_name, loggedUser);
         request.setAttribute("message", model.getMessage());
         request.setAttribute("msgBgColor", model.getMessageBGColor());

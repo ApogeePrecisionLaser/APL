@@ -56,14 +56,14 @@
                         </div>
                     </form>
 
-                    <div class="d-flex justify-content-between mt-3">
+<!--                    <div class="d-flex justify-content-between mt-3">
                         <p class="mb-1">
                             <a href="/LoginController" class="fontFourteen">Go to Login</a>
                         </p>
-                        <!-- <p class="mb-0">
+                         <p class="mb-0">
                           <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
-                        </p> -->
-                    </div>
+                        </p> 
+                    </div>-->
 
                 </div>
             </div>

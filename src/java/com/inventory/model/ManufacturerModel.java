@@ -5,7 +5,6 @@
 package com.inventory.model;
 
 import com.inventory.tableClasses.Manufacturer;
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -62,7 +61,7 @@ public class ManufacturerModel {
     }
 
     public int insertRecord(Manufacturer manufacturer) {
-        String query = "INSERT INTO manufacturer(manufacturer_name, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
+        String query = " INSERT INTO manufacturer(manufacturer_name, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -90,9 +89,9 @@ public class ManufacturerModel {
         int revision = ManufacturerModel.getRevisionno(manufacturer, manufacturer_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM manufacturer WHERE manufacturer_id = " + manufacturer_id + "  && active='Y' ";
-        String query2 = "UPDATE manufacturer SET active =? WHERE manufacturer_id =? and revision_no=? ";
-        String query3 = "INSERT INTO manufacturer(manufacturer_id,manufacturer_name,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM manufacturer WHERE manufacturer_id = " + manufacturer_id + "  && active='Y' ";
+        String query2 = " UPDATE manufacturer SET active =? WHERE manufacturer_id =? and revision_no=? ";
+        String query3 = " INSERT INTO manufacturer(manufacturer_id,manufacturer_name,description,revision_no,active,remark) VALUES(?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -155,7 +154,7 @@ public class ManufacturerModel {
     }
 
     public int deleteRecord(int manufacturer_id) {
-        String query = "DELETE FROM manufacturer WHERE active='Y' and manufacturer_id = " + manufacturer_id;
+        String query = " DELETE FROM manufacturer WHERE active='Y' and manufacturer_id = " + manufacturer_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();

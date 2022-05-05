@@ -53,10 +53,10 @@ public class ModelNameModel {
             searchItemName = searchItemCodearr[0];
         }
 
-        String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_code,mim.manufacturer_item_map_id,m.lead_time"
-                + " ,m.model_no,m.part_no,inn.item_name ,m.basic_price"
-                + "  FROM model m,manufacturer_item_map mim,item_names inn,manufacturer mr where m.active='Y' "
-                + " and mim.active='Y' and mr.active='Y' and inn.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=inn.item_names_id and"
+        String query = " SELECT mr.manufacturer_name,m.model_id, m.model,m.description,inn.item_code,mim.manufacturer_item_map_id,m.lead_time "
+                + " ,m.model_no,m.part_no,inn.item_name ,m.basic_price "
+                + " FROM model m,manufacturer_item_map mim,item_names inn,manufacturer mr where m.active='Y' "
+                + " and mim.active='Y' and mr.active='Y' and inn.active='Y' and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=inn.item_names_id and "
                 + " mim.manufacturer_id=mr.manufacturer_id ";
 
         if (!searchModel.equals("") && searchModel != null) {
@@ -99,7 +99,7 @@ public class ModelNameModel {
 
     public int insertRecord(ModelName model_name, Iterator itr, String image_name, String destination, int image_count) {
         String query2 = " select count(*) as count from model where model='" + model_name.getModel() + "' and active='Y' ";
-        String query = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,"
+        String query = " INSERT INTO model(model,manufacturer_item_map_id,lead_time, "
                 + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         int manufacturer_item_map_id = 0;
@@ -122,12 +122,12 @@ public class ModelNameModel {
 //            msgBgColor = COLOR_ERROR;
 //        }
         try {
-            String query3 = "insert into manufacturer_item_map(manufacturer_id,item_names_id,"
+            String query3 = " insert into manufacturer_item_map(manufacturer_id,item_names_id, "
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,now()) ";
 
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query3, Statement.RETURN_GENERATED_KEYS);
-            String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
+            String query4 = " SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
                     + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
             int manufacturer_item_map_ids = 0;
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
@@ -135,9 +135,9 @@ public class ModelNameModel {
             while (rs1.next()) {
                 manufacturer_item_map_ids = rs1.getInt("manufacturer_item_map_id");
             }
-            String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
-                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
-                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y'"
+            String query5 = " SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
+                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "' "
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' "
                     + " and m.model='" + model_name.getModel() + "' ";
 
             PreparedStatement pstmt2 = connection.prepareStatement(query5);
@@ -232,10 +232,10 @@ public class ModelNameModel {
         int manufacturer_item_map_id = model_name.getManufacturer_item_map_id();
         //  int manufacturer_item_map_id = getManufacturerItemMapId(manufacturer_id, item_id);
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM model WHERE model_id = " + model_id + "  && active='Y' ";
-        String query2 = "UPDATE model SET active =? WHERE model_id =? and revision_no=? ";
-        String query3 = "INSERT INTO model(model_id,model,manufacturer_item_map_id,lead_time,"
-                + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM model WHERE model_id = " + model_id + "  && active='Y' ";
+        String query2 = " UPDATE model SET active =? WHERE model_id =? and revision_no=? ";
+        String query3 = " INSERT INTO model(model_id,model,manufacturer_item_map_id,lead_time, "
+                + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
 
@@ -245,15 +245,15 @@ public class ModelNameModel {
             int count_map = 0;
             int updateRowsAffected_map = 0;
 
-            String map_query1 = "SELECT max(revision) FROM manufacturer_item_map WHERE "
+            String map_query1 = " SELECT max(revision) FROM manufacturer_item_map WHERE "
                     + " manufacturer_item_map_id = " + manufacturer_item_map_id + " and active='Y' ";
 
-            String map_query2 = "UPDATE manufacturer_item_map SET active=? WHERE manufacturer_item_map_id=? and revision=? ";
+            String map_query2 = " UPDATE manufacturer_item_map SET active=? WHERE manufacturer_item_map_id=? and revision=? ";
 
-            String map_query3 = "insert into manufacturer_item_map(manufacturer_item_map_id,manufacturer_id,item_names_id, "
+            String map_query3 = " insert into manufacturer_item_map(manufacturer_item_map_id,manufacturer_id,item_names_id, "
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,?,now()) ";
-            String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
+            String query4 = " SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
                     + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y'  ";
             int manufacturer_item_map_ids = 0;
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
@@ -261,8 +261,8 @@ public class ModelNameModel {
             while (rs1.next()) {
                 manufacturer_item_map_ids = rs1.getInt("manufacturer_item_map_id");
             }
-            String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
-                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
+            String query5 = " SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
+                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "' "
                     + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' ";
 
             PreparedStatement pstmt2 = connection.prepareStatement(query5);
@@ -359,8 +359,8 @@ public class ModelNameModel {
         Date date = new Date();
         String middleName = "";
         String current_date = dateFormat.format(date);
-        String query3 = "INSERT INTO item_image_details (image_name, image_path, date_time, description,model_id,revision_no,active,remark) "
-                + " VALUES(?,?,?,?,?,?,?,?)";
+        String query3 = " INSERT INTO item_image_details (image_name, image_path, date_time, description,model_id,revision_no,active,remark) "
+                + " VALUES(?,?,?,?,?,?,?,?) ";
         String imageName = "";
         String item_code = model_name.getItem_code();
         String item_name = "";
@@ -459,7 +459,7 @@ public class ModelNameModel {
     public static int getManufacturerItemMapRevisionno(ModelName model_name, int manufacturer_item_map_id) {
         int revision = 0;
         try {
-            String query = " SELECT max(revision) as revision_no FROM manufacturer_item_map"
+            String query = " SELECT max(revision) as revision_no FROM manufacturer_item_map "
                     + " WHERE manufacturer_item_map_id =" + manufacturer_item_map_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -497,7 +497,7 @@ public class ModelNameModel {
         String data = "";
         String img_name = "";
         String destination_path = "";
-        String query = "SELECT item_image_details_id,image_name, image_path,model_id "
+        String query = " SELECT item_image_details_id,image_name, image_path,model_id "
                 + " FROM item_image_details iid "
                 + " where iid.model_id=" + model_id + " and active='Y'  ORDER BY item_image_details_id ";
 
@@ -528,7 +528,7 @@ public class ModelNameModel {
         int count = 0;
         int updateRowsAffected = 0;
 
-        String query2 = "UPDATE item_image_details SET active=? WHERE item_image_details_id=? ";
+        String query2 = " UPDATE item_image_details SET active=? WHERE item_image_details_id=? ";
 
         try {
             PreparedStatement pstm = connection.prepareStatement(query2);
@@ -554,7 +554,7 @@ public class ModelNameModel {
         String img_name = "";
 
         String destination_path = "";
-        String query = "SELECT item_image_details_id,image_name, image_path "
+        String query = " SELECT item_image_details_id,image_name, image_path "
                 + " FROM item_image_details iid "
                 + " where iid.item_image_details_id=" + item_image_details_id + " ORDER BY item_image_details_id ";
 
@@ -597,7 +597,7 @@ public class ModelNameModel {
 
         try {
 
-            String query = " SELECT image_name FROM item_image_details"
+            String query = " SELECT image_name FROM item_image_details "
                     + " WHERE model_id =" + model_id + " order by item_image_details_id desc limit 1 ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -699,12 +699,12 @@ public class ModelNameModel {
     }
 
     public int deleteRecord(int model_id) {
-        String query = "update model set active='N' where model_id = " + model_id;
+        String query = " update model set active='N' where model_id = " + model_id;
         int manufacturer_item_map_id = getManufacturerItemMapId(model_id);
 
         int rowsAffected = 0;
         try {
-            String query1 = "DELETE FROM manufacturer_item_map WHERE manufacturer_item_map_id = '" + manufacturer_item_map_id + "' "
+            String query1 = " DELETE FROM manufacturer_item_map WHERE manufacturer_item_map_id = '" + manufacturer_item_map_id + "' "
                     + "and active='Y' ";
 
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -831,7 +831,7 @@ public class ModelNameModel {
         String query = " select m.model from model m,manufacturer mr,item_names inn,manufacturer_item_map mim "
                 + " where m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
                 + " and mim.manufacturer_id=mr.manufacturer_id and mim.item_names_id=inn.item_names_id and m.active='Y' and mr.active='Y' "
-                + " and mim.active='Y'";
+                + " and mim.active='Y' ";
 
         if (!manufacturer_name.equals("") && manufacturer_name != null) {
             query += " and mr.manufacturer_name='" + manufacturer_name + "' ";
@@ -863,13 +863,17 @@ public class ModelNameModel {
 
     public List<String> getItemTypeForModelOrPart(String item_code) {
         List<String> list = new ArrayList<String>();
+
+        if (!item_code.equals("")) {
+            String item_code_arr[] = item_code.split(" # ");
+            item_code = item_code_arr[1];
+        }
         String query = " select itemt.item_type from item_type itemt,item_names itemn where itemn.item_type_id=itemt.item_type_id and itemn.active='Y' "
                 + " and itemt.active='Y' ";
 
         if (!item_code.equals("") && item_code != null) {
             query += " and itemn.item_code='" + item_code + "' ";
         }
-
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

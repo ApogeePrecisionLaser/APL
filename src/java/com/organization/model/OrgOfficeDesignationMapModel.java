@@ -5,25 +5,14 @@
  */
 package com.organization.model;
 
-import com.organization.tableClasses.Org_Office;
 import com.organization.tableClasses.OrganisationDesignationBean;
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 
 /**
  *
@@ -53,7 +42,7 @@ public class OrgOfficeDesignationMapModel {
     public int getNoOfRows() {
         int noOfRows = 0;
         try {
-            ResultSet rset = connection.prepareStatement("select count(*) from org_office").executeQuery();
+            ResultSet rset = connection.prepareStatement(" select count(*) from org_office ").executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
@@ -63,7 +52,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public static int getDesgnid(String org_id) {
-        String query = "SELECT designation_id FROM designation WHERE  designation=? and active=? ";
+        String query = " SELECT designation_id FROM designation WHERE  designation=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -80,7 +69,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public static int getParentOrgid(int org_id) {
-        String query = "SELECT organisation_designation_map_id_2 FROM organisation_designation WHERE  organisation_designation_map_id_1=? and active=? ";
+        String query = " SELECT organisation_designation_map_id_2 FROM organisation_designation WHERE  organisation_designation_map_id_1=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -97,7 +86,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public static int getcheckorgid(int org_id) {
-        String query = "SELECT organisation_designation_map_id_1 FROM organisation_designation WHERE  organisation_designation_map_id_2=? and active=? ";
+        String query = " SELECT organisation_designation_map_id_1 FROM organisation_designation WHERE  organisation_designation_map_id_2=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -121,7 +110,7 @@ public class OrgOfficeDesignationMapModel {
         try {
             query = " select oodm.org_office_designation_map_id,oo.org_office_name,d.designation,oodm.serial_no from "
                     + " org_office_designation_map oodm,org_office oo,designation d "
-                    + "where oodm.org_office_id=oo.org_office_id and oodm.designation_id = d.designation_id and oodm.active = 'Y' and oo.active='Y' and d.active='Y' ";
+                    + " where oodm.org_office_id=oo.org_office_id and oodm.designation_id = d.designation_id and oodm.active = 'Y' and oo.active='Y' and d.active='Y' ";
 
             if (!searchOrgOffice.equals("") && searchOrgOffice != null) {
                 query += " and oo.org_office_name='" + searchOrgOffice + "' ";
@@ -154,7 +143,7 @@ public class OrgOfficeDesignationMapModel {
 
     public int getIdOfParent(String number) {
         int id = 0;
-        String query1 = "SELECT organisation_designation_map_id FROM organisation_designation_map WHERE serial_no =?  && active=? ";
+        String query1 = " SELECT organisation_designation_map_id FROM organisation_designation_map WHERE serial_no =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setString(1, number);
@@ -177,7 +166,7 @@ public class OrgOfficeDesignationMapModel {
 
     public String getDesigNameFromId(int id) {
         String name = "";
-        String query1 = "SELECT designation FROM designation WHERE designation_id =?  && active=? ";
+        String query1 = " SELECT designation FROM designation WHERE designation_id =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, id);
@@ -200,7 +189,7 @@ public class OrgOfficeDesignationMapModel {
 
     public String getOrgNameFromId(int id) {
         String name = "";
-        String query1 = "SELECT organisation_name FROM organisation_name WHERE organisation_id =?  && active=? ";
+        String query1 = " SELECT organisation_name FROM organisation_name WHERE organisation_id =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, id);
@@ -231,7 +220,7 @@ public class OrgOfficeDesignationMapModel {
         int orgid = getOrganisationOfficeId(bean.getOrganisation());
         int desigid = getDesignation_id(bean.getDesignation());
 
-        String query = "insert into org_office_designation_map(org_office_id,designation_id,"
+        String query = " insert into org_office_designation_map(org_office_id,designation_id, "
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
 
@@ -271,12 +260,12 @@ public class OrgOfficeDesignationMapModel {
         int org_office_id = getOrganisationOfficeId(bean.getOrganisation());
         int desigid = getDesignation_id(bean.getDesignation());
 
-        String query1 = "SELECT max(revision) FROM org_office_designation_map WHERE "
-                + "org_office_designation_map_id = " + org_office_designation_map_id + " and active='Y' ";
+        String query1 = " SELECT max(revision) FROM org_office_designation_map WHERE "
+                + " org_office_designation_map_id = " + org_office_designation_map_id + " and active='Y' ";
 
-        String query2 = "UPDATE org_office_designation_map SET active=? WHERE org_office_designation_map_id=? and revision=? ";
+        String query2 = " UPDATE org_office_designation_map SET active=? WHERE org_office_designation_map_id=? and revision=? ";
 
-        String query3 = "insert into org_office_designation_map(org_office_id,designation_id,"
+        String query3 = " insert into org_office_designation_map(org_office_id,designation_id, "
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
 
@@ -340,7 +329,7 @@ public class OrgOfficeDesignationMapModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision) as revision_no FROM org_office_designation_map"
+            String query = " SELECT max(revision) as revision_no FROM org_office_designation_map "
                     + " WHERE org_office_designation_map_id =" + org_office_designation_map_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -365,8 +354,8 @@ public class OrgOfficeDesignationMapModel {
         PreparedStatement psmt;
         ResultSet rst;
 
-        String query = "DELETE FROM org_office_designation_map WHERE org_office_designation_map_id = '" + org_office_designation_map_id + "' "
-                + "and active='Y' ";
+        String query = " DELETE FROM org_office_designation_map WHERE org_office_designation_map_id = '" + org_office_designation_map_id + "' "
+                + " and active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
             rowsAffected = psmt.executeUpdate();
@@ -388,7 +377,7 @@ public class OrgOfficeDesignationMapModel {
 
     public List<String> getOrganisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org.organisation_name FROM organisation_name AS org  where org.active='Y' ORDER BY organisation_name ";
+        String query = " SELECT org.organisation_name FROM organisation_name AS org  where org.active='Y' ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -411,7 +400,7 @@ public class OrgOfficeDesignationMapModel {
 
     public List<String> searchOrganisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.organisation_name FROM organisation_name AS org,organisation_designation odm where org.organisation_id = odm.organisation_id and odm.active='Y' and org.active='Y' ";
+        String query = " SELECT distinct org.organisation_name FROM organisation_name AS org,organisation_designation odm where org.organisation_id = odm.organisation_id and odm.active='Y' and org.active='Y' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -438,7 +427,7 @@ public class OrgOfficeDesignationMapModel {
         // int id1 = getDesgn_idd(id);
         List<String> list = new ArrayList<String>();
 
-        query = "SELECT distinct d.designation FROM designation d,org_office_designation_map oodm,org_office oo"
+        query = " SELECT distinct d.designation FROM designation d,org_office_designation_map oodm,org_office oo "
                 + " where d.designation_id=oodm.designation_id and oodm.org_office_id=oo.org_office_id and oodm.active='Y' "
                 + " and d.active='Y' and oo.active='Y' ";
 
@@ -467,7 +456,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getOrganisation_id(String organisation_name) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ? and active=?";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -483,7 +472,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getOrganisationOfficeId(String organisation_name) {
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y'";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y' ";
         int org_office_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -499,7 +488,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getParentGeneration(int org_id, int desig_id) {
-        String query = "SELECT * FROM organisation_designation WHERE organisation_id = ? and organisation_designation_map_id_1=? and active=? ";
+        String query = " SELECT * FROM organisation_designation WHERE organisation_id = ? and organisation_designation_map_id_1=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -517,7 +506,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getDesignation_id(String organisation_name) {
-        String query = "SELECT designation_id FROM designation WHERE designation = '" + organisation_name + "' and active='Y' ";
+        String query = " SELECT designation_id FROM designation WHERE designation = '" + organisation_name + "' and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -533,7 +522,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public static String getDesignation_name(String designation_id) {
-        String query = "SELECT designation FROM designation WHERE designation_id = ? and active='Y' ";
+        String query = " SELECT designation FROM designation WHERE designation_id = ? and active='Y' ";
         String designation_name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -551,7 +540,7 @@ public class OrgOfficeDesignationMapModel {
     public List<String> OrgOffice(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
-        String query = "SELECT org_office_name from org_office where active='Y' order by org_office_name";
+        String query = " SELECT org_office_name from org_office where active='Y' order by org_office_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, office_code);
@@ -576,9 +565,9 @@ public class OrgOfficeDesignationMapModel {
 
     public List<String> getOrgOfficeNameSearch(String q, String office_code) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT o.org_office_name FROM org_office AS o  "
+        String query = " SELECT o.org_office_name FROM org_office AS o  "
                 + " WHERE IF('" + office_code + "'='', o.org_office_code LIKE '%%' , o.org_office_code='" + office_code + "') "
-                + "ORDER BY o.org_office_name";
+                + " ORDER BY o.org_office_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -601,7 +590,7 @@ public class OrgOfficeDesignationMapModel {
 
     public List<String> getOrgOfficeCodeSearch(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_code FROM org_office as oo GROUP BY oo.org_office_code";
+        String query = " SELECT oo.org_office_code FROM org_office as oo GROUP BY oo.org_office_code ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -624,7 +613,7 @@ public class OrgOfficeDesignationMapModel {
 
     public List<String> getGeneration(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.generation FROM organisation_designation  AS org   where org.active='Y'  ORDER BY generation ";
+        String query = " SELECT distinct org.generation FROM organisation_designation  AS org   where org.active='Y'  ORDER BY generation ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -646,7 +635,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getOrgOfficeType_id(String office_type) {
-        String query = "SELECT office_type_id FROM org_office_type WHERE  office_type = ? ";
+        String query = " SELECT office_type_id FROM org_office_type WHERE  office_type = ? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -662,7 +651,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = ?";
+        String query = " SELECT city_id FROM city WHERE city_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -677,7 +666,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getDesgn_id(String office) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ?";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -692,7 +681,7 @@ public class OrgOfficeDesignationMapModel {
     }
 
     public int getDesgn_idd(int office) {
-        String query = "SELECT designation_id FROM organisation_designation_map WHERE organisation_id = ?";
+        String query = " SELECT designation_id FROM organisation_designation_map WHERE organisation_id = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -710,7 +699,7 @@ public class OrgOfficeDesignationMapModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT city_name FROM city AS c ORDER BY city_name ";
+        String query = " SELECT city_name FROM city AS c ORDER BY city_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -738,7 +727,7 @@ public class OrgOfficeDesignationMapModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT designation FROM designation AS d,organisation_designation as od where d.designation_id=od.organisation_designation_map_id_1 and d.active='Y' and od.active='Y' ORDER BY designation ";
+        String query = " SELECT designation FROM designation AS d,organisation_designation as od where d.designation_id=od.organisation_designation_map_id_1 and d.active='Y' and od.active='Y' ORDER BY designation ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -766,7 +755,7 @@ public class OrgOfficeDesignationMapModel {
         //  int id = getDesgn_id(code);
         // int id1 = getDesgn_idd(id);
         List<String> list = new ArrayList<String>();
-        String query = "SELECT designation FROM designation where designation.active='Y' ";
+        String query = " SELECT designation FROM designation where designation.active='Y' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -792,7 +781,7 @@ public class OrgOfficeDesignationMapModel {
         // int id1 = getDesgn_idd(id);
         List<String> list = new ArrayList<String>();
 
-        String query = "SELECT * FROM designation d,organisation_designation o where "
+        String query = " SELECT * FROM designation d,organisation_designation o where "
                 + " d.designation_id=o.organisation_designation_map_id_1 "
                 + " and  o.organisation_id='" + id + "' and  o.active='Y' and d.active='Y' and o.is_super_child='N' ";
 

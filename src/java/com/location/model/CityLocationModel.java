@@ -137,7 +137,7 @@ public class CityLocationModel {
     public int insertRecord(CityLocationBean cityLocationeBean) {
         int rowsAffected = 0;
         //String query = "INSERT INTO city_location (zone_new_id,location,remark, location_code) VALUES (?,?,?, ?) ";
-        String query = "INSERT INTO city_location (location,remark,latitude,longitude,area_id,location_no,revision_no,active) VALUES (?,?,?,?,?,?,?,?) ";
+        String query = " INSERT INTO city_location (location,remark,latitude,longitude,area_id,location_no,revision_no,active) VALUES (?,?,?,?,?,?,?,?) ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -176,12 +176,12 @@ public class CityLocationModel {
         searchAreaName = krutiToUnicode.convert_to_unicode(searchAreaName);
 
         String query = " select cl.city_location_id,z.zone_name,w.ward_name,a.area_name,cl.location,cl.location_no,cl.remark,cl.latitude,cl.longitude "
-                + "from city_location as cl,zone as z, ward as w,area as a where "
-                + "cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
+                + " from city_location as cl,zone as z, ward as w,area as a where "
+                + " cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                 + " And IF('" + searchCityName + "' = '', cl.location LIKE '%%', cl.location  =?) "
-                + "And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
-                + "And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
-                + "And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?)order by zone_name,ward_name,area_name,location_no"
+                + " And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
+                + " And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
+                + " And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?)order by zone_name,ward_name,area_name,location_no "
                 + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -220,9 +220,9 @@ public class CityLocationModel {
                 + " FROM city_location as cl,zone as z,ward as w,area as a where "
                 + " cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                 + " And IF('" + searchCityName + "' = '', cl.location LIKE '%%', cl.location  =?) "
-                + "And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
-                + "And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
-                + "And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) ";
+                + " And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
+                + " And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
+                + " And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchCityName);
@@ -257,9 +257,9 @@ public class CityLocationModel {
                 + " from city_location as cl,zone as z, ward as w,area as a where "
                 + " cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                 + " And IF('" + searchCityName + "' = '', cl.location LIKE '%%', cl.location  =?) "
-                + "And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
-                + "And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
-                + "And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) ";
+                + " And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
+                + " And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
+                + " And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) ";
         int noOfRows = 0;
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -303,7 +303,7 @@ public class CityLocationModel {
 
     public List<String> getCityName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select city_name from city "
+        String query = " select city_name from city "
                 + " GROUP BY city_name ORDER BY city_name";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -328,7 +328,7 @@ public class CityLocationModel {
     public List<String> getZone(String q) {
         List<String> list = new ArrayList<String>();
 
-        String query = "select z.zone_name from zone as z "
+        String query = " select z.zone_name from zone as z "
                 + " GROUP BY z.zone_name  ORDER BY z.zone_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -358,9 +358,9 @@ public class CityLocationModel {
         PreparedStatement pstmt;
         zone_name = (zone_name);
         String query = " SELECT w.ward_name  FROM ward AS w, zone AS z "
-                + "WHERE   w.zone_id = z.zone_id "
-                + "AND IF('" + zone_name + "'='', zone_name like '%%', zone_name ='" + zone_name + "') "
-                + "Group by ward_name ";
+                + " WHERE   w.zone_id = z.zone_id "
+                + " AND IF('" + zone_name + "'='', zone_name like '%%', zone_name ='" + zone_name + "') "
+                + " Group by ward_name ";
         try {
             pstmt = (PreparedStatement) connection.prepareStatement(query);
             // pstmt.setString(1, zone_name);
@@ -388,10 +388,10 @@ public class CityLocationModel {
         zone_name = (zone_name);
         ward_name = (ward_name);
         String query = " SELECT a.area_name "
-                + "FROM area AS a ,ward AS w, zone AS z "
-                + "WHERE a.ward_id IN (select w.ward_id from ward w where ward_name='" + ward_name + "') "
-                + "AND w.zone_id IN (select z.zone_id from zone z where zone_name='" + zone_name + "') "
-                + "Group by area_name";
+                + " FROM area AS a ,ward AS w, zone AS z "
+                + " WHERE a.ward_id IN (select w.ward_id from ward w where ward_name='" + ward_name + "') "
+                + " AND w.zone_id IN (select z.zone_id from zone z where zone_name='" + zone_name + "') "
+                + " Group by area_name";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -415,8 +415,8 @@ public class CityLocationModel {
 
     public List<String> getZoneName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select zone from city_location as cl ,zone_new as z where cl.zone_new_id=z.zone_new_id"
-                + " GROUP BY zone ORDER BY zone";
+        String query = " select zone from city_location as cl ,zone_new as z where cl.zone_new_id=z.zone_new_id "
+                + " GROUP BY zone ORDER BY zone ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -439,9 +439,9 @@ public class CityLocationModel {
 
     public List<String> getLocationName(String q, String location_code) {
         List<String> list = new ArrayList<String>();
-        String query = "select location from city_location "
+        String query = " select location from city_location "
                 + " WHERE IF('" + location_code + "'='', location_code LIKE '%%', location_code='" + location_code + "') "
-                + " GROUP BY location ORDER BY location";
+                + " GROUP BY location ORDER BY location ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -465,9 +465,9 @@ public class CityLocationModel {
     public List<String> getLocationCode(String q, String location_name) {
         List<String> list = new ArrayList<String>();
         location_name = krutiToUnicode.convert_to_unicode(location_name);
-        String query = "select location_code from city_location "
+        String query = " select location_code from city_location "
                 + " WHERE IF('" + location_name + "'='', location LIKE '%%', location='" + location_name + "') "
-                + " GROUP BY location ORDER BY location";
+                + " GROUP BY location ORDER BY location ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -492,7 +492,7 @@ public class CityLocationModel {
         //List<String> list = new ArrayList<String>();
         int area_id = 0;
         area = (area);
-        String query = "select area_id from area where area_name='" + area + "'";
+        String query = " select area_id from area where area_name='" + area + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

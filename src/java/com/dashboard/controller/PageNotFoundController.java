@@ -1,23 +1,18 @@
 package com.dashboard.controller;
 
-import com.location.model.CityModel;
-import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
-import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class PageNotFoundController extends HttpServlet {
 
     @Override

@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-body">
                     <p class="login-box-msg">Sign in to start your session</p>
-                    <form action="LoginController" method="post">
+                    <form action="LoginController" method="post" id="login_form" name="login_form">
                         <!--                        <div class="input-group mb-3">
                                                     <select class="form-control rounded-0 fontFourteen">
                                                         <option selected disabled >Select One</option>
@@ -59,6 +59,7 @@
                                                         </div>
                                                     </div>
                                                 </div>-->
+                        <input type="hidden" name="user_token" id="user_token" value="${user_token}">
                         <div class="input-group mb-3">
                             <input type="text" class="form-control rounded-0 fontFourteen" placeholder="Mobile Or Email" name="email" id="email">
                             <div class="input-group-append">
@@ -78,13 +79,15 @@
                         <div class="row">
                             <div class="col-12">
                                 <button  type="submit" name="task" id="login12" value="login" class="btn myThemeBtn btn-block" onclick="validate()" >Sign In</button>
+                                <div id="image_div" style="display:none">
+                                    <img src="images/loader.gif" id="gif" style="display: block; margin: 0 auto; width: 100px; visibility: hidden;">
+                                </div>
                             </div>
                         </div>
                     </form>
                     <div class="d-flex justify-content-center mt-3 login_container">
                         <strong style="color: red;" id="error_msg">${message}</strong>
                     </div>
-
 
                     <div class="d-flex justify-content-between mt-3">
                         <p class="mb-1">
@@ -94,11 +97,12 @@
                                                     <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
                                                 </p>-->
                     </div>
-
                 </div>
             </div>
         </div>
-
+        <div id="loading">
+            <div class="loader"></div>
+        </div>
 
         <script src="CRM Dashboard/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
@@ -106,16 +110,27 @@
         <!-- AdminLTE App -->
         <script src="CRM Dashboard/assets2/js/adminlte.min.js"></script>
         <script>
-
-                                    function validate() {
+                                    $(window).on('load', function () {
+                                        $('#loading').hide();
+                                    })
+        </script>
+        <script>
+            function validate() {
 //                                        var mobile = $('#mobile').val();
-                                        var email = $('#email').val();
-                                        if (email == '') {
-                                            $('#error_msg').text("Please enter any one of the info either Email Or Mobile!..");
-                                            return false;
-                                        }
+                var email = $('#email').val();
+                if (email == '') {
+                    $('#error_msg').text("Please enter any one of the info either Email Or Mobile!..");
+                    return false;
+                } else {
 
-                                    }
+                }
+            }
+        </script>
+        <script>
+            $('#login_form').submit(function () {
+                $('#image_div').show();
+                $('#gif').css('visibility', 'visible');
+            });
         </script>
     </body>
 </html>

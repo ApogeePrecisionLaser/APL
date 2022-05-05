@@ -1,25 +1,13 @@
 package com.inventory.model;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.CheckInventory;
-import java.io.File;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import static java.time.LocalDateTime.now;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
 
 /**
  *
@@ -61,7 +49,7 @@ public class CheckInventoryModel {
                     + " and indi.item_names_id=ia.item_names_id "
                     + " and  kp1.org_office_id=oo.org_office_id   "
                     + " and indt.status_id=s.status_id and indt.active='Y' "
-                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3,11) and d.designation_id='5'";
+                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3,11) and d.designation_id='5' ";
             if (!indent_status.equals("") && indent_status != null) {
                 query += " and s.status='" + indent_status + "' ";
             }
@@ -113,7 +101,7 @@ public class CheckInventoryModel {
     public List<CheckInventory> getStatus() {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status  order by status ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -135,7 +123,7 @@ public class CheckInventoryModel {
         List<CheckInventory> list = new ArrayList<CheckInventory>();
 
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
+                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, "
                 + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
                 + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
@@ -187,7 +175,7 @@ public class CheckInventoryModel {
 //                + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
 //                + " and indt.indent_table_id='" + indent_table_id + "' and indt.status_id=11 ";
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity,"
+                + " ,s1.status as indent_status,s2.status as item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, "
                 + " indi.deliver_qty,indt.requested_by ,indt.requested_to,m.model "
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
                 + " status s1,status s2,inventory inv,inventory_basic ib,model m,manufacturer_item_map mim "
@@ -289,7 +277,7 @@ public class CheckInventoryModel {
     public String getIndentNo(int indent_table_id) {
         String indent_no = "";
 
-        String query = "SELECT indt.indent_no,s.status FROM indent_table indt,status s WHERE indt.status_id=s.status_id and"
+        String query = " SELECT indt.indent_no,s.status FROM indent_table indt,status s WHERE indt.status_id=s.status_id and "
                 + " indt.indent_table_id = '" + indent_table_id + "' and indt.active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -306,7 +294,7 @@ public class CheckInventoryModel {
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -321,7 +309,7 @@ public class CheckInventoryModel {
 
     public int getStatusId(String status) {
 
-        String query = "SELECT status_id FROM status WHERE status = '" + status + "' ";
+        String query = " SELECT status_id FROM status WHERE status = '" + status + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -336,7 +324,7 @@ public class CheckInventoryModel {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -351,7 +339,7 @@ public class CheckInventoryModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status WHERE status_id in(11,12,10) ";
+        String query = " SELECT status from status WHERE status_id in(11,12,10) ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -375,7 +363,7 @@ public class CheckInventoryModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -399,7 +387,7 @@ public class CheckInventoryModel {
 
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
+        String query = " SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

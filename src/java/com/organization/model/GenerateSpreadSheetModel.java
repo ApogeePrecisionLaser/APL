@@ -37,7 +37,6 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.organization.tableClasses.GenerateSpreadSheet;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.function.Supplier;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -115,9 +114,9 @@ public class GenerateSpreadSheetModel {
                 + " kp.father_name,kp.date_of_birth,kp.emergency_contact_name,kp.emergency_contact_mobile, "
                 + " onn.organisation_name,onn.organisation_code,oo.org_office_name,oo.address_line1,oo.email_id1, "
                 + " oo.mobile_no1,oo.org_office_code, "
-                + " d.designation,d.designation_code ,oot.office_type"
+                + " d.designation,d.designation_code ,oot.office_type "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
@@ -474,7 +473,7 @@ public class GenerateSpreadSheetModel {
 
         int count = 0;
         String query = " SELECT distinct oo.org_office_name FROM org_office oo,organisation_name oname where oo.active='Y' and oname.active='Y' "
-                + "and oo.organisation_id=oname.organisation_id ";
+                + " and oo.organisation_id=oname.organisation_id ";
         if (!org_name.equals("") && org_name != null) {
             query += " and oname.organisation_name='" + org_name + "' ";
         }
@@ -505,7 +504,7 @@ public class GenerateSpreadSheetModel {
         int count = 0;
         String query = " SELECT distinct oot.office_type FROM org_office_type oot,org_office oo,organisation_name oname "
                 + " where oo.active='Y' and oname.active='Y' and oot.active='Y' and oo.office_type_id=oot.office_type_id "
-                + "and oo.organisation_id=oname.organisation_id ";
+                + " and oo.organisation_id=oname.organisation_id ";
         if (!org_name.equals("") && org_name != null) {
             query += " and oname.organisation_name='" + org_name + "' ";
         }
@@ -573,7 +572,7 @@ public class GenerateSpreadSheetModel {
         int count = 0;
         String query = " SELECT distinct kp.key_person_name FROM key_person kp,org_office oo,designation d "
                 + " where kp.active='Y' and oo.active='Y' and d.active='Y' "
-                + "and kp.org_office_id=oo.org_office_id and kp.designation_id=d.designation_id ";
+                + " and kp.org_office_id=oo.org_office_id and kp.designation_id=d.designation_id ";
         if (!org_office_name.equals("") && org_office_name != null) {
             query += " and oo.org_office_name='" + org_office_name + "' ";
         }
@@ -603,7 +602,7 @@ public class GenerateSpreadSheetModel {
 
     public int getOrgOfficeId(String org_office) {
         int org_office_id = 0;
-        String query = "SELECT org_office_id FROM org_office WHERE  org_office_name = '" + org_office + "'  and active='Y' ";
+        String query = " SELECT org_office_id FROM org_office WHERE  org_office_name = '" + org_office + "'  and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);

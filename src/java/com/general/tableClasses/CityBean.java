@@ -7,7 +7,7 @@ package com.general.tableClasses;
 
 /**
  *
- * @author Administrator
+ * @author Komal
  */
 public class CityBean {
     private int id;

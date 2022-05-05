@@ -25,11 +25,19 @@
                             <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" >
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <strong>OOps!</strong> ${message}
-
                             </div>
                         </c:if>
                     </c:if>
+                    <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" style="display:none">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Success!</strong>
 
+                    </div>
+                    <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" style="display:none">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>OOps!</strong> 
+
+                    </div>
                 </div>
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
@@ -71,11 +79,10 @@
                                                                                         <input type="radio"  required name="enquiry_type" id="enquiry_type" value="complaint">-->
                                         </div>
 
-
                                         <div class="d-flex justify-content-start">
                                             <div class="form-group form-check mr-3">
                                                 <label class="form-check-label">
-                                                    <input class="form-check-input" type="radio" name="enquiry_type" id="enquiry_type" value="Sales"> Sales
+                                                    <input class="form-check-input" type="radio" name="enquiry_type" id="enquiry_type" value="Sales" checked=""> Sales
                                                 </label>
                                             </div>
                                             <div class="form-group form-check">
@@ -89,7 +96,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>District:<sup class="text-danger">*</sup></label>
-                                            <input type="text" class="form-control" required name="district" id="district">
+                                            <input type="text" class="form-control" required name="district" id="district" placeholder="Press Space">
                                         </div>
                                     </div>
 
@@ -129,18 +136,13 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Enquiry Source:</label>
-
-                                            <input type="text" class="form-control"  name="enquiry_source" id="enquiry_source">
-
+                                            <input type="text" class="form-control"  name="enquiry_source" id="enquiry_source" placeholder="Press Space">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Marketing Vertical:</label>
-
-                                            <input type="text" class="form-control"  name="marketing_vertical" id="marketing_vertical">
-
-
+                                            <input type="text" class="form-control"  name="marketing_vertical" id="marketing_vertical" placeholder="Press Space">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -179,19 +181,19 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>City:</label>
-                                            <input type="text" class="form-control"  name="sender_city" id="sender_city">
+                                            <input type="text" class="form-control"  name="sender_city" id="sender_city" placeholder="Press Space">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>State:</label>
-                                            <input type="text" class="form-control"  name="sender_state" id="sender_state">
+                                            <input type="text" class="form-control"  name="sender_state" id="sender_state" placeholder="Press Space">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Country:</label>
-                                            <input type="text" class="form-control"  name="sender_country" id="sender_country">
+                                            <input type="text" class="form-control"  name="sender_country" id="sender_country" placeholder="Press Space">
                                         </div>
                                     </div>
                                 </div>
@@ -209,10 +211,6 @@
             </div>
         </div>
     </section>
-
-
-
-
 </div>
 
 
@@ -242,11 +240,13 @@
 //    });
 
                                                 $(function () {
-
-
                                                     setTimeout(function () {
                                                         $('.myAlertBox').fadeOut('fast');
-                                                    }, 2000);
+                                                    }, 3000);
+
+                                                    setTimeout(function () {
+                                                        $('.alert-danger').fadeOut('fast');
+                                                    }, 4000);
 
                                                     $("#enquiry_source").autocomplete({
                                                         source: function (request, response) {
@@ -402,12 +402,17 @@
                                                     var phoneNo = document.getElementById('sender_mob');
 
                                                     if (phoneNo.value == "" || phoneNo.value == null) {
-                                                        alert("Please enter your Mobile No.");
+//                                                        alert("Please enter your Mobile No.");
+                                                        $('.alert-danger').show();
+                                                        $('.alert-danger').html("Please enter your Mobile No.");
                                                         return false;
-                                                    }
-                                                    if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
-                                                        alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+                                                    } else if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
+//                                                        alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+                                                        $('.alert-danger').show();
+                                                        $('.alert-danger').html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong>Oops!</strong>Mobile No. is not valid, Please Enter 10 Digit Mobile No.');
                                                         return false;
+                                                    } else {
+                                                        $('.alert-danger').hide();
                                                     }
                                                     return true;
                                                 }
@@ -416,12 +421,17 @@
                                                     var phoneNo = document.getElementById('sender_alternate_mob');
 
                                                     if (phoneNo.value == "" || phoneNo.value == null) {
-                                                        alert("Please enter your Mobile No.");
+//                                                        alert("Please enter your Mobile No.");
+                                                        $('.alert-danger').show();
+                                                        $('.alert-danger').html("Please enter your Mobile No.");
                                                         return false;
-                                                    }
-                                                    if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
-                                                        alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+                                                    } else if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
+//                                                        alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+                                                        $('.alert-danger').show();
+                                                        $('.alert-danger').html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong>Oops!</strong>Mobile No. is not valid, Please Enter 10 Digit Mobile No.');
                                                         return false;
+                                                    } else {
+                                                        $('.alert-danger').hide();
                                                     }
                                                     return true;
                                                 }

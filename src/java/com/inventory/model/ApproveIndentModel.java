@@ -1,35 +1,13 @@
 package com.inventory.model;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.tableClasses.ApproveIndent;
-import java.io.File;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import static java.time.LocalDateTime.now;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import org.apache.commons.fileupload.FileItem;
-import org.json.simple.JSONArray;
 
 /**
  *
@@ -102,7 +80,7 @@ public class ApproveIndentModel {
     public List<ApproveIndent> getStatus() {
         List<ApproveIndent> list = new ArrayList<ApproveIndent>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status  order by status ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -139,10 +117,10 @@ public class ApproveIndentModel {
 
         if (user_role.equals("Super Admin")) {
             query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
-                    + "s1.status as indent_status,s2.status as  item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, "
-                    + "indi.deliver_qty,indt.requested_by,  indt.requested_to,m.model  from indent_table indt,indent_item indi, item_names "
-                    + "itn,purpose p,  status s1,status s2,inventory inv,inventory_basic ib,model m,  manufacturer_item_map mim,  "
-                    + "key_person kp,designation d,org_office oo  where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
+                    + " s1.status as indent_status,s2.status as  item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, "
+                    + " indi.deliver_qty,indt.requested_by,  indt.requested_to,m.model  from indent_table indt,indent_item indi, item_names "
+                    + " itn,purpose p,  status s1,status s2,inventory inv,inventory_basic ib,model m,  manufacturer_item_map mim,  "
+                    + " key_person kp,designation d,org_office oo  where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
                     + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and mim.item_names_id=itn.item_names_id   and indi.purpose_id=p.purpose_id "
                     + " and ib.inventory_basic_id=inv.inventory_basic_id  and ib.item_names_id=itn.item_names_id  and ib.active='Y'  and inv.active='Y' "
                     + " and m.active='Y' and mim.active='Y'  and indt.status_id=s1.status_id and  indi.status_id=s2.status_id and indt.active='Y'  "
@@ -151,7 +129,7 @@ public class ApproveIndentModel {
                     + " and oo.org_office_id=ib.org_office_id "
                     + " and indi.model_id=m.model_id ";
         } else {
-            query = "select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
+            query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty , "
                     + " s1.status as indent_status,s2.status as "
                     + " item_status,indi.indent_item_id,indt.indent_table_id,inv.stock_quantity, indi.deliver_qty,indt.requested_by, "
                     + " indt.requested_to,m.model "
@@ -250,7 +228,7 @@ public class ApproveIndentModel {
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -265,7 +243,7 @@ public class ApproveIndentModel {
 
     public int getStatusId(String status) {
 
-        String query = "SELECT status_id FROM status WHERE status = '" + status + "' ";
+        String query = " SELECT status_id FROM status WHERE status = '" + status + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -280,7 +258,7 @@ public class ApproveIndentModel {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -295,7 +273,7 @@ public class ApproveIndentModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status WHERE status_id in(3,6) ";
+        String query = " SELECT status from status WHERE status_id in(3,6) ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -319,7 +297,7 @@ public class ApproveIndentModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -343,7 +321,7 @@ public class ApproveIndentModel {
 
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
+        String query = " SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

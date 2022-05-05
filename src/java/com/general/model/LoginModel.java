@@ -6,13 +6,8 @@
 package com.general.model;
 
 import com.google.gson.JsonObject;
-import static com.lowagie.text.pdf.PdfFileSpecification.url;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
@@ -126,7 +121,7 @@ public class LoginModel {
 //            query += " and kp.mobile_no1='" + mobile + "' ";
 //        }
         if (!email.equals("") && email != null) {
-            query += " and kp.email_id1='" + email + "' or kp.mobile_no1='" + email + "' ";
+            query += " and (kp.email_id1='" + email + "' or kp.mobile_no1='" + email + "') ";
         }
         try {
             connection.setAutoCommit(false);
@@ -170,7 +165,7 @@ public class LoginModel {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select distinct kp.key_person_id from designation d, key_person kp, user l "
+        String query = " select distinct kp.key_person_id from designation d, key_person kp, user l "
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and d.active='Y' ";
         try {
@@ -206,13 +201,33 @@ public class LoginModel {
         return str;
     }
 
+    public String getUserId(String mobile) {
+        String str = "";
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = " select l.user_id from user l,key_person kp "
+                + " where  kp.mobile_no1='" + mobile + "' "
+                + " AND kp.key_person_id=l.key_person_id and kp.active='Y' and l.active='Y' ";
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                str = rst.getString(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getKeyPersonId ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+
     public int getOrgOfficeId(String user_name, String password) {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.org_office_id from org_office oo, key_person kp, user l "
+        String query = " select oo.org_office_id from org_office oo, key_person kp, user l "
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
-                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
+                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y' ";
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -230,9 +245,9 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.org_office_name from org_office oo, key_person kp, user l "
+        String query = " select oo.org_office_name from org_office oo, key_person kp, user l "
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
-                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
+                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y' ";
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -250,7 +265,7 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select distinct kp.mobile_no1 from designation d, key_person kp, user l "
+        String query = " select distinct kp.mobile_no1 from designation d, key_person kp, user l "
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and d.active='Y' ";
         try {
@@ -318,9 +333,9 @@ public class LoginModel {
         int str = 0;
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select oo.organisation_id from org_office oo, key_person kp, user l "
+        String query = " select oo.organisation_id from org_office oo, key_person kp, user l "
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
-                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y'; ";
+                + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and oo.active='Y' ";
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -338,7 +353,7 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select orgn.organisation_name from org_office oo, key_person kp, user l,organisation_name orgn "
+        String query = " select orgn.organisation_name from org_office oo, key_person kp, user l,organisation_name orgn "
                 + " where l.user_name='" + user_name + "' and l.user_password='" + password + "' "
                 + " and l.key_person_id=kp.key_person_id and kp.org_office_id=oo.org_office_id and orgn.organisation_id=oo.organisation_id "
                 + " and oo.active='Y' and orgn.active='Y' ";
@@ -377,7 +392,7 @@ public class LoginModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(rev_no) as rev_no FROM user WHERE key_person_id =" + key_id + "  && active='Y';";
+            String query = " SELECT max(rev_no) as rev_no FROM user WHERE key_person_id =" + key_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -398,7 +413,7 @@ public class LoginModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(rev_no) as rev_no FROM otp WHERE user_id =" + user_id + "  && active='Y';";
+            String query = " SELECT max(rev_no) as rev_no FROM otp WHERE user_id =" + user_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -420,10 +435,10 @@ public class LoginModel {
         int updateRowsAffected = 0;
         boolean status = false;
 
-        String query1 = " SELECT max(rev_no) rev_no FROM user WHERE key_person_id = " + logged_key_person_id + "  && active=? ";
+        String query1 = " SELECT max(rev_no) rev_no,user_token FROM user WHERE key_person_id = " + logged_key_person_id + "  && active=? ";
         String query2 = " UPDATE user SET active=? WHERE key_person_id=? and rev_no=? ";
-        String query3 = " INSERT INTO user(user_id,user_name, user_password, registration_date, key_person_id,active,rev_no) "
-                + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String query3 = " INSERT INTO user(user_id,user_name, user_password, registration_date, key_person_id,active,rev_no,user_token) "
+                + " VALUES(?, ?, ?, ?, ?, ?, ?,?) ";
 
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -451,6 +466,7 @@ public class LoginModel {
                     psmt.setInt(5, logged_key_person_id);
                     psmt.setString(6, "Y");
                     psmt.setInt(7, revision);
+                    psmt.setString(8, rs.getString("user_token"));
 
                     updateRowsAffected = psmt.executeUpdate();
                     if (updateRowsAffected > 0) {
@@ -685,8 +701,8 @@ public class LoginModel {
         String str = "";
         PreparedStatement pstmt;
         ResultSet rst;
-        String query = "select u.key_person_id,u.user_id,u.user_name from user u,key_person kp "
-                + " where u.key_person_id=kp.key_person_id and kp.active='Y' and u.active='Y' and kp.mobile_no1='" + mobile + "'";
+        String query = " select u.key_person_id,u.user_id,u.user_name from user u,key_person kp "
+                + " where u.key_person_id=kp.key_person_id and kp.active='Y' and u.active='Y' and kp.mobile_no1='" + mobile + "' ";
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query);
@@ -717,10 +733,10 @@ public class LoginModel {
 
         int revision = getRevisionno(key_person_id);
 
-        String query1 = " SELECT max(rev_no) rev_no FROM user WHERE key_person_id = " + key_person_id + "  && active=? ";
+        String query1 = " SELECT max(rev_no) rev_no,user_token FROM user WHERE key_person_id = " + key_person_id + "  && active=? ";
         String query2 = " UPDATE user SET active=? WHERE key_person_id=? and rev_no=? ";
-        String query3 = " INSERT INTO user(user_id,user_name, user_password, registration_date, key_person_id,active,rev_no) "
-                + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String query3 = " INSERT INTO user(user_id,user_name, user_password, registration_date, key_person_id,active,rev_no,user_token) "
+                + " VALUES(?, ?, ?, ?, ?, ?, ?,?) ";
 
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -748,6 +764,7 @@ public class LoginModel {
                     psmt.setInt(5, key_person_id);
                     psmt.setString(6, "Y");
                     psmt.setInt(7, revision);
+                    psmt.setString(8, rs.getString("user_token"));
 
                     updateRowsAffected = psmt.executeUpdate();
                     if (updateRowsAffected > 0) {
@@ -771,6 +788,132 @@ public class LoginModel {
 
         }
         return updateRowsAffected;
+    }
+
+    public int saveToken(String user_token, String email, String password) throws SQLException {
+
+        int rowsAffected = 0;
+        int count = 0;
+        int updateRowsAffected = 0;
+        Boolean status = false;
+
+        String key_person_data = getKeyPersonData(email, password);
+        String kp_arr[] = key_person_data.split("&");
+        int key_person_id = Integer.parseInt(kp_arr[0]);
+        int user_id = Integer.parseInt(kp_arr[1]);
+        String user_name = kp_arr[2];
+
+        int revision = getRevisionno(key_person_id);
+
+//        String query1 = " SELECT max(rev_no) rev_no FROM user_token WHERE user_id = " + user_id + "  && active=? ";
+//        String query2 = " UPDATE user_token SET active=? WHERE user_id=? and rev_no=? ";
+        String query3 = " INSERT INTO user_token(user_id,active,rev_no,user_token) "
+                + " VALUES(?, ?, ?, ?) ";
+
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        String date_time = sdf.format(date);
+        try {
+            connection.setAutoCommit(false);
+
+//            PreparedStatement pstmt = connection.prepareStatement(query1);
+//            pstmt.setString(1, "Y");
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            if (rs.next()) {
+//                PreparedStatement pstm = connection.prepareStatement(query2);
+//                pstm.setString(1, "n");
+//                pstm.setInt(2, user_id);
+//                pstm.setInt(3, revision);
+//                updateRowsAffected = pstm.executeUpdate();
+//                if (updateRowsAffected >= 1) {
+//                    revision = rs.getInt("rev_no") + 1;
+            PreparedStatement psmt = (PreparedStatement) connection.prepareStatement(query3);
+            psmt.setInt(1, user_id);
+            psmt.setString(2, "Y");
+            psmt.setInt(3, 0);
+            psmt.setString(4, user_token);
+
+            updateRowsAffected = psmt.executeUpdate();
+            if (updateRowsAffected > 0) {
+                status = true;
+                message = "Record updated successfully.";
+                msgBgColor = COLOR_OK;
+                connection.commit();
+            } else {
+                status = false;
+                message = "Cannot update the record, some error.";
+                msgBgColor = COLOR_ERROR;
+                connection.rollback();
+            }
+
+//                }
+//
+//            }
+        } catch (Exception e) {
+            System.out.println("Error:KeypersonModel updateRecord-" + e);
+        } finally {
+
+        }
+        return updateRowsAffected;
+    }
+
+    public String getKeyPersonData(String email, String password) {
+        String str = "";
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = " select u.key_person_id,u.user_id,u.user_name from user u,key_person kp "
+                + " where u.key_person_id=kp.key_person_id and kp.active='Y' and u.active='Y' ";
+        if (!email.equals("") && email != null) {
+            query += " and kp.email_id1='" + email + "' or kp.mobile_no1='" + email + "' ";
+        }
+        if (!password.equals("") && password != null) {
+            query += " and u.user_password='" + password + "' ";
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                int key_person_id = rst.getInt(1);
+                int user_id = rst.getInt(2);
+                String user_name = rst.getString(3);
+                str = key_person_id + "&" + user_id + "&" + user_name;
+            }
+        } catch (Exception e) {
+            System.out.println("getKeyPersonId ERROR inside LoginModel - " + e);
+        }
+        return str;
+    }
+
+    public int getTokenCount(String email, String password, String user_token) {
+        int count = 0;
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = " select count(*) as count from user u,key_person kp,user_token ut "
+                + " where u.key_person_id=kp.key_person_id and kp.active='Y' and u.active='Y' and ut.active='Y' "
+                + " and ut.user_id=u.user_id ";
+        if (!email.equals("") && email != null) {
+            query += " and (kp.email_id1='" + email + "' or kp.mobile_no1='" + email + "') ";
+        }
+        if (!password.equals("") && password != null) {
+            query += " and u.user_password='" + password + "' ";
+        }
+        if (!user_token.equals("") && user_token != null) {
+            query += " and ut.user_token='" + user_token + "' ";
+        }
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                count = rst.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("getCount ERROR inside LoginModel - " + e);
+        }
+        return count;
     }
 
     public String getMessage() {

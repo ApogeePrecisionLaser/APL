@@ -7,11 +7,8 @@ package com.report.controller;
 
 import com.DBConnection.DBConnection;
 import com.general.model.GeneralModel;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -20,90 +17,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.json.simple.JSONObject;
-import static java.awt.PageAttributes.MediaType.C2;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpVersion;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.util.EntityUtils;
-//import org.json.JSONArray;
-//import org.json.simple.JSONObject;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import sun.misc.BASE64Decoder;
-import com.google.api.client.auth.oauth2.BearerToken;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.BasicAuthentication;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.AppendValuesResponse;
-import com.google.api.services.sheets.v4.model.ClearValuesRequest;
-import com.google.api.services.sheets.v4.model.ClearValuesResponse;
-import com.google.api.services.sheets.v4.model.ValueRange;
 import com.report.bean.DailyEnquiryReport;
-import com.report.bean.DealersReport;
 import com.report.model.DailyEnquiryReportModel;
-import com.report.model.DealersReportModel;
 
 /**
  *
@@ -179,6 +100,58 @@ public class DailyEnquiryReportController extends HttpServlet {
 
                 jrxmlFilePath = ctx.getRealPath("/DailyEnquiryReport.jrxml");
                 list = model.getData(from_date, to_date, loggedUser, logged_key_person_id);
+                byte[] reportInbytes = GeneralModel.generateRecordList(jrxmlFilePath, list);
+                response.setContentLength(reportInbytes.length);
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                return;
+
+                // start Write a string into file and download
+//                File output = new File("output.txt");
+//                FileWriter writer = new FileWriter(output);
+//
+//                writer.write("This text was written with a FileWriter");
+//                writer.flush();
+//                writer.close();
+//
+//                FileInputStream inStream = new FileInputStream(output);
+//
+//                String relativePath = getServletContext().getRealPath("");
+//                ServletContext context = getServletContext();
+//
+//                String mimeType = context.getMimeType("output.txt");
+//                if (mimeType == null) {
+//                    mimeType = "application/octet-stream";
+//                }
+//                response.setContentType(mimeType);
+//                response.setContentLength((int) output.length());
+//
+//                String headerKey = "Content-Disposition";
+//                String headerValue = String.format("attachment; filename=\"%s\"", output.getName());
+//                response.setHeader(headerKey, headerValue);
+//
+//                OutputStream outStream = response.getOutputStream();
+//                byte[] buffer = new byte[4096];
+//                int bytesRead = -1;
+//
+//                while ((bytesRead = inStream.read(buffer)) != -1) {
+//                    outStream.write(buffer, 0, bytesRead);
+//                }
+//                inStream.close();
+//                outStream.close();
+                // end Write a string into file and download
+            }
+
+            if ((task.equals("viewMultipleImagesReport"))) {
+                String jrxmlFilePath;
+                List list = null;
+
+                response.setContentType("application/pdf");
+                response.setCharacterEncoding("UTF-8");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                jrxmlFilePath = ctx.getRealPath("/MultipleDynamicImages.jrxml");
+                list = model.getDynamicImagesData();
                 byte[] reportInbytes = GeneralModel.generateRecordList(jrxmlFilePath, list);
                 response.setContentLength(reportInbytes.length);
                 servletOutputStream.write(reportInbytes, 0, reportInbytes.length);

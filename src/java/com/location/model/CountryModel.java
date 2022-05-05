@@ -47,9 +47,9 @@ public class CountryModel {
         int noOfRows = 0;
 
         try {
-            String query = "select count(*) from country "
-                    + "WHERE if('" + searchCountryName + "' = '', country_name like '%%',  country_name = '" + searchCountryName + "')"
-                    + " AND IF('" + searchCountryDiscription + "'='' ,country_discription LIKE '%%',country_discription LIKE '" + searchCountryDiscription + ".%' OR country_discription like ?)";
+            String query = " select count(*) from country "
+                    + " WHERE if('" + searchCountryName + "' = '', country_name like '%%',  country_name = '" + searchCountryName + "') "
+                    + " AND IF('" + searchCountryDiscription + "'='' ,country_discription LIKE '%%',country_discription LIKE '" + searchCountryDiscription + ".%' OR country_discription like ?) ";
 
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchCountryDiscription);
@@ -64,10 +64,10 @@ public class CountryModel {
 
     public List<CountryBean> showAllData(String searchCountryName, String searchCountryDiscription) {
         List<CountryBean> list = new ArrayList<CountryBean>();
-        String query = "SELECT * FROM country "
-                + "WHERE if('" + searchCountryName + "' = '', country_name like '%%', country_name = '" + searchCountryName + "')"
-                + " AND IF('" + searchCountryDiscription + "'='' ,country_discription LIKE '%%',country_discription LIKE '" + searchCountryDiscription + ".%' OR country_discription like ?)"
-                + "ORDER BY country_name ";
+        String query = " SELECT * FROM country "
+                + " WHERE if('" + searchCountryName + "' = '', country_name like '%%', country_name = '" + searchCountryName + "') "
+                + " AND IF('" + searchCountryDiscription + "'='' ,country_discription LIKE '%%',country_discription LIKE '" + searchCountryDiscription + ".%' OR country_discription like ?) "
+                + " ORDER BY country_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchCountryDiscription);
@@ -91,11 +91,11 @@ public class CountryModel {
         List<CountryBean> list = new ArrayList<CountryBean>();
         searchCountryName = searchCountryName;
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        String query = "SELECT country_id,country_name,country_discription FROM country "
-                + "WHERE if('" + searchCountryName + "' = '', country_name like '%%', country_name = '" + searchCountryName + "')"
-                + " AND IF('" + searchCountryDiscription + "'='' ,country_discription LIKE '%%',country_discription LIKE '" + searchCountryDiscription + ".%' OR country_discription like ?)"
-                + "ORDER BY country_discription "
-                + "LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
+        String query = " SELECT country_id,country_name,country_discription FROM country "
+                + " WHERE if('" + searchCountryName + "' = '', country_name like '%%', country_name = '" + searchCountryName + "') "
+                + " AND IF('" + searchCountryDiscription + "'='' ,country_discription LIKE '%%',country_discription LIKE '" + searchCountryDiscription + ".%' OR country_discription like ?) "
+                + " ORDER BY country_discription "
+                + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchCountryDiscription);
@@ -115,7 +115,7 @@ public class CountryModel {
     }
 
     public int insertRecord(CountryBean country) {
-        String query = "INSERT INTO country(country_name, country_discription,revision_no,active,remark ) VALUES(?,?,?,?,?)";
+        String query = " INSERT INTO country(country_name, country_discription,revision_no,active,remark ) VALUES(?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -141,7 +141,7 @@ public class CountryModel {
     }
 
     public int updateRecord(CountryBean country) {
-        String query = "UPDATE country SET country_name=?, country_discription=?  WHERE country_id=?";
+        String query = " UPDATE country SET country_name=?, country_discription=?  WHERE country_id=? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -165,7 +165,7 @@ public class CountryModel {
     }
 
     public int deleteRecord(int country_id) {
-        String query = "DELETE FROM country WHERE country_id = " + country_id;
+        String query = " DELETE FROM country WHERE country_id = " + country_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();

@@ -4,13 +4,8 @@
  */
 package com.webservice.controller;
 
-import com.organization.tableClasses.KeyPerson;
 import com.webservice.model.SendMail;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -22,7 +17,6 @@ import org.codehaus.jettison.json.JSONException;
 //import org.json.simple.JSONArray;
 //import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
-import com.dashboard.bean.Enquiry;
 import com.general.model.GeneralModel;
 import com.report.bean.DailyEnquiryReport;
 import java.io.BufferedReader;
@@ -45,6 +39,11 @@ import java.util.*;
 import javax.servlet.ServletContext;
 import com.report.model.DailyEnquiryReportModel;
 
+
+/**
+ *
+ * @author komal
+ */
 public class EnquiryReportSchedular implements ServletContextListener {
 
     int scheduler_count = 0;
@@ -77,8 +76,14 @@ public class EnquiryReportSchedular implements ServletContextListener {
             Calendar calendar = Calendar.getInstance();
             Date startTime = calendar.getTime();
 
+//            Date date = new Date();
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//            String time = "10:30:00";
+//            String date_time = sdf.format(date) + " " + time;
+//            Date start_time = sdf1.parse(date_time);
             // schedule the task to run hourly            
-            timer.scheduleAtFixedRate(task, startTime, 1000 * 60 * 60);
+            timer.scheduleAtFixedRate(task, startTime, 1000 * 1 * 60);
             // save our timer for later use
             servletContext.setAttribute("timer", timer);
         } catch (Exception e) {
@@ -104,6 +109,7 @@ public class EnquiryReportSchedular implements ServletContextListener {
             salesperson_list.add("168");
             salesperson_list.add("169");
             salesperson_list.add("95");
+            salesperson_list.add("172");
             salesperson_list.add("89");//admin
             String role = "";
             if (salesperson_list.size() > 0) {
@@ -116,18 +122,32 @@ public class EnquiryReportSchedular implements ServletContextListener {
                         list = DailyEnquiryReportModel.getData(from_date, to_date, role, Integer.parseInt(salesperson_list.get(i)));
                     }
 
+                    String current_date = list.get(0).getCurrent_date();
+                    String count_of_total_query_of_current_date = list.get(0).getTotal_query_of_current_date();
+                    String count_of_total_query_till_date = list.get(0).getTotal_query_till_date();
+                    String count_of_open_query_of_current_date = list.get(0).getOpen_query_of_current_date();
+                    String count_of_open_query_till_date = list.get(0).getOpen_query_till_date();
+                    String count_of_closed_query_of_current_date = list.get(0).getClosed_query_of_current_date();
+                    String count_of_closed_query_till_date = list.get(0).getClosed_query_till_date();
+                    String count_of_sold_query_of_current_date = list.get(0).getSold_query_of_current_date();
+                    String count_of_sold_query_till_date = list.get(0).getSold_query_till_date();
+
                     byte[] reportInbytes = GeneralModel.generateRecordList(path, list);
-                    if (Integer.parseInt(list.get(0).getTotal_query_till_date()) > 0) {
+                    if (Integer.parseInt(list.get(0).getTotal_query_of_current_date()) > 0) {
                         String mail_id = DailyEnquiryReportModel.getMailId(salesperson_list.get(i));
                         String name = DailyEnquiryReportModel.getPersonName(salesperson_list.get(i));
-                        writeBytesToFile("ssadvt_repository\\APL\\Report\\sm.pdf", reportInbytes, mail_id, role, name);
+                        writeBytesToFile("ssadvt_repository\\APL\\Report\\sm.pdf", reportInbytes, mail_id, role, name, current_date, count_of_total_query_of_current_date,
+                                count_of_total_query_till_date, count_of_open_query_of_current_date, count_of_open_query_till_date, count_of_closed_query_of_current_date,
+                                count_of_closed_query_till_date, count_of_sold_query_of_current_date, count_of_sold_query_till_date);
                     }
                 }
             }
             return result;
         }
 
-        public void writeBytesToFile(String fileOutput, byte[] bytes, String mail_id, String role, String name)
+        public void writeBytesToFile(String fileOutput, byte[] bytes, String mail_id, String role, String name, String current_date1, String count_of_total_query_of_current_date,
+                String count_of_total_query_till_date, String count_of_open_query_of_current_date, String count_of_open_query_till_date, String count_of_closed_query_of_current_date,
+                String count_of_closed_query_till_date, String count_of_sold_query_of_current_date, String count_of_sold_query_till_date)
                 throws IOException {
 
             System.err.println("under write bytres");
@@ -151,16 +171,28 @@ public class EnquiryReportSchedular implements ServletContextListener {
 
                 if (role.equals("Admin")) {
                     name = "Mr. Arun Kumar Gupta";
+                    mail_id = "arun@apogeeleveller.com";
                 }
                 SendMail mailC = new SendMail();
-                String msg = mailC.sentMail(fileOutput, mail_id, role, current_date, name);
+                String msg = mailC.sentMail(fileOutput, mail_id, role, current_date, name, current_date, count_of_total_query_of_current_date,
+                        count_of_total_query_till_date, count_of_open_query_of_current_date, count_of_open_query_till_date, count_of_closed_query_of_current_date,
+                        count_of_closed_query_till_date, count_of_sold_query_of_current_date, count_of_sold_query_till_date);
             }
         }
 
         @Override
         public void run() {
             try {
-                String result = sendEnquiryReport();
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
+                String current_time = sdf2.format(date);
+                String time = "05:42";
+                if (time.equals(current_time)) {
+                    String result = sendEnquiryReport();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

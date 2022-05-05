@@ -37,7 +37,7 @@ public class TypeOfOccupationModel {
     public static int getNoOfRows(String searchtypeofoccupation) {
         int noOfRows = 0;
         try {
-            String query = "SELECT count(*) from type_of_occupation where "
+            String query = " SELECT count(*) from type_of_occupation where "
                     + "  IF('" + searchtypeofoccupation + "' = '', name LIKE '%%',name  =?) ";
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
             pstmt.setString(1, searchtypeofoccupation);
@@ -57,7 +57,7 @@ public class TypeOfOccupationModel {
         if (lowerLimit == -1) {
             addQuery = "";
         }
-        String query = "SELECT type_of_occupation_id,name,Description from type_of_occupation"
+        String query = " SELECT type_of_occupation_id,name,Description from type_of_occupation "
                 + " where IF('" + searchtypeofoccupation + "' = '', name LIKE '%%',name  =?) "
                 + addQuery;
         try {
@@ -83,7 +83,7 @@ public class TypeOfOccupationModel {
         if (lowerLimit == -1) {
             addQuery = "";
         }
-        String query = "SELECT name,Description from type_of_occupation"
+        String query = " SELECT name,Description from type_of_occupation "
                 + " where IF('" + searchtypeofoccupation + "' = '', name LIKE '%%',name  =?) "
                 + addQuery;
         try {
@@ -106,7 +106,7 @@ public class TypeOfOccupationModel {
         boolean status = false;
         int rowsAffected = 0;
         try {
-            PreparedStatement ps = (PreparedStatement) connection.prepareStatement("insert into type_of_occupation (name,Description,revision_no,active,remark) values(?,?,?,?)");
+            PreparedStatement ps = (PreparedStatement) connection.prepareStatement(" insert into type_of_occupation (name,Description,revision_no,active,remark) values(?,?,?,?) ");
             ps.setString(1, bean.getName());
             ps.setString(2, bean.getDescription());
 
@@ -133,7 +133,7 @@ public class TypeOfOccupationModel {
         boolean status = false;
         int rowsAffected = 0;
         try {
-            rowsAffected = connection.prepareStatement("Delete from type_of_occupation where type_of_occupation_id=" + type_of_occupation_id + " ").executeUpdate();
+            rowsAffected = connection.prepareStatement(" Delete from type_of_occupation where type_of_occupation_id=" + type_of_occupation_id + " ").executeUpdate();
             if (rowsAffected > 0) {
                 status = true;
             } else {

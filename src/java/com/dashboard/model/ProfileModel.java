@@ -1,35 +1,24 @@
 package com.dashboard.model;
 
 import com.dashboard.bean.Profile;
-import static com.organization.model.KeypersonModel.getRevisionnoForImage;
-import com.organization.tableClasses.KeyPerson;
 import com.organization.tableClasses.Org_Office;
 import com.organization.tableClasses.OrganisationDesignationBean;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.*;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.text.DateFormat;
 import org.apache.commons.fileupload.FileItem;
 
+/**
+ *
+ * @author Komal
+ */
 public class ProfileModel {
 
     static private Connection connection;
@@ -68,7 +57,7 @@ public class ProfileModel {
                 query = " select oo.org_office_name,kp.key_person_name,oo.email_id1,oo.landline_no1,oo.mobile_no1 as office_mobile, "
                         + " kp.mobile_no1 as person_mobile,oo.service_tax_reg_no,oo.address_line1,oo.address_line2,oo.address_line3, "
                         + " c.city_name,c.pin_code,kp.bloodgroup,kp.gender,kp.id_no,idt.id_type,kp.date_of_birth,oo.org_office_id,kp.key_person_id, "
-                        + " oodm.org_office_designation_map_id,gid.general_image_details_id,kp.latitude,kp.longitude,gid.image_destination_id,"
+                        + " oodm.org_office_designation_map_id,gid.general_image_details_id,kp.latitude,kp.longitude,gid.image_destination_id, "
                         + " gid.image_name,kp.salutation "
                         + " from key_person kp,org_office oo,city c,id_type idt,org_office_designation_map oodm,general_image_details gid "
                         + " where kp.active='Y' and oo.active='Y' and c.active='Y' and oodm.active='Y' and gid.active='Y' "
@@ -139,7 +128,7 @@ public class ProfileModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("ProfileModel Exception------------" + e);
+            System.err.println("ProfileModel getAllDetails() Exception------------" + e);
         }
 
         return list;
@@ -155,7 +144,7 @@ public class ProfileModel {
                 + " oo.mobile_no1,oo.org_office_code, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.org_office_id  "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
@@ -195,7 +184,7 @@ public class ProfileModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in ProfileModel getData -- " + e);
+            System.out.println("Error in ProfileModel getAllDealers() -- " + e);
 
         }
 
@@ -212,11 +201,11 @@ public class ProfileModel {
                 + " oo.mobile_no1,oo.org_office_code, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.org_office_id  "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
-                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id "
                 + " and oo.office_type_id=3  ORDER BY kp.created_at desc limit 12 ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -252,7 +241,7 @@ public class ProfileModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in ProfileModel getData -- " + e);
+            System.out.println("Error in ProfileModel getAllLatestDealers() -- " + e);
 
         }
 
@@ -271,11 +260,11 @@ public class ProfileModel {
                 + " oo.mobile_no1,oo.org_office_code,oo.org_office_id, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2,oo.service_tax_reg_no,oo.latitude,oo.longitude "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
-                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id "
                 + " and oo.office_type_id=3 ";
 
         try {
@@ -296,7 +285,7 @@ public class ProfileModel {
                 arrayObj.add(jsonObj);
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("ProfileModel getAllDealerList() error" + e);
         }
 
         return arrayObj;
@@ -371,7 +360,7 @@ public class ProfileModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error in ProfileModel getData -- " + e);
+            System.out.println("Error in ProfileModel viewDealerDetails() -- " + e);
 
         }
 
@@ -380,7 +369,7 @@ public class ProfileModel {
 
     public List<String> getCities(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT city_name from city where active='Y'";
+        String query = " SELECT city_name from city where active='Y' ";
         if (!q.equals("") && q != null) {
             query += " and city_name!='" + q + "' ";
         }
@@ -408,7 +397,7 @@ public class ProfileModel {
 
     public List<String> getStates(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT state_name from state where active='Y'";
+        String query = " SELECT state_name from state where active='Y' ";
         if (!q.equals("") && q != null) {
             query += " and state_name!='" + q + "' ";
         }
@@ -445,7 +434,7 @@ public class ProfileModel {
                 destination_path = rs.getString("destination_path");
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getDestination_Path in ProfileModel : " + ex);
+            System.out.println("ERROR: in getDestination_Path() in ProfileModel : " + ex);
         }
         return destination_path;
     }
@@ -459,7 +448,7 @@ public class ProfileModel {
                 city_id = rs.getInt("city_id");
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getCityId in ProfileModel : " + ex);
+            System.out.println("ERROR: in getCityId() in ProfileModel : " + ex);
         }
         return city_id;
     }
@@ -473,7 +462,7 @@ public class ProfileModel {
                 key_person_id = rs.getInt("key_person_id");
             }
         } catch (Exception ex) {
-            System.out.println("ERROR: in getKeyPersonId in ProfileModel : " + ex);
+            System.out.println("ERROR: in getKeyPersonId() in ProfileModel : " + ex);
         }
         return key_person_id;
     }
@@ -493,9 +482,9 @@ public class ProfileModel {
                 + " WHERE org_office_id=? and revision_no=? ";
         String query4 = " select count(*) from general_image_details where key_person_id='" + key_id + "' ";
 
-        String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,"
-                + "revision_no,active,remark) "
-                + " VALUES(?,?,?,?,?,?,?,?)";
+        String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id, "
+                + " revision_no,active,remark) "
+                + " VALUES(?,?,?,?,?,?,?,?) ";
         // String query6=" UPDATE general_image_details SET active=? WHERE key_person_id=? ";
         int rowsAffected = 0;
         try {
@@ -616,8 +605,8 @@ public class ProfileModel {
 
     public int insertImageRecord(Profile key, String image_name, String image_uploaded_for, String current_date, int kp_id) {
         int rowsAffected = 0;
-        String imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
-                + " VALUES(?, ?, ?, ?,?,?,?,?)";
+        String imageQuery = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
+                + " VALUES(?, ?, ?, ?,?,?,?,?) ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(imageQuery);
             pstmt.setString(1, image_name);
@@ -631,7 +620,7 @@ public class ProfileModel {
             rowsAffected = pstmt.executeUpdate();
             pstmt.close();
         } catch (Exception e) {
-            System.out.println("Error:ProfileModel--insertImageRecord-- " + e);
+            System.out.println("Error:ProfileModel--insertImageRecord()-- " + e);
         }
         return rowsAffected;
     }
@@ -658,7 +647,7 @@ public class ProfileModel {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("ProfileModel WirteImage error: " + e);
+                    System.out.println("ProfileModel WirteImage() error: " + e);
                 }
             }
             //}
@@ -685,7 +674,7 @@ public class ProfileModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id =" + oo_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id =" + oo_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -707,7 +696,7 @@ public class ProfileModel {
         try {
 
             String query = " SELECT max(revision_no) as revision_no FROM general_image_details"
-                    + " WHERE key_person_id =" + key_id + "  && active='Y';";
+                    + " WHERE key_person_id =" + key_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -727,7 +716,7 @@ public class ProfileModel {
     public List<String> getMobilevalidty(String q) {
         List<String> list = new ArrayList<String>();
         String AdvertiseName = "";
-        String query = "SELECT mobile_no1 FROM key_person where active='Y' and mobile_no1='" + q + "'";
+        String query = " SELECT mobile_no1 FROM key_person where active='Y' and mobile_no1='" + q + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -748,13 +737,13 @@ public class ProfileModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error:ProfileModel getMobilevalidty-" + e);
+            System.out.println("Error:ProfileModel getMobilevalidty()-" + e);
         }
         return list;
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = ?";
+        String query = " SELECT city_id FROM city WHERE city_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -763,7 +752,7 @@ public class ProfileModel {
             rset.next();    // move cursor from BOR to valid record.
             city_id = rset.getInt("city_id");
         } catch (Exception e) {
-            System.out.println("ProfileModel getCity_id Error: " + e);
+            System.out.println("ProfileModel getCity_id() Error: " + e);
         }
         return city_id;
     }
@@ -775,12 +764,12 @@ public class ProfileModel {
         int key = 0;
 
         try {
-            String query = "INSERT INTO "
-                    + "org_office( org_office_name,org_office_code,office_type_id, address_line1, "
-                    + "address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
-                    + "landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super,"
-                    + "generation,latitude,longitude,service_tax_reg_no) "
-                    + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?)";
+            String query = " INSERT INTO "
+                    + " org_office( org_office_name,org_office_code,office_type_id, address_line1, "
+                    + " address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
+                    + " landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super, "
+                    + " generation,latitude,longitude,service_tax_reg_no) "
+                    + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?) ";
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             //   pstmt.setInt(1, orgOffice.getOrganisation_id());
             pstmt.setString(1, (orgOffice.getOrg_office_name()));
@@ -816,7 +805,7 @@ public class ProfileModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: ProfileModel---insertRecord" + e);
+            System.out.println("Error: ProfileModel---insertRecord()" + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -844,7 +833,7 @@ public class ProfileModel {
 
             }
         } catch (Exception e) {
-            System.err.println("OrgOfficeModel getRevisionno error------------" + e);
+            System.err.println("ProfileModel getRevisionno() error------------" + e);
         }
         return revision;
     }
@@ -874,9 +863,9 @@ public class ProfileModel {
 //        } else {
 //            generation = getParentGeneration(orgid, p_prg_office_id) + 1;
 //        }
-        String query1 = "SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id = " + org_office_id + "  && active='Y' ";
-        String query2 = "UPDATE org_office SET active=? WHERE org_office_id=? and revision_no=? ";
-        String query3 = "INSERT INTO "
+        String query1 = " SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id = " + org_office_id + "  && active='Y' ";
+        String query2 = " UPDATE org_office SET active=? WHERE org_office_id=? and revision_no=? ";
+        String query3 = " INSERT INTO "
                 + " org_office(org_office_id,org_office_name,org_office_code,office_type_id, address_line1, "
                 + " address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
                 + " landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super, "
@@ -942,7 +931,7 @@ public class ProfileModel {
 
             }
         } catch (Exception e) {
-            System.out.println("OrgOfficeModel updateRecord() Error: " + e);
+            System.out.println("ProfileModel updateRecordForOrgOffice() Error: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record updated successfully.";
@@ -958,7 +947,7 @@ public class ProfileModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision) as revision_no FROM org_office_designation_map"
+            String query = " SELECT max(revision) as revision_no FROM org_office_designation_map "
                     + " WHERE org_office_designation_map_id =" + org_office_designation_map_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -970,7 +959,7 @@ public class ProfileModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error: OrgOfficeDesignationMapModel---getRevisionno" + e);
+            System.out.println("Error: ProfileModel---getRevisionnoForOrgOfficeMap" + e);
 
         }
         return revision;
@@ -983,12 +972,12 @@ public class ProfileModel {
         int updateRowsAffected = 0;
         Boolean status = false;
 
-        String query1 = "SELECT max(revision) FROM org_office_designation_map WHERE "
-                + "org_office_designation_map_id = " + org_office_designation_map_id + " and active='Y' ";
+        String query1 = " SELECT max(revision) FROM org_office_designation_map WHERE "
+                + " org_office_designation_map_id = " + org_office_designation_map_id + " and active='Y' ";
 
         String query2 = "UPDATE org_office_designation_map SET active=? WHERE org_office_designation_map_id=? and revision=? ";
 
-        String query3 = "insert into org_office_designation_map(org_office_id,designation_id,"
+        String query3 = " insert into org_office_designation_map(org_office_id,designation_id, "
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
 
@@ -1041,7 +1030,7 @@ public class ProfileModel {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: OrgOfficeDesignationMapModel---updateRecord" + e);
+            System.out.println("Error: ProfileModel---updatemapOrganisationDesignation()" + e);
         } finally {
 
         }
@@ -1052,7 +1041,7 @@ public class ProfileModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM key_person WHERE key_person_id =" + key_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM key_person WHERE key_person_id =" + key_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -1063,7 +1052,7 @@ public class ProfileModel {
 
             }
         } catch (Exception e) {
-            System.out.println("KeypersonModel getRevisionno error: " + e);
+            System.out.println("ProfileModel getRevisionnoForKeyPerson() error: " + e);
 
         }
         return revision;
@@ -1080,20 +1069,20 @@ public class ProfileModel {
         Date date = new Date();
         String current_date = dateFormat.format(date);
         int kp_id = 0;
-        String query1 = "SELECT max(revision_no) revision_no FROM key_person WHERE key_person_id = " + key_id + "  && active=? ";
+        String query1 = " SELECT max(revision_no) revision_no FROM key_person WHERE key_person_id = " + key_id + "  && active=? ";
         String query2 = " UPDATE key_person SET active=? WHERE key_person_id=? and revision_no=? ";
         String query3 = " INSERT INTO key_person(key_person_id,salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
-                + "address_line2, address_line3,"
-                + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name,"
-                + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup,"
-                + "emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation,"
-                + "org_office_designation_map_id) "//image_path,
-                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " address_line2, address_line3,"
+                + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name, "
+                + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup, "
+                + " emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation, "
+                + " org_office_designation_map_id) "//image_path,
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         String query4 = " select count(*) from general_image_details where key_person_id='" + key_id + "' ";
 
-        String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,"
+        String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id, "
                 + "revision_no,active,remark) "
-                + " VALUES(?,?,?,?,?,?,?,?)";
+                + " VALUES(?,?,?,?,?,?,?,?) ";
         String query6 = " select count(*) as count from user where key_person_id='" + key_id + "' and user_name='" + key.getKey_person_name() + "' and active='Y' ";
 //        String user_update = " UPDATE user SET active=? WHERE key_person_id=? and revision_no=? ";
 //        String user_insert = " INSERT INTO user (user_name, user_password, registration_date, key_person_id,"
@@ -1203,7 +1192,7 @@ public class ProfileModel {
                                 image_uploaded_for = "key_person_photo";
 
                                 update_image_query = " UPDATE general_image_details SET active=? "
-                                        + "WHERE key_person_id=? and revision_no=? "
+                                        + " WHERE key_person_id=? and revision_no=? "
                                         + " and image_destination_id=1 ";
 
                             } else if (i == 1 && !tempExt.equals("")) {
@@ -1213,7 +1202,7 @@ public class ProfileModel {
                                 image_uploaded_for = "key_person_ID";
 
                                 update_image_query = " UPDATE general_image_details SET active=? "
-                                        + "WHERE key_person_id=? and revision_no=? "
+                                        + " WHERE key_person_id=? and revision_no=? "
                                         + " and image_destination_id=2 ";
                             }
 
@@ -1266,7 +1255,7 @@ public class ProfileModel {
 
             }
         } catch (Exception e) {
-            System.out.println("Error:KeypersonModel updateRecord-" + e);
+            System.out.println("Error:ProfileModel updateKeyPersonRecord-" + e);
         }
         if (rowsAffected > 0) {
             status = true;
@@ -1284,7 +1273,7 @@ public class ProfileModel {
     }
 
     public int getIdtype_id(String id_type) {
-        String query = "SELECT id_type_id FROM id_type WHERE id_type = '" + id_type + "'";
+        String query = " SELECT id_type_id FROM id_type WHERE id_type = '" + id_type + "' ";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1299,11 +1288,11 @@ public class ProfileModel {
     }
 
     public int getOrgOffice_id(String org_office_name, String office_code) {
-        String query = "SELECT ot.org_office_id "
+        String query = " SELECT ot.org_office_id "
                 + " FROM org_office AS ot , "
                 + " organisation_name AS o "
                 + " WHERE o.organisation_id=ot.organisation_id AND "
-                + "ot.org_office_name = '" + org_office_name + "' AND ot.org_office_code = '" + office_code + "'";
+                + " ot.org_office_name = '" + org_office_name + "' AND ot.org_office_code = '" + office_code + "' ";
 
         int organisation_id = 0;
         try {
@@ -1323,8 +1312,8 @@ public class ProfileModel {
 
     public int getOrgOfficeDesignationMapId(int designation_id, int org_office_id) {
         int org_office_des_map_id = 0;
-        String query = "SELECT org_office_designation_map_id FROM org_office_designation_map "
-                + "WHERE designation_id = '" + designation_id + "' and org_office_id='" + org_office_id + "'";
+        String query = " SELECT org_office_designation_map_id FROM org_office_designation_map "
+                + " WHERE designation_id = '" + designation_id + "' and org_office_id='" + org_office_id + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //  pstmt.setString(1, designation);
@@ -1332,14 +1321,14 @@ public class ProfileModel {
             rset.next();    // move cursor from BOR to valid record.
             org_office_des_map_id = rset.getInt("org_office_designation_map_id");
         } catch (Exception e) {
-            System.out.println("Error:keypersonModel--getOrgOfficeDesignationMapId-- " + e);
+            System.out.println("Error:ProfileModel--getOrgOfficeDesignationMapId-- " + e);
         }
 
         return org_office_des_map_id;
     }
 
     public int getOrganisationOfficeId(String organisation_name) {
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y'";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y' ";
         int org_office_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1349,7 +1338,7 @@ public class ProfileModel {
             rset.next();    // move cursor from BOR to valid record.
             org_office_id = rset.getInt("org_office_id");
         } catch (Exception e) {
-            System.out.println("OrgOfficeDesignationMapModel Error: getOrganisationOfficeId--" + e);
+            System.out.println("ProfileModel Error: getOrganisationOfficeId--" + e);
         }
         return org_office_id;
     }
@@ -1363,7 +1352,7 @@ public class ProfileModel {
         int orgid = getOrganisationOfficeId(bean.getOrganisation());
         //  int desigid = getDesignation_id(bean.getDesignation());
 
-        String query = "insert into org_office_designation_map(org_office_id,designation_id,"
+        String query = " insert into org_office_designation_map(org_office_id,designation_id, "
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
 
@@ -1380,7 +1369,7 @@ public class ProfileModel {
             // System.out.println("insert query -" + pstmt);
             rowsAffected = pstmt.executeUpdate();
         } catch (Exception e) {
-            System.out.println("OrgOfficeDesignationMapModel Error while inserting record in insertRecord...." + e);
+            System.out.println("ProfileModel mapOrganisationDesignation() Error while inserting record in insertRecord...." + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
@@ -1409,12 +1398,12 @@ public class ProfileModel {
         int kp_id = 0;
         try {
             connection.setAutoCommit(false);
-            query1 = "INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
-                    + "address_line2, address_line3,"
-                    + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name,"
-                    + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup,"
-                    + "emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation,org_office_designation_map_id) "
-                    + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            query1 = " INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
+                    + " address_line2, address_line3, "
+                    + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name, "
+                    + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup, "
+                    + " emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation,org_office_designation_map_id) "
+                    + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
             query2 = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
                     + " VALUES(?,?,?,?,?,?,?,?)";
@@ -1470,8 +1459,8 @@ public class ProfileModel {
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 kp_id = rs.getInt(1);
-                String dealer_sales_map = "insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
-                        + "VALUES( ?, ?, ?)";
+                String dealer_sales_map = " insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
+                        + " VALUES( ?, ?, ?)";
                 PreparedStatement pstmt2 = connection.prepareStatement(dealer_sales_map, Statement.RETURN_GENERATED_KEYS);
                 //   pstmt.setInt(1, orgOffice.getOrganisation_id());
                 pstmt2.setInt(1, kp_id);
@@ -1480,8 +1469,8 @@ public class ProfileModel {
 
                 rowsAffected2 = pstmt2.executeUpdate();
 
-                String user_query = "insert into user(user_name,user_password,key_person_id,active,rev_no) "
-                        + "VALUES( ?, ?, ?,?,?)";
+                String user_query = " insert into user(user_name,user_password,key_person_id,active,rev_no) "
+                        + " VALUES( ?, ?, ?,?,?) ";
                 PreparedStatement pstmt3 = connection.prepareStatement(user_query, Statement.RETURN_GENERATED_KEYS);
                 //   pstmt.setInt(1, orgOffice.getOrganisation_id());
                 pstmt3.setString(1, key.getKey_person_name());
@@ -1495,8 +1484,8 @@ public class ProfileModel {
                 int user_id = 0;
                 if (rs3.next()) {
                     user_id = rs3.getInt(1);
-                    String user_role_map = "insert into user_role_map(user_id,user_role_id,active,rev_no) "
-                            + "VALUES( ?, ?, ?,?)";
+                    String user_role_map = " insert into user_role_map(user_id,user_role_id,active,rev_no) "
+                            + " VALUES( ?, ?, ?,?) ";
                     PreparedStatement pstmt4 = connection.prepareStatement(user_role_map, Statement.RETURN_GENERATED_KEYS);
                     //   pstmt.setInt(1, orgOffice.getOrganisation_id());
                     pstmt4.setInt(1, user_id);
@@ -1597,14 +1586,14 @@ public class ProfileModel {
             }
 
         } catch (Exception ex) {
-            System.out.println("Error: KeypersonModel- getimage_destination_id-" + ex);
+            System.out.println("Error: ProfileModel- getimage_destination_id-" + ex);
         }
         return image_destination_id;
     }
 
     public static List<String> getIdtypeList() {
         List<String> list = new ArrayList<String>();
-        String query = "select * from id_type where active='Y'";
+        String query = " select * from id_type where active='Y' ";
         //  + " GROUP BY key_person_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1624,7 +1613,7 @@ public class ProfileModel {
                 list.add("No such key person Type exists.");
             }
         } catch (Exception e) {
-            System.out.println("Error:KeypersonModel--getIdtypeList()-- " + e);
+            System.out.println("Error:ProfileModel--getIdtypeList()-- " + e);
         }
         return list;
     }
@@ -1633,7 +1622,7 @@ public class ProfileModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(rev_no) as revision_no FROM user WHERE key_person_id =" + key_id + "  && active='Y';";
+            String query = " SELECT max(rev_no) as revision_no FROM user WHERE key_person_id =" + key_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -1644,7 +1633,7 @@ public class ProfileModel {
 
             }
         } catch (Exception e) {
-            System.out.println("KeypersonModel getRevisionnoForUser error: " + e);
+            System.out.println("ProfileModel getRevisionnoForUser error: " + e);
 
         }
         return revision;
@@ -1657,7 +1646,7 @@ public class ProfileModel {
         int updateRowsAffected = 0;
         Boolean status = false;
 
-        String query2 = "UPDATE user SET user_password=? WHERE key_person_id=? and active='Y' ";
+        String query2 = " UPDATE user SET user_password=? WHERE key_person_id=? and active='Y' ";
 
         try {
             connection.setAutoCommit(false);

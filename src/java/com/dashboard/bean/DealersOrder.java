@@ -2,6 +2,10 @@ package com.dashboard.bean;
 
 import java.util.List;
 
+/**
+ *
+ * @author Komal
+ */
 public class DealersOrder {
 
     /**

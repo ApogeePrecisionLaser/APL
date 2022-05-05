@@ -3,18 +3,14 @@ package com.dashboard.controller;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.Profile;
 import com.dashboard.model.ProfileModel;
-import com.organization.tableClasses.KeyPerson;
 import com.organization.tableClasses.Org_Office;
 import com.organization.tableClasses.OrganisationDesignationBean;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +29,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class DealersController extends HttpServlet {
 
     private File tmpDir;

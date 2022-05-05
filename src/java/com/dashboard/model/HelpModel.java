@@ -1,13 +1,7 @@
 package com.dashboard.model;
 
 import com.dashboard.bean.Help;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,42 +10,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.Authenticator;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.servlet.http.HttpSession;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.apache.commons.fileupload.FileItem;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
+
+
+/**
+ *
+ * @author Komal
+ */
 public class HelpModel {
 
     static private Connection connection;
@@ -65,7 +31,7 @@ public class HelpModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("DealersOrderModel setConnection() Error: " + e);
+            System.out.println("HelpModel setConnection() Error: " + e);
         }
     }
 
@@ -80,10 +46,10 @@ public class HelpModel {
         String current_date = sdf.format(date);
         String date_time = sdf1.format(date);
         try {
-            String query = "INSERT INTO "
-                    + "dealer_help_messages( status,subject,dealer_id, message, "
-                    + "document_path, document_name,revision_no,active,remark,description,date_time) "
-                    + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+            String query = " INSERT INTO "
+                    + " dealer_help_messages( status,subject,dealer_id, message, "
+                    + " document_path, document_name,revision_no,active,remark,description,date_time) "
+                    + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?) ";
             String[] image_name = {bean.getDocument_path()};
             String imageName = "";
             for (int i = 0; i < image_name.length; i++) {
@@ -124,7 +90,7 @@ public class HelpModel {
                 key = rs.getInt(1);
             }
         } catch (Exception e) {
-            System.out.println("Error: ProfileModel---insertRecord" + e);
+            System.out.println("Error: HelpModel---insertMessage" + e);
         }
 
         if (rowsAffected
@@ -163,7 +129,7 @@ public class HelpModel {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("ProfileModel WirteImage error: " + e);
+                    System.out.println("HelpModel WriteImage() error: " + e);
                 }
             }
             //}
@@ -181,7 +147,7 @@ public class HelpModel {
             try {
                 result = directory.mkdirs();
             } catch (Exception e) {
-                System.out.println("ProfileModel makeDirectory Error - " + e);
+                System.out.println("HelpModel makeDirectory Error - " + e);
             }
         }
         return result;
@@ -203,7 +169,7 @@ public class HelpModel {
                 bean.setDocument_name(rset.getString("document_name"));
                 bean.setDealer_name(rset.getString("key_person_name"));
                 bean.setContact_no(rset.getString("mobile_no1"));
-                String date_time = rset.getString("date_time"); 
+                String date_time = rset.getString("date_time");
 
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss a");
                 Date date = new Date();
@@ -217,7 +183,7 @@ public class HelpModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.out.println("Error in ProfileModel getData -- " + e);
+            System.out.println("Error in HelpModel getAllSupportMessages -- " + e);
         }
         return list;
     }
@@ -279,7 +245,7 @@ public class HelpModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("DealersOrderModel closeConnection: " + e);
+            System.out.println("HelpModel closeConnection: " + e);
         }
     }
 
@@ -288,7 +254,7 @@ public class HelpModel {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
-            System.out.println("DealersOrderModel setConnection error: " + e);
+            System.out.println("HelpModel setConnection error: " + e);
         }
     }
 

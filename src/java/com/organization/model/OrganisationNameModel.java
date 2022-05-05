@@ -50,7 +50,7 @@ public class OrganisationNameModel {
     public int getNoOfRows(String active) {
         int noOfRows = 0;
         try {
-            ResultSet rset = connection.prepareStatement("SELECT COUNT(*) FROM organisation_name where "
+            ResultSet rset = connection.prepareStatement(" SELECT COUNT(*) FROM organisation_name where "
                     + " IF('" + active + "'='' , active LIKE '%%', active = '" + active + "') ").executeQuery();
             rset.next();
             noOfRows = Integer.parseInt(rset.getString(1));
@@ -119,7 +119,7 @@ public class OrganisationNameModel {
             searchOrgSubType = "";
         }
 
-        String query = "select org.organisation_id,org.organisation_name,org.description,org.organisation_code,orgT.org_type_name "
+        String query = " select org.organisation_id,org.organisation_name,org.description,org.organisation_code,orgT.org_type_name "
                 + " from organisation_name org, organisation_type orgT where orgT.organisation_type_id=org.organisation_type_id ";
         if (!org_name.equals("") && org_name != null) {
             query += " and org.organisation_name='" + org_name + "' ";
@@ -160,8 +160,8 @@ public class OrganisationNameModel {
 //                   + "AND if('" + searchOrgType + "' = '', o.organisation_name like '%%', o.organisation_name like  '" + searchOrgType + "') "
 //                + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 
-        String query = "select org.organisation_id,org.organisation_name,org.description,org.organisation_code,orgT.org_type_name "
-                + " from organisation_name org, organisation_type orgT where orgT.organisation_type_id=org.organisation_type_id and"
+        String query = " select org.organisation_id,org.organisation_name,org.description,org.organisation_code,orgT.org_type_name "
+                + " from organisation_name org, organisation_type orgT where orgT.organisation_type_id=org.organisation_type_id and "
                 + " IF('" + active + "'='' ,org.active LIKE '%%',org.active = '" + active + "') ";
         if (!searchOrgType.equals("") && searchOrgType != null) {
             query += " and org.organisation_name='" + searchOrgType + "' ";
@@ -191,7 +191,7 @@ public class OrganisationNameModel {
     }
 
     public int insertRecord(OrganisationName organisation_name) {
-        String query = "INSERT INTO organisation_name(organisation_name,organisation_type_id,description,"
+        String query = " INSERT INTO organisation_name(organisation_name,organisation_type_id,description, "
                 + " revision_no,active,remark,organisation_code) VALUES(?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
@@ -222,9 +222,9 @@ public class OrganisationNameModel {
         int revision = OrganisationNameModel.getRevisionno(organisation_name, organisation_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM organisation_name WHERE organisation_id = " + organisation_id + "  && active=? ";
-        String query2 = "UPDATE organisation_name SET active=? WHERE organisation_id=? and revision_no=?";
-        String query3 = "INSERT INTO organisation_name(organisation_id,organisation_name,organisation_type_id,description,revision_no,active,remark,organisation_code) VALUES(?,?,?,?,?,?,?,?) ";
+        String query1 = " SELECT max(revision_no) revision_no FROM organisation_name WHERE organisation_id = " + organisation_id + "  && active=? ";
+        String query2 = " UPDATE organisation_name SET active=? WHERE organisation_id=? and revision_no=? ";
+        String query3 = " INSERT INTO organisation_name(organisation_id,organisation_name,organisation_type_id,description,revision_no,active,remark,organisation_code) VALUES(?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             connection.setAutoCommit(false);
@@ -284,7 +284,7 @@ public class OrganisationNameModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM organisation_name WHERE organisation_id =" + organisation_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM organisation_name WHERE organisation_id =" + organisation_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -303,7 +303,7 @@ public class OrganisationNameModel {
 
     public int deleteRecord(int organisation_id) {
         //  int id = getOrganisationID(organisation_id);
-        String query = "DELETE FROM organisation_name WHERE organisation_id = " + organisation_id;
+        String query = " DELETE FROM organisation_name WHERE organisation_id = " + organisation_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -322,7 +322,7 @@ public class OrganisationNameModel {
 
     public int getOrganisationID(String org_name) {
         org_name = (org_name);
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ?";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -338,7 +338,7 @@ public class OrganisationNameModel {
 
     public int getOrganisationTypeID(String org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ?";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -354,7 +354,7 @@ public class OrganisationNameModel {
 
     public int getOrganisationSubTypeID(String org_sub_type_name) {
         org_sub_type_name = (org_sub_type_name);
-        String query = "SELECT organisation_sub_type_id FROM organisation_sub_type WHERE organisation_sub_type_name = ?";
+        String query = " SELECT organisation_sub_type_id FROM organisation_sub_type WHERE organisation_sub_type_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -370,7 +370,7 @@ public class OrganisationNameModel {
 
     public String getOrganisationTypeName(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT org_type_name FROM organisation_type WHERE organisation_type_id = ? and active='Y'";
+        String query = " SELECT org_type_name FROM organisation_type WHERE organisation_type_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -387,7 +387,7 @@ public class OrganisationNameModel {
     public JSONObject getselectedOrg(String q) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         JSONObject json = new JSONObject();
-        String query = "SELECT * FROM organisation_name where organisation_name=?  AND active='Y' ";
+        String query = " SELECT * FROM organisation_name where organisation_name=?  AND active='Y' ";
         try {
             PreparedStatement ptst = connection.prepareStatement(query);
             ptst.setString(1, q);
@@ -418,7 +418,7 @@ public class OrganisationNameModel {
 
     public String getOfficeTypeName(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT office_type FROM org_office_type WHERE office_type_id = ? and active='Y'";
+        String query = " SELECT office_type FROM org_office_type WHERE office_type_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -434,7 +434,7 @@ public class OrganisationNameModel {
 
     public String getOrganisationName(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT organisation_name FROM organisation_name WHERE organisation_id = ? and active='Y'";
+        String query = " SELECT organisation_name FROM organisation_name WHERE organisation_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -450,7 +450,7 @@ public class OrganisationNameModel {
 
     public String getOfficeName(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT org_office_name FROM org_office WHERE org_office_id = ? and active='Y'";
+        String query = " SELECT org_office_name FROM org_office WHERE org_office_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -466,7 +466,7 @@ public class OrganisationNameModel {
 
     public String getidtypename(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT id_type FROM id_type WHERE id_type_id = ? and active='Y'";
+        String query = " SELECT id_type FROM id_type WHERE id_type_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -482,7 +482,7 @@ public class OrganisationNameModel {
 
     public String getdesignationName(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT designation FROM designation WHERE designation_id = ? and active='Y'";
+        String query = " SELECT designation FROM designation WHERE designation_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -498,7 +498,7 @@ public class OrganisationNameModel {
 
     public String getfamilykpid(int org_type_name) {
         org_type_name = (org_type_name);
-        String query = "SELECT designation FROM designation WHERE designation_id = ? and active='Y'";
+        String query = " SELECT designation FROM designation WHERE designation_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -516,7 +516,7 @@ public class OrganisationNameModel {
         String name = "";
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT city_name FROM city AS c where c.active='Y'and c.city_id=? ";
+        String query = " SELECT city_name FROM city AS c where c.active='Y'and c.city_id=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -537,7 +537,7 @@ public class OrganisationNameModel {
     public JSONObject getselectedOffice(String q) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         JSONObject json = new JSONObject();
-        String query = "SELECT * FROM org_office where org_office_name=?  AND active='Y' ";
+        String query = " SELECT * FROM org_office where org_office_name=?  AND active='Y' ";
         try {
             PreparedStatement ptst = connection.prepareStatement(query);
             ptst.setString(1, q);
@@ -596,7 +596,7 @@ public class OrganisationNameModel {
     public JSONObject getselectedPerson(String q) {
         List<OrganisationName> list = new ArrayList<OrganisationName>();
         JSONObject json = new JSONObject();
-        String query = "SELECT * FROM key_person where key_person_name=?  AND active='Y' ";
+        String query = " SELECT * FROM key_person where key_person_name=?  AND active='Y' ";
         try {
             PreparedStatement ptst = connection.prepareStatement(query);
             ptst.setString(1, q);
@@ -692,7 +692,7 @@ public class OrganisationNameModel {
 
     public List<String> getOrganisationTypeName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org_type_name FROM organisation_type where organisation_type.active='Y' ORDER BY org_type_name";
+        String query = " SELECT org_type_name FROM organisation_type where organisation_type.active='Y' ORDER BY org_type_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -715,7 +715,7 @@ public class OrganisationNameModel {
 
     public List<String> getOrganisationSubTypeName(String q, String organisation_type) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct organisation_sub_type_name FROM organisation_sub_type,organisation_type where organisation_type.org_type_name='" + organisation_type + "' and organisation_sub_type.active='Y' ORDER BY organisation_sub_type_name";
+        String query = " SELECT distinct organisation_sub_type_name FROM organisation_sub_type,organisation_type where organisation_type.org_type_name='" + organisation_type + "' and organisation_sub_type.active='Y' ORDER BY organisation_sub_type_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -738,7 +738,7 @@ public class OrganisationNameModel {
 
     public List<String> getOrganisationName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT organisation_name FROM organisation_name where organisation_name.active='Y' ORDER BY organisation_name ";
+        String query = " SELECT organisation_name FROM organisation_name where organisation_name.active='Y' ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -761,7 +761,7 @@ public class OrganisationNameModel {
 
     public List<String> getOrganisationName(String q, String organisation_type, String organisation_sub_type) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT organisation_name FROM organisation_name ORDER BY organisation_name ";
+        String query = " SELECT organisation_name FROM organisation_name ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

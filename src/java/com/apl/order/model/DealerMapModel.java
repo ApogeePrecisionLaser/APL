@@ -38,7 +38,7 @@ import net.sf.jasperreports.view.save.JRPdfSaveContributor;
 
 /**
  *
- * @author komal
+ * @author Akash
  */
 public class DealerMapModel {
 
@@ -73,7 +73,7 @@ public class DealerMapModel {
         int o_id = 0;
         try {
             query = " select distinct kp.key_person_name as d,kp1.key_person_name as s,dealer_salesmanager_table_id,dsm.remark "
-                    + "from dealer_salesmanager_mapping as dsm,key_person as kp ,key_person as kp1 where dsm.dealer_id=kp.key_person_id and dsm.salesman_id=kp1.key_person_id and kp.active='Y' and dsm.active='y'";
+                    + " from dealer_salesmanager_mapping as dsm,key_person as kp ,key_person as kp1 where dsm.dealer_id=kp.key_person_id and dsm.salesman_id=kp1.key_person_id and kp.active='Y' and dsm.active='y' ";
 
             if (!org_name.equals("") && org_name != null) {
                 query += " and kp.key_person_name='" + org_name + "' ";
@@ -107,8 +107,8 @@ public class DealerMapModel {
         int rowsAffected = 0;
         int count = 0;
 
-        String query = "insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
-                + "VALUES( ?, ?, ?)";
+        String query = " insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
+                + " VALUES( ?, ?, ?) ";
 //  int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -142,10 +142,10 @@ public class DealerMapModel {
         int updateRowsAffected = 0;
         int revision = 0;
         boolean status;
-        String query1 = "SELECT max(revision_no) as revision_no FROM dealer_salesmanager_mapping WHERE dealer_salesmanager_table_id = " + org_office_id + "  && active='Y' ";
-        String query2 = "UPDATE dealer_salesmanager_mapping SET active=? WHERE dealer_salesmanager_table_id=? ";
-        String query3 = "insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
-                + "VALUES( ?, ?, ?)";
+        String query1 = " SELECT max(revision_no) as revision_no FROM dealer_salesmanager_mapping WHERE dealer_salesmanager_table_id = " + org_office_id + "  && active='Y' ";
+        String query2 = " UPDATE dealer_salesmanager_mapping SET active=? WHERE dealer_salesmanager_table_id=? ";
+        String query3 = " insert into dealer_salesmanager_mapping(dealer_id,salesman_id,remark) "
+                + " VALUES( ?, ?, ?) ";
 
         int rowsAffected = 0;
         try {
@@ -201,8 +201,8 @@ public class DealerMapModel {
         int rowsAffected = 0;
         int count = 0;
 
-        String query = "insert into salesmanager_state_mapping(state_id,salesman_id,remark) "
-                + "VALUES( ?, ?, ?)";
+        String query = " insert into salesmanager_state_mapping(state_id,salesman_id,remark) "
+                + " VALUES( ?, ?, ?) ";
 //  int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -236,10 +236,10 @@ public class DealerMapModel {
         int updateRowsAffected = 0;
         int revision = 0;
         boolean status;
-        String query1 = "SELECT max(revision_no) as revision_no FROM salesmanager_state_mapping WHERE salesmanager_state_mapping_id = " + salesmanager_state_mapping_id + "  && active='Y' ";
-        String query2 = "UPDATE salesmanager_state_mapping SET active=? WHERE salesmanager_state_mapping_id=? ";
-        String query3 = "insert into salesmanager_state_mapping(state_id,salesman_id,remark) "
-                + "VALUES( ?, ?, ?)";
+        String query1 = " SELECT max(revision_no) as revision_no FROM salesmanager_state_mapping WHERE salesmanager_state_mapping_id = " + salesmanager_state_mapping_id + "  && active='Y' ";
+        String query2 = " UPDATE salesmanager_state_mapping SET active=? WHERE salesmanager_state_mapping_id=? ";
+        String query3 = " insert into salesmanager_state_mapping(state_id,salesman_id,remark) "
+                + " VALUES( ?, ?, ?) ";
 
         int rowsAffected = 0;
         try {
@@ -292,7 +292,7 @@ public class DealerMapModel {
 
     public int deleteRecord(int org_office_id) throws SQLException {
 
-        String query = "DELETE FROM dealer_salesmanager_mapping WHERE dealer_salesmanager_table_id = " + org_office_id;
+        String query = " DELETE FROM dealer_salesmanager_mapping WHERE dealer_salesmanager_table_id = " + org_office_id;
         int child_item_count = 0;
         int rowsAffected = 0;
         try {
@@ -320,7 +320,7 @@ public class DealerMapModel {
 
     public int deleteRecordForSSM(int salesmanager_state_mapping_id) throws SQLException {
 
-        String query = "DELETE FROM salesmanager_state_mapping WHERE salesmanager_state_mapping_id = " + salesmanager_state_mapping_id;
+        String query = " DELETE FROM salesmanager_state_mapping WHERE salesmanager_state_mapping_id = " + salesmanager_state_mapping_id;
         int child_item_count = 0;
         int rowsAffected = 0;
         try {
@@ -348,7 +348,7 @@ public class DealerMapModel {
 
     public List<String> getDealer(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct key_person_name FROM apl.key_person as kp ,designation as dg where kp.designation_id=dg.designation_id and dg.designation='Owner' and kp.active='Y'";
+        String query = " SELECT distinct key_person_name FROM apl.key_person as kp ,designation as dg where kp.designation_id=dg.designation_id and dg.designation='Owner' and kp.active='Y' ";
 
         //  System.err.println("query-----------" + query);
         try {
@@ -374,7 +374,7 @@ public class DealerMapModel {
 
     public List<String> getState(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct state_name FROM state where active='Y' group by state_name ";
+        String query = " SELECT distinct state_name FROM state where active='Y' group by state_name ";
 
         //  System.err.println("query-----------" + query);
         try {
@@ -400,7 +400,7 @@ public class DealerMapModel {
 
     public List<String> getSalesDealer(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct key_person_name FROM apl.key_person as kp ,designation as dg where kp.designation_id=dg.designation_id and dg.designation='Sales' and kp.active='Y'";
+        String query = " SELECT distinct key_person_name FROM apl.key_person as kp ,designation as dg where kp.designation_id=dg.designation_id and dg.designation='Sales' and kp.active='Y' ";
 
         //  System.err.println("query-----------" + query);
         try {
@@ -425,7 +425,7 @@ public class DealerMapModel {
     }
 
     public int getKp_id(String city_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = ? and active='Y'";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = ? and active='Y' ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -440,7 +440,7 @@ public class DealerMapModel {
     }
 
     public int getStateId(String state) {
-        String query = "SELECT state_id FROM state WHERE state_name = ? and active='Y'";
+        String query = " SELECT state_id FROM state WHERE state_name = ? and active='Y' ";
         int state_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -464,8 +464,8 @@ public class DealerMapModel {
         int o_id = 0;
         try {
             query = " select distinct kp.key_person_name as salesman,st.state_name,ssm.salesmanager_state_mapping_id,ssm.remark "
-                    + " from salesmanager_state_mapping as ssm,key_person as kp ,state as st"
-                    + " where ssm.state_id=st.state_id and ssm.salesman_id=kp.key_person_id and kp.active='Y' and ssm.active='y'";
+                    + " from salesmanager_state_mapping as ssm,key_person as kp ,state as st "
+                    + " where ssm.state_id=st.state_id and ssm.salesman_id=kp.key_person_id and kp.active='Y' and ssm.active='y' ";
 
             if (!searchstate.equals("") && searchstate != null) {
                 query += " and st.state_name='" + searchstate + "' ";

@@ -27,7 +27,7 @@ public class RwaBeneficiaryModel {
     public static int getNoOfRows() {
         int noOfRows = 0;
         try {
-            String query = "select count(rwa_beneficiary_mapping_id) from rwa_beneficiary_mapping ";
+            String query = " select count(rwa_beneficiary_mapping_id) from rwa_beneficiary_mapping ";
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
             rset.next();
@@ -46,7 +46,7 @@ public class RwaBeneficiaryModel {
         if (lowerLimit == -1) {
             addQuery = "";
         }
-        String query = "select rwa_beneficiary_mapping_id,rwa_name,kp.key_person_name,kp.emp_code from rwa as r,key_person as kp,rwa_beneficiary_mapping as rbm,beneficiary as b where "
+        String query = " select rwa_beneficiary_mapping_id,rwa_name,kp.key_person_name,kp.emp_code from rwa as r,key_person as kp,rwa_beneficiary_mapping as rbm,beneficiary as b where "
                 + " r.rwa_id=rbm.rwa_id and rbm.beneficiary_id=b.beneficiary_id and b.key_person_id=kp.key_person_id "
                 + addQuery;
         try {
@@ -74,10 +74,10 @@ public class RwaBeneficiaryModel {
         try {
             int rwa_id = bean.getRwa_beneficiary_mapping_id();
             if (rwa_id == 0) {
-                query = "insert into rwa_beneficiary_mapping (rwa_id,beneficiary_id) values(?,?)";
+                query = " insert into rwa_beneficiary_mapping (rwa_id,beneficiary_id) values(?,?) ";
             }
             if (rwa_id > 0) {
-                query = "update rwa_beneficiary_mapping set rwa_id=?,beneficiary_id=? where rwa_id=?";
+                query = " update rwa_beneficiary_mapping set rwa_id=?,beneficiary_id=? where rwa_id=? ";
             }
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
 
@@ -120,7 +120,7 @@ public class RwaBeneficiaryModel {
         boolean status = false;
         int rowsAffected = 0;
         try {
-            rowsAffected = connection.prepareStatement("Delete from rwa_beneficiary_mapping where rwa_beneficiary_mapping_id=" + rwa_id + " ").executeUpdate();
+            rowsAffected = connection.prepareStatement(" Delete from rwa_beneficiary_mapping where rwa_beneficiary_mapping_id=" + rwa_id + " ").executeUpdate();
             if (rowsAffected > 0) {
                 status = true;
             } else {
@@ -145,7 +145,7 @@ public class RwaBeneficiaryModel {
         int rwa_id = 0;
         try {
             String name = rwa_name;
-            String query = "select rwa_id from rwa"
+            String query = " select rwa_id from rwa "
                     + " where rwa_name='" + name + "' ";
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -161,7 +161,7 @@ public class RwaBeneficiaryModel {
         int beneficiary_id = 0;
         try {
 
-            String query = "select beneficiary_id from key_person as kp,beneficiary as b"
+            String query = " select beneficiary_id from key_person as kp,beneficiary as b "
                     + " where  kp.key_person_id=b.key_person_id and emp_code=" + emp_code;
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -176,7 +176,7 @@ public class RwaBeneficiaryModel {
     public List<String> getRwaName(String q) {
         List<String> list = new ArrayList<String>();
         String query = " select rwa_name from rwa "
-                + "Group by rwa_name";
+                + " Group by rwa_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -201,7 +201,7 @@ public class RwaBeneficiaryModel {
         List<String> list = new ArrayList<String>();
         String query = " select key_person_name from key_person "
                 + " where IF('" + emp_code + "'='', emp_code like '%%', emp_code ='" + emp_code + "') "
-                + "Group by key_person_name";
+                + " Group by key_person_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

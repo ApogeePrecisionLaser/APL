@@ -4,10 +4,7 @@
  */
 package com.organization.model;
 
-import com.lowagie.text.pdf.PdfWriter;
 import com.organization.tableClasses.Org_Office;
-import com.organization.tableClasses.OrganisationDesignationBean;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,23 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporterContext;
-import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.export.JRPdfExporterTagHelper;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.view.save.JRPdfSaveContributor;
 
 /**
  *
@@ -74,11 +55,11 @@ public class OrgOfficeModel {
         idList = getAllParentChildList(office_name_search);
         try {
             query = " select o.org_office_code,o.org_office_id ,o.org_office_name,og.organisation_name,c.city_name,oft.office_type, "
-                    + " o.address_line1,o.address_line2, o.address_line3, o.email_id1, o.email_id2, o.mobile_no1, o.mobile_no2, o.landline_no1,"
-                    + " o.landline_no2, o.landline_no3,o.serial_no,o.super,o.generation,o.parent_org_office_id,o.latitude,o.longitude,o.service_tax_reg_no"
+                    + " o.address_line1,o.address_line2, o.address_line3, o.email_id1, o.email_id2, o.mobile_no1, o.mobile_no2, o.landline_no1, "
+                    + " o.landline_no2, o.landline_no3,o.serial_no,o.super,o.generation,o.parent_org_office_id,o.latitude,o.longitude,o.service_tax_reg_no "
                     + " FROM org_office o, organisation_name og, city c, org_office_type oft "
                     + " where o.organisation_id = og.organisation_id and c.city_id = o.city_id and oft.office_type_id = o.office_type_id and "
-                    + "  og.active='Y' and c.active='Y' and o.active='Y' and oft.active='Y' ";
+                    + " og.active='Y' and c.active='Y' and o.active='Y' and oft.active='Y' ";
 
             if (!org_name.equals("") && org_name != null) {
                 query += " and og.organisation_name='" + org_name + "' ";
@@ -154,7 +135,7 @@ public class OrgOfficeModel {
         }
         int org_office_id = 0, parent_id = 0;
 
-        String qry = "select org_office_id from org_office where active='Y' and org_office_name='" + office_name_search + "' ";
+        String qry = " select org_office_id from org_office where active='Y' and org_office_name='" + office_name_search + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry);
             ResultSet rstt = pst.executeQuery();
@@ -166,7 +147,7 @@ public class OrgOfficeModel {
             System.out.println("OrgOfficeModel.getAllParentChildList() -" + e);
         }
 
-        String qry1 = "select org_office_id from org_office where active='Y' and parent_org_office_id='" + org_office_id + "' limit 1 ";
+        String qry1 = " select org_office_id from org_office where active='Y' and parent_org_office_id='" + org_office_id + "' limit 1 ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry1);
             ResultSet rstt = pst.executeQuery();
@@ -179,7 +160,7 @@ public class OrgOfficeModel {
         }
 
         try {
-            query = "SELECT distinct t2.org_office_id as lev2, t3.org_office_id as lev3, "
+            query = " SELECT distinct t2.org_office_id as lev2, t3.org_office_id as lev3, "
                     + " t4.org_office_id as lev4,t5.org_office_id as lev5,t6.org_office_id as lev6, "
                     + " t7.org_office_id as lev7,t8.org_office_id as lev8,t9.org_office_id as lev9,t10.org_office_id as lev10 "
                     + " FROM org_office AS t1 "
@@ -192,7 +173,7 @@ public class OrgOfficeModel {
                     + " LEFT JOIN org_office AS t8 ON t8.parent_org_office_id = t7.org_office_id and t8.active='Y' "
                     + " LEFT JOIN org_office AS t9 ON t9.parent_org_office_id = t8.org_office_id and t9.active='Y' "
                     + " LEFT JOIN org_office AS t10 ON t10.parent_org_office_id = t9.org_office_id and t10.active='Y' "
-                    + "  WHERE '" + org_office_id + "' in (t1.parent_org_office_id,t2.parent_org_office_id,t3.parent_org_office_id) ";
+                    + " WHERE '" + org_office_id + "' in (t1.parent_org_office_id,t2.parent_org_office_id,t3.parent_org_office_id) ";
 
             pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -246,7 +227,7 @@ public class OrgOfficeModel {
     }
 
     public static int getParentOrgid(int org_id) {
-        String query = "SELECT parent_org_office_id FROM org_office WHERE  org_office_id=? and active=? ";
+        String query = " SELECT parent_org_office_id FROM org_office WHERE  org_office_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -261,7 +242,7 @@ public class OrgOfficeModel {
     }
 
     public static int getcheckorgid(int org_id) {
-        String query = "SELECT org_office_id FROM org_office WHERE  parent_org_office_id=? and active=? ";
+        String query = " SELECT org_office_id FROM org_office WHERE  parent_org_office_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -307,7 +288,7 @@ public class OrgOfficeModel {
 
     public int getIdOfParent(String number) {
         int id = 0;
-        String query1 = "SELECT org_office_id FROM org_office WHERE serial_no =?  && active=? ";
+        String query1 = " SELECT org_office_id FROM org_office WHERE serial_no =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
 //            pstmt.setString(1, number);
@@ -328,7 +309,7 @@ public class OrgOfficeModel {
     }
 
     public int getOrg_Office_id(String organisation_name) {
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y' ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + organisation_name + "' and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -344,7 +325,7 @@ public class OrgOfficeModel {
     }
 
     public int getParentGeneration(int org_id, int desig_id) {
-        String query = "SELECT * FROM org_office WHERE organisation_id = ? and org_office_id=? and active=? ";
+        String query = " SELECT * FROM org_office WHERE organisation_id = ? and org_office_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -396,7 +377,7 @@ public class OrgOfficeModel {
 
         }
 
-        String query1 = "select count(*) "
+        String query1 = " select count(*) "
                 + " from org_office where organisation_id='" + orgid + "' "
                 + " and org_office_id='" + org_officeid1 + "' and "
                 + " parent_org_office_id='" + org_officeid2 + "' and active='Y' ";
@@ -415,12 +396,12 @@ public class OrgOfficeModel {
             msgBgColor = COLOR_ERROR;
 //            return rowsAffected;
         }
-        String query = "INSERT INTO "
-                + "org_office( org_office_name,org_office_code,office_type_id, address_line1, "
-                + "address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
-                + "landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super,"
-                + "generation,latitude,longitude,service_tax_reg_no) "
-                + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query = " INSERT INTO "
+                + " org_office( org_office_name,org_office_code,office_type_id, address_line1, "
+                + " address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
+                + " landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super, "
+                + " generation,latitude,longitude,service_tax_reg_no) "
+                + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?) ";
 //  int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -471,7 +452,7 @@ public class OrgOfficeModel {
     }
 
     public int getOrgofficeid(String organisation_name) {
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = ? and active=? ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -512,9 +493,9 @@ public class OrgOfficeModel {
             generation = getParentGeneration(orgid, p_prg_office_id) + 1;
         }
 
-        String query1 = "SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id = " + org_office_id + "  && active='Y' ";
-        String query2 = "UPDATE org_office SET active=? WHERE org_office_id=? and revision_no=? ";
-        String query3 = "INSERT INTO "
+        String query1 = " SELECT max(revision_no) as revision_no FROM org_office WHERE org_office_id = " + org_office_id + "  && active='Y' ";
+        String query2 = " UPDATE org_office SET active=? WHERE org_office_id=? and revision_no=? ";
+        String query3 = " INSERT INTO "
                 + " org_office(org_office_id,org_office_name,org_office_code,office_type_id, address_line1, "
                 + " address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
                 + " landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super, "
@@ -597,7 +578,7 @@ public class OrgOfficeModel {
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
         String AdvertiseName = "";
-        String query = "SELECT mobile_no1 FROM org_office where org_office.active='Y' and mobile_no1='" + q + "'";
+        String query = " SELECT mobile_no1 FROM org_office where org_office.active='Y' and mobile_no1='" + q + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -706,7 +687,7 @@ public class OrgOfficeModel {
 
     public List<String> organisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT  org.organisation_name FROM organisation_name  AS org where org.active='Y' ORDER BY organisation_name ";
+        String query = " SELECT  org.organisation_name FROM organisation_name  AS org where org.active='Y' ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -753,7 +734,7 @@ public class OrgOfficeModel {
 
     public List<String> searchMobile(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct mobile_no1 FROM org_office  AS org where org.active='Y' ORDER BY mobile_no1 ";
+        String query = " SELECT distinct mobile_no1 FROM org_office  AS org where org.active='Y' ORDER BY mobile_no1 ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -776,7 +757,7 @@ public class OrgOfficeModel {
 
     public List<String> getOrganisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.organisation_name FROM organisation_name  AS org,org_office as oft where org.organisation_id=oft.organisation_id and org.active='Y' and oft.active='Y' ORDER BY organisation_name ";
+        String query = " SELECT distinct org.organisation_name FROM organisation_name  AS org,org_office as oft where org.organisation_id=oft.organisation_id and org.active='Y' and oft.active='Y' ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -799,7 +780,7 @@ public class OrgOfficeModel {
 
     public List<String> getGeneration(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.generation FROM org_office  AS org   where org.active='Y'  ORDER BY generation ";
+        String query = " SELECT distinct org.generation FROM org_office  AS org   where org.active='Y'  ORDER BY generation ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -821,7 +802,7 @@ public class OrgOfficeModel {
     }
 
     public int getOrganisation_id(String organisation_name) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ? and active=? ";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -838,7 +819,7 @@ public class OrgOfficeModel {
     }
 
     public int getOfficetype_id(String organisation_name) {
-        String query = "SELECT office_type_id FROM org_office_type WHERE office_type = ? and active=? ";
+        String query = " SELECT office_type_id FROM org_office_type WHERE office_type = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -856,7 +837,7 @@ public class OrgOfficeModel {
     public List<String> OrgOfficeType(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
-        String query = "SELECT office_type from org_office_type where org_office_type.active='Y'";
+        String query = " SELECT office_type from org_office_type where org_office_type.active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, office_code);
@@ -883,7 +864,7 @@ public class OrgOfficeModel {
     public List<String> getMobile(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
-        String query = "SELECT mobile_no1 from org_office where active='Y' group by mobile_no1";
+        String query = " SELECT mobile_no1 from org_office where active='Y' group by mobile_no1 ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, office_code);
@@ -910,7 +891,7 @@ public class OrgOfficeModel {
     public List<String> gethierarchysearch(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
-        String query = "SELECT mobile_no1 from org_office where active='Y'";
+        String query = " SELECT mobile_no1 from org_office where active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, office_code);
@@ -935,7 +916,7 @@ public class OrgOfficeModel {
     }
 
     public int getDesgn_id(String office) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ?";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -957,8 +938,8 @@ public class OrgOfficeModel {
 //                + " organisation_designation_map.organisation_id='" + id + "' and "
 //                + " organisation_designation_map.active='Y' and designation.active='Y'";
 
-        String query = "SELECT * FROM org_office d where "
-                + "   d.organisation_id='" + id + "' and  d.active='Y'  and d.super='N' ";
+        String query = " SELECT * FROM org_office d where "
+                + " d.organisation_id='" + id + "' and  d.active='Y'  and d.super='N' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -997,10 +978,10 @@ public class OrgOfficeModel {
 
     public List<String> getOrgOfficeNameSearch(String q, String org_name, String code) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct o.org_office_name FROM org_office AS o ,organisation_name as om "
+        String query = " SELECT distinct o.org_office_name FROM org_office AS o ,organisation_name as om "
                 + " WHERE IF('" + org_name + "'='', om.organisation_name LIKE '%%' , om.organisation_name='" + org_name + "')  and o.organisation_id=om.organisation_id "
                 + " AND if('" + code + "' = '' , o.org_office_code like '%%' , o.org_office_code = ? ) and o.active='Y' and om.active='Y' "
-                + "ORDER BY o.org_office_name";
+                + " ORDER BY o.org_office_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
@@ -1027,8 +1008,8 @@ public class OrgOfficeModel {
 
     public List<String> getOrgOfficeCodeSearch(String q, String code) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_code FROM org_office as oo,organisation_name onn where oo.active='Y' and onn.active='Y' "
-                + "and oo.organisation_id=onn.organisation_id and onn.organisation_name='" + code + "'";
+        String query = " SELECT oo.org_office_code FROM org_office as oo,organisation_name onn where oo.active='Y' and onn.active='Y' "
+                + " and oo.organisation_id=onn.organisation_id and onn.organisation_name='" + code + "' ";
 
         //  System.err.println("query-----------" + query);
         try {
@@ -1054,7 +1035,7 @@ public class OrgOfficeModel {
     }
 
     public int getOrgOfficeType_id(String office_type) {
-        String query = "SELECT office_type_id FROM org_office_type WHERE  office_type = ?  and active=? ";
+        String query = " SELECT office_type_id FROM org_office_type WHERE  office_type = ?  and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1071,7 +1052,7 @@ public class OrgOfficeModel {
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = ?";
+        String query = " SELECT city_id FROM city WHERE city_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1089,7 +1070,7 @@ public class OrgOfficeModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT city_name FROM city AS c where c.active='Y' ORDER BY city_name ";
+        String query = " SELECT city_name FROM city AS c where c.active='Y' ORDER BY city_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -1115,7 +1096,7 @@ public class OrgOfficeModel {
 
     public List<String> getStateName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT state_name FROM state ORDER BY state_name ";
+        String query = " SELECT state_name FROM state ORDER BY state_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

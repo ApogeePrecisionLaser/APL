@@ -19,7 +19,7 @@ import java.util.List;
 public class OrgClientAssoMapModel {
 
     private Connection connection;
-    
+
     private String message;
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
@@ -30,7 +30,7 @@ public class OrgClientAssoMapModel {
 
             connection = con;
         } catch (Exception e) {
-             System.out.println("OrgClientAssoMapModel setConnection() Error: " + e);
+            System.out.println("OrgClientAssoMapModel setConnection() Error: " + e);
         }
     }
 
@@ -49,10 +49,10 @@ public class OrgClientAssoMapModel {
 
     public List<OrgClientAssoMap> showData(int lowerLimit, int noOfRowsToDisplay) {
         List<OrgClientAssoMap> list = new ArrayList<OrgClientAssoMap>();
-        String query = "SELECT org_client_asso_map_id, c.organisation_name AS client_org, ca.organisation_name AS client_asso_org, oca.description "
-                + "FROM org_client_asso_map AS oca, organisation_name AS c, organisation_name AS ca "
-                + "WHERE oca.org_client_id=c.organisation_id AND oca.org_clie_asso_id=ca.organisation_id "
-                + "GROUP BY org_client_asso_map_id ORDER BY c.organisation_name LIMIT "
+        String query = " SELECT org_client_asso_map_id, c.organisation_name AS client_org, ca.organisation_name AS client_asso_org, oca.description "
+                + " FROM org_client_asso_map AS oca, organisation_name AS c, organisation_name AS ca "
+                + " WHERE oca.org_client_id=c.organisation_id AND oca.org_clie_asso_id=ca.organisation_id "
+                + " GROUP BY org_client_asso_map_id ORDER BY c.organisation_name LIMIT "
                 + lowerLimit + ", " + noOfRowsToDisplay;
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -72,7 +72,7 @@ public class OrgClientAssoMapModel {
     }
 
     public int insertRecord(OrgClientAssoMap OrgClientAssoMap) {
-        String query = "INSERT INTO org_client_asso_map (org_client_id, org_clie_asso_id, description) "
+        String query = " INSERT INTO org_client_asso_map (org_client_id, org_clie_asso_id, description) "
                 + " VALUES(?, ?, ?) ";
         int rowsAffected = 0;
         try {
@@ -95,7 +95,7 @@ public class OrgClientAssoMapModel {
     }
 
     public int updateRecord(OrgClientAssoMap OrgClientAssoMap) {
-        String query = "UPDATE org_client_asso_map SET org_client_id=?, org_clie_asso_id=?, description=? WHERE org_client_asso_map_id= ? ";
+        String query = " UPDATE org_client_asso_map SET org_client_id=?, org_clie_asso_id=?, description=? WHERE org_client_asso_map_id= ? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -119,7 +119,7 @@ public class OrgClientAssoMapModel {
     }
 
     public int deleteRecord(int org_client_asso_map_id) {
-        String query = "DELETE FROM org_client_asso_map WHERE org_client_asso_map_id= " + org_client_asso_map_id;
+        String query = " DELETE FROM org_client_asso_map WHERE org_client_asso_map_id= " + org_client_asso_map_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -138,9 +138,9 @@ public class OrgClientAssoMapModel {
 
     public List<String> getClientAssoOrgName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT o.organisation_name FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
-                + "WHERE  o.organisation_id= om.organisation_id AND om.organisation_type_id = ot.organisation_type_id AND ot.organisation_type_id= ost.organisation_type_id "
-                + "AND ot.org_type_name='Client Associate'  GROUP BY o.organisation_name ORDER BY o.organisation_name ";
+        String query = " SELECT o.organisation_name FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
+                + " WHERE  o.organisation_id= om.organisation_id AND om.organisation_type_id = ot.organisation_type_id AND ot.organisation_type_id= ost.organisation_type_id "
+                + " AND ot.org_type_name='Client Associate'  GROUP BY o.organisation_name ORDER BY o.organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -162,7 +162,7 @@ public class OrgClientAssoMapModel {
     }
 
     public int getClientOrg_id(String organisation_name) {
-        String query = "SELECT o.organisation_id FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
+        String query = " SELECT o.organisation_id FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
                 + " WHERE  o.organisation_id= om.organisation_id AND om.organisation_type_id = ot.organisation_type_id AND ot.organisation_type_id= ost.organisation_type_id "
                 + " AND ot.org_type_name='Client' AND organisation_name = ? GROUP BY o.organisation_id ";
         int organisation_id = 0;
@@ -180,9 +180,9 @@ public class OrgClientAssoMapModel {
 
     public List<String> getClientOrgNameList(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT o.organisation_name FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
-                + "WHERE  o.organisation_id= om.organisation_id AND om.organisation_type_id = ot.organisation_type_id AND ot.organisation_type_id= ost.organisation_type_id "
-                + "AND ot.org_type_name='Client'  GROUP BY o.organisation_name ORDER BY o.organisation_name ";
+        String query = " SELECT o.organisation_name FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
+                + " WHERE  o.organisation_id= om.organisation_id AND om.organisation_type_id = ot.organisation_type_id AND ot.organisation_type_id= ost.organisation_type_id "
+                + " AND ot.org_type_name='Client'  GROUP BY o.organisation_name ORDER BY o.organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -204,7 +204,7 @@ public class OrgClientAssoMapModel {
     }
 
     public int getClientAssoOrgID(String organisation_name) {
-        String query = "SELECT o.organisation_id FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
+        String query = " SELECT o.organisation_id FROM organisation_name AS o, organisation_type AS ot, organisation_sub_type AS ost, organisation_map AS om "
                 + " WHERE  o.organisation_id= om.organisation_id AND om.organisation_type_id = ot.organisation_type_id AND ot.organisation_type_id= ost.organisation_type_id "
                 + " AND ot.org_type_name='Client Associate' AND organisation_name =? ";
         int id = 0;
@@ -222,10 +222,10 @@ public class OrgClientAssoMapModel {
 
     public List<String> getOrganisation_subType_Name(String q, String org_type_name) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT ost.organisation_sub_type_name "
-                + "FROM organisation_sub_type AS ost ,organisation_type AS ot "
-                + "WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name=? "
-                + "ORDER BY organisation_sub_type_name ";
+        String query = " SELECT ost.organisation_sub_type_name "
+                + " FROM organisation_sub_type AS ost ,organisation_type AS ot "
+                + " WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name=? "
+                + " ORDER BY organisation_sub_type_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, org_type_name);
@@ -249,7 +249,7 @@ public class OrgClientAssoMapModel {
     }
 
     public int getOrganisation_subType_id(String organisation_sutType_name) {
-        String query = "SELECT organisation_sub_type_id FROM organisation_sub_type WHERE organisation_sub_type_name = ?";
+        String query = " SELECT organisation_sub_type_id FROM organisation_sub_type WHERE organisation_sub_type_name = ? ";
         int organisation_subType_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -272,8 +272,6 @@ public class OrgClientAssoMapModel {
     public String getMsgBgColor() {
         return msgBgColor;
     }
-
-   
 
     public void closeConnection() {
         try {

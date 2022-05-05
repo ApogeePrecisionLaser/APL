@@ -71,8 +71,8 @@ public class TehsilModel {
 //        tehsilName = krutiToUnicode.convert_to_unicode(tehsilName);
         tehsilName = tehsilName;
         ArrayList<TehsilBean> list = new ArrayList<TehsilBean>();
-        String query = "select tehsil_name,tehsil_description from tehsil where "
-                + " if('" + tehsilName + "'='',tehsil_name LIKE '%%',tehsil_name='" + tehsilName + "')";
+        String query = " select tehsil_name,tehsil_description from tehsil where "
+                + " if('" + tehsilName + "'='',tehsil_name LIKE '%%',tehsil_name='" + tehsilName + "') ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -95,7 +95,7 @@ public class TehsilModel {
 
     public static int getDistrictId(String district_name) {
         int division_id = 0;
-        String query = "select district_id from district where district_name= '" + district_name + "' ";
+        String query = " select district_id from district where district_name= '" + district_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -110,7 +110,7 @@ public class TehsilModel {
 
     public static int getTehsilId(String district_name) {
         int division_id = 0;
-        String query = "select tehsil_id from tehsil where tehsil_name= '" + district_name + "' ";
+        String query = " select tehsil_id from tehsil where tehsil_name= '" + district_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -202,7 +202,7 @@ public class TehsilModel {
     public List<String> getTehsilName(String q, String distName) {
         List<String> list = new ArrayList<String>();
 
-        String query = "select tehsil_name FROM tehsil where tehsil.district_id=(select district.district_id from district where district_name='" + distName + "') GROUP BY tehsil_name ORDER BY tehsil_name";
+        String query = " select tehsil_name FROM tehsil where tehsil.district_id=(select district.district_id from district where district_name='" + distName + "') GROUP BY tehsil_name ORDER BY tehsil_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -252,7 +252,7 @@ public class TehsilModel {
     public void deleteRecord(int tehsilId) {
         PreparedStatement presta = null;
         try {
-            presta = connection.prepareStatement("delete from tehsil where tehsil_id=?");
+            presta = connection.prepareStatement(" delete from tehsil where tehsil_id=? ");
             presta.setInt(1, tehsilId);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -270,7 +270,7 @@ public class TehsilModel {
     public String getTehsilNameFromId(int id) {
         String name = null;
 
-        String query = "SELECT tehsil_name FROM tehsil where tehsil_id=? and active='Y'";
+        String query = " SELECT tehsil_name FROM tehsil where tehsil_id=? and active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, id);
@@ -298,7 +298,7 @@ public class TehsilModel {
                 + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
          
          */
-        String query = "SELECT tehsil_id,tehsil_name,tehsil_description,tehsil_id,district_name FROM tehsil ,district"
+        String query = " SELECT tehsil_id,tehsil_name,tehsil_description,tehsil_id,district_name FROM tehsil ,district "
                 + " where tehsil.district_id=district.district_id and tehsil.active='Y' and district.active='Y' "
                 + " AND IF('" + searchTehsil + "'='',tehsil_name LIKE '%%',tehsil_name=?) "
                 + " order by tehsil_name limit " + lowerLimit + "," + noOfRowsToDisplay;
@@ -348,7 +348,7 @@ public class TehsilModel {
     public int getDistrictIdFromName(String name) {
         int id = 0;
 
-        String query = "SELECT district_id FROM district where district_name=? and active='Y'";
+        String query = " SELECT district_id FROM district where district_name=? and active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, name);
@@ -366,7 +366,7 @@ public class TehsilModel {
     public void insertRecord(TehsilBean bean) {
         int rowAffected = 0;
         try {
-            String query = "insert into tehsil(tehsil_name,tehsil_description,district_id,revision_no,active) values(?,?,?,?,?)";
+            String query = " insert into tehsil(tehsil_name,tehsil_description,district_id,revision_no,active) values(?,?,?,?,?) ";
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, bean.getTehsilName());
             ps.setString(2, bean.getTehsilDescription());
@@ -389,10 +389,10 @@ public class TehsilModel {
         int revision = TehsilModel.getRevisionno(Bean, tehsil_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM tehsil WHERE tehsil_id = " + tehsil_id + "  && active=? ";
-        String query2 = "UPDATE tehsil SET active=? WHERE tehsil_id=? and revision_no=?";
-        String query3 = "INSERT INTO tehsil(tehsil_id,tehsil_name,tehsil_description,district_id,revision_no,active)"
-                + "VALUES(?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM tehsil WHERE tehsil_id = " + tehsil_id + "  && active=? ";
+        String query2 = " UPDATE tehsil SET active=? WHERE tehsil_id=? and revision_no=? ";
+        String query3 = " INSERT INTO tehsil(tehsil_id,tehsil_name,tehsil_description,district_id,revision_no,active) "
+                + " VALUES(?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -444,7 +444,7 @@ public class TehsilModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM tehsil WHERE tehsil_id =" + tehsil_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM tehsil WHERE tehsil_id =" + tehsil_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 

@@ -6,7 +6,6 @@
 package com.webservice.model;
 
 import com.dashboard.bean.Enquiry;
-import com.dashboard.model.DealersOrderModel;
 import com.google.gson.Gson;
 import com.organization.tableClasses.KeyPerson;
 import java.io.BufferedReader;
@@ -111,7 +110,7 @@ public class APLWebServiceModel {
 //                + " where ot.active='Y'";
 
         query = " select ot.organisation_type_id,ot.org_type_name,ot.description,ot.remark,ot.parent_org_id,ot.super "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -147,7 +146,7 @@ public class APLWebServiceModel {
 //                + " where onn.active='Y'";
 
         query = " select onn.organisation_id,onn.organisation_name,onn.organisation_type_id,onn.organisation_code,onn.description,onn.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -182,7 +181,7 @@ public class APLWebServiceModel {
 //                + " where oot.active='Y'";
 
         query = " select oot.office_type_id,oot.office_type,oot.description,oot.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -216,11 +215,11 @@ public class APLWebServiceModel {
 //                + " from org_office oo "
 //                + " where oo.active='Y'";
 
-        query = " select oo.org_office_id,oo.org_office_name,oo.organisation_id,oo.office_type_id,oo.city_id,oo.address_line1,"
-                + " oo.address_line2,oo.address_line3,oo.email_id1,oo.email_id2,oo.mobile_no1,oo.mobile_no2,oo.landline_no1,"
-                + " oo.landline_no2,oo.landline_no3,oo.service_tax_reg_no,oo.vat_reg_no,oo.org_office_code,oo.remark,oo.building_id,"
+        query = " select oo.org_office_id,oo.org_office_name,oo.organisation_id,oo.office_type_id,oo.city_id,oo.address_line1, "
+                + " oo.address_line2,oo.address_line3,oo.email_id1,oo.email_id2,oo.mobile_no1,oo.mobile_no2,oo.landline_no1, "
+                + " oo.landline_no2,oo.landline_no3,oo.service_tax_reg_no,oo.vat_reg_no,oo.org_office_code,oo.remark,oo.building_id, "
                 + " oo.serial_no,oo.super,oo.parent_org_office_id,oo.latitude,oo.longitude "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -276,7 +275,7 @@ public class APLWebServiceModel {
 //                + " where oodt.active='Y'";
 
         query = " select oodm.org_office_designation_map_id,oodm.org_office_id,oodm.designation_id,oodm.remark,oodm.serial_no "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -312,7 +311,7 @@ public class APLWebServiceModel {
 //                + " where d.active='Y'";
 
         query = " select d.designation_id,d.designation,d.description,d.designation_code,d.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -347,7 +346,7 @@ public class APLWebServiceModel {
 //                + " where c.active='Y'";
 
         query = " select c.city_id,c.city_name,c.pin_code,c.std_code,c.city_description,c.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d,city c "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -386,7 +385,7 @@ public class APLWebServiceModel {
 //                + " from key_person kp "
 //                + " where kp.active='Y'";
 
-        query = " select kp.key_person_id,kp.salutation,kp.key_person_name,kp.org_office_id,kp.city_id,kp.address_line1,kp.address_line2,"
+        query = " select kp.key_person_id,kp.salutation,kp.key_person_name,kp.org_office_id,kp.city_id,kp.address_line1,kp.address_line2, "
                 + " kp.address_line3, "
                 + " kp.mobile_no1,kp.mobile_no2,kp.landline_no1,kp.landline_no2,kp.email_id1,kp.email_id2,kp.designation_id, "
                 + " kp.org_office_designation_map_id,kp.emp_code,kp.father_name,kp.date_of_birth,kp.latitude,kp.longitude, "
@@ -521,7 +520,7 @@ public class APLWebServiceModel {
 //                + " where itemt.active='Y'";
 
         query = " select onn.organisation_id,onn.organisation_name,onn.organisation_type_id,onn.organisation_code,onn.description,onn.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -555,7 +554,7 @@ public class APLWebServiceModel {
 //                + " where itemn.active='Y'";
 
         query = " select onn.organisation_id,onn.organisation_name,onn.organisation_type_id,onn.organisation_code,onn.description,onn.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -593,7 +592,7 @@ public class APLWebServiceModel {
 
         query = " select gid.general_image_details_id,gid.image_name,gid.image_destination_id,gid.key_person_id, "
                 + " gid.description,gid.date_time,gid.remark "
-                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot,"
+                + " from key_person kp,organisation_name onn, organisation_type ot,org_office oo,org_office_type oot, "
                 + " org_office_designation_map oodm,designation d,general_image_details gid "
                 + " where kp.active='y'and onn.active='y' and ot.active='y' and oo.active='y' and oodm.active='y' "
                 + " and d.active='y' and oot.active='y' and oodm.org_office_id=oo.org_office_id and oodm.designation_id=d.designation_id "
@@ -626,7 +625,7 @@ public class APLWebServiceModel {
     public JSONArray getImageDestination(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
-        query = "select image_destination_id,destination_path,image_uploaded_for_id,remark"
+        query = " select image_destination_id,destination_path,image_uploaded_for_id,remark "
                 + " from image_destination idd "
                 + " where idd.active='Y' ";
         try {
@@ -649,9 +648,9 @@ public class APLWebServiceModel {
     public JSONArray getImageUploadedFor(String number) {
         JSONArray rowData = new JSONArray();
         String query = null;
-        query = "select Image_uploaded_for_id,uploaded_table,image_uploaded_for,view_label,remark "
+        query = " select Image_uploaded_for_id,uploaded_table,image_uploaded_for,view_label,remark "
                 + " from image_uploaded_for iuf "
-                + " where iuf.active='Y'";
+                + " where iuf.active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -757,7 +756,7 @@ public class APLWebServiceModel {
             System.out.println("SMS URL: " + url);
         } catch (Exception e) {
             result = e.toString();
-            System.out.println("APLWebServiceModel sendSMS() Error: " + e);
+            System.out.println("APLWebServiceModel sendSmsToAssignedFor() Error: " + e);
         }
         return result;
     }
@@ -785,7 +784,7 @@ public class APLWebServiceModel {
 
         KeyPerson b2 = null;
 
-        String query = "select * from key_person  where mobile_no1=? and active=?";
+        String query = " select * from key_person  where mobile_no1=? and active=? ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, number);
@@ -816,14 +815,14 @@ public class APLWebServiceModel {
         } catch (Exception e) {
             //  message = "Cannot save the record, some error.";
             // msgBgColor = COLOR_ERROR;
-            System.out.println("APLWebServiceModel error in Check Existing - " + e);
+            System.out.println("APLWebServiceModel error in checkExisting - " + e);
         }
         return b2;
     }
 
     public boolean UpdateRecord(String number, int id) {
         boolean b = false;
-        String query = "update key_person set isVarified='Yes' where mobile_no1=" + number + " and key_person_id=? and active='Y'";
+        String query = " update key_person set isVarified='Yes' where mobile_no1=" + number + " and key_person_id=? and active='Y' ";
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -895,7 +894,7 @@ public class APLWebServiceModel {
                 }
 
                 coming_time = current_time;
-                query = "insert into attendance(key_person_id,coming_time,going_time,latitude,longitude,remark,status_type_id) "
+                query = " insert into attendance(key_person_id,coming_time,going_time,latitude,longitude,remark,status_type_id) "
                         + " values(?,?,?,?,?,?,?) ";
                 psmt = connection.prepareStatement(query);
                 psmt.setInt(++i, key_person_id);
@@ -1171,13 +1170,12 @@ public class APLWebServiceModel {
         }
     }
 
-    public int insertEnquiries(Enquiry bean) {
-        String query = "INSERT INTO enquiry_table(enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
-                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+    public int insertEnquiries(Enquiry bean) throws SQLException {
+        String query = " INSERT INTO enquiry_table(enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
                 + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
-
         String query2 = " select count(*) as count from enquiry_table where enquiry_no='" + bean.getEnquiry_no() + "' and active='Y' ";
 
         java.util.Date date = new java.util.Date();
@@ -1188,6 +1186,7 @@ public class APLWebServiceModel {
 //        int marketing_vertical_id = getMarketingVerticalId(bean.getMarketing_vertical_name());
 
         try {
+            connection.setAutoCommit(false);
             int count = 0;
             ResultSet rst = connection.prepareStatement(query2).executeQuery();
             while (rst.next()) {
@@ -1236,8 +1235,8 @@ public class APLWebServiceModel {
 
                 String city = bean.getEnquiry_city();
                 String district = "";
-                String query_map_district = " select dt.district_name from district dt,city ct,tehsil th"
-                        + " where dt.active='Y' and ct.active='Y' and th.active='Y'"
+                String query_map_district = " select dt.district_name from district dt,city ct,tehsil th "
+                        + " where dt.active='Y' and ct.active='Y' and th.active='Y' "
                         + " and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ct.city_name='" + city + "' ";
                 PreparedStatement pstmt3 = connection.prepareStatement(query_map_district);
                 ResultSet rs3 = pstmt3.executeQuery();
@@ -1346,14 +1345,16 @@ public class APLWebServiceModel {
         if (rowsAffected > 0) {
             message = "Record saved successfully.";
             messageBGColor = "";
+            connection.commit();
         } else {
             message = "Cannot save the record, some error.";
             messageBGColor = "";
+            connection.rollback();
         }
         return rowsAffected;
     }
 
-    public static String assignToSalesPerson(String enquiry_table_id, String state, String district) {
+    public static String assignToSalesPerson(String enquiry_table_id, String state, String district) throws SQLException {
         int revision = APLWebServiceModel.getRevisionno(enquiry_table_id);
         int updateRowsAffected = 0;
         boolean status = false;
@@ -1362,21 +1363,30 @@ public class APLWebServiceModel {
                 + " enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to,product_name "
                 + " FROM enquiry_table WHERE enquiry_table_id = " + enquiry_table_id + "  && active=? ";
-        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=?";
+        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=? ";
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
-                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
 
         try {
+            connection.setAutoCommit(false);
             int assigned_to_salesperson = 0;
             List<Integer> assigned_to_salesperson_list = getSalesPersonId(state);
+
             if (district.equals("Others")) {
-                assigned_to_salesperson_list.add(168);
+                if (assigned_to_salesperson_list.size() > 0) {
+                    if (assigned_to_salesperson_list.get(0).toString().equals("168")) {
+                        assigned_to_salesperson_list.clear();
+                    } else {
+                        assigned_to_salesperson_list.add(168);
+                    }
+                }
             }
             if (assigned_to_salesperson_list.size() == 0) {
                 assigned_to_salesperson_list.add(168);
+
             }
             if (assigned_to_salesperson_list.size() > 0) {
                 PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -1443,10 +1453,14 @@ public class APLWebServiceModel {
                             rowsAffected = psmt.executeUpdate();
                             if (rowsAffected > 0) {
                                 status = true;
-                                String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name,
-                                        assigned_to_salesperson, "sales", "salesperson");
-                                String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no, product_name,
+//                                        assigned_to_salesperson, "sales", "salesperson");
+//                                String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                        product_name, enquiry_table_id, assigned_to_salesperson, "sales", "salesperson");
+
+                                String result = sendNotification(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
                                         product_name, enquiry_table_id, assigned_to_salesperson, "sales", "salesperson");
+
                             } else {
                                 status = false;
                             }
@@ -1463,9 +1477,11 @@ public class APLWebServiceModel {
         if (rowsAffected > 0) {
             message = "Your Enquiry successfully assigend !.";
             messageBGColor = COLOR_OK;
+            connection.commit();
         } else {
             message = "Cannot update the record, some error.";
             messageBGColor = COLOR_ERROR;
+            connection.rollback();
         }
         return message;
     }
@@ -1488,7 +1504,7 @@ public class APLWebServiceModel {
             }
 
         } catch (Exception e) {
-            System.out.println("EnquiryModel getKeyPersonId Error: " + e);
+            System.out.println("EnquiryModel getSalesPersonId Error: " + e);
         }
         return list;
     }
@@ -1541,12 +1557,12 @@ public class APLWebServiceModel {
             rset3.next();
             id = rset3.getInt("key_person_id");
         } catch (Exception e) {
-            System.out.println("EnquiryModel getKeyPersonId Error: " + e);
+            System.out.println("EnquiryModel getDealerId Error: " + e);
         }
         return id;
     }
 
-    public static String assignToDealer(String enquiry_table_id, String district, String product_name) {
+    public static String assignToDealer(String enquiry_table_id, String district, String product_name) throws SQLException {
         int revision = APLWebServiceModel.getRevisionno(enquiry_table_id);
         int updateRowsAffected = 0;
         boolean status = false;
@@ -1555,14 +1571,15 @@ public class APLWebServiceModel {
                 + " enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob,description,assigned_to,product_name "
                 + " FROM enquiry_table WHERE enquiry_table_id = " + enquiry_table_id + "  && active=? ";
-        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=?";
+        String query2 = " UPDATE enquiry_table SET active=? WHERE enquiry_table_id=? and revision_no=? ";
         String query3 = " INSERT INTO enquiry_table(enquiry_table_id,enquiry_source_table_id,marketing_vertical_id,enquiry_status_id,enquiry_no,sender_name,sender_email, "
-                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration,"
+                + " sender_mob,sender_company_name,enquiry_address,enquiry_city,enquiry_state,country,enquiry_message,enquiry_date_time,enquiry_call_duration, "
                 + " enquiry_reciever_mob,sender_alternate_email,sender_alternate_mob, "
-                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + " revision_no,active,description,assigned_to,product_name,assigned_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
 
         try {
+            connection.setAutoCommit(false);
             int assigned_to_dealer = getDealerId(district);
             if (assigned_to_dealer > 0) {
                 PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -1628,9 +1645,11 @@ public class APLWebServiceModel {
                         rowsAffected = psmt.executeUpdate();
                         if (rowsAffected > 0) {
                             status = true;
-                            String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no,
-                                    product_name, assigned_to_dealer, "sales", "dealer");
-                            String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                            String message = sendTelegramMessage(sender_name, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                    product_name, assigned_to_dealer, "sales", "dealer");
+//                            String message2 = sendMail(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
+//                                    product_name, enquiry_table_id, assigned_to_dealer, "sales", "dealer");
+                            String result = sendNotification(sender_name, sender_email, sender_mob, enquiry_city, enquiry_state, enquiry_no,
                                     product_name, enquiry_table_id, assigned_to_dealer, "sales", "dealer");
 
                         } else {
@@ -1640,14 +1659,16 @@ public class APLWebServiceModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel assignToSalesPerson-" + e);
+            System.out.println("Error:EnquiryModel assignToDealer-" + e);
         }
         if (rowsAffected > 0) {
             message = " Your Enquiry successfully assigend !.";
             messageBGColor = COLOR_OK;
+            connection.commit();
         } else {
             message = "Cannot update the record, some error.";
             messageBGColor = COLOR_ERROR;
+            connection.rollback();
         }
         return message + "&" + status;
 
@@ -1702,7 +1723,7 @@ public class APLWebServiceModel {
             conn.disconnect();
 
         } catch (Exception e) {
-            System.err.println("Exception-----" + e);
+            System.err.println("sendTelegramMessage Exception-----" + e);
         }
 
         return result;
@@ -1795,7 +1816,7 @@ public class APLWebServiceModel {
 //Logo.
             messageBodyPart1.setContent("Dear Partner, <br />Hope you are having a good day!<br />"
                     + "We have one new inquiry for you, kindly check your CRM.<br />"
-                    + "<a href='http://localhost:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
+                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
                     //                    + "<a href='http://120.138.10.146:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "'>Click On this For Enquiry.</a><br/><br/>"
                     + "Customer Name: <b>" + sender_name + "</b> <br/>"
                     + "Inquired Product: <b>" + product_name + "</b> <br/>"
@@ -1822,6 +1843,113 @@ public class APLWebServiceModel {
 
     }
 
+    public static String sendNotification(String sender_name, String email, String sender_mob, String enquiry_city, String enquiry_state,
+            String enquiry_no, String product_name, String enquiry_table_id, int assigned_to_salesperson, String enquiry_type,
+            String user_type) {
+//        assigned_to_salesperson = 89;
+//        if (user_type.equals("dealer")) {
+//            assigned_to_salesperson = 60;
+//        }
+
+        try {
+            List<String> key_person_data = getKeyPersonData(assigned_to_salesperson);
+            for (int i = 0; i < key_person_data.size(); i++) {
+                String kp_arr[] = key_person_data.get(i).split("&");
+                String user_token = kp_arr[0];
+                int user_id = Integer.parseInt(kp_arr[1]);
+                String user_name = kp_arr[2];
+                final String apiKey = "AAAAn_Hig7I:APA91bFXdudad_67iQZKDgKlVjj4coOqS2neIW3QjXo90nd0K9A1DyP8ER6Ibm9slyVqg1BBeoLQPR0dGmeR1SoH69yf7A8uh0guWoPuS5lHJ95Va7eq2iIOD8oWPmrTP1ad7eAdp4ps";
+                URL url = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Authorization", "key = " + apiKey);
+                conn.setDoOutput(true);
+                String title = "Enquiry";
+                String data_url = "";
+                if (user_type.equals("dealer")) {
+                    if (enquiry_type.equals("sales")) {
+                        title = "Sales Enquiry";
+                        data_url = "http://120.138.10.146:8080/APL/DealersOrderController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "";
+                    }
+                    if (enquiry_type.equals("complaint")) {
+                        title = "Complaint Enquiry";
+                        data_url = "http://120.138.10.146:8080/APL/DealersOrderController?task=viewComplaintDetails&enquiry_table_id=" + enquiry_table_id + "";
+                    }
+
+                } else {
+                    if (enquiry_type.equals("sales")) {
+                        title = "Sales Enquiry";
+                        data_url = "http://120.138.10.146:8080/APL/ApproveOrdersController?task=viewEnquiryDetails&enquiry_table_id=" + enquiry_table_id + "";
+                    }
+                    if (enquiry_type.equals("complaint")) {
+                        title = "Complaint Enquiry";
+                        data_url = "http://120.138.10.146:8080/APL/ApproveOrdersController?task=viewComplaintDetails&enquiry_table_id=" + enquiry_table_id + "";
+                    }
+                }
+
+                String body = "We have one new inquiry for you, kindly check your CRM.\n"
+                        + "Customer Name:  " + sender_name + " \n"
+                        + "Inquired Product:  " + product_name + " \n"
+                        + "Contact Details:  " + sender_mob + "\n"
+                        + "Enquiry Id:  " + enquiry_no + "\n"
+                        + "Location:  " + enquiry_city + "," + enquiry_state + "\n";
+
+                String input = "{\"data\" : {\"title\" : \"" + title + "\",\"body\" : \"" + body + "\",\"url\" : \"" + data_url + "\"}, \"to\":\"" + user_token + "\"}";
+
+                OutputStream os = conn.getOutputStream();
+                os.write(input.getBytes());
+                os.flush();
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+                System.out.println("\nSending 'POST' request to URL : " + url);
+                System.out.println("Post parameters : " + input);
+                System.out.println("Response Code : " + responseCode);
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+            }
+        } catch (Exception e) {
+            System.err.println("Exception----" + e);
+        }
+        return "strrrrrr";
+    }
+
+    public static List<String> getKeyPersonData(int key_person_id) {
+        String str = "";
+        List<String> list = new ArrayList<>();
+        PreparedStatement pstmt;
+        ResultSet rst;
+        String query = " select ut.user_token,u.user_id,u.user_name from user u,key_person kp,user_token ut "
+                + " where u.key_person_id=kp.key_person_id and kp.active='Y' and u.active='Y' "
+                + " and ut.active='Y' and ut.user_id=u.user_id  and kp.key_person_id='" + key_person_id + "' ";
+
+        try {
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(query);
+            rst = pstmt.executeQuery();
+            while (rst.next()) {
+                String user_token = rst.getString(1);
+                int user_id = rst.getInt(2);
+                String user_name = rst.getString(3);
+                str = user_token + "&" + user_id + "&" + user_name;
+
+                list.add(str);
+            }
+        } catch (Exception e) {
+            System.out.println("getKeyPersonData ERROR inside LoginModel - " + e);
+        }
+        return list;
+    }
+
     public static String getEmail(int assigned_to) {
         String email = "";
         try {
@@ -1846,7 +1974,7 @@ public class APLWebServiceModel {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:EnquiryModel getRevisionno-" + e);
+            System.out.println("Error:EnquiryModel getEmail-" + e);
 
         }
         return email;
@@ -1855,7 +1983,7 @@ public class APLWebServiceModel {
     public static int getRevisionno(String enquiry_table_id) {
         int revision = 0;
         try {
-            String query = " SELECT max(revision_no) as revision_no FROM enquiry_table WHERE enquiry_table_id =" + enquiry_table_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM enquiry_table WHERE enquiry_table_id =" + enquiry_table_id + "  && active='Y' ";
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
             ResultSet rset = pstmt.executeQuery();
@@ -1906,8 +2034,6 @@ public class APLWebServiceModel {
         }
         return id;
     }
-
-    
 
     public Connection getConnection() {
         return connection;

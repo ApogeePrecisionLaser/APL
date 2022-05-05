@@ -6,7 +6,6 @@
 package com.inventory.model;
 
 import com.inventory.tableClasses.ManufacturerItemMap;
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,15 +88,15 @@ public class ManufacturerItemMapModel {
         int item_id = getItemId(bean.getItem_name());
         int model_id = getModelId(bean.getModel_name());
 
-        String query = "insert into manufacturer_item_map(manufacturer_id,item_names_id,"
+        String query = " insert into manufacturer_item_map(manufacturer_id,item_names_id, "
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,now()) ";
         int map_count = 0;
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
-            String query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
-                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
-                    + " and active='Y'  ";
+            String query4 = " SELECT count(*) as count FROM manufacturer_item_map WHERE "
+                    + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' "
+                    + " and active='Y' ";
 
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
             ResultSet rs1 = pstmt1.executeQuery();
@@ -145,17 +144,17 @@ public class ManufacturerItemMapModel {
         int item_id = getItemId(bean.getItem_name());
 //        int model_id = getModelId(bean.getModel_name());
 
-        String query1 = "SELECT max(revision) FROM manufacturer_item_map WHERE "
+        String query1 = " SELECT max(revision) FROM manufacturer_item_map WHERE "
                 + " manufacturer_item_map_id = " + manufacturer_item_map_id + " and active='Y' ";
 
-        String query2 = "UPDATE manufacturer_item_map SET active=? WHERE manufacturer_item_map_id=? and revision=? ";
+        String query2 = " UPDATE manufacturer_item_map SET active=? WHERE manufacturer_item_map_id=? and revision=? ";
 
-        String query3 = "insert into manufacturer_item_map(manufacturer_item_map_id,manufacturer_id,item_names_id, "
+        String query3 = " insert into manufacturer_item_map(manufacturer_item_map_id,manufacturer_id,item_names_id, "
                 + " active,revision,remark,created_by,serial_no,created_at) "
                 + " values (?,?,?,?,?,?,?,?,now()) ";
-        String query4 = "SELECT count(*) as count FROM manufacturer_item_map WHERE "
-                + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "'"
-                + " and active='Y'  ";
+        String query4 = " SELECT count(*) as count FROM manufacturer_item_map WHERE "
+                + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' "
+                + " and active='Y' ";
 
         int map_count = 0;
         try {
@@ -223,7 +222,7 @@ public class ManufacturerItemMapModel {
     public static int getRevisionno(ManufacturerItemMap orgOffice, int manufacturer_item_map_id) {
         int revision = 0;
         try {
-            String query = " SELECT max(revision) as revision_no FROM manufacturer_item_map"
+            String query = " SELECT max(revision) as revision_no FROM manufacturer_item_map "
                     + " WHERE manufacturer_item_map_id =" + manufacturer_item_map_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -243,8 +242,8 @@ public class ManufacturerItemMapModel {
         PreparedStatement psmt;
         ResultSet rst;
 
-        String query = "DELETE FROM manufacturer_item_map WHERE manufacturer_item_map_id = '" + manufacturer_item_map_id + "' "
-                + "and active='Y' ";
+        String query = " DELETE FROM manufacturer_item_map WHERE manufacturer_item_map_id = '" + manufacturer_item_map_id + "' "
+                + " and active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
             rowsAffected = psmt.executeUpdate();
@@ -263,7 +262,7 @@ public class ManufacturerItemMapModel {
 
     public List<String> getManufacturer(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT manufacturer_name FROM manufacturer where active='Y' ORDER BY manufacturer_name ";
+        String query = " SELECT manufacturer_name FROM manufacturer where active='Y' ORDER BY manufacturer_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -286,7 +285,7 @@ public class ManufacturerItemMapModel {
 
     public List<String> getItem(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT item_name FROM item_names where active='Y' ORDER BY item_name ";
+        String query = " SELECT item_name FROM item_names where active='Y' ORDER BY item_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -309,7 +308,7 @@ public class ManufacturerItemMapModel {
 
     public List<String> getModel(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT model FROM model where active='Y' ORDER BY model ";
+        String query = " SELECT model FROM model where active='Y' ORDER BY model ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -331,7 +330,7 @@ public class ManufacturerItemMapModel {
     }
 
     public int getManufacturerId(String manufacturer_name) {
-        String query = "SELECT manufacturer_id FROM manufacturer WHERE manufacturer_name = ? and active=?";
+        String query = " SELECT manufacturer_id FROM manufacturer WHERE manufacturer_name = ? and active=? ";
         int manufacturer_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -347,7 +346,7 @@ public class ManufacturerItemMapModel {
     }
 
     public int getItemId(String item_name) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = ? and active=?";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = ? and active=? ";
         int item_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -363,7 +362,7 @@ public class ManufacturerItemMapModel {
     }
 
     public int getModelId(String model_name) {
-        String query = "SELECT model_id FROM model WHERE model = ? and active=?";
+        String query = " SELECT model_id FROM model WHERE model = ? and active=? ";
         int model_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);

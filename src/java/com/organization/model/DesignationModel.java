@@ -6,7 +6,6 @@ package com.organization.model;
 
 import com.organization.tableClasses.Designation;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -47,12 +46,12 @@ public class DesignationModel {
         List<Designation> list = new ArrayList<Designation>();
         searchDesignation = searchDesignation;
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        String query = "SELECT * FROM designation "
-                + "WHERE if('" + searchDesignation + "' = '', designation like '%%', designation = '" + searchDesignation + "')"
+        String query = " SELECT * FROM designation "
+                + " WHERE if('" + searchDesignation + "' = '', designation like '%%', designation = '" + searchDesignation + "') "
                 + " and if('" + active + "' = '', active like '%%', active = '" + active + "') "
                 //+ "AND if('" + searchDesignationCode + "' = '', designation_code like '%%', designation_code = '" + searchDesignationCode + "')"
-                + " AND IF('" + searchDesignationCode + "'='' ,designation_code LIKE '%%',designation_code LIKE '" + searchDesignationCode + ".%' OR designation_code like ?)"
-                + "ORDER BY designation_code ";
+                + " AND IF('" + searchDesignationCode + "'='' ,designation_code LIKE '%%',designation_code LIKE '" + searchDesignationCode + ".%' OR designation_code like ?) "
+                + " ORDER BY designation_code ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -77,7 +76,7 @@ public class DesignationModel {
         List<Designation> list = new ArrayList<Designation>();
         searchDesignation = searchDesignation;
         // Use DESC or ASC for descending or ascending order respectively of fetched data.
-        String query = "SELECT * FROM designation where active='Y' ";
+        String query = " SELECT * FROM designation where active='Y' ";
 
         if (!searchDesignation.equals("") && searchDesignation != null) {
             query += " and designation='" + searchDesignation + "' ";
@@ -107,7 +106,7 @@ public class DesignationModel {
     }
 
     public int insertRecord(Designation designation) {
-        String query = "INSERT INTO designation(designation, description, designation_code,revision_no,active,remark) VALUES( ?, ?, ?,?,?,?)";
+        String query = " INSERT INTO designation(designation, description, designation_code,revision_no,active,remark) VALUES( ?, ?, ?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -135,9 +134,9 @@ public class DesignationModel {
         int revision = DesignationModel.getRevisionno(designation, designation_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM designation WHERE designation_id = " + designation_id + "  && active=? ";
-        String query2 = "UPDATE designation SET active=? WHERE designation_id=? and revision_no=?";
-        String query3 = "INSERT INTO designation(designation_id,designation, description, designation_code,revision_no,active,remark) VALUES( ?,?, ?, ?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM designation WHERE designation_id = " + designation_id + "  && active=? ";
+        String query2 = " UPDATE designation SET active=? WHERE designation_id=? and revision_no=? ";
+        String query3 = " INSERT INTO designation(designation_id,designation, description, designation_code,revision_no,active,remark) VALUES( ?,?, ?, ?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -186,7 +185,7 @@ public class DesignationModel {
     }
 
     public int deleteRecord(int designation_id) throws SQLException {
-        String query = "DELETE FROM designation WHERE designation_id = '" + designation_id + "' && active='Y'";
+        String query = " DELETE FROM designation WHERE designation_id = '" + designation_id + "' && active='Y' ";
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -213,7 +212,7 @@ public class DesignationModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM designation WHERE designation_id =" + designation_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM designation WHERE designation_id =" + designation_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -235,7 +234,7 @@ public class DesignationModel {
 
         int count = 0;
         String query = " SELECT designation FROM designation where designation.active='Y' "
-                + " and if('" + code + "' = '', designation_code like '%%', designation_code = '" + code + "') ORDER BY designation";
+                + " and if('" + code + "' = '', designation_code like '%%', designation_code = '" + code + "') ORDER BY designation ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();

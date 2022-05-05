@@ -82,9 +82,10 @@
                                 <p class="_p-name"> <b>${beanType.model}</b> </p>
                                 <div class="_p-price-box">
                                     <div class="p-list">
-                                        <span> M.R.P. : <i class="fa fa-inr"></i> <del> Rs. ${beanType.basic_price}  </del>   </span>
-                                        <span class="price"> Rs. <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
-                                                          value =  "${beanType.basic_price}" />  </span>
+                                        <span> M.R.P. : <i class="fa fa-inr"></i> 
+                                        <!--<del>Rs. ${beanType.basic_price}  </del>--> 
+                                        </span>
+                                        <span class="price"><small> <i class="fas fa-rupee-sign curruncyIcon"></i></small></span> <span class="price" id="price${loopCounter.count}">${beanType.basic_price}  </span>
                                     </div>
                                     <div class="_p-add-cart">
                                         <!--                                        <div class="_p-qty">
@@ -163,8 +164,7 @@
                                         <h4 class="mb-1"> <a href="DealersOrderController?task=viewDetail&model_id=${beanType3.model_id}"> ${beanType3.model} </a> </h4>
                                         <div class="price-box mb-2">
                                             <!--<span class="price"> Price <i class="fa fa-inr"></i> Rs. ${beanType3.basic_price} </span>-->
-                                            <span class="offer-price"> Offer Price <i class="fa fa-inr"></i> Rs.  <fmt:formatNumber type = "number"  maxFractionDigits = "3" 
-                                                              value =  "${beanType3.basic_price}" />  </span>
+                                            <span class="offer-price"><i class="fas fa-rupee-sign curruncyIcon"></i> </span><span class="offer-price" id="basic_price${loopCounter3.count}">  ${beanType3.basic_price} </span>
                                         </div>
                                         <div class="btn-box text-center">
                                             <a href="javascript:void(0);">
@@ -181,7 +181,6 @@
                 </div>
             </div>
         </div>
-
     </section>
 </div>
 
@@ -325,6 +324,10 @@
                 image = image.replace(/\\/g, "/");
             }
             $('.my_img' + (j + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image + "");
+
+            var price = $('#price' + (j + 1)).text();
+            var price1 = convertToCommaSeperate(price);
+            $('#price' + (j + 1)).text(price1);
         }
     });
 
@@ -363,6 +366,10 @@
                 image3 = image3.replace(/\\/g, "/");
             }
             $('.my_img3' + (l + 1)).attr("src", "http://" + IMAGE_URL + "/APL/DealersOrderController?getImage=" + image3 + "");
+
+            var basic_price = $('#basic_price' + (l + 1)).text();
+            var basic_price1 = convertToCommaSeperate(basic_price);
+            $('#basic_price' + (l + 1)).text(basic_price1);
         }
     });
 
@@ -403,4 +410,20 @@
         });
     }
 
+
+    function convertToCommaSeperate(x) {
+        x = x.toString();
+        var afterPoint = '';
+        if (x.indexOf('.') > 0)
+            afterPoint = x.substring(x.indexOf('.'), x.length);
+        x = Math.floor(x);
+        x = x.toString();
+        var lastThree = x.substring(x.length - 3);
+        var otherNumbers = x.substring(0, x.length - 3);
+        if (otherNumbers != '')
+            lastThree = ',' + lastThree;
+        var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+
+        return res;
+    }
 </script>

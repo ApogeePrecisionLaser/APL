@@ -7,7 +7,7 @@ package com.dashboard.bean;
 
 /**
  *
- * @author Apogee
+ * @author Komal
  */
 public class Help {
     

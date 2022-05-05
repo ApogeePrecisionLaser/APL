@@ -9,17 +9,11 @@
  */
 package com.organization.controller;
 
-import com.organization.model.OrgOfficeModel;
 import com.DBConnection.DBConnection;
 import com.organization.model.OrgOfficeDesignationMapModel;
-import com.organization.model.OrganisationDesignationModel;
-import com.organization.model.OrganisationDesignationNewModel;
-import com.organization.tableClasses.Org_Office;
 import com.organization.tableClasses.OrganisationDesignationBean;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -30,6 +24,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+
+
+/**
+ *
+ * @author komal
+ */
 public class OrgOfficeDesignationMapController extends HttpServlet {
 
     @Override

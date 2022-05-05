@@ -23,6 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+/**
+ *
+ * @author Akash
+ */
 public class SalesManagerStateMappingController extends HttpServlet {
 
     @Override

@@ -5,7 +5,6 @@
  */
 package com.webservice.controller;
 
-import com.organization.tableClasses.KeyPerson;
 import com.webservice.model.APLWebServiceModel;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -30,6 +29,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.net.ssl.HttpsURLConnection;
@@ -306,7 +306,7 @@ public class APLWebServiceController {
     @Path("/getEnquiriesFromIndiaMart")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String getEnquiriesFromIndiaMart(String message) throws JSONException {
+    public String getEnquiriesFromIndiaMart(String message) throws JSONException, SQLException {
         APLWebServiceModel model = new APLWebServiceModel();
         String msg = "";
         try {
@@ -350,7 +350,7 @@ public class APLWebServiceController {
             }
 
             JSONArray jsonArr = new JSONArray(result);
-
+            
             for (int i = 0; i < jsonArr.length(); i++) {
                 JSONObject jsonObj = jsonArr.getJSONObject(i);
 

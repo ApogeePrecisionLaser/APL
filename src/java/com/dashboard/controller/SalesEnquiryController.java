@@ -3,8 +3,6 @@ package com.dashboard.controller;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.Enquiry;
 import com.dashboard.model.EnquiryModel;
-import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -19,6 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class SalesEnquiryController extends HttpServlet {
 
     @Override
@@ -114,6 +117,7 @@ public class SalesEnquiryController extends HttpServlet {
             if (status == null) {
                 status = "";
             }
+
             ArrayList<Enquiry> list = model.getAllEnquiries(enquiry_source, status);
             request.setAttribute("list", list);
             request.setAttribute("enquiry_source", enquiry_source);
@@ -211,28 +215,47 @@ public class SalesEnquiryController extends HttpServlet {
             if (enquiry_type == null) {
                 enquiry_type = "";
             }
-            Enquiry bean = new Enquiry();
-            bean.setEnquiry_type(enquiry_type);
-            bean.setEnquiry_table_id(enquiry_table_id);
-            bean.setProduct_name(request.getParameter("product_name"));
-            bean.setEnquiry_source(request.getParameter("enquiry_source"));
-            bean.setMarketing_vertical_name(request.getParameter("marketing_vertical"));
-            bean.setEnquiry_no(request.getParameter("enquiry_no"));
-            bean.setSender_name(request.getParameter("sender_name"));
-            bean.setSender_email(request.getParameter("sender_email"));
-            bean.setSender_alternate_email(request.getParameter("sender_alternate_email"));
-            bean.setSender_mob(request.getParameter("sender_mob"));
-            bean.setSender_alternate_mob(request.getParameter("sender_alternate_mob"));
-            bean.setSender_company_name(request.getParameter("sender_company_name"));
-            bean.setEnquiry_address(request.getParameter("sender_address"));
-            bean.setEnquiry_city(request.getParameter("sender_city"));
-            bean.setEnquiry_state(request.getParameter("sender_state"));
-            bean.setCountry(request.getParameter("sender_country"));
-            bean.setEnquiry_message(request.getParameter("enquiry_message").trim());
-            bean.setDescription(request.getParameter("district").trim());
-
-            if (enquiry_table_id == 0) {
-                model.insertEnquiries(bean, enquiry_type, loggedUser, logged_key_person_id);
+            int count = 0;
+            String district = request.getParameter("district").trim();
+            if (district.equals("Others")) {
+                count = 1;
+            } else {
+                count = model.checkDistrict(district);
+            }
+            if (count > 0) {
+                Enquiry bean = new Enquiry();
+                bean.setEnquiry_type(enquiry_type);
+                bean.setEnquiry_table_id(enquiry_table_id);
+                bean.setProduct_name(request.getParameter("product_name"));
+                bean.setEnquiry_source(request.getParameter("enquiry_source"));
+                bean.setMarketing_vertical_name(request.getParameter("marketing_vertical"));
+                bean.setEnquiry_no(request.getParameter("enquiry_no"));
+                bean.setSender_name(request.getParameter("sender_name"));
+                bean.setSender_email(request.getParameter("sender_email"));
+                bean.setSender_alternate_email(request.getParameter("sender_alternate_email"));
+                bean.setSender_mob(request.getParameter("sender_mob"));
+                bean.setSender_alternate_mob(request.getParameter("sender_alternate_mob"));
+                bean.setSender_company_name(request.getParameter("sender_company_name"));
+                bean.setEnquiry_address(request.getParameter("sender_address"));
+                bean.setEnquiry_city(request.getParameter("sender_city"));
+                bean.setEnquiry_state(request.getParameter("sender_state"));
+                bean.setCountry(request.getParameter("sender_country"));
+                bean.setEnquiry_message(request.getParameter("enquiry_message").trim());
+                bean.setDescription(request.getParameter("district").trim());
+                int rowsAffected = 0;
+                if (enquiry_table_id == 0) {
+                    rowsAffected = model.insertEnquiries(bean, enquiry_type, loggedUser, logged_key_person_id);
+                    if (rowsAffected > 0) {
+                        request.setAttribute("message", "Query Submitted..");
+                        request.setAttribute("msgBgColor", "green");
+                        request.getRequestDispatcher("CRMDashboardController").forward(request, response);
+                    }
+                }
+            } else {
+                request.setAttribute("message", "Please Select district from list.");
+                request.setAttribute("msgBgColor", "red");
+                request.setAttribute("user_role", loggedUser);
+                request.getRequestDispatcher("sales_enquiry_form").forward(request, response);
             }
         }
 

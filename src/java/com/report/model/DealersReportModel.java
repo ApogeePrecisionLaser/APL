@@ -10,38 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import com.google.api.client.auth.oauth2.BearerToken;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.BasicAuthentication;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.AppendValuesResponse;
-import com.google.api.services.sheets.v4.model.ClearValuesRequest;
-import com.google.api.services.sheets.v4.model.ClearValuesResponse;
-import com.google.api.services.sheets.v4.model.ValueRange;
 import com.report.bean.DealersReport;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.function.Supplier;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import org.json.simple.JSONObject;
 
 /**
@@ -117,11 +87,11 @@ public class DealersReportModel {
                 + " oo.mobile_no1,oo.org_office_code, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2 "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
-                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id "
                 + " and oo.office_type_id=3 ";
 
         if (!org_name.equals("") && org_name != null) {
@@ -196,11 +166,11 @@ public class DealersReportModel {
                 + " oo.mobile_no1,oo.org_office_code, "
                 + " d.designation,d.designation_code ,oot.office_type,oo.address_line2,kp.mobile_no2 "
                 + " from key_person kp, organisation_name onn, org_office oo, designation d, "
-                + " org_office_designation_map oodm, org_office_type oot"
+                + " org_office_designation_map oodm, org_office_type oot "
                 + " where kp.active='y' and oo.active='y' and onn.active='y' and d.active='y' and oodm.active='Y' and oot.active='Y' "
                 + " and oo.organisation_id=onn.organisation_id and kp.org_office_id=oo.org_office_id "
                 + " and oodm.designation_id=d.designation_id and oodm.org_office_id=oo.org_office_id "
-                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id"
+                + " and kp.org_office_designation_map_id=oodm.org_office_designation_map_id and oo.office_type_id=oot.office_type_id "
                 + " and oo.office_type_id=3 ";
 
         if (!org_name.equals("") && org_name != null) {
@@ -552,7 +522,7 @@ public class DealersReportModel {
 
         int count = 0;
         String query = " SELECT distinct oo.org_office_name FROM org_office oo,organisation_name oname where oo.active='Y' and oname.active='Y' "
-                + "and oo.organisation_id=oname.organisation_id ";
+                + " and oo.organisation_id=oname.organisation_id ";
         if (!org_name.equals("") && org_name != null) {
             query += " and oname.organisation_name='" + org_name + "' ";
         }
@@ -583,7 +553,7 @@ public class DealersReportModel {
         int count = 0;
         String query = " SELECT distinct oot.office_type FROM org_office_type oot,org_office oo,organisation_name oname "
                 + " where oo.active='Y' and oname.active='Y' and oot.active='Y' and oo.office_type_id=oot.office_type_id "
-                + "and oo.organisation_id=oname.organisation_id ";
+                + " and oo.organisation_id=oname.organisation_id ";
         if (!org_name.equals("") && org_name != null) {
             query += " and oname.organisation_name='" + org_name + "' ";
         }
@@ -651,7 +621,7 @@ public class DealersReportModel {
         int count = 0;
         String query = " SELECT distinct kp.key_person_name FROM key_person kp,org_office oo,designation d "
                 + " where kp.active='Y' and oo.active='Y' and d.active='Y' "
-                + "and kp.org_office_id=oo.org_office_id and kp.designation_id=d.designation_id ";
+                + " and kp.org_office_id=oo.org_office_id and kp.designation_id=d.designation_id ";
         if (!org_office_name.equals("") && org_office_name != null) {
             query += " and oo.org_office_name='" + org_office_name + "' ";
         }
@@ -681,7 +651,7 @@ public class DealersReportModel {
 
     public int getOrgOfficeId(String org_office) {
         int org_office_id = 0;
-        String query = "SELECT org_office_id FROM org_office WHERE  org_office_name = '" + org_office + "'  and active='Y' ";
+        String query = " SELECT org_office_id FROM org_office WHERE  org_office_name = '" + org_office + "'  and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -712,4 +682,3 @@ public class DealersReportModel {
         }
     }
 }
-

@@ -88,7 +88,7 @@ public class CityModel {
     public List<String> getCityName(String q, String distName) {
         List<String> list = new ArrayList<String>();
 
-        String query = "select city_name FROM city where city.district_id=(select district.district_id from district where district_name='" + distName + "') GROUP BY city_name ORDER BY city_name";
+        String query = " select city_name FROM city where city.district_id=(select district.district_id from district where district_name='" + distName + "') GROUP BY city_name ORDER BY city_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -136,7 +136,7 @@ public class CityModel {
     public void deleteRecord(int cityId) {
         PreparedStatement presta = null;
         try {
-            presta = connection.prepareStatement("delete from city where city_id=?");
+            presta = connection.prepareStatement(" delete from city where city_id=? ");
             presta.setInt(1, cityId);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -154,7 +154,7 @@ public class CityModel {
     public String getTehsilNameFromId(int id) {
         String name = null;
 
-        String query = "SELECT tehsil_name FROM tehsil where tehsil_id=? and active='Y'";
+        String query = " SELECT tehsil_name FROM tehsil where tehsil_id=? and active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, id);
@@ -173,7 +173,7 @@ public class CityModel {
     public ArrayList<CityBean> getAllRecords(String searchCity) {
         searchCity = (searchCity);
         ArrayList<CityBean> list = new ArrayList<CityBean>();
-        String query = "SELECT city_id,city_name,pin_code,std_code,city_description,tehsil_id FROM city "
+        String query = " SELECT city_id,city_name,pin_code,std_code,city_description,tehsil_id FROM city "
                 + " WHERE  active='Y' ";
 
         if (!searchCity.equals("") && searchCity != null) {
@@ -204,7 +204,7 @@ public class CityModel {
     public int getTehsilIdFromName(String name) {
         int id = 0;
 
-        String query = "SELECT tehsil_id FROM tehsil where tehsil_name=? and active='Y'";
+        String query = " SELECT tehsil_id FROM tehsil where tehsil_name=? and active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, name);
@@ -222,7 +222,7 @@ public class CityModel {
 
     public static int getCityId(String district_name) {
         int division_id = 0;
-        String query = "select city_id from city where city_name= '" + district_name + "' ";
+        String query = " select city_id from city where city_name= '" + district_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -240,7 +240,7 @@ public class CityModel {
     public void insertRecord(CityBean bean) {
         int rowAffected = 0;
         try {
-            String query = "insert into city(city_name,city_description,pin_code,std_code,tehsil_id,revision_no,active,created_by,remark) values(?,?,?,?,?,0,'Y','tk','default')";
+            String query = " insert into city(city_name,city_description,pin_code,std_code,tehsil_id,revision_no,active,created_by,remark) values(?,?,?,?,?,0,'Y','tk','default') ";
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, bean.getCityName());
             ps.setString(2, bean.getCityDescription());
@@ -264,10 +264,10 @@ public class CityModel {
         int revision = CityModel.getRevisionno(Bean, city_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM city WHERE city_id = " + city_id + "  && active=? ";
-        String query2 = "UPDATE city SET active=? WHERE city_id=? and revision_no=?";
-        String query3 = "INSERT INTO city(city_id,city_name,city_description,pin_code,std_code,tehsil_id,revision_no,active,created_by,remark)"
-                + "VALUES(?,?,?,?,?,?,?,'Y','tk','default')";
+        String query1 = " SELECT max(revision_no) revision_no FROM city WHERE city_id = " + city_id + "  && active=? ";
+        String query2 = " UPDATE city SET active=? WHERE city_id=? and revision_no=? ";
+        String query3 = " INSERT INTO city(city_id,city_name,city_description,pin_code,std_code,tehsil_id,revision_no,active,created_by,remark) "
+                + " VALUES(?,?,?,?,?,?,?,'Y','tk','default') ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -322,7 +322,7 @@ public class CityModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM city WHERE tehsil_id =" + city_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM city WHERE tehsil_id =" + city_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 

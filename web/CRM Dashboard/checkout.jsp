@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
 
@@ -31,7 +32,6 @@
                 </div>
             </div>
         </div>
-
 
         <div id="services" class="services section-bg marginTop20 cartSection mb-3 mb-md-2">
             <div class="container-fluid">
@@ -71,7 +71,8 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="inputName" class="fontFourteen">Payment Mode:<sup class="text-danger">*</sup></label>
-                                                    <input type="text" class="form-control" name="payment_mode" id="payment_mode" placeholder="Select Payment mode">
+                                                    <input type="text" class="form-control" name="payment_mode" id="payment_mode" required=""
+                                                           onblur="validate()" placeholder="Select Payment mode">
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -104,8 +105,10 @@
                                 </div>
                             </div>
                             <div class="col-md-4 mb-4 mb-md-0">
-                                <div class="_product-detail-content  border" style="background-color: #102f42;box-shadow: 2px 2px 7px #999;">
-                                    <p class="_p-name text-white"> Your Order Detail </p>
+                                <div class="_product-detail-content  border rightSide" >
+                                    <div class="_p-name-wrap">
+                                        <p class="_p-name text-white"> PRICE DETAILS </p>
+                                    </div>
                                     <!--                                    <div class="couponWrap mb-3">
                                                                             <div class="d-flex justify-content-start">
                                                                                 <div class="form-group mb-0 w-100">
@@ -117,26 +120,33 @@
                                                                              <p class="text-danger mb-0" style="color: #621c23;">Coupon Invalid</p> 
                                                                         </div>-->
                                     <div>
-                                        <table class="table table-bordered mb-0 text-white">
-                                            <tbody>
-                                                <tr>
-                                                    <td >Subtotal</td>
-                                                    <td id="subtotal">${total_approved_price}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="fontFourteen">Delivery Charge</td>
-                                                    <td class="fontFourteen" id="delivery_charge">0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="fontFourteen">Coupon Discount</td>
-                                                    <td class="fontFourteen" id="coupon_discount">${total_discount_percent}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="totalValue">Total Amount</td>
-                                                    <td class="totalValue" id="total_amount">Rs. ${total_discount_price}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div>
+                                            <table class="table table-bordered mb-0 text-white">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="fontFourteen">Price (${total_approved_qty} Items ) (<i class="fas fa-rupee-sign fontTen"></i>)</td>
+                                                        <td id="subtotal_col">${total_approved_price}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="fontFourteen">Discount %</td>
+                                                        <td class="fontFourteen" id="coupon_discount">${total_discount_percent} %
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="fontFourteen">Discount Price (<i class="fas fa-rupee-sign fontTen"></i>)</td>
+                                                        <td class="fontFourteen" id="discount_price_col">${total_approved_price - total_discount_price  }</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="totalValue">Total Amount (<i class="fas fa-rupee-sign fontTen"></i>)</td>
+                                                        <td class="totalValue" id="total_amount_col"><i class="fas fa-rupee-sign fontTen"></i>
+                                                            ${total_discount_price}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="px-3 py-3">
+                                            <p class="mb-0" style="color: #08ff40;">You have saved <i class="fas fa-rupee-sign fontTen"></i>${total_approved_price - total_discount_price  } on this order</p>
+                                        </div>
                                     </div>               
                                 </div>
                                 <!--                        <div class="text-right mt-3">
@@ -147,13 +157,12 @@
                         </div>
                         <div class="text-right mt-3">
                             <!--<a class="btn myThemeBtn" onclick="completeOrder()">Complete Order</a>-->
-                            <input type="submit" class="btn myThemeBtn" name="task" id="deliverOrder" value="Complete Checkout">
+                            <input type="submit" class="btn myThemeBtn" name="task" id="deliverOrder" value="Complete Checkout" >
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-
     </section>
 </div>
 
@@ -167,15 +176,44 @@
 
 <script>
 
-    $(function () {
-        var count = $('#count').val();
-        var total_price = 0;
-        $('.counting').text(count);
-        var delivery_charge = parseInt(($('#delivery_charge').text()));
-        var coupon_discount = parseInt(($('#coupon_discount').text()));
-        var total_price = parseInt(($('#subtotal').text()));
-    });
+//    $(function () {
+//        var count = $('#count').val();
+//        var total_price = 0;
+//        $('.counting').text(count);
+//        var delivery_charge = parseInt(($('#delivery_charge').text()));
+//        var coupon_discount = parseInt(($('#coupon_discount').text()));
+//        var total_price = parseInt(($('#subtotal').text()));
+//
+//
+//    });
 
+    $(document).ready(function () {
+        var subtotal = $('#subtotal_col').text();
+        $('#subtotal_col').text(convertToCommaSeperate(subtotal));
+
+        var discount_price = $('#discount_price_col').text();
+        $('#discount_price_col').text(convertToCommaSeperate(discount_price));
+
+        var total_amount = $('#total_amount_col').text();
+        $('#total_amount_col').text(convertToCommaSeperate(total_amount));
+
+
+    })
+    function convertToCommaSeperate(x) {
+        x = x.toString();
+        var afterPoint = '';
+        if (x.indexOf('.') > 0)
+            afterPoint = x.substring(x.indexOf('.'), x.length);
+        x = Math.floor(x);
+        x = x.toString();
+        var lastThree = x.substring(x.length - 3);
+        var otherNumbers = x.substring(0, x.length - 3);
+        if (otherNumbers != '')
+            lastThree = ',' + lastThree;
+        var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+
+        return res;
+    }
     $(function () {
 
         $("#payment_mode").autocomplete({
@@ -236,4 +274,20 @@
 //            }
 //        });
 //    }
+
+
+    function validate() {
+        var payment_type = $('#payment_mode').val();
+//        alert(payment_type);
+        if (payment_type == null || payment_type == '' || payment_type != 'AdvancePayment'
+                || payment_type != 'Credit' || payment_type != 'Parts' || payment_type != 'Net Banking') {
+
+            alert("Please Select Payment Mode from list!..");
+            return false;
+        }
+    }
+
+
+
+
 </script>

@@ -57,7 +57,7 @@ public class OrganisationTypeDesignationModel {
     public int getNoOfRows() {
         int noOfRows = 0;
         try {
-            ResultSet rset = connection.prepareStatement("select count(*) from org_office").executeQuery();
+            ResultSet rset = connection.prepareStatement(" select count(*) from org_office ").executeQuery();
             rset.next();    // move cursor from BOR to valid record.
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class OrganisationTypeDesignationModel {
 //                    + " AND IF('" + office_code_search + "'='' ,o.org_office_code LIKE '%%',o.org_office_code LIKE '" + office_code_search + ".%' OR o.org_office_code like ?)"
 //                    + " AND IF ('" + office_name_search + "' = '' , o.org_office_name LIKE '%%',o.org_office_name = ?) "
 //                    + " ORDER BY org.organisation_name,o.org_office_name ";
-            String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+            String query = " select od.id,od.is_super_child,o.org_type_name,d.designation, "
                     + " od.parent_designation_id,od.generation "
                     //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                     //+ " and a.active='Y')as desigantion_map_2 "
@@ -172,7 +172,7 @@ public class OrganisationTypeDesignationModel {
 ////                    + " AND IF ('" + office_name_search+ "' = '' , o.org_office_name LIKE '%%',o.org_office_name = ?) "
 //
 //                    + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
-            query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+            query = " select od.id,od.is_super_child,o.org_type_name,d.designation, "
                     + " od.parent_designation_id,od.generation "
                     //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                     //+ " and a.active='Y')as desigantion_map_2 "
@@ -225,7 +225,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public static int getParentOrgid(int org_id) {
-        String query = "SELECT parent_designation_id FROM designation_organisation_type_map WHERE  designation_id=? and active=? ";
+        String query = " SELECT parent_designation_id FROM designation_organisation_type_map WHERE  designation_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -242,7 +242,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public static int getcheckorgid(int org_id) {
-        String query = "SELECT designation_id FROM designation_organisation_type_map WHERE  parent_designation_id=? and active=? ";
+        String query = " SELECT designation_id FROM designation_organisation_type_map WHERE  parent_designation_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -259,7 +259,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public static int getDesgnid(String org_id) {
-        String query = "SELECT designation_id FROM designation WHERE  designation=? and active=? ";
+        String query = " SELECT designation_id FROM designation WHERE  designation=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -313,7 +313,7 @@ public class OrganisationTypeDesignationModel {
 ////                    + " AND IF ('" + office_name_search+ "' = '' , o.org_office_name LIKE '%%',o.org_office_name = ?) "
 //
 //                    + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
-            query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+            query = " select od.id,od.is_super_child,o.org_type_name,d.designation, "
                     + " od.parent_designation_id,od.generation "
                     //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                     //+ " and a.active='Y')as desigantion_map_2 "
@@ -378,7 +378,7 @@ public class OrganisationTypeDesignationModel {
 ////                           + "  IF('" + o_id + "' = '', parent_org_id LIKE '%%',parent_org_id =?) "
 //                              + " ORDER BY generation asc "
 //                              + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
-        String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+        String query = " select od.id,od.is_super_child,o.org_type_name,d.designation, "
                 + " od.parent_designation_id,od.generation,od.designation_id "
                 //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                 //+ " and a.active='Y')as desigantion_map_2 "
@@ -389,7 +389,7 @@ public class OrganisationTypeDesignationModel {
                 + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
                 + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
                 + " AND IF('" + org_id + "' = '', od.designation_id LIKE '%%',od.designation_id =?) order by generation  "
-                + "  LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
+                + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -470,7 +470,7 @@ public class OrganisationTypeDesignationModel {
 //                              + " ORDER BY generation asc "
 //                              + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 //            
-        String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+        String query = " select od.id,od.is_super_child,o.org_type_name,d.designation, "
                 + " od.parent_designation_id,od.generation,od.designation_id "
                 //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                 //+ " and a.active='Y')as desigantion_map_2 "
@@ -481,7 +481,7 @@ public class OrganisationTypeDesignationModel {
                 + " AND IF ('" + org_name + "' = '' , o.org_type_name LIKE '%%',o.org_type_name= ?) "
                 + " AND IF ('" + getgeneration + "' = '' , od.generation LIKE '%%',od.generation= ?) "
                 + " AND IF('" + org_id + "' = '', od.parent_designation_id LIKE '%%',od.parent_designation_id =?) order by generation  "
-                + "   LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
+                + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -565,7 +565,7 @@ public class OrganisationTypeDesignationModel {
 //                              + " ORDER BY generation asc "
 //                              + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
 //            
-        String query = "select od.id,od.is_super_child,o.org_type_name,d.designation, "
+        String query = " select od.id,od.is_super_child,o.org_type_name,d.designation, "
                 + " od.parent_designation_id,od.generation,od.designation_id "
                 //+ " (select a.designation from designation a,organisation_designation b where a.designation_id=b.organisation_designation_map_id_2 "
                 //+ " and a.active='Y')as desigantion_map_2 "
@@ -652,7 +652,7 @@ public class OrganisationTypeDesignationModel {
 
     public int getIdOfParent(String number) {
         int id = 0;
-        String query1 = "SELECT organisation_designation_map_id FROM organisation_designation_map WHERE serial_no =?  && active=? ";
+        String query1 = " SELECT organisation_designation_map_id FROM organisation_designation_map WHERE serial_no =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setString(1, number);
@@ -674,7 +674,7 @@ public class OrganisationTypeDesignationModel {
 
     public String getDesigNameFromId(int id) {
         String name = "";
-        String query1 = "SELECT designation FROM designation WHERE designation_id =?  && active=? ";
+        String query1 = " SELECT designation FROM designation WHERE designation_id =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, id);
@@ -696,7 +696,7 @@ public class OrganisationTypeDesignationModel {
 
     public String getOrgNameFromId(int id) {
         String name = "";
-        String query1 = "SELECT organisation_name FROM organisation_name WHERE organisation_id =?  && active=? ";
+        String query1 = " SELECT organisation_name FROM organisation_name WHERE organisation_id =?  && active=? ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, id);
@@ -748,7 +748,7 @@ public class OrganisationTypeDesignationModel {
         }
 
         // to check if parent exist or not
-        String qry2 = "select count(*) from designation_organisation_type_map where organisation_type_id='" + orgid + "' and "
+        String qry2 = " select count(*) from designation_organisation_type_map where organisation_type_id='" + orgid + "' and "
                 + " designation_id='" + desigid1 + "' and active='Y' ";
         try {
             PreparedStatement pst1 = connection.prepareStatement(qry2);
@@ -767,7 +767,7 @@ public class OrganisationTypeDesignationModel {
         }
 
         //
-        String query1 = "select count(*) "
+        String query1 = " select count(*) "
                 + " from designation_organisation_type_map where organisation_type_id='" + orgid + "' "
                 + " and designation_id='" + desigid2 + "' and "
                 + " parent_designation_id='" + desigid1 + "' and active='Y' ";
@@ -788,7 +788,7 @@ public class OrganisationTypeDesignationModel {
             return rowsAffected;
         }
 
-        String query = "insert into designation_organisation_type_map(organisation_type_id,designation_id,"
+        String query = " insert into designation_organisation_type_map(organisation_type_id,designation_id, "
                 + " parent_designation_id,is_super_child,active,revision_no,remark,created_by,created_at,generation) "
                 + " values (?,?,?,?,?,?,?,?,now(),?) ";
 
@@ -992,7 +992,7 @@ public class OrganisationTypeDesignationModel {
         }
 
         // to check if child present or not for update logic
-        String qry3 = "select count(*),designation_id from designation_organisation_type_map where "
+        String qry3 = " select count(*),designation_id from designation_organisation_type_map where "
                 + " id='" + org_desig_id + "' and organisation_type_id='" + orgid + "'  "
                 //+ " organisation_id='" + orgid + "' and organisation_designation_map_id_2='"+prev_mapId1+"' "
                 + " and active='Y' ";
@@ -1010,7 +1010,7 @@ public class OrganisationTypeDesignationModel {
         }
         if (prev_mapId1 != desigid) {
             int c = 0;
-            String query3 = "select count(*),designation_id from designation_organisation_type_map where "
+            String query3 = " select count(*),designation_id from designation_organisation_type_map where "
                     //+ " organisation_designation_id='" + org_desig_id + "' and organisation_id='" + orgid + "'  "
                     + " organisation_type_id='" + orgid + "' and parent_designation_id='" + prev_mapId1 + "' "
                     + " and active='Y' ";
@@ -1035,7 +1035,7 @@ public class OrganisationTypeDesignationModel {
         }
 
         // to check if child exist or not for duplicate entry of child
-        String qry2 = "select count(*) from designation_organisation_type_map where organisation_type_id='" + orgid + "' and "
+        String qry2 = " select count(*) from designation_organisation_type_map where organisation_type_id='" + orgid + "' and "
                 + " designation_id='" + desigid1 + "' and active='Y' ";
         try {
             PreparedStatement pst1 = connection.prepareStatement(qry2);
@@ -1057,23 +1057,23 @@ public class OrganisationTypeDesignationModel {
 
         // to check child - parent mapping
         //int count = 0;
-        String qry = "select count(*) from designation_organisation_type_map "
+        String qry = " select count(*) from designation_organisation_type_map "
                 + " where organisation_type_id='" + orgid + "' and "
                 + " parent_designation_id='" + desigid1 + "' and active='Y' ";
 
-        String qry1 = "select is_super_child from designation_organisation_type_map where id='" + org_desig_id + "'  "
+        String qry1 = " select is_super_child from designation_organisation_type_map where id='" + org_desig_id + "'  "
                 + " and active='Y' ";
 
         //
         //String query1 = "SELECT max(revision),serial_no,super  FROM organisation_designation_map WHERE organisation_designation_map_id = " + org_office_id + "  && active=? ";
-        String query1 = "SELECT max(revision_no),is_super_child FROM designation_organisation_type_map WHERE id = " + org_office_id + "  && active='Y' ";
+        String query1 = " SELECT max(revision_no),is_super_child FROM designation_organisation_type_map WHERE id = " + org_office_id + "  && active='Y' ";
         //String query2 = "UPDATE organisation_designation_map SET active=? WHERE organisation_designation_map_id=? and revision=?";
-        String query2 = "UPDATE designation_organisation_type_map SET active=? WHERE id=? and revision_no=?";
+        String query2 = " UPDATE designation_organisation_type_map SET active=? WHERE id=? and revision_no=? ";
 
 //        String query3 = "INSERT INTO "
 //                + "organisation_designation_map(organisation_designation_map_id,organisation_id,designation_id,serial_no, super,revision,active,parent_designation) "
 //                + "VALUES(?,?,?,?,?,?,?,?)";
-        String query3 = " insert into designation_organisation_type_map(organisation_type_id,designation_id,"
+        String query3 = " insert into designation_organisation_type_map(organisation_type_id,designation_id, "
                 + " parent_designation_id,is_super_child,active,revision_no,remark,"
                 + " created_by,created_at,id,generation) "
                 + " values (?,?,?,?,?,?,?,?,now(),?,?) ";
@@ -1177,7 +1177,7 @@ public class OrganisationTypeDesignationModel {
     public Boolean updateallRecorf(int id) throws SQLException {
         Boolean status = false;
 
-        String querynw = "select * from designation_organisation_type_map where organisation_type_id=?  and active=?  order by generation";
+        String querynw = " select * from designation_organisation_type_map where organisation_type_id=?  and active=?  order by generation ";
         PreparedStatement psmtnw = (PreparedStatement) connection.prepareStatement(querynw);
         psmtnw.setInt(1, id);
 
@@ -1197,7 +1197,7 @@ public class OrganisationTypeDesignationModel {
 
             }
 
-            String querynw2 = "update designation_organisation_type_map SET generation=?  where organisation_type_id=?  and designation_id=? and active=?  order by generation";
+            String querynw2 = " update designation_organisation_type_map SET generation=?  where organisation_type_id=?  and designation_id=? and active=?  order by generation ";
             PreparedStatement psmtnw2 = (PreparedStatement) connection.prepareStatement(querynw2);
             psmtnw2.setInt(1, generation);
             psmtnw2.setInt(2, id);
@@ -1215,7 +1215,7 @@ public class OrganisationTypeDesignationModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM designation_organisation_type_map WHERE id =" + org_office_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM designation_organisation_type_map WHERE id =" + org_office_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -1236,7 +1236,7 @@ public class OrganisationTypeDesignationModel {
         int rowsAffected = 0;
         PreparedStatement psmt;
         ResultSet rst;
-        String query = "select organisation_type_id,designation_id,parent_designation_id "
+        String query = " select organisation_type_id,designation_id,parent_designation_id "
                 + " from designation_organisation_type_map where id='" + org_office_id + "' "
                 + " and active='Y' ";
         try {
@@ -1256,7 +1256,7 @@ public class OrganisationTypeDesignationModel {
             rowsAffected = 0;
             query = null;
         }
-        query = "select count(*) from designation_organisation_type_map where "
+        query = " select count(*) from designation_organisation_type_map where "
                 + " organisation_type_id='" + org_id + "' and parent_designation_id='" + org_map1 + "' and active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
@@ -1288,7 +1288,7 @@ public class OrganisationTypeDesignationModel {
 //            message = "Cannot delete the record, some error.";
 //            msgBgColor = COLOR_ERROR;
 //        }
-        query = "DELETE FROM designation_organisation_type_map WHERE id = '" + org_office_id + "' and "
+        query = " DELETE FROM designation_organisation_type_map WHERE id = '" + org_office_id + "' and "
                 + " active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
@@ -1311,7 +1311,7 @@ public class OrganisationTypeDesignationModel {
 
     public List<String> getOrganisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org.organisation_name FROM organisation_name AS org ORDER BY organisation_name ";
+        String query = " SELECT org.organisation_name FROM organisation_name AS org ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1334,7 +1334,7 @@ public class OrganisationTypeDesignationModel {
 
     public List<String> searchOrganisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.org_type_name FROM organisation_type AS org,designation_organisation_type_map odm where org.organisation_type_id = odm.organisation_type_id and odm.active='Y' and org.active='Y' ";
+        String query = " SELECT distinct org.org_type_name FROM organisation_type AS org,designation_organisation_type_map odm where org.organisation_type_id = odm.organisation_type_id and odm.active='Y' and org.active='Y' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1361,9 +1361,9 @@ public class OrganisationTypeDesignationModel {
         int id1 = getDesgn_idd(id);
         List<String> list = new ArrayList<String>();
         if (q.equals(null) || q.equals("")) {
-            query = "SELECT distinct designation FROM designation where designation.active='Y' ";
+            query = " SELECT distinct designation FROM designation where designation.active='Y' ";
         } else {
-            query = "SELECT distinct designation FROM designation,organisation_designation_map where designation.designation_id=organisation_designation_map.organisation_designation_map_id and organisation_designation_map.active='Y' ";
+            query = " SELECT distinct designation FROM designation,organisation_designation_map where designation.designation_id=organisation_designation_map.organisation_designation_map_id and organisation_designation_map.active='Y' ";
         }
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -1386,7 +1386,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getOrganisation_id(String organisation_name) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? and active=?";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1402,7 +1402,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getParentGeneration(int org_id, int desig_id) {
-        String query = "SELECT * FROM designation_organisation_type_map WHERE organisation_type_id = ? and designation_id=? and active=? ";
+        String query = " SELECT * FROM designation_organisation_type_map WHERE organisation_type_id = ? and designation_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1420,7 +1420,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getDesignation_id(String organisation_name) {
-        String query = "SELECT designation_id FROM designation WHERE designation = ? and active=? ";
+        String query = " SELECT designation_id FROM designation WHERE designation = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1436,7 +1436,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public static String getDesignation_name(String designation_id) {
-        String query = "SELECT designation FROM designation WHERE designation_id = ? and active='Y' ";
+        String query = " SELECT designation FROM designation WHERE designation_id = ? and active='Y' ";
         String designation_name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1454,7 +1454,7 @@ public class OrganisationTypeDesignationModel {
     public List<String> OrgOfficeType(String q) {
         List<String> list = new ArrayList<String>();
         //String query = "SELECT org.office_type FROM org_office_type AS org WHERE org.org_office_code = ? ORDER BY office_type ";
-        String query = "SELECT org_type_name from organisation_type where organisation_type.active='Y' order by org_type_name";
+        String query = " SELECT org_type_name from organisation_type where organisation_type.active='Y' order by org_type_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1, office_code);
@@ -1479,7 +1479,7 @@ public class OrganisationTypeDesignationModel {
 
     public List<String> getGeneration(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.generation FROM designation_organisation_type_map  AS org   where org.active='Y'  ORDER BY generation ";
+        String query = " SELECT distinct org.generation FROM designation_organisation_type_map  AS org   where org.active='Y'  ORDER BY generation ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1502,9 +1502,9 @@ public class OrganisationTypeDesignationModel {
 
     public List<String> getOrgOfficeNameSearch(String q, String office_code) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT o.org_office_name FROM org_office AS o  "
+        String query = " SELECT o.org_office_name FROM org_office AS o  "
                 + " WHERE IF('" + office_code + "'='', o.org_office_code LIKE '%%' , o.org_office_code='" + office_code + "') "
-                + "ORDER BY o.org_office_name";
+                + " ORDER BY o.org_office_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1527,7 +1527,7 @@ public class OrganisationTypeDesignationModel {
 
     public List<String> getOrgOfficeCodeSearch(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_code FROM org_office as oo GROUP BY oo.org_office_code";
+        String query = " SELECT oo.org_office_code FROM org_office as oo GROUP BY oo.org_office_code ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1549,7 +1549,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getOrgOfficeType_id(String office_type) {
-        String query = "SELECT office_type_id FROM org_office_type WHERE  office_type = ? ";
+        String query = " SELECT office_type_id FROM org_office_type WHERE  office_type = ? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1565,7 +1565,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = ?";
+        String query = " SELECT city_id FROM city WHERE city_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1580,7 +1580,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getDesgn_id(String office) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ?";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1595,7 +1595,7 @@ public class OrganisationTypeDesignationModel {
     }
 
     public int getDesgn_idd(int office) {
-        String query = "SELECT designation_id FROM organisation_designation_map WHERE organisation_id = ?";
+        String query = " SELECT designation_id FROM organisation_designation_map WHERE organisation_id = ? ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1626,7 +1626,7 @@ public class OrganisationTypeDesignationModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT designation FROM designation AS d,designation_organisation_type_map as od where d.designation_id=od.designation_id and d.active='Y' and od.active='Y' ORDER BY d.designation ";
+        String query = " SELECT designation FROM designation AS d,designation_organisation_type_map as od where d.designation_id=od.designation_id and d.active='Y' and od.active='Y' ORDER BY d.designation ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -1654,7 +1654,7 @@ public class OrganisationTypeDesignationModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT city_name FROM city AS c ORDER BY city_name ";
+        String query = " SELECT city_name FROM city AS c ORDER BY city_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //    pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -1682,7 +1682,7 @@ public class OrganisationTypeDesignationModel {
         //  int id = getDesgn_id(code);
         // int id1 = getDesgn_idd(id);
         List<String> list = new ArrayList<String>();
-        String query = "SELECT designation FROM designation where designation.active='Y' ";
+        String query = " SELECT designation FROM designation where designation.active='Y' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1711,7 +1711,7 @@ public class OrganisationTypeDesignationModel {
 //                + " organisation_designation_map.organisation_id='" + id + "' and "
 //                + " organisation_designation_map.active='Y' and designation.active='Y'";
 
-        String query = "SELECT * FROM designation d,designation_organisation_type_map o where "
+        String query = " SELECT * FROM designation d,designation_organisation_type_map o where "
                 + " d.designation_id=o.designation_id "
                 + " and  o.organisation_type_id='" + id + "' and  o.active='Y' and d.active='Y' and o.is_super_child='N' ";
 

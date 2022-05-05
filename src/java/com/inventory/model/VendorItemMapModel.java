@@ -8,19 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import com.DBConnection.DBConnection;
-import static com.inventory.model.InventoryBasicModel.getStockQuantity;
-import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.ItemName;
 import com.inventory.tableClasses.VendorItemMap;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
@@ -292,7 +285,7 @@ public class VendorItemMapModel {
     }
 
     public int insertRecord(VendorItemMap bean) throws SQLException {
-        String query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+        String query = " INSERT INTO item_authorization(item_names_id,designation_id,description, "
                 + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
 
@@ -302,7 +295,7 @@ public class VendorItemMapModel {
         String query2 = " select  item_names_id, "
                 + " item_name, "
                 + " parent_id "
-                + "from (select * from item_names where active='Y' "
+                + " from (select * from item_names where active='Y' "
                 + " order by parent_id, item_names_id ) item_names, "
                 + " (select @pv := '" + item_name_id + "') initialisation "
                 + " where   find_in_set(parent_id, @pv) > 0 "
@@ -320,7 +313,7 @@ public class VendorItemMapModel {
             }
             if (item_names_id_list.size() == 0) {
                 int org_office_id = getOrgOfficeId(bean.getOrg_office());
-                String item_auth_query = "INSERT INTO vendor_item_map(item_names_id,description,"
+                String item_auth_query = " INSERT INTO vendor_item_map(item_names_id,description, "
                         + " revision_no,active,remark,org_office_id) "
                         + " VALUES(?,?,?,?,?,?) ";
 
@@ -349,7 +342,7 @@ public class VendorItemMapModel {
 
             }
 
-            String query5 = " select item_names_id from item_names where item_names_id"
+            String query5 = " select item_names_id from item_names where item_names_id "
                     + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
                     + "  and active='Y' ";
 
@@ -363,7 +356,7 @@ public class VendorItemMapModel {
 
             for (int j = 0; j < item_names_id_list.size(); j++) {
                 int org_office_id = getOrgOfficeId(bean.getOrg_office());
-                String item_auth_query = "INSERT INTO vendor_item_map(item_names_id,description,"
+                String item_auth_query = " INSERT INTO vendor_item_map(item_names_id,description, "
                         + " revision_no,active,remark,org_office_id) "
                         + " VALUES(?,?,?,?,?,?) ";
 
@@ -408,7 +401,7 @@ public class VendorItemMapModel {
 
     public int getOrgOfficeId(String org_office) {
 
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -422,7 +415,7 @@ public class VendorItemMapModel {
     }
 
     public int getModelId(String model_name) {
-        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -444,9 +437,9 @@ public class VendorItemMapModel {
         String query1 = " SELECT max(revision_no) revision_no FROM vendor_item_map WHERE vendor_item_map_id = " + vendor_item_map_id + " "
                 + " and active='Y' ";
         String query2 = " UPDATE vendor_item_map SET active=? WHERE vendor_item_map_id=? and revision_no=? ";
-        String query3 = "INSERT INTO vendor_item_map(vendor_item_map_id,item_names_id,description,"
+        String query3 = " INSERT INTO vendor_item_map(vendor_item_map_id,item_names_id,description, "
                 + " revision_no,active,remark,org_office_id) "
-                + " VALUES(?,?,?,?,?,?,?)";
+                + " VALUES(?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         int map_count = 0;
@@ -533,7 +526,7 @@ public class VendorItemMapModel {
         String query2 = " select  item_names_id, "
                 + " item_name, "
                 + " parent_id "
-                + "from (select * from item_names where active='Y' "
+                + " from (select * from item_names where active='Y' "
                 + " order by parent_id, item_names_id ) item_names, "
                 + " (select @pv := '" + item_name_id + "') initialisation "
                 + " where   find_in_set(parent_id, @pv) > 0 "
@@ -568,8 +561,8 @@ public class VendorItemMapModel {
                 }
             }
 
-            String query5 = " select item_names_id from item_names where item_names_id"
-                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
+            String query5 = " select item_names_id from item_names where item_names_id "
+                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y' "
                     + "  and active='Y' ";
 
             PreparedStatement pstmt5 = connection.prepareStatement(query5);
@@ -612,7 +605,7 @@ public class VendorItemMapModel {
     }
 
     public int getItemNamesId(String item_name) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -627,7 +620,7 @@ public class VendorItemMapModel {
 
     public int getDesignationId(String designation) {
 
-        String query = "SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
+        String query = " SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -641,7 +634,7 @@ public class VendorItemMapModel {
     }
 
     public String getItemName(int item_name_id) {
-        String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y'";
+        String query = " SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -657,7 +650,7 @@ public class VendorItemMapModel {
 
     public List<String> getDesignation(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT designation from designation where active='Y' ";
+        String query = " SELECT designation from designation where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -682,7 +675,7 @@ public class VendorItemMapModel {
     public List<String> getItemName(String q) {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT item_name from item_names where active='Y' and is_super_child='Y' ";
-        String query = "SELECT item_name from item_names where active='Y' ";
+        String query = " SELECT item_name from item_names where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -706,7 +699,7 @@ public class VendorItemMapModel {
 
     public List<String> getAllChild(String item_names_id) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT item_names_id from item_names where active='Y' ";
+        String query = " SELECT item_names_id from item_names where active='Y' ";
 
         try {
             List<Integer> idList = new ArrayList<Integer>();
@@ -714,11 +707,11 @@ public class VendorItemMapModel {
             int count = 0;
 
             idList = getAllParentChildList(item_names_id);
-            query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                    + "itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
+            query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
+                    + " itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
                     + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
             if (!item_names_id.equals("")) {
-                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+                query += " and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
             }
             if (!item_names_id.equals("")) {
@@ -748,7 +741,7 @@ public class VendorItemMapModel {
         }
         int item_names_id = 0, parent_id = 0;
 
-        String qry = "select item_names_id from item_names where active='Y' and item_names_id='" + item_id + "' ";
+        String qry = " select item_names_id from item_names where active='Y' and item_names_id='" + item_id + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry);
             ResultSet rstt = pst.executeQuery();
@@ -760,7 +753,7 @@ public class VendorItemMapModel {
             System.out.println("VendorItemMapModel.getAllParentChildList() -" + e);
         }
 
-        String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
+        String qry1 = " select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry1);
             ResultSet rstt = pst.executeQuery();
@@ -804,7 +797,7 @@ public class VendorItemMapModel {
         } catch (Exception e) {
             System.out.println("Error:--ItemNameModel--- getAllParentChildList--" + e);
         }
-        String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
+        String qry2 = " select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry2);
             ResultSet rstt = pst.executeQuery();
@@ -826,7 +819,7 @@ public class VendorItemMapModel {
             list.add(search_org_office);
         } else {
 
-            String query = " SELECT oo.org_office_name FROM org_office oo where"
+            String query = " SELECT oo.org_office_name FROM org_office oo where "
                     + " oo.active='Y' and oo.office_type_id=7 ";
 
             if (!search_org_office.equals("") && search_org_office != null) {

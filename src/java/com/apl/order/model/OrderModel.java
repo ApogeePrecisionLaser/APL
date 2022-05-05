@@ -1,4 +1,3 @@
-
 package com.apl.order.model;
 
 import com.inventory.model.*;
@@ -26,7 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
- * @author Komal
+ * @author Akash
  */
 public class OrderModel {
 
@@ -51,8 +50,8 @@ public class OrderModel {
     public String getRequestedToKeyPersonorder(String q, String requested_by) {
         int loc_of_dealer = getRequestedKeyPersondegId(requested_by);
         String key_person_name = "";
-        String query = "Select kp2.key_person_name from dealer_salesmanager_mapping as dsm,key_person as kp1,key_person as kp2 where kp1.key_person_id=dsm.dealer_id\n"
-                + " and  kp2.key_person_id=dsm.salesman_id and dsm.dealer_id='" + loc_of_dealer + "' and  kp1.active='y' and dsm.active='Y' and kp2.active='Y'";
+        String query = " Select kp2.key_person_name from dealer_salesmanager_mapping as dsm,key_person as kp1,key_person as kp2 where kp1.key_person_id=dsm.dealer_id "
+                + " and  kp2.key_person_id=dsm.salesman_id and dsm.dealer_id='" + loc_of_dealer + "' and  kp1.active='y' and dsm.active='Y' and kp2.active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -115,18 +114,18 @@ public class OrderModel {
         String amount_in_words = numberToWords(234678);
 
         String query = " select required_qty,deliver_qty,approved_qty,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to "
-                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2,"
-                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo,"
+                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2, "
+                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo, "
                 + " oo2.service_tax_reg_no as officeGSTNo,oo2.mobile_no1,oo2.mobile_no2,osp.prices, "
                 + " c1.city_name as key_person_city,oo1.org_office_name as requested_by_office, "
                 + " oo1.address_line1 as kp_address_line1,oo1.address_line2 as kp_address_line2,oo1.address_line3 as kp_address_line3 "
-                + " from model m,manufacturer_item_map mim,order_table indt,order_item indi,key_person kp1,key_person kp2 ,"
+                + " from model m,manufacturer_item_map mim,order_table indt,order_item indi,key_person kp1,key_person kp2, "
                 + " item_names as itn,org_office oo1,org_office oo2,city c1,city c2,orders_sales_pricing osp "
                 + " where indi.order_table_id=indt.order_table_id and indi.model_id=m.model_id "
-                + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
+                + " and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
                 + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
                 + " kp1.key_person_id=indt.requested_by  and kp2.key_person_id=indt.requested_to and kp1.active='y' "
-                + " and kp2.active='y' and itn.active='Y' and indt.order_no='" + orderno + "' and oo1.active='Y' and oo2.active='Y'"
+                + " and kp2.active='y' and itn.active='Y' and indt.order_no='" + orderno + "' and oo1.active='Y' and oo2.active='Y' "
                 + " and c1.active='Y' and osp.order_id=indt.order_table_id and osp.order_item_id=indi.order_item_id "
                 + " and c2.active='Y' "
                 + " and kp1.org_office_id=oo1.org_office_id and kp2.org_office_id=oo2.org_office_id "
@@ -323,7 +322,7 @@ public class OrderModel {
     public List<Indent> getStatus() {
         List<Indent> list = new ArrayList<Indent>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status  order by status ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -345,7 +344,7 @@ public class OrderModel {
     }
 
     public int insertRecord(Indent bean, String logged_user_name, String office_admin, int i, String paymentmode) throws SQLException {
-        String query = "INSERT INTO order_table(order_no,requested_by,requested_to,"
+        String query = " INSERT INTO order_table(order_no,requested_by,requested_to, "
                 + " status_id,active,remark,date_time,description,revision_no) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
@@ -359,7 +358,7 @@ public class OrderModel {
 
         try {
             if (i == 0) {
-                String query4 = "SELECT count(*) as count FROM order_table WHERE "
+                String query4 = " SELECT count(*) as count FROM order_table WHERE "
                         + " order_no='" + bean.getIndent_no() + "' "
                         + " and active='Y'  ";
 
@@ -398,7 +397,7 @@ public class OrderModel {
                     }
                 }
             }
-            String query2 = "INSERT INTO order_item(order_table_id,item_names_id, required_qty,"
+            String query2 = " INSERT INTO order_item(order_table_id,item_names_id, required_qty, "
                     + " status_id,active,remark,expected_date_time,description,revision_no,delivered_date_time,model_id) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -440,7 +439,7 @@ public class OrderModel {
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -454,7 +453,7 @@ public class OrderModel {
     }
 
     public int getRequestedKeyPersondegId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -469,7 +468,7 @@ public class OrderModel {
 
     public int getModelId(String model) {
 
-        String query = "SELECT model_id FROM model WHERE model = '" + model + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -484,7 +483,7 @@ public class OrderModel {
 
     public int getItemNameId(int model_id) {
 
-        String query = " SELECT itn.item_names_id FROM model m,manufacturer_item_map mim,item_names itn"
+        String query = " SELECT itn.item_names_id FROM model m,manufacturer_item_map mim,item_names itn "
                 + "  WHERE m.model_id = '" + model_id + "'  and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  "
                 + " and itn.item_names_id=mim.item_names_id and m.active='Y' and mim.active='Y' and itn.active='Y' ";
         int id = 0;
@@ -501,7 +500,7 @@ public class OrderModel {
 
     public int getPurposeId(String purpose) {
 
-        String query = "SELECT purpose_id FROM purpose WHERE purpose = '" + purpose + "' ";
+        String query = " SELECT purpose_id FROM purpose WHERE purpose = '" + purpose + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -516,7 +515,7 @@ public class OrderModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status  ";
+        String query = " SELECT status from status  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -540,7 +539,7 @@ public class OrderModel {
 
     public List<String> getPurpose(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT purpose from purpose  ";
+        String query = " SELECT purpose from purpose  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -564,7 +563,7 @@ public class OrderModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -589,9 +588,9 @@ public class OrderModel {
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         int loc_of_dealer = getRequestedKeyPersondegId(requested_by);
         List<String> list = new ArrayList<String>();
-        String query = "Select * from key_person as kp ,city as c , designation as d  where kp.city_id=c.city_id and\n"
-                + " kp.designation_id=d.designation_id and d.designation='sales' and c.city_id='" + loc_of_dealer + "' \n"
-                + " and c.active='Y' and kp.active='y'";
+        String query = " Select * from key_person as kp ,city as c , designation as d  where kp.city_id=c.city_id and "
+                + " kp.designation_id=d.designation_id and d.designation='sales' and c.city_id='" + loc_of_dealer + "' "
+                + " and c.active='Y' and kp.active='y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -835,10 +834,10 @@ public class OrderModel {
         String query = " select indt.order_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time, "
                 + " indi.approved_qty, "
                 + " indi.deliver_qty, itn.quantity as stock_qty  ,s.status,indi.order_item_id,m.model "
-                + " from order_table indt,order_item indi, item_names itn,purpose p,  status s,manufacturer_item_map mim"
+                + " from order_table indt,order_item indi, item_names itn,purpose p,  status s,manufacturer_item_map mim "
                 + " ,model m  "
                 + " where indt.order_table_id=indi.order_table_id   and mim.item_names_id=itn.item_names_id "
-                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and indi.model_id=m.model_id"
+                + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and indi.model_id=m.model_id "
                 + " and mim.active='Y'  and m.active='Y' "
                 + " and indi.status_id=s.status_id and indt.active='Y' and indi.active='Y' and itn.active='Y' "
                 + " and indt.order_table_id='" + indent_table_id + "' ";

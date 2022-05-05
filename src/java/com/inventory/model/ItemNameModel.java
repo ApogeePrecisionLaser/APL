@@ -22,8 +22,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.fileupload.FileItem;
 import org.json.simple.JSONArray;
 
@@ -83,8 +81,8 @@ public class ItemNameModel {
                 for (int i = 0; i < parentItemNameList.size(); i++) {
                     searchItemName = parentItemNameList.get(i);
                     idList = getAllParentChildList(searchItemName);
-                    query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                            + "itn.generation,itn.is_super_child,itn.prefix ,itn.HSNCode "
+                    query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
+                            + " itn.generation,itn.is_super_child,itn.prefix ,itn.HSNCode "
                             + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
 
                     if (!searchItemType.equals("") && searchItemType != null) {
@@ -101,7 +99,7 @@ public class ItemNameModel {
                         query += " and itn.item_code='" + itemCode + "' ";
                     }
 
-                    query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
+                    query += " and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
                             + " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
                     ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -136,8 +134,8 @@ public class ItemNameModel {
                 }
             } else {
                 idList = getAllParentChildList(searchItemName);
-                query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                        + "itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
+                query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
+                        + " itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
                         + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
 
                 if (!searchItemType.equals("") && searchItemType != null) {
@@ -250,18 +248,18 @@ public class ItemNameModel {
 //            query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") "
 //                    + " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
             idList = getAllParentChildList(searchItemName);
-            query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                    + "itn.generation,itn.is_super_child,itn.prefix "
+            query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
+                    + " itn.generation,itn.is_super_child,itn.prefix "
                     + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
 
             if (!searchItemName.equals("")) {
-                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+                query += " and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
             }
             if (!searchItemName.equals("")) {
                 query += " order by field(itn.item_names_id," + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
             } else {
-                query += "order by generation ";
+                query += " order by generation ";
             }
 
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -315,7 +313,7 @@ public class ItemNameModel {
         }
         int item_names_id = 0, parent_id = 0;
 
-        String qry = "select item_names_id from item_names where active='Y' and item_name='" + searchItemName + "' ";
+        String qry = " select item_names_id from item_names where active='Y' and item_name='" + searchItemName + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry);
             ResultSet rstt = pst.executeQuery();
@@ -327,7 +325,7 @@ public class ItemNameModel {
             System.out.println("ItemNameModel.getAllParentChildList() -" + e);
         }
 
-        String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
+        String qry1 = " select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry1);
             ResultSet rstt = pst.executeQuery();
@@ -371,7 +369,7 @@ public class ItemNameModel {
         } catch (Exception e) {
             System.out.println("Error:--ItemNameModel--- getAllParentChildList--" + e);
         }
-        String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
+        String qry2 = " select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry2);
             ResultSet rstt = pst.executeQuery();
@@ -428,8 +426,8 @@ public class ItemNameModel {
     }
 
     public int insertParent(ItemName item_name, Iterator itr) throws SQLException {
-        String query = "INSERT INTO item_names(item_name,item_type_id,description,"
-                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
+        String query = " INSERT INTO item_names(item_name,item_type_id,description, "
+                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
@@ -538,7 +536,7 @@ public class ItemNameModel {
 
     public int getDesignationId(String designation) {
 
-        String query = "SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
+        String query = " SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -553,8 +551,8 @@ public class ItemNameModel {
 
     public int insertRecord(ItemName item_name, Iterator itr, ModelName modelBean, int j, String image_name, String destination,
             ItemAuthorization itemAuthBean, List<String> des_list, HashMap<Integer, Integer> key_person_map) throws SQLException {
-        String query = "INSERT INTO item_names(item_name,item_type_id,description,"
-                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode)"
+        String query = " INSERT INTO item_names(item_name,item_type_id,description, "
+                + " revision_no,active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode) "
                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         String kkk = "";
         int rowsAffected = 0;
@@ -672,12 +670,12 @@ public class ItemNameModel {
                                 }
 
                                 int org_office_des_map_id = getOrgOfficeDesignationMapIdOO(item_name.getOrg_office(), designation_id);
-                                String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+                                String item_auth_query = " INSERT INTO item_authorization(item_names_id,designation_id,description, "
                                         + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id,key_person_id) "
                                         + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
-                                String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
-                                        + " item_names_id='" + item_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
+                                String query4_count = " SELECT count(*) as count FROM item_authorization WHERE "
+                                        + "item_names_id='" + item_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
                                         + " and active='Y' and key_person_id='" + kkk + "'  ";
                                 int auth_map_count = 0;
                                 PreparedStatement pstmt1 = connection.prepareStatement(query4_count);
@@ -710,7 +708,7 @@ public class ItemNameModel {
                 }
             }
             String query_count_model = " select count(*) as count from model where model='" + modelBean.getModel() + "' and active='Y' ";
-            String query_insert_model = "INSERT INTO model(model,manufacturer_item_map_id,lead_time,"
+            String query_insert_model = " INSERT INTO model(model,manufacturer_item_map_id,lead_time, "
                     + " description,revision_no,active,remark,model_no,part_no,basic_price) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
             int manufacturer_item_map_id = 0;
@@ -718,12 +716,12 @@ public class ItemNameModel {
 
             int manufacturer_id = getManufacturerId(modelBean.getManufacturer_name());
 
-            String query_insert_manufacturer_item_map = "insert into manufacturer_item_map(manufacturer_id,item_names_id,"
+            String query_insert_manufacturer_item_map = " insert into manufacturer_item_map(manufacturer_id,item_names_id, "
                     + " active,revision,remark,created_by,serial_no,created_at) "
                     + " values (?,?,?,?,?,?,?,now()) ";
 
             java.sql.PreparedStatement pstmt3 = connection.prepareStatement(query_insert_manufacturer_item_map, Statement.RETURN_GENERATED_KEYS);
-            String query4 = "SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
+            String query4 = " SELECT manufacturer_item_map_id FROM manufacturer_item_map WHERE "
                     + " manufacturer_id='" + manufacturer_id + "' and item_names_id='" + item_id + "' and active='Y' ";
             int manufacturer_item_map_ids = 0;
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
@@ -731,9 +729,9 @@ public class ItemNameModel {
             while (rs1.next()) {
                 manufacturer_item_map_ids = rs1.getInt("manufacturer_item_map_id");
             }
-            String query5 = "SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
-                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "'"
-                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y'"
+            String query5 = " SELECT count(*) as count FROM manufacturer_item_map mim, model m WHERE "
+                    + " mim.manufacturer_id='" + manufacturer_id + "' and mim.item_names_id='" + item_id + "' "
+                    + " and  m.manufacturer_item_map_id='" + manufacturer_item_map_ids + "' and mim.active='Y'  and m.active='Y' "
                     + " and m.model='" + modelBean.getModel() + "' ";
 
             PreparedStatement pstmt2 = connection.prepareStatement(query5);
@@ -787,7 +785,7 @@ public class ItemNameModel {
             }
             rowsAffected = insertImageRecord(rowsAffected, modelBean, itr, destination, model_id, image_name, j, item_name.getItem_name());
 
-            String ib_query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+            String ib_query = " INSERT INTO inventory_basic(item_names_id,org_office_id,description, "
                     + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
             int inventory_basic_id = 0;
@@ -835,8 +833,8 @@ public class ItemNameModel {
                         inventory_basic_id = rs_inv.getInt(1);
                     }
 
-                    String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                    String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                             + " reference_document_type,reference_document_id,stock_quantity) "
                             + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -881,7 +879,7 @@ public class ItemNameModel {
 
     public int getOrgOfficeId(String org_office) {
 
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -895,7 +893,7 @@ public class ItemNameModel {
     }
 
     public int getModelId(String model_name) {
-        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -916,8 +914,8 @@ public class ItemNameModel {
         Date date = new Date();
         String middleName = "";
         String current_date = dateFormat.format(date);
-        String query3 = "INSERT INTO item_image_details (image_name, image_path, date_time, description,model_id,revision_no,active,remark) "
-                + " VALUES(?,?,?,?,?,?,?,?)";
+        String query3 = " INSERT INTO item_image_details (image_name, image_path, date_time, description,model_id,revision_no,active,remark) "
+                + " VALUES(?,?,?,?,?,?,?,?) ";
         String imageName = "";
 //        String item_code = model_name.getItem_code();
 //        String item_name = "";
@@ -1035,7 +1033,7 @@ public class ItemNameModel {
     }
 
     public int getParentGeneration(int p_id) {
-        String query = "SELECT * FROM item_names WHERE item_names_id='" + p_id + "' and active='Y' ";
+        String query = " SELECT * FROM item_names WHERE item_names_id='" + p_id + "' and active='Y' ";
         int generation = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1052,7 +1050,7 @@ public class ItemNameModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT prefix FROM item_names WHERE item_names_id='" + p_id + "' and active='Y' ";
 
-        String query = " SELECT T2.prefix FROM (SELECT @r AS _id,"
+        String query = " SELECT T2.prefix FROM (SELECT @r AS _id, "
                 + " (SELECT @r := parent_id FROM item_names WHERE item_names_id = _id) AS parent_id, "
                 + " @l := @l + 1 AS lvl "
                 + " FROM"
@@ -1077,7 +1075,7 @@ public class ItemNameModel {
     }
 
     public int getParent_Item_id(String item_name) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y' ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y' ";
         int p_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1092,7 +1090,7 @@ public class ItemNameModel {
 
     public int getParent_Item_id_for_code(String item_name, String item_code) {
 
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and item_code='" + item_code + "' and active='Y' ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and item_code='" + item_code + "' and active='Y' ";
         int p_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1163,7 +1161,7 @@ public class ItemNameModel {
         String img_name = "";
 
         String destination_path = "";
-        String query = "SELECT item_image_details_id,image_name, image_path "
+        String query = " SELECT item_image_details_id,image_name, image_path "
                 + " FROM item_image_details iid "
                 + " where iid.item_image_details_id=" + item_image_details_id + " ORDER BY item_image_details_id ";
 
@@ -1187,7 +1185,7 @@ public class ItemNameModel {
         String data = "";
         String img_name = "";
         String destination_path = "";
-        String query = "SELECT item_image_details_id,image_name, image_path,item_names_id "
+        String query = " SELECT item_image_details_id,image_name, image_path,item_names_id "
                 + " FROM item_image_details iid "
                 + " where iid.item_names_id=" + item_names_id + " and active='Y'  ORDER BY item_image_details_id ";
 
@@ -1248,10 +1246,10 @@ public class ItemNameModel {
             generation = getParentGeneration(p_item_id_for_code) + 1;
         }
 
-        String query1 = "SELECT max(revision_no) revision_no FROM item_names WHERE item_names_id = " + item_names_id + "  && active='Y' ";
-        String query2 = "UPDATE item_names SET active=? WHERE item_names_id=? and revision_no=? ";
-        String query3 = "INSERT INTO item_names(item_names_id,item_name,item_type_id,description,revision_no, "
-                + " active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM item_names WHERE item_names_id = " + item_names_id + "  && active='Y' ";
+        String query2 = " UPDATE item_names SET active=? WHERE item_names_id=? and revision_no=? ";
+        String query3 = " INSERT INTO item_names(item_names_id,item_name,item_type_id,description,revision_no, "
+                + " active,remark,item_code,quantity,parent_id,generation,is_super_child,prefix,HSNCode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         try {
@@ -1348,7 +1346,7 @@ public class ItemNameModel {
         String image_name = "";
 
         try {
-            String query = " SELECT image_name FROM item_image_details"
+            String query = " SELECT image_name FROM item_image_details "
                     + " WHERE item_names_id =" + item_name_id + " order by item_image_details_id desc limit 1 ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
@@ -1416,8 +1414,8 @@ public class ItemNameModel {
     public static String getRevisionnoForImage(ItemName key, int item_names_id) {
         String revision = "";
         try {
-            String query = " SELECT max(revision_no) as revision_no FROM item_image_details"
-                    + " WHERE item_names_id =" + item_names_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM item_image_details "
+                    + " WHERE item_names_id =" + item_names_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -1434,7 +1432,7 @@ public class ItemNameModel {
     public int deleteRecord(int item_names_id) {
         String query1 = " select count(*) as count from item_names where parent_id='" + item_names_id + "' ";
 
-        String query = "DELETE FROM item_names WHERE item_names_id = " + item_names_id;
+        String query = " DELETE FROM item_names WHERE item_names_id = " + item_names_id;
         int child_item_count = 0;
         int rowsAffected = 0;
         try {
@@ -1475,7 +1473,7 @@ public class ItemNameModel {
         int count = 0;
         int updateRowsAffected = 0;
 
-        String query2 = "UPDATE item_image_details SET active=? WHERE item_image_details_id=? ";
+        String query2 = " UPDATE item_image_details SET active=? WHERE item_image_details_id=? ";
 
         try {
             PreparedStatement pstm = connection.prepareStatement(query2);
@@ -1513,7 +1511,7 @@ public class ItemNameModel {
     }
 
     public int getItemNamesId(String item_name) {
-        String query = "SELECT item_names_id FROM item_name WHERE item_name = ?";
+        String query = " SELECT item_names_id FROM item_name WHERE item_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1528,7 +1526,7 @@ public class ItemNameModel {
     }
 
     public int getItemTypeID(String item_type) {
-        String query = "SELECT item_type_id FROM item_type WHERE item_type = '" + item_type + "' and active='Y' ";
+        String query = " SELECT item_type_id FROM item_type WHERE item_type = '" + item_type + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1578,7 +1576,7 @@ public class ItemNameModel {
     }
 
     public String getItemTypeName(int item_type) {
-        String query = "SELECT item_type FROM item_type WHERE item_type_id = ? and active='Y'";
+        String query = " SELECT item_type FROM item_type WHERE item_type_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1593,7 +1591,7 @@ public class ItemNameModel {
     }
 
     public String getItemName(int item_name_id) {
-        String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y'";
+        String query = " SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1609,7 +1607,7 @@ public class ItemNameModel {
 
     public List<String> getItemType(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT item_type FROM item_type where active='Y' ORDER BY item_type";
+        String query = " SELECT item_type FROM item_type where active='Y' ORDER BY item_type ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1632,7 +1630,7 @@ public class ItemNameModel {
 
     public List<String> getItemName(String q, String item_type) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_name FROM item_names itn,item_type itt where itn.item_type_id=itt.item_type_id and"
+        String query = " SELECT itn.item_name FROM item_names itn,item_type itt where itn.item_type_id=itt.item_type_id and "
                 + " itn.active='Y' and itt.active='Y'  ";
         if (!item_type.equals("") && item_type != null) {
             query += " and itt.item_type='" + item_type + "' ";
@@ -1660,7 +1658,7 @@ public class ItemNameModel {
 
     public List<String> getItemCode(String q, String item_type, String item_name) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_code FROM item_names itn,item_type itt where itn.item_type_id=itt.item_type_id and"
+        String query = " SELECT itn.item_code FROM item_names itn,item_type itt where itn.item_type_id=itt.item_type_id and "
                 + " itn.active='Y' and itt.active='Y' and itn.is_super_child='Y' ";
         if (!item_type.equals("") && item_type != null) {
             query += " and itt.item_type='" + item_type + "' ";
@@ -1691,7 +1689,7 @@ public class ItemNameModel {
 
     public List<String> getParentItemName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as parent_item_name  FROM item_names itn where"
+        String query = " SELECT concat(itn.item_name,' - ',itn.item_code) as parent_item_name  FROM item_names itn where "
                 + " itn.active='Y' and itn.is_super_child='N' ORDER BY itn.item_name ";
 
         try {
@@ -1716,7 +1714,7 @@ public class ItemNameModel {
 
     public List<String> getGeneration(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT generation  FROM item_names itn where"
+        String query = " SELECT generation  FROM item_names itn where "
                 + " itn.active='Y' group by itn.generation ORDER BY itn.generation ";
 
         try {
@@ -1741,7 +1739,7 @@ public class ItemNameModel {
 
     public List<String> getSuperChild(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT is_super_child  FROM item_names itn where"
+        String query = " SELECT is_super_child  FROM item_names itn where "
                 + " itn.active='Y' group by itn.is_super_child ORDER BY itn.is_super_child ";
 
         try {

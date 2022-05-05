@@ -9,13 +9,10 @@
  */
 package com.organization.controller;
 
-import com.organization.model.OrgOfficeModel;
 import com.DBConnection.DBConnection;
 import com.organization.model.OrganisationDesignationModel;
-import com.organization.tableClasses.Org_Office;
 import com.organization.tableClasses.OrganisationDesignationBean;
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;

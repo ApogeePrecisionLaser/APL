@@ -26,6 +26,8 @@
                 <div class="card card-primary card-outline">            
                     <div class="card-body">              
                         <div class="table-responsive mailbox-messages tableScrollWrap noWrapTable">
+                            <input type="hidden" name="count" id="count" value="${count}">
+
                             <table class="table table-hover table-striped" id="mytable">
                                 <thead>
                                     <tr>
@@ -39,224 +41,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <!--<a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>-->
-                                            <a onclick="document.getElementById('id01').style.display = 'block'" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fontFourteen">1</td>
-                                        <td class="fontFourteen"><a href="">Kundan Pandey</a></td>
-                                        <td class="fontFourteen">Why do we use it?</td>
-                                        <!--<td class="fontFourteen" style="max-width: 250px;">It is a long established fact that a reader will be distracted. </td>-->
-                                        <td class=""><i class="statusDisapprove fontThirteen">Unread</i></td>
-                                        <td class="fontFourteen">5 mins ago</td>
-                                        <td>
-                                            <a href="notificationDetail.php" class="btn far fa-eye actionEdit" title="See Message"></a>
-                                            <a onclick="return confirm('Are you sure you want to delete this message?');" href="#" class="btn far fa-trash-alt actionDelete" title="Delete Message"></a>
-                                        </td>
-                                    </tr>
+                                    <c:forEach var="beanType" items="${requestScope['event_list']}"
+                                               varStatus="loopCounter">
+                                        <tr>
+                                            <td class="fontFourteen">${loopCounter.count}</td>
+                                            <td class="fontFourteen">
+                                                <input type="hidden" name="document_name" id="document_name${loopCounter.count}" 
+                                                       value="${beanType.document_name}">
+                                                <img src="" class="event_image${loopCounter.count}" style="width: 40px;height: 20px;object-fit: cover;">
 
-                                <div id="id01" class="modal deleteAlertModel">
-                                    <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">×</span>
-                                    <div class="modal-content" action="/action_page.php">
-                                        <div class="container">
-                                            <h1>Delete Account</h1>
-                                            <p>Are you sure you want to delete your account?</p>
-                                            <div class="clearfix">
-                                                <a type="button" href="#" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</a>
-                                                <a type="button" href="#" onclick="document.getElementById('id01').style.display = 'none'" class="deletebtn">Delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            </td>
+                                            <td class="fontFourteen">${beanType.title}</td>
+                                            <td class="fontFourteen"><i class="statusApprove py-0">Active</td>
+                                            <td class="fontFourteen">${beanType.time_ago}</td>
+                                            <td>
+                                                <a href="NotificationController?task=event_detail&events_id=${beanType.events_id}" class="btn far fa-eye actionEdit" title="See Message"></a>
+                                            </td>
+                                        </tr>
+
+                                    </c:forEach>
+
+
                                 </tbody>
                             </table>
                         </div>
@@ -266,9 +71,6 @@
         </div>
     </section>
 </div>
-
-
-
 
 
 <div class="modal myPopup" id="myPopModal">
@@ -297,4 +99,14 @@
             modal.style.display = "none";
         }
     }
+</script>
+<script>
+    $(document).ready(function () {
+        var count = $('#count').val();
+        for (var i = 0; i < count; i++) {
+            var document_name = $('#document_name' + (i + 1)).val();
+            $('.event_image' + (i + 1)).attr("src", "http://" + IMAGE_URL + "/APL/NotificationController?task=viewImage&document_name=" + document_name);
+
+        }
+    })
 </script>

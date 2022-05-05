@@ -37,7 +37,9 @@
                     <li class="nav-item">
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>      
-                </ul>
+                </ul> 
+                <input type="hidden" name="email" id="email" value="${email}">
+                <input type="hidden" name="password" id="password" value="${password}">
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -68,10 +70,13 @@
 
 
                     <!-- Notifications Dropdown Menu -->
+                    <%
+                        if (session.getAttribute("user_role").equals("Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales")) {
+                    %>
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
                             <i class="far fa-bell"></i>
-                            <span class="badge badge-warning navbar-badge"><%= session.getAttribute("total_notification")%></span>
+                            <span class="badge badge-warning navbar-badge total_notification"><%= session.getAttribute("total_notification")%></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <span class="dropdown-item dropdown-header"><%= session.getAttribute("total_notification")%> Notifications</span>
@@ -81,13 +86,13 @@
                             <%
                                 if (session.getAttribute("user_role").equals("Admin")) {
                             %>
-                            <a href="SalesEnquiryController?task=sales_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
+                            <a href="SalesEnquiryController?task=sales_enquiry_list" class="dropdown-item pending_sales_enquiries">
+                                <i class="fas fa-envelope mr-2 "></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="SalesEnquiryController?task=complaint_enquiry_list" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
+                            <a href="SalesEnquiryController?task=complaint_enquiry_list" class="dropdown-item pending_complaint_enquiries">
+                                <i class="fas fa-envelope mr-2 "></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <!--                            <div class="dropdown-divider"></div>
@@ -99,30 +104,30 @@
                             <%
                                 if (session.getAttribute("user_role").equals("Dealer")) {
                             %>
-                            <a href="DealersOrderController?task=sales_enquiry_list" class="dropdown-item">
+                            <a href="DealersOrderController?task=sales_enquiry_list" class="dropdown-item pending_sales_enquiries">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="DealersOrderController?task=complaint_enquiry_list" class="dropdown-item">
+                            <a href="DealersOrderController?task=complaint_enquiry_list" class="dropdown-item pending_complaint_enquiries">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="notification.php" class="dropdown-item">
-                                <i class="far fa-newspaper mr-2"></i> 0 News 
+                            <a href="NotificationController" class="dropdown-item pending_news">
+                                <i class="far fa-newspaper mr-2"></i> <%= session.getAttribute("pending_news")%> News 
                                 <span class="float-right text-muted text-sm"></span>
                             </a>
                             <% }%>
                             <%
                                 if (session.getAttribute("user_role").equals("Sales")) {
                             %>
-                            <a href="ApproveOrdersController?task=sales_enquiry_list" class="dropdown-item">
+                            <a href="ApproveOrdersController?task=sales_enquiry_list" class="dropdown-item pending_sales_enquiries">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_sales_enquiries")%> Sales Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_enquiry}</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="ApproveOrdersController?task=complaint_enquiry_list" class="dropdown-item">
+                            <a href="ApproveOrdersController?task=complaint_enquiry_list" class="dropdown-item pending_complaint_enquiries">
                                 <i class="fas fa-envelope mr-2"></i> <%= session.getAttribute("pending_complaint_enquiries")%> Complaint Enquiry
                                 <span class="float-right text-muted text-sm">${last_time_of_complaint}</span>
                             </a>
@@ -138,6 +143,7 @@
 
                         </div>
                     </li>
+                    <%}%>
                     <%
                         if (session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Admin")) {
                     %>
@@ -148,7 +154,7 @@
                     </li>
                     <%}%>
                     <li class="nav-item mr-3">
-                        <a class="nav-link lineHeightOneTwo pl-1" href="LoginController?task=logout">
+                        <a class="nav-link lineHeightOneTwo pl-1" href="LoginController?task=logout" onclick="return logout('<%= session.getAttribute("log_email")%>', '<%= session.getAttribute("password")%>')">
                             <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20">
                         </a>
                     </li>
@@ -159,16 +165,28 @@
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
+                <%
+                    if (session.getAttribute("user_role").equals("Incharge") || session.getAttribute("user_role").equals("Super Admin")) {
+                %>
+                <a href="dashboard" class="brand-link">
+                    <img src="CRM Dashboard/assets2/img/product/logoIcon.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8;margin-top: 6px;">
+                    <span class="brand-text font-weight-light1">Apogee</span>
+                </a>
+                <%}%>
+                <%
+                    if (session.getAttribute("user_role").equals("Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales")) {
+                %>
                 <a href="CRMDashboardController" class="brand-link">
                     <img src="CRM Dashboard/assets2/img/product/logoIcon.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8;margin-top: 6px;">
                     <span class="brand-text font-weight-light1">Apogee</span>
                 </a>
+                <%}%>
 
                 <!-- Sidebar -->
                 <div class="sidebar sidebarNavWrap">
                     <div class="user-panel mb-2 d-flex">
                         <%
-                            if (session.getAttribute("user_role").equals("Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Incharge")) {
+                            if (session.getAttribute("user_role").equals("Super Admin") || session.getAttribute("user_role").equals("Admin") || session.getAttribute("user_role").equals("Dealer") || session.getAttribute("user_role").equals("Sales") || session.getAttribute("user_role").equals("Incharge")) {
                         %>
                         <div class="image">
                             <img src="CRM Dashboard/assets2/img/product/profileImg.png" class="img-circle elevation-2 usr_image" alt="User Image">
@@ -189,6 +207,17 @@
                             %>
                             <!--<a href="CRMDashboardController" class="d-block">Admin</a>-->
                             <a href="CRMDashboardController" class="d-block"><%= session.getAttribute("logged_user_name")%></a>
+                            <%}%>
+
+                            <%
+                                if (session.getAttribute("user_role").equals("Incharge")) {
+                            %>
+                            <a href="dashboard" class="d-block"><%= session.getAttribute("logged_user_name")%></a>
+                            <%}%>
+                            <%
+                                if (session.getAttribute("user_role").equals("Super Admin")) {
+                            %>
+                            <a href="dashboard" class="d-block"><%= session.getAttribute("logged_user_name")%></a>
                             <%}%>
                         </div>
                         <%}%>
@@ -250,19 +279,19 @@
                                     <p>
                                         Enquiry Management
                                         <i class="fas fa-angle-left right"></i>
-                                        <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("total_notification")%></sup>
+                                        <sup class="px-1 text-white bg-danger rounded-sm fontTen total_notification"><%= session.getAttribute("total_notification")%></sup>
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="DealersOrderController?task=sales_enquiry_list" class="nav-link">
+                                        <a href="DealersOrderController?task=sales_enquiry_list" class="nav-link side_pending_sales_enquiries">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Sales Enquiry List<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_sales_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="DealersOrderController?task=complaint_enquiry_list" class="nav-link">
+                                        <a href="DealersOrderController?task=complaint_enquiry_list" class="nav-link side_pending_complaint_enquiries">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Complaint Enquiry List<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_complaint_enquiries")%></sup></p>
                                         </a>
@@ -276,7 +305,7 @@
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon far fa-envelope"></i>
                                     <p>
-                                        Message
+                                        Notification <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_news")%></sup>
                                         <i class="fas fa-angle-left right"></i>
                                     </p>
                                 </a>
@@ -296,7 +325,7 @@
                                     <li class="nav-item">
                                         <a href="NotificationController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Notification</p>
+                                            <p>News <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_news")%></sup></p>
                                         </a>
                                     </li>
                                 </ul>
@@ -324,8 +353,27 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <!--                            <li class="nav-item">
+                                                            <a href="#" class="nav-link">
+                                                                <i class="fas fa-thumbs-up"></i>
+                                                                <p>
+                                                                    Subscription
+                                                                    <i class="fas fa-angle-left right"></i>
+                                                                </p>
+                                                            </a>
+                                                            <ul class="nav nav-treeview">
+                                                                <li class="nav-item">
+                                                                    <a href="" class="nav-link">
+                                                                        <i class="far fa-circle nav-icon"></i>
+                                                                        <p>Token Request</p>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>-->
+
                             <li class="nav-item">
-                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo">
+                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo" onclick="return logout('<%= session.getAttribute("log_email")%>', '<%= session.getAttribute("password")%>')">
                                     <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
                                     <p>Logout</p>
                                 </a>
@@ -355,9 +403,15 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="ApproveOrdersController" class="nav-link">
+                                        <a href="ApproveOrdersController?status=Pending" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Approve Order</p>
+                                            <p>Pending Order</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="ApproveOrdersController?status=Approved" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Approved Order</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -371,7 +425,7 @@
                                     <p>
                                         Enquiry Management
                                         <i class="fas fa-angle-left right"></i>
-                                        <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("total_notification")%></sup>
+                                        <sup class="px-1 text-white bg-danger rounded-sm fontTen total_notification"><%= session.getAttribute("total_notification")%></sup>
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
@@ -382,14 +436,14 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="ApproveOrdersController?task=sales_enquiry_list" class="nav-link">
+                                        <a href="ApproveOrdersController?task=sales_enquiry_list" class="nav-link side_pending_sales_enquiries">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Sales Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_sales_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="ApproveOrdersController?task=complaint_enquiry_list" class="nav-link">
+                                        <a href="ApproveOrdersController?task=complaint_enquiry_list" class="nav-link side_pending_complaint_enquiries">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_complaint_enquiries")%></sup></p>
                                         </a>
@@ -418,7 +472,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo">
+                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo" onclick="return logout('<%= session.getAttribute("log_email")%>', '<%= session.getAttribute("password")%>')">
                                     <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
                                     <p>Logout</p>
                                 </a>
@@ -496,7 +550,7 @@
                                         Enquiry Management
                                         <i class="fas fa-angle-left right"></i>
 
-                                        <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("total_notification")%></sup>
+                                        <sup class="px-1 text-white bg-danger rounded-sm fontTen total_notification"><%= session.getAttribute("total_notification")%></sup>
 
                                     </p>
                                 </a>
@@ -520,14 +574,14 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="SalesEnquiryController?task=sales_enquiry_list" class="nav-link">
+                                        <a href="SalesEnquiryController?task=sales_enquiry_list" class="nav-link side_pending_sales_enquiries">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Sales Enquiry List  <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_sales_enquiries")%></sup></p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="SalesEnquiryController?task=complaint_enquiry_list" class="nav-link">
+                                        <a href="SalesEnquiryController?task=complaint_enquiry_list" class="nav-link side_pending_complaint_enquiries">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("pending_complaint_enquiries")%></sup></p>
                                         </a>
@@ -551,6 +605,13 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
+                                        <a href="DemandNoteController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Demand Notes</p>
+                                        </a>
+                                    </li>
+                                   
+                                    <li class="nav-item">
                                         <a href="PurchaseOrdersController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>All Purchase Orders</p>
@@ -563,14 +624,13 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="PurchaseOrdersController" class="nav-link">
+                                        <a href="ApprovePurchaseOrdersController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Alerts</p>
+                                            <p>Approve Orders</p>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-
 
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
@@ -581,7 +641,18 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-
+                                    <li class="nav-item">
+                                        <a href="EventController?task=add_event" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Add News</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="EventController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>News List </p>
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="SupportMessagesController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
@@ -590,7 +661,6 @@
                                     </li>
                                 </ul>
                             </li>
-
 
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
@@ -611,7 +681,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo">
+                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo" onclick="return logout('<%= session.getAttribute("log_email")%>', '<%= session.getAttribute("password")%>')">
                                     <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
                                     <p>Logout</p>
                                 </a>
@@ -619,17 +689,171 @@
                         </ul>
 
                         <%}%>
+
+
+
+
+                        <%
+                            if (session.getAttribute("user_role").equals("Incharge")) {
+                        %>
+
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Purchase Management
+                                        <i class="fas fa-angle-left right"></i>
+
+                                        <!--<sup class="px-1 text-white bg-danger rounded-sm fontTen"><%= session.getAttribute("total_notification")%></sup>-->
+
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="DemandNoteController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Demand Notes</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="DemandNoteController?task=new_demand" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Make Demand Note</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Purchase Orders</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController?task=new order" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Make Purchase Order</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="InventoryController" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>Back To Inventory</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo" onclick="return logout('<%= session.getAttribute("log_email")%>', '<%= session.getAttribute("password")%>')">
+                                    <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
+                                    <p>Logout</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <%}%>
+
+
+                        <%
+                            if (session.getAttribute("user_role").equals("Super Admin")) {
+                        %>
+
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Purchase Management
+                                        <i class="fas fa-angle-left right"></i>
+
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="DemandNoteController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Demand Notes</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Purchase Orders</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController?task=new order" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Make Purchase Order</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="InventoryController" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>Back To Inventory</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="LoginController?task=logout" class="nav-link lineHeightOneTwo" onclick="return logout('<%= session.getAttribute("log_email")%>', '<%= session.getAttribute("password")%>')">
+                                    <img src="CRM Dashboard/assets2/img/product/power-off.png" width="20"> &nbsp
+                                    <p>Logout</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <%}%>
                     </nav>
                     <!-- /.sidebar-menu -->
                 </div>
                 <!-- /.sidebar -->
             </aside>
-
+            <div id="loading">
+                <div class="loader"></div>
+            </div>
 
 
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
             <script src="CRM Dashboard/assets2/js/myJS.js" type="text/javascript"></script>
 
             <script>
-                $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
+                                    $('.usr_image').attr("src", "http://" + IMAGE_URL + "/APL/CRMDashboardController?task=viewImage&type=ph");
             </script>
+
+            <script>
+                $(document).ready(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: 'CRMDashboardController?task=getData',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('.pending_complaint_enquiries').empty();
+                            $('.pending_sales_enquiries').empty();
+                            $('.total_notification').empty();
+                            $('.pending_news').empty();
+                            $('.pending_sales_enquiries').html('<i class="fas fa-envelope mr-2 "></i> ' + data.pending_sales_enquiries + '  Sales Enquiry<span class="float-right text-muted text-sm">' + data.last_time_of_enquiry + '</span>');
+                            $('.pending_complaint_enquiries').html('<i class="fas fa-envelope mr-2 "></i> ' + data.pending_complaint_enquiries + '  Complaint Enquiry<span class="float-right text-muted text-sm">' + data.last_time_of_complaint + '</span>');
+
+                            $('.pending_news').html('<i class="far fa-newspaper mr-2"></i> ' + data.pending_news + '  News<span class="float-right text-muted text-sm">' + data.last_time_of_news + '</span>');
+
+                            $('.side_pending_sales_enquiries').html('<i class="far fa-circle nav-icon"></i> <p>Sales Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen">' + data.pending_sales_enquiries + '</sup></p>');
+                            $('.side_pending_complaint_enquiries').html('<i class="far fa-circle nav-icon"></i> <p>Complaint Enquiry List <sup class="px-1 text-white bg-danger rounded-sm fontTen">' + data.pending_complaint_enquiries + '</sup></p>');
+                            $('.total_notification').html(data.total_notification);
+                        }
+                    });
+                })
+
+                function logout(email, password) {
+//                    alert(email);
+                    if (Android !== undefined) {
+                        if (Android.logout !== undefined) {
+                            Android.logout(email, password);
+                        }
+                    }
+                }
+            </script>
+

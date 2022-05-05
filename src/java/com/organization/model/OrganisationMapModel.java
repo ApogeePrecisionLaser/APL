@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 public class OrganisationMapModel {
 
     private Connection connection;
-  
+
     private String message;
     private String msgBgColor;
     private final String COLOR_OK = "lightyellow";
@@ -36,18 +36,19 @@ public class OrganisationMapModel {
 
             connection = con;
         } catch (Exception e) {
-             System.out.println("OrganisationMapModel setConnection() Error: " + e);
+            System.out.println("OrganisationMapModel setConnection() Error: " + e);
         }
     }
+
     public int getNoOfRows(int organisation_id, int org_type_id, int org_sub_type_id) {
         int noOfRows = 0;
         try {
-            String query = "SELECT count(*) FROM organisation_map AS m, organisation_name AS org, organisation_type AS ot, organisation_sub_type AS ost "
-                    + "WHERE m.organisation_id=org.organisation_id AND m.organisation_type_id=ot.organisation_type_id "
-                    + "AND m.organisation_sub_type_id= ost.organisation_sub_type_id and "
-                    + "if(" + organisation_id + "=0, org.organisation_id like '%%',org.organisation_id=" + organisation_id + ") and "
-                    + "if(" + org_type_id + "=0,ot.organisation_type_id like'%%', ot.organisation_type_id=" + org_type_id + ") and "
-                    + "if(" + org_sub_type_id + "=0,ost.organisation_sub_type_id like'%%', ost.organisation_sub_type_id =" + org_sub_type_id + ") ";
+            String query = " SELECT count(*) FROM organisation_map AS m, organisation_name AS org, organisation_type AS ot, organisation_sub_type AS ost "
+                    + " WHERE m.organisation_id=org.organisation_id AND m.organisation_type_id=ot.organisation_type_id "
+                    + " AND m.organisation_sub_type_id= ost.organisation_sub_type_id and "
+                    + " if(" + organisation_id + "=0, org.organisation_id like '%%',org.organisation_id=" + organisation_id + ") and "
+                    + " if(" + org_type_id + "=0,ot.organisation_type_id like'%%', ot.organisation_type_id=" + org_type_id + ") and "
+                    + " if(" + org_sub_type_id + "=0,ost.organisation_sub_type_id like'%%', ost.organisation_sub_type_id =" + org_sub_type_id + ") ";
 
             PreparedStatement psmt = connection.prepareStatement(query);
             ResultSet rset = psmt.executeQuery();
@@ -63,14 +64,14 @@ public class OrganisationMapModel {
 
     public List<OrganisationMap> showData(int lowerLimit, int noOfRowsToDisplay, int organisation_id, int org_type_id, int org_sub_type_id) {
         List<OrganisationMap> list = new ArrayList<OrganisationMap>();
-        String query = "SELECT m.org_map_id ,org.organisation_name, ot.org_type_name, ost.organisation_sub_type_name ,m.description "
-                + "FROM organisation_map AS m, organisation_name AS org, organisation_type AS ot, organisation_sub_type AS ost "
-                + "WHERE m.organisation_id=org.organisation_id AND m.organisation_type_id=ot.organisation_type_id "
-                + "AND m.organisation_sub_type_id= ost.organisation_sub_type_id and "
-                + "if(" + organisation_id + "=0, org.organisation_id like '%%',org.organisation_id=" + organisation_id + ") and "
-                + "if(" + org_type_id + "=0,ot.organisation_type_id like'%%', ot.organisation_type_id=" + org_type_id + ") and "
-                + "if(" + org_sub_type_id + "=0,ost.organisation_sub_type_id like'%%', ost.organisation_sub_type_id =" + org_sub_type_id + ") "
-                + "ORDER BY org.organisation_name LIMIT "
+        String query = " SELECT m.org_map_id ,org.organisation_name, ot.org_type_name, ost.organisation_sub_type_name ,m.description "
+                + " FROM organisation_map AS m, organisation_name AS org, organisation_type AS ot, organisation_sub_type AS ost "
+                + " WHERE m.organisation_id=org.organisation_id AND m.organisation_type_id=ot.organisation_type_id "
+                + " AND m.organisation_sub_type_id= ost.organisation_sub_type_id and "
+                + " if(" + organisation_id + "=0, org.organisation_id like '%%',org.organisation_id=" + organisation_id + ") and "
+                + " if(" + org_type_id + "=0,ot.organisation_type_id like'%%', ot.organisation_type_id=" + org_type_id + ") and "
+                + " if(" + org_sub_type_id + "=0,ost.organisation_sub_type_id like'%%', ost.organisation_sub_type_id =" + org_sub_type_id + ") "
+                + " ORDER BY org.organisation_name LIMIT "
                 + lowerLimit + ", " + noOfRowsToDisplay;
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -91,7 +92,7 @@ public class OrganisationMapModel {
     }
 
     public int insertRecord(OrganisationMap OrganisationMap) {
-        String query = "INSERT INTO organisation_map (organisation_id, organisation_type_id, organisation_sub_type_id, description) "
+        String query = " INSERT INTO organisation_map (organisation_id, organisation_type_id, organisation_sub_type_id, description) "
                 + " VALUES(?, ?, ?, ?) ";
         int rowsAffected = 0;
         try {
@@ -115,7 +116,7 @@ public class OrganisationMapModel {
     }
 
     public int updateRecord(OrganisationMap OrganisationMap) {
-        String query = "UPDATE organisation_map SET organisation_id=?, organisation_type_id=?, organisation_sub_type_id=?, description=? WHERE org_map_id=?";
+        String query = " UPDATE organisation_map SET organisation_id=?, organisation_type_id=?, organisation_sub_type_id=?, description=? WHERE org_map_id=? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -140,7 +141,7 @@ public class OrganisationMapModel {
     }
 
     public int deleteRecord(int site_id) {
-        String query = "DELETE FROM organisation_map WHERE org_map_id=" + site_id;
+        String query = " DELETE FROM organisation_map WHERE org_map_id=" + site_id;
         int rowsAffected = 0;
         try {
             rowsAffected = connection.prepareStatement(query).executeUpdate();
@@ -159,7 +160,7 @@ public class OrganisationMapModel {
 
     public List<String> getOrganisation_Name(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org.organisation_name FROM organisation_name AS org ORDER BY organisation_name ";
+        String query = " SELECT org.organisation_name FROM organisation_name AS org ORDER BY organisation_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -181,7 +182,7 @@ public class OrganisationMapModel {
     }
 
     public int getOrganisation_id(String organisation_name) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ?";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -197,7 +198,7 @@ public class OrganisationMapModel {
 
     public List<String> getOrgTypeNameList(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org_type_name FROM organisation_type ORDER BY org_type_name";
+        String query = " SELECT org_type_name FROM organisation_type ORDER BY org_type_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -219,7 +220,7 @@ public class OrganisationMapModel {
     }
 
     public int getOrganisationTypeID(String org_type_name) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ?";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -252,10 +253,10 @@ public class OrganisationMapModel {
 
     public List<String> getOrganisation_subType_Name(String q, String org_type_name) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT ost.organisation_sub_type_name "
-                + "FROM organisation_sub_type AS ost ,organisation_type AS ot "
-                + "WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name=? "
-                + "ORDER BY organisation_sub_type_name ";
+        String query = " SELECT ost.organisation_sub_type_name "
+                + " FROM organisation_sub_type AS ost ,organisation_type AS ot "
+                + " WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name=? "
+                + " ORDER BY organisation_sub_type_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, org_type_name);
@@ -279,10 +280,10 @@ public class OrganisationMapModel {
     }
 
     public int getOrganisation_subType_id(String organisation_Type, String organisation_subType_name) {
-        String query = "SELECT ost.organisation_sub_type_id "
-                + "FROM organisation_sub_type AS ost ,organisation_type AS ot "
-                + "WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name= ? "
-                + "AND ost.organisation_sub_type_name = ?  ";
+        String query = " SELECT ost.organisation_sub_type_id "
+                + " FROM organisation_sub_type AS ost ,organisation_type AS ot "
+                + " WHERE ost.organisation_type_id=ot.organisation_type_id AND org_type_name= ? "
+                + " AND ost.organisation_sub_type_name = ?  ";
         int organisation_subType_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -314,26 +315,28 @@ public class OrganisationMapModel {
         }
         return reportInbytes;
     }
- public  ByteArrayOutputStream generateOrginisationMapXlsRecordList(String jrxmlFilePath, int organisation_id, int org_type_id, int org_sub_type_id) {
-                ByteArrayOutputStream bytArray = new ByteArrayOutputStream();
-               HashMap mymap = new HashMap();
-               mymap.put("organisation_id", organisation_id);
-               mymap.put("org_type_id", org_type_id);
-               mymap.put("org_sub_type", org_sub_type_id);
-               Connection con = connection;
-                try {
-                    //JRBeanCollectionDataSource jrBean=new JRBeanCollectionDataSource(list);
-                    JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, mymap, con);
-                    JRXlsExporter exporter = new JRXlsExporter();
-                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
-                    exporter.exportReport();
-                } catch (Exception e) {
-                    System.out.println("OrginisationMapStatusModel generateOrginisationMapXlsRecordList() JRException: " + e);
-                }
-                return bytArray;
-            }
+
+    public ByteArrayOutputStream generateOrginisationMapXlsRecordList(String jrxmlFilePath, int organisation_id, int org_type_id, int org_sub_type_id) {
+        ByteArrayOutputStream bytArray = new ByteArrayOutputStream();
+        HashMap mymap = new HashMap();
+        mymap.put("organisation_id", organisation_id);
+        mymap.put("org_type_id", org_type_id);
+        mymap.put("org_sub_type", org_sub_type_id);
+        Connection con = connection;
+        try {
+            //JRBeanCollectionDataSource jrBean=new JRBeanCollectionDataSource(list);
+            JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, mymap, con);
+            JRXlsExporter exporter = new JRXlsExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, bytArray);
+            exporter.exportReport();
+        } catch (Exception e) {
+            System.out.println("OrginisationMapStatusModel generateOrginisationMapXlsRecordList() JRException: " + e);
+        }
+        return bytArray;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -342,7 +345,6 @@ public class OrganisationMapModel {
         return msgBgColor;
     }
 
-    
     public void closeConnection() {
         try {
             connection.close();

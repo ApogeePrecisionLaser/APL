@@ -46,12 +46,12 @@ public class MyCustomTagFunctions {
                     "jdbc:mysql://localhost:3306/apl", "root", "root");
 
             String query = " select p.privilege_id,p.privilege_type,p.privilege_type_id,p.privilege_type_value,  "
-                    + " uu.u_url_id,uu.u_url,uup.privilege  \n"
-                    + " from url_detail ud, u_url_privilege uup, u_url uu, u_role_url_privilege urup, user_roles ur, privilege p  \n"
-                    + " where ud.url_detail_id=uup.url_detail_id and uu.u_url_id=ud.url_id and urup.u_url_id=ud.url_id  \n"
+                    + " uu.u_url_id,uu.u_url,uup.privilege "
+                    + " from url_detail ud, u_url_privilege uup, u_url uu, u_role_url_privilege urup, user_roles ur, privilege p  "
+                    + " where ud.url_detail_id=uup.url_detail_id and uu.u_url_id=ud.url_id and urup.u_url_id=ud.url_id "
                     + " and ur.user_role_id=urup.user_role_id and p.privilege_id=ud.privilege_id   "
-                    + " and urup.u_role_url_privilege_id=uup.u_role_url_privilege_id \n"
-                    + " and  uu.u_url='" + url + "' and ur.role_name = '" + user + "' and p.privilege_type_id='" + qry + "'"
+                    + " and urup.u_role_url_privilege_id=uup.u_role_url_privilege_id "
+                    + " and  uu.u_url='" + url + "' and ur.role_name = '" + user + "' and p.privilege_type_id='" + qry + "' "
                     + " and uup.privilege='Y' ";
             ResultSet rst = con.prepareStatement(query).executeQuery();
             while (rst.next()) {

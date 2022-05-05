@@ -57,8 +57,8 @@ public class ItemAuthorizationModel {
             search_designation = "";
         }
 
-        String query = "select d.designation,itn.item_name,ia.item_authorization_id,ia.qty,ia.description,ia.monthly_limit from item_names itn,item_authorization ia, "
-                + " designation d where itn.active='Y' and ia.active='Y' and d.active='Y' and ia.item_names_id=itn.item_names_id"
+        String query = " select d.designation,itn.item_name,ia.item_authorization_id,ia.qty,ia.description,ia.monthly_limit from item_names itn,item_authorization ia, "
+                + " designation d where itn.active='Y' and ia.active='Y' and d.active='Y' and ia.item_names_id=itn.item_names_id "
                 + "  and ia.designation_id=d.designation_id ";
 
         if (!searchItemName.equals("") && searchItemName != null) {
@@ -364,7 +364,7 @@ public class ItemAuthorizationModel {
     }
 
     public int insertRecord(ItemAuthorization bean, String[] des_checkbox, HashMap<Integer, Integer> key_person_map) throws SQLException {
-        String query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+        String query = " INSERT INTO item_authorization(item_names_id,designation_id,description, "
                 + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
 
@@ -377,7 +377,7 @@ public class ItemAuthorizationModel {
         String query2 = " select  item_names_id, "
                 + " item_name, "
                 + " parent_id "
-                + "from (select * from item_names where active='Y' "
+                + " from (select * from item_names where active='Y' "
                 + " order by parent_id, item_names_id ) item_names, "
                 + " (select @pv := '" + item_name_id + "') initialisation "
                 + " where   find_in_set(parent_id, @pv) > 0 "
@@ -416,7 +416,7 @@ public class ItemAuthorizationModel {
                     for (int l = 0; l < key_p_list.size(); l++) {
                         kkk = key_p_list.get(l).trim();
                         org_office_des_map_id = getOrgOfficeDesignationMapId(bean.getOrg_office(), designation_id);
-                        String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+                        String item_auth_query = " INSERT INTO item_authorization(item_names_id,designation_id,description, "
                                 + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id,key_person_id) "
                                 + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
@@ -449,7 +449,7 @@ public class ItemAuthorizationModel {
 
                     }
                     if (designation_id == 5) {
-                        String ib_query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+                        String ib_query = " INSERT INTO inventory_basic(item_names_id,org_office_id,description, "
                                 + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
                         int inventory_basic_id = 0;
@@ -509,8 +509,8 @@ public class ItemAuthorizationModel {
                                         inventory_basic_id = rs_inv.getInt(1);
                                     }
 
-                                    String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                                    String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                                             + " reference_document_type,reference_document_id,stock_quantity) "
                                             + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -537,8 +537,8 @@ public class ItemAuthorizationModel {
                 }
             }
 
-            String query5 = " select item_names_id from item_names where item_names_id"
-                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
+            String query5 = " select item_names_id from item_names where item_names_id "
+                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y' "
                     + "  and active='Y' ";
 
             PreparedStatement pstmt5 = connection.prepareStatement(query5);
@@ -569,11 +569,11 @@ public class ItemAuthorizationModel {
                     for (int l = 0; l < key_p_list.size(); l++) {
                         kkk = key_p_list.get(l).trim();
                         org_office_des_map_id = getOrgOfficeDesignationMapId(bean.getOrg_office(), designation_id);
-                        String item_auth_query = "INSERT INTO item_authorization(item_names_id,designation_id,description,"
+                        String item_auth_query = " INSERT INTO item_authorization(item_names_id,designation_id,description, "
                                 + " revision_no,active,remark,qty,monthly_limit,org_office_designation_map_id,key_person_id) "
                                 + " VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
-                        String query4_count = "SELECT count(*) as count FROM item_authorization WHERE "
+                        String query4_count = " SELECT count(*) as count FROM item_authorization WHERE "
                                 + " item_names_id='" + item_name_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
                                 + " and active='Y' and key_person_id='" + kkk + "'  ";
                         int auth_map_count = 0;
@@ -604,7 +604,7 @@ public class ItemAuthorizationModel {
                     }
 
                     if (designation_id == 5) {
-                        String ib_query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+                        String ib_query = " INSERT INTO inventory_basic(item_names_id,org_office_id,description, "
                                 + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
 
                         int inventory_basic_id = 0;
@@ -677,8 +677,8 @@ public class ItemAuthorizationModel {
                                             inventory_basic_id = rs_inv.getInt(1);
                                         }
 
-                                        String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                                                + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                                        String query2_inv = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                                                + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                                                 + " reference_document_type,reference_document_id,stock_quantity) "
                                                 + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -727,7 +727,7 @@ public class ItemAuthorizationModel {
 
     public int getOrgOfficeId(String org_office) {
 
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -741,7 +741,7 @@ public class ItemAuthorizationModel {
     }
 
     public int getModelId(String model_name) {
-        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -778,18 +778,18 @@ public class ItemAuthorizationModel {
         int item_name_id = getItemNamesId(bean.getItem_name());
         int designation_id = getDesignationId(bean.getDesignation());
 
-        String query1 = "SELECT max(revision_no) revision_no FROM item_authorization WHERE item_authorization_id = " + item_authorization_id + " "
+        String query1 = " SELECT max(revision_no) revision_no FROM item_authorization WHERE item_authorization_id = " + item_authorization_id + " "
                 + " and active='Y' ";
-        String query2 = "UPDATE item_authorization SET active=? WHERE item_authorization_id=? and revision_no=? ";
-        String query3 = "INSERT INTO item_authorization(item_authorization_id,item_names_id,designation_id,description,"
+        String query2 = " UPDATE item_authorization SET active=? WHERE item_authorization_id=? and revision_no=? ";
+        String query3 = " INSERT INTO item_authorization(item_authorization_id,item_names_id,designation_id,description, "
                 + " revision_no,active,remark,qty,monthly_limit) "
-                + " VALUES(?,?,?,?,?,?,?,?,?)";
+                + " VALUES(?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         int map_count = 0;
         try {
-            String query4 = "SELECT count(*) as count FROM item_authorization WHERE "
-                    + " item_names_id='" + item_name_id + "' and designation_id='" + designation_id + "'"
+            String query4 = " SELECT count(*) as count FROM item_authorization WHERE "
+                    + " item_names_id='" + item_name_id + "' and designation_id='" + designation_id + "' "
                     + " and active='Y'  ";
 
             PreparedStatement pstmt1 = connection.prepareStatement(query4);
@@ -982,8 +982,8 @@ public class ItemAuthorizationModel {
                 }
             }
 
-            String query5 = " select item_names_id from item_names where item_names_id"
-                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y'"
+            String query5 = " select item_names_id from item_names where item_names_id "
+                    + " in(" + item_names_id_list.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") and is_super_child='Y' "
                     + "  and active='Y' ";
 
             PreparedStatement pstmt5 = connection.prepareStatement(query5);
@@ -1015,7 +1015,7 @@ public class ItemAuthorizationModel {
                         kkk = key_p_list.get(l).trim();
                         org_office_des_map_id = getOrgOfficeDesignationMapId(bean.getOrg_office(), designation_id);
 
-                        String query4_count = "SELECT item_authorization_id FROM item_authorization WHERE "
+                        String query4_count = " SELECT item_authorization_id FROM item_authorization WHERE "
                                 + " item_names_id='" + item_name_id + "' and org_office_designation_map_id='" + org_office_des_map_id + "' "
                                 + " and active='Y' and key_person_id='" + kkk + "'  ";
                         int item_authorization_id = 0;
@@ -1079,7 +1079,7 @@ public class ItemAuthorizationModel {
     }
 
     public int getItemNamesId(String item_name) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1094,7 +1094,7 @@ public class ItemAuthorizationModel {
 
     public int getDesignationId(String designation) {
 
-        String query = "SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
+        String query = " SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1108,7 +1108,7 @@ public class ItemAuthorizationModel {
     }
 
     public String getItemName(int item_name_id) {
-        String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y'";
+        String query = " SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1124,7 +1124,7 @@ public class ItemAuthorizationModel {
 
     public List<String> getDesignation(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT designation from designation where active='Y' ";
+        String query = " SELECT designation from designation where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -1149,7 +1149,7 @@ public class ItemAuthorizationModel {
     public List<String> getItemName(String q) {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT item_name from item_names where active='Y' and is_super_child='Y' ";
-        String query = "SELECT item_name from item_names where active='Y' ";
+        String query = " SELECT item_name from item_names where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -1173,7 +1173,7 @@ public class ItemAuthorizationModel {
 
     public List<String> getAllChild(String item_names_id) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT item_names_id from item_names where active='Y' ";
+        String query = " SELECT item_names_id from item_names where active='Y' ";
 
         try {
             List<Integer> idList = new ArrayList<Integer>();
@@ -1181,11 +1181,11 @@ public class ItemAuthorizationModel {
             int count = 0;
 
             idList = getAllParentChildList(item_names_id);
-            query = "select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                    + "itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
+            query = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
+                    + " itn.generation,itn.is_super_child,itn.prefix,itn.HSNCode  "
                     + " from item_names itn, item_type itt where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' ";
             if (!item_names_id.equals("")) {
-                query += "and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
+                query += " and itn.item_names_id in(" + idList.toString().replaceAll("\\[", "").replaceAll("\\]", "") + ") ";
 
             }
             if (!item_names_id.equals("")) {
@@ -1215,7 +1215,7 @@ public class ItemAuthorizationModel {
         }
         int item_names_id = 0, parent_id = 0;
 
-        String qry = "select item_names_id from item_names where active='Y' and item_names_id='" + item_id + "' ";
+        String qry = " select item_names_id from item_names where active='Y' and item_names_id='" + item_id + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry);
             ResultSet rstt = pst.executeQuery();
@@ -1227,7 +1227,7 @@ public class ItemAuthorizationModel {
             System.out.println("ItemNameModel.getAllParentChildList() -" + e);
         }
 
-        String qry1 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
+        String qry1 = " select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' limit 1 ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry1);
             ResultSet rstt = pst.executeQuery();
@@ -1253,7 +1253,7 @@ public class ItemAuthorizationModel {
                     + " LEFT JOIN item_names AS t8 ON t8.parent_id = t7.item_names_id and t8.active='Y' "
                     + " LEFT JOIN item_names AS t9 ON t9.parent_id = t8.item_names_id and t9.active='Y' "
                     + " LEFT JOIN item_names AS t10 ON t10.parent_id = t9.item_names_id and t10.active='Y' "
-                    + "  WHERE '" + item_names_id + "' in (t1.parent_id,t2.parent_id) ";
+                    + " WHERE '" + item_names_id + "' in (t1.parent_id,t2.parent_id) ";
 
             pstmt = connection.prepareStatement(query);
             ResultSet rset = pstmt.executeQuery();
@@ -1271,7 +1271,7 @@ public class ItemAuthorizationModel {
         } catch (Exception e) {
             System.out.println("Error:--ItemNameModel--- getAllParentChildList--" + e);
         }
-        String qry2 = "select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
+        String qry2 = " select item_names_id from item_names where active='Y' and parent_id='" + item_names_id + "' ";
         try {
             PreparedStatement pst = connection.prepareStatement(qry2);
             ResultSet rstt = pst.executeQuery();

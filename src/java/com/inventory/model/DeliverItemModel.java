@@ -1,12 +1,10 @@
 package com.inventory.model;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
@@ -56,7 +54,7 @@ public class DeliverItemModel {
                     + " status s,designation d where indt.requested_to=kp2.key_person_id "
                     + " and indt.requested_by=kp1.key_person_id "
                     + " and indt.status_id=s.status_id and indt.active='Y' "
-                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3) and d.designation_id='5'";
+                    + " and kp1.active='Y' and kp2.active='Y' and d.active='Y' and indt.status_id in(6,7,9,3) and d.designation_id='5' ";
         }
 
         try {
@@ -83,7 +81,7 @@ public class DeliverItemModel {
         List<DeliverItem> list = new ArrayList<DeliverItem>();
 
         String query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty "
-                + " ,s.status,indi.indent_item_id,indt.indent_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by ,indt.requested_to "
+                + " ,s.status,indi.indent_item_id,indt.indent_table_id,itn.quantity as stock_qty,indi.deliver_qty,indt.requested_by,indt.requested_to "
                 + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
                 + " status s where indt.indent_table_id=indi.indent_table_id and indi.item_names_id=itn.item_names_id "
                 + " and indi.purpose_id=p.purpose_id "
@@ -119,7 +117,7 @@ public class DeliverItemModel {
 
     public String getIndentNo(int indent_table_id) {
 
-        String query = "SELECT indent_no FROM indent_table WHERE indent_table_id = '" + indent_table_id + "' ";
+        String query = " SELECT indent_no FROM indent_table WHERE indent_table_id = '" + indent_table_id + "' ";
         String indent_no = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -153,7 +151,7 @@ public class DeliverItemModel {
         int updateRowsAffected4 = 0;
         int map_count = 0;
         try {
-            String query = "INSERT INTO delivery_challan(delivery_challan_no,challan_date,signature_of_sender,"
+            String query = " INSERT INTO delivery_challan(delivery_challan_no,challan_date,signature_of_sender, "
                     + " transportation_mode,active,remark,vehicle_no,description,revision_no,indent_table_id,indent_item_id,status_id) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -218,7 +216,7 @@ public class DeliverItemModel {
 //                updateRowsAffected3 = pstm3.executeUpdate();
 //
 //            } else {
-            String inventory_inward_query2 = " select ib.inventory_basic_id from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
+            String inventory_inward_query2 = " select ib.inventory_basic_id from inventory_basic ib,inventory inv,item_names itn,key_person kp, "
                     + " indent_item indi,org_office oo,indent_table indt,model m,manufacturer_item_map mim "
                     + " where indi.item_names_id=itn.item_names_id  and indt.requested_by=kp.key_person_id "
                     + " and indt.indent_table_id=indi.indent_table_id and itn.item_names_id=indi.item_names_id and "
@@ -226,7 +224,7 @@ public class DeliverItemModel {
                     + " and ib.inventory_basic_id=inv.inventory_basic_id "
                     + " and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' and m.active='Y' and mim.active='Y' "
                     + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id and mim.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
-                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
+                    + " and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
                     + " and m.model='" + bean.getModel() + "' "
                     + " and oo.org_office_name='" + logged_org_office + "' "
                     + " group by ib.inventory_basic_id ";
@@ -238,7 +236,7 @@ public class DeliverItemModel {
                 inventory_basic_id = rs.getInt("inventory_basic_id");
             }
 
-            String query_insert = "INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
+            String query_insert = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
                     + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -262,7 +260,7 @@ public class DeliverItemModel {
             rowsAffected = pstmt_ins.executeUpdate();
             // }
 
-            String inventory_outward_query = " select inv.inventory_id,inv.stock_quantity,inv.outward_quantity from inventory_basic ib,inventory inv,item_names itn,key_person kp,"
+            String inventory_outward_query = " select inv.inventory_id,inv.stock_quantity,inv.outward_quantity from inventory_basic ib,inventory inv,item_names itn,key_person kp, "
                     + " indent_item indi,org_office oo,indent_table indt,model m,manufacturer_item_map mim "
                     + " where indi.item_names_id=itn.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
                     + " and mim.item_names_id=itn.item_names_id and ib.model_id=m.model_id "
@@ -270,10 +268,10 @@ public class DeliverItemModel {
                     + " itn.item_names_id=ib.item_names_id  and ib.org_office_id=oo.org_office_id and ib.inventory_basic_id=inv.inventory_basic_id "
                     + " and kp.key_person_id=inv.key_person_id  and ib.active='Y' and inv.active='Y' and itn.active='Y' and indt.active='Y' "
                     + " and m.active='Y' and mim.active='Y' "
-                    + "and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
+                    + " and kp.active='Y' and oo.active='Y'  and indi.active='Y' and itn.item_name='" + bean.getItem_name() + "' "
                     + " and oo.org_office_name='" + logged_org_office + "' "
                     + " and m.model='" + bean.getModel() + "' "
-                    + "and kp.key_person_name='" + logged_user_name + "' group by inv.inventory_id ";
+                    + " and kp.key_person_name='" + logged_user_name + "' group by inv.inventory_id ";
 
             PreparedStatement psmt2 = connection.prepareStatement(inventory_outward_query);
             ResultSet rs2 = psmt2.executeQuery();
@@ -307,7 +305,7 @@ public class DeliverItemModel {
     }
 
     public int getRequestedKeyPersonId(String person_name) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -322,7 +320,7 @@ public class DeliverItemModel {
 
     public int getStatusId(String status) {
 
-        String query = "SELECT status_id FROM status WHERE status = '" + status + "' ";
+        String query = " SELECT status_id FROM status WHERE status = '" + status + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -337,7 +335,7 @@ public class DeliverItemModel {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -352,7 +350,7 @@ public class DeliverItemModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status WHERE status_id in(7,12,10) ";
+        String query = " SELECT status from status WHERE status_id in(7,12,10) ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -376,7 +374,7 @@ public class DeliverItemModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -400,7 +398,7 @@ public class DeliverItemModel {
 
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
+        String query = " SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -426,22 +424,22 @@ public class DeliverItemModel {
         List<Indent> list = new ArrayList<Indent>();
 
         String query = " select required_qty,deliver_qty,approved_qty,kp1.key_person_name as requested_by,kp2.key_person_name as requested_to "
-                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2,"
-                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo,"
+                + " ,item_name,m.model,itn.HSNCode,oo2.address_line1 as oo_address_line1,oo2.address_line2 as oo_address_line2, "
+                + " oo2.address_line3 as oo_address_line3,c2.city_name as org_office_city,c2.pin_code,oo1.service_tax_reg_no as partyGSTNo, "
                 + " oo2.service_tax_reg_no as officeGSTNo,oo2.mobile_no1,oo2.mobile_no2, "
                 + " c1.city_name as key_person_city,oo1.org_office_name as requested_by_office, "
                 + " oo1.address_line1 as kp_address_line1,oo1.address_line2 as kp_address_line2,oo1.address_line3 as kp_address_line3 "
-                + " from model m,manufacturer_item_map mim,indent_table indt,indent_item indi,key_person kp1,key_person kp2 ,"
+                + " from model m,manufacturer_item_map mim,indent_table indt,indent_item indi,key_person kp1,key_person kp2, "
                 + " item_names as itn,org_office oo1,org_office oo2,city c1,city c2 "
                 + " where indi.indent_table_id=indt.indent_table_id and indi.model_id=m.model_id "
-                + "  and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
+                + " and m.active='Y' and mim.item_names_id=itn.item_names_id and mim.active='Y' "
                 + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  and "
                 + " kp1.key_person_id=indt.requested_by  and kp2.key_person_id=indt.requested_to and kp1.active='y' "
-                + " and kp2.active='y' and itn.active='Y' and indt.indent_no='" + indent_no + "' and oo1.active='Y' and oo2.active='Y'"
+                + " and kp2.active='y' and itn.active='Y' and indt.indent_no='" + indent_no + "' and oo1.active='Y' and oo2.active='Y' "
                 + " and c1.active='Y' "
                 + " and c2.active='Y' "
                 + " and kp1.org_office_id=oo1.org_office_id and kp2.org_office_id=oo2.org_office_id "
-                + " and oo1.city_id=c1.city_id  and oo2.city_id=c2.city_id  ";
+                + " and oo1.city_id=c1.city_id  and oo2.city_id=c2.city_id ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();

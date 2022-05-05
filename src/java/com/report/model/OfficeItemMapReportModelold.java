@@ -6,13 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import com.DBConnection.DBConnection;
 import com.inventory.model.InventoryBasicModel;
 import com.inventory.model.ItemNameModel;
-import com.inventory.tableClasses.Inventory;
 import com.inventory.tableClasses.InventoryBasic;
 import com.inventory.tableClasses.ItemName;
 import com.report.bean.OfficeItemMapReport;
@@ -129,7 +127,7 @@ public class OfficeItemMapReportModelold {
             String query = " select itn.item_names_id "
                     + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv, "
                     + " key_person kp,org_office oo,manufacturer mr "
-                    + " where itt.item_type_id=itn.item_type_id and mim.item_names_id=itn.item_names_id"
+                    + " where itt.item_type_id=itn.item_type_id and mim.item_names_id=itn.item_names_id "
                     + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                     + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                     + " and oo.org_office_id=ib.org_office_id "
@@ -330,18 +328,18 @@ public class OfficeItemMapReportModelold {
                         multiple_count = rset_count.getInt("count");
                     }
 
-                    String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id,"
-                            + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name,"
+                    String query2 = " select itn.item_names_id,itn.item_name,itn.description,itn.item_code,itt.item_type,itn.quantity,itn.parent_id, "
+                            + " itn.generation,itn.is_super_child,itn.prefix,inv.inventory_id,ib.inventory_basic_id,oo.org_office_name,kp.key_person_name, "
                             + " inv.inward_quantity,inv.outward_quantity,inv.stock_quantity,inv.date_time,inv.reference_document_type, "
                             + " inv.reference_document_id,inv.description,m.model,mr.manufacturer_name  "
-                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp,"
+                            + " from item_names itn, item_type itt,manufacturer_item_map mim,model m,inventory_basic ib,inventory inv,key_person kp, "
                             + " org_office oo,manufacturer mr "
                             + " where itt.item_type_id=itn.item_type_id and itn.active='Y' and itt.active='y' and mim.item_names_id=itn.item_names_id "
                             + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                             + " and ib.model_id=m.model_id and ib.inventory_basic_id=inv.inventory_basic_id and kp.key_person_id=inv.key_person_id "
                             + " and oo.org_office_id=ib.org_office_id and mim.active='Y' "
                             + " and m.active='Y' and ib.active='Y' and inv.active='Y' and kp.active='Y' and oo.active='Y' "
-                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and"
+                            + " and ib.item_names_id=itn.item_names_id and mr.manufacturer_id=mim.manufacturer_id and mr.active='Y' and "
                             + " itn.item_names_id='" + item_id + "' and kp.key_person_id=115 ";
 
                     if (!search_item_code.equals("") && search_item_code != null) {
@@ -536,7 +534,7 @@ public class OfficeItemMapReportModelold {
     }
 
     public int insertRecord(InventoryBasic bean) throws SQLException {
-        String query = "INSERT INTO inventory_basic(item_names_id,org_office_id,description,"
+        String query = " INSERT INTO inventory_basic(item_names_id,org_office_id,description, "
                 + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
         int rowsAffected = 0;
@@ -591,8 +589,8 @@ public class OfficeItemMapReportModelold {
                         inventory_basic_id = rs.getInt(1);
                     }
 
-                    String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description,"
-                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,"
+                    String query2 = " INSERT INTO inventory(inventory_basic_id,key_person_id,description, "
+                            + " revision_no,active,remark,inward_quantity,outward_quantity,date_time, "
                             + " reference_document_type,reference_document_id,stock_quantity) "
                             + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -633,7 +631,7 @@ public class OfficeItemMapReportModelold {
 
     public int getKeyPersonId(String key_person_name) {
 
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + key_person_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -684,10 +682,11 @@ public class OfficeItemMapReportModelold {
         int stock_quantity = getStockQuantity(item_name_id);
 
         int map_count = 0;
-        String query1 = "SELECT max(revision_no) revision_no FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id + "  && active='Y' ";
-        String query2 = "UPDATE inventory_basic SET active=? WHERE inventory_basic_id=? and revision_no=? ";
-        String query3 = "INSERT INTO inventory_basic(inventory_basic_id,item_names_id,org_office_id,description,"
-                + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id + " "
+                + " && active='Y' ";
+        String query2 = " UPDATE inventory_basic SET active=? WHERE inventory_basic_id=? and revision_no=? ";
+        String query3 = " INSERT INTO inventory_basic(inventory_basic_id,item_names_id,org_office_id,description, "
+                + " revision_no,active,remark,min_quantity,daily_req,opening_balance,model_id) VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
 
         int rowsAffected = 0;
         int rowsAffected2 = 0;
@@ -736,11 +735,11 @@ public class OfficeItemMapReportModelold {
                 }
             }
 
-            String query1_inventory = "SELECT max(revision_no) revision_no FROM inventory WHERE inventory_id = " + inventory_id + "  and active='Y' ";
-            String query2_inventory = "UPDATE inventory SET active=? WHERE inventory_id=? and revision_no=? ";
-            String query3_inventory = "INSERT INTO inventory(inventory_id,inventory_basic_id,key_person_id,description,"
+            String query1_inventory = " SELECT max(revision_no) revision_no FROM inventory WHERE inventory_id = " + inventory_id + "  and active='Y' ";
+            String query2_inventory = " UPDATE inventory SET active=? WHERE inventory_id=? and revision_no=? ";
+            String query3_inventory = " INSERT INTO inventory(inventory_id,inventory_basic_id,key_person_id,description, "
                     + " revision_no,active,remark,inward_quantity,outward_quantity,date_time,reference_document_type,reference_document_id,stock_quantity) "
-                    + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
             PreparedStatement pstmt2 = connection.prepareStatement(query1_inventory);
             ResultSet rs_inventory = pstmt2.executeQuery();
             if (rs_inventory.next()) {
@@ -826,7 +825,7 @@ public class OfficeItemMapReportModelold {
     }
 
     public int deleteRecord(int inventory_basic_id) {
-        String query = "DELETE FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id;
+        String query = " DELETE FROM inventory_basic WHERE inventory_basic_id = " + inventory_basic_id;
         int child_item_count = 0;
         int rowsAffected = 0;
         try {
@@ -849,7 +848,7 @@ public class OfficeItemMapReportModelold {
     }
 
     public int getItemNamesId(String item_code) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_code = '" + item_code + "' ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_code = '" + item_code + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -864,7 +863,7 @@ public class OfficeItemMapReportModelold {
 
     public int getOrgOfficeId(String org_office) {
 
-        String query = "SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
+        String query = " SELECT org_office_id FROM org_office WHERE org_office_name = '" + org_office + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -878,7 +877,7 @@ public class OfficeItemMapReportModelold {
     }
 
     public int getModelId(String model_name) {
-        String query = "SELECT model_id FROM model WHERE model = '" + model_name + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model_name + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -892,7 +891,7 @@ public class OfficeItemMapReportModelold {
     }
 
     public String getItemName(int item_name_id) {
-        String query = "SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
+        String query = " SELECT item_name FROM item_names WHERE item_names_id = ? and active='Y' ";
         String name = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -908,7 +907,7 @@ public class OfficeItemMapReportModelold {
 
     public List<String> getItemName(String q, String manufacturer) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT itn.item_name FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+        String query = " SELECT itn.item_name FROM item_names itn,manufacturer mr,manufacturer_item_map mim where "
                 + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
                 + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y'  ";
 
@@ -938,7 +937,8 @@ public class OfficeItemMapReportModelold {
 
     public List<String> getItemCode(String q, String manufacturer) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr,manufacturer_item_map mim where"
+        String query = " SELECT concat(itn.item_name,' - ',itn.item_code) as item_code FROM item_names itn,manufacturer mr, "
+                + " manufacturer_item_map mim where "
                 + " mr.manufacturer_id=mim.manufacturer_id and itn.item_names_id=mim.item_names_id and itn.active='Y' "
                 + " and mr.active='Y' and mim.active='Y' and itn.is_super_child='Y' ";
 
@@ -1014,7 +1014,7 @@ public class OfficeItemMapReportModelold {
 //    }
     public List<String> getOrgOffice(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oo.org_office_name FROM org_office oo where"
+        String query = " SELECT oo.org_office_name FROM org_office oo where "
                 + " oo.active='Y' ";
 
         query += " group by oo.org_office_name ORDER BY oo.org_office_name ";
@@ -1040,7 +1040,7 @@ public class OfficeItemMapReportModelold {
 
     public List<String> getManufacturer(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT manufacturer_name FROM manufacturer where"
+        String query = "SELECT manufacturer_name FROM manufacturer where "
                 + " active='Y' ";
 
         query += " group by manufacturer_name ORDER BY manufacturer_name ";
@@ -1075,7 +1075,7 @@ public class OfficeItemMapReportModelold {
 
         String query = " select m.model from manufacturer_item_map mim,model m,manufacturer mr,item_names itn "
                 + " where mim.manufacturer_item_map_id=m.manufacturer_item_map_id and "
-                + "mr.manufacturer_id=mim.manufacturer_id and mim.item_names_id=itn.item_names_id and mim.active='Y' and mr.active='Y' "
+                + " mr.manufacturer_id=mim.manufacturer_id and mim.item_names_id=itn.item_names_id and mim.active='Y' and mr.active='Y' "
                 + " and m.active='Y' and itn.active='Y' ";
 
         if (!manufacturer_name.equals("") && manufacturer_name != null) {
@@ -1111,7 +1111,7 @@ public class OfficeItemMapReportModelold {
 
     public List<String> getKeyPerson(String q, String org_office) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT kp.key_person_name FROM key_person kp,org_office oo where"
+        String query = " SELECT kp.key_person_name FROM key_person kp,org_office oo where "
                 + " kp.org_office_id=oo.org_office_id and kp.active='Y' and oo.active='Y' ";
 
         if (!org_office.equals("") && org_office != null) {

@@ -29,7 +29,8 @@
                     <a href="https://www.apogeeprecision.com/" target="_blank" class="h1 text-uppercase" style="font-size: 36px;"><b>Apogee</b> Precision</a>
                 </div>
                 <div class="card-body">
-
+                    <input type="hidden" name="email" id="email" value="${email}">
+                    <input type="hidden" name="password" id="password" value="${password}">
                     <c:if test="${message!=''}">
                         <c:if test="${msgBgColor=='green'}">
                             <p class="login-box-msg text-success">${message}</p>
@@ -43,7 +44,7 @@
 
                     </c:if>
                     <p class="login-box-msg text-success" id="otpValue" style="display:none"></p>
-                    <form action="LoginController" method="post">
+                    <form action="LoginController" method="post" id="login_form" name="login_form">
                         <input type="hidden" name="verify_type" value="${type}">
                         <input type="hidden" name="mobile" value="${mobile}">
                         <input type="hidden" name="otp_value" value="${otp}" id="otp_value">
@@ -63,40 +64,75 @@
                         <div class="row">
                             <div class="col-12">
                                 <button type="submit" class="btn myThemeBtn btn-block" name="task" value="VerifyOTP">Verify</button>
+                                <div id="image_div" style="display:none">
+                                    <img src="images/loader.gif" id="gif" style="display: block; margin: 0 auto; width: 100px; visibility: hidden;">
+                                </div>
                             </div>
                         </div>
                     </form>
 
-                    <div class="d-flex justify-content-between mt-3">
-                        <p class="mb-1">
-                            <a href="LoginController" class="fontFourteen">Go to Login</a>
-                        </p>
-                        <!-- <p class="mb-0">
-                          <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
-                        </p> -->
-                    </div>
+                    <!--                    <div class="d-flex justify-content-between mt-3">
+                                            <p class="mb-1">
+                                                <a href="LoginController" class="fontFourteen">Go to Login</a>
+                                            </p>
+                                             <p class="mb-0">
+                                              <a href="register.html" class="fontFourteen">Register! New Dealer?</a>
+                                            </p> 
+                                        </div>-->
 
                 </div>
             </div>
         </div>
 
+        <div id="loading">
+            <div class="loader"></div>
+        </div>
 
         <script src="CRM Dashboard/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
         <script src="CRM Dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
         <script src="CRM Dashboard/assets2/js/adminlte.min.js"></script>
+        <script>
+
+            $(document).ready(function () {
+                var password = $('#password').val();
+                var email = $('#email').val();
+                if (email != '' || password != '') {
+                    sendData(email, password);
+                }
+            });
+            function sendData(email, password) {
+//                alert(email);
+//                alert(password);
+                if (Android !== undefined) {
+                    if (Android.invoke !== undefined) {
+                        Android.invoke(email, password);
+                    }
+                }
+            }
+
+            $(document).ready(function () {
+                var otp = $('#otp_value').val();
+                if (otp != '') {
+//            alert("Your OTP is----" + otp);
+                    $('#otpValue').show();
+                    $('#otpValue').html('Your OTP is--' + otp);
+                }
+            })
+
+        </script>
+        <script>
+            $(window).on('load', function () {
+                //        alert("dsw");
+                $('#loading').hide();
+            })
+            $('#login_form').submit(function () {
+                $('#image_div').show();
+
+                $('#gif').css('visibility', 'visible');
+            });
+        </script>
     </body>
 </html>
 
-<script>
-    $(document).ready(function () {
-        var otp = $('#otp_value').val();
-        if (otp != '') {
-//            alert("Your OTP is----" + otp);
-            $('#otpValue').show();
-            $('#otpValue').html('Your OTP is--' + otp);
-        }
-    })
-
-</script>

@@ -2,12 +2,12 @@ body {
     /*background-color: #f0f0f0;*/
     /*background-color: #ffcfcf;*/
     background-color: #fff;
- }
- @media (min-width: 1200px){
+}
+@media (min-width: 1200px){
     .container, .container-lg, .container-md, .container-sm, .container-xl {
         max-width: calc(100% - 230px) !important;
     }
- }
+}
 
 /*.container {
     max-width: calc(100% - 230px) !important;
@@ -43,7 +43,7 @@ form input:focus{
     color:#fff;
 }
 .mainMenuDataEntry .dropdown-item:last-child {
-  border-bottom: 1px solid #fff!important;
+    border-bottom: 1px solid #fff!important;
 }
 /*
 .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
@@ -73,71 +73,71 @@ form input:focus{
     margin-bottom: 0;
 }
 .organizationBox{
-   box-shadow:0px 0px 2px #332A7C;
-   padding:20px;
-   background-color:#fff;
-   border: 1px solid #332A7C;
+    box-shadow:0px 0px 2px #332A7C;
+    padding:20px;
+    background-color:#fff;
+    border: 1px solid #332A7C;
 }
 .marginTop30{
-   margin-top:20px;
+    margin-top:20px;
 }
 .myInput.form-control{
-   border-radius:0;
-   border:1px solid #332A7C;
+    border-radius:0;
+    border:1px solid #332A7C;
 }
 .mySelect.form-control{
-   border-radius:0;
-   border:1px solid #332A7C;
+    border-radius:0;
+    border:1px solid #332A7C;
 }
 .myTextArea.form-control{
-   border-radius:0;
-   border:1px solid #332A7C;
+    border-radius:0;
+    border:1px solid #332A7C;
 }
 .formBtnWrap{
-   margin-top: 31px;
+    margin-top: 31px;
 }
 .formBtn{
-   background-color: #332A7C;
-   border:1px solid #332A7C;
-   border-radius: 0;
-   color: #fff;
-   padding:6px 20px;
-   
+    background-color: #332A7C;
+    border:1px solid #332A7C;
+    border-radius: 0;
+    color: #fff;
+    padding:6px 20px;
+
 }
 .formBtn:hover{
-   color: #ff7d7d;
-   background-color: #fff;
+    color: #ff7d7d;
+    background-color: #fff;
 }
 .normalBtn{
-   background-color: #332A7C;
-   border:1px solid #332A7C;
-   border-radius: 0;
-   color: #fff;
-   padding: 6px 29px;
-   margin-bottom: 5px;
+    background-color: #332A7C;
+    border:1px solid #332A7C;
+    border-radius: 0;
+    color: #fff;
+    padding: 6px 29px;
+    margin-bottom: 5px;
 }
 .normalBtn:hover{
-   color: #ff7d7d;
-   background-color: #fff;
+    color: #ff7d7d;
+    background-color: #fff;
 }
 .headBox{
-   background-color:#332A7C;
-   margin: -20px -20px 0;
-   padding: 8px 20px;
+    background-color:#332A7C;
+    margin: -20px -20px 0;
+    padding: 8px 20px;
 }
 .headBox h5{
-   font-size:19px;
-   margin-bottom:3px;
-   color: #fff;
+    font-size:19px;
+    margin-bottom:3px;
+    color: #fff;
 }
 
 .myTable table.dataTable th{
-   white-space:nowrap;
-   font-weight:600;
-   font-size: 14px;
+    white-space:nowrap;
+    font-weight:600;
+    font-size: 14px;
 }
 .myTable table.dataTable td{
-   font-size:14px;
+    font-size:14px;
 }
 .table th {
     vertical-align: middle!important;
@@ -222,12 +222,12 @@ body {
     /*background-color: #f0f0f0;*/
     /*background-color: #ffcfcf;*/
     background-color: #fff;
- }
- @media (min-width: 1200px){
+}
+@media (min-width: 1200px){
     .container, .container-lg, .container-md, .container-sm, .container-xl {
         max-width: calc(100% - 230px) !important;
     }
- }
+}
 
 /*.container {
     max-width: calc(100% - 230px) !important;
@@ -263,7 +263,7 @@ form input:focus{
     color:#fff;
 }
 .mainMenuDataEntry .dropdown-item:last-child {
-  border-bottom: 1px solid #fff!important;
+    border-bottom: 1px solid #fff!important;
 }
 /*
 .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
@@ -293,71 +293,71 @@ form input:focus{
     margin-bottom: 0;
 }
 .organizationBox{
-   box-shadow:0px 0px 2px #332A7C;
-   padding:20px;
-   background-color:#fff;
-   border: 1px solid #332A7C;
+    box-shadow:0px 0px 2px #332A7C;
+    padding:20px;
+    background-color:#fff;
+    border: 1px solid #332A7C;
 }
 .marginTop30{
-   margin-top:20px;
+    margin-top:20px;
 }
 .myInput.form-control{
-   border-radius:0;
-   border:1px solid #332A7C;
+    border-radius:0;
+    border:1px solid #332A7C;
 }
 .mySelect.form-control{
-   border-radius:0;
-   border:1px solid #332A7C;
+    border-radius:0;
+    border:1px solid #332A7C;
 }
 .myTextArea.form-control{
-   border-radius:0;
-   border:1px solid #332A7C;
+    border-radius:0;
+    border:1px solid #332A7C;
 }
 .formBtnWrap{
-   margin-top: 31px;
+    margin-top: 31px;
 }
 .formBtn{
-   background-color: #332A7C;
-   border:1px solid #332A7C;
-   border-radius: 0;
-   color: #fff;
-   padding:6px 20px;
-   
+    background-color: #332A7C;
+    border:1px solid #332A7C;
+    border-radius: 0;
+    color: #fff;
+    padding:6px 20px;
+
 }
 .formBtn:hover{
-   color: #ff7d7d;
-   background-color: #fff;
+    color: #ff7d7d;
+    background-color: #fff;
 }
 .normalBtn{
-   background-color: #332A7C;
-   border:1px solid #332A7C;
-   border-radius: 0;
-   color: #fff;
-   padding: 6px 29px;
-   margin-bottom: 5px;
+    background-color: #332A7C;
+    border:1px solid #332A7C;
+    border-radius: 0;
+    color: #fff;
+    padding: 6px 29px;
+    margin-bottom: 5px;
 }
 .normalBtn:hover{
-   color: #ff7d7d;
-   background-color: #fff;
+    color: #ff7d7d;
+    background-color: #fff;
 }
 .headBox{
-   background-color:#332A7C;
-   margin: -20px -20px 0;
-   padding: 8px 20px;
+    background-color:#332A7C;
+    margin: -20px -20px 0;
+    padding: 8px 20px;
 }
 .headBox h5{
-   font-size:19px;
-   margin-bottom:3px;
-   color: #fff;
+    font-size:19px;
+    margin-bottom:3px;
+    color: #fff;
 }
 
 .myTable table.dataTable th{
-   white-space:nowrap;
-   font-weight:600;
-   font-size: 14px;
+    white-space:nowrap;
+    font-weight:600;
+    font-size: 14px;
 }
 .myTable table.dataTable td{
-   font-size:14px;
+    font-size:14px;
 }
 .table th {
     vertical-align: middle!important;
@@ -462,4 +462,10 @@ table.dataTable thead .sorting_asc {
 .customImpWidthAppOrd{
     width: 70px!important;
     max-width: 70px!important;
+}
+.ui-autocomplete
+{
+    max-height:320px;
+    max-width: 500px;
+    overflow: auto;
 }

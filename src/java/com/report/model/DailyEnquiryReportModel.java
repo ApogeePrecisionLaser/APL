@@ -10,40 +10,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import com.google.api.client.auth.oauth2.BearerToken;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.BasicAuthentication;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.AppendValuesResponse;
-import com.google.api.services.sheets.v4.model.ClearValuesRequest;
-import com.google.api.services.sheets.v4.model.ClearValuesResponse;
-import com.google.api.services.sheets.v4.model.ValueRange;
 import com.report.bean.DailyEnquiryReport;
 import com.report.bean.DealersReport;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.function.Supplier;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import org.json.simple.JSONObject;
 
 /**
@@ -125,6 +98,9 @@ public class DailyEnquiryReportModel {
         int count_of_sold_query_of_current_date = 0;
         int count_of_sold_query_till_date = 0;
 
+        String total_query_till_date = "";
+        String open_query_till_date = "";
+        String closed_query_till_date = "";
         Date d1 = null;
         Date d2 = null;
 
@@ -137,12 +113,34 @@ public class DailyEnquiryReportModel {
                 total_query_of_current_date += " and date(created_at)<='" + to_date + "' ";
             }
             if (!user_role.equals("Admin")) {
-                total_query_of_current_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+                total_query_of_current_date += " and (assigned_to='" + key_person_id + "') ";
             }
+            total_query_of_current_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
 
-            String total_query_till_date = " select * from enquiry_table where active='Y' ";
-            if (!user_role.equals("Admin")) {
-                total_query_till_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+            if (user_role.equals("Sales")) {
+                total_query_till_date = " select * "
+                        + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st,salesmanager_state_mapping ssm,key_person kp, "
+                        + " org_office oo,enquiry_source_table est  "
+                        + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
+                        + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
+                        + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+                        + " and es.active='Y' and oo.active='Y' "
+                        + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
+                        + " and (ssm.salesman_id=et.assigned_to  or ssm.salesman_id=et.assigned_by)  "
+                        + " and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
+                if (user_role.equals("Sales")) {
+                    total_query_till_date += " and ssm.salesman_id='" + key_person_id + "' ";
+                }
+
+                total_query_till_date += " group by et.enquiry_table_id ";
+                total_query_till_date += " order by et.enquiry_table_id desc ";
+            }
+            if (user_role.equals("Admin")) {
+                total_query_till_date = " select * from enquiry_table where active='Y' ";
+                if (!user_role.equals("Admin")) {
+                    total_query_till_date += " and (assigned_to='" + key_person_id + "') ";
+                }
+                total_query_till_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
             }
 
             String open_query_of_current_date = " select * from enquiry_table where active='Y' "
@@ -154,16 +152,41 @@ public class DailyEnquiryReportModel {
                 open_query_of_current_date += " and date(created_at)<='" + to_date + "' ";
             }
             if (!user_role.equals("Admin")) {
-                open_query_of_current_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+                open_query_of_current_date += " and (assigned_to='" + key_person_id + "' ) ";
 
             }
+            open_query_of_current_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
 
-            String open_query_till_date = " select * from enquiry_table where active='Y' "
-                    + " and enquiry_status_id in(1,2,3,4,13,14,15) ";
+            if (user_role.equals("Sales")) {
+                open_query_till_date = " select * "
+                        + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st, "
+                        + " salesmanager_state_mapping ssm,key_person kp, "
+                        + " org_office oo,enquiry_source_table est  "
+                        + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' "
+                        + " and ssm.active='Y' and kp.active='Y' "
+                        + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id"
+                        + " and ssm.state_id=st.state_id "
+                        + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+                        + " and es.active='Y' and oo.active='Y' "
+                        + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
+                        + " and (ssm.salesman_id=et.assigned_to  or ssm.salesman_id=et.assigned_by) and et.enquiry_status_id in(1,2,3,4,13,14,15)  "
+                        + " and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
+                if (user_role.equals("Sales")) {
+                    open_query_till_date += " and ssm.salesman_id='" + key_person_id + "' ";
+                }
 
-            if (!user_role.equals("Admin")) {
-                open_query_till_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+                open_query_till_date += " group by et.enquiry_table_id ";
+                open_query_till_date += " order by et.enquiry_table_id desc ";
+            }
+            if (user_role.equals("Admin")) {
+                open_query_till_date = " select * from enquiry_table where active='Y' "
+                        + " and enquiry_status_id in(1,2,3,4,13,14,15) ";
 
+                if (!user_role.equals("Admin")) {
+                    open_query_till_date += " and (assigned_to='" + key_person_id + "' ) ";
+
+                }
+                open_query_till_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
             }
 
             String closed_query_of_current_date = " select * from enquiry_table where active='Y' "
@@ -175,16 +198,39 @@ public class DailyEnquiryReportModel {
                 closed_query_of_current_date += " and date(created_at)<='" + to_date + "' ";
             }
             if (!user_role.equals("Admin")) {
-                closed_query_of_current_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+                closed_query_of_current_date += " and (assigned_to='" + key_person_id + "' ) ";
 
             }
+            closed_query_of_current_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
 
-            String closed_query_till_date = " select * from enquiry_table where active='Y' "
-                    + " and enquiry_status_id in(16,17,18,19,20) ";
-            if (!user_role.equals("Admin")) {
-                closed_query_till_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+            if (user_role.equals("Sales")) {
+                closed_query_till_date = " select * "
+                        + " from enquiry_table et,enquiry_status es,city ct,tehsil th,district dt,division dv,state st,salesmanager_state_mapping ssm,key_person kp, "
+                        + " org_office oo,enquiry_source_table est "
+                        + " where et.active='Y' and ct.active='Y' and st.active='Y' and dt.active='Y'  and th.active='Y'  and dv.active='Y' and ssm.active='Y' and kp.active='Y' "
+                        + " and kp.key_person_id=et.assigned_to and ct.tehsil_id=th.tehsil_id and th.district_id=dt.district_id and ssm.state_id=st.state_id "
+                        + " and et.enquiry_status_id=es.enquiry_status_id and (dt.district_name=et.description or et.description='Others') "
+                        + " and es.active='Y' and oo.active='Y' "
+                        + " and oo.org_office_id=kp.org_office_id  and dt.division_id=dv.division_id and dv.state_id=st.state_id  "
+                        + " and (ssm.salesman_id=et.assigned_to  or ssm.salesman_id=et.assigned_by) and et.enquiry_status_id in(16,17,18,19,20)  "
+                        + " and est.active='Y' and et.enquiry_source_table_id=est.enquiry_source_table_id ";
+                if (user_role.equals("Sales")) {
+                    closed_query_till_date += " and ssm.salesman_id='" + key_person_id + "' ";
+                }
 
+                closed_query_till_date += " group by et.enquiry_table_id ";
+                closed_query_till_date += " order by et.enquiry_table_id desc ";
             }
+            if (user_role.equals("Admin")) {
+                closed_query_till_date = " select * from enquiry_table where active='Y' "
+                        + " and enquiry_status_id in(16,17,18,19,20) ";
+                if (!user_role.equals("Admin")) {
+                    closed_query_till_date += " and (assigned_to='" + key_person_id + "') ";
+
+                }
+                closed_query_till_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
+            }
+
             String sold_query_of_current_date = " select * from enquiry_table where active='Y' "
                     + " and enquiry_status_id in(16) ";
             if (!"".equals(from_date)) {
@@ -194,16 +240,18 @@ public class DailyEnquiryReportModel {
                 sold_query_of_current_date += " and date(created_at)<='" + to_date + "' ";
             }
             if (!user_role.equals("Admin")) {
-                sold_query_of_current_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+                sold_query_of_current_date += " and (assigned_to='" + key_person_id + "') ";
 
             }
+            sold_query_of_current_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
 
             String sold_query_till_date = " select * from enquiry_table where active='Y' "
                     + " and enquiry_status_id in(16) ";
             if (!user_role.equals("Admin")) {
-                sold_query_till_date += " and (assigned_to='" + key_person_id + "' or assigned_by='" + key_person_id + "') ";
+                sold_query_till_date += " and (assigned_to='" + key_person_id + "') ";
 
             }
+            sold_query_till_date += " group by enquiry_table_id   order by enquiry_table_id desc ";
 
             pstmt = connection.prepareStatement(total_query_of_current_date);
             rset = pstmt.executeQuery();
@@ -285,6 +333,41 @@ public class DailyEnquiryReportModel {
         return list;
     }
 
+    public static List<DailyEnquiryReport> getDynamicImagesData() {
+        List<DailyEnquiryReport> list = new ArrayList<DailyEnquiryReport>();
+
+        try {
+            String path1 = "C:\\Users\\Apogee\\Desktop\\REAL DATA FOR APL\\package1.jpg";
+            String path2 = "C:\\Users\\Apogee\\Desktop\\REAL DATA FOR APL\\package2.jpg";
+            String path3 = "C:\\Users\\Apogee\\Desktop\\REAL DATA FOR APL\\data1.jpg";
+            DailyEnquiryReport bean1 = new DailyEnquiryReport();
+            DailyEnquiryReport bean2 = new DailyEnquiryReport();
+            DailyEnquiryReport bean3 = new DailyEnquiryReport();
+            File initialFile1 = new File(path1);
+            InputStream targetStream1 = new FileInputStream(initialFile1);
+
+            File initialFile2 = new File(path2);
+            InputStream targetStream2 = new FileInputStream(initialFile2);
+
+            File initialFile3 = new File(path3);
+            InputStream targetStream3 = new FileInputStream(initialFile3);
+            for (int i = 0; i < 3; i++) {
+                bean1.setImages(targetStream1);
+                bean2.setImages(targetStream2);
+                bean3.setImages(targetStream3);
+                bean1.setCurrent_date("image1");
+                bean2.setCurrent_date("image2");
+                bean3.setCurrent_date("image3");
+            }
+            list.add(bean1);
+            list.add(bean2);
+            list.add(bean3);
+        } catch (Exception e) {
+            System.err.println("Exception-----" + e);
+        }
+        return list;
+    }
+
     public static String getMailId(String key_person_id) {
         String email = "";
         int count = 0;
@@ -326,10 +409,7 @@ public class DailyEnquiryReportModel {
                 }
                 if (gender.equals("M")) {
                     key_person_name = "Mr " + rs.getString("key_person_name");
-                } else {
-                    key_person_name = "Mr. " + rs.getString("key_person_name");
                 }
-
                 count++;
             }
 

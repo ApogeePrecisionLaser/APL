@@ -14,6 +14,21 @@
                         <li class="breadcrumb-item active">Sales Enquiry Detail</li>
                     </ol>
                 </div>
+                <c:if test="${not empty message}">
+                    <c:if test="${msgBgColor=='green'}">
+                        <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Success!</strong> ${message}
+
+                        </div>
+                    </c:if>
+                    <c:if test="${msgBgColor=='red'}">
+                        <div class="alert alert-danger alert-dismissible myAlertBox" id="msg" >
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>OOps!</strong> ${message}
+                        </div>
+                    </c:if>
+                </c:if>
             </div>
         </div><!-- /.container-fluid -->
     </section>
@@ -257,6 +272,14 @@
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 <script>
+    $(function () {
+        setTimeout(function () {
+            $('.myAlertBox').fadeOut('fast');
+        }, 3000);
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('fast');
+        }, 4000);
+    });
     function assignToDealer(enquiry_table_id) {
         var dealer_name = $('#dealers' + enquiry_table_id).val();
         $.ajax({

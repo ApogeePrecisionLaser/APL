@@ -129,7 +129,7 @@ public class OrganisationTypeModel {
 //            list1 = OrganisationTypeModel.showHierarchyParentData(org_id, searchOrgType, searchgeneration, o_id);
 //            return list1;
 //        }
-        String query = "SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
+        String query = " SELECT organisation_type_id, org_type_name, description,parent_org_id,super,generation "
                 + " FROM organisation_type  where active='Y' ";
 
         if (!searchOrgType.equals("") && searchOrgType != null) {
@@ -375,7 +375,7 @@ public class OrganisationTypeModel {
 //        return list1;
 //    }
     public static int getcheckorgid(int org_id) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE  parent_org_id=? and active=? ";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE  parent_org_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -392,7 +392,7 @@ public class OrganisationTypeModel {
     }
 
     public static int getOrgid(String org_id) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE active='Y' ";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE active='Y' ";
 
         if (!org_id.equals("") && org_id != null) {
             query += " and org_type_name='" + org_id + "' ";
@@ -414,7 +414,7 @@ public class OrganisationTypeModel {
     }
 
     public static int getParentOrgid(int org_id) {
-        String query = "SELECT parent_org_id FROM organisation_type WHERE  organisation_type_id=? and active=? ";
+        String query = " SELECT parent_org_id FROM organisation_type WHERE  organisation_type_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -431,7 +431,7 @@ public class OrganisationTypeModel {
     }
 
     public static String getParentOrgname(int org_id) {
-        String query = "SELECT org_type_name FROM organisation_type WHERE  organisation_type_id='" + org_id + "' and active='Y' ";
+        String query = " SELECT org_type_name FROM organisation_type WHERE  organisation_type_id='" + org_id + "' and active='Y' ";
 
         String organisation_id = "";
         try {
@@ -449,7 +449,7 @@ public class OrganisationTypeModel {
     }
 
     public int getParentGeneration(int org_id) {
-        String query = "SELECT * FROM organisation_type WHERE  organisation_type_id=? and active=? ";
+        String query = " SELECT * FROM organisation_type WHERE  organisation_type_id=? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -496,7 +496,7 @@ public class OrganisationTypeModel {
             }
         }
         // to check if parent exist or not
-        String qry2 = "select count(*) from organisation_type where organisation_type_id='" + org_type_id + "'  "
+        String qry2 = " select count(*) from organisation_type where organisation_type_id='" + org_type_id + "'  "
                 + "  and active='Y' ";
         try {
             PreparedStatement pst1 = connection.prepareStatement(qry2);
@@ -515,8 +515,8 @@ public class OrganisationTypeModel {
         }
 
         //
-        String query1 = "select count(*) "
-                + " from organisation_type where organisation_type_id='" + org_type_id + "'  and"
+        String query1 = " select count(*) "
+                + " from organisation_type where organisation_type_id='" + org_type_id + "'  and "
                 + " parent_org_id='" + p_org_type_id + "' and active='Y' ";
 
         try {
@@ -535,7 +535,7 @@ public class OrganisationTypeModel {
             return rowsAffected;
         }
 
-        String query = "INSERT INTO organisation_type(org_type_name,description,revision_no,active,remark,super,parent_org_id,generation) VALUES(?,?,?,?,?,?,?,?)";
+        String query = " INSERT INTO organisation_type(org_type_name,description,revision_no,active,remark,super,parent_org_id,generation) VALUES(?,?,?,?,?,?,?,?) ";
         //  int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -563,7 +563,7 @@ public class OrganisationTypeModel {
     }
 
     public int getOrgtype_id(String organisation_name) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? and active=? ";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -617,7 +617,7 @@ public class OrganisationTypeModel {
         }
 
         // to check if child present or not for update logic
-        String qry3 = "select count(*),organisation_type_id from organisation_type where "
+        String qry3 = " select count(*),organisation_type_id from organisation_type where "
                 + " organisation_type_id='" + org_type_id + "' "
                 //+ " organisation_id='" + orgid + "' and organisation_designation_map_id_2='"+prev_mapId1+"' "
                 + " and active='Y' ";
@@ -635,7 +635,7 @@ public class OrganisationTypeModel {
         }
         if (prev_mapId1 != org_type_id) {
             int c = 0;
-            String query3 = "select count(*),organisation_type_id from organisation_type where "
+            String query3 = " select count(*),organisation_type_id from organisation_type where "
                     //+ " organisation_designation_id='" + org_desig_id + "' and organisation_id='" + orgid + "'  "
                     + " organisation_type_id='" + org_type_id + "' and org_type_id='" + prev_mapId1 + "' "
                     + " and active='Y' ";
@@ -660,7 +660,7 @@ public class OrganisationTypeModel {
         }
 
         // to check if child exist or not for duplicate entry of child
-        String qry2 = "select count(*) from organisation_type where   "
+        String qry2 = " select count(*) from organisation_type where   "
                 + " organisation_type_id='" + org_type_id + "' and active='Y' ";
         try {
             PreparedStatement pst1 = connection.prepareStatement(qry2);
@@ -680,24 +680,24 @@ public class OrganisationTypeModel {
         boolean status = false;
         // to check child - parent mapping
         //int count = 0;
-        String qry = "select count(*) from organisation_type "
+        String qry = " select count(*) from organisation_type "
                 + " where organisation_type_id='" + org_type_id + "' and "
                 + " parent_org_id='" + p_org_type_id + "' and active='Y' ";
 
-        String qry1 = "select super from organisation_type where organisation_type_id='" + org_type_id + "'  "
+        String qry1 = " select super from organisation_type where organisation_type_id='" + org_type_id + "'  "
                 + " and active='Y' ";
 
         //
         //String query1 = "SELECT max(revision),serial_no,super  FROM organisation_designation_map WHERE organisation_designation_map_id = " + org_office_id + "  && active=? ";
-        String query1 = "SELECT max(revision_no),super FROM organisation_type WHERE organisation_type_id = " + org_type_id + "  && active='Y' ";
+        String query1 = " SELECT max(revision_no),super FROM organisation_type WHERE organisation_type_id = " + org_type_id + "  && active='Y' ";
         //String query2 = "UPDATE organisation_designation_map SET active=? WHERE organisation_designation_map_id=? and revision=?";
-        String query2 = "UPDATE organisation_type SET active=? WHERE organisation_type_id=? and revision_no=?";
+        String query2 = " UPDATE organisation_type SET active=? WHERE organisation_type_id=? and revision_no=? ";
 
 //        String query3 = "INSERT INTO "
 //                + "organisation_designation_map(organisation_designation_map_id,organisation_id,designation_id,serial_no, super,revision,active,parent_designation) "
 //                + "VALUES(?,?,?,?,?,?,?,?)";
-        String query3 = "INSERT INTO organisation_type(organisation_type_id,org_type_name,description,revision_no,active,remark,parent_org_id,"
-                + "super,generation) VALUES(?,?,?,?,?,?,?,?,?)";
+        String query3 = " INSERT INTO organisation_type(organisation_type_id,org_type_name,description,revision_no,active,remark,parent_org_id, "
+                + " super,generation) VALUES(?,?,?,?,?,?,?,?,?) ";
 
         //int rowsAffected = 0;
         try {
@@ -794,7 +794,7 @@ public class OrganisationTypeModel {
     public Boolean updateallRecorf(int id) throws SQLException {
         Boolean status = false;
 
-        String querynw = "select * from organisation_type where organisation_type_id=?  and active=?  order by generation";
+        String querynw = " select * from organisation_type where organisation_type_id=?  and active=?  order by generation ";
         PreparedStatement psmtnw = (PreparedStatement) connection.prepareStatement(querynw);
         psmtnw.setInt(1, id);
 
@@ -814,7 +814,7 @@ public class OrganisationTypeModel {
 
             }
 
-            String querynw2 = "update organisation_type SET generation=?  where  organisation_type_id=? and active=?  order by generation";
+            String querynw2 = " update organisation_type SET generation=?  where  organisation_type_id=? and active=?  order by generation ";
             PreparedStatement psmtnw2 = (PreparedStatement) connection.prepareStatement(querynw2);
             psmtnw2.setInt(1, generation);
             ;
@@ -851,7 +851,7 @@ public class OrganisationTypeModel {
         int rowsAffected = 0;
         PreparedStatement psmt;
         ResultSet rst;
-        String query = "select organisation_type_id,parent_org_id "
+        String query = " select organisation_type_id,parent_org_id "
                 + " from organisation_type where organisation_type_id='" + organisation_type_id + "' "
                 + " and active='Y' ";
 
@@ -872,7 +872,7 @@ public class OrganisationTypeModel {
             rowsAffected = 0;
             query = null;
         }
-        query = "select count(*) from organisation_type where "
+        query = " select count(*) from organisation_type where "
                 + "  parent_org_id='" + org_id + "' and active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
@@ -904,7 +904,7 @@ public class OrganisationTypeModel {
 //            message = "Cannot delete the record, some error.";
 //            msgBgColor = COLOR_ERROR;
 //        }
-        query = "DELETE FROM organisation_type WHERE organisation_type_id = '" + organisation_type_id + "' and "
+        query = " DELETE FROM organisation_type WHERE organisation_type_id = '" + organisation_type_id + "' and "
                 + " active='Y' ";
         try {
             psmt = connection.prepareStatement(query);
@@ -934,7 +934,7 @@ public class OrganisationTypeModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM organisation_type WHERE organisation_type_id =" + organisation_type_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM organisation_type WHERE organisation_type_id =" + organisation_type_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -999,7 +999,7 @@ public class OrganisationTypeModel {
 
     public List<String> getGeneration(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT distinct org.generation FROM organisation_type  AS org   where org.active='Y'  ORDER BY generation ";
+        String query = " SELECT distinct org.generation FROM organisation_type  AS org   where org.active='Y'  ORDER BY generation ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1021,7 +1021,7 @@ public class OrganisationTypeModel {
     }
 
     public String getDesgn_id(String office) {
-        String query = "SELECT parent_org_id FROM organisation_type WHERE org_type_name = ?";
+        String query = " SELECT parent_org_id FROM organisation_type WHERE org_type_name = ? ";
         String city_id = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1082,7 +1082,7 @@ public class OrganisationTypeModel {
 
         int org_type_name = 0;
 
-        String query = " SELECT  organisation_type_id FROM organisation_type o  where org_type_name='" + p_org + "'";
+        String query = " SELECT  organisation_type_id FROM organisation_type o  where org_type_name='" + p_org + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

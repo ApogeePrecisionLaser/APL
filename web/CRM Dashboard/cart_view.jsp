@@ -72,10 +72,12 @@
                 <div class="row row-sm">
                     <div class="col-md-8">
                         <div class="_product-detail-content leftSide">
-                            <p class="_p-name"> Cart Item </p>
+                            <div class="_p-name-wrap">
+                                <p class="_p-name"> Cart Items </p>
+                            </div>   
                             <div class="_p-price-box">
                                 <div class="table-responsive cartTable"> 
-                                    <table class="table table-bordered mb-0">
+                                    <table class="table table-bordered1 mb-0">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
@@ -99,6 +101,7 @@
                                                             <input type="hidden" name="image_path" id="image_path${loopCounter.count}" value="${beanType.image_path}">
                                                             <input type="hidden" name="image_name" id="image_name${loopCounter.count}" value="${beanType.image_name}">
                                                             <input type="hidden" name="count" id="count" value="${count}">
+                                                            <input type="hidden" name="total_count" id="total_count" value="${total_count}">
                                                             <input type="hidden" name="price" id="price${loopCounter.count}" value=" ${beanType.basic_price * beanType.quantity}">
                                                             <input type="hidden" name="model_id" id="model_id${loopCounter.count}" value="${beanType.model_id}">
                                                             <img src="https://s.fotorama.io/1.jpg" class="img-fluid${loopCounter.count}">
@@ -140,12 +143,17 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="text-right mt-3">
+                                    <a href="DealersOrderController" class="btn myThemeBtn">More Purchase</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="_product-detail-content  border" style="background-color: #102f42;box-shadow: 2px 2px 7px #999;">
-                            <p class="_p-name text-white"> Grand Total </p>
+                        <div class="_product-detail-content  border rightSide">
+                            <div class="_p-name-wrap">
+                                <p class="_p-name text-white"> PRICE DETAILS </p>
+                            </div>
                             <!--                            <div class="couponWrap mb-3">
                                                             <form action="#" class="d-flex mb-1">
                                                                 <div class="form-group mb-0 w-100">
@@ -157,31 +165,35 @@
                                                              <p class="text-danger mb-0" style="color: #621c23;">Coupon Invalid</p> 
                                                         </div>-->
                             <div>
-                                <table class="table table-bordered mb-0 text-white">
-                                    <tbody>
-                                        <tr>
-                                            <td class="fontFourteen">Subtotal</td>
-                                            <td class="fontFourteen" id="subtotal"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Delivery Charge</td>
-                                            <td id="delivery_charge">0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Coupon Discount</td>
-                                            <td id="coupon_discount">0</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="totalValue">Total Amount</td>
-                                            <td class="totalValue" id="total_amount">?10,80,000.00</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div>
+                                    <table class="table table-bordered1 mb-0 text-white">
+                                        <tbody>
+                                            <tr>
+                                                <td class="fontFourteen">Price ( <span class="total_counting">${total_count}</span> Items ) (<i class="fas fa-rupee-sign fontTen"></i>)</td>
+                                                <td class="fontFourteen" id="subtotal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Discount %</td>
+                                                <td id="coupon_discount">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Discount Price (<i class="fas fa-rupee-sign fontTen"></i>)</td>
+                                                <td id="delivery_charge">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="totalValue">Total Amount (<i class="fas fa-rupee-sign fontTen"></i>)</td>
+                                                <td class="totalValue" id="total_amount"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--                                <div class="px-3 py-3">
+                                                                    <p class="mb-0" style="color: #08ff40;">You will save <i class="fas fa-rupee-sign fontTen"></i>560 on this order</p>
+                                                                </div>-->
                             </div>               
                         </div>
                         <div class="text-right mt-3">
-                            <a class="btn myThemeBtn" style="background-color: #102f42;
-                               color: white;" onclick="completeOrder()">Complete Order</a>
+                            <a class="btn myThemeVoiletBtn" onclick="completeOrder()">Complete Order</a>
                         </div>
                     </div>
                 </div>
@@ -192,7 +204,7 @@
 
 
         <div class="sec bg-light marginTop40 pt-4">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12 title_bx">
                         <h3 class="title"> Related Products   </h3>
@@ -223,9 +235,8 @@
                                         </div>
                                         <h4 class="mb-1"> <a href="DealersOrderController?task=viewDetail&model_id=${beanType2.model_id}"> ${beanType2.model} </a> </h4>
                                         <div class="price-box mb-2">
-                                            <span class="offer-price"> Price   <fmt:formatNumber type = "number"
-                                                              maxFractionDigits = "3" value =  "${beanType2.basic_price}" />  </span>
-                                            <!--<span class="offer-price"> Offer Price <i class="fa fa-inr"></i> 120 </span>-->
+                                            <span class="offer-price"> <i class="fas fa-rupee-sign curruncyIcon"></i></span>
+                                            <span class="offer-price" id="offer_price${loopCounter2.count}">${beanType2.basic_price}</span>
                                         </div>
                                         <div class="btn-box text-center">
                                             <!--                                            <a class="btn btn-sm" href="javascript:void(0);"> <i class="fa fa-shopping-cart"></i> Add to Cart </a>-->
@@ -246,20 +257,20 @@
         <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 
         <script>
-            function numberWithCommas(x) {
-                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
+
             $(function () {
                 var count = $('#count').val();
+                var total_counting = $('#total_counting').val();
                 var total_price = 0;
                 $('.counting').text(count);
+                $('.total_counting').text(total_counting);
                 for (var j = 0; j < count; j++) {
                     var image_path = $('#image_path' + (j + 1)).val();
                     var image_name = $('#image_name' + (j + 1)).val();
                     var price = $('#price' + (j + 1)).val();
                     total_price = parseInt(total_price) + parseInt(price);
                     // alert(total_price);
-                    $('#subtotal').text(numberWithCommas(total_price));
+                    $('#subtotal').text(convertToCommaSeperate(total_price));
                     var image = image_path + image_name;
                     if (image != "") {
                         image = image.replace(/\\/g, "/");
@@ -272,7 +283,7 @@
                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                $('#total_amount').text("Rs. " + numberWithCommas(total_price + delivery_charge + coupon_discount));
+                $('#total_amount').html(convertToCommaSeperate(total_price + delivery_charge + coupon_discount));
 
             });
 
@@ -297,6 +308,9 @@
                         $('#add' + (k + 1)).attr('disabled', false);
                     }
 
+                    var offer_price = $('#offer_price' + (k + 1)).text();
+                    var offer_price1 = convertToCommaSeperate(offer_price);
+                    $('#offer_price' + (k + 1)).text(offer_price1);
                 }
             });
 
@@ -394,19 +408,25 @@
                                 $('#price_div' + lastaddedmodel_id).html('<input type="hidden" name="basic_price' + lastaddedmodel_id + '" id="basic_price' + lastaddedmodel_id + '" value="' + rate * qty + '">' + rate * qty);
                                 $('#basic_price' + lastaddedmodel_id).val(rate * qty);
                                 var total_price = 0;
+                                var total_count = 0;
+
+
                                 for (var j = 0; j < count; j++) {
                                     var model_ids = $('#model_id' + (j + 1)).val();
                                     var price = ($('#basic_price' + model_ids)).val();
+                                    var quantity = ($('#qty' + model_ids)).val();
                                     if (price == undefined) {
                                         price = 0;
                                     }
                                     total_price = parseInt(total_price) + parseInt(price);
-                                    $('#subtotal').text(numberWithCommas(total_price));
+                                    total_count = parseInt(total_count) + parseInt(quantity);
+                                    $('.total_counting').text(total_count);
+                                    $('#subtotal').text(convertToCommaSeperate(total_price));
                                 }
                                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
+                                $('#total_amount').html(convertToCommaSeperate((total_price + delivery_charge + coupon_discount)));
                             } else {
                                 //  alert("else");
                                 count = data.list;
@@ -418,25 +438,30 @@
                                 $('#price_div' + model_id).html('<input type="hidden" name="basic_price' + model_id + '" id="basic_price' + model_id + '" value="' + rate * qty + '">' + rate * qty);
                                 $('#basic_price' + model_id).val(rate * qty);
                                 var total_price = 0;
+                                var total_count = 0;
                                 for (var j = 0; j < count; j++) {
                                     var model_ids = $('#model_id' + (j + 1)).val();
                                     var price = ($('#basic_price' + model_ids)).val();
+                                    var quantity = ($('#qty' + model_ids)).val();
+
                                     if (price == undefined) {
                                         price = 0;
                                     }
                                     total_price = parseInt(total_price) + parseInt(price);
-                                    //  alert(total_price);
-                                    $('#subtotal').text(numberWithCommas(total_price));
+                                    total_count = parseInt(total_count) + parseInt(quantity);
+                                    $('.total_counting').text(total_count);
+                                    //  alert(total_price);;
+                                    $('#subtotal').text(convertToCommaSeperate(total_price));
                                 }
                                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
+                                $('#total_amount').html(convertToCommaSeperate((total_price + delivery_charge + coupon_discount)));
                             }
 
 
 
-                            window.location.reload();
+//                            window.location.reload();
 
                             if (data.success_msg != '') {
                                 $('.counting').text(data.list);
@@ -495,22 +520,26 @@
                             $('#price_div' + model_id).html('<input type="hidden" name="basic_price' + model_id + '" id="basic_price' + model_id + '" value="' + rate * qty + '">' + rate * qty);
                             $('#basic_price' + model_id).val(rate * qty);
                             var total_price = 0;
+                            var total_count = 0;
                             count = data.list;
 
 
                             for (var j = 0; j < count; j++) {
                                 var model_ids = $('#model_id' + (j + 1)).val();
                                 var price = ($('#basic_price' + model_ids)).val();
+                                var quantity = ($('#qty' + model_ids)).val();
                                 if (price == undefined) {
                                     price = 0;
                                 }
                                 total_price = parseInt(total_price) + parseInt(price);
-                                $('#subtotal').text(numberWithCommas(total_price));
+                                total_count = parseInt(total_count) + parseInt(quantity);
+                                $('.total_counting').text(total_count);
+                                $('#subtotal').text(convertToCommaSeperate(total_price));
                             }
                             var delivery_charge = parseInt(($('#delivery_charge').text()));
                             var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                            $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
+                            $('#total_amount').html(convertToCommaSeperate((total_price + delivery_charge + coupon_discount)));
 
 //                            window.location.reload();
 
@@ -550,24 +579,27 @@
                                 $('#msg_success').show();
                                 $('#msg_danger').hide();
                                 var total_price = 0;
+                                var total_count = 0;
                                 $('#model_row' + model_id).remove();
                                 count = parseInt(data.list) + 1;
                                 for (var j = 0; j < count; j++) {
                                     var model_ids = $('#model_id' + (j + 1)).val();
                                     var price = ($('#basic_price' + model_ids)).val();
+                                    var quantity = ($('#qty' + model_ids)).val();
 
                                     if (price == undefined) {
                                         price = 0;
                                     }
 
                                     total_price = parseInt(total_price) + parseInt(price);
-
-                                    $('#subtotal').text(numberWithCommas(total_price));
+                                    total_count = parseInt(total_count) + parseInt(quantity);
+                                    $('.total_counting').text(total_count);
+                                    $('#subtotal').text(convertToCommaSeperate(total_price));
                                 }
                                 var delivery_charge = parseInt(($('#delivery_charge').text()));
                                 var coupon_discount = parseInt(($('#coupon_discount').text()));
 
-                                $('#total_amount').text("Rs. " + numberWithCommas((total_price + delivery_charge + coupon_discount)));
+                                $('#total_amount').html(convertToCommaSeperate((total_price + delivery_charge + coupon_discount)));
 
                                 window.location.reload();
 
@@ -635,6 +667,20 @@
                 });
             }
 
+            function convertToCommaSeperate(x) {
+                x = x.toString();
+                var afterPoint = '';
+                if (x.indexOf('.') > 0)
+                    afterPoint = x.substring(x.indexOf('.'), x.length);
+                x = Math.floor(x);
+                x = x.toString();
+                var lastThree = x.substring(x.length - 3);
+                var otherNumbers = x.substring(0, x.length - 3);
+                if (otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
 
+                return res;
+            }
         </script>
 

@@ -9,16 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealerItemMap;
-import com.inventory.tableClasses.Inventory;
-import com.inventory.tableClasses.ItemAuthorization;
-import com.inventory.tableClasses.ItemName;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import org.apache.commons.collections.MultiMap;
-import org.apache.commons.collections.map.MultiValueMap;
 
 /**
  *
@@ -38,7 +32,7 @@ public class DealerItemMapModel {
 
             connection = con;
         } catch (Exception e) {
-            System.out.println("ItemAuthorizationModel setConnection() Error: " + e);
+            System.out.println("DealerItemMapModel setConnection() Error: " + e);
         }
     }
 
@@ -53,7 +47,7 @@ public class DealerItemMapModel {
                     + " and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id  and ia.active='Y' "
                     + " and itn.item_names_id= mim.item_names_id and oo.active='Y' "
                     + " and mim.manufacturer_item_map_id=m.manufacturer_item_map_id and ia.item_names_id=itn.item_names_id and "
-                    + " d.designation_id=ia.designation_id  ";
+                    + " d.designation_id=ia.designation_id ";
 //                    + " and oo.org_office_id='" + logged_org_office_id + "' ";
 
             query += " group by itn.item_name ";
@@ -66,7 +60,7 @@ public class DealerItemMapModel {
                 list.add(bean);
             }
         } catch (Exception e) {
-            System.err.println("Exception------------" + e);
+            System.err.println("getAllItems Exception------------" + e);
         }
 
         return list;
@@ -80,15 +74,15 @@ public class DealerItemMapModel {
 
                     String query = " select itn.item_name,mr.manufacturer_name,m.model,m.model_id,iid.image_path,iid.image_name,m.description "
                             + " ,m.basic_price,inv.stock_quantity  from item_names itn, manufacturer_item_map mim,model m,item_authorization ia, "
-                            + " designation d,manufacturer mr,"
+                            + " designation d,manufacturer mr, "
                             + " item_image_details iid,inventory_basic ib,inventory inv,org_office oo "
                             + " where itn.active='Y' and mim.active='Y' and m.active='Y' and d.active='Y' and mr.active='Y' "
                             + " and iid.active='Y'  and iid.model_id=m.model_id and mr.manufacturer_id=mim.manufacturer_id and ib.active='Y' "
                             + " and inv.active='Y'  and ia.active='Y' "
                             + " and itn.item_names_id= mim.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
                             + " and ia.item_names_id=itn.item_names_id and ib.item_names_id=itn.item_names_id "
-                            + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y'"
-                            + "  and  d.designation_id=ia.designation_id ";
+                            + " and ib.model_id=m.model_id  and ib.inventory_basic_id=inv.inventory_basic_id and oo.active='Y' "
+                            + " and  d.designation_id=ia.designation_id ";
                     query += " and itn.item_name='" + list2.get(i).getItem_name() + "' group by m.model";
 
                     ResultSet rst = connection.prepareStatement(query).executeQuery();
@@ -110,7 +104,8 @@ public class DealerItemMapModel {
                         bean.setBasic_price(basic_price);
                         bean.setStock_quantity(stock_quantity);
 
-                        String query2 = " select dealer_item_map_id from dealer_item_map where active='Y' and  model_id='" + rst.getString("model_id") + "' "
+                        String query2 = " select dealer_item_map_id from dealer_item_map where active='Y' and "
+                                + "  model_id='" + rst.getString("model_id") + "' "
                                 + " and org_office_id='" + logged_org_office_id + "' ";
                         int count_map = 0;
                         ResultSet rst2 = connection.prepareStatement(query2).executeQuery();
@@ -130,7 +125,7 @@ public class DealerItemMapModel {
                     }
 
                 } catch (Exception e) {
-                    System.err.println("Exception------------" + e);
+                    System.err.println("getAllModels Exception------------" + e);
                 }
 
             }
@@ -142,7 +137,7 @@ public class DealerItemMapModel {
         List<DealerItemMap> list = new ArrayList<DealerItemMap>();
 
         String query = "  select m.model,dim.dealer_item_map_id,itn.item_name,oo.org_office_name,dim.description "
-                + " from item_authorization ia,designation d,item_names itn,manufacturer_item_map mim,model m,"
+                + " from item_authorization ia,designation d,item_names itn,manufacturer_item_map mim,model m, "
                 + " manufacturer mr,org_office oo,dealer_item_map dim "
                 + " where ia.active='Y' and d.active='Y' and mim.active='Y' and m.active='Y'  and mr.active='Y' and oo.active='Y' and dim.active='Y'  "
                 + " and mim.item_names_id=itn.item_names_id and mim.manufacturer_id=mr.manufacturer_id "
@@ -201,7 +196,7 @@ public class DealerItemMapModel {
 
     public List<String> getModel(String q, String item) {
         List<String> list = new ArrayList<String>();
-        String query = "  select m.model from item_names itn,manufacturer_item_map mim,model m,manufacturer mr "
+        String query = " select m.model from item_names itn,manufacturer_item_map mim,model m,manufacturer mr "
                 + " where mim.active='Y' and m.active='Y'  and mr.active='Y' "
                 + " and mim.item_names_id=itn.item_names_id and mim.manufacturer_id=mr.manufacturer_id "
                 + " and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
@@ -231,7 +226,7 @@ public class DealerItemMapModel {
     }
 
     public int getItemNamesId(String item_name) {
-        String query = "SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y'  ";
+        String query = " SELECT item_names_id FROM item_names WHERE item_name = '" + item_name + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -245,7 +240,7 @@ public class DealerItemMapModel {
     }
 
     public int getModelId(String model) {
-        String query = "SELECT model_id FROM model WHERE model = '" + model + "' and active='Y' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model + "' and active='Y' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -292,7 +287,7 @@ public class DealerItemMapModel {
     }
 
     public int insertRecord(DealerItemMap bean, String org_office_id) throws SQLException {
-        String query = " INSERT INTO dealer_item_map(item_authorization_id,model_id,org_office_id,description,"
+        String query = " INSERT INTO dealer_item_map(item_authorization_id,model_id,org_office_id,description, "
                 + " revision_no,active,remark) "
                 + " VALUES(?,?,?,?,?,?,?) ";
 
@@ -303,9 +298,10 @@ public class DealerItemMapModel {
 
         int map_count = 0;
         try {
-            String query1 = "SELECT count(*) as count FROM dealer_item_map WHERE "
-                    + " item_authorization_id='" + item_authorization_id + "' and model_id='" + model_id + "' and org_office_id='" + org_office_id + "' "
-                    + " and active='Y'  ";
+            String query1 = " SELECT count(*) as count FROM dealer_item_map WHERE "
+                    + " item_authorization_id='" + item_authorization_id + "' and model_id='" + model_id + "' "
+                    + " and org_office_id='" + org_office_id + "' "
+                    + " and active='Y' ";
 
             PreparedStatement pstmt1 = connection.prepareStatement(query1);
             ResultSet rs1 = pstmt1.executeQuery();
@@ -380,7 +376,7 @@ public class DealerItemMapModel {
         try {
             connection.close();
         } catch (Exception e) {
-            System.out.println("ItemAuthorizationModel closeConnection() Error: " + e);
+            System.out.println("DealerItemMapModel closeConnection() Error: " + e);
         }
     }
 

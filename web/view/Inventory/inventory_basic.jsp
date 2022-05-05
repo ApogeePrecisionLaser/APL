@@ -50,7 +50,12 @@
         overflow-y: scroll;
         position:relative;
     }
-
+    .ui-autocomplete
+    {
+        max-height:320px;
+        max-width: 500px;
+        overflow: auto;
+    }
 </style>
 <script>
 

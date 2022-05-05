@@ -5,7 +5,6 @@
 package com.inventory.model;
 
 import com.inventory.tableClasses.ItemType;
-import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -61,7 +60,7 @@ public class ItemTypeModel {
     }
 
     public int insertRecord(ItemType item_Type) {
-        String query = "INSERT INTO item_type(item_type, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
+        String query = " INSERT INTO item_type(item_type, description,revision_no,active,remark) VALUES(?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -98,10 +97,10 @@ public class ItemTypeModel {
 //        }
         int item_count = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM item_type WHERE item_type_id = " + item_type_id + "  && active=? ";
-        String query2 = "UPDATE item_type SET active =? WHERE item_Type_id =? and revision_no=? ";
+        String query1 = " SELECT max(revision_no) revision_no FROM item_type WHERE item_type_id = " + item_type_id + "  && active=? ";
+        String query2 = " UPDATE item_type SET active =? WHERE item_Type_id =? and revision_no=? ";
         // String query3 = "INSERT INTO item_type(item_type_id,item_type,description,revision_no,active,remark,is_super_child) VALUES(?,?,?,?,?,?,?)";
-        String query3 = "INSERT INTO item_type(item_type_id,item_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?)";
+        String query3 = " INSERT INTO item_type(item_type_id,item_type,description,revision_no,active,remark) VALUES(?,?,?,?,?,?) ";
 //        String query4 = " select is_super_child from item_type where item_type_id='" + item_type_id + "' ";
 //        String query5 = " select count(*) as count from item_names inn,item_type itt where inn.item_type_id=itt.item_type_id and"
 //                + " inn.item_type_id='" + item_type_id + "' and itt.is_super_child='N'  ";
@@ -162,7 +161,7 @@ public class ItemTypeModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM item_type WHERE item_type_id =" + item_type_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM item_type WHERE item_type_id =" + item_type_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -183,7 +182,7 @@ public class ItemTypeModel {
 //        String query5 = " select count(*) as count from item_names inn,item_type itt where inn.item_type_id=itt.item_type_id and"
 //                + " inn.item_type_id='" + item_type_id + "' and itt.is_super_child='N'  ";
 
-        String query = "DELETE FROM item_type WHERE active='Y' and item_type_id = " + item_type_id;
+        String query = " DELETE FROM item_type WHERE active='Y' and item_type_id = " + item_type_id;
         int rowsAffected = 0;
         String is_super_child = "";
         int item_count = 0;

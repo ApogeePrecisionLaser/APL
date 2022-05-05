@@ -96,9 +96,9 @@ public class IndentModel {
         List<Indent> list = new ArrayList<Indent>();
 
         String query = " select indt.indent_no,indt.date_time,indt.description "
-                + " ,s1.status as indent_status,s2.status as item_status,kp1.key_person_name as requested_by,"
+                + " ,s1.status as indent_status,s2.status as item_status,kp1.key_person_name as requested_by, "
                 + " kp2.key_person_name as requested_to, "
-                + " indt.indent_table_id,p.purpose,itn.item_name,m.model,indi.required_qty,indi.approved_qty,indi.deliver_qty"
+                + " indt.indent_table_id,p.purpose,itn.item_name,m.model,indi.required_qty,indi.approved_qty,indi.deliver_qty "
                 + " ,indi.expected_date_time,oo.address_line1,oo.address_line2,oo.address_line3,c.city_name,dc.challan_date  from "
                 + " indent_table indt,key_person kp1,key_person kp2,item_names itn,model m,manufacturer mr,manufacturer_item_map mim, "
                 + " status s1,status s2,indent_item indi,purpose p,org_office oo,city c,delivery_challan dc "
@@ -107,7 +107,7 @@ public class IndentModel {
                 + " and indt.requested_by=kp1.key_person_id and indi.status_id=s2.status_id and itn.active='Y' and m.active='Y' "
                 + " and indi.item_names_id=itn.item_names_id and m.model_id=indi.model_id and mr.manufacturer_id=mim.manufacturer_id "
                 + " and mim.item_names_id=itn.item_names_id and mim.manufacturer_item_map_id=m.manufacturer_item_map_id "
-                + " and indt.status_id=s1.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'and indi.active='Y'"
+                + " and indt.status_id=s1.status_id and indt.active='Y' and kp1.active='Y' and kp2.active='Y'and indi.active='Y' "
                 + " and indt.indent_table_id=indi.indent_table_id and p.purpose_id=indi.purpose_id and oo.active='Y' and c.active='Y' "
                 + " and kp1.org_office_id=oo.org_office_id and oo.city_id=c.city_id ";
 
@@ -160,7 +160,7 @@ public class IndentModel {
     public List<Indent> getStatus() {
         List<Indent> list = new ArrayList<Indent>();
 
-        String query = " select status,status_id from status  order by status";
+        String query = " select status,status_id from status  order by status ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -182,7 +182,7 @@ public class IndentModel {
     }
 
     public int insertRecord(Indent bean, String logged_user_name, String office_admin, int i, int logged_org_office_id) throws SQLException {
-        String query = "INSERT INTO indent_table(indent_no,requested_by,requested_to,"
+        String query = " INSERT INTO indent_table(indent_no,requested_by,requested_to, "
                 + " status_id,active,remark,date_time,description,revision_no) "
                 + " VALUES(?,?,?,?,?,?,?,?,?) ";
         int rowsAffected2 = 0;
@@ -196,7 +196,7 @@ public class IndentModel {
 
         try {
             if (i == 0) {
-                String query4 = "SELECT count(*) as count FROM indent_table WHERE "
+                String query4 = " SELECT count(*) as count FROM indent_table WHERE "
                         + " indent_no='" + bean.getIndent_no() + "' "
                         + " and active='Y'  ";
 
@@ -229,7 +229,7 @@ public class IndentModel {
                     }
                 }
             }
-            String query2 = "INSERT INTO indent_item(indent_table_id,item_names_id,purpose_id, required_qty,"
+            String query2 = " INSERT INTO indent_item(indent_table_id,item_names_id,purpose_id, required_qty, "
                     + " status_id,active,remark,expected_date_time,description,revision_no,model_id) "
                     + " VALUES(?,?,?,?,?,?,?,?,?,?,?) ";
 
@@ -272,7 +272,7 @@ public class IndentModel {
     }
 
     public int getRequestedKeyPersonId(String person_name, int logged_org_office_id) {
-        String query = "SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' and org_office_id='" + logged_org_office_id + "' ";
+        String query = " SELECT key_person_id FROM key_person WHERE key_person_name = '" + person_name + "' and active='Y' and org_office_id='" + logged_org_office_id + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -287,7 +287,7 @@ public class IndentModel {
 
     public int getModelId(String model) {
 
-        String query = "SELECT model_id FROM model WHERE model = '" + model + "' ";
+        String query = " SELECT model_id FROM model WHERE model = '" + model + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -302,8 +302,8 @@ public class IndentModel {
 
     public int getItemNameId(int model_id) {
 
-        String query = " SELECT itn.item_names_id FROM model m,manufacturer_item_map mim,item_names itn"
-                + "  WHERE m.model_id = '" + model_id + "'  and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  "
+        String query = " SELECT itn.item_names_id FROM model m,manufacturer_item_map mim,item_names itn "
+                + " WHERE m.model_id = '" + model_id + "'  and m.manufacturer_item_map_id=mim.manufacturer_item_map_id  "
                 + " and itn.item_names_id=mim.item_names_id and m.active='Y' and mim.active='Y' and itn.active='Y' ";
         int id = 0;
         try {
@@ -319,7 +319,7 @@ public class IndentModel {
 
     public int getPurposeId(String purpose) {
 
-        String query = "SELECT purpose_id FROM purpose WHERE purpose = '" + purpose + "' ";
+        String query = " SELECT purpose_id FROM purpose WHERE purpose = '" + purpose + "' ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -334,7 +334,7 @@ public class IndentModel {
 
     public List<String> getStatus(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT status from status  ";
+        String query = " SELECT status from status  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -358,7 +358,7 @@ public class IndentModel {
 
     public List<String> getPurpose(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT purpose from purpose  ";
+        String query = " SELECT purpose from purpose  ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -382,7 +382,7 @@ public class IndentModel {
 
     public List<String> getRequestedByKeyPerson(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' ";
+        String query = " SELECT key_person_name from key_person where active='Y' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -406,7 +406,7 @@ public class IndentModel {
 
     public List<String> getRequestedToKeyPerson(String q, String requested_by) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
+        String query = " SELECT key_person_name from key_person where active='Y' and key_person_name!='" + requested_by + "' ";
 
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
@@ -433,7 +433,7 @@ public class IndentModel {
         List<Integer> list2 = new ArrayList<>();
         try {
             String query = " select itn.item_names_id "
-                    + " from item_names itn, item_type itt,item_authorization ia,designation d,org_office oo,org_office_designation_map oodm,"
+                    + " from item_names itn, item_type itt,item_authorization ia,designation d,org_office oo,org_office_designation_map oodm, "
                     + " key_person kp "
                     + " where ia.item_names_id=itn.item_names_id "
                     + " and d.designation='" + logged_designation + "' and oo.org_office_name='" + org_office + "' "
@@ -465,7 +465,7 @@ public class IndentModel {
                         + " item_names h "
                         + " WHERE @r <> 0) T1 "
                         + " JOIN item_names T2 "
-                        + " ON T1._id = T2.item_names_id where T2.active='y'  "
+                        + " ON T1._id = T2.item_names_id where T2.active='y' "
                         + " ORDER BY T1.lvl DESC limit 1 ";
 
                 ResultSet rst3 = connection.prepareStatement(qry_order).executeQuery();
@@ -618,7 +618,7 @@ public class IndentModel {
                 list.add(bean1);
                 if (rset.getString("is_super_child").equals("Y")) {
                     String query1 = " select m.model_id,m.model from item_names itn,manufacturer_item_map mim,model m "
-                            + " where itn.item_names_id=mim.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id"
+                            + " where itn.item_names_id=mim.item_names_id and m.manufacturer_item_map_id=mim.manufacturer_item_map_id "
                             + " and mim.active='Y' and m.active='Y' and itn.active='Y' and "
                             + " itn.item_names_id='" + rset.getInt("item_names_id") + "' ";
 
@@ -664,7 +664,7 @@ public class IndentModel {
             }
             String query = "";
 //            if (status_id == 7) {
-            query = "   select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty,"
+            query = " select indt.indent_no,itn.item_name,p.purpose,indi.required_qty,indi.expected_date_time,indi.approved_qty, "
                     + "  indi.deliver_qty,itn.quantity as stock_qty  ,s.status,indi.indent_item_id,m.model "
                     + " from indent_table indt,indent_item indi, item_names itn,purpose p, "
                     + " status s,model m,manufacturer_item_map mim where indt.indent_table_id=indi.indent_table_id "

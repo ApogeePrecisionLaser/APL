@@ -1,7 +1,5 @@
 package com.dashboard.controller;
 
-import com.location.model.CityModel;
-import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.bean.Enquiry;
@@ -10,10 +8,8 @@ import com.dashboard.model.DealersOrderModel;
 import com.dashboard.model.ProfileModel;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -32,6 +28,11 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class DealersOrderController extends HttpServlet {
 
     int quantity = 1;
@@ -111,7 +112,7 @@ public class DealersOrderController extends HttpServlet {
                 if (JQstring.equals("getPaymentMode")) {
                     list = model.getPaymentMode(q);
                 }
-
+                
                 if (json != null) {
                     out.println(json);
                 } else {
@@ -220,7 +221,8 @@ public class DealersOrderController extends HttpServlet {
         if (update_enquiry.equals("Update")) {
             String status = request.getParameter("status");
             String enquiry_table_id = request.getParameter("enquiry_table_id");
-//            String status2 = "";
+            String message = "";
+
             if (status == null) {
                 status = "";
             }
@@ -232,7 +234,7 @@ public class DealersOrderController extends HttpServlet {
             String remark = request.getParameter("remark");
 
             try {
-                model.updateEnquiryStatus(status, date_time, remark, enquiry_table_id);
+                message = model.updateEnquiryStatus(status, date_time, remark, enquiry_table_id);
             } catch (SQLException ex) {
                 Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -245,6 +247,8 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("status", status);
             request.setAttribute("date_time", date_time);
             request.setAttribute("remark", remark);
+            request.setAttribute("message", message);
+            request.setAttribute("msgBgColor", model.getMessageBGColor());
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("dealer_sales_enquiry_details").forward(request, response);
@@ -254,7 +258,8 @@ public class DealersOrderController extends HttpServlet {
         if (update_complaint.equals("Update")) {
             String status = request.getParameter("status");
             String enquiry_table_id = request.getParameter("enquiry_table_id");
-//            String status2 = "";
+            String message = "";
+
             if (status == null) {
                 status = "";
             }
@@ -266,7 +271,7 @@ public class DealersOrderController extends HttpServlet {
             String remark = request.getParameter("remark");
 
             try {
-                model.updateComplaintEnquiryStatus(status, date_time, remark, enquiry_table_id);
+                message = model.updateComplaintEnquiryStatus(status, date_time, remark, enquiry_table_id);
             } catch (SQLException ex) {
                 Logger.getLogger(ApproveOrdersController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -279,6 +284,8 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("status", status);
             request.setAttribute("date_time", date_time);
             request.setAttribute("remark", remark);
+            request.setAttribute("message", message);
+            request.setAttribute("msgBgColor", model.getMessageBGColor());
             DBConnection.closeConncetion(model.getConnection());
 
             request.getRequestDispatcher("dealer_complaint_enquiry_details").forward(request, response);
@@ -481,7 +488,13 @@ public class DealersOrderController extends HttpServlet {
 
             ArrayList<DealersOrder> list = model.viewCart(logged_key_person_id);
             request.setAttribute("list", list);
+
+            int total_count = 0;
+            for (int i = 0; i < list.size(); i++) {
+                total_count = total_count + list.get(i).getQuantity();
+            }
             request.setAttribute("count", list.size());
+            request.setAttribute("total_count", total_count);
 
             ArrayList<DealersOrder> list1 = model.getAllItems(logged_org_office_id, search_item);
             ArrayList<DealersOrder> list2 = new ArrayList<>();
@@ -545,7 +558,6 @@ public class DealersOrderController extends HttpServlet {
                 }
                 out.println(gson);
                 DBConnection.closeConncetion(model.getConnection());
-
                 return;
             }
         }
@@ -681,12 +693,16 @@ public class DealersOrderController extends HttpServlet {
             float total_discount_price = 0;
             float total_discount_percent = 0;
             float total_approved_price = 0;
+            int total_approved_qty = 0;
 
             for (int i = 0; i < order_list.size(); i++) {
-                total_amount = total_amount + Float.parseFloat(order_list.get(i).getBasic_price());
-                total_discount_price = total_discount_price + Float.parseFloat(order_list.get(i).getDiscount_price());
-                total_discount_percent = total_discount_percent + Float.parseFloat(order_list.get(i).getDiscount_percent());
-                total_approved_price = total_approved_price + Float.parseFloat(order_list.get(i).getApproved_price());
+                if (!order_list.get(i).getItem_status().equals("Denied")) {
+                    total_amount = total_amount + Float.parseFloat(order_list.get(i).getBasic_price());
+                    total_discount_price = total_discount_price + Float.parseFloat(order_list.get(i).getDiscount_price());
+                    total_discount_percent = total_discount_percent + Float.parseFloat(order_list.get(i).getDiscount_percent());
+                    total_approved_price = total_approved_price + Float.parseFloat(order_list.get(i).getApproved_price());
+                    total_approved_qty = total_approved_qty + Integer.parseInt(order_list.get(i).getApproved_qty());
+                }
             }
 
             ArrayList<DealersOrder> list = model.viewCart(logged_key_person_id);
@@ -702,7 +718,14 @@ public class DealersOrderController extends HttpServlet {
             request.setAttribute("total_amount", total_amount);
             request.setAttribute("total_discount_price", total_discount_price);
             request.setAttribute("total_approved_price", total_approved_price);
-            request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+            request.setAttribute("total_approved_qty", total_approved_qty);
+            if (total_discount_price == 0.0 && total_approved_price == 0.0) {
+                request.setAttribute("total_discount_percent", 0);
+
+            } else {
+                request.setAttribute("total_discount_percent", (String.format("%.2f", (((total_approved_price - total_discount_price) / total_approved_price) * 100))));
+
+            }
 
             request.setAttribute("logged_user_name", logged_user_name);
             request.setAttribute("logged_org_office", logged_org_office);
@@ -790,7 +813,7 @@ public class DealersOrderController extends HttpServlet {
                 File f = new File(destinationPath);
                 FileInputStream fis = null;
                 if (!f.exists()) {
-                    destinationPath = "C:\\ssadvt_repository\\health_department\\general\\no_image.png";
+                    destinationPath = "C:\\ssadvt_repository\\APL\\key_person\\no_image.png";
                     f = new File(destinationPath);
                 }
                 fis = new FileInputStream(f);

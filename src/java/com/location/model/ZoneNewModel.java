@@ -70,7 +70,7 @@ public class ZoneNewModel {
         ArrayList<ZoneNewBean> list = new ArrayList<ZoneNewBean>();
         String query = " SELECT z.zone_id,z.zone_name,z.description,z.zone_no "
                 + "  FROM zone as z where "
-                + " IF('" + searchZone + "'='',z.zone_name LIKE '%%',z.zone_name=?) order by zone_name";
+                + " IF('" + searchZone + "'='',z.zone_name LIKE '%%',z.zone_name=?) order by zone_name ";
         // + " IF('"+searchZone_no +"'='',z.zone_no LIKE '%%',z.zone_no=?) ";
 
         try {
@@ -190,9 +190,9 @@ public class ZoneNewModel {
     public void updateRecord(String countryName, String zoneId, String zoneName, String zoneDescription) {
         PreparedStatement presta = null;
         try {
-            String query = "update zone set zone_name='" + zoneName.trim() + "',zone_description='" + zoneDescription.trim() + "',"
-                    + "country_id=(select country_id from country where '" + countryName.trim() + "'=country.country_name)"
-                    + "where zone_id=" + Integer.parseInt(zoneId);
+            String query = " update zone set zone_name='" + zoneName.trim() + "',zone_description='" + zoneDescription.trim() + "', "
+                    + " country_id=(select country_id from country where '" + countryName.trim() + "'=country.country_name) "
+                    + " where zone_id=" + Integer.parseInt(zoneId);
             presta = connection.prepareStatement(query);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -210,7 +210,7 @@ public class ZoneNewModel {
     public void deleteRecord(int zoneId) {
         PreparedStatement presta = null;
         try {
-            presta = connection.prepareStatement("delete from zone where zone_id=?");
+            presta = connection.prepareStatement(" delete from zone where zone_id=? ");
             presta.setInt(1, zoneId);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -231,9 +231,9 @@ public class ZoneNewModel {
         ArrayList<ZoneNewBean> list = new ArrayList<ZoneNewBean>();
         searchZone = (searchZone);
         searchZone_no = (searchZone_no);
-        String query = "SELECT z.zone_id,z.zone_name,z.description,z.zone_no,c.city_name FROM zone as z , city as c where z.active='Y' and c.active='Y' and z.city_id = c.city_id "
+        String query = " SELECT z.zone_id,z.zone_name,z.description,z.zone_no,c.city_name FROM zone as z , city as c where z.active='Y' and c.active='Y' and z.city_id = c.city_id "
                 + " and IF('" + searchZone + "'='',z.zone_name LIKE '%%',z.zone_name=?) and  "
-                + "  IF('" + searchZone_no + "'='',z.zone_no LIKE '%%',z.zone_no=?) order by zone_no  "
+                + " IF('" + searchZone_no + "'='',z.zone_no LIKE '%%',z.zone_no=?) order by zone_no  "
                 + " limit " + lowerLimit + "," + noOfRowsToDisplay;
 
         try {
@@ -260,8 +260,8 @@ public class ZoneNewModel {
         searchZone = (searchZone);
         searchZone_no = (searchZone_no);
         String query = " SELECT Count(*) FROM zone as z where "
-                + " IF('" + searchZone + "'='',z.zone_name LIKE '%%',z.zone_name=?) order by zone_name"
-                + " IF('" + searchZone_no + "'='',z.zone_no LIKE '%%',z.zone_no=?)";
+                + " IF('" + searchZone + "'='',z.zone_name LIKE '%%',z.zone_name=?) order by zone_name "
+                + " IF('" + searchZone_no + "'='',z.zone_no LIKE '%%',z.zone_no=?) ";
         int noOfRows = 0;
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -278,7 +278,7 @@ public class ZoneNewModel {
 
     public static int getCityId(String city_name) {
         int city_id = 0;
-        String query = "select city_id from city where city_name= '" + city_name + "' ";
+        String query = " select city_id from city where city_name= '" + city_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -341,7 +341,7 @@ public class ZoneNewModel {
 //        }
 //    }
     public static void insertNewRecord(ZoneNewBean zone) {
-        String query = "INSERT INTO zone(zone_name,description,zone_no, city_id,revision_no,active ) VALUES(?,?,?,?,?,?)";
+        String query = " INSERT INTO zone(zone_name,description,zone_no, city_id,revision_no,active ) VALUES(?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -371,9 +371,9 @@ public class ZoneNewModel {
         int revision = ZoneNewModel.getRevisionno(bean, zone_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM zone WHERE zone_id = " + zone_id + "  && active=? ";
-        String query2 = "UPDATE zone SET active=? WHERE zone_id=? and revision_no=?";
-        String query3 = "INSERT INTO zone(zone_id,zone_name,description,zone_no, city_id,revision_no,active) VALUES( ?,?, ?, ?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM zone WHERE zone_id = " + zone_id + "  && active=? ";
+        String query2 = " UPDATE zone SET active=? WHERE zone_id=? and revision_no=? ";
+        String query3 = " INSERT INTO zone(zone_id,zone_name,description,zone_no, city_id,revision_no,active) VALUES( ?,?, ?, ?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -426,7 +426,7 @@ public class ZoneNewModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM zone WHERE designation_id =" + zone_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM zone WHERE designation_id =" + zone_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 

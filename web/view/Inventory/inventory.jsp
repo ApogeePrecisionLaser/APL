@@ -321,8 +321,82 @@
                 return false;
             }
         });
+
+
+        $("#pr_modelName").autocomplete({
+            source: function (request, response) {
+                var random = document.getElementById("pr_modelName").value;
+                var manufacturer_name = document.getElementById("manufacturer_name").value;
+                var item_code = document.getElementById("item_code").value;
+                $.ajax({
+                    url: "InventoryController",
+                    dataType: "json",
+                    data: {action1: "getModelName", str: random, manufacturer_name: manufacturer_name, item_code: item_code},
+                    success: function (data) {
+                        console.log(data);
+                        response(data.list);
+                    }, error: function (error) {
+                        console.log(error.responseText);
+                        response(error.responseText);
+                    }
+                });
+            },
+            select: function (events, ui) {
+                console.log(ui);
+                $('#pr_modelName').val(ui.item.label);
+                return false;
+            }
+        });
     });
 
+
+
+//    $(document).ready(function () {
+//        $(document).on('keydown', '.myAutocompleteClass', function () {
+//            var id = this.id;
+//            var manufacturer = "";
+//            var type;
+//            //  alert(id);
+//            //alert(type);
+//            if (id.match("^pr_name")) {
+//                type = "Product";
+//            } else if (id.match("^pr_vendor")) {
+//                type = "Vendor";
+//            }
+//
+//            var random = this.value;
+//            $('#' + id).autocomplete({
+//                source: function (request, response) {
+//                    $.ajax({
+//                        url: "InventoryController",
+//                        dataType: "json",
+//                        data: {
+//                            action1: "getParameter",
+//                            str: random,
+//                            type: type
+//                        },
+//                        success: function (data) {
+//                            console.log(data);
+//                            response(data.list);
+//                        },
+//                        error: function (error) {
+//                            console.log(error.responseText);
+//                            response(error.responseText);
+//                        }
+//                    });
+//                },
+//                autoFocus: true,
+//                minLength: 0,
+//                appendTo: "#myModal",
+//                select: function (events, ui) {
+//                    console.log(ui);
+//                    $(this).val(ui.item.label);
+//                    return false;
+//                }
+//            });
+//        }
+//        );
+//    });
 
     function makeEditable(id) {
         document.getElementById("org_office").disabled = false;
@@ -474,6 +548,8 @@
 <section>
     <div class="container-fluid page_heading sectionPadding35">
         <h1>Inventory</h1>
+
+        <input type="hidden" name="autogenerate_order_no" id="autogenerate_order_no" value="${autogenerate_order_no}">
     </div>
 </section>
 
@@ -488,7 +564,7 @@
                 <div class="col-md-4">
                     <div class="form-group mb-md-0">
                         <label>Org Office</label>
-                        <input type="text" name="search_org_office" id="search_org_office" value="${search_org_office}" Placeholder="Org Office" class="form-control myInput searchInput1 w-100" >
+                        <input type="text" name="search_org_office"  id="search_org_office" value="${search_org_office}" Placeholder="Org Office" class="form-control myInput searchInput1 w-100" >
                     </div>
                 </div>
 
@@ -549,15 +625,14 @@
                 <table id="tree-table" class="table table-hover table-bordered" data-page-length='6'>
 
                     <tr>
-                        <th>
-                            <a class="nav-link" href="" role="button">
-                                <img src="CRM Dashboard/assets2/img/product/addEnquiry.png" width="20">
-                            </a></th>
+                        <!--      <th>
+                                                      <a class="nav-link open-modal" href="" role="button"  >
+                                                              <img src="CRM Dashboard/assets2/img/product/addOrder.png" width="20">
+                                                          </a>
+                          </th>-->
                         <th>Item Name</th>
                         <th style="width:80px">Item Code</th>
                         <th style="width:80px">Org Office</th>
-                        <th style="width:80px">Manufacturer Name</th>
-                        <th style="width:80px">Model Name</th>
                         <th style="width:80px">Model No.</th>
                         <th style="width:80px">Part No.</th>
                         <th style="width:80px">Key Person</th>
@@ -568,68 +643,61 @@
                         <th style="width:80px">Reference Document Id</th>
                         <th style="width:80px">Date Time</th>
                         <!--<th>Description</th>-->
-                        <th></th>
-                        <th></th>
+                        <!--                        <th></th>
+                                                <th></th>-->
                     </tr>
                     <tbody>
                         <c:forEach var="beanType" items="${requestScope['list']}"
                                    varStatus="loopCounter">
-                            <c:choose>
-                                <c:when test="${beanType.stock_quantity==0 && beanType.is_super_child=='Y'}">
-                                    <tr style="background-color: red;font-weight: bold;color:white" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
-                                        data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-                                    </c:when>
-                                    <c:when test="${(beanType.stock_quantity<=beanType.min_quantity) && beanType.is_super_child=='Y'}">
-                                    <tr style="background-color:yellow;font-weight: bold" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
-                                        data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-                                    </c:when>
-                                    <c:otherwise>
-                                    <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
-                                        data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
-                                    </c:otherwise>
-                                </c:choose>
+                            <%--  <c:choose>
+                                  <c:when test="${beanType.stock_quantity==0 && beanType.popupval=='Yes' && beanType.user_role=='Incharge'}">
+                                      <tr style="background-color: red;font-weight: bold;color:white" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                          data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                      </c:when>
+                                      <c:when test="${(beanType.stock_quantity<=beanType.min_quantity) && beanType.popupval=='Yes'  && beanType.user_role=='Incharge'}">
+                                      <tr style="background-color:yellow;font-weight: bold" onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                          data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                      </c:when>
+                                      <c:otherwise>
+                                      <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                          data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                      </c:otherwise>
+                                  </c:choose>--%>
+                            <tr onclick="fillColumn('${beanType.inventory_id}', '${loopCounter.count}', '${beanType.popupval}');"
+                                data-id="${beanType.item_names_id}" data-parent="${beanType.parent_item_id}" data-level="${beanType.generation}">
+                                <!--<td data-column="name">${loopCounter.count }</td>-->      
+                                <%--  <c:choose>
+                                      <c:when test="${beanType.popupval=='Yes' && beanType.user_role=='Incharge'}">
+                                          <td>
+                                              <input type="checkbox" class="inv_check" value="${loopCounter.count }">
+                                          </td>
+                                      </c:when>
+                                      <c:otherwise>
+                                          <td></td>
+                                      </c:otherwise>
+                                  </c:choose>--%>
 
-     <!--<td data-column="name">${loopCounter.count }</td>-->      
-                                <c:choose>
-                                    <c:when test="${beanType.is_super_child=='Y'}">
-                                        <td><input type="checkbox" ></td>
-                                        </c:when>
-                                        <c:otherwise>
-                                        <td></td>
-                                    </c:otherwise>
-                                </c:choose>
+                                <td id="${loopCounter.count} 2" data-column="name">${beanType.item_name}</td>
+                                <td id="${loopCounter.count} 3" >${beanType.item_code}</td>
+                                <td id="${loopCounter.count} 4" >${beanType.org_office}</td> 
+                                <td id="${loopCounter.count} 5" style="display: none">${beanType.manufacturer_name}</td> 
+                                <td id="${loopCounter.count} 6" style="display: none">${beanType.model}</td> 
+                                <td id="${loopCounter.count} 7" >${beanType.model_no}</td>
+                                <td id="${loopCounter.count} 8" >${beanType.part_no}</td>
+                                <td id="${loopCounter.count} 9" >${beanType.key_person}</td>                                               
+                                <td id="${loopCounter.count} 10" >${beanType.stock_quantity}</td>                                               
+                                <td id="${loopCounter.count} 11" >${beanType.inward_quantity}</td> 
+                                <td id="${loopCounter.count} 12" >${beanType.outward_quantity}</td>
+                                <td id="${loopCounter.count} 13" >${beanType.reference_document_type}</td>
+                                <td id="${loopCounter.count} 14" >${beanType.reference_document_id}</td>
+                                <td id="${loopCounter.count} 15" >${beanType.date_time}</td> 
+                                <td id="${loopCounter.count} 16" style="display: none">${beanType.inventory_id}</td>  
 
-                                <td id="${loopCounter.count }2" data-column="name">${beanType.item_name}</td>
-                                <td id="${loopCounter.count }3">${beanType.item_code}</td>
-                                <td id="${loopCounter.count }4" >${beanType.org_office}</td> 
-                                <td id="${loopCounter.count }5">${beanType.manufacturer_name}</td> 
-                                <td id="${loopCounter.count }6">${beanType.model}</td>
-                                <td id="${loopCounter.count }7">${beanType.model_no}</td>
-                                <td id="${loopCounter.count }8">${beanType.part_no}</td>
-                                <td id="${loopCounter.count }9">${beanType.key_person}</td>                                               
-                                <td id="${loopCounter.count }10">${beanType.stock_quantity}</td>                                               
-                                <td id="${loopCounter.count }11">${beanType.inward_quantity}</td> 
-                                <td id="${loopCounter.count }12">${beanType.outward_quantity}</td>
-                                <td id="${loopCounter.count }13">${beanType.reference_document_type}</td>
-                                <td id="${loopCounter.count }14">${beanType.reference_document_id}</td>
-                                <td id="${loopCounter.count }15">${beanType.date_time}</td> 
-                                <!--<td id="${loopCounter.count }16">${beanType.description}</td>-->  
-
-                                <c:choose>
-                                    <c:when test="${beanType.popupval=='openpopup'}">
-                                        <td>
-                                            <input type="button" name="openpopup" id="openpopup" class="btn btn-success" value="Show Details" onclick="openPopUpForDetails(${beanType.item_names_id})">
-                                        </td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td></td>
-                                    </c:otherwise>
-                                </c:choose>
+<!--<td id="${loopCounter.count }16">${beanType.description}</td>-->  
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-
             </div>      
         </div>
     </section>
@@ -735,4 +803,189 @@
 </section>-->
 
 
+
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-xl" style="width:1100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Purchase</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div class="container-fluid">              
+                    <div class="row mt-0">
+                        <div class="col-md-12">
+                            <div class="card card-primary card-outline rounded-0">
+                                <div class="card-body rounded-0">
+                                    <div>
+                                        <form class="myForm1" action="PurchaseOrdersController" method="post">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="inputName" class="fontFourteen">Order No:<sup class="text-danger">*</sup></label>
+                                                        <input type="text" class="form-control rounded-0" name="order_no" id="order_no">
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-md-3">
+                                                  <div class="form-group">
+                                                    <label for="inputName" class="fontFourteen">Vendor Name:</label>
+                                                    <input type="text" class="form-control rounded-0">
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                  <div class="form-group">
+                                                    <label for="inputName" class="fontFourteen">Contact Person:<sup class="text-danger">*</sup></label>
+                                                    <input type="text" class="form-control rounded-0">
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                  <div class="form-group">
+                                                    <label for="inputName" class="fontFourteen">Mobile No:<sup class="text-danger">*</sup></label>
+                                                    <input type="text" class="form-control rounded-0">
+                                                  </div>
+                                                </div> -->
+                                                <div class="col-md-12">
+                                                    <div class="">
+                                                        <!--                                                        <div class="text-right">
+                                                                                                                    <input id='add-row' class='btn btn-primary rounded-0 btn-sm' type='button' value='Add Product' />
+                                                                                                                </div>                        -->
+                                                        <div class="mt-3">
+                                                            <div class="table-responsive">
+                                                                <table id="test-table121121" class="table table-condensed w-100" style="min-width: 800px;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="pl-0 fontFourteen">Product Name</th>
+                                                                            <th class="pl-0 fontFourteen">Model Name</th>
+                                                                            <th class="pl-0 fontFourteen">Model No/Part No</th>
+                                                                            <th class="pl-0 fontFourteen">Stock Qty</th>
+                                                                            <th class="pl-0 fontFourteen">Quantity</th>
+                                                                            <th class="pl-0 fontFourteen">Vendor Name</th>
+
+                                                                            <!-- <th class="pl-0 fontFourteen">Vendor Name</th> -->
+                                                                            <!-- <th class="pl-0 fontFourteen">Price</th>
+                                                                            <th class="pl-0 fontFourteen">Price</th> -->
+
+                                                                            <th class="pl-0 fontFourteen"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="test-body">
+                                                                        <tr id="row0" class="test-body-row">
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_name' value='' type='text' class='form-control rounded-0 myAutocompleteClass' />
+                                                                                <input name='inventory_id0' value='' type='hidden' class='form-control rounded-0' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_modelName0' value='' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_model0' value='' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_stock_qty0' disabled="" value='' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_qty0'  required="" value='' type='text' class='form-control rounded-0 input-md' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <input name='pr_vendor0'   required="" value='' type='text'  placeholder="Press Space" class='form-control rounded-0 input-md myAutocompleteClass' />
+                                                                            </td>
+                                                                            <td class="pl-0">
+                                                                                <button class='delete-row btn btn-sm rounded-0 btn-danger '><i class="fa fa-trash"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group mb-0 mt-0">
+                                                        <button type="submit" class="btn btn btn-primary rounded-0 btn-sm" name="task" value="Submit">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger " data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <%@include file="../layout/footer.jsp" %>
+<script>
+    var row = 0;
+//    $(document).on("click", "#add-row", function () {
+//        var new_row = '<tr id="row' + row + '"><td class="pl-0"><input name="pr_name" id="pr_name' + row + '" type="text" class="form-control rounded-0 myAutocompleteClass" /></td><td class="pl-0"><input name="pr_modelName" id="pr_modelName' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_model" id="pr_model' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_stock_qty" id="pr_stock_qty' + row + '" type="text" disabled="" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_qty"  id="pr_qty' + row + '" type="text" class="form-control rounded-0" /></td><td class="pl-0"><input name="pr_vendor" id="pr_vendor' + row + '" type="text" class="form-control rounded-0 myAutocompleteClass" /></td><td class="pl-0"><button class="delete-row btn btn-sm rounded-0 btn-danger"><i class="fa fa-trash"></i></button></td></tr>';
+//        // alert(new_row);
+//        $('#test-body').append(new_row);
+//        row++;
+//        return false;
+//    });
+
+
+    $(document).on("click", ".open-modal", function () {
+        var length = 0;
+
+        $('#test-body').empty();
+        var rows = 0;
+        $('input.inv_check:checkbox:checked').each(function () {
+            var vendor_name = "";
+
+//            alert(rows);
+            var sThisVal = $(this).val();
+            var item_name = $('#' + sThisVal + 5).text();
+            var model_name = $('#' + sThisVal + 6).text();
+            var model_no = $('#' + sThisVal + 7).text();
+            var part_no = $('#' + sThisVal + 8).text();
+            var stock_qty = $('#' + sThisVal + 10).text();
+            var inventory_id = $('#' + sThisVal + 16).text();
+            var model_part_no = "";
+
+            if (model_no == '') {
+                model_part_no = part_no;
+            }
+            if (part_no == '') {
+                model_part_no = model_no;
+            }
+            $.ajax({
+                url: "InventoryController",
+                dataType: "json",
+                data: {action1: "getVendorName", item_name: item_name},
+                success: function (data) {
+                    console.log(data);
+                    vendor_name = data.list;
+                    $('#myModal').modal('show');
+                    $('#order_no').val($('#autogenerate_order_no').val())
+                    $('#test-body').append('<tr id="row' + rows + '"><td class="pl-0"><input name="pr_name" id="pr_name' + rows + '" type="text" class="form-control rounded-0 myAutocompleteClass" value="' + item_name + '" /><input name="inventory_id' + rows + '" id="inventory_id' + rows + '" type="hidden" class="form-control rounded-0" value="' + inventory_id + '" /></td><td class="pl-0"><input name="pr_modelName' + rows + '" id="pr_modelName' + rows + '" type="text" class="form-control rounded-0" value="' + model_name + '"/></td><td class="pl-0"><input name="pr_model' + rows + '"  id="pr_model' + rows + '" type="text" class="form-control rounded-0" value="' + model_part_no + '" /></td><td class="pl-0"><input name="pr_stock_qty' + rows + '" id="pr_stock_qty' + rows + '" type="text" class="form-control rounded-0" disabled="" value="' + stock_qty + '" /></td><td class="pl-0"><input name="pr_qty' + rows + '" id="pr_qty' + rows + '" type="text" class="form-control rounded-0" required="" /></td><td class="pl-0"><input name="pr_vendor' + rows + '" id="pr_vendor' + rows + '" type="text" class="form-control rounded-0 myAutocompleteClass" value="' + vendor_name + '" placeholder="Press Space"  required=""/></td><td class="pl-0"><button class="delete-row btn btn-sm rounded-0 btn-danger"><i class="fa fa-trash"></i></button></td></tr>');
+                    rows++;
+                }
+            });
+            row++;
+        });
+
+        return false;
+    });
+    $(document).on("click", ".delete-row", function () {
+        if (row > 1) {
+            $(this).closest('tr').remove();
+            row--;
+        }
+        return false;
+    });
+</script>

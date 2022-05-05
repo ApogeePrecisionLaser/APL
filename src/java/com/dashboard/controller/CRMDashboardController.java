@@ -1,16 +1,14 @@
 package com.dashboard.controller;
 
-import com.location.model.CityModel;
-import com.location.bean.CityBean;
 import com.DBConnection.DBConnection;
-import com.dashboard.bean.DealerItemMap;
 import com.dashboard.bean.DealersOrder;
 import com.dashboard.bean.Enquiry;
+import com.dashboard.bean.EventBean;
 import com.dashboard.bean.Help;
 import com.dashboard.bean.Profile;
-import com.dashboard.model.DealerItemMapModel;
 import com.dashboard.model.DealersOrderModel;
 import com.dashboard.model.EnquiryModel;
+import com.dashboard.model.EventModel;
 import com.dashboard.model.HelpModel;
 import com.dashboard.model.ProfileModel;
 import java.io.BufferedInputStream;
@@ -33,6 +31,10 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+/**
+ *
+ * @author Komal
+ */
 public class CRMDashboardController extends HttpServlet {
 
     @Override
@@ -50,7 +52,7 @@ public class CRMDashboardController extends HttpServlet {
         String loggedUser = "";
 
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("logged_user_name") == null ) {
+        if (session == null || session.getAttribute("logged_user_name") == null) {
             request.getRequestDispatcher("/").forward(request, response);
             return;
         } else {
@@ -71,12 +73,14 @@ public class CRMDashboardController extends HttpServlet {
         ProfileModel profileModel = new ProfileModel();
         EnquiryModel enquiryModel = new EnquiryModel();
         HelpModel helpModel = new HelpModel();
+        EventModel eventModel = new EventModel();
 
         try {
             model.setConnection(DBConnection.getConnectionForUtf(ctx));
             profileModel.setConnection(DBConnection.getConnectionForUtf(ctx));
             enquiryModel.setConnection(DBConnection.getConnectionForUtf(ctx));
             helpModel.setConnection(DBConnection.getConnectionForUtf(ctx));
+            eventModel.setConnection(DBConnection.getConnectionForUtf(ctx));
 
         } catch (Exception e) {
             System.out.println("error in CityController setConnection() calling try block" + e);
@@ -89,6 +93,101 @@ public class CRMDashboardController extends HttpServlet {
             String task = request.getParameter("task");
             if (task == null) {
                 task = "";
+            }
+            if (task.equals("getData")) {
+                if (session.getAttribute("user_role").equals("Admin")) {
+                    ArrayList<Enquiry> pending_enquiries_list = enquiryModel.getAllPendingEnquiries("", "Pending");
+                    ArrayList<Enquiry> pending_complaint_list = enquiryModel.getAllPendingComplaints("", "Pending");
+                    ArrayList<EventBean> pending_news = eventModel.getAllEvents(logged_key_person_id, loggedUser);
+
+                    String last_time_of_enquiry = "";
+                    String last_time_of_complaint = "";
+                    for (int j = 0; j < 1; j++) {
+                        if (pending_enquiries_list.size() > 0) {
+                            last_time_of_enquiry = pending_enquiries_list.get(j).getEnquiry_date_time().toString();
+                        }
+                        if (pending_complaint_list.size() > 0) {
+                            last_time_of_complaint = pending_complaint_list.get(j).getEnquiry_date_time().toString();
+                        }
+                    }
+
+                    JSONObject obj1 = new JSONObject();
+                    obj1.put("pending_sales_enquiries", pending_enquiries_list.size());
+                    obj1.put("pending_complaint_enquiries", pending_complaint_list.size());
+                    obj1.put("last_time_of_complaint", last_time_of_complaint);
+                    obj1.put("last_time_of_enquiry", last_time_of_enquiry);
+                    obj1.put("pending_news", pending_news.size());
+                    obj1.put("total_notification", ((pending_enquiries_list.size()) + (pending_complaint_list.size())));
+                    PrintWriter out = response.getWriter();
+                    out.print(obj1);
+
+                    DBConnection.closeConncetion(enquiryModel.getConnection());
+                    DBConnection.closeConncetion(eventModel.getConnection());
+                    return;
+
+                }
+                if (session.getAttribute("user_role").equals("Dealer")) {
+                    ArrayList<Enquiry> pending_sales_enquiry_list = model.getPendingEnquiriesForDealer(logged_key_person_id);
+                    ArrayList<Enquiry> pending_complaint_enquiry_list = model.getPendingComplaintForDealer(logged_key_person_id);
+                    ArrayList<EventBean> pending_news = model.getEvents(logged_key_person_id, loggedUser);
+
+                    String last_time_of_enquiry = "";
+                    String last_time_of_complaint = "";
+                    String last_time_of_news = "";
+                    for (int j = 0; j < 1; j++) {
+                        if (pending_sales_enquiry_list.size() > 0) {
+                            last_time_of_enquiry = pending_sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                        }
+                        if (pending_complaint_enquiry_list.size() > 0) {
+                            last_time_of_complaint = pending_complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                        }
+                        if (pending_news.size() > 0) {
+                            last_time_of_news = pending_news.get(j).getDate_time().toString();
+                        }
+                    }
+
+                    JSONObject obj1 = new JSONObject();
+                    obj1.put("pending_sales_enquiries", pending_sales_enquiry_list.size());
+                    obj1.put("pending_complaint_enquiries", pending_complaint_enquiry_list.size());
+                    obj1.put("pending_news", pending_news.size());
+                    obj1.put("last_time_of_complaint", last_time_of_complaint);
+                    obj1.put("last_time_of_enquiry", last_time_of_enquiry);
+                    obj1.put("last_time_of_news", last_time_of_news);
+                    obj1.put("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())
+                            + (pending_news.size())));
+                    PrintWriter out = response.getWriter();
+                    out.print(obj1);
+
+                    DBConnection.closeConncetion(model.getConnection());
+                    return;
+                }
+                if (session.getAttribute("user_role").equals("Sales")) {
+                    ArrayList<Enquiry> pending_sales_enquiry_list = model.getAllPendingEnquiries(session.getAttribute("user_role").toString(), logged_key_person_id, "", "Pending");
+                    ArrayList<Enquiry> pending_complaint_enquiry_list = model.getAllPendingComplaints(session.getAttribute("user_role").toString(), logged_key_person_id, "", "Pending");
+
+                    String last_time_of_enquiry = "";
+                    String last_time_of_complaint = "";
+
+                    for (int j = 0; j < 1; j++) {
+                        if (pending_sales_enquiry_list.size() > 0) {
+                            last_time_of_enquiry = pending_sales_enquiry_list.get(j).getEnquiry_date_time().toString();
+                        }
+                        if (pending_complaint_enquiry_list.size() > 0) {
+                            last_time_of_complaint = pending_complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
+                        }
+                    }
+                    JSONObject obj1 = new JSONObject();
+                    obj1.put("pending_sales_enquiries", pending_sales_enquiry_list.size());
+                    obj1.put("pending_complaint_enquiries", pending_complaint_enquiry_list.size());
+                    obj1.put("last_time_of_complaint", last_time_of_complaint);
+                    obj1.put("last_time_of_enquiry", last_time_of_enquiry);
+                    obj1.put("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())));
+                    PrintWriter out = response.getWriter();
+                    out.print(obj1);
+
+                    DBConnection.closeConncetion(model.getConnection());
+                    return;
+                }
             }
 
             if (task.equals("viewImage")) {
@@ -202,11 +301,11 @@ public class CRMDashboardController extends HttpServlet {
         if (session.getAttribute("user_role").equals("Admin")) {
             ArrayList<DealersOrder> total_orders_list = model.getAllHistoryOrders(logged_user_name, loggedUser);
             List<Profile> dealers_list = profileModel.getAllDealers();
-            ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllEnquiries("", "");
-            ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllComplaints("", "");
-            
-            ArrayList<Enquiry> pending_enquiries_list = enquiryModel.getAllPendingEnquiries("", "");
-            ArrayList<Enquiry> pending_complaint_list = enquiryModel.getAllPendingComplaints("", "");
+            ArrayList<Enquiry> total_enquiries_list = enquiryModel.getAllPendingEnquiries("", "Total");
+            ArrayList<Enquiry> total_complaint_list = enquiryModel.getAllPendingComplaints("", "Total");
+
+            ArrayList<Enquiry> pending_enquiries_list = enquiryModel.getAllPendingEnquiries("", "Pending");
+            ArrayList<Enquiry> pending_complaint_list = enquiryModel.getAllPendingComplaints("", "Pending");
             ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
             List<Profile> latest_dealers = profileModel.getAllLatestDealers();
             List<Help> supportMessages = helpModel.getAllSupportMessages();
@@ -214,6 +313,7 @@ public class CRMDashboardController extends HttpServlet {
             ArrayList<DealersOrder> allModels = model.getAllLatestItems(String.valueOf(logged_org_office_id));
 //            ArrayList<DealerItemMap> allModels = new ArrayList<>();
 //            allModels = dealerItemMapModel.getAllModels(String.valueOf(logged_org_office_id), allItems);
+            ArrayList<EventBean> pending_news = eventModel.getAllEvents(logged_key_person_id, loggedUser);
 
             String last_time_of_enquiry = "";
             String last_time_of_complaint = "";
@@ -225,10 +325,12 @@ public class CRMDashboardController extends HttpServlet {
                     last_time_of_complaint = pending_complaint_list.get(j).getEnquiry_date_time().toString();
                 }
             }
-
+            request.setAttribute("email", session.getAttribute("log_email").toString());
+            request.setAttribute("password", session.getAttribute("password").toString());
             request.setAttribute("allProducts", allModels.size());
             request.setAttribute("allModels", allModels);
             request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+            request.setAttribute("dashboard_pending_orders_count", dashboard_pending_orders.size());
             request.setAttribute("supportMessages", supportMessages.size());
             request.setAttribute("latest_dealers", latest_dealers);
             request.setAttribute("total_orders", total_orders_list.size());
@@ -237,6 +339,7 @@ public class CRMDashboardController extends HttpServlet {
             request.setAttribute("complaint_enquiries", total_complaint_list.size());
             request.setAttribute("pending_sales_enquiries", pending_enquiries_list.size());
             request.setAttribute("pending_complaint_enquiries", pending_complaint_list.size());
+            request.setAttribute("pending_news", pending_news.size());
             request.setAttribute("last_time_of_complaint", last_time_of_complaint);
             request.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
 
@@ -244,6 +347,7 @@ public class CRMDashboardController extends HttpServlet {
             DBConnection.closeConncetion(profileModel.getConnection());
             DBConnection.closeConncetion(enquiryModel.getConnection());
             DBConnection.closeConncetion(helpModel.getConnection());
+            DBConnection.closeConncetion(eventModel.getConnection());
             request.setAttribute("total_notification", ((pending_enquiries_list.size()) + (pending_complaint_list.size())));
 
             request.getRequestDispatcher("admin_dashboard").forward(request, response);
@@ -258,9 +362,11 @@ public class CRMDashboardController extends HttpServlet {
             ArrayList<Enquiry> pending_complaint_enquiry_list = model.getPendingComplaintForDealer(logged_key_person_id);
 
             ArrayList<DealersOrder> dashboard_pending_orders = model.getAllDashboardOrders(logged_user_name, session.getAttribute("user_role").toString());
+            ArrayList<EventBean> pending_news = model.getEvents(logged_key_person_id, loggedUser);
 
             String last_time_of_enquiry = "";
             String last_time_of_complaint = "";
+            String last_time_of_news = "";
             for (int j = 0; j < 1; j++) {
                 if (pending_sales_enquiry_list.size() > 0) {
                     last_time_of_enquiry = pending_sales_enquiry_list.get(j).getEnquiry_date_time().toString();
@@ -268,20 +374,27 @@ public class CRMDashboardController extends HttpServlet {
                 if (pending_complaint_enquiry_list.size() > 0) {
                     last_time_of_complaint = pending_complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
                 }
+                if (pending_news.size() > 0) {
+                    last_time_of_news = pending_news.get(j).getDate_time().toString();
+                }
             }
-
+            request.setAttribute("email", session.getAttribute("log_email").toString());
+            request.setAttribute("password", session.getAttribute("password").toString());
             request.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
             request.setAttribute("last_time_of_complaint", last_time_of_complaint);
+            request.setAttribute("last_time_of_news", last_time_of_news);
             request.setAttribute("dashboard_pending_orders", dashboard_pending_orders);
+            request.setAttribute("dashboard_pending_orders_count", dashboard_pending_orders.size());
+            request.setAttribute("pending_news_list", pending_news);
             request.setAttribute("sales_enquiries", sales_enquiry_list.size());
             request.setAttribute("complaint_enquiries", complaint_enquiry_list.size());
             request.setAttribute("pending_sales_enquiries", pending_sales_enquiry_list.size());
             request.setAttribute("pending_complaint_enquiries", pending_complaint_enquiry_list.size());
+            request.setAttribute("pending_news", pending_news.size());
             request.setAttribute("pending_orders", pending_orders_list.size());
-            request.setAttribute("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())));
+            request.setAttribute("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())
+                    + (pending_news.size())));
             DBConnection.closeConncetion(model.getConnection());
-            DBConnection.closeConncetion(profileModel.getConnection());
-            DBConnection.closeConncetion(enquiryModel.getConnection());
             request.getRequestDispatcher("CRMDashboard").forward(request, response);
 
         }
@@ -306,7 +419,8 @@ public class CRMDashboardController extends HttpServlet {
                     last_time_of_complaint = pending_complaint_enquiry_list.get(j).getEnquiry_date_time().toString();
                 }
             }
-
+            request.setAttribute("email", session.getAttribute("log_email").toString());
+            request.setAttribute("password", session.getAttribute("password").toString());
             request.setAttribute("last_time_of_enquiry", last_time_of_enquiry);
             request.setAttribute("last_time_of_complaint", last_time_of_complaint);
             request.setAttribute("sales_enquiries", sales_enquiry_list.size());
@@ -316,10 +430,8 @@ public class CRMDashboardController extends HttpServlet {
             request.setAttribute("pending_orders", pending_orders_list.size());
             request.setAttribute("approved_orders", approved_orders_list.size());
             request.setAttribute("denied_orders", denied_orders_list.size());
-            request.setAttribute("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size()) + 3));
+            request.setAttribute("total_notification", ((pending_sales_enquiry_list.size()) + (pending_complaint_enquiry_list.size())));
             DBConnection.closeConncetion(model.getConnection());
-            DBConnection.closeConncetion(profileModel.getConnection());
-            DBConnection.closeConncetion(enquiryModel.getConnection());
             request.getRequestDispatcher("salesperson_dashboard").forward(request, response);
 
         }

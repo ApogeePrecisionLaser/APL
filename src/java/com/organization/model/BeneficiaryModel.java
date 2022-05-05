@@ -37,17 +37,17 @@ public class BeneficiaryModel {
 
         int noOfRows = 0;
         try {
-            String query = "select count(b.beneficiary_id) "
+            String query = " select count(b.beneficiary_id) "
                     + " from type_of_occupation as t,beneficiary as b,key_person as kp,zone as z,ward as w,area as a,city_location as cl "
-                    + "  where b.type_of_occupation_id=t.type_of_occupation_id and b.key_person_id=kp.key_person_id and b.city_location_id=cl.city_location_id and "
-                    + "  cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
+                    + " where b.type_of_occupation_id=t.type_of_occupation_id and b.key_person_id=kp.key_person_id and b.city_location_id=cl.city_location_id and "
+                    + " cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                     + " And IF('" + searchoccupation_name + "' = '', b.occupation_name LIKE '%%', b.occupation_name  =?) "
                     + " And IF('" + searchCityName + "' = '', cl.location LIKE '%%', cl.location  =?) "
-                    + "And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
-                    + "And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
-                    + "And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) "
-                    + "And IF('" + searchPersonName + "' = '', kp.key_person_name LIKE '%%', kp.key_person_name =?) "
-                    + "And IF('" + person_code + "' = '', kp.emp_code LIKE '%%', kp.emp_code =?) ";
+                    + " And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
+                    + " And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
+                    + " And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) "
+                    + " And IF('" + searchPersonName + "' = '', kp.key_person_name LIKE '%%', kp.key_person_name =?) "
+                    + " And IF('" + person_code + "' = '', kp.emp_code LIKE '%%', kp.emp_code =?) ";
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
             pstmt.setString(1, searchoccupation_name);
             pstmt.setString(2, searchCityName);
@@ -73,17 +73,17 @@ public class BeneficiaryModel {
         if (lowerLimit == -1) {
             addQuery = "";
         }
-        String query = "select b.beneficiary_id,t.name,b.occupation_name,kp.key_person_name,kp.emp_code,z.zone_name,z.zone_no,w.ward_name,w.ward_no,a.area_name,a.area_no,cl.location,cl.location_no,b.no_of_person,b.is_residencial,b.Description,b.rfid"
+        String query = " select b.beneficiary_id,t.name,b.occupation_name,kp.key_person_name,kp.emp_code,z.zone_name,z.zone_no,w.ward_name,w.ward_no,a.area_name,a.area_no,cl.location,cl.location_no,b.no_of_person,b.is_residencial,b.Description,b.rfid "
                 + " from type_of_occupation as t,beneficiary as b,key_person as kp,zone as z,ward as w,area as a,city_location as cl "
-                + "  where b.type_of_occupation_id=t.type_of_occupation_id and b.key_person_id=kp.key_person_id and b.city_location_id=cl.city_location_id and "
-                + "  cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
+                + " where b.type_of_occupation_id=t.type_of_occupation_id and b.key_person_id=kp.key_person_id and b.city_location_id=cl.city_location_id and "
+                + " cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                 + " And IF('" + searchoccupation_name + "' = '', b.occupation_name LIKE '%%', b.occupation_name  =?) "
                 + " And IF('" + searchCityName + "' = '', cl.location LIKE '%%', cl.location  =?) "
-                + "And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
-                + "And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
-                + "And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) "
-                + "And IF('" + searchPersonName + "' = '', kp.key_person_name LIKE '%%', kp.key_person_name =?) "
-                + "And IF('" + person_code + "' = '', kp.emp_code LIKE '%%', kp.emp_code =?) "
+                + " And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
+                + " And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
+                + " And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) "
+                + " And IF('" + searchPersonName + "' = '', kp.key_person_name LIKE '%%', kp.key_person_name =?) "
+                + " And IF('" + person_code + "' = '', kp.emp_code LIKE '%%', kp.emp_code =?) "
                 + addQuery;
         try {
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
@@ -129,18 +129,18 @@ public class BeneficiaryModel {
         if (lowerLimit == -1) {
             addQuery = "";
         }
-        String query = " select   kp.key_person_name,kp.emp_code,kp.father_name,Concat(kp.address_line1,'_',kp.address_line2,'_',kp.address_line3)as address,b.no_of_person, "
+        String query = " select kp.key_person_name,kp.emp_code,kp.father_name,Concat(kp.address_line1,'_',kp.address_line2,'_',kp.address_line3)as address,b.no_of_person, "
                 + " b.occupation_name,tp.name,kp.mobile_no1,b.is_residencial,b.description "
                 + " from key_person as kp,beneficiary as b,type_of_occupation as tp,city_location as cl,area as a,ward as w,zone as z "
                 + " where b.key_person_id=kp.key_person_id and b.type_of_occupation_id=tp.type_of_occupation_id and b.city_location_id=cl.city_location_id and "
                 + " cl.area_id=a.area_id and a.ward_id=w.ward_id and w.zone_id=z.zone_id "
                 + " And IF('" + searchoccupation_name + "' = '', b.occupation_name LIKE '%%', b.occupation_name  =?) "
                 + " And IF('" + searchCityName + "' = '', cl.location LIKE '%%', cl.location  =?) "
-                + "And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
-                + "And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
-                + "And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) "
-                + "And IF('" + searchPersonName + "' = '', kp.key_person_name LIKE '%%', kp.key_person_name =?) "
-                + "And IF('" + person_code + "' = '', kp.emp_code LIKE '%%', kp.emp_code =?) "
+                + " And IF('" + searchZoneName + "' = '', z.zone_name LIKE '%%', z.zone_name =?) "
+                + " And IF('" + searchWardName + "' = '', w.ward_name LIKE '%%', w.ward_name =?) "
+                + " And IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =?) "
+                + " And IF('" + searchPersonName + "' = '', kp.key_person_name LIKE '%%', kp.key_person_name =?) "
+                + " And IF('" + person_code + "' = '', kp.emp_code LIKE '%%', kp.emp_code =?) "
                 + " order by emp_code "
                 + addQuery;
         try {
@@ -180,10 +180,10 @@ public class BeneficiaryModel {
         try {
             int beneficiary_id = bean.getBeneficiary_id();
             if (beneficiary_id == 0) {
-                query = "insert into beneficiary (occupation_name,key_person_id,is_residencial,Description,no_of_person,type_of_occupation_id,city_location_id,rfid) values(?,?,?,?,?,?,?,?)";
+                query = " insert into beneficiary (occupation_name,key_person_id,is_residencial,Description,no_of_person,type_of_occupation_id,city_location_id,rfid) values(?,?,?,?,?,?,?,?) ";
             }
             if (beneficiary_id > 0) {
-                query = "update beneficiary set occupation_name=?,key_person_id=?,is_residencial=?,Description=?,no_of_person=?,type_of_occupation_id=?,city_location_id=?,rfid=? where beneficiary_id=?";
+                query = " update beneficiary set occupation_name=?,key_person_id=?,is_residencial=?,Description=?,no_of_person=?,type_of_occupation_id=?,city_location_id=?,rfid=? where beneficiary_id=? ";
             }
             PreparedStatement ps = (PreparedStatement) connection.prepareStatement(query);
             ps.setString(1, bean.getOccupation_name());
@@ -231,7 +231,7 @@ public class BeneficiaryModel {
         int key_person_id = 0;
         try {
             //String person_name=krutiToUnicode.convert_to_unicode(key_person_name);
-            String query = "select key_person_id from key_person"
+            String query = " select key_person_id from key_person "
                     + " where emp_code=" + person_code;
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -247,7 +247,7 @@ public class BeneficiaryModel {
         int city_location_id = 0;
         try {
 
-            String query = "select city_location_id from city_location"
+            String query = " select city_location_id from city_location "
                     + " where location='" + location + "' ";
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -262,7 +262,7 @@ public class BeneficiaryModel {
     public static int getType_of_occupation_id(String type_of_occupation_name) {
         int type_of_occupation_id = 0;
         try {
-            String query = "select type_of_occupation_id from type_of_occupation"
+            String query = " select type_of_occupation_id from type_of_occupation "
                     + " where name='" + type_of_occupation_name + "' ";
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             while (rset.next()) {
@@ -278,7 +278,7 @@ public class BeneficiaryModel {
         boolean status = false;
         int rowsAffected = 0;
         try {
-            rowsAffected = connection.prepareStatement("Delete from beneficiary where beneficiary_id=" + beneficiary_id + " ").executeUpdate();
+            rowsAffected = connection.prepareStatement(" Delete from beneficiary where beneficiary_id=" + beneficiary_id + " ").executeUpdate();
             if (rowsAffected > 0) {
                 status = true;
             } else {
@@ -326,7 +326,7 @@ public class BeneficiaryModel {
         List<String> list = new ArrayList<String>();
         String query = " select key_person_name from key_person "
                 + " where IF('" + emp_code + "'='', emp_code like '%%', emp_code ='" + emp_code + "') "
-                + "Group by key_person_name";
+                + " Group by key_person_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;

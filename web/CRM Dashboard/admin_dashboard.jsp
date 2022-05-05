@@ -3,6 +3,13 @@
 
 <%@include file="/CRM Dashboard/CRM_header.jsp" %>
 
+<style>
+    .ui-autocomplete
+    {
+        max-height:320px;
+        overflow: auto;
+    }
+</style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -16,6 +23,8 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="CRMDashboardController">Home</a></li>
                         <li class="breadcrumb-item active">Dashboard</li>
+                        <input type="hidden" name="email" id="email" value="${email}">
+                        <input type="hidden" name="password" id="password" value="${password}">
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -44,12 +53,12 @@
                     </a>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3">
-                    <a href="#" class="linkWrap">
+                    <a href="EventController" class="linkWrap">
                         <div class="info-box mb-3 dashboardBoxShadow">
-                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+                            <span class="info-box-icon bg-success elevation-1"><i class="far fa-calendar-alt"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Sales</span>
-                                <span class="info-box-number">760</span>
+                                <span class="info-box-text">Events</span>
+                                <span class="info-box-number">${pending_news}</span>
                             </div>
                         </div>
                     </a>
@@ -110,6 +119,7 @@
                     <div class="card dashboardBoxShadow">
                         <div class="card-header border-transparent">
                             <h3 class="card-title">Latest Orders</h3>
+                            <input type="hidden" name="dashboard_pending_orders_count" id="dashboard_pending_orders_count" value="${dashboard_pending_orders_count}">
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
@@ -124,7 +134,7 @@
                                             <th>Order ID</th>
                                             <th>Dealer</th>
                                             <th>Contact No</th>
-                                            <th>Price</th>
+                                            <th>Price (<i class="fas fa-rupee-sign fontTen"></i>)</th>
                                             <th>Date</th>
                                             <th>Status</th>
                                         </tr>
@@ -135,8 +145,12 @@
                                             <tr>
                                                 <td><a href="OrdersHistoryController?task=viewOrderDetails&order_table_id=${beanType.order_table_id}">${beanType.order_no}</a></td>
                                                 <td>${beanType.org_office}</td>
-                                                <td><a href="tel:+${beanType.requested_by_mobile}"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.requested_by_mobile}</a></td>
-                                                <td><fmt:formatNumber type = "number"  maxFractionDigits = "3"  value =  "${beanType.basic_price}" /></td>
+                                                <td><a href="tel:+${beanType.requested_by_mobile}" class="nowrap"><i class="fas fa-mobile-alt fontTwelve"></i> ${beanType.requested_by_mobile}</a></td>
+                                                <td id="price${loopCounter.count}">
+                                                    ${beanType.basic_price}
+                                                </td>
+
+
                                                 <td>${beanType.date_time}</td>
 
                                                 <td>
@@ -388,7 +402,100 @@
     </section>
 </div>
 
+<div class="modal fade rounded-0 AddEnquiryPopup" id="EnquiryPopup" >
+    <div class="modal-dialog">
+        <div class="modal-content rounded-0">
+            <div class="modal-header rounded-0 bg-voilet " >
+                <h4 class="modal-title text-white" >Add Enquiry</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true" id="CloseEnquiryPopup">&times;</button>
+            </div>
+            <div class="modal-body">
+                <c:if test="${not empty message}">
+                    <div class="">
+                        <c:if test="${msgBgColor=='green'}">
+                            <div class="alert alert-success alert-dismissible py-1 px-2 rounded-0 fontFourteen">
+                                <button type="button" class="close p-1" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong> ${message}
+                            </div>
+                        </c:if>
+                    </div>
+                </c:if>
+                <div class="">
+                    <div class="alert alert-success alert-dismissible py-1 px-2 rounded-0 fontFourteen"  id="msg" style="display:none">
+                        <button type="button" class="close p-1" data-dismiss="alert">&times;</button>
+                        <strong>Success!</strong>
+                    </div>
+                    <div class="alert alert-danger alert-dismissible py-1 px-2 rounded-0 fontFourteen" id="msg" style="display:none">
+                        <button type="button" class="close p-1" data-dismiss="alert">&times;</button>
+                        <strong>OOps!</strong> 
+                    </div>
+                </div>
 
+                <div>
+                    <form class="myForm" action="SalesEnquiryController" method="post">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-2">
+                                    <label>Enquiry Type:<sup class="text-danger">*</sup></label>
+                                </div>
+                                <div class="d-flex justify-content-start">
+                                    <div class="form-group form-check mr-3">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="enquiry_type" id="enquiry_type" value="Sales" checked> Sales
+                                        </label>
+                                    </div>
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="enquiry_type" id="enquiry_type" value="complaint"> Complaint
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>District:<sup class="text-danger">*</sup></label>
+                                    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                    <input type="text" class="form-control ui-autocomplete-input" required="" name="district" id="district" autocomplete="off" placeholder="Press Space">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name:<sup class="text-danger">*</sup></label>
+                                    <input type="text" class="form-control rounded-0" required="" name="sender_name" id="sender_name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mobile:<sup class="text-danger">*</sup></label>
+                                    <input type="text" class="form-control rounded-0" required="" name="sender_mob" id="sender_mob" onblur="ValidateNo()">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Enquiry Message:</label>
+                                    <textarea class="form-control rounded-0" required="" rows="4" name="enquiry_message" id="enquiry_message"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 pl-0">
+                            <div class="d-flex justify-content-between">
+                                <div class="form-group mb-0">  
+                                    <input type="submit" name="task" value="Submit" class="btn myThemeBtn px-4">
+                                </div>
+                                <div >
+                                    <a href="SalesEnquiryController?task=sales_enquiry_list" class="fontFourteen text-right text-underline">Check Enquiry List</a>
+                                </div>
+                            </div>                    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <%@include file="/CRM Dashboard/CRM_footer.jsp" %>
 <!--<script src="CRM Dashboard/assets2/js/pages/dashboard.js"></script>-->
@@ -396,68 +503,68 @@
 
 
 <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var latitude = [];
-                                                        var longitude = [];
-                                                        var dealer_office_name = [];
-                                                        var mobile = [];
-                                                        var email = [];
-                                                        var person_name = [];
-                                                        var org_office_id = [];
-                                                        var key_person_id = [];
-                                                        var dealer_data;
-                                                        $.ajax({
-                                                            type: "POST",
-                                                            url: 'CRMDashboardController?task=getDealerLocation',
-                                                            dataType: 'json',
-                                                            success: function (data) {
-                                                                var map = new google.maps.Map(document.getElementById('map'), {
-                                                                    zoom: 7,
-                                                                    center: new google.maps.LatLng(28.614884, 77.208917),
-                                                                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                                                                });
-                                                                var infowindow = new google.maps.InfoWindow();
-                                                                var marker;
-                                                                dealer_data = data.dealers;
-                                                                for (var i = 0; i < dealer_data.length; i++) {
-                                                                    latitude[i] = dealer_data[i]["latitude"];
-                                                                    longitude[i] = dealer_data[i]["longitude"];
-                                                                    dealer_office_name[i] = dealer_data[i]["dealer_office_name"];
-                                                                    email[i] = dealer_data[i]["email"];
-                                                                    mobile[i] = dealer_data[i]["mobile"];
-                                                                    person_name[i] = dealer_data[i]["person_name"];
-                                                                    org_office_id[i] = dealer_data[i]["org_office_id"];
-                                                                    key_person_id[i] = dealer_data[i]["key_person_id"];
-                                                                    // alert(org_office_id[i]);
-                                                                    if (latitude[i] == '') {
-                                                                        latitude[i] = 28.614884;
-                                                                        longitude[i] = 77.208917;
-                                                                    }
-                                                                    console.log(latitude[i]);
-
-                                                                    marker = new google.maps.Marker({
-                                                                        position: new google.maps.LatLng(latitude[i], longitude[i]),
-                                                                        map: map,
-                                                                        title: dealer_office_name[i],
-                                                                        // icon: image
-                                                                    })
-
-                                                                    google.maps.event.addListener(
-                                                                            marker,
-                                                                            'click',
-                                                                            (function (marker, i) {
-                                                                                return function () {
-                                                                                    infowindow.setContent('<b><h6>' + dealer_office_name[i] + ' (' + person_name[i] + ')</h6></b></br><b>Email:- </b>' + email[i] + '</br><b>Mobile:- </b>' + mobile[i] + '</br><b>Latitude:- </b>' + latitude[i] + '</br><b>Longitude:- </b>' + longitude[i] + '')
-                                                                                    infowindow.open(map, marker)
-                                                                                    window.location.href = "DealersController?task=viewDealerDetails&org_office_id=" + org_office_id[i] + "&key_person_id=" + key_person_id[i];
-
-                                                                                }
-                                                                            })(marker, i)
-                                                                            )
-                                                                }
-                                                            }
-                                                        });
+                                        $(document).ready(function () {
+                                            var latitude = [];
+                                            var longitude = [];
+                                            var dealer_office_name = [];
+                                            var mobile = [];
+                                            var email = [];
+                                            var person_name = [];
+                                            var org_office_id = [];
+                                            var key_person_id = [];
+                                            var dealer_data;
+                                            $.ajax({
+                                                type: "POST",
+                                                url: 'CRMDashboardController?task=getDealerLocation',
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                    var map = new google.maps.Map(document.getElementById('map'), {
+                                                        zoom: 7,
+                                                        center: new google.maps.LatLng(28.614884, 77.208917),
+                                                        mapTypeId: google.maps.MapTypeId.ROADMAP
                                                     });
+                                                    var infowindow = new google.maps.InfoWindow();
+                                                    var marker;
+                                                    dealer_data = data.dealers;
+                                                    for (var i = 0; i < dealer_data.length; i++) {
+                                                        latitude[i] = dealer_data[i]["latitude"];
+                                                        longitude[i] = dealer_data[i]["longitude"];
+                                                        dealer_office_name[i] = dealer_data[i]["dealer_office_name"];
+                                                        email[i] = dealer_data[i]["email"];
+                                                        mobile[i] = dealer_data[i]["mobile"];
+                                                        person_name[i] = dealer_data[i]["person_name"];
+                                                        org_office_id[i] = dealer_data[i]["org_office_id"];
+                                                        key_person_id[i] = dealer_data[i]["key_person_id"];
+                                                        // alert(org_office_id[i]);
+                                                        if (latitude[i] == '') {
+                                                            latitude[i] = 28.614884;
+                                                            longitude[i] = 77.208917;
+                                                        }
+                                                        console.log(latitude[i]);
+
+                                                        marker = new google.maps.Marker({
+                                                            position: new google.maps.LatLng(latitude[i], longitude[i]),
+                                                            map: map,
+                                                            title: dealer_office_name[i],
+                                                            // icon: image
+                                                        })
+
+                                                        google.maps.event.addListener(
+                                                                marker,
+                                                                'click',
+                                                                (function (marker, i) {
+                                                                    return function () {
+                                                                        infowindow.setContent('<b><h6>' + dealer_office_name[i] + ' (' + person_name[i] + ')</h6></b></br><b>Email:- </b>' + email[i] + '</br><b>Mobile:- </b>' + mobile[i] + '</br><b>Latitude:- </b>' + latitude[i] + '</br><b>Longitude:- </b>' + longitude[i] + '')
+                                                                        infowindow.open(map, marker)
+                                                                        window.location.href = "DealersController?task=viewDealerDetails&org_office_id=" + org_office_id[i] + "&key_person_id=" + key_person_id[i];
+
+                                                                    }
+                                                                })(marker, i)
+                                                                )
+                                                    }
+                                                }
+                                            });
+                                        });
 
 </script>
 <script>
@@ -488,146 +595,146 @@
 <script>
 
 
-//    $(document).ready(function () {
+    //    $(document).ready(function () {
 
-//        var sales_enquiries;
-//        $.ajax({
-//            type: "POST",
-//            url: 'CRMDashboardController?task=getAllSalesEnquiries',
-//            dataType: 'json',
-//            success: function (data) {
-//                sales_enquiries = data.sales_enquiries;
-////                alert(sales_enquiries);
-////                alert(sales_enquiries.length);
-////                alert(sales_enquiries[0]["resolved_enquiry_count"]);
-//
-//
-//                if (sales_enquiries.length > 0) {
-//                    var colors = ["#3c8dbc", "#0073b7", "#00c0ef", "#e8c3b9"];
-//                    var labels = ["Resolved", "Unresolved", "Assigned", "Pending"];
-//                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"]];
-//                    var saleEnquiryData = [
-//                        {
-//                            label: labels[0],
-//                            data: datas[0],
-//                            color: colors[0]
-//                        },
-//                        {
-//                            label: labels[1],
-//                            data: datas[1],
-//                            color: colors[1]
-//                        },
-//                        {
-//                            label: labels[2],
-//                            data: datas[2],
-//                            color: colors[2]
-//                        },
-//                        {
-//                            label: labels[3],
-//                            data: datas[3],
-//                            color: colors[3]
-//                        }
-//                    ]
-//                    $.plot('#salesEnquiry', saleEnquiryData, {
-//                        series: {
-//                            pie: {
-//                                show: true,
-//                                radius: 1,
-//                                innerRadius: 0.5,
-//                                label: {
-//                                    show: true,
-//                                    radius: 2 / 3,
-//                                    formatter: labelFormatter,
-//                                    threshold: 0.1,
-//                                    text: 'hello'
-//                                }
-//
-//                            }
-//                        },
-//                        legend: {
-//                            show: false
-//                        }
-//                    })
+    //        var sales_enquiries;
+    //        $.ajax({
+    //            type: "POST",
+    //            url: 'CRMDashboardController?task=getAllSalesEnquiries',
+    //            dataType: 'json',
+    //            success: function (data) {
+    //                sales_enquiries = data.sales_enquiries;
+    ////                alert(sales_enquiries);
+    ////                alert(sales_enquiries.length);
+    ////                alert(sales_enquiries[0]["resolved_enquiry_count"]);
+    //
+    //
+    //                if (sales_enquiries.length > 0) {
+    //                    var colors = ["#3c8dbc", "#0073b7", "#00c0ef", "#e8c3b9"];
+    //                    var labels = ["Resolved", "Unresolved", "Assigned", "Pending"];
+    //                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"]];
+    //                    var saleEnquiryData = [
+    //                        {
+    //                            label: labels[0],
+    //                            data: datas[0],
+    //                            color: colors[0]
+    //                        },
+    //                        {
+    //                            label: labels[1],
+    //                            data: datas[1],
+    //                            color: colors[1]
+    //                        },
+    //                        {
+    //                            label: labels[2],
+    //                            data: datas[2],
+    //                            color: colors[2]
+    //                        },
+    //                        {
+    //                            label: labels[3],
+    //                            data: datas[3],
+    //                            color: colors[3]
+    //                        }
+    //                    ]
+    //                    $.plot('#salesEnquiry', saleEnquiryData, {
+    //                        series: {
+    //                            pie: {
+    //                                show: true,
+    //                                radius: 1,
+    //                                innerRadius: 0.5,
+    //                                label: {
+    //                                    show: true,
+    //                                    radius: 2 / 3,
+    //                                    formatter: labelFormatter,
+    //                                    threshold: 0.1,
+    //                                    text: 'hello'
+    //                                }
+    //
+    //                            }
+    //                        },
+    //                        legend: {
+    //                            show: false
+    //                        }
+    //                    })
 
-//
-//                    anychart.onDocumentReady(function () {
-//                        // create pie chart with passed data
-//                        var chart = anychart.pie([
-//                            ['Resolved' + "(" + datas[0] + ")", datas[0]],
-//                            ['Unresolved' + "(" + datas[1] + ")", datas[1]],
-//                            ['Assigned' + "(" + datas[2] + ")", datas[2]],
-//                            ['Pending' + "(" + datas[3] + ")", datas[3]]
-//                        ]);
-//                        var total = parseInt(datas[0]) + parseInt(datas[1]) + parseInt(datas[2]) + parseInt(datas[3]);
-//
-//                        // creates palette
-//                        var palette = anychart.palettes.distinctColors();
-//                        palette.items([
-//                            {color: '#7d9db6'},
-//                            {color: '#8db59d'},
-//                            {color: '#f38367'},
-//                            {color: '#b97792'}
-//                        ]);
-//
-//                        // set chart radius
-//                        chart
-//                                .radius('43%')
-//                                // create empty area in pie chart
-//                                .innerRadius('60%')
-//                                // set chart palette
-//                                .palette(palette);
-//
-//                        // set outline settings
-//                        chart
-//                                .outline()
-//                                .width('3%')
-//                                .fill(function () {
-//                                    return anychart.color.darken(this.sourceColor, 0.25);
-//                                });
-//
-//                        // format tooltip
-//                        chart.tooltip().format('Percent Value: {%PercentValue}%');
-//
-//                        // create standalone label and set label settings
-//                        var label = anychart.standalones.label();
-//                        label
-//                                .enabled(true)
-//                                .text(total)
-//                                .width('100%')
-//                                .height('100%')
-//                                .adjustFontSize(true, true)
-//                                .minFontSize(10)
-//                                .maxFontSize(25)
-//                                .fontColor('#60727b')
-//                                .position('center')
-//                                .anchor('center')
-//                                .hAlign('center')
-//                                .vAlign('middle');
-//
-//                        // set label to center content of chart
-//                        chart.center().content(label);
-//
-//                        // set container id for the chart
-//                        chart.container('container1');
-//                        // initiate chart drawing
-//                        chart.draw();
-//                    });
-//                }
-//            },
-//        });
-//    })
+    //
+    //                    anychart.onDocumentReady(function () {
+    //                        // create pie chart with passed data
+    //                        var chart = anychart.pie([
+    //                            ['Resolved' + "(" + datas[0] + ")", datas[0]],
+    //                            ['Unresolved' + "(" + datas[1] + ")", datas[1]],
+    //                            ['Assigned' + "(" + datas[2] + ")", datas[2]],
+    //                            ['Pending' + "(" + datas[3] + ")", datas[3]]
+    //                        ]);
+    //                        var total = parseInt(datas[0]) + parseInt(datas[1]) + parseInt(datas[2]) + parseInt(datas[3]);
+    //
+    //                        // creates palette
+    //                        var palette = anychart.palettes.distinctColors();
+    //                        palette.items([
+    //                            {color: '#7d9db6'},
+    //                            {color: '#8db59d'},
+    //                            {color: '#f38367'},
+    //                            {color: '#b97792'}
+    //                        ]);
+    //
+    //                        // set chart radius
+    //                        chart
+    //                                .radius('43%')
+    //                                // create empty area in pie chart
+    //                                .innerRadius('60%')
+    //                                // set chart palette
+    //                                .palette(palette);
+    //
+    //                        // set outline settings
+    //                        chart
+    //                                .outline()
+    //                                .width('3%')
+    //                                .fill(function () {
+    //                                    return anychart.color.darken(this.sourceColor, 0.25);
+    //                                });
+    //
+    //                        // format tooltip
+    //                        chart.tooltip().format('Percent Value: {%PercentValue}%');
+    //
+    //                        // create standalone label and set label settings
+    //                        var label = anychart.standalones.label();
+    //                        label
+    //                                .enabled(true)
+    //                                .text(total)
+    //                                .width('100%')
+    //                                .height('100%')
+    //                                .adjustFontSize(true, true)
+    //                                .minFontSize(10)
+    //                                .maxFontSize(25)
+    //                                .fontColor('#60727b')
+    //                                .position('center')
+    //                                .anchor('center')
+    //                                .hAlign('center')
+    //                                .vAlign('middle');
+    //
+    //                        // set label to center content of chart
+    //                        chart.center().content(label);
+    //
+    //                        // set container id for the chart
+    //                        chart.container('container1');
+    //                        // initiate chart drawing
+    //                        chart.draw();
+    //                    });
+    //                }
+    //            },
+    //        });
+    //    })
 </script>
 <script>
     $(function () {
         var sales_enquiries;
         var sales_enquiry_source = "";
-//        sales_enquiry_source = $('.sales_enquiry_source').val();
-//        if (sales_enquiry_source == 'on') {
-//            sales_enquiry_source = "";
-//        }
-//        if (sales_enquiry_source == 'off') {
-//            sales_enquiry_source = "IndiaMART";
-//        }
+        //        sales_enquiry_source = $('.sales_enquiry_source').val();
+        //        if (sales_enquiry_source == 'on') {
+        //            sales_enquiry_source = "";
+        //        }
+        //        if (sales_enquiry_source == 'off') {
+        //            sales_enquiry_source = "IndiaMART";
+        //        }
         $.ajax({
             type: "POST",
             url: 'CRMDashboardController?task=getAllSalesEnquiries',
@@ -694,9 +801,9 @@
         var sales_enquiries;
         var sales_enquiry_source = "";
         sales_enquiry_source = value;
-//        alert(sales_enquiry_source);
+        //        alert(sales_enquiry_source);
 
-//        alert(sales_enquiry_source);
+        //        alert(sales_enquiry_source);
         $.ajax({
             type: "POST",
             url: 'CRMDashboardController?task=getAllSalesEnquiries',
@@ -705,11 +812,11 @@
             success: function (data) {
                 sales_enquiries = data.sales_enquiries;
                 if (sales_enquiries.length > 0) {
-//                    var total = parseInt(sales_enquiries[0]["resolved_enquiry_count"]) + parseInt(sales_enquiries[0]["unresolved_enquiry_count"])
-//                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"]) + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
-//                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
-//                    var labels = ["Resolved" + "(" + sales_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + sales_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
-//                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"], 0];
+                    //                    var total = parseInt(sales_enquiries[0]["resolved_enquiry_count"]) + parseInt(sales_enquiries[0]["unresolved_enquiry_count"])
+                    //                            + parseInt(sales_enquiries[0]["assigned_enquiry_count"]) + parseInt(sales_enquiries[0]["pending_enquiry_count"]);
+                    //                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
+                    //                    var labels = ["Resolved" + "(" + sales_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + sales_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + sales_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + sales_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
+                    //                    var datas = [sales_enquiries[0]["resolved_enquiry_count"], sales_enquiries[0]["unresolved_enquiry_count"], sales_enquiries[0]["assigned_enquiry_count"], sales_enquiries[0]["pending_enquiry_count"], 0];
 
 
                     var total = parseInt(sales_enquiries[0]["sold_enquiry_count"])
@@ -774,11 +881,11 @@
             success: function (data) {
                 complaint_enquiries = data.complaint_enquiries;
                 if (complaint_enquiries.length > 0) {
-//                    var total = parseInt(complaint_enquiries[0]["resolved_enquiry_count"]) + parseInt(complaint_enquiries[0]["unresolved_enquiry_count"])
-//                            + parseInt(complaint_enquiries[0]["assigned_enquiry_count"]) + parseInt(complaint_enquiries[0]["pending_enquiry_count"]);
-//                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
-//                    var labels = ["Resolved" + "(" + complaint_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + complaint_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + complaint_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + complaint_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
-//                    var datas = [complaint_enquiries[0]["resolved_enquiry_count"], complaint_enquiries[0]["unresolved_enquiry_count"], complaint_enquiries[0]["assigned_enquiry_count"], complaint_enquiries[0]["pending_enquiry_count"], 0];
+                    //                    var total = parseInt(complaint_enquiries[0]["resolved_enquiry_count"]) + parseInt(complaint_enquiries[0]["unresolved_enquiry_count"])
+                    //                            + parseInt(complaint_enquiries[0]["assigned_enquiry_count"]) + parseInt(complaint_enquiries[0]["pending_enquiry_count"]);
+                    //                    var colors = ["#00a65a", "#f56954", "#00c0ef", "#f39c12", "#6c757d"];
+                    //                    var labels = ["Resolved" + "(" + complaint_enquiries[0]["resolved_enquiry_count"] + ")", "Failed" + "(" + complaint_enquiries[0]["unresolved_enquiry_count"] + ")", "Assigned" + "(" + complaint_enquiries[0]["assigned_enquiry_count"] + ")", "Pending" + "(" + complaint_enquiries[0]["pending_enquiry_count"] + ")", "Total" + "(" + total + ")"];
+                    //                    var datas = [complaint_enquiries[0]["resolved_enquiry_count"], complaint_enquiries[0]["unresolved_enquiry_count"], complaint_enquiries[0]["assigned_enquiry_count"], complaint_enquiries[0]["pending_enquiry_count"], 0];
 
                     var total = parseInt(complaint_enquiries[0]["sold_enquiry_count"])
                             + parseInt(complaint_enquiries[0]["unsold_enquiry_count"])
@@ -838,91 +945,91 @@
 
 
     $(function () {
-//    var data        = [],
-//        totalPoints = 100
-//    function getRandomData() {
-//
-//      if (data.length > 0) {
-//        data = data.slice(1)
-//      }
-//      while (data.length < totalPoints) {
-//
-//        var prev = data.length > 0 ? data[data.length - 1] : 50,
-//            y    = prev + Math.random() * 10 - 5
-//
-//        if (y < 0) {
-//          y = 0
-//        } else if (y > 100) {
-//          y = 100
-//        }
-//
-//        data.push(y)
-//      }
-//      var res = []
-//      for (var i = 0; i < data.length; ++i) {
-//        res.push([i, data[i]])
-//      }
-//
-//      return res
-//    }
-//
-//    var interactive_plot = $.plot('#interactive', [
-//        {
-//          data: getRandomData(),
-//        }
-//      ],
-//      {
-//        grid: {
-//          borderColor: '#f3f3f3',
-//          borderWidth: 1,
-//          tickColor: '#f3f3f3'
-//        },
-//        series: {
-//          color: '#3c8dbc',
-//          lines: {
-//            lineWidth: 2,
-//            show: true,
-//            fill: true,
-//          },
-//        },
-//        yaxis: {
-//          min: 0,
-//          max: 100,
-//          show: true
-//        },
-//        xaxis: {
-//          show: true
-//        }
-//      }
-//    )
-//
-//    var updateInterval = 500 //Fetch data ever x milliseconds
-//    var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
-//    function update() {
-//
-//      interactive_plot.setData([getRandomData()])
-//
-//      // Since the axes don't change, we don't need to call plot.setupGrid()
-//      interactive_plot.draw()
-//      if (realtime === 'on') {
-//        setTimeout(update, updateInterval)
-//      }
-//    }
-//
-//    //INITIALIZE REALTIME DATA FETCHING
-//    if (realtime === 'on') {
-//      update()
-//    }
-//    //REALTIME TOGGLE
-//    $('#realtime .btn').click(function () {
-//      if ($(this).data('toggle') === 'on') {
-//        realtime = 'on'
-//      }
-//      else {
-//        realtime = 'off'
-//      }
-//      update()
-//    })
+        //    var data        = [],
+        //        totalPoints = 100
+        //    function getRandomData() {
+        //
+        //      if (data.length > 0) {
+        //        data = data.slice(1)
+        //      }
+        //      while (data.length < totalPoints) {
+        //
+        //        var prev = data.length > 0 ? data[data.length - 1] : 50,
+        //            y    = prev + Math.random() * 10 - 5
+        //
+        //        if (y < 0) {
+        //          y = 0
+        //        } else if (y > 100) {
+        //          y = 100
+        //        }
+        //
+        //        data.push(y)
+        //      }
+        //      var res = []
+        //      for (var i = 0; i < data.length; ++i) {
+        //        res.push([i, data[i]])
+        //      }
+        //
+        //      return res
+        //    }
+        //
+        //    var interactive_plot = $.plot('#interactive', [
+        //        {
+        //          data: getRandomData(),
+        //        }
+        //      ],
+        //      {
+        //        grid: {
+        //          borderColor: '#f3f3f3',
+        //          borderWidth: 1,
+        //          tickColor: '#f3f3f3'
+        //        },
+        //        series: {
+        //          color: '#3c8dbc',
+        //          lines: {
+        //            lineWidth: 2,
+        //            show: true,
+        //            fill: true,
+        //          },
+        //        },
+        //        yaxis: {
+        //          min: 0,
+        //          max: 100,
+        //          show: true
+        //        },
+        //        xaxis: {
+        //          show: true
+        //        }
+        //      }
+        //    )
+        //
+        //    var updateInterval = 500 //Fetch data ever x milliseconds
+        //    var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
+        //    function update() {
+        //
+        //      interactive_plot.setData([getRandomData()])
+        //
+        //      // Since the axes don't change, we don't need to call plot.setupGrid()
+        //      interactive_plot.draw()
+        //      if (realtime === 'on') {
+        //        setTimeout(update, updateInterval)
+        //      }
+        //    }
+        //
+        //    //INITIALIZE REALTIME DATA FETCHING
+        //    if (realtime === 'on') {
+        //      update()
+        //    }
+        //    //REALTIME TOGGLE
+        //    $('#realtime .btn').click(function () {
+        //      if ($(this).data('toggle') === 'on') {
+        //        realtime = 'on'
+        //      }
+        //      else {
+        //        realtime = 'off'
+        //      }
+        //      update()
+        //    })
         /*
          * END INTERACTIVE CHART
          */
@@ -954,5 +1061,113 @@
                 + label
                 + '<br>'
                 + Math.round(series.percent) + '%</div>'
+    }
+
+
+    $(document).ready(function () {
+        var password = $('#password').val();
+        var email = $('#email').val();
+        //        alert("email----"+email);
+        //        alert(password);
+        if (email != '' || password != '') {
+            sendData(email, password);
+        }
+
+    });
+    function sendData(email, password) {
+        if (Android !== undefined) {
+            if (Android.invoke !== undefined) {
+                Android.invoke(email, password);
+            }
+        }
+    }
+
+
+    $(function () {
+        var count = $('#dashboard_pending_orders_count').val();
+        for (var j = 0; j < count; j++) {
+            var price = $('#price' + (j + 1)).text();
+            var price1 = convertToCommaSeperate(price);
+            $('#price' + (j + 1)).text(price1);
+        }
+
+
+    });
+    function convertToCommaSeperate(x) {
+        x = x.toString();
+        var afterPoint = '';
+        if (x.indexOf('.') > 0)
+            afterPoint = x.substring(x.indexOf('.'), x.length);
+        x = Math.floor(x);
+        x = x.toString();
+        var lastThree = x.substring(x.length - 3);
+        var otherNumbers = x.substring(0, x.length - 3);
+        if (otherNumbers != '')
+            lastThree = ',' + lastThree;
+        var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+
+        return res;
+    }
+
+
+</script> 
+<script>
+    $('#EnquiryPopup').modal('show');
+    $('#CloseEnquiryPopup').modal('hide');
+    // setTimeout(function() {
+    //     $('#overlay').modal('hide');
+    // }, 5000);
+
+
+    $("#district").autocomplete({
+        source: function (request, response) {
+            var random = $('#district').val();
+            $.ajax({
+                url: "SalesEnquiryController",
+                dataType: "json",
+                data: {action1: "getDistrict", str: random},
+                success: function (data) {
+                    console.log(data);
+                    response(data.list);
+                }, error: function (error) {
+                    console.log(error.responseText);
+                    response(error.responseText);
+                }
+            });
+        }, autoFocus: true,
+        minLength: 0,
+        appendTo: "#EnquiryPopup",
+        select: function (events, ui) {
+            console.log(ui);
+            $('#district').val(ui.item.label);
+            return false;
+        }
+    });
+    $(function () {
+        setTimeout(function () {
+            $('.alert-success').fadeOut('fast');
+        }, 3000);
+
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('fast');
+        }, 4000);
+    });
+
+    function ValidateNo() {
+        var phoneNo = document.getElementById('sender_mob');
+        if (phoneNo.value == "" || phoneNo.value == null) {
+//                                                        alert("Please enter your Mobile No.");
+            $('.alert-danger').show();
+            $('.alert-danger').html("Please enter your Mobile No.");
+            return false;
+        } else if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
+//            alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+            $('.alert-danger').show();
+            $('.alert-danger').html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong>Oops!</strong>Mobile No. is not valid, Please Enter 10 Digit Mobile No.');
+            return false;
+        } else {
+            $('.alert-danger').hide();
+        }
+        return true;
     }
 </script>

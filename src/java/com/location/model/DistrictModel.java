@@ -57,7 +57,7 @@ public class DistrictModel {
     public List<DistrictBean> showAllData(String districtName) {
         districtName = krutiToUnicode.convert_to_unicode(districtName);
         ArrayList<DistrictBean> list = new ArrayList<DistrictBean>();
-        String query = "select district_name,district_description,division_name,state_name,ut_name from district,division,state where district.division_id=division.division_id and district.state_id=state.state_id and if('" + districtName + "'='',district_name LIKE '%%',district_name='" + districtName + "')";
+        String query = " select district_name,district_description,division_name,state_name,ut_name from district,division,state where district.division_id=division.division_id and district.state_id=state.state_id and if('" + districtName + "'='',district_name LIKE '%%',district_name='" + districtName + "') ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -81,7 +81,7 @@ public class DistrictModel {
 
     public List<String> getDist(String q, String divName) {
         List<String> list = new ArrayList<String>();
-        String query = "select district.district_name from district where district.division_id=(select division.division_id from division where division.division_name='" + divName + "') group by district_name order by district_name";
+        String query = " select district.district_name from district where district.division_id=(select division.division_id from division where division.division_name='" + divName + "') group by district_name order by district_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -104,7 +104,7 @@ public class DistrictModel {
 
     public List<String> getState(String q) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT state_name FROM state GROUP BY state_name ORDER BY state_name";
+        String query = " SELECT state_name FROM state GROUP BY state_name ORDER BY state_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -128,7 +128,7 @@ public class DistrictModel {
 
     public List<String> getUt(String q) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT ut_name FROM state GROUP BY ut_name ORDER BY ut_name";
+        String query = " SELECT ut_name FROM state GROUP BY ut_name ORDER BY ut_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -177,7 +177,7 @@ public class DistrictModel {
         stateName = (stateName);
 
 //        if(stateName==null||stateName.equals(""))
-        String query = "select division_name from division where division.state_id IN (select state.state_id from state where state.state_name='" + stateName + "')";
+        String query = " select division_name from division where division.state_id IN (select state.state_id from state where state.state_name='" + stateName + "') ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -200,7 +200,7 @@ public class DistrictModel {
 
     public static int getDivisionID(String division_name) {
         int division_id = 0;
-        String query = "(select division_id from division where division_name='" + division_name + "') ";
+        String query = " (select division_id from division where division_name='" + division_name + "') ";
         try {
             PreparedStatement pst = connection.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
@@ -274,7 +274,7 @@ public class DistrictModel {
     public void deleteRecord(int districtId) {
         PreparedStatement presta = null;
         try {
-            presta = connection.prepareStatement("delete from district where district_id=?");
+            presta = connection.prepareStatement(" delete from district where district_id=? ");
             presta.setInt(1, districtId);
             int i = presta.executeUpdate();
             if (i > 0) {
@@ -295,7 +295,7 @@ public class DistrictModel {
         searchDistrict = (searchDistrict);
         ArrayList<DistrictBean> list = new ArrayList<DistrictBean>();
 
-        String query = "SELECT district_id, district_name,district_description,division_name,state_name,ut_name FROM district,division,state WHERE district.active='Y' and division.active='Y' and state.active='Y' and district.division_id=division.division_id  and division.state_id=state.state_id and division.state_id=state.state_id and IF('" + searchDistrict + "'='',district_name LIKE '%%',district_name=?) order by district_name limit " + lowerLimit + "," + noOfRowsToDisplay;
+        String query = " SELECT district_id, district_name,district_description,division_name,state_name,ut_name FROM district,division,state WHERE district.active='Y' and division.active='Y' and state.active='Y' and district.division_id=division.division_id  and division.state_id=state.state_id and division.state_id=state.state_id and IF('" + searchDistrict + "'='',district_name LIKE '%%',district_name=?) order by district_name limit " + lowerLimit + "," + noOfRowsToDisplay;
 //         String query = "SELECT district_id, district_name,district_description,division_name,state_name,ut_name FROM district,division,state WHERE district.division_id=division.division_id and district.state_id=state.state_id and IF('" + searchDistrict + "'='',district_name LIKE '%%',district_name=?) order by district_name limit " + lowerLimit + "," + noOfRowsToDisplay;
 
         try {
@@ -407,7 +407,7 @@ public class DistrictModel {
 //    }
     public static int getStateID(String state_name) {
         state_name = (state_name);
-        String query = "SELECT state_id FROM state WHERE state_name = ?";
+        String query = " SELECT state_id FROM state WHERE state_name = ? ";
         int id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -424,7 +424,7 @@ public class DistrictModel {
 
     public int getDivisionId(String division_name) {
         int division_id = 0;
-        String query = "select division_id from division where division_name= '" + division_name + "' ";
+        String query = " select division_id from division where division_name= '" + division_name + "' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -439,7 +439,7 @@ public class DistrictModel {
 
     public int insertRecord(DistrictBean Bean) {
 
-        String query = "INSERT INTO district(district_name, district_description, division_id,revision_no,active ) VALUES(?,?,?,?,?)";
+        String query = " INSERT INTO district(district_name, district_description, division_id,revision_no,active ) VALUES(?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -468,10 +468,10 @@ public class DistrictModel {
         int revision = DistrictModel.getRevisionno(Bean, district_id);
         int updateRowsAffected = 0;
         boolean status = false;
-        String query1 = "SELECT max(revision_no) revision_no FROM district WHERE district_id = " + district_id + "  && active=? ";
-        String query2 = "UPDATE district SET active=? WHERE district_id=? and revision_no=?";
-        String query3 = "INSERT INTO district(district_id,division_id,district_name,district_description,revision_no,active)"
-                + "VALUES(?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM district WHERE district_id = " + district_id + "  && active=? ";
+        String query2 = " UPDATE district SET active=? WHERE district_id=? and revision_no=? ";
+        String query3 = " INSERT INTO district(district_id,division_id,district_name,district_description,revision_no,active) "
+                + " VALUES(?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -523,7 +523,7 @@ public class DistrictModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM district WHERE district_id =" + district_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM district WHERE district_id =" + district_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 

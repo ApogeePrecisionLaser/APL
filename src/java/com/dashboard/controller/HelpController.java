@@ -3,7 +3,6 @@ package com.dashboard.controller;
 import com.DBConnection.DBConnection;
 import com.dashboard.bean.Help;
 import com.dashboard.model.HelpModel;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,6 +26,11 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONObject;
 
+
+/**
+ *
+ * @author Komal
+ */
 public class HelpController extends HttpServlet {
 
     private File tmpDir;

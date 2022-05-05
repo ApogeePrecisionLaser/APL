@@ -188,8 +188,8 @@ public class KeypersonModel {
 
     public List<EmergencyBean> showEmergency(String kp_id) {
         List list = new ArrayList();
-        String query = " select distinct emer.id,emer.name,emer.number,emer.key_person_id,emer.emergency_kp_id from"
-                + " emergency_contact_details emer,key_person k"
+        String query = " select distinct emer.id,emer.name,emer.number,emer.key_person_id,emer.emergency_kp_id from "
+                + " emergency_contact_details emer,key_person k "
                 + " where  emer.key_person_id=" + kp_id + " and  k.active='Y' and emer.active='Y' ";
         //  System.err.println("quer--------------------" + query);
         try {
@@ -254,7 +254,7 @@ public class KeypersonModel {
     }
 
     public int getOrganisation_id(String organisation_name) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
+        String query = " SELECT organisation_id FROM organisation_name WHERE organisation_name = ? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -280,15 +280,15 @@ public class KeypersonModel {
         PreparedStatement pstmt = null;
         int kp_id = 0;
         try {
-            query1 = "INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
-                    + "address_line2, address_line3,"
-                    + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name,"
-                    + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup,"
-                    + "emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation,org_office_designation_map_id) "
-                    + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            query1 = " INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
+                    + " address_line2, address_line3, "
+                    + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name, "
+                    + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup, "
+                    + " emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation,org_office_designation_map_id) "
+                    + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
-            query2 = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
-                    + " VALUES(?,?,?,?,?,?,?,?)";
+            query2 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
+                    + " VALUES(?,?,?,?,?,?,?,?) ";
 
             pstmt = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
             //    pstmt.setString(16, photo_destination + imageName);
@@ -409,8 +409,8 @@ public class KeypersonModel {
 
     public int getOrgOfficeDesignationMapId(int designation_id, int org_office_id) {
         int org_office_des_map_id = 0;
-        String query = "SELECT org_office_designation_map_id FROM org_office_designation_map "
-                + "WHERE designation_id = '" + designation_id + "' and org_office_id='" + org_office_id + "'";
+        String query = " SELECT org_office_designation_map_id FROM org_office_designation_map "
+                + " WHERE designation_id = '" + designation_id + "' and org_office_id='" + org_office_id + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //  pstmt.setString(1, designation);
@@ -435,20 +435,20 @@ public class KeypersonModel {
         Date date = new Date();
         String current_date = dateFormat.format(date);
         int kp_id = 0;
-        String query1 = "SELECT max(revision_no) revision_no FROM key_person WHERE key_person_id = " + key_id + "  && active=? ";
-        String query2 = "UPDATE key_person SET active=? WHERE key_person_id=? and revision_no=?";
-        String query3 = "INSERT INTO key_person(key_person_id,salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
-                + "address_line2, address_line3,"
-                + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name,"
-                + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup,"
-                + "emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation,"
-                + "org_office_designation_map_id) "//image_path,
-                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query1 = " SELECT max(revision_no) revision_no FROM key_person WHERE key_person_id = " + key_id + "  && active=? ";
+        String query2 = " UPDATE key_person SET active=? WHERE key_person_id=? and revision_no=? ";
+        String query3 = " INSERT INTO key_person(key_person_id,salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
+                + " address_line2, address_line3, "
+                + " mobile_no1, mobile_no2, landline_no1, landline_no2, email_id1, email_id2,emp_code, father_name, "
+                + " date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup, "
+                + " emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation, "
+                + " org_office_designation_map_id) "//image_path,
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         String query4 = " select count(*) from general_image_details where key_person_id='" + key_id + "' ";
 
-        String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,"
-                + "revision_no,active,remark) "
-                + " VALUES(?,?,?,?,?,?,?,?)";
+        String query5 = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id, "
+                + " revision_no,active,remark) "
+                + " VALUES(?,?,?,?,?,?,?,?) ";
 
         // String query6=" UPDATE general_image_details SET active=? WHERE key_person_id=? ";
         int rowsAffected = 0;
@@ -542,7 +542,7 @@ public class KeypersonModel {
                                 image_uploaded_for = "key_person_photo";
 
                                 update_image_query = " UPDATE general_image_details SET active=? "
-                                        + "WHERE key_person_id=? and revision_no=? "
+                                        + " WHERE key_person_id=? and revision_no=? "
                                         + " and image_destination_id=1 ";
 
                             } else if (i == 1 && !tempExt.equals("")) {
@@ -552,7 +552,7 @@ public class KeypersonModel {
                                 image_uploaded_for = "key_person_ID";
 
                                 update_image_query = " UPDATE general_image_details SET active=? "
-                                        + "WHERE key_person_id=? and revision_no=? "
+                                        + " WHERE key_person_id=? and revision_no=? "
                                         + " and image_destination_id=2 ";
                             }
 
@@ -619,8 +619,8 @@ public class KeypersonModel {
 
     public int insertImageRecord(KeyPerson key, String image_name, String image_uploaded_for, String current_date, int kp_id) {
         int rowsAffected = 0;
-        String imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
-                + " VALUES(?, ?, ?, ?,?,?,?,?)";
+        String imageQuery = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id,revision_no,active,remark) "
+                + " VALUES(?, ?, ?, ?,?,?,?,?) ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(imageQuery);
             pstmt.setString(1, image_name);
@@ -673,7 +673,7 @@ public class KeypersonModel {
         int revision = 0;
         try {
 
-            String query = " SELECT max(revision_no) as revision_no FROM key_person WHERE key_person_id =" + key_id + "  && active='Y';";
+            String query = " SELECT max(revision_no) as revision_no FROM key_person WHERE key_person_id =" + key_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -695,7 +695,7 @@ public class KeypersonModel {
         try {
 
             String query = " SELECT max(revision_no) as revision_no FROM general_image_details"
-                    + " WHERE key_person_id =" + key_id + "  && active='Y';";
+                    + " WHERE key_person_id =" + key_id + "  && active='Y' ";
 
             PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
 
@@ -739,7 +739,7 @@ public class KeypersonModel {
     public int getkey_person_id(String emp_code) {
         String query;
         int key_person_id = 0;
-        query = "select key_person_id from key_person where emp_code='" + emp_code + "' ";
+        query = " select key_person_id from key_person where emp_code='" + emp_code + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
@@ -759,7 +759,7 @@ public class KeypersonModel {
     public int getgeneral_image_details_id(int id) {
         String query;
         int key_person_id = 0;
-        query = "select general_image_details_id from general_image_details where key_person_id='" + id + "' ";
+        query = " select general_image_details_id from general_image_details where key_person_id='" + id + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
@@ -801,14 +801,14 @@ public class KeypersonModel {
         //String tempExt="";
         int count = 0;
 
-        String query = "UPDATE key_person SET  salutation=?, key_person_name=?, designation_id=?, org_office_id=?, city_id=?, address_line1=?, "
-                + "address_line2=?, address_line3=?,"
+        String query = " UPDATE key_person SET  salutation=?, key_person_name=?, designation_id=?, org_office_id=?, city_id=?, address_line1=?, "
+                + " address_line2=?, address_line3=?, "
                 + " mobile_no1=?, mobile_no2=?, landline_no1=?, landline_no2=?, email_id1=?, email_id2=?, father_name=?, date_of_birth=? "
-                + "WHERE key_person_id=?";
-        updateQuery = "update general_image_details set image_name=?,image_destination_id=?, date_time=?,key_person_id=? where general_image_details_id=?";
-        imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id) "
-                + " VALUES(?, ?, ?, ?,?)";
-        String updateQuery1 = "UPDATE key_person set general_image_details_id=? where key_person_id=?";
+                + " WHERE key_person_id=? ";
+        updateQuery = " update general_image_details set image_name=?,image_destination_id=?, date_time=?,key_person_id=? where general_image_details_id=? ";
+        imageQuery = " INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,key_person_id) "
+                + " VALUES(?, ?, ?, ?,?) ";
+        String updateQuery1 = " UPDATE key_person set general_image_details_id=? where key_person_id=? ";
 
         int rowsAffected = 0;
         try {
@@ -897,7 +897,7 @@ public class KeypersonModel {
 
     public String imageExist(String image_uploaded_for, int key_person_id) {
         String image_name = "";
-        String query = "SELECT gid.general_image_details_id, gid.image_name "
+        String query = " SELECT gid.general_image_details_id, gid.image_name "
                 + " FROM general_image_details gid, image_destination id, image_uploaded_for uf "
                 + " WHERE gid.image_destination_id=id.image_destination_id AND id.image_uploaded_for_id=uf.image_uploaded_for_id "
                 + " AND uf.image_uploaded_for='" + image_uploaded_for + "' AND gid.key_person_id=" + key_person_id + " "
@@ -915,7 +915,7 @@ public class KeypersonModel {
     }
 
     public int getRevisionNo(int key_person_id) {
-        String query = "SELECT max(revision_no) as revision_no FROM key_person WHERE key_person_id = '" + key_person_id + "' and active='Y' ";
+        String query = " SELECT max(revision_no) as revision_no FROM key_person WHERE key_person_id = '" + key_person_id + "' and active='Y' ";
         int revision_no = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -932,7 +932,7 @@ public class KeypersonModel {
     public int deleteRecord(int key_person_id) {
         // String query = "DELETE FROM key_person WHERE key_person_id=" + key_person_id;
         int revision_no = getRevisionNo(key_person_id);
-        String query2 = "UPDATE key_person SET active=? WHERE key_person_id=? and revision_no=?";
+        String query2 = " UPDATE key_person SET active=? WHERE key_person_id=? and revision_no=? ";
         int rowsAffected = 0;
         try {
 
@@ -958,7 +958,7 @@ public class KeypersonModel {
     }
 
     public int getCity_id(String city_name) {
-        String query = "SELECT city_id FROM city WHERE city_name = '" + city_name + "'";
+        String query = " SELECT city_id FROM city WHERE city_name = '" + city_name + "' ";
         int city_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -976,7 +976,7 @@ public class KeypersonModel {
     }
 
     static public String getid_type_id(String type_id) {
-        String query = "SELECT id_type FROM id_type WHERE id_type_id ='" + type_id + "'";
+        String query = " SELECT id_type FROM id_type WHERE id_type_id ='" + type_id + "' ";
         String city_id = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -994,7 +994,7 @@ public class KeypersonModel {
 
     public List<String> getOffice_type(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT oft.office_type FROM org_office_type AS oft ORDER BY office_type ";
+        String query = " SELECT oft.office_type FROM org_office_type AS oft ORDER BY office_type ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1065,7 +1065,7 @@ public class KeypersonModel {
 //        String query = "SELECT k.key_person_name FROM key_person  As k, org_office AS oft  WHERE k.org_office_id = oft.org_office_id and k.active='Y' "
 //                         + " AND if('"+ code +"' = '' , oft.org_office_code like '%%' , oft.org_office_code = ? ) ";
         //  + " GROUP BY key_person_name ";
-        String query = " SELECT k.key_person_name FROM key_person  As k, org_office AS oft  WHERE"
+        String query = " SELECT k.key_person_name FROM key_person  As k, org_office AS oft  WHERE "
                 + " k.org_office_id = oft.org_office_id and k.active='Y'  ";
         if (!code.equals("") && code != null) {
             query += " and oft.org_office_code='" + code + "' ";
@@ -1097,7 +1097,7 @@ public class KeypersonModel {
 
     public static List<String> getIdtypeList() {
         List<String> list = new ArrayList<String>();
-        String query = "select * from id_type where active='Y'";
+        String query = " select * from id_type where active='Y' ";
         //  + " GROUP BY key_person_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1124,8 +1124,8 @@ public class KeypersonModel {
 
     public List<String> getOrgOfficeName(String q, String office_code) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT ot.org_office_name FROM org_office AS ot , org_office_type as oft,organisation_name AS o "
-                + "WHERE oft.office_type_id = ot.office_type_id  AND o.organisation_id=ot.organisation_id AND ot.org_office_code ='" + office_code + "' and ot.active='Y' and oft.active='Y' and o.active='Y'"
+        String query = " SELECT ot.org_office_name FROM org_office AS ot , org_office_type as oft,organisation_name AS o "
+                + " WHERE oft.office_type_id = ot.office_type_id  AND o.organisation_id=ot.organisation_id AND ot.org_office_code ='" + office_code + "' and ot.active='Y' and oft.active='Y' and o.active='Y' "
                 //                + " AND if('"+ office_code +"' = '' , ot.org_office_code like '%%' , ot.org_office_code = ? ) "
                 + " GROUP BY org_office_name ";
         System.err.println("org office query----------------" + query);
@@ -1155,8 +1155,8 @@ public class KeypersonModel {
 
     public int insertemergency(List list1, List list2, int key_id, String k, String mobile_no1) {
         List<String> list = new ArrayList<String>();
-        String query = "INSERT INTO emergency_contact_details(key_person_id,name,number,emergency_kp_id,confirmation,revision_no,active)"
-                + " VALUES( ?, ?, ?,?,?,?,?)";
+        String query = " INSERT INTO emergency_contact_details(key_person_id,name,number,emergency_kp_id,confirmation,revision_no,active) "
+                + " VALUES( ?, ?, ?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1190,11 +1190,11 @@ public class KeypersonModel {
     }
 
     public int getOrgOffice_id(String org_office_name, String office_code) {
-        String query = "SELECT ot.org_office_id "
-                + " FROM org_office AS ot , "
+        String query = " SELECT ot.org_office_id "
+                + " FROM org_office AS ot, "
                 + " organisation_name AS o "
                 + " WHERE o.organisation_id=ot.organisation_id AND "
-                + "ot.org_office_name = '" + org_office_name + "' AND ot.org_office_code = '" + office_code + "'";
+                + " ot.org_office_name = '" + org_office_name + "' AND ot.org_office_code = '" + office_code + "' ";
 
         int organisation_id = 0;
         try {
@@ -1213,10 +1213,10 @@ public class KeypersonModel {
     }
 
     public int getOrgOfficeid(String org_office_name) {
-        String query = "SELECT ot.org_office_id "
-                + " FROM org_office AS ot , "
+        String query = " SELECT ot.org_office_id "
+                + " FROM org_office AS ot, "
                 + " organisation_name AS o "
-                + " WHERE o.organisation_id=ot.organisation_id AND ot.org_office_name = '" + org_office_name + "' AND ot.active='Y'";
+                + " WHERE o.organisation_id=ot.organisation_id AND ot.org_office_name = '" + org_office_name + "' AND ot.active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1237,7 +1237,7 @@ public class KeypersonModel {
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
         String AdvertiseName = "";
-        String query = "SELECT mobile_no1 FROM key_person where key_person.active='Y' and mobile_no1='" + q + "'";
+        String query = " SELECT mobile_no1 FROM key_person where key_person.active='Y' and mobile_no1='" + q + "' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -1268,7 +1268,7 @@ public class KeypersonModel {
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
         String AdvertiseName = "";
-        String query = "SELECT mobile_no1 FROM key_person where key_person.active='Y' ";
+        String query = " SELECT mobile_no1 FROM key_person where key_person.active='Y' ";
         if (!person.equals("") && person != null) {
             query += " and key_person_name='" + person + "' ";
         }
@@ -1303,7 +1303,7 @@ public class KeypersonModel {
         List<String> list = new ArrayList<String>();
 //        String query = "SELECT city_name FROM city AS c ,state AS s WHERE c.state_id=s.state_id AND s.state_name=? "
 //                + "  ORDER BY city_name";
-        String query = "SELECT city_name FROM city AS c where c.active='Y' ORDER BY city_name";
+        String query = " SELECT city_name FROM city AS c where c.active='Y' ORDER BY city_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             //pstmt.setString(1, krutiToUnicode.convert_to_unicode(state_name));
@@ -1330,7 +1330,7 @@ public class KeypersonModel {
 
     public List<String> getStateName(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT state_name FROM state ORDER BY state_name ";
+        String query = " SELECT state_name FROM state ORDER BY state_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1375,7 +1375,7 @@ public class KeypersonModel {
     }
 
     public int getIdtype_id(String id_type) {
-        String query = "SELECT id_type_id FROM id_type WHERE id_type = '" + id_type + "'";
+        String query = " SELECT id_type_id FROM id_type WHERE id_type = '" + id_type + "' ";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1390,7 +1390,7 @@ public class KeypersonModel {
     }
 
     public String getkp_name(int id_type) {
-        String query = "SELECT key_person_name FROM key_person WHERE key_person_id = '" + id_type + "'";
+        String query = " SELECT key_person_name FROM key_person WHERE key_person_id = '" + id_type + "' ";
         String designation_id = "";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1405,7 +1405,7 @@ public class KeypersonModel {
     }
 
     public int getDesignation_id(String designation) {
-        String query = "SELECT designation_id FROM designation WHERE designation = '" + designation + "'";
+        String query = " SELECT designation_id FROM designation WHERE designation = '" + designation + "' ";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1420,7 +1420,7 @@ public class KeypersonModel {
     }
 
     public int getemergencykp_id(String designation) {
-        String query = "SELECT key_person_id FROM key_person WHERE mobile_no1 = '" + designation + "'";
+        String query = " SELECT key_person_id FROM key_person WHERE mobile_no1 = '" + designation + "' ";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1437,7 +1437,7 @@ public class KeypersonModel {
 
     public List<String> getDesignation(String q, String code, String key_person) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT designation from designation as d, org_office AS oft,key_person as k where k.designation_id=d.designation_id and oft.org_office_id=k.org_office_id and k.active='Y' "
+        String query = " SELECT designation from designation as d, org_office AS oft,key_person as k where k.designation_id=d.designation_id and oft.org_office_id=k.org_office_id and k.active='Y' "
                 + " AND if('" + code + "' = '' , oft.org_office_code like '%%' , oft.org_office_code = ? ) "
                 + " AND if('" + key_person + "' = '' , k.key_person_name like '%%' , k.key_person_name = ? )  ";
         try {
@@ -1466,10 +1466,10 @@ public class KeypersonModel {
         List<String> list = new ArrayList<String>();
         //  String query = "SELECT designation from designation as d where d.active='Y' ";
         //   + " AND if('"+ code +"' = '' , oft.org_office_code like '%%' , oft.org_office_code = ? ) ";
-        String query1 = "  select distinct o.organisation_name,d.designation from organisation_name o,org_office oft,organisation_designation od,designation d "
-                + "  where oft.org_office_name='" + code + "' and od.organisation_id=o.organisation_id and "
+        String query1 = " select distinct o.organisation_name,d.designation from organisation_name o,org_office oft,organisation_designation od,designation d "
+                + " where oft.org_office_name='" + code + "' and od.organisation_id=o.organisation_id and "
                 + " d.designation_id=od.organisation_designation_map_id_1 and "
-                + "  oft.organisation_id=o.organisation_id and o.active='Y' and oft.active='Y' and od.active='Y' and d.active='Y'  ";
+                + " oft.organisation_id=o.organisation_id and o.active='Y' and oft.active='Y' and od.active='Y' and d.active='Y'  ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1);
@@ -1501,7 +1501,7 @@ public class KeypersonModel {
         int key_person_id = 0;
         query = " select om.organisation_id,ot.organisation_type_id from org_office oo,organisation_name om ,organisation_type ot "
                 + " where org_office_name='" + emp_code + "' and om.organisation_id=oo.organisation_id and om.organisation_type_id=ot.organisation_type_id and oo.active='Y' "
-                + "  and om.active='Y' and ot.active='Y'";
+                + "  and om.active='Y' and ot.active='Y' ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1520,7 +1520,7 @@ public class KeypersonModel {
     }
 
     public int getRealOrganisationType_id(String office_type) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE  org_type_name = ?  and active=? ";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE  org_type_name = ?  and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1562,11 +1562,11 @@ public class KeypersonModel {
 //            " where oft.org_office_name='"+code+"' and od.organisation_id=o.organisation_id and dotm.designation_id=d.designation_id and " +
 //            " d.designation_id=od.organisation_designation_map_id_1 and o.organisation_type_id=ot.organisation_type_id and " +
 //            " oft.organisation_id=o.organisation_id and o.active='Y' and oft.active='Y' and od.active='Y' and d.active='Y' ";
-        String query = "select distinct ot.org_type_name,ot.organisation_type_id,ot.parent_org_id,d.designation"
-                + " from organisation_type ot,"
-                + " designation d, designation_organisation_type_map dotm"
-                + " where ot.organisation_type_id = " + org_type_id + " and dotm.organisation_type_id = ot.organisation_type_id and dotm.designation_id = d.designation_id"
-                + " and ot.active='Y' and dotm.active='Y' and d.active='Y' ;";
+        String query = " select distinct ot.org_type_name,ot.organisation_type_id,ot.parent_org_id,d.designation "
+                + " from organisation_type ot, "
+                + " designation d, designation_organisation_type_map dotm "
+                + " where ot.organisation_type_id = " + org_type_id + " and dotm.organisation_type_id = ot.organisation_type_id and dotm.designation_id = d.designation_id "
+                + " and ot.active='Y' and dotm.active='Y' and d.active='Y' ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1618,7 +1618,7 @@ public class KeypersonModel {
         int org_type_id = 0;
         int org_office_id = getOrgOfficeId(code);
         String designation = "";
-        String query = " select d.designation from org_office_designation_map map,designation d where map.org_office_id='" + org_office_id + "'"
+        String query = " select d.designation from org_office_designation_map map,designation d where map.org_office_id='" + org_office_id + "' "
                 + " and d.designation_id=map.designation_id ";
 
         try {
@@ -1641,7 +1641,7 @@ public class KeypersonModel {
 
     public int getOrgOfficeId(String org_office) {
         int org_office_id = 0;
-        String query = "SELECT org_office_id FROM org_office WHERE  org_office_name = '" + org_office + "'  and active='Y' ";
+        String query = " SELECT org_office_id FROM org_office WHERE  org_office_name = '" + org_office + "'  and active='Y' ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1663,7 +1663,7 @@ public class KeypersonModel {
 //                        + "  where oft.org_office_name='"+code+"' and od.organisation_id=o.organisation_id and "
 //                        + " d.designation_id=od.organisation_designation_map_id_1 and "                   
 //                        + "  oft.organisation_id=o.organisation_id and o.active='Y' and oft.active='Y' and od.active='Y' and d.active='Y'  ";
-        String query = "select ot.parent_org_id from organisation_type ot where organisation_type_id=" + code;
+        String query = " select ot.parent_org_id from organisation_type ot where organisation_type_id=" + code;
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1694,7 +1694,7 @@ public class KeypersonModel {
         List<String> list = new ArrayList<String>();
         //   String query = "SELECT org.org_office_code FROM org_office AS org , org_office_type as oft "
         //      + " WHERE org.office_type_id=oft.office_type_id group by org.org_office_code where org.active='Y' and oft.active='Y' ";
-        String query = "select distinct org.organisation_name from organisation_name  as org,org_office off where  off.organisation_id=org.organisation_id and org.active='Y' and  off.active='Y'";
+        String query = " select distinct org.organisation_name from organisation_name  as org,org_office off where  off.organisation_id=org.organisation_id and org.active='Y' and  off.active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1,office_type);
@@ -1719,7 +1719,7 @@ public class KeypersonModel {
     }
 
     public int getOrganisationType_id(String office_type) {
-        String query = "SELECT organisation_id FROM organisation_name WHERE  organisation_name = ?  and active=? ";
+        String query = " SELECT organisation_id FROM organisation_name WHERE  organisation_name = ?  and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1737,7 +1737,7 @@ public class KeypersonModel {
 
     public int insertRecordOrganisation(OrganisationName organisation_name) {
         int orgnameid = 0;
-        String query = "INSERT INTO organisation_name(organisation_name,organisation_type_id,description,"
+        String query = " INSERT INTO organisation_name(organisation_name,organisation_type_id,description, "
                 + " revision_no,active,remark,organisation_code) VALUES(?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
@@ -1772,11 +1772,11 @@ public class KeypersonModel {
 
     public int insertRecordOrgOffice(Org_Office orgOffice) {
         int orgnameid = 0;
-        String query = "INSERT INTO "
-                + "org_office( org_office_name,org_office_code,office_type_id, address_line1, "
-                + "address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
-                + "landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super,generation,latitude,longitude) "
-                + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?)";
+        String query = " INSERT INTO "
+                + " org_office( org_office_name,org_office_code,office_type_id, address_line1, "
+                + " address_line2, address_line3, city_id, email_id1, email_id2, mobile_no1, mobile_no2, "
+                + " landline_no1, landline_no2, landline_no3,revision_no,active,remark,organisation_id,parent_org_office_id,super,generation,latitude,longitude) "
+                + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?) ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -1826,7 +1826,7 @@ public class KeypersonModel {
     }
 
     public int getorgtypeidfromname(String id_type) {
-        String query = "SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? and active='Y'";
+        String query = " SELECT organisation_type_id FROM organisation_type WHERE org_type_name = ? and active='Y' ";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1841,7 +1841,7 @@ public class KeypersonModel {
     }
 
     public int getofficetypeidfromname(String id_type) {
-        String query = "SELECT office_type_id FROM org_office_type WHERE office_type = ? and active='Y'";
+        String query = " SELECT office_type_id FROM org_office_type WHERE office_type = ? and active='Y' ";
         int designation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1862,9 +1862,9 @@ public class KeypersonModel {
         int officetypeid = getofficetypeidfromname(fd.getOfficetype());
         int cityid = getCity_id(fd.getOffcity());
 
-        String query1 = "insert into organisation_name(organisation_name,organisation_type_id,organisation_code) values(?,?,?)";
-        String query2 = "insert into org_office(org_office_name,organisation_id,office_type_id,city_id,address_line1,email_id1,mobile_no1,landline_no1,org_office_code,revision_no,remark,generation,super)"
-                + " values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query1 = " insert into organisation_name(organisation_name,organisation_type_id,organisation_code) values(?,?,?) ";
+        String query2 = " insert into org_office(org_office_name,organisation_id,office_type_id,city_id,address_line1,email_id1,mobile_no1,landline_no1,org_office_code,revision_no,remark,generation,super) "
+                + " values(?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, fd.getOrgname());
@@ -1909,7 +1909,7 @@ public class KeypersonModel {
     }
 
     public int getdesignationId(String office_type) {
-        String query = "SELECT * FROM designation WHERE  designation = ?  and active=? ";
+        String query = " SELECT * FROM designation WHERE  designation = ?  and active=? ";
         int organisation_id = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1937,9 +1937,9 @@ public class KeypersonModel {
         PreparedStatement pstmt = null;
         int kp_id = 0;
         try {
-            query1 = "INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
+            query1 = " INSERT INTO key_person( salutation, key_person_name, designation_id, org_office_id, city_id, address_line1, "
                     + " mobile_no1, landline_no1,  email_id1 ,emp_code, father_name, date_of_birth,revision_no,active,remark,latitude,longitude,id_type_id,id_no,password,bloodgroup,emergency_contact_name,emergency_contact_mobile,isVarified,gender,family_office,family_designation,relation) "//image_path,
-                    + "VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + " VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
             pstmt = connection.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
             //    pstmt.setString(16, photo_destination + imageName);
@@ -2014,7 +2014,7 @@ public class KeypersonModel {
         List<String> list = new ArrayList<String>();
         //   String query = "SELECT org.org_office_code FROM org_office AS org , org_office_type as oft "
         //      + " WHERE org.office_type_id=oft.office_type_id group by org.org_office_code where org.active='Y' and oft.active='Y' ";
-        String query = "select org.org_office_code from org_office as org where org.active='Y'";
+        String query = " select org.org_office_code from org_office as org where org.active='Y' ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             // pstmt.setString(1,office_type);
@@ -2040,7 +2040,7 @@ public class KeypersonModel {
 
     public List<String> searchOrgOfficeCode(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select org.org_office_code from org_office as org,key_person as kp where org.org_office_id=kp.org_office_id and kp.active='Y'";
+        String query = " select org.org_office_code from org_office as org,key_person as kp where org.org_office_id=kp.org_office_id and kp.active='Y' ";
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -2067,7 +2067,7 @@ public class KeypersonModel {
 
     public List<String> searchfamilyOfficeCode(String q, String org_name) {
         List<String> list = new ArrayList<String>();
-        String query = "select distinct org.org_office_code from org_office as org ,organisation_name onn where org.active='Y'"
+        String query = " select distinct org.org_office_code from org_office as org ,organisation_name onn where org.active='Y' "
                 + " and onn.active='Y' and org.organisation_id=onn.organisation_id ";
         if (!org_name.equals("") && org_name != null) {
             query += " and onn.organisation_name='" + org_name + "' ";
@@ -2099,7 +2099,7 @@ public class KeypersonModel {
     public List<String> getImagePath(String q) {
 
         List<String> list = new ArrayList<String>();
-        String query = "SELECT image_name from general_image_details where key_person_id='" + q + "' and active='Y' ";
+        String query = " SELECT image_name from general_image_details where key_person_id='" + q + "' and active='Y' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -2122,7 +2122,7 @@ public class KeypersonModel {
 
     public List<String> getsearchOrganisation(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT org.org_office_code FROM org_office AS org , org_office_type as oft "
+        String query = " SELECT org.org_office_code FROM org_office AS org , org_office_type as oft "
                 + " WHERE org.office_type_id=oft.office_type_id group by org.org_office_code ";
 
         try {
@@ -2147,8 +2147,8 @@ public class KeypersonModel {
 
     public List<String> getSearchEmpCode(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "select kp.emp_code from key_person kp "
-                + "left join org_office as of on kp.org_office_id = of.org_office_id "
+        String query = " select kp.emp_code from key_person kp "
+                + " left join org_office as of on kp.org_office_id = of.org_office_id "
                 + " GROUP BY kp.emp_code ";
 
         try {
@@ -2213,12 +2213,12 @@ public class KeypersonModel {
 //             + " WHERE dp.image_destination_id=gid.image_destination_id "
 //             + " AND gid.general_image_details_id = kp.general_image_details_id "
 //             + " AND kp.emp_code = '" + emp_code + "'";
-        String query = "SELECT general_image_details_id,image_name, destination_path "
+        String query = " SELECT general_image_details_id,image_name, destination_path "
                 + " FROM general_image_details gid, image_destination dp, image_uploaded_for iuf "
                 + " WHERE dp.image_destination_id=gid.image_destination_id AND iuf.image_uploaded_for_id=dp.image_uploaded_for_id "
                 + " AND iuf.image_uploaded_for='" + uploadedFor + "' AND gid.key_person_id=" + key_person_id + " "
                 + " and gid.active='Y' and dp.active='Y' and iuf.active='Y' "
-                + " ORDER BY general_image_details_id DESC";
+                + " ORDER BY general_image_details_id DESC ";
         try {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
             if (rs.next()) {
