@@ -34,8 +34,6 @@ import org.codehaus.jettison.json.JSONObject;
 import java.util.*;
 import javax.servlet.ServletContext;
 
-
-
 /**
  *
  * @author komal
@@ -115,8 +113,7 @@ public class IndiamartEnquiriesService implements ServletContextListener {
 
                     result = response.toString();
                 }
-               
-                
+
                 JSONArray jsonArr = new JSONArray(result);
                 for (int i = jsonArr.length() - 1; i >= 0; i--) {
                     JSONObject jsonObj = jsonArr.getJSONObject(i);
@@ -140,12 +137,12 @@ public class IndiamartEnquiriesService implements ServletContextListener {
                     bean.setEnquiry_message(jsonObj.get("ENQ_MESSAGE").toString());
                     bean.setDate_time(jsonObj.get("DATE_TIME_RE").toString());
                     bean.setProduct_name(jsonObj.get("PRODUCT_NAME").toString());
-
+                   
+                    
                     if (enquiry_table_id == 0) {
                         model.insertEnquiries(bean);
                     }
                 }
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {

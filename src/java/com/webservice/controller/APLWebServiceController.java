@@ -175,10 +175,8 @@ public class APLWebServiceController {
             obj.put("city", json);
             json = model.getKeyPerson(number);
             obj.put("key_person", json);
-
             json = model.getImageData(number);
             obj.put("image_data", json);
-
             json = model.getAttendanceData(number);
             obj.put("attendance", json);
 //            json = model.getItemType(number);

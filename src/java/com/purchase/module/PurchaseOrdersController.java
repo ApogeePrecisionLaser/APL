@@ -32,8 +32,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-
-
 /**
  *
  * @author komal
@@ -310,7 +308,7 @@ public class PurchaseOrdersController extends HttpServlet {
             if (type == null) {
                 type = "";
             }
-              counting = model.getCounting();
+            counting = model.getCounting();
             autogenerate_order_no = "PO" + counting;
             List<PurchaseOrdersBean> list = model.viewCart(logged_key_person_id, loggedUser);
 
@@ -453,7 +451,7 @@ public class PurchaseOrdersController extends HttpServlet {
             request.setAttribute("org_office_id", org_office_id);
             request.getRequestDispatcher("purchase_order_placed_item").forward(request, response);
         }
-        
+
         if (task.equals("viewDetails")) {
             String order_no = request.getParameter("order_no");
             List<PurchaseOrdersBean> detail = model.getOrderDetail(order_no);
@@ -477,9 +475,9 @@ public class PurchaseOrdersController extends HttpServlet {
         if (task.equals("viewPdf")) {
             try {
                 String order_no = request.getParameter("order_no");
-
+                String mail = request.getParameter("mail");
                 String logo_path = ctx.getRealPath("/CRM Dashboard/assets2/img/product/logo1.jpg");
-                
+
                 String FILE = "Downloads/" + order_no + ".pdf";
                 Document document = new Document(PageSize.A3);
                 PdfWriter.getInstance(document, new FileOutputStream(FILE));
@@ -488,42 +486,55 @@ public class PurchaseOrdersController extends HttpServlet {
                 model.addMetaData(document);
                 model.addContent(document, logo_path, order_no);
                 document.close();
-                File downloadFile = new File(FILE);
-                FileInputStream inStream = new FileInputStream(downloadFile);
+                if (!mail.equals("yes")) {
+                    File downloadFile = new File(FILE);
+                    FileInputStream inStream = new FileInputStream(downloadFile);
 
-                String relativePath = getServletContext().getRealPath("");
-                ServletContext context = getServletContext();
+                    String relativePath = getServletContext().getRealPath("");
+                    ServletContext context = getServletContext();
 
-                String mimeType = context.getMimeType(FILE);
-                if (mimeType == null) {
-                    mimeType = "application/octet-stream";
+                    String mimeType = context.getMimeType(FILE);
+                    if (mimeType == null) {
+                        mimeType = "application/octet-stream";
+                    }
+                    response.setContentType(mimeType);
+                    response.setContentLength((int) downloadFile.length());
+
+                    String headerKey = "Content-Disposition";
+                    String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+                    response.setHeader(headerKey, headerValue);
+
+                    OutputStream outStream = response.getOutputStream();
+                    byte[] buffer = new byte[4096];
+                    int bytesRead = -1;
+
+                    while ((bytesRead = inStream.read(buffer)) != -1) {
+                        outStream.write(buffer, 0, bytesRead);
+                    }
+                    inStream.close();
+                    outStream.close();
                 }
-                response.setContentType(mimeType);
-                response.setContentLength((int) downloadFile.length());
-
-                String headerKey = "Content-Disposition";
-                String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
-                response.setHeader(headerKey, headerValue);
-
-                OutputStream outStream = response.getOutputStream();
-                byte[] buffer = new byte[4096];
-                int bytesRead = -1;
-
-                while ((bytesRead = inStream.read(buffer)) != -1) {
-                    outStream.write(buffer, 0, bytesRead);
+                if (mail.equals("yes")) {
+                    String result = model.sentMail(FILE,order_no);
+                    request.setAttribute("message", model.getMessage());
+                    request.setAttribute("msgBgColor", model.getMessageBGColor());
                 }
-                inStream.close();
-                outStream.close();
             } catch (DocumentException ex) {
                 Logger.getLogger(PurchaseOrdersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         List<PurchaseOrdersBean> list = model.getAllExistingOrders(logged_key_person_id, loggedUser);
-        request.setAttribute("list", list);
-        request.setAttribute("message", model.getMessage());
-        request.setAttribute("msgBgColor", model.getMessageBGColor());
-        request.setAttribute("role", loggedUser);
-        request.getRequestDispatcher("existing_orders").forward(request, response);
+
+        request.setAttribute(
+                "list", list);
+        request.setAttribute(
+                "message", model.getMessage());
+        request.setAttribute(
+                "msgBgColor", model.getMessageBGColor());
+        request.setAttribute(
+                "role", loggedUser);
+        request.getRequestDispatcher(
+                "existing_orders").forward(request, response);
     }
 
     @Override

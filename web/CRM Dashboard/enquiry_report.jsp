@@ -63,6 +63,10 @@
                         </div>
                         <br>
 
+                        <!--
+                       
+                        -->
+
                         <c:forEach var="beanType" items="${requestScope['list']}"
                                    varStatus="loopCounter">
                             <div class="row">                
@@ -126,9 +130,6 @@
 </div>
 
 
-
-
-
 <div class="modal myPopup" id="myPopModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -150,6 +151,7 @@
 <script>
 
     function viewReport() {
+//        window.open("https://www.apogeeleveller.com/admin/api/testAdd.php?name=komal");
         var queryString;
         var from_date = $('#from_date').val();
         var to_date = $('#to_date').val();
@@ -173,6 +175,7 @@
 
         return window.open(url, window_name, window_features);
     }
+
 
 
 

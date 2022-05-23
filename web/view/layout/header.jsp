@@ -105,14 +105,18 @@
                                         <a href="InventoryBasicController" class="dropdown-item">Inventory Basic</a>
                                         <a href="InventoryController" class="dropdown-item">Inventory</a>
                                         <a href="CheckInventoryController" class="dropdown-item">Check Inventory & Generate Delivery Challan</a>
-                                        <a href="PurchaseOrdersController?task=new order" class="dropdown-item">Make Purchase Order</a>
-
                                         <%}%>
                                         <!--                                        <a href="DeliverItemController" class="dropdown-item">Delivery Chalan</a>-->
                                     </div> 
                                 </li>
                                 <%}%>
-
+                                <%
+                                    if (session.getAttribute("user_role").equals("Incharge")) {
+                                %>
+                                <li class="nav-item dropdown">
+                                    <a href="PurchaseOrdersController?task=new order" class="nav-link">Purchase Order</a>
+                                </li>
+                                <%}%>
 
                                 <%
                                     if (session.getAttribute("user_role").equals("Super Admin")) {

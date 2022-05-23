@@ -2189,7 +2189,7 @@
         <servlet-name>approve_purchase_order_detail</servlet-name>
         <url-pattern>/approve_purchase_order_detail</url-pattern>
     </servlet-mapping>  
-    
+   
     <servlet>
         <servlet-name>DemandNoteController</servlet-name>
         <servlet-class>com.purchase.module.DemandNoteController</servlet-class>
@@ -2216,6 +2216,89 @@
         <servlet-name>demand_notes</servlet-name>
         <url-pattern>/demand_notes</url-pattern>
     </servlet-mapping> 
+    
+    <servlet>
+        <servlet-name>demand_note_detail</servlet-name>
+        <jsp-file>/CRM Dashboard/demand_note_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>demand_note_detail</servlet-name>
+        <url-pattern>/demand_note_detail</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>QuotationController</servlet-name>
+        <servlet-class>com.purchase.module.QuotationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>QuotationController</servlet-name>
+        <url-pattern>/QuotationController</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>request_for_quotation</servlet-name>
+        <jsp-file>/CRM Dashboard/request_for_quotation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>request_for_quotation</servlet-name>
+        <url-pattern>/request_for_quotation</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>quotations</servlet-name>
+        <jsp-file>/CRM Dashboard/quotations.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>quotations</servlet-name>
+        <url-pattern>/quotations</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>request_for_quotation_by_product</servlet-name>
+        <jsp-file>/CRM Dashboard/request_for_quotation_by_product.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>request_for_quotation_by_product</servlet-name>
+        <url-pattern>/request_for_quotation_by_product</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>quotation_detail</servlet-name>
+        <jsp-file>/CRM Dashboard/quotation_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>quotation_detail</servlet-name>
+        <url-pattern>/quotation_detail</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+        <servlet-name>ComparisonChartController</servlet-name>
+        <servlet-class>com.purchase.module.ComparisonChartController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComparisonChartController</servlet-name>
+        <url-pattern>/ComparisonChartController</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>comparison_chart_item_list</servlet-name>
+        <jsp-file>/CRM Dashboard/comparison_chart_item_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>comparison_chart_item_list</servlet-name>
+        <url-pattern>/comparison_chart_item_list</url-pattern>
+    </servlet-mapping>  
+    <servlet>
+        <servlet-name>comparison_chart</servlet-name>
+        <jsp-file>/CRM Dashboard/comparison_chart.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>comparison_chart</servlet-name>
+        <url-pattern>/comparison_chart</url-pattern>
+    </servlet-mapping>  
+    
+    
     
     <!--End Purchase order module -->
     

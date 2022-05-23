@@ -34,6 +34,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -140,7 +157,6 @@ public class PurchaseOrdersModel {
         }
         return list;
     }
-    
 
     public List<PurchaseOrdersBean> getAllPendingOrders(int key_person_id, String role) {
         List<PurchaseOrdersBean> list = new ArrayList<PurchaseOrdersBean>();
@@ -169,7 +185,7 @@ public class PurchaseOrdersModel {
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
-            
+
             while (rset.next()) {
                 PurchaseOrdersBean bean = new PurchaseOrdersBean();
                 bean.setOrder_no(rset.getString("order_no"));
@@ -200,7 +216,7 @@ public class PurchaseOrdersModel {
         List<PurchaseOrdersBean> list = new ArrayList<PurchaseOrdersBean>();
 
         String query = " select po.order_no,itn.item_name,m.model,m.model_no,m.part_no,oo1.org_office_name as vendor_name, "
-                + " po.qty,m.model_id,po.rate,po.purchase_order_id, "
+                + " po.qty,m.model_id,po.rate,po.purchase_order_id,po.vendor_lead_time, "
                 + " kp.key_person_name,oo2.org_office_name as org_office_name,"
                 + " po.date_time,oo1.mobile_no1 as vendor_mobile,oo1.email_id1 as vendor_email,oo1.address_line1 "
                 + " as vendor_add1,oo1.address_line2 "
@@ -239,7 +255,8 @@ public class PurchaseOrdersModel {
                 bean.setStatus(rset.getString("status"));
                 bean.setPurchase_order_id(rset.getInt("purchase_order_id"));
                 bean.setPrice(rset.getString("rate"));
-                
+                bean.setLead_time(rset.getInt("vendor_lead_time"));
+
                 String model_no = rset.getString("model_no");
                 String part_no = rset.getString("part_no");
                 if (model_no.equals("")) {
@@ -283,6 +300,27 @@ public class PurchaseOrdersModel {
 
             ResultSet rset = pstmt.executeQuery();
 
+            while (rset.next()) {
+                revision = rset.getInt("revision_no");
+
+            }
+        } catch (Exception e) {
+            System.err.println("PurchaseOrdersModel getRevisionno() error--------" + e);
+        }
+        return revision;
+    }
+   
+    
+    public static int getRevisionnoForPurchaseOrder(String order_no) {
+        int revision = 0;
+        try {
+            String query = " SELECT max(revision_no) as revision_no FROM purchase_order where "
+                    + " order_no='" + order_no + "' and active='Y' ";
+
+            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+            
             while (rset.next()) {
                 revision = rset.getInt("revision_no");
 
@@ -1380,7 +1418,7 @@ public class PurchaseOrdersModel {
         document.add(preface);
 
         //Add product table
-        float[] colproduct = {1, 5, 5, 2, 3, 3};
+        float[] colproduct = {1, 5, 5, 2, 2, 3, 3};
         PdfPTable table_product = new PdfPTable(colproduct);
         table_product.setWidthPercentage(100);
 
@@ -1395,6 +1433,10 @@ public class PurchaseOrdersModel {
         PdfPCell c_model = new PdfPCell();
         c_model = new PdfPCell(new Phrase(" Model", bold12));
         c_model.setBackgroundColor(BaseColor.DARK_GRAY);
+
+        PdfPCell c_lead_time = new PdfPCell();
+        c_lead_time = new PdfPCell(new Phrase(" Lead Time", bold12));
+        c_lead_time.setBackgroundColor(BaseColor.DARK_GRAY);
 
         PdfPCell c_qty = new PdfPCell();
         c_qty = new PdfPCell(new Phrase(" Qty", bold12));
@@ -1411,10 +1453,12 @@ public class PurchaseOrdersModel {
         table_product.addCell(c_s_no);
         table_product.addCell(c_product);
         table_product.addCell(c_model);
+        table_product.addCell(c_lead_time);
         table_product.addCell(c_qty);
         table_product.addCell(c_price);
         table_product.addCell(c_total);
 
+        table_product.addCell("");
         table_product.addCell("");
         table_product.addCell("");
         table_product.addCell("");
@@ -1427,6 +1471,7 @@ public class PurchaseOrdersModel {
             table_product.addCell(new Phrase(String.valueOf(i + 1), bold10));
             table_product.addCell(new Phrase(" " + list.get(i).getItem_name(), normal));
             table_product.addCell(new Phrase(" " + list.get(i).getModel(), normal));
+            table_product.addCell(new Phrase(" " + list.get(i).getLead_time(), normal));
             table_product.addCell(new Phrase(" " + list.get(i).getQty(), normal));
             table_product.addCell(new Phrase(String.valueOf(" " + Integer.parseInt(list.get(i).getPrice()) / Integer.parseInt(list.get(i).getQty())), normal));
             table_product.addCell(new Phrase(" " + list.get(i).getPrice(), normal));
@@ -1439,6 +1484,7 @@ public class PurchaseOrdersModel {
         PdfPCell c_subtotal_val = new PdfPCell();
         c_subtotal_val = new PdfPCell(new Phrase(String.valueOf(" " + total_price), normal));
 
+        table_product.addCell(" ");
         table_product.addCell(" ");
         table_product.addCell(" ");
         table_product.addCell(" ");
@@ -1563,5 +1609,159 @@ public class PurchaseOrdersModel {
         document.add(table_footer2);
 
         //End Add footer
+    }
+
+    public String sentMail(String destination, String order_no) {
+        // SMTP server information
+
+        String host = "smtp.gmail.com";
+        String port = "587";
+        String mailFrom = "smartmeter.apogee@gmail.com";
+        String password = "jpss1277";
+
+        // outgoing message information
+        String mailTo = "komal.apogee@gmail.com";
+//        String mailTo = mail_id;
+        String subject = "Purchase Order";
+        String message = "Hello Sir/Mam, Please find attached pdf file of purchase order.";
+        String result = "";
+        int updateRowsAffected = 0;
+        int rowsAffected = 0;
+        try {
+            result = sendPlainTextEmail(host, port, mailFrom, password, mailTo,
+                    subject, message, destination);
+
+            int revision = PurchaseOrdersModel.getRevisionnoForPurchaseOrder(order_no);
+
+            String query1 = " SELECT max(revision_no) as revision_no,item_names_id,model_id,vendor_id,org_office_id,key_person_id,qty, "
+                    + " rate,vendor_lead_time,inventory_id,purchase_order_id,date_time "
+                    + " FROM purchase_order WHERE order_no='" + order_no + "' and active='Y' ";
+
+            String query_update = " UPDATE purchase_order SET active =? "
+                    + " WHERE order_no=? and revision_no=? ";
+
+            PreparedStatement pstmt = connection.prepareStatement(query1);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                revision = rs.getInt("revision_no");
+                int item_names_id = rs.getInt("item_names_id");
+                int model_id = rs.getInt("model_id");
+                int org_office_id = rs.getInt("org_office_id");
+                int vendor_id = rs.getInt("vendor_id");
+                int key_person_id = rs.getInt("key_person_id");
+                String qty = rs.getString("qty");
+                String rate = rs.getString("rate");
+                String vendor_lead_time = rs.getString("vendor_lead_time");
+                String inventory_id = rs.getString("inventory_id");
+                String purchase_order_id = rs.getString("purchase_order_id");
+                String date_time = rs.getString("date_time");
+
+                PreparedStatement pstm = connection.prepareStatement(query_update);
+                pstm.setString(1, "N");
+                pstm.setString(2, order_no);
+                pstm.setInt(3, revision);
+
+                updateRowsAffected = pstm.executeUpdate();
+
+                if (updateRowsAffected >= 1) {
+                    String query_insert = " INSERT INTO purchase_order(purchase_order_id,order_no,item_names_id,"
+                            + " model_id,vendor_id,org_office_id,key_person_id,status_id,qty,rate,vendor_lead_time,payment,follow_up_frequency,"
+                            + " active,order_document_path,inventory_id,revision_no,date_time,created_by,description,remark) "
+                            + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+                    revision = rs.getInt("revision_no") + 1;
+                    PreparedStatement psmt1 = (PreparedStatement) connection.prepareStatement(query_insert);
+                    psmt1.setString(1, purchase_order_id);
+                    psmt1.setString(2, order_no);
+                    psmt1.setInt(3, item_names_id);
+                    psmt1.setInt(4, model_id);
+                    psmt1.setInt(5, vendor_id);
+                    psmt1.setInt(6, org_office_id);
+                    psmt1.setInt(7, key_person_id);
+                    psmt1.setInt(8, 17);
+                    psmt1.setString(9, qty);
+                    psmt1.setString(10, rate);
+                    psmt1.setString(11, vendor_lead_time);
+                    psmt1.setInt(12, 0);
+                    psmt1.setInt(13, 0);
+                    psmt1.setString(14, "Y");
+                    psmt1.setString(15, "");
+                    psmt1.setString(16, inventory_id);
+                    psmt1.setInt(17, revision);
+                    psmt1.setString(18, date_time);
+                    psmt1.setString(19, "");
+                    psmt1.setString(20, "");
+                    psmt1.setString(21, "");
+                    rowsAffected = psmt1.executeUpdate();
+                }
+                
+            }
+        } catch (Exception ex) {
+
+            System.out.println("Failed to sent email.");
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public String sendPlainTextEmail(String host, String port,
+            final String userName, final String password, String toAddress,
+            String subject, String messag, String destination) throws AddressException,
+            MessagingException {
+
+        // sets SMTP server properties
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // creates a new session with an authenticator
+        Authenticator auth = new Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        };
+
+        Session session = Session.getInstance(properties, auth);
+
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(new InternetAddress(userName));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
+            msg.setSubject(subject);
+
+            //3) create MimeBodyPart object and set your message text     
+            BodyPart messageBodyPart1 = new MimeBodyPart();
+            messageBodyPart1.setText(messag);
+
+            //4) create new MimeBodyPart object and set DataHandler object to this object      
+            MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+            MimeBodyPart messageBodyPart3 = new MimeBodyPart();
+
+            String filename = "C:\\ssadvt_repository\\APL\\Report\\sm.pdf";//change accordingly  
+
+            filename = destination;
+            Multipart multipart = new MimeMultipart();
+            DataSource source = new FileDataSource(filename);
+            messageBodyPart2.setDataHandler(new DataHandler(source));
+            messageBodyPart2.setFileName(filename.substring(10));
+
+            multipart.addBodyPart(messageBodyPart1);
+            multipart.addBodyPart(messageBodyPart2);
+
+            msg.setContent(multipart);
+
+            Transport.send(msg);
+            message = "Email Sent successfully.";
+            messageBGColor = COLOR_OK;
+            System.out.println("message sent....");
+
+        } catch (MessagingException ex) {
+            ex.printStackTrace();
+            message = "Something Went Wrong.";
+            messageBGColor = COLOR_ERROR;
+        }
+        return message;
     }
 }

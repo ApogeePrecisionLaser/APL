@@ -1210,7 +1210,7 @@ public class APLWebServiceModel {
                 pstmt.setString(11, bean.getEnquiry_state());
                 pstmt.setString(12, bean.getCountry());
                 pstmt.setString(13, bean.getEnquiry_message());
-
+                
                 pstmt.setString(14, bean.getDate_time());
 
                 String enquiry_call_duration = "";

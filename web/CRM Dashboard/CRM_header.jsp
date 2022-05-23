@@ -610,13 +610,27 @@
                                             <p>All Demand Notes</p>
                                         </a>
                                     </li>
-                                   
+
                                     <li class="nav-item">
-                                        <a href="PurchaseOrdersController" class="nav-link">
+                                        <a href="QuotationController?task=new_quotation&type=vendor" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>All Purchase Orders</p>
+                                            <p>Request For Quotation</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="QuotationController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Quotations</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="ComparisonChartController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Comparison Chart</p>
+                                        </a>
+                                    </li>
+
                                     <li class="nav-item">
                                         <a href="PurchaseOrdersController?task=new order" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
@@ -624,9 +638,15 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="PurchaseOrdersController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Purchase Orders</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="ApprovePurchaseOrdersController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Approve Orders</p>
+                                            <p>Approve Purchase Orders</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -711,15 +731,41 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
+                                        <a href="DemandNoteController?task=new_demand" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Make Demand Note</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="DemandNoteController" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>All Demand Notes</p>
                                         </a>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a href="DemandNoteController?task=new_demand" class="nav-link">
+                                        <a href="QuotationController?task=new_quotation&type=vendor" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Make Demand Note</p>
+                                            <p>Request For Quotation</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="QuotationController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Quotations</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="ComparisonChartController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Comparison Chart</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController?task=new order" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Make Purchase Order</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -728,13 +774,6 @@
                                             <p>All Purchase Orders</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="PurchaseOrdersController?task=new order" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Make Purchase Order</p>
-                                        </a>
-                                    </li>
-
                                 </ul>
                             </li>
 
@@ -776,10 +815,23 @@
                                             <p>All Demand Notes</p>
                                         </a>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a href="PurchaseOrdersController" class="nav-link">
+                                        <a href="QuotationController?task=new_quotation&type=vendor" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>All Purchase Orders</p>
+                                            <p>Request For Quotation</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="QuotationController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Quotations</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="ComparisonChartController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Comparison Chart</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -788,7 +840,12 @@
                                             <p>Make Purchase Order</p>
                                         </a>
                                     </li>
-
+                                    <li class="nav-item">
+                                        <a href="PurchaseOrdersController" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>All Purchase Orders</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 

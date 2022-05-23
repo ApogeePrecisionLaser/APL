@@ -5,14 +5,13 @@
  */
 package com.purchase.module;
 
-
 /**
  *
  * @author komal
  */
 public class PurchaseOrdersBean {
 
-    private int purchase_order_id, item_names_id, model_id, vendor_id, inventory_id, revision_no, stock_qty, min_qty,status_id;
+    private int purchase_order_id, item_names_id, model_id, vendor_id, inventory_id, revision_no, stock_qty, min_qty, status_id, approved_qty,lead_time;
     private String order_no, item_name, model, vendor, qty, rate, vendor_lead_time, payment, follow_up_frequency,
             active, order_document_path, description, remark, date_time, time_ago, mobile, model_no, price, total_qty, total_price;
     private String image_path;
@@ -30,6 +29,12 @@ public class PurchaseOrdersBean {
     private String customer_name;
     private String status;
     private String customer_office_name;
+    private int demand_note_id;
+    private String demand_note_no;
+    private int quotation_id;
+    private int key_person_id;
+    private String quotation_no;
+    private String scheduled_date;
 
     /**
      * @return the purchase_order_id
@@ -645,6 +650,118 @@ public class PurchaseOrdersBean {
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * @return the demand_note_id
+     */
+    public int getDemand_note_id() {
+        return demand_note_id;
+    }
+
+    /**
+     * @param demand_note_id the demand_note_id to set
+     */
+    public void setDemand_note_id(int demand_note_id) {
+        this.demand_note_id = demand_note_id;
+    }
+
+    /**
+     * @return the demand_note_no
+     */
+    public String getDemand_note_no() {
+        return demand_note_no;
+    }
+
+    /**
+     * @param demand_note_no the demand_note_no to set
+     */
+    public void setDemand_note_no(String demand_note_no) {
+        this.demand_note_no = demand_note_no;
+    }
+
+    /**
+     * @return the approved_qty
+     */
+    public int getApproved_qty() {
+        return approved_qty;
+    }
+
+    /**
+     * @param approved_qty the approved_qty to set
+     */
+    public void setApproved_qty(int approved_qty) {
+        this.approved_qty = approved_qty;
+    }
+
+    /**
+     * @return the quotation_id
+     */
+    public int getQuotation_id() {
+        return quotation_id;
+    }
+
+    /**
+     * @param quotation_id the quotation_id to set
+     */
+    public void setQuotation_id(int quotation_id) {
+        this.quotation_id = quotation_id;
+    }
+
+    /**
+     * @return the quotation_no
+     */
+    public String getQuotation_no() {
+        return quotation_no;
+    }
+
+    /**
+     * @param quotation_no the quotation_no to set
+     */
+    public void setQuotation_no(String quotation_no) {
+        this.quotation_no = quotation_no;
+    }
+
+    /**
+     * @return the scheduled_date
+     */
+    public String getScheduled_date() {
+        return scheduled_date;
+    }
+
+    /**
+     * @param scheduled_date the scheduled_date to set
+     */
+    public void setScheduled_date(String scheduled_date) {
+        this.scheduled_date = scheduled_date;
+    }
+
+    /**
+     * @return the key_person_id
+     */
+    public int getKey_person_id() {
+        return key_person_id;
+    }
+
+    /**
+     * @param key_person_id the key_person_id to set
+     */
+    public void setKey_person_id(int key_person_id) {
+        this.key_person_id = key_person_id;
+    }
+
+    /**
+     * @return the lead_time
+     */
+    public int getLead_time() {
+        return lead_time;
+    }
+
+    /**
+     * @param lead_time the lead_time to set
+     */
+    public void setLead_time(int lead_time) {
+        this.lead_time = lead_time;
     }
 
 }

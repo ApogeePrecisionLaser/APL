@@ -955,7 +955,13 @@ table.dataTable tbody th, table.dataTable tbody td{
     border-radius: 20px;
     white-space: nowrap;
 }
-
+.statusReceivedQuotation{
+    background-color: #3472A8;
+    padding: 2px 15px;
+    color: #fff;
+    border-radius: 20px;
+    white-space: nowrap;
+}
 
 .myBtnInfo{
     background-color: #17a2b8;
@@ -1734,4 +1740,20 @@ select.goog-te-combo option[value="en"], select.goog-te-combo option[value="hi"]
     max-height:320px;
     max-width: 500px;
     overflow: auto;
+}
+.myOtherBtn{
+    background-color: #797a7d;
+    border: 1px solid #797a7d;
+    border-radius: 0;
+    padding: 5px 20px;
+    transition: all .3s ease;
+    white-space: nowrap;
+}
+.myOtherSuccessBtn{
+    background-color: #3c8a53;
+    border: 1px solid #3c8a53;
+    border-radius: 0;
+    padding: 5px 20px;
+    transition: all .3s ease;
+    white-space: nowrap;
 }

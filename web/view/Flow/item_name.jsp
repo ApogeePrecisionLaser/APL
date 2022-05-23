@@ -463,11 +463,8 @@
                         <td id="${loopCounter.count }12">
                             <input type="submit" class="btn formBtn" id="org_chart" name="org_chart" value="Org Chart" onclick="getOrgChartData('${beanType.item_name}')">
                         </td>
-
                     </tr>
                 </c:forEach>
-
-
                 </tbody>
             </table>
         </div>          

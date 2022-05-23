@@ -20,9 +20,11 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <div class="d-flex">
-                        <div>
-                            <a href="DemandNoteController?task=new_demand" class="btn btn-primary myNewLinkBtn">Create New Demand Note</a>
-                        </div>
+                        <c:if test="${role=='Incharge'}">
+                            <div>
+                                <a href="DemandNoteController?task=new_demand" class="btn btn-primary myNewLinkBtn">Create New Demand Note</a>
+                            </div>
+                        </c:if>
                         <c:if test="${not empty message}">
                             <c:if test="${msgBgColor=='green'}">
                                 <div class="alert alert-success alert-dismissible myAlertBox"  id="msg" >
@@ -72,23 +74,54 @@
                                                 <th class="fontFourteen">Sr. No.</th>
                                                     <c:if test="${role=='Admin' || role=='Super Admin'}">
                                                     <th class="fontFourteen">Office Name</th>
+                                                    <th class="fontFourteen">Key Person Name</th>
 
                                                 </c:if>
-                                                <th class="fontFourteen">Order No</th>
-                                                <th class="fontFourteen">Vendor Name</th>
-                                                    <c:if test="${role=='Admin' || role=='Super Admin'}">
-                                                    <th>Customer</th>
-                                                    </c:if>
-                                                <th>Vendor Mobile No</th>
-                                                <th class="fontFourteen">Price (<small><i class="fas fa-rupee-sign curruncyIcon"></i></small>)</th>
+                                                <th class="fontFourteen">Demand Note No</th>
                                                 <th class="fontFourteen">Time</th>
                                                 <th class="fontFourteen">Status</th>
-                                                <!--<th class="fontFourteen">Quotation</th>-->
                                                 <th class="fontFourteen">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
+
+                                            <c:forEach var="beanType" items="${requestScope['list']}"
+                                                       varStatus="loopCounter">
+                                                <tr>
+                                                    <td> ${loopCounter.count} </td>
+                                                    <c:if test="${role=='Admin' || role=='Super Admin'}">
+                                                        <td class="fontFourteen">${beanType.org_office_name}</td>
+                                                        <td class="fontFourteen">${beanType.customer_name}</td>
+                                                    </c:if>
+                                                    <td class="fontFourteen">${beanType.demand_note_no}</td>
+                                                    <td class="fontFourteen">${beanType.time_ago}</td>
+                                                    <c:choose>
+                                                        <c:when test="${beanType.status=='Pending'}">
+                                                            <td class="fontFourteen"><i class="statusPending">${beanType.status}</i> </td>
+                                                        </c:when>
+                                                        <c:when test="${beanType.status=='Approved'}">
+                                                            <td class="fontFourteen"><i class="statusApprove">${beanType.status}</i> </td>
+                                                        </c:when>
+                                                        <c:when test="${beanType.status=='Denied'}">
+                                                            <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i> </td>
+                                                        </c:when>
+                                                        <c:when test="${beanType.status=='Convert To Quotation'}">
+                                                            <td class="fontFourteen"><i class="statusPaymentDone">Converted To Quotation</i> </td>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <td class="fontFourteen"><i class="">${beanType.status}</i> </td>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <td>
+                                                        <a href="DemandNoteController?task=viewDetails&order_no=${beanType.demand_note_no}" class="btn far fa-eye actionEdit" title="View Demand Detail"></a>
+                                                        <c:if test="${beanType.status=='Approved'}">
+                                                            <a class="btn  statusPaymentDone"  title="Convert To Quotation" href="DemandNoteController?task=convertToQuotation&demand_note_no=${beanType.demand_note_no}">
+                                                                Convert To Quotation
+                                                            </a>       
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

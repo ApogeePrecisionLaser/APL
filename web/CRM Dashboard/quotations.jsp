@@ -21,7 +21,7 @@
                 <div class="col-sm-6">
                     <div class="d-flex">
                         <div>
-                            <a href="PurchaseOrdersController?task=new order" class="btn btn-primary myNewLinkBtn">Create Order</a>
+                            <a href="QuotationController?task=new_quotation&type=vendor" class="btn btn-primary myNewLinkBtn">Request For Quotation</a>
                         </div>
                         <!--                        <div class="">
                                                     <div class="alert alert-success alert-dismissible myAlertBox">
@@ -60,7 +60,7 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <li class="breadcrumb-item active">All Purchase Order</li>
+                        <li class="breadcrumb-item active">All Quotations</li>
                     </ol>
                 </div>
             </div>
@@ -79,16 +79,20 @@
                                             <tr>
                                                 <th class="fontFourteen">Sr. No.</th>
                                                     <c:if test="${role=='Admin' || role=='Super Admin'}">
-                                                    <th class="fontFourteen">Office Name</th>
+                                                    <th class="fontFourteen">Office Name
+                                                    </th>
 
                                                 </c:if>
-                                                <th class="fontFourteen">Order No</th>
+                                                <c:if test="${role=='Admin' || role=='Super Admin'}">
+                                                    <th>Customer
+                                                    </th>
+                                                </c:if>
                                                 <th class="fontFourteen">Vendor Name</th>
-                                                    <c:if test="${role=='Admin' || role=='Super Admin'}">
-                                                    <th>Customer</th>
-                                                    </c:if>
-                                                <th>Vendor Mobile No</th>
-                                                <th class="fontFourteen">Price (<small><i class="fas fa-rupee-sign curruncyIcon"></i></small>)</th>
+
+                                                <th class="fontFourteen">Quotation No</th>
+
+                                                <!--<th>Vendor Mobile No</th>-->
+                                                <!--<th class="fontFourteen">Price (<small><i class="fas fa-rupee-sign curruncyIcon"></i></small>)</th>-->
                                                 <th class="fontFourteen">Time</th>
                                                 <th class="fontFourteen">Status</th>
                                                 <!--<th class="fontFourteen">Quotation</th>-->
@@ -102,14 +106,16 @@
                                                     <td> ${loopCounter.count} </td>
                                                     <c:if test="${role=='Admin' || role=='Super Admin'}">
                                                         <td class="fontFourteen">${beanType.org_office_name}</td>
-                                                    </c:if>
-                                                    <td class="fontFourteen">${beanType.order_no}</td>
-                                                    <td class="fontFourteen">${beanType.vendor}</td>
-                                                    <c:if test="${role=='Admin' || role=='Super Admin'}">
                                                         <td class="fontFourteen">${beanType.customer_name}</td>
                                                     </c:if>
-                                                    <td class="fontFourteen"><a href="tel:+91-${beanType.mobile}">+91-${beanType.mobile}</a></td>                            
-                                                    <td class="fontFourteen">${beanType.price}</td>
+                                                    <td class="fontFourteen">${beanType.vendor}</td>
+
+
+                                                    <!--
+                                                    -->
+
+
+                                                    <td class="fontFourteen">${beanType.quotation_no}</td>
                                                     <td class="fontFourteen">${beanType.time_ago}</td>
                                                     <c:choose>
                                                         <c:when test="${beanType.status=='Pending'}">
@@ -121,7 +127,7 @@
                                                         <c:when test="${beanType.status=='Denied'}">
                                                             <td class="fontFourteen"><i class="statusDisapprove">${beanType.status}</i> </td>
                                                         </c:when>
-                                                        <c:when test="${beanType.status=='Order Sent To Vendor'}">
+                                                        <c:when test="${beanType.status=='Received Quotation'}">
                                                             <td class="fontFourteen"><i class="statusReceivedQuotation">${beanType.status}</i> </td>
                                                         </c:when>
                                                         <c:otherwise>
@@ -129,16 +135,10 @@
                                                         </c:otherwise>
                                                     </c:choose>
                                                     <td>
-                                                        <a href="PurchaseOrdersController?task=viewDetails&order_no=${beanType.order_no}" class="btn far fa-eye actionEdit" title="View Order Detail"></a>
-                                                        <a class="btn actionEdit"  title="View PDF" id="download" onclick="viewPdf('${beanType.order_no}')">
+                                                        <a href="QuotationController?task=viewDetails&quotation_no=${beanType.quotation_no}" class="btn far fa-eye actionEdit" title="View Quotation Detail"></a>
+                                                        <a class="btn actionEdit"  target="_blank" title="View PDF" id="download" href="QuotationController?task=viewPdF&&mail=no&quotation_no=${beanType.quotation_no}">
                                                             <i class="fas fa-download"></i>
-                                                        </a>  
-                                                        <c:if test="${beanType.status=='Approved'}">
-                                                            <a class="btn actionView"  title="Send Order To Vendor" id="download"
-                                                               href="PurchaseOrdersController?task=viewPdf&mail=yes&order_no=${beanType.order_no}">
-                                                                <i class="fa fa-paper-plane"></i>
-                                                            </a> 
-                                                        </c:if>
+                                                        </a>       
                                                     </td>
                                                 </tr>
                                             </c:forEach>
